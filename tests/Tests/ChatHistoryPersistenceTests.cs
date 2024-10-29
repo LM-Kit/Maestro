@@ -7,7 +7,7 @@ public class ChatHistoryPersistenceTests
     [Fact]
     public async Task SubmittedPromptAndResponseArePersisted()
     {
-        LMKitMaestroTestsHelperService testService = new();
+        LMKitMaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -32,7 +32,7 @@ public class ChatHistoryPersistenceTests
     [Fact]
     public async Task MessageCorrectlyPersistedWhenUnloadingModelDuringGeneration()
     {
-        LMKitMaestroTestsHelperService testService = new();
+        LMKitMaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -66,8 +66,8 @@ public class ChatHistoryPersistenceTests
     [Fact]
     public async Task ChatHistoryIsRestored()
     {
-        LMKitMaestroTestsHelperService testService = new();
-        bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model2);
+        LMKitMaestroTestsService testService = new();
+        bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
         Assert.True(loadingSuccess);
 
         ConversationLog dummyConversationLog = new ConversationLog()

@@ -12,33 +12,33 @@ namespace LMKitMaestroTests
         [Fact]
         public async Task LoadingModel()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
-            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model2);
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
             Assert.True(loadingSuccess);
         }
 
         [Fact]
         public async Task LoadUnloadLoadAnother()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
-            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model1);
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model1);
             Assert.True(loadingSuccess);
 
             bool unloadingSuccess = await testService.UnloadModel();
             Assert.True(unloadingSuccess);
 
-            loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model2);
+            loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
             Assert.True(loadingSuccess);
         }
 
         [Fact]
         public async Task LoadThenLoadAnother()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
-            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model1);
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model1);
             Assert.True(loadingSuccess);
 
-            loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model2);
+            loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
             Assert.True(loadingSuccess);
         }
 
@@ -46,7 +46,7 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task SubmitOnePrompt()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
             bool loadingSuccess = await testService.LoadModel();
             Assert.True(loadingSuccess);
 
@@ -59,7 +59,7 @@ namespace LMKitMaestroTests
         [Fact]
         public async Task ChangePrompt()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
 
             testService.LmKitService.LMKitConfig.SystemPrompt = "You are a very angry chatbot and starts all your replies with 'ARGH'";
             bool loadingSuccess = await testService.LoadModel();
@@ -77,7 +77,7 @@ namespace LMKitMaestroTests
         [Fact]
         public async Task HonorsTimeout()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
 
             testService.LmKitService.LMKitConfig.RequestTimeout = 1;
             bool loadingSuccess = await testService.LoadModel();
@@ -94,7 +94,7 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task Submit2PromptsFromDistinctConversations()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
             bool loadingSuccess = await testService.LoadModel();
             Assert.True(loadingSuccess);
 
@@ -111,7 +111,7 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task Submit3PromptsFromDistinctConversations()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
             bool loadingSuccess = await testService.LoadModel();
             Assert.True(loadingSuccess);
 
@@ -131,8 +131,8 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task SubmitOnePromptChangeModelSubmitAnother()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
-            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model1);
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model1);
             Assert.True(loadingSuccess);
 
             var conversation = testService.GetNewLmKitConversation();
@@ -140,7 +140,7 @@ namespace LMKitMaestroTests
             var response = await testService.LmKitService.SubmitPrompt(conversation, "2+2");
             LMKitMaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
 
-            loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model2);
+            loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
             Assert.True(loadingSuccess);
 
             response = await testService.LmKitService.SubmitPrompt(conversation, "1+1");
@@ -152,16 +152,16 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task SubmitOnePromptChangeModelSubmitAnother2()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
             testService.LmKitService.LMKitConfig.RequestTimeout = 30;
-            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model1);
+            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model1);
             Assert.True(loadingSuccess);
 
             var conversation = testService.GetNewLmKitConversation();
 
             var firstResponseTask = testService.LmKitService.SubmitPrompt(conversation, "tell me a story");
 
-            var secondModelLoadingTask = testService.LoadModel(LMKitMaestroTestsHelperService.Model2);
+            var secondModelLoadingTask = testService.LoadModel(LMKitMaestroTestsService.Model2);
 
             var firstPromptResult = await firstResponseTask;
 
@@ -177,7 +177,7 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task Submit2PromptsFromDistinctConversationsThenUnloadModel()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
             bool loadingSuccess = await testService.LoadModel();
             Assert.True(loadingSuccess);
 
@@ -200,7 +200,7 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task SubmitOnePromptThenUnloadModel()
         {
-            LMKitMaestroTestsHelperService testService = new LMKitMaestroTestsHelperService();
+            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
             bool loadingSuccess = await testService.LoadModel();
             Assert.True(loadingSuccess);
 

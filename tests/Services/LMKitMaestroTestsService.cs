@@ -5,7 +5,7 @@ using LMKitMaestroTests.Services;
 
 namespace LMKitMaestroTests
 {
-    internal class LMKitMaestroTestsHelperService
+    internal class LMKitMaestroTestsService
     {
         public static readonly ModelInfo Model1 = new ModelInfo("lmKit", "llama-3-8b-instruct-gguf", "Llama-3-8B-Q4_K_M.gguf", new Uri(@"D:\_models\lm-kit\llama-3-8b-instruct-gguf\Llama-3-8B-Q4_K_M.gguf"));
         public static readonly ModelInfo Model2 = new ModelInfo("lm-kit", "phi-3.1-mini-4k-3.8b-instruct-gguf", "Phi-3.5-mini-Instruct-Q4_K_M.gguf", new Uri(@"D:\_models\lm-kit\phi-3.1-mini-4k-3.8b-instruct-gguf\Phi-3.5-mini-Instruct-Q4_K_M.gguf.gguf"));
@@ -23,7 +23,7 @@ namespace LMKitMaestroTests
 
         public ChatPageViewModel ChatPageViewModel { get; }
 
-        public LMKitMaestroTestsHelperService()
+        public LMKitMaestroTestsService()
         {
             ConversationListViewModel = GetNewConversationListViewModel(LmKitService, Database);
             ChatPageViewModel = GetNewChatPageViewModel(LmKitService, ConversationListViewModel, Database, LLmFileManager);

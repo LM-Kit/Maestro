@@ -5,10 +5,10 @@ public class ChatPageViewModelTests
     [Fact]
     public async Task AddNewConversation()
     {
-        var testService = new LMKitMaestroTestsHelperService();
+        var testService = new LMKitMaestroTestsService();
         var chatPageViewModel = testService.ChatPageViewModel;
 
-        bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model2);
+        bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
         Assert.True(loadingSuccess);
 
         chatPageViewModel.StartNewConversation();
@@ -22,10 +22,10 @@ public class ChatPageViewModelTests
     [Fact]
     public async Task DeleteConversation()
     {
-        var testService = new LMKitMaestroTestsHelperService();
+        var testService = new LMKitMaestroTestsService();
         var chatPageViewModel = testService.ChatPageViewModel;
 
-        bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model2);
+        bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
         Assert.True(loadingSuccess);
 
         testService.ChatPageViewModel.StartNewConversation();
@@ -37,12 +37,12 @@ public class ChatPageViewModelTests
     [Fact]
     public async Task DeleteConversationWhileGeneratingResponse()
     {
-        var testService = new LMKitMaestroTestsHelperService();
+        var testService = new LMKitMaestroTestsService();
 
         testService.LmKitService.LMKitConfig.RequestTimeout = 60;
         var chatPageViewModel = testService.ChatPageViewModel;
 
-        bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsHelperService.Model2);
+        bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
         Assert.True(loadingSuccess);
 
         testService.ChatPageViewModel.StartNewConversation();
