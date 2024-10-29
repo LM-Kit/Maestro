@@ -22,18 +22,18 @@ namespace LMKitMaestroTests
         public ILLMFileManager LLmFileManager { get; } = new DummyLLmFileManager();
         public LMKitService LmKitService { get; } = new LMKitService();
         public ILMKitMaestroDatabase Database { get; } = new DummyLMKitMaestroDatabase();
+
+        public SettingsViewModel SettingsViewModel { get; }
         public ConversationListViewModel ConversationListViewModel { get; }
-
         public ModelListViewModel ModelListViewModel { get; }
-
         public ChatPageViewModel ChatPageViewModel { get; }
 
         public LMKitMaestroTestsService()
         {
+            SettingsViewModel = GetNewSettingsViewModel(LmKitService);
             ConversationListViewModel = GetNewConversationListViewModel(LmKitService, Database);
             ModelListViewModel = GetNewModelListViewModel(LmKitService, LLmFileManager);
-            ChatPageViewModel = GetNewChatPageViewModel(LmKitService, ConversationListViewModel, ModelListViewModel, Database, LLmFileManager);
-
+            ChatPageViewModel = GetNewChatPageViewModel(LmKitService, ConversationListViewModel, ModelListViewModel, Database, LLmFileManager, SettingsViewModel);
             LmKitService.LMKitConfig.MaximumCompletionTokens = 200;
             LmKitService.LMKitConfig.RequestTimeout = 15;
         }
@@ -116,6 +116,13 @@ namespace LMKitMaestroTests
             return new ConversationViewModel(mainThread, popupService, appSettingsService, lmKitService, database);
         }
 
+        private static SettingsViewModel GetNewSettingsViewModel(LMKitService lmKitService)
+        {
+            var appSettingsService = new Mock<IAppSettingsService>().Object;
+
+            return new SettingsViewModel(appSettingsService, lmKitService);
+        }
+
         private static ConversationListViewModel GetNewConversationListViewModel(LMKitService lmKitService, ILMKitMaestroDatabase database)
         {
             var popupService = new Mock<IPopupService>().Object;
@@ -134,7 +141,7 @@ namespace LMKitMaestroTests
         }
 
         private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService, ConversationListViewModel conversationListViewModel,
-            ModelListViewModel modelListViewModel, ILMKitMaestroDatabase database,  ILLMFileManager llmFileManager)
+            ModelListViewModel modelListViewModel, ILMKitMaestroDatabase database,  ILLMFileManager llmFileManager, SettingsViewModel settingsViewModel)
         {
             var popupService = new Mock<IPopupService>().Object;
             var mainThread = new Mock<IMainThread>().Object;
@@ -142,7 +149,6 @@ namespace LMKitMaestroTests
             var logger = new Mock<ILogger<ChatPageViewModel>>().Object;
             var navigationService = new Mock<INavigationService>().Object;
             var popupNavigation = new Mock<IPopupNavigation>().Object;
-            var settingsViewModel = new Mock<SettingsViewModel>().Object;
 
             return new ChatPageViewModel(navigationService, popupService, popupNavigation, conversationListViewModel, 
                 modelListViewModel, logger, database, lmKitService, llmFileManager, settingsViewModel);
