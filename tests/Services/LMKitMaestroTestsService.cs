@@ -10,8 +10,8 @@ namespace LMKitMaestroTests
 {
     internal class LMKitMaestroTestsService
     {
-        public static readonly ModelInfo Model1 = new ModelInfo("lmKit", "llama-3-8b-instruct-gguf", "Llama-3-8B-Q4_K_M.gguf", new Uri(@"D:\_models\lm-kit\llama-3-8b-instruct-gguf\Llama-3-8B-Q4_K_M.gguf"));
-        public static readonly ModelInfo Model2 = new ModelInfo("lm-kit", "phi-3.1-mini-4k-3.8b-instruct-gguf", "Phi-3.5-mini-Instruct-Q4_K_M.gguf", new Uri(@"D:\_models\lm-kit\phi-3.1-mini-4k-3.8b-instruct-gguf\Phi-3.5-mini-Instruct-Q4_K_M.gguf.gguf"));
+        public static readonly Uri Model1 = new Uri(@"https://huggingface.co/lm-kit/phi-3.1-mini-4k-3.8b-instruct-gguf/resolve/main/Phi-3.1-mini-4k-Instruct-Q3_K_M.gguf?download=true");
+        public static readonly Uri Model2 = new Uri(@"https://huggingface.co/lm-kit/llama-3-8b-instruct-gguf/resolve/main/Llama-3-8B-Instruct-Q4_K_M.gguf?download=true");
 
         private Exception? _errorLoadingException;
         TaskCompletionSource<bool>? _modelLoadingTask;
@@ -50,11 +50,11 @@ namespace LMKitMaestroTests
             return new ConversationViewModelWrapper(ConversationListViewModel.CurrentConversation!);
         }
 
-        public async Task<bool> LoadModel(ModelInfo? modelInfo = null)
+        public async Task<bool> LoadModel(Uri? modelUri = null)
         {
-            if (modelInfo == null)
+            if (modelUri == null)
             {
-                modelInfo = Model1;
+                modelUri = Model1;
             }
 
             _modelLoadingTask = new TaskCompletionSource<bool>();
@@ -63,7 +63,7 @@ namespace LMKitMaestroTests
             LmKitService.ModelLoadingCompleted += LmKitService_ModelLoadingCompleted;
             LmKitService.ModelLoadingFailed += LmKitService_ModelLoadingFailed;
 
-            LmKitService.LoadModel(modelInfo.FileUri!);
+            LmKitService.LoadModel(modelUri!);
 
 
             var result = await _modelLoadingTask.Task;
