@@ -50,7 +50,7 @@ public class ChatPageViewModelTests
         Assert.True(loadingSuccess);
 
         testService.ChatPageViewModel.StartNewConversation();
-        Assert.Equal(1, chatPageViewModel.ConversationListViewModel.Conversations.Count);
+        Assert.Single(chatPageViewModel.ConversationListViewModel.Conversations);
         Assert.True(chatPageViewModel.ConversationListViewModel.CurrentConversation == chatPageViewModel.ConversationListViewModel.Conversations[0]);
 
         var conversation = new ConversationViewModelWrapper(chatPageViewModel.ConversationListViewModel.CurrentConversation);
