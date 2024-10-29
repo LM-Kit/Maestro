@@ -3,6 +3,7 @@ using LMKitMaestro.Tests.Services;
 
 namespace LMKitMaestro.Tests
 {
+    [Collection("LM-Kit Maestro Tests")]
     public class LmKitServiceTests
     {
         public LmKitServiceTests()
@@ -13,7 +14,7 @@ namespace LMKitMaestro.Tests
         public async Task LoadingModel()
         {
             LMKitMaestroTestsService testService = new();
-            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
+            bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model1);
             Assert.True(loadingSuccess);
         }
 

@@ -2,6 +2,7 @@ using LMKitMaestro.Tests.Services;
 
 namespace LMKitMaestro.Tests;
 
+[Collection("LM-Kit Maestro Tests")]
 public class ConversationViewModelTests
 {
     [Fact]

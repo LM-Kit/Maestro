@@ -2,6 +2,7 @@
 
 namespace LMKitMaestro.Tests;
 
+[Collection("LM-Kit Maestro Tests")]
 public class ChatPageViewModelTests
 {
     [Fact]

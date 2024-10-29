@@ -3,6 +3,8 @@ using LMKit.TextGeneration.Chat;
 using LMKitMaestro.Tests.Services;
 
 namespace LMKitMaestro.Tests;
+
+[Collection("LM-Kit Maestro Tests")]
 public class ChatHistoryPersistenceTests
 {
     [Fact]
@@ -43,7 +45,7 @@ public class ChatHistoryPersistenceTests
         testConversation.ConversationViewModel.Send();
 
         // Adding a delay before requesting model unload:
-        // If we are unloading the model right after sending the requestwe don't expect the conversation log to be saved in the database:
+        // If we are unloading the model right after sending the request, we don't expect the conversation log to be saved in the database:
         // If the prompt request was cancelled before arriving until Lm-Kit library, the ChatHistory instance is not touched
         // -> in such scenario we simply update the UI to show the message was cancelled but its content is never restored in between sessions.
         await Task.Delay(500);
