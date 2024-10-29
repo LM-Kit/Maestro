@@ -32,7 +32,7 @@ public class ConversationViewModelTests
 
         await Task.Delay(1000);
 
-        testConversation.ConversationViewModel.Cancel();
+        await testConversation.ConversationViewModel.Cancel();
 
         await testConversation.PromptResultTask.Task;
         LMKitMaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
@@ -52,7 +52,7 @@ public class ConversationViewModelTests
 
         await Task.Delay(50);
 
-        testConversation.ConversationViewModel.Cancel();
+        await testConversation.ConversationViewModel.Cancel();
 
         await testConversation.PromptResultTask.Task;
         LMKitMaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
@@ -70,7 +70,7 @@ public class ConversationViewModelTests
         testConversation.ConversationViewModel.InputText = "tell me a fucking story";
         testConversation.ConversationViewModel.Send();
 
-        testConversation.ConversationViewModel.Cancel();
+        await testConversation.ConversationViewModel.Cancel();
 
         await testConversation.PromptResultTask.Task;
         LMKitMaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
@@ -93,7 +93,7 @@ public class ConversationViewModelTests
         conversation2.ConversationViewModel.Send();
 
         await Task.Delay(25);
-        conversation1.ConversationViewModel.Cancel();
+        await conversation1.ConversationViewModel.Cancel();
 
 
         await conversation1.PromptResultTask.Task;

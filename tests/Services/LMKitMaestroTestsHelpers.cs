@@ -41,7 +41,7 @@ namespace LMKitMaestroTests
         {
             var assembly = Assembly.GetExecutingAssembly();
 
-            using (Stream chatHistoryStream = assembly.GetManifestResourceStream("LMKitMaestroTests.ChatHistorySerialized.txt"))
+            using (Stream chatHistoryStream = assembly!.GetManifestResourceStream("LMKitMaestroTests.ChatHistorySerialized.txt")!)
             using (StreamReader reader = new StreamReader(chatHistoryStream))
             {
                 string result = reader.ReadToEnd();

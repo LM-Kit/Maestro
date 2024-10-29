@@ -10,11 +10,11 @@ namespace LMKitMaestroTests
         public static readonly ModelInfo Model1 = new ModelInfo("lmKit", "llama-3-8b-instruct-gguf", "Llama-3-8B-Q4_K_M.gguf", new Uri(@"D:\_models\lm-kit\llama-3-8b-instruct-gguf\Llama-3-8B-Q4_K_M.gguf"));
         public static readonly ModelInfo Model2 = new ModelInfo("lm-kit", "phi-3.1-mini-4k-3.8b-instruct-gguf", "Phi-3.5-mini-Instruct-Q4_K_M.gguf", new Uri(@"D:\_models\lm-kit\phi-3.1-mini-4k-3.8b-instruct-gguf\Phi-3.5-mini-Instruct-Q4_K_M.gguf.gguf"));
 
-        private bool _progressEventWasRaised = false;
         private Exception? _errorLoadingException;
         TaskCompletionSource<bool>? _modelLoadingTask;
         TaskCompletionSource<bool>? _modelUnloadedTask;
-        TaskCompletionSource<LMKitService.PromptResult?>? _submitPromptTask;
+
+        public bool ProgressEventWasRaided { get; private set; }
 
         public ILLMFileManager LLmFileManager { get; } = new DummyLLmFileManager();
         public LMKitService LmKitService { get; } = new LMKitService();
@@ -51,7 +51,7 @@ namespace LMKitMaestroTests
             }
 
             _modelLoadingTask = new TaskCompletionSource<bool>();
-            _progressEventWasRaised = false;
+            ProgressEventWasRaided = false;
             LmKitService.ModelLoadingProgressed += LmKitService_ModelLoadingProgressed;
             LmKitService.ModelLoadingCompleted += LmKitService_ModelLoadingCompleted;
             LmKitService.ModelLoadingFailed += LmKitService_ModelLoadingFailed;
@@ -84,7 +84,7 @@ namespace LMKitMaestroTests
         private void LmKitService_ModelLoadingProgressed(object? sender, EventArgs e)
         {
             var args = (LMKitService.ModelLoadingProgressedEventArgs)e;
-            _progressEventWasRaised = true;
+            ProgressEventWasRaided = true;
         }
 
         private void LmKitService_ModelLoadingCompleted(object? sender, EventArgs e)

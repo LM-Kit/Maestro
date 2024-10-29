@@ -24,7 +24,7 @@ namespace LMKitMaestroTests.Services
                     promptResult = await lmKitService.SubmitPrompt(Conversation, prompt);
                     PromptResultTask.SetResult(promptResult);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     PromptResultTask.SetResult(null);
                 }

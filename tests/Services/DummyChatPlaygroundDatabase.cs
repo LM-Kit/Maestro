@@ -7,26 +7,26 @@ internal class DummyLMKitMaestroDatabase : ILMKitMaestroDatabase
 {
     public List<ConversationLog> Conversations = new List<ConversationLog>();
 
-    public async Task<int> DeleteConversation(ConversationLog conversationLog)
+    public Task<int> DeleteConversation(ConversationLog conversationLog)
     {
-        return Conversations.Remove(conversationLog) ? 1 : 0;
+        return Task.FromResult(Conversations.Remove(conversationLog) ? 1 : 0);
     }
 
-    public async Task<List<ConversationLog>> GetConversations()
+    public Task<List<ConversationLog>> GetConversations()
     {
-        return Conversations;
+        return Task.FromResult(Conversations);
     }
 
-    public async Task<int> SaveConversation(ConversationLog conversationLog)
+    public Task<int> SaveConversation(ConversationLog conversationLog)
     {
         if (Conversations.Contains(conversationLog))
         {
-            return 0;
+            return Task.FromResult(0);
         }
         else
         {
             Conversations.Add(conversationLog);
-            return 1;
+            return Task.FromResult(1);
         }
     }
 }

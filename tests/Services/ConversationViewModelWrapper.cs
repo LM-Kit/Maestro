@@ -29,21 +29,21 @@ internal sealed class ConversationViewModelWrapper
 
     private void OnTextGenerationCompleted(object? sender, EventArgs e)
     {
-        var conversationViewModel = (ConversationViewModel)sender;
+        var conversationViewModel = (ConversationViewModel)sender!;
 
         PromptResultTask.SetResult(true);
     }
 
     private void OnTextGenerationFailed(object? sender, EventArgs e)
     {
-        var conversationViewModel = (ConversationViewModel)sender;
+        var conversationViewModel = (ConversationViewModel)sender!;
 
         PromptResultTask.SetResult(false);
     }
 
     private void OnDatabaseSynchronizationCompleted(object? sender, EventArgs e)
     {
-        var conversationViewModel = (ConversationViewModel)sender;
+        var conversationViewModel = (ConversationViewModel)sender!;
 
         if (!DatabaseSyncTask.Task.IsCompleted)
         {

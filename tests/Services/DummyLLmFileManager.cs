@@ -11,7 +11,9 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     public bool FileCollectingInProgress { get; private set; }
 
+#pragma warning disable 67
     public event EventHandler? FileCollectingCompleted;
+#pragma warning restore 67
 
     public void DeleteModel(ModelInfo modelInfo)
     {
