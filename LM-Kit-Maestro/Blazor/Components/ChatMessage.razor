@@ -1,0 +1,294 @@
+﻿@inherits ComponentBase
+
+@inject IClipboardHandler ClipboardHandler
+
+<div class="rootContainer">
+    <div class="messageDiv @(MessageViewModel.Sender == MessageSender.User ? "userMessageDiv" : "assistantMessageDiv")">
+        <div style="display:flex">
+
+            @if (MessageViewModel.Sender == MessageSender.User)
+            {
+                <span class="status">
+                    @(GetStatusText(MessageViewModel.Status))
+                </span>
+            }
+
+            <div class="messageContent @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageContent" : "userMessageContent")">
+                @if (MessageViewModel.Sender == MessageSender.Assistant)
+                {
+                    if (MessageHtml != null)
+                    {
+                        @((MarkupString)MessageHtml)
+                    }
+                }
+                else
+                {
+                    @MessageViewModel.Text
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="messageFooter">
+        @if (MessageViewModel.Sender == MessageSender.User)
+        {
+            <div class="messageActions userMessageActions">
+                <span>
+                    <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons chatActionIcon">
+                        @(MessageJustCopied ? "check" : "content_copy")
+                    </button>
+                </span>
+            </div>
+        }
+        else
+        {
+            @*             <div class="align-right assistantResponseStats">
+        <span>
+        8.62 tok/sec • 281 tokens • 15.15s to first token • Stop: userStopped
+        </span>
+        </div> *@
+
+            <div class="messageActions">
+                <span>
+                    <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons chatActionIcon">
+                        @(MessageJustCopied ? "check" : "content_copy")
+                    </button>
+                </span>
+            </div>
+        }
+    </div>
+
+</div>
+
+<style>
+
+    .messageFooter {
+        display: flex;
+        visibility: hidden;
+    }
+
+        .messageFooter:hover {
+            visibility: visible;
+        }
+
+    .assistantResponseStats {
+    }
+
+    .messageActions {
+        position: absolute;
+    }
+
+    .userMessageActions {
+        right: 0;
+    }
+
+    .rootContainer {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        margin-right: 8px;
+        margin-left: 8px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    .messageDiv {
+    }
+
+    .rootContainer:hover > div {
+        visibility: visible;
+    }
+
+    .userMessageDiv {
+        max-width: 75%;
+        margin-left: auto;
+    }
+
+    .status {
+        margin-right: 16px;
+        color: var(--Surface3);
+        text-align: end;
+        display: inline-block;
+        align-self: center;
+    }
+
+    .userMessageDiv {
+    }
+
+    .messageContent {
+        white-space: pre-wrap; /* Preserves whitespace and allows wrapping */
+        word-break: break-word; /* Ensures long words break and wrap */
+        overflow-wrap: break-word; /* Allows wrapping long words */
+        max-width: 100%; /* Prevents the div from exceeding the width of its container */
+    }
+
+    .userMessageContent {
+        display: block;
+        background: var(--Surface);
+        padding-inline: 24px;
+        padding-block: 16px;
+        border-radius: 32px;
+    }
+
+    .assistantMessageContent {
+        padding: 4px;
+        margin-bottom: -16px; /* workaround: this syntax adds 16px bottom margin to the html block '(MarkupString)Markdig.Markdown.ToHtml(MessageViewModel.Text)'*/
+    }
+
+    .chatActionButton {
+        display: inline-block;
+        height: 28px;
+        width: 28px;
+        border-radius: 50%;
+        border-width: 0px;
+        background-color: transparent;
+        position: relative;
+    }
+
+    .chatActionIcon {
+        padding: 4px;
+        border-radius: 4px;
+        color: var(--OnBackground);
+        font-size: 13px;
+    }
+
+        .chatActionIcon:hover {
+            color: var(--OnBackground);
+        }
+
+    .dot {
+        height: 10px;
+        width: 10px;
+        margin-left: 4px;
+        background-color: var(--OnBackground);
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .align-right {
+        margin-left: auto;
+    }
+</style>
+
+@code {
+    const string ProgressIndicatorHtml = "<span class=\"dot \"></span>";
+
+    bool messageJustCopied;
+    bool MessageJustCopied
+    {
+        get => messageJustCopied;
+        set
+        {
+            messageJustCopied = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
+    string? messageHtml;
+    string? MessageHtml
+    {
+        get => messageHtml;
+        set
+        {
+            messageHtml = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
+    MessageViewModel? messageViewModel;
+    [Parameter]
+    [EditorRequired]
+#pragma warning disable BL0007
+    public MessageViewModel MessageViewModel
+    {
+        get => messageViewModel!;
+        set
+        {
+            if (messageViewModel != null)
+            {
+                messageViewModel.PropertyChanged -= OnMessageViewModelPropertyChanged;
+            }
+
+            messageViewModel = value;
+            messageViewModel.PropertyChanged += OnMessageViewModelPropertyChanged;
+
+            if (messageViewModel.Sender == MessageSender.Assistant)
+            {
+                messageHtml = GenerateAssistantResponseHtml(messageViewModel);
+            }
+
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+#pragma warning restore BL0007
+
+    private void OnMessageViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (MessageViewModel.Sender == MessageSender.Assistant)
+        {
+            if (e.PropertyName == nameof(MessageViewModel.Text))
+            {
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel);
+            }
+            else if (e.PropertyName == nameof(MessageViewModel.MessageInProgress) && !MessageViewModel.MessageInProgress)
+            {
+                if (MessageHtml != null && MessageHtml.Contains(ProgressIndicatorHtml))
+                {
+                    MessageHtml = MessageHtml.Replace(ProgressIndicatorHtml, string.Empty);
+                }
+            }
+        }
+
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    private async Task OnCopyMessageButtonClicked()
+    {
+        bool success = await ClipboardHandler.CopyTextToClipboardAsync(MessageViewModel.Text);
+
+        if (success)
+        {
+            if (!MessageJustCopied)
+            {
+                var _ = Task.Run(async () =>
+                {
+                    MessageJustCopied = true;
+                    await Task.Delay(3000);
+                    MessageJustCopied = false;
+                });
+            }
+        }
+    }
+
+    private static string GenerateAssistantResponseHtml(MessageViewModel messageViewModel)
+    {
+        string html = !string.IsNullOrEmpty(messageViewModel.Text) ? Markdig.Markdown.ToHtml(messageViewModel.Text) : string.Empty;
+
+        if (messageViewModel.MessageInProgress)
+        {
+            var closingTagIndex = Math.Max(0, html.LastIndexOf(@"</"));
+
+            if (closingTagIndex != -1)
+            {
+                html = html.Insert(closingTagIndex, ProgressIndicatorHtml);
+            }
+        }
+
+        return html;
+    }
+
+    private static string GetStatusText(LmKitTextGenerationStatus status)
+    {
+        switch (status)
+        {
+            default:
+                return string.Empty;
+
+            case LmKitTextGenerationStatus.Cancelled:
+                return "Cancelled";
+
+            case LmKitTextGenerationStatus.UnknownError:
+                return "Unknown error";
+        }
+    }
+}
