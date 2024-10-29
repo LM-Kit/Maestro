@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:PopupView 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:local="clr-namespace:LMKitMaestro"
+    xmlns:controls="clr-namespace:LMKitMaestro.Controls"
+    xmlns:views="clr-namespace:LMKitMaestro.Views"
+    xmlns:converters="clr-namespace:LMKitMaestro.Converters"
+    xmlns:models="clr-namespace:LMKitMaestro.Models"
+    xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
+    xmlns:services="clr-namespace:LMKitMaestro.Services"
+    xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    x:DataType="vm:AlertPopupViewModel"
+    ShowOkButton="True"
+    BodyVerticalOptions="Center"
+    ShowBackgroundOverlay="True"
+    ShowCloseButton="False"
+    x:Class="LMKitMaestro.Views.AlertPopup">
+
+    <views:PopupView.Body>
+        <Border
+            WidthRequest="{x:Static local:AppConstants.AlertPopupWidth}"
+            Style="{StaticResource CardBorder}">
+
+            <VerticalStackLayout Spacing="12">
+                <Label 
+                    FontAttributes="Bold"
+                    StyleClass="Subtitle"
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding Title, Converter={mct:IsStringNotNullOrEmptyConverter}}"
+                    Text="{Binding Title}"/>
+
+                <Label Text="{Binding Message}"/>
+            </VerticalStackLayout>
+        </Border>
+    </views:PopupView.Body>
+</views:PopupView>

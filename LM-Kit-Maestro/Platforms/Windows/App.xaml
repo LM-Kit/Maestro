@@ -1,0 +1,26 @@
+﻿<maui:MauiWinUIApplication
+    x:Class="LMKitMaestro.WinUI.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:maui="using:Microsoft.Maui"
+    xmlns:local="using:LMKitMaestro.WinUI">
+    <maui:MauiWinUIApplication.Resources>
+        <DataTemplate x:Key="MauiAppTitleBarTemplate">
+
+            <Grid >
+                <Border
+                    Background="#0D1117"
+                    Canvas.ZIndex="1"
+                    VerticalAlignment="Stretch"
+                    Margin="0,0">
+                    <!--<TextBlock
+                        Foreground="{StaticResource OutlineVariant}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Text="LM-Kit Chat Playground"/>-->
+
+                </Border>
+            </Grid>
+        </DataTemplate>
+    </maui:MauiWinUIApplication.Resources>
+</maui:MauiWinUIApplication>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:LMKitMaestro"
+             xmlns:views="clr-namespace:LMKitMaestro.Views"
+             xmlns:models="clr-namespace:LMKitMaestro.Models"
+             xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
+             xmlns:controls="clr-namespace:LMKitMaestro.Controls"
+             xmlns:converters="clr-namespace:LMKitMaestro.Converters"
+             xmlns:services="clr-namespace:LMKitMaestro.Services"
+             xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
+             xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:blazor="clr-namespace:LMKitMaestro.Blazor"
+             x:Class="LMKitMaestro.Views.ChatView"
+             x:DataType="vm:ConversationViewModel"
+             IsEnabled="{Binding ., Converter={mct:IsNotNullConverter}}"
+             x:Name="chatView"
+             >
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SendButtonStyle" TargetType="Button">
+                <Setter Property="Text" Value="{x:Static icons:MaterialRegular.Send}"/>
+                <Setter Property="WidthRequest" Value="32"/>
+                <Setter Property="HeightRequest" Value="32"/>
+                <Setter Property="CornerRadius" Value="16"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="FontFamily" Value="MaterialRegular"/>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" >
+                                <VisualState.Setters>
+                                    <Setter Property="TextColor" Value="{StaticResource Surface2}" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource OnBackground}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    <Setter Property="TextColor" Value="{StaticResource Surface2}" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface4}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="TextColor" Value="{StaticResource Surface2}" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource OnBackground}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Hover">
+                                <VisualState.Setters>
+                                    <Setter Property="TextColor" Value="{StaticResource Surface2}" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource OnBackground}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <Grid RowDefinitions="*, auto, 32">
+        <Grid ZIndex="1" BackgroundColor="{StaticResource Background}" IsVisible="{Binding IsInitialized, Converter={mct:InvertedBoolConverter}}">
+            <VerticalStackLayout Spacing="12" HorizontalOptions="Center" VerticalOptions="Center">
+                <Label TextColor="{StaticResource OutlineVariant}" Text="Loading chat history..."/>
+                <ActivityIndicator IsRunning="True" Color="{StaticResource OutlineVariant}" WidthRequest="16" HeightRequest="16"/>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Mesage history Blazor view -->
+        <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
+            <BlazorWebView.RootComponents>
+                <RootComponent Selector="#app" ComponentType="{x:Type blazor:Routes}" />
+            </BlazorWebView.RootComponents>
+        </BlazorWebView>
+
+        <!-- Text completion result toast -->
+        <Grid 
+            ZIndex="1"
+            RowDefinitions="*,auto"
+            Margin="12"
+            HorizontalOptions="Center"
+            VerticalOptions="End">
+
+            <Border
+                IsVisible="{Binding Source={x:Reference chatView}, Path=ShowLatestCompletionResult}"
+                HorizontalOptions="Center"
+                Margin="0, 12" 
+                Padding="16, 12"
+                StrokeThickness="0"
+                BackgroundColor="{StaticResource Surface}"
+                StrokeShape="RoundRectangle 20"
+                ZIndex="1">
+                <Grid>
+                    <HorizontalStackLayout>
+                        <Label TextColor="{StaticResource OnSurface}" Text="{Binding Source={x:Reference chatView}, Path=LatestStopReason, StringFormat='{}Stop reason: {0}'}"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Chat input -->
+        <Border  
+            BackgroundColor="{StaticResource Surface}"
+            MaximumWidthRequest="800"
+            Focused="OnEntryBorderFocused"
+            Unfocused="OnEntryBorderUnfocused"
+            Padding="12, 10"
+            StrokeThickness="0.2"
+            StrokeShape="RoundRectangle 32"
+            Grid.Row="1">
+            <Border.Triggers>
+                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference chatView}, Path=ChatEntryIsFocused}" Value="True">
+                    <Setter Property="Stroke" Value="{StaticResource Outline}"/>
+                </DataTrigger>
+                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference chatView}, Path=ChatEntryIsFocused}" Value="False">
+                    <Setter Property="Stroke" Value="{StaticResource Background}"/>
+                </DataTrigger>
+            </Border.Triggers>
+
+            <Grid ColumnSpacing="16" ColumnDefinitions="*, auto">
+                <controls:ChatBoxEditor
+                    AutoSize="TextChanges"
+                    EntryKeyReleased="OnEntryKeyReleased"
+                    MaximumHeightRequest="200"
+                    x:Name="chatBoxEditor"
+                    BackgroundColor="Transparent"
+                    Text="{Binding InputText, Mode=TwoWay}"/>
+
+                <Button 
+                    Grid.Column="1" 
+                    Style="{StaticResource SendButtonStyle}"
+                    >
+
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button" Binding="{Binding ., Converter={mct:IsNullConverter}}" Value="True">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="Button" Binding="{Binding AwaitingResponse}" Value="False">
+                            <Setter Property="Command" Value="{Binding SendCommand}"/>
+                            <Setter Property="IsEnabled" Value="{Binding InputText, Converter={mct:IsStringNotNullOrWhiteSpaceConverter}}"/>
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="Button" Binding="{Binding AwaitingResponse}" Value="True">
+                            <Setter Property="Text" Value="{x:Static icons:MaterialRegular.Stop}"/>
+                            <Setter Property="Command" Value="{Binding CancelCommand}"/>
+                            <Setter Property="IsEnabled" Value="True"/>
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Last loaded model info -->
+        <Grid 
+            MaximumWidthRequest="800"
+            IsVisible="False" 
+            HorizontalOptions="Center"
+            VerticalOptions="Center" 
+            Margin="16, 0" 
+            Grid.Row="2">
+            <Grid.Triggers>
+                <DataTrigger Value="True" TargetType="Grid">
+                    <DataTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:AppShellViewModel}}" Path="AppIsInitialized"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ConversationViewModel}}" Path="IsInitialized"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ConversationViewModel}}" Path="LastUsedModel" Converter="{mct:IsNotNullConverter}"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LmKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static services:LmKitModelLoadingState.Unloaded}"/>
+                        </MultiBinding>
+                    </DataTrigger.Binding>
+                    <Setter Property="IsVisible" Value="True"/>
+                </DataTrigger>
+
+                <DataTrigger Value="True" TargetType="Grid">
+                    <DataTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:AppShellViewModel}}" Path="AppIsInitialized"/>
+                            <Binding Path="UsedDifferentModel"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LmKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static services:LmKitModelLoadingState.Loaded}"/>
+                        </MultiBinding>
+                    </DataTrigger.Binding>
+                    <Setter Property="IsVisible" Value="True"/>
+                </DataTrigger>
+            </Grid.Triggers>
+
+            <uranium:StatefulContentView
+                TappedCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=LoadModelCommand}"
+                CommandParameter="{Binding LastUsedModel}"
+                ToolTipProperties.Text="Click to reload this model">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter TargetName="reloadLabel" Property="Label.TextColor" Value="{StaticResource OnSurface}"/>
+                                    <Setter TargetName="reloadIcon" Property="Label.TextColor" Value="{StaticResource OnSurface}"/>
+                                    <Setter Property="Opacity" Value="0.8"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="PointerOver">
+                                <VisualState.Setters>
+                                    <Setter TargetName="reloadLabel" Property="Label.TextColor" Value="{StaticResource OnSurface}"/>
+                                    <Setter TargetName="reloadIcon" Property="Label.TextColor" Value="{StaticResource OnSurface}"/>
+                                    <Setter TargetName="reloadIcon" Property="IsVisible" Value="True"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+
+                <Grid>
+                    <Label 
+                        x:Name="reloadLabel" 
+                        VerticalOptions="Center"
+                        LineBreakMode="HeadTruncation"
+                        StyleClass="Subtitle"
+                        FontSize="13"
+                        TextColor="{StaticResource Outline}"
+                        Text="{Binding LastUsedModel, Converter={converters:FileNameConverter}, StringFormat='{}This chat last used \'{0}\''}"/>
+
+                    <Label 
+                        x:Name="reloadIcon"
+                        Margin="2, 0"
+                        IsVisible="False"
+                        FontSize="13"
+                        TranslationX="{Binding Source={x:Reference reloadLabel}, Path=Width}"
+                        FontFamily="MaterialRegular" 
+                        VerticalOptions="Center"
+                        TextColor="{StaticResource Outline}" 
+                        Text="{x:Static icons:MaterialRegular.Refresh}"/>
+                </Grid>
+            </uranium:StatefulContentView>
+        </Grid>
+    </Grid>
+</ContentView>

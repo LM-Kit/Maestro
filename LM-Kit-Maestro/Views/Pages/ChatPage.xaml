@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:LMKitMaestro"
+             xmlns:controls="clr-namespace:LMKitMaestro.Controls"
+             xmlns:views="clr-namespace:LMKitMaestro.Views"
+             xmlns:converters="clr-namespace:LMKitMaestro.Converters"
+             xmlns:models="clr-namespace:LMKitMaestro.Models"
+             xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
+             xmlns:services="clr-namespace:LMKitMaestro.Services"
+             xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             x:Class="LMKitMaestro.Views.ChatPage"
+             x:DataType="vm:ChatPageViewModel"
+             x:Name="chatPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Grid" x:Key="SidebarHeaderGrid">
+                <Setter Property="ColumnDefinitions" Value="32, *, 32"/>
+                <Setter Property="VerticalOptions" Value="Start"/>
+                <Setter Property="MinimumWidthRequest" Value="{x:Static local:AppConstants.ChatPageSideTogglesWidth}"/>
+                <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ModelSelectionButtonHeight}"/>
+                <Setter Property="IsVisible" Value="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles}"/>
+            </Style>
+
+            <Style TargetType="Grid" x:Key="TuckedSidebarUpperGridSyle">
+                <Setter Property="WidthRequest" Value="{x:Static local:AppConstants.ChatPageSideTogglesWidth}"/>
+                <Setter Property="VerticalOptions" Value="Start"/>
+                <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ModelSelectionButtonHeight}"/>
+            </Style>
+
+            <Style TargetType="Label" x:Key="SidebarTitleStyle">
+                <Setter Property="Grid.Column" Value="1"/>
+                <Setter Property="LineBreakMode" Value="NoWrap"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+            </Style>
+            
+            <ControlTemplate x:Key="TuckedSettingsSidebarUpperGrid">
+                <Grid Style="{StaticResource TuckedSidebarUpperGridSyle}" Grid.Column="2">
+                    <Button
+                      Margin="12, 0"
+                      Style="{StaticResource SidebarToggleButtonStyle}"
+                      Text="{x:Static icons:MaterialRegular.Settings}"
+                      Command="{Binding ToggleSettingsSidebarCommand}"
+                      HorizontalOptions="End"
+                      Grid.Column="2"/>
+                </Grid>
+            </ControlTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <!-- Note: negative margin is to overlap the section bar black space -->
+    <Grid
+        Margin="0, -8, 0, 0"
+        ColumnSpacing="0">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth}"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth}"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{x:Static local:AppConstants.ChatPageHeaderHeight}"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header background overlay-->
+        <Grid Grid.ColumnSpan="3" BackgroundColor="{StaticResource Surface}"/>
+
+        <!-- Header horizontal separator-->
+        <BoxView Grid.ColumnSpan="3" StyleClass="Separator" VerticalOptions="End"/>
+
+        <!-- Header -->
+        <Grid 
+            VerticalOptions="Start"
+            HeightRequest="{x:Static local:AppConstants.ChatPageHeaderHeight}"
+            Grid.ColumnSpan="3" 
+            ColumnDefinitions="auto, *, auto">
+
+            <!-- Chats sidebar header section -->
+            <Grid 
+                Style="{StaticResource SidebarHeaderGrid}"
+                Padding="16, 0, 0, 0"
+                WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth}">
+
+                <Button
+                    Style="{StaticResource SidebarToggleButtonStyle}"
+                    Text="{x:Static icons:MaterialRegular.Forum}"
+                    Command="{Binding ToggleChatsSidebarCommand}"
+                    HorizontalOptions="Start"/>
+
+                <Label
+                    StyleClass="Title"
+                    Style="{StaticResource SidebarTitleStyle}"
+                    IsVisible="{Binding ChatsSidebarIsToggled}"
+                    Text="Chats"/>
+
+                <Button
+                    HorizontalOptions="End"
+                    ToolTipProperties.Text="Start a new chat"
+                    Style="{StaticResource SecondaryActionButtonStyle}"
+                    Grid.Column="2" 
+                    FontFamily="MaterialRegular"
+                    Text="{x:Static icons:MaterialRegular.Add}"
+                    Command="{Binding StartNewConversationCommand}"/>
+            </Grid>
+
+            <views:ModelSelectionButton 
+                x:Name="modelSelectionButton"
+                VerticalOptions="Start"
+                Margin="16, 0"
+                HeightRequest="{x:Static local:AppConstants.ModelSelectionButtonHeight}"
+                Grid.Column="1">
+                <views:ModelSelectionButton.Triggers>
+                    <DataTrigger TargetType="views:ModelSelectionButton" Binding="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles}" Value="True">
+                        <Setter Property="MaximumWidthRequest" Value="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"/>
+                    </DataTrigger>
+                </views:ModelSelectionButton.Triggers>
+            </views:ModelSelectionButton>
+
+            <!-- Settings sidebar header section -->
+            <Grid
+                Style="{StaticResource SidebarHeaderGrid}"
+                Padding="0, 0, 16, 0"
+                WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth}"
+                Grid.Column="2">
+
+                <Button
+                    IsVisible="{Binding SettingsSidebarIsToggled}"
+                    HorizontalOptions="Start"
+                    ToolTipProperties.Text="Reset default settings"
+                    Style="{StaticResource SecondaryActionButtonStyle}"
+                    Text="{x:Static icons:MaterialRegular.Restart_alt}" 
+                    Command="{Binding SettingsViewModel.ResetDefaultValuesCommand}" />
+
+                <Label 
+                    StyleClass="Title"
+                    Style="{StaticResource SidebarTitleStyle}"
+                    IsVisible="{Binding SettingsSidebarIsToggled}"
+                    Text="Settings"/>
+
+                <Button 
+                    Grid.Column="2"
+                    Style="{StaticResource SidebarToggleButtonStyle}"
+                    Text="{x:Static icons:MaterialRegular.Settings}"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ToggleSettingsSidebarCommand}"/>
+            </Grid>
+        </Grid>
+
+        <views:ChatConversationsView
+            x:Name="chatsSidebar"
+            WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth}"
+            Grid.Row="1"/>
+
+        <views:ChatView
+            x:Name="chatView"
+            Grid.RowSpan="2"
+            Margin="{x:Static views:ChatPage.ChatViewMargin}"
+            BindingContext="{Binding ConversationListViewModel.CurrentConversation}"
+            Grid.Column="1"/>
+
+        <views:ChatSettingsView
+            x:Name="settingsSidebar"
+            Grid.Row="1"
+            Grid.Column="2"
+            WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth}"
+            BindingContext="{Binding SettingsViewModel}"/>
+    </Grid>
+</ContentPage>
