@@ -21,12 +21,18 @@ public class ChatPageViewModelTests
         var testService = new LMKitMaestroTestsService();
         var chatPageViewModel = testService.ChatPageViewModel;
 
-        bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
-        Assert.True(loadingSuccess);
-
+        // Starting 2 conversations
         testService.ChatPageViewModel.StartNewConversation();
-        Assert.True(chatPageViewModel.ConversationListViewModel.Conversations.Count == 1);
+        testService.ChatPageViewModel.StartNewConversation();
+        Assert.True(chatPageViewModel.ConversationListViewModel.Conversations.Count == 2);
         Assert.True(chatPageViewModel.ConversationListViewModel.CurrentConversation == chatPageViewModel.ConversationListViewModel.Conversations[0]);
+
+        var conversationToDelete = chatPageViewModel.ConversationListViewModel.Conversations[1];
+
+        await testService.ChatPageViewModel.DeleteConversation(conversationToDelete);
+
+        Assert.True(chatPageViewModel.ConversationListViewModel.Conversations.Count == 1);
+        Assert.True(chatPageViewModel.ConversationListViewModel.CurrentConversation != conversationToDelete);
     }
 
     [Fact]
