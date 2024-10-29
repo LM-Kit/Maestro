@@ -1,4 +1,6 @@
-﻿namespace LMKitMaestroTests.Tests;
+﻿using LMKitMaestro.Tests.Services;
+
+namespace LMKitMaestro.Tests;
 
 public class ChatPageViewModelTests
 {
@@ -10,7 +12,7 @@ public class ChatPageViewModelTests
 
         chatPageViewModel.StartNewConversation();
 
-        Assert.True(chatPageViewModel.ConversationListViewModel.Conversations.Count == 1);
+        Assert.Equal(1, chatPageViewModel.ConversationListViewModel.Conversations.Count);
         Assert.True(chatPageViewModel.ConversationListViewModel.CurrentConversation == chatPageViewModel.ConversationListViewModel.Conversations[0]);
     }
 
@@ -24,14 +26,14 @@ public class ChatPageViewModelTests
         // Starting 2 conversations
         testService.ChatPageViewModel.StartNewConversation();
         testService.ChatPageViewModel.StartNewConversation();
-        Assert.True(chatPageViewModel.ConversationListViewModel.Conversations.Count == 2);
+        Assert.Equal(2, chatPageViewModel.ConversationListViewModel.Conversations.Count);
         Assert.True(chatPageViewModel.ConversationListViewModel.CurrentConversation == chatPageViewModel.ConversationListViewModel.Conversations[0]);
 
         var conversationToDelete = chatPageViewModel.ConversationListViewModel.Conversations[1];
 
         await testService.ChatPageViewModel.DeleteConversation(conversationToDelete);
 
-        Assert.True(chatPageViewModel.ConversationListViewModel.Conversations.Count == 1);
+        Assert.Equal(1, chatPageViewModel.ConversationListViewModel.Conversations.Count);
         Assert.True(chatPageViewModel.ConversationListViewModel.CurrentConversation != conversationToDelete);
     }
 
@@ -47,7 +49,7 @@ public class ChatPageViewModelTests
         Assert.True(loadingSuccess);
 
         testService.ChatPageViewModel.StartNewConversation();
-        Assert.True(chatPageViewModel.ConversationListViewModel.Conversations.Count == 1);
+        Assert.Equal(1, chatPageViewModel.ConversationListViewModel.Conversations.Count);
         Assert.True(chatPageViewModel.ConversationListViewModel.CurrentConversation == chatPageViewModel.ConversationListViewModel.Conversations[0]);
 
         var conversation = new ConversationViewModelWrapper(chatPageViewModel.ConversationListViewModel.CurrentConversation);

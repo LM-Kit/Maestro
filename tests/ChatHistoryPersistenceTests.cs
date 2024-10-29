@@ -1,7 +1,8 @@
 ﻿using LMKitMaestro.Models;
 using LMKit.TextGeneration.Chat;
+using LMKitMaestro.Tests.Services;
 
-namespace LMKitMaestroTests;
+namespace LMKitMaestro.Tests;
 public class ChatHistoryPersistenceTests
 {
     [Fact]
@@ -21,12 +22,12 @@ public class ChatHistoryPersistenceTests
 
         await testConversation.DatabaseSyncTask.Task;
         var savedConversations = await testService.Database.GetConversations();
-        Assert.True(savedConversations.Count == 1);
+        Assert.Single(savedConversations);
 
         var conversationLog = savedConversations[0];
-        Assert.True(conversationLog.ChatHistoryData != null);
+        Assert.NotNull(conversationLog.ChatHistoryData);
         var chatHistory = ChatHistory.Deserialize(conversationLog.ChatHistoryData);
-        Assert.True(CountUserAndAssistantMessages(chatHistory) == 2);
+        Assert.Equal(2, CountUserAndAssistantMessages(chatHistory));
     }
 
     [Fact]
@@ -55,12 +56,12 @@ public class ChatHistoryPersistenceTests
         var messages = testConversation.ConversationViewModel.Messages.Count;
         await testConversation.DatabaseSyncTask.Task;
         var savedConversations = await testService.Database.GetConversations();
-        Assert.True(savedConversations.Count == 1);
+        Assert.Single(savedConversations);
 
         var conversationLog = savedConversations[0];
-        Assert.True(conversationLog.ChatHistoryData != null);
+        Assert.NotNull(conversationLog.ChatHistoryData);
         var chatHistory = ChatHistory.Deserialize(conversationLog.ChatHistoryData);
-        Assert.True(CountUserAndAssistantMessages(chatHistory) == 2);
+        Assert.Equal(2, CountUserAndAssistantMessages(chatHistory));
     }
 
     [Fact]
@@ -70,7 +71,7 @@ public class ChatHistoryPersistenceTests
         bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
         Assert.True(loadingSuccess);
 
-        ConversationLog dummyConversationLog = new ConversationLog()
+        ConversationLog dummyConversationLog = new()
         {
             ChatHistoryData = LMKitMaestroTestsHelpers.GetTestChatHistoryData(),
         };
@@ -78,7 +79,7 @@ public class ChatHistoryPersistenceTests
         await testService.Database.SaveConversation(dummyConversationLog);
 
         await testService.ConversationListViewModel.LoadConversationLogs();
-        Assert.True(testService.ConversationListViewModel.Conversations.Count == 1);
+        Assert.Single(testService.ConversationListViewModel.Conversations);
 
         var testConversation = new ConversationViewModelWrapper(testService.ConversationListViewModel.Conversations[0]);
         testConversation.ConversationViewModel.InputText = "now add 69";
@@ -88,15 +89,15 @@ public class ChatHistoryPersistenceTests
 
         await testConversation.DatabaseSyncTask.Task;
         var savedConversations = await testService.Database.GetConversations();
-        Assert.True(savedConversations.Count == 1);
+        Assert.Single(savedConversations);
 
         var conversationLog = savedConversations[0];
-        Assert.True(conversationLog.ChatHistoryData != null);
+        Assert.NotNull(conversationLog.ChatHistoryData);
         var chatHistory = ChatHistory.Deserialize(conversationLog.ChatHistoryData);
-        Assert.True(CountUserAndAssistantMessages(chatHistory) == 4);
+        Assert.Equal(4, CountUserAndAssistantMessages(chatHistory));
 
         var lastMessage = chatHistory.Messages.Last();
-        Assert.True(lastMessage.AuthorRole == AuthorRole.Assistant);
+        Assert.Equal(AuthorRole.Assistant, lastMessage.AuthorRole);
         //Assert.Contains("71", lastMessage.Content);
     }
 

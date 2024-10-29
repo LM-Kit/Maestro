@@ -1,7 +1,7 @@
 using LMKitMaestro.Services;
-using LMKitMaestroTests.Services;
+using LMKitMaestro.Tests.Services;
 
-namespace LMKitMaestroTests
+namespace LMKitMaestro.Tests
 {
     public class LmKitServiceTests
     {
@@ -12,7 +12,7 @@ namespace LMKitMaestroTests
         [Fact]
         public async Task LoadingModel()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
             bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
             Assert.True(loadingSuccess);
         }
@@ -20,7 +20,7 @@ namespace LMKitMaestroTests
         [Fact]
         public async Task LoadUnloadLoadAnother()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
             bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model1);
             Assert.True(loadingSuccess);
 
@@ -34,7 +34,7 @@ namespace LMKitMaestroTests
         [Fact]
         public async Task LoadThenLoadAnother()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
             bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model1);
             Assert.True(loadingSuccess);
 
@@ -46,7 +46,7 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task SubmitOnePrompt()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
             bool loadingSuccess = await testService.LoadModel();
             Assert.True(loadingSuccess);
 
@@ -59,7 +59,7 @@ namespace LMKitMaestroTests
         [Fact]
         public async Task ChangePrompt()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
 
             testService.LmKitService.LMKitConfig.SystemPrompt = "You are a very angry chatbot and starts all your replies with 'ARGH'";
             bool loadingSuccess = await testService.LoadModel();
@@ -77,7 +77,7 @@ namespace LMKitMaestroTests
         [Fact]
         public async Task HonorsTimeout()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
 
             testService.LmKitService.LMKitConfig.RequestTimeout = 1;
             bool loadingSuccess = await testService.LoadModel();
@@ -86,15 +86,15 @@ namespace LMKitMaestroTests
             var conversation = testService.GetNewLmKitConversation();
             var response = await testService.LmKitService.SubmitPrompt(conversation, "tell me a story");
 
-            Assert.True(response != null);
-            Assert.True(response.Status == LmKitTextGenerationStatus.Cancelled);
+            Assert.NotNull(response);
+            Assert.Equal(response.Status, LmKitTextGenerationStatus.Cancelled);
             Assert.True(response.Exception is OperationCanceledException operationCancelled);
         }
 
         [Fact]
         private async Task Submit2PromptsFromDistinctConversations()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
             bool loadingSuccess = await testService.LoadModel();
             Assert.True(loadingSuccess);
 
@@ -111,7 +111,7 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task Submit3PromptsFromDistinctConversations()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
             bool loadingSuccess = await testService.LoadModel();
             Assert.True(loadingSuccess);
 
@@ -131,7 +131,7 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task SubmitOnePromptChangeModelSubmitAnother()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
             bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model1);
             Assert.True(loadingSuccess);
 
@@ -152,7 +152,7 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task SubmitOnePromptChangeModelSubmitAnother2()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
             testService.LmKitService.LMKitConfig.RequestTimeout = 30;
             bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model1);
             Assert.True(loadingSuccess);
@@ -177,12 +177,12 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task Submit2PromptsFromDistinctConversationsThenUnloadModel()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
             bool loadingSuccess = await testService.LoadModel();
             Assert.True(loadingSuccess);
 
-            LmKitDummyConversation conversation1 = new LmKitDummyConversation(testService.LmKitService);
-            LmKitDummyConversation conversation2 = new LmKitDummyConversation(testService.LmKitService);
+            LmKitDummyConversation conversation1 = new(testService.LmKitService);
+            LmKitDummyConversation conversation2 = new(testService.LmKitService);
 
             conversation1.SubmitPrompt(testService.LmKitService, "bonjour");
             conversation2.SubmitPrompt(testService.LmKitService, "chaleureuses salutations");
@@ -200,11 +200,11 @@ namespace LMKitMaestroTests
         [Fact]
         private async Task SubmitOnePromptThenUnloadModel()
         {
-            LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+            LMKitMaestroTestsService testService = new();
             bool loadingSuccess = await testService.LoadModel();
             Assert.True(loadingSuccess);
 
-            LmKitDummyConversation conversation1 = new LmKitDummyConversation(testService.LmKitService);
+            LmKitDummyConversation conversation1 = new(testService.LmKitService);
 
             conversation1.SubmitPrompt(testService.LmKitService, "bonjour");
 

@@ -1,6 +1,6 @@
 ﻿using LMKitMaestro.ViewModels;
 
-namespace LMKitMaestroTests;
+namespace LMKitMaestro.Tests.Services;
 
 internal sealed class ConversationViewModelWrapper
 {

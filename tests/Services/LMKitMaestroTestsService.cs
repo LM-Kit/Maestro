@@ -1,17 +1,17 @@
 ﻿using LMKitMaestro.Data;
 using LMKitMaestro.Services;
+using LMKitMaestro.Tests.Services;
 using LMKitMaestro.ViewModels;
-using LMKitMaestroTests.Services;
 using Microsoft.Extensions.Logging;
 using Mopups.Interfaces;
 using Moq;
 
-namespace LMKitMaestroTests
+namespace LMKitMaestro.Tests
 {
     internal class LMKitMaestroTestsService
     {
-        public static readonly Uri Model1 = new Uri(@"https://huggingface.co/lm-kit/phi-3.1-mini-4k-3.8b-instruct-gguf/resolve/main/Phi-3.1-mini-4k-Instruct-Q3_K_M.gguf?download=true");
-        public static readonly Uri Model2 = new Uri(@"https://huggingface.co/lm-kit/llama-3-8b-instruct-gguf/resolve/main/Llama-3-8B-Instruct-Q4_K_M.gguf?download=true");
+        public static readonly Uri Model1 = new(@"https://huggingface.co/lm-kit/phi-3.1-mini-4k-3.8b-instruct-gguf/resolve/main/Phi-3.1-mini-4k-Instruct-Q3_K_M.gguf?download=true");
+        public static readonly Uri Model2 = new(@"https://huggingface.co/lm-kit/llama-3-8b-instruct-gguf/resolve/main/Llama-3-8B-Instruct-Q4_K_M.gguf?download=true");
 
         private Exception? _errorLoadingException;
         TaskCompletionSource<bool>? _modelLoadingTask;

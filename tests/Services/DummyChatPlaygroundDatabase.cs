@@ -1,11 +1,11 @@
 ﻿using LMKitMaestro.Data;
 using LMKitMaestro.Models;
 
-namespace LMKitMaestroTests;
+namespace LMKitMaestro.Tests.Services;
 
 internal class DummyLMKitMaestroDatabase : ILMKitMaestroDatabase
 {
-    public List<ConversationLog> Conversations = new List<ConversationLog>();
+    public List<ConversationLog> Conversations = new();
 
     public Task<int> DeleteConversation(ConversationLog conversationLog)
     {

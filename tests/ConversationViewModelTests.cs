@@ -1,11 +1,13 @@
-namespace LMKitMaestroTests;
+using LMKitMaestro.Tests.Services;
+
+namespace LMKitMaestro.Tests;
 
 public class ConversationViewModelTests
 {
     [Fact]
     public async Task SendsAndReceivesResponse()
     {
-        LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+        LMKitMaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -21,7 +23,7 @@ public class ConversationViewModelTests
     [Fact]
     public async Task CancelPromptAfter1sec()
     {
-        LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+        LMKitMaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -41,7 +43,7 @@ public class ConversationViewModelTests
     [Fact]
     public async Task CancelPromptAfter50Ms()
     {
-        LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+        LMKitMaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -61,7 +63,7 @@ public class ConversationViewModelTests
     [Fact]
     public async Task CancelPromptImmediatelyAfterSubmit()
     {
-        LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+        LMKitMaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -79,7 +81,7 @@ public class ConversationViewModelTests
     [Fact]
     public async Task SubmitTwoPromptThenCancelFirst()
     {
-        LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+        LMKitMaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -107,7 +109,7 @@ public class ConversationViewModelTests
     [Fact]
     public async Task GenerateConversationTitle()
     {
-        LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+        LMKitMaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -126,7 +128,7 @@ public class ConversationViewModelTests
     [Fact]
     public async Task GenerateConversationTitle2Conversations()
     {
-        LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+        LMKitMaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -153,7 +155,7 @@ public class ConversationViewModelTests
     [Fact]
     public async Task UnloadModelWhileGeneratingTitle()
     {
-        LMKitMaestroTestsService testService = new LMKitMaestroTestsService();
+        LMKitMaestroTestsService testService = new();
         testService.LmKitService.LMKitConfig.RequestTimeout = 30;
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
