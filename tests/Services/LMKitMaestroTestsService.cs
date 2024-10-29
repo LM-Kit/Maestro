@@ -1,4 +1,5 @@
 ﻿using LMKitMaestro.Data;
+using LMKitMaestro.Helpers;
 using LMKitMaestro.Services;
 using LMKitMaestro.Tests.Services;
 using LMKitMaestro.ViewModels;
@@ -63,7 +64,14 @@ namespace LMKitMaestro.Tests
             LmKitService.ModelLoadingCompleted += LmKitService_ModelLoadingCompleted;
             LmKitService.ModelLoadingFailed += LmKitService_ModelLoadingFailed;
 
-            LmKitService.LoadModel(modelUri!);
+            string? localFilePath = FileHelpers.GetModelFilePathFromUrl(modelUri, LMKitDefaultSettings.DefaultModelsFolderPath);
+
+            if (localFilePath == null)
+            {
+                throw new Exception("Failed to create local file path from model download url");
+            }
+
+            LmKitService.LoadModel(modelUri!, localFilePath);
 
 
             var result = await _modelLoadingTask.Task;

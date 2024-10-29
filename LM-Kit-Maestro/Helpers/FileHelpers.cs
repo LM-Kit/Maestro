@@ -151,6 +151,16 @@ public static class FileHelpers
         return Path.Combine(modelsFolderPath, modelInfo.Publisher, modelInfo.Repository, modelInfo.FileName);
     }
 
+    public static string? GetModelFilePathFromUrl(Uri modelUrl, string modelsFolderPath)
+    {
+        if (GetModelInfoFromDownloadUrl(modelUrl, out string publisher, out string repository, out string fileName))
+        {
+            return Path.Combine(modelsFolderPath, publisher, repository, fileName);
+        }
+
+        return null;
+    }
+
     public static string GetFileBaseName(Uri fileUri)
     {
         return SanitizeUriSegment(fileUri.Segments[fileUri.Segments.Length - 1]);

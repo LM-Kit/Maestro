@@ -38,7 +38,7 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    public void LoadModel(Uri fileUri)
+    public void LoadModel(Uri fileUri, string? localFilePath = null)
     {
         if (_model != null)
         {
@@ -55,7 +55,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                _model = new LMKit.Model.LLM(fileUri, loadingProgress: OnModelLoadingProgressed);
+                _model = new LMKit.Model.LLM(fileUri, fileUri.IsFile ? fileUri.LocalPath : localFilePath, loadingProgress: OnModelLoadingProgressed);
 
                 modelLoadingSuccess = true;
             }
