@@ -7,18 +7,22 @@
     <maui:MauiWinUIApplication.Resources>
         <DataTemplate x:Key="MauiAppTitleBarTemplate">
 
+                    <!--Background="#512BD4"-->
             <Grid >
                 <Border
                     Background="#0D1117"
                     Canvas.ZIndex="1"
+                    Padding="0"
                     VerticalAlignment="Stretch"
-                    Margin="0,0">
+                    Margin="0,0,0,0">
+                    
                     <!--<TextBlock
-                        Foreground="{StaticResource OutlineVariant}"
+                        FontSize="12"
+                        FontFamily="Segoe"
+                        Foreground="#FFFFFF"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
-                        Text="LM-Kit Chat Playground"/>-->
-
+                        Text="LM-Kit Maestro"/>-->
                 </Border>
             </Grid>
         </DataTemplate>
