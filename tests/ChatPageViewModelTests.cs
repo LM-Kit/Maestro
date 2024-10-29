@@ -60,10 +60,18 @@ public class ChatPageViewModelTests
         await Task.Delay(500);
 
         await conversation.ConversationViewModel.Cancel();
-        // Ensuring that the response generation is cancelled within a reasonable time (1s),
-        // (Request time out has been previously set to 60 sec for this test)
-        bool isCancelledWithin1second = await conversation.PromptResultTask.Task.WaitAsync(TimeSpan.FromSeconds(1));
-        Assert.True(isCancelledWithin1second);
+
+        try
+        {
+            await conversation.PromptResultTask.Task.WaitAsync(TimeSpan.FromSeconds(1));
+        }
+        catch (TimeoutException)
+        {
+            // Ensuring that the response generation is cancelled within a reasonable time (1s),
+            // (Request time out has been previously set to 60 sec for this test)
+            Assert.Fail("The response generation was not cancelled within less than 1 sec");
+        }
+
         LMKitMaestroTestsHelpers.AssertConversationPromptCancelledState(conversation);
     }
 }
