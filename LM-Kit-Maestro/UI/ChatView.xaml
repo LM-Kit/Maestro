@@ -4,7 +4,7 @@
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:local="clr-namespace:LMKitMaestro"
              xmlns:ui="clr-namespace:LMKitMaestro.UI"
-             xmlns:blazor="clr-namespace:LMKitMaestro.UI.Blazor"
+             xmlns:blazor="clr-namespace:LMKitMaestro.UI.Razor"
              xmlns:models="clr-namespace:LMKitMaestro.Models"
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
              xmlns:controls="clr-namespace:LMKitMaestro.Controls"
