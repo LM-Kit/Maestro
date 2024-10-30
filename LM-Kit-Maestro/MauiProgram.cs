@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using LMKitMaestro.Views;
+using LMKitMaestro.UI;
 using LMKitMaestro.ViewModels;
 using LMKitMaestro.Services;
 using UraniumUI;

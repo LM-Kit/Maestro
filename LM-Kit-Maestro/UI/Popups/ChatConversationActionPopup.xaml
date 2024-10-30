@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:PopupBase 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:ui="clr-namespace:LMKitMaestro.UI"
+    xmlns:models="clr-namespace:LMKitMaestro.Models"
+    xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
+    x:DataType="vm:ChatConversationActionPopupViewModel"
+    x:Class="LMKitMaestro.UI.ChatConversationActionPopup">
+
+    <ui:PopupBase.Resources>
+        <ResourceDictionary>
+            <Style TargetType="uranium:StatefulContentView">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="Transparent"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Background}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="PointerOver">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Background}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ui:PopupBase.Resources>
+    
+    <Grid>
+        <Grid>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnPopupBackgroundTapped"/>
+            </Grid.GestureRecognizers>
+        </Grid>
+
+        <Grid 
+            x:Name="popupContentGrid"
+            SizeChanged="OnPopupContentSizeChanged"
+            TranslationX="{Binding ConversationX}" 
+            TranslationY="{Binding ConversationY}"  
+            Margin="4, 0" 
+            HorizontalOptions="Start" 
+            VerticalOptions="Start">
+            <Border 
+                Padding="0, 8"
+                VerticalOptions="Start"
+                StrokeThickness="1"
+                BackgroundColor="{StaticResource Surface}"
+                Stroke="{StaticResource Surface2}"
+                ZIndex="10"
+                StrokeShape="RoundRectangle 4"
+                HorizontalOptions="Start" 
+                Grid.Row="1" 
+                Grid.Column="1">
+
+                <Grid HorizontalOptions="Start">
+                    <VerticalStackLayout Padding="8, 0" HorizontalOptions="Fill" Spacing="0">
+                        <Border StrokeShape="RoundRectangle 4" Stroke="Transparent" StrokeThickness="0">
+                            <uranium:StatefulContentView Padding="8" Tapped="OnSelectClicked">
+                                <Label HorizontalOptions="Center" StyleClass="ChatActionText" Margin="0, 0" Text="Select"/>
+                            </uranium:StatefulContentView>
+                        </Border>
+                        <!--<BoxView Margin="4,0" HeightRequest="1"/>-->
+
+                        <Border StrokeShape="RoundRectangle 4" Stroke="Transparent" StrokeThickness="0">
+                            <uranium:StatefulContentView Padding="8" Tapped="OnRenameClicked">
+                                <Label HorizontalOptions="Center" StyleClass="ChatActionText" Margin="0, 0" Text="Rename"/>
+                            </uranium:StatefulContentView>
+                        </Border>
+                        <!--<BoxView Margin="4,0" HeightRequest="1"/>-->
+
+                        <Border StrokeShape="RoundRectangle 4" Stroke="Transparent" StrokeThickness="0">
+                            <uranium:StatefulContentView Padding="8" Tapped="OnDeleteClicked">
+                                <Label HorizontalOptions="Center" TextColor="{StaticResource Error}" StyleClass="ChatActionText" Margin="0, 0" Text="Delete"/>
+                            </uranium:StatefulContentView>
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ui:PopupBase>

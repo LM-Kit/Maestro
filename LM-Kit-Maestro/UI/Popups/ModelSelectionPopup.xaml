@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:PopupView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:local="clr-namespace:LMKitMaestro"
+    xmlns:controls="clr-namespace:LMKitMaestro.Controls"
+    xmlns:ui="clr-namespace:LMKitMaestro.UI"
+    xmlns:converters="clr-namespace:LMKitMaestro.Converters"
+    xmlns:models="clr-namespace:LMKitMaestro.Models"
+    xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
+    xmlns:services="clr-namespace:LMKitMaestro.Services"
+    xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    BodyVerticalOptions="Start"
+    ShowOkButton="False"
+    ShowBackgroundOverlay="True"
+    ShowCloseButton="True"
+    BodyMargin="8, 72, 8, 8"
+    CloseWhenBackgroundIsClicked="False"
+    x:Class="LMKitMaestro.UI.ModelSelectionPopup"
+    x:DataType="vm:ModelSelectionPopupViewModel">
+
+    <ui:PopupView.Resources>
+        <Style x:Key="ModelInfoBadge" TargetType="Border">
+            <Setter Property="Padding" Value="8, 4"/>
+            <Setter Property="Stroke" Value="{StaticResource Surface4}"/>
+            <Setter Property="StrokeThickness" Value="0.25"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 4"/>
+        </Style>
+    </ui:PopupView.Resources>
+
+    <ui:PopupView.Body>
+        <Grid
+            MinimumWidthRequest="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"
+            MaximumWidthRequest="{x:Static local:AppConstants.ChatWindowLayoutMinimumWidth}">
+            <!-- Empty model list view -->
+            <Grid 
+                VerticalOptions="Start"
+                RowDefinitions="*,*" 
+                RowSpacing="20"
+                Margin="0, 0, 0, 8"
+                IsVisible="{Binding ChatPageViewModel.ModelListViewModel.UserModels.Count, Converter={StaticResource EqualToZeroConverter}}">
+
+                <Label 
+                    TextColor="{StaticResource OutlineVariant}" 
+                    HorizontalTextAlignment="Center" 
+                    VerticalOptions="Center" 
+                    Text="You don't have any model installed"/>
+
+                <ui:LinkView
+                    Grid.Row="1"
+                    Text="Go to Models tab"
+                    Clicked="OnCloseButtonClicked"
+                    Command="{Binding NavigateToModelPageCommand}"
+                    Icon="{x:Static icons:MaterialRegular.Download}"/>
+            </Grid>
+
+            <!-- Model list view -->
+            <controls:CustomCollectionView 
+                x:Name="modelsCollection"
+                Margin="0"
+                Spacing="8"
+                Grid.Row="1"
+                IsVisible="{Binding ChatPageViewModel.ModelListViewModel.UserModels.Count, Converter={StaticResource GreaterThanZeroConverter}}"
+                ItemsSource="{Binding ChatPageViewModel.ModelListViewModel.UserModels}"
+                SelectedItem="{Binding ChatPageViewModel.SelectedModel, Mode=TwoWay}">
+
+                <controls:CustomCollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ModelInfoViewModel">
+                        <Border StrokeShape="RoundRectangle 4" Stroke="Transparent" StrokeThickness="0" Padding="8, 12">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroupList>
+                                    <VisualStateGroup x:Name="CustomCollectionViewStates">
+                                        <VisualState x:Name="_Normal">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="Transparent"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+
+                                        <VisualState x:Name="_Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="{StaticResource Surface3}"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+
+                                        <VisualState x:Name="_Hovered">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="{StaticResource Surface3}"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateGroupList>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <Grid ColumnSpacing="8" ColumnDefinitions="*, auto, auto">
+                                <Label VerticalOptions="Center" Text="{Binding Name}"/>
+
+                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="1">
+                                    <Label VerticalOptions="Center" TextColor="{StaticResource Outline}" Text="{Binding ModelInfo.Publisher}"/>
+                                </Border>
+
+                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="2">
+                                    <Label VerticalOptions="Center" TextColor="{StaticResource Outline}"  Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </controls:CustomCollectionView.ItemTemplate>
+            </controls:CustomCollectionView>
+        </Grid>
+    </ui:PopupView.Body>
+</ui:PopupView>

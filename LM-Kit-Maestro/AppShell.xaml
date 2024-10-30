@@ -3,7 +3,7 @@
     x:Class="LMKitMaestro.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:LMKitMaestro.Views"
+    xmlns:ui="clr-namespace:LMKitMaestro.UI"
     xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
     xmlns:local="clr-namespace:LMKitMaestro"
     xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
@@ -19,27 +19,27 @@
     <!-- WinUI TitleBar issue: https://stackoverflow.com/questions/78200704/net-maui-flyout-menu-is-overlapping-the-windows-title-bar-->
 
     <!--<FlyoutItem Route="HomePage" Title="Home">
-        <ShellContent ContentTemplate="{DataTemplate views:HomePage}"/>
+        <ShellContent ContentTemplate="{DataTemplate ui:HomePage}"/>
     </FlyoutItem>-->
 
     <!--<Tab BindingContext="{Binding HomeTab}" Title="{Binding HomeTab.Title}" Route="HomePage">
-        <ShellContent Title="Home" ContentTemplate="{DataTemplate views:HomePage}"/>
+        <ShellContent Title="Home" ContentTemplate="{DataTemplate ui:HomePage}"/>
     </Tab>-->
 
     <Tab BindingContext="{Binding ChatTab}" Title="{Binding ChatTab.Title}" Route="ChatPage">
-        <ShellContent Title="AI Chat" ContentTemplate="{DataTemplate views:ChatPage}"/>
+        <ShellContent Title="AI Chat" ContentTemplate="{DataTemplate ui:ChatPage}"/>
     </Tab>
 
     <Tab BindingContext="{Binding ModelsTab}" Title="{Binding ModelsTab.Title}" Route="ModelsPage">
-        <ShellContent Title="Models" ContentTemplate="{DataTemplate views:ModelsPage}"/>
+        <ShellContent Title="Models" ContentTemplate="{DataTemplate ui:ModelsPage}"/>
     </Tab>
 
     <!--<FlyoutItem Route="ChatPage" Title="AI Chat">
-        <ShellContent ContentTemplate="{DataTemplate views:ChatPage}"/>
+        <ShellContent ContentTemplate="{DataTemplate ui:ChatPage}"/>
     </FlyoutItem>-->
 
     <!--<FlyoutItem Route="ModelsPage"  Title="Models">
-        <ShellContent ContentTemplate="{DataTemplate views:ModelsPage}"/>
+        <ShellContent ContentTemplate="{DataTemplate ui:ModelsPage}"/>
     </FlyoutItem>-->
 
     <shell:SimpleShell.RootPageContainer>
@@ -66,7 +66,7 @@
                         Spacing="12">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="vm:LMKitMaestroTabViewModel">
-                                <views:LinkView
+                                <ui:LinkView
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=NavigateCommand}"
                                     CommandParameter="{Binding}"
                                     FontFamily="SegoeLight"
@@ -74,13 +74,13 @@
                                     StyleClass="Title"
                                     TextColor="{StaticResource Outline}"
                                     Text="{Binding Title}">
-                                    <views:LinkView.Triggers>
-                                        <DataTrigger TargetType="views:LinkView" Binding="{Binding IsSelected}" Value="True">
+                                    <ui:LinkView.Triggers>
+                                        <DataTrigger TargetType="ui:LinkView" Binding="{Binding IsSelected}" Value="True">
                                             <Setter Property="TextColor" Value="{StaticResource OnBackground}"/>
                                             <Setter Property="FontFamily" Value="Segoe"/>
                                         </DataTrigger>
-                                    </views:LinkView.Triggers>
-                                </views:LinkView>
+                                    </ui:LinkView.Triggers>
+                                </ui:LinkView>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </HorizontalStackLayout>
