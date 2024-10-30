@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
 
-namespace LMKitMaestro.UI.Components
+namespace LMKitMaestro.UI.Razor.Components
 {
     public abstract class MvvmComponentBase<TViewModel> : ComponentBase where TViewModel : IViewModelBase
     {
