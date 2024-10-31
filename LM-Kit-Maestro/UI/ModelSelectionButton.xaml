@@ -13,7 +13,6 @@
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              x:Class="LMKitMaestro.UI.ModelSelectionButton"
              x:DataType="vm:ChatPageViewModel"
-             BackgroundColor="Red"
              x:Name="modelSelectionButton">
     
     <ContentView.Resources>
@@ -33,6 +32,12 @@
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface2}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+
                             <VisualState x:Name="Pressed">
                                 <VisualState.Setters>
                                     <Setter Property="BackgroundColor" Value="{StaticResource Surface3}"/>
@@ -65,17 +70,17 @@
                         <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface}"/>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface2}"/>
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="Pressed">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface2}"/>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface}"/>
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="PointerOver">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface2}"/>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface}"/>
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
