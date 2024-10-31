@@ -2,9 +2,9 @@
 
 @inject IClipboardHandler ClipboardHandler
 
-<div class="rootContainer">
+<div class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageRootContainer" : "")">
     <div class="messageDiv @(MessageViewModel.Sender == MessageSender.User ? "userMessageDiv" : "assistantMessageDiv")">
-        <div style="display:flex">
+        <div>
 
             @if (MessageViewModel.Sender == MessageSender.User)
             {
@@ -30,25 +30,18 @@
     </div>
 
     <div class="messageFooter">
-        @if (MessageViewModel.Sender == MessageSender.User)
-        {
-            <div class="messageActions userMessageActions">
-                <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons chatActionIcon">
-                    @(MessageJustCopied ? "check" : "content_copy")
-                </button>
-            </div>
-        }
-        else
-        {
-            <div class="messageButtonDiv">
-                <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons chatActionIcon">
-                    @(MessageJustCopied ? "check" : "content_copy")
-                </button>
-            </div>
 
+        <div class="messageActions @(MessageViewModel.Sender == MessageSender.User ? "userMessageActions" : "")">
+            <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons chatActionIcon">
+                @(MessageJustCopied ? "check" : "content_copy")
+            </button>
+        </div>
+
+        @if (MessageViewModel.Sender == MessageSender.Assistant)
+        {
             @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
             {
-                <span class="m-3 assistantResponseInfo">
+                <span class="assistantResponseInfo">
                     @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
                 </span>
             }
@@ -62,10 +55,15 @@
         display: flex;
         position: relative;
         flex-direction: column;
-        margin-right: 8px;
-        margin-left: 8px;
-        margin-top: 8px;
-        margin-bottom: 8px;
+        margin-top: 2px;
+        margin-bottom: 20px;
+        padding-inline: 8px;
+        padding-block: 16px;
+        border-radius: 0px;
+    }
+
+    .assistantMessageRootContainer:hover{
+        background-color: var(--Surface);
     }
 
     .rootContainer:hover > div {
@@ -89,6 +87,7 @@
     }
 
     .messageContent {
+        padding: 20px;
         white-space: pre-wrap; /* Preserves whitespace and allows wrapping */
         word-break: break-word; /* Ensures long words break and wrap */
         overflow-wrap: break-word; /* Allows wrapping long words */
@@ -98,8 +97,6 @@
     .userMessageContent {
         display: block;
         background: var(--Surface);
-        padding-inline: 24px;
-        padding-block: 16px;
         border-radius: 32px;
     }
 
@@ -109,25 +106,25 @@
     }
 
     .chatActionButton {
-        height: 32px;
-        width: 32px;
+        height: 28px;
+        width: 28px;
         border-radius: 50%;
         border-width: 0;
+        font-size: 12px;
         background-color: transparent;
     }
 
-        .chatActionButton:hover {
-            background-color: var(--Surface3);
-        }
+    .chatActionButton:hover {
+        background-color: var(--Surface3);
+    }
 
     .chatActionIcon {
         color: var(--OnBackground);
         color: var(--Outline);
-        font-size: 11px;
     }
 
-        .chatActionIcon:hover {
-        }
+    .chatActionIcon:hover {
+    }
 
     .dot {
         height: 10px;
@@ -147,18 +144,19 @@
     }
 
     .messageFooter {
-        margin-top: 4px;
-        margin-bottom: 16px;
-        visibility: hidden;
-        display: inline-block;
+        margin-top: 12px;
+        visibility: collapse;
+        display: flex;
     }
 
-        .messageFooter:hover {
-            visibility: visible;
-        }
+    .messageFooter:hover {
+        visibility: visible;
+    }
 
     .assistantResponseInfo {
-        font-size: small;
+        font-size: 11px;
+        margin-left: 8px;
+        align-content: center;
         color: var(--Outline);
     }
 
@@ -166,9 +164,12 @@
         display: inline;
     }
 
+    .messageActions {
+        display: inline;
+    }
+
     .userMessageActions {
-        position: absolute;
-        right: 0;
+        margin-left: auto;
     }
 </style>
 
