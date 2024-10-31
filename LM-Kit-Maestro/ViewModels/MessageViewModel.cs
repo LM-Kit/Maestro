@@ -3,6 +3,7 @@ using LMKit.TextGeneration.Chat;
 using LMKitMaestro.Models;
 using CommunityToolkit.Mvvm.Input;
 using LMKitMaestro.Services;
+using static LMKit.TextGeneration.TextGenerationResult;
 
 namespace LMKitMaestro.ViewModels;
 public partial class MessageViewModel : ViewModelBase
@@ -23,6 +24,9 @@ public partial class MessageViewModel : ViewModelBase
                 Text = _lmKitMessage.Content;
                 MessageModel.Text = Text;
                 MessageModel.Sender = Sender;
+                TerminationReason = _lmKitMessage.TerminationReason;
+                GeneratedTokens = _lmKitMessage.GeneratedTokens;
+
                 _lmKitMessage.PropertyChanged += OnMessagePropertyChanged;
             }
 
@@ -46,6 +50,12 @@ public partial class MessageViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool _isHovered;
+
+    [ObservableProperty]
+    private StopReason _terminationReason;
+
+    [ObservableProperty]
+    private double _generatedTokens;
 
     public event EventHandler? MessageContentUpdated;
 
@@ -87,6 +97,14 @@ public partial class MessageViewModel : ViewModelBase
             MessageModel.Text = Text;
 
             MessageContentUpdated?.Invoke(this, EventArgs.Empty);
+        }
+        else if (e.PropertyName == nameof(ChatHistory.Message.GeneratedTokens))
+        {
+            GeneratedTokens = LmKitMessage!.GeneratedTokens;
+        }
+        else if (e.PropertyName == nameof(ChatHistory.Message.TerminationReason))
+        {
+            TerminationReason = LmKitMessage!.TerminationReason;
         }
     }
 
