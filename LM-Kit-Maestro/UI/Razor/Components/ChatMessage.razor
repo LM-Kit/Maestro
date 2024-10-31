@@ -5,14 +5,6 @@
 <div class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageRootContainer" : "")">
     <div class="messageDiv @(MessageViewModel.Sender == MessageSender.User ? "userMessageDiv" : "assistantMessageDiv")">
         <div>
-
-            @if (MessageViewModel.Sender == MessageSender.User)
-            {
-                <span class="status">
-                    @(GetStatusText(MessageViewModel.Status))
-                </span>
-            }
-
             <div class="messageContent @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageContent" : "userMessageContent")">
                 @if (MessageViewModel.Sender == MessageSender.Assistant)
                 {
@@ -72,14 +64,6 @@
     .userMessageDiv {
         max-width: 75%;
         margin-left: auto;
-    }
-
-    .status {
-        margin-right: 16px;
-        color: var(--Surface3);
-        text-align: end;
-        display: inline-block;
-        align-self: center;
     }
 
     .userMessageDiv {

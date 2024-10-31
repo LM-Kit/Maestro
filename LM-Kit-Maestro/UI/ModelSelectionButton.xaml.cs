@@ -9,11 +9,32 @@ public partial class ModelSelectionButton : ContentView
 
     private ChatPageViewModel? _chatPageViewModel;
 
+    public static readonly BindableProperty IsHoverdProperty = BindableProperty.Create(nameof(IsHovered), typeof(bool), typeof(ModelSelectionButton));
+    public bool IsHovered
+    {
+        get => (bool)GetValue(IsHoverdProperty);
+        private set => SetValue(IsHoverdProperty, value);
+    }
+
     public static readonly BindableProperty LoadingTextProperty = BindableProperty.Create(nameof(LoadingText), typeof(string), typeof(ModelSelectionButton));
     public string LoadingText
     {
         get => (string)GetValue(LoadingTextProperty);
         private set => SetValue(LoadingTextProperty, value);
+    }
+
+    public static readonly BindableProperty BorderColorProperty = BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(ModelSelectionButton));
+    public Color BorderColor
+    {
+        get => (Color)GetValue(BorderColorProperty);
+        private set => SetValue(BorderColorProperty, value);
+    }
+
+    public static readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(ModelSelectionButton));
+    public Color BackgroundColor
+    {
+        get => (Color)GetValue(BackgroundColorProperty);
+        private set => SetValue(BackgroundColorProperty, value);
     }
 
     public ModelSelectionButton()
@@ -86,5 +107,15 @@ public partial class ModelSelectionButton : ContentView
         }
 
         _mustIgnoreNextStatefulContentViewTap &= false;
+    }
+
+    private void OnModelSelectionButtonHovered(object sender, EventArgs e)
+    {
+        IsHovered = true;
+    }
+
+    private void OnModelSelectionButtonHoveredExited(object sender, EventArgs e)
+    {
+        IsHovered = false;
     }
 }
