@@ -45,8 +45,8 @@
         <div id="scroll-to-end">
             @if (!IsScrolledToEnd)
             {
-                <button @onclick="OnScrollToEndButtonClicked" class="scroll-to-end-button">
-                    <span style="font-size: 16px" class="material-icons">arrow_downward</span>
+                <button @onclick="OnScrollToEndButtonClicked" class="material-icons scroll-to-end-button">
+                    arrow_downward
                 </button>
             }
         </div>
@@ -103,7 +103,8 @@
     .scroll-to-end-button {
         width: 32px;
         height: 32px;
-        color: var(--OnSuface);
+        color: var(--Outline);
+        font-size: 14px;
         background-color: var(--Surface3);
         border-radius: 50%;
         display: flex;
