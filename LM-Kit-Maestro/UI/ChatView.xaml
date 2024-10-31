@@ -77,31 +77,6 @@
             </BlazorWebView.RootComponents>
         </BlazorWebView>
 
-        <!-- Text completion result toast -->
-        <Grid 
-            ZIndex="1"
-            RowDefinitions="*,auto"
-            Margin="12"
-            HorizontalOptions="Center"
-            VerticalOptions="End">
-
-            <Border
-                IsVisible="{Binding Source={x:Reference chatView}, Path=ShowLatestCompletionResult}"
-                HorizontalOptions="Center"
-                Margin="0, 12" 
-                Padding="16, 12"
-                StrokeThickness="0"
-                BackgroundColor="{StaticResource Surface}"
-                StrokeShape="RoundRectangle 20"
-                ZIndex="1">
-                <Grid>
-                    <HorizontalStackLayout>
-                        <Label TextColor="{StaticResource OnSurface}" Text="{Binding Source={x:Reference chatView}, Path=LatestStopReason, StringFormat='{}Stop reason: {0}'}"/>
-                    </HorizontalStackLayout>
-                </Grid>
-            </Border>
-        </Grid>
-
         <!-- Chat input -->
         <Border  
             BackgroundColor="{StaticResource Surface}"

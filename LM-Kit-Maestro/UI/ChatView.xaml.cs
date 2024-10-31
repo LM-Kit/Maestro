@@ -1,5 +1,4 @@
 using LMKitMaestro.ViewModels;
-using LMKit.TextGeneration;
 
 namespace LMKitMaestro.UI;
 
@@ -12,20 +11,6 @@ public partial class ChatView : ContentView
     {
         get => (bool)GetValue(ChatEntryIsFocusedProperty);
         private set => SetValue(ChatEntryIsFocusedProperty, value);
-    }
-
-    public static readonly BindableProperty ShowLatestCompletionResultProperty = BindableProperty.Create(nameof(ShowLatestCompletionResult), typeof(bool), typeof(ChatView));
-    public bool ShowLatestCompletionResult
-    {
-        get => (bool)GetValue(ShowLatestCompletionResultProperty);
-        private set => SetValue(ShowLatestCompletionResultProperty, value);
-    }
-
-    public static readonly BindableProperty? LatestStopReasonProperty = BindableProperty.Create(nameof(LatestStopReason), typeof(TextGenerationResult.StopReason?), typeof(ChatView));
-    public TextGenerationResult.StopReason? LatestStopReason
-    {
-        get => (TextGenerationResult.StopReason?)GetValue(LatestStopReasonProperty);
-        private set => SetValue(LatestStopReasonProperty, value);
     }
 
     private ConversationViewModel? _conversationViewModel;
@@ -43,21 +28,6 @@ public partial class ChatView : ContentView
         if (BindingContext is ConversationViewModel conversationViewModel)
         {
             _conversationViewModel = conversationViewModel;
-
-            conversationViewModel.TextGenerationCompleted += OnTextGenerationCompleted;
-
-            if (ShowLatestCompletionResult)
-            {
-                ShowLatestCompletionResult = false;
-            }
-
-            LatestStopReason = null;
-
-            if (_previouslySelectedConversation != null)
-            {
-                _previouslySelectedConversation.TextGenerationCompleted -= OnTextGenerationCompleted;
-            }
-
             _previouslySelectedConversation = conversationViewModel;
 
             await ForceFocus();
@@ -92,22 +62,5 @@ public partial class ChatView : ContentView
     private void OnEntryBorderUnfocused(object sender, FocusEventArgs e)
     {
         ChatEntryIsFocused = false;
-    }
-
-    private void OnTextGenerationCompleted(object? sender, EventArgs e)
-    {
-        var textGenerationCompletedEventArgs = (ConversationViewModel.TextGenerationCompletedEventArgs)e;
-
-        if (sender == BindingContext)
-        {
-            var _ = Task.Run(async () =>
-            {
-                ShowLatestCompletionResult = true;
-                LatestStopReason = textGenerationCompletedEventArgs.StopReason;
-                await Task.Delay(3000);
-                LatestStopReason = null;
-                ShowLatestCompletionResult = false;
-            });
-        }
     }
 }
