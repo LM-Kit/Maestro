@@ -100,10 +100,6 @@
             <DataTrigger TargetType="Border" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loaded}">
                 <Setter Property="Stroke" Value="{StaticResource Primary}" />
             </DataTrigger>
-            
-            <DataTrigger TargetType="Border" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
-                <Setter Property="Stroke" Value="Transparent" />
-            </DataTrigger>
         </Border.Triggers>
 
         <uranium:StatefulContentView
