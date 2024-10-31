@@ -40,7 +40,6 @@
         }
         else
         {
-
             <div class="messageButtonDiv">
                 <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons chatActionIcon">
                     @(MessageJustCopied ? "check" : "content_copy")
@@ -120,9 +119,9 @@
         background-color: transparent;
     }
 
-    .chatActionButton:hover {
-        background-color: var(--Surface3);
-    }
+        .chatActionButton:hover {
+            background-color: var(--Surface3);
+        }
 
     .chatActionIcon {
         color: var(--OnBackground);
@@ -151,7 +150,8 @@
     }
 
     .messageFooter {
-        visibility: hidden;
+        margin-top: 4px;
+        visibility: visible;
         display: inline-block;
     }
 
@@ -272,6 +272,8 @@
     {
         string html = !string.IsNullOrEmpty(messageViewModel.Text) ? Markdig.Markdown.ToHtml(messageViewModel.Text) : string.Empty;
 
+        bool responseIsEmpty = html.Length == 0;
+
         if (messageViewModel.MessageInProgress)
         {
             var closingTagIndex = Math.Max(0, html.LastIndexOf(@"</"));
@@ -279,6 +281,24 @@
             if (closingTagIndex != -1)
             {
                 html = html.Insert(closingTagIndex, ProgressIndicatorHtml);
+
+                if (responseIsEmpty)
+                {
+                    html = $"<p>{html}</p>";
+                }
+            }
+        }
+
+        if (!responseIsEmpty)
+        {
+            // Ensuring we don't insert an unwanted new-line at the end of the message.
+            if (html.EndsWith(">\n"))
+            {
+                html = html.Remove(html.Length - ">\n".Length);
+            }
+            else if (html == "\n")
+            {
+                html = string.Empty;
             }
         }
 
