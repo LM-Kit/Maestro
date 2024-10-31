@@ -31,7 +31,7 @@ namespace LMKitMaestro.ViewModels
 
                     _currentConversation = value;
                     _currentConversation.IsSelected = true;
-                    
+
                     OnPropertyChanged();
                 }
             }
@@ -120,6 +120,11 @@ namespace LMKitMaestro.ViewModels
 
             if (conversationViewModel == CurrentConversation)
             {
+                if (Conversations.Count == 0)
+                {
+                    AddNewConversation();
+                }
+
                 CurrentConversation = Conversations.First();
             }
         }
