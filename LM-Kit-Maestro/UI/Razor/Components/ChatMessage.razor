@@ -49,7 +49,7 @@
 
             @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
             {
-                <span class="m-3" style="font-size: small">
+                <span class="m-3 assistantResponseInfo">
                     @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
                 </span>
             }
@@ -59,28 +59,6 @@
 </div>
 
 <style>
-
-    .messageFooter {
-        visibility: visible;
-        display: inline-block;
-    }
-
-        .messageFooter:hover {
-            visibility: visible;
-        }
-
-    .assistantResponseStats {
-    }
-
-    .messageButtonDiv {
-        display: inline;
-    }
-
-    .userMessageActions {
-        position: absolute;
-        right: 0;
-    }
-
     .rootContainer {
         display: flex;
         position: relative;
@@ -135,24 +113,24 @@
     }
 
     .chatActionButton {
-        height: 28px;
-        width: 28px;
+        height: 32px;
+        width: 32px;
         border-radius: 50%;
         border-width: 0;
         background-color: transparent;
     }
 
-        .chatActionButton:hover {
-            background-color: var(--Surface3);
-        }
+    .chatActionButton:hover {
+        background-color: var(--Surface3);
+    }
 
     .chatActionIcon {
         color: var(--OnBackground);
+        color: var(--Outline);
         font-size: 11px;
     }
 
         .chatActionIcon:hover {
-            color: var(--OnBackground);
         }
 
     .dot {
@@ -170,6 +148,29 @@
 
     .align-left {
         margin-right: auto;
+    }
+
+    .messageFooter {
+        visibility: hidden;
+        display: inline-block;
+    }
+
+        .messageFooter:hover {
+            visibility: visible;
+        }
+
+    .assistantResponseInfo {
+        font-size: small;
+        color: var(--Outline);
+    }
+
+    .messageButtonDiv {
+        display: inline;
+    }
+
+    .userMessageActions {
+        position: absolute;
+        right: 0;
     }
 </style>
 
