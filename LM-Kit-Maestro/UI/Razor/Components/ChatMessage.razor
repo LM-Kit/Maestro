@@ -33,28 +33,26 @@
         @if (MessageViewModel.Sender == MessageSender.User)
         {
             <div class="messageActions userMessageActions">
-                <span>
-                    <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons chatActionIcon">
-                        @(MessageJustCopied ? "check" : "content_copy")
-                    </button>
-                </span>
+                <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons chatActionIcon">
+                    @(MessageJustCopied ? "check" : "content_copy")
+                </button>
             </div>
         }
         else
         {
-            @*             <div class="align-right assistantResponseStats">
-        <span>
-        8.62 tok/sec • 281 tokens • 15.15s to first token • Stop: userStopped
-        </span>
-        </div> *@
 
-            <div class="messageActions">
-                <span>
-                    <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons chatActionIcon">
-                        @(MessageJustCopied ? "check" : "content_copy")
-                    </button>
-                </span>
+            <div class="messageButtonDiv">
+                <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons chatActionIcon">
+                    @(MessageJustCopied ? "check" : "content_copy")
+                </button>
             </div>
+
+            @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
+            {
+                <span class="m-3" style="font-size: small">
+                    @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
+                </span>
+            }
         }
     </div>
 
@@ -63,8 +61,8 @@
 <style>
 
     .messageFooter {
-        display: flex;
-        visibility: hidden;
+        visibility: visible;
+        display: inline-block;
     }
 
         .messageFooter:hover {
@@ -74,11 +72,12 @@
     .assistantResponseStats {
     }
 
-    .messageActions {
-        position: absolute;
+    .messageButtonDiv {
+        display: inline;
     }
 
     .userMessageActions {
+        position: absolute;
         right: 0;
     }
 
@@ -136,20 +135,20 @@
     }
 
     .chatActionButton {
-        display: inline-block;
         height: 28px;
         width: 28px;
         border-radius: 50%;
-        border-width: 0px;
+        border-width: 0;
         background-color: transparent;
-        position: relative;
     }
 
+        .chatActionButton:hover {
+            background-color: var(--Surface3);
+        }
+
     .chatActionIcon {
-        padding: 4px;
-        border-radius: 4px;
         color: var(--OnBackground);
-        font-size: 13px;
+        font-size: 11px;
     }
 
         .chatActionIcon:hover {
@@ -167,6 +166,10 @@
 
     .align-right {
         margin-left: auto;
+    }
+
+    .align-left {
+        margin-right: auto;
     }
 </style>
 
@@ -236,6 +239,10 @@
                 {
                     MessageHtml = MessageHtml.Replace(ProgressIndicatorHtml, string.Empty);
                 }
+            }
+            else if (e.PropertyName == nameof(MessageViewModel.TerminationReason))
+            {
+
             }
         }
 
