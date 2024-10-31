@@ -13,6 +13,7 @@
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              x:Class="LMKitMaestro.UI.ModelSelectionButton"
              x:DataType="vm:ChatPageViewModel"
+             BackgroundColor="Red"
              x:Name="modelSelectionButton">
     
     <ContentView.Resources>
@@ -49,22 +50,32 @@
             </Style>
 
             <Style x:Key="ModelSelectionButtonStyle" TargetType="uranium:StatefulContentView">
+                <Style.Triggers>
+                    <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
+                        <Setter Property="InputTransparent" Value="True" />
+                    </DataTrigger>
+
+                    <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
+                        <Setter Property="InputTransparent" Value="True" />
+                    </DataTrigger>
+                </Style.Triggers>
+                
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface2}"/>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface}"/>
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="Pressed">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface}"/>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface2}"/>
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="PointerOver">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface}"/>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface2}"/>
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -84,6 +95,7 @@
             <DataTrigger TargetType="Border" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loaded}">
                 <Setter Property="Stroke" Value="{StaticResource Primary}" />
             </DataTrigger>
+            
             <DataTrigger TargetType="Border" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
                 <Setter Property="Stroke" Value="Transparent" />
             </DataTrigger>
@@ -95,20 +107,6 @@
             Hovered="OnModelSelectionButtonHovered"
             HoverExited="OnModelSelectionButtonHoveredExited"
             Tapped="OnModelSelectionButtonClicked">
-            <uranium:StatefulContentView.Triggers>
-                <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
-                    <Setter Property="InputTransparent" Value="True" />
-                </DataTrigger>
-
-                <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
-                    <Setter Property="InputTransparent" Value="True" />
-                </DataTrigger>
-
-                <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
-                    <Setter Property="InputTransparent" Value="True" />
-                </DataTrigger>
-            </uranium:StatefulContentView.Triggers>
-
             <Grid RowDefinitions="*, auto">
                 <Grid Padding="12, 0" ColumnSpacing="8" ColumnDefinitions="24, *, 24">
                     <Button 
