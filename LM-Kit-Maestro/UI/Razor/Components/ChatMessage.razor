@@ -32,7 +32,7 @@
     <div class="messageFooter">
 
         <div class="messageActions @(MessageViewModel.Sender == MessageSender.User ? "userMessageActions" : "")">
-            <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons chatActionIcon">
+            <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
                 @(MessageJustCopied ? "check" : "content_copy")
             </button>
         </div>
