@@ -32,6 +32,9 @@ public partial class AppShellViewModel : ViewModelBase
     [ObservableProperty]
     LMKitMaestroTabViewModel _modelsTab = new LMKitMaestroTabViewModel("Models", "ModelsPage");
 
+    [ObservableProperty]
+    LMKitMaestroTabViewModel _assistantsTab = new LMKitMaestroTabViewModel("AI Assistants", "AssistantsPage");
+
     private LMKitMaestroTabViewModel? _currentTab;
     public LMKitMaestroTabViewModel CurrentTab
     {
