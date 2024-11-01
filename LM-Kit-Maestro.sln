@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LM-Kit-Maestro", "LM-Kit-Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LM-Kit-Maestro.Tests", "tests\LM-Kit-Maestro.Tests.csproj", "{37E609B0-C258-406F-B596-771B757667C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LM-Kit.NET", "..\LM-Kit\LM-Kit.NET\LM-Kit.NET.csproj", "{ABEA4B5D-1337-471C-A667-B04B216F2427}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,14 +35,6 @@ Global
 		{37E609B0-C258-406F-B596-771B757667C6}.Release_Pub|Any CPU.Build.0 = Release|Any CPU
 		{37E609B0-C258-406F-B596-771B757667C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37E609B0-C258-406F-B596-771B757667C6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ABEA4B5D-1337-471C-A667-B04B216F2427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABEA4B5D-1337-471C-A667-B04B216F2427}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABEA4B5D-1337-471C-A667-B04B216F2427}.Release_Dev|Any CPU.ActiveCfg = Release_Dev|Any CPU
-		{ABEA4B5D-1337-471C-A667-B04B216F2427}.Release_Dev|Any CPU.Build.0 = Release_Dev|Any CPU
-		{ABEA4B5D-1337-471C-A667-B04B216F2427}.Release_Pub|Any CPU.ActiveCfg = Release_Pub|Any CPU
-		{ABEA4B5D-1337-471C-A667-B04B216F2427}.Release_Pub|Any CPU.Build.0 = Release_Pub|Any CPU
-		{ABEA4B5D-1337-471C-A667-B04B216F2427}.Release|Any CPU.ActiveCfg = Release_Pub|Any CPU
-		{ABEA4B5D-1337-471C-A667-B04B216F2427}.Release|Any CPU.Build.0 = Release_Pub|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

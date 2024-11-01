@@ -23,10 +23,9 @@
     <ContentView.Resources>
         <ResourceDictionary>
             <Style x:Key="SendButtonStyle" TargetType="Button">
-                <!--<Setter Property="Text" Value="{x:Static icons:MaterialRegular.Send}"/>-->
                 <Setter Property="WidthRequest" Value="32"/>
                 <Setter Property="HeightRequest" Value="32"/>
-                <Setter Property="CornerRadius" Value="15"/>
+                <Setter Property="CornerRadius" Value="16"/>
                 <Setter Property="BorderWidth" Value="0"/>
                 <Setter Property="Padding" Value="0"/>
                 <Setter Property="VerticalOptions" Value="End"/>

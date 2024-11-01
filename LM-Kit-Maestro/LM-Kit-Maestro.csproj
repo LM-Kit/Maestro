@@ -64,6 +64,7 @@
     </ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="LM-Kit.NET" Version="2024.10.5" />
 		<PackageReference Include="LM-Kit.NET.Backend.Cuda12.Windows" Version="2024.10.5" />
 		<PackageReference Include="Majorsoft.Blazor.Components.Common.JsInterop" Version="1.5.0" />
 		<PackageReference Include="Markdig" Version="0.38.0" />
@@ -84,10 +85,6 @@
 		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.10.2" />
 		<PackageReference Include="UraniumUI.Icons.MaterialIcons" Version="2.10.2" />
 		<PackageReference Include="UraniumUI.Material" Version="2.10.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\LM-Kit\LM-Kit.NET\LM-Kit.NET.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -28,7 +28,7 @@
             </button>
         </div>
 
-        @if (MessageViewModel.Sender == MessageSender.Assistant)
+@*         @if (MessageViewModel.Sender == MessageSender.Assistant)
         {
             @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
             {
@@ -36,7 +36,7 @@
                     @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
                 </span>
             }
-        }
+        } *@
     </div>
 
 </div>
