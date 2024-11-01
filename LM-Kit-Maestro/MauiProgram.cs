@@ -46,6 +46,7 @@ namespace LMKitMaestro
                     fonts.AddFont("Segoe UI.ttf", "Segoe");
                     fonts.AddFont("Segoe UI Bold.ttf", "SegoeBold");
 
+                    fonts.AddFontAwesomeIconFonts();
                     fonts.AddMaterialIconFonts();
                 })
                 .ConfigureMauiHandlers(handlers =>

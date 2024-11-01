@@ -7,6 +7,8 @@
              x:Class="LMKitMaestro.App">
     <Application.Resources>
         <ResourceDictionary>
+            <!--<StyleSheet Source="Resources/CSS/LmKitMaestro.css"/>
+            <StyleSheet Source="Resources/CSS/font-awesome.css"/>-->
             <mct:VariableMultiValueConverter x:Key="AllTrueConverter" ConditionType="All"/>
             <mct:VariableMultiValueConverter x:Key="AllFalseConverter" ConditionType="None"/>
             <mct:VariableMultiValueConverter x:Key="AnyTrueConverter" ConditionType="Any"/>

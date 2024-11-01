@@ -64,7 +64,6 @@
         <Setter Property="FontFamily" Value="Segoe"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderWidth" Value="0"/>
-        <Setter Property="MinimumHeightRequest" Value="32"/>
         <Setter Property="CornerRadius" Value="4"/>
         <Setter Property="Padding" Value="12, 4"/>
         <Setter Property="BackgroundColor" Value="{StaticResource Surface2}"/>
