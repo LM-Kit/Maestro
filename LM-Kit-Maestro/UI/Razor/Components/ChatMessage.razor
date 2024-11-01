@@ -2,7 +2,7 @@
 
 @inject IClipboardHandler ClipboardHandler
 
-<div class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageRootContainer" : "")">
+<div class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageRootContainer" : "userMessageRootContainer")">
     <div class="messageDiv @(MessageViewModel.Sender == MessageSender.User ? "userMessageDiv" : "assistantMessageDiv")">
         <div>
             <div class="messageContent @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageContent" : "userMessageContent")">
@@ -54,7 +54,11 @@
     }
 
     .assistantMessageRootContainer:hover {
-        background-color: var(--Surface);
+        background-color: var(--Surface15);
+    }
+
+    .userMessageRootContainer:hover  .userMessageContent{
+        background-color: var(--Surface15);
     }
 
     .rootContainer:hover > div {
@@ -79,9 +83,10 @@
 
     .userMessageContent {
         display: block;
-        background: var(--Surface);
+        background-color: var(--Surface);
         border-radius: 32px;
     }
+
 
     .assistantMessageContent {
         padding: 4px;
