@@ -64,7 +64,6 @@
         <Setter Property="FontFamily" Value="Segoe"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderWidth" Value="0"/>
-        <Setter Property="MinimumHeightRequest" Value="32"/>
         <Setter Property="CornerRadius" Value="4"/>
         <Setter Property="Padding" Value="12, 4"/>
         <Setter Property="BackgroundColor" Value="{StaticResource Surface2}"/>
@@ -153,30 +152,6 @@
         </Setter>
     </Style>
     
-    <Style x:Key="ModelSelectionButtonStyle" TargetType="uranium:StatefulContentView">
-        <Setter Property="VisualStateManager.VisualStateGroups">
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal">
-                        <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
-                        </VisualState.Setters>
-                    </VisualState>
-                    <VisualState x:Name="Pressed">
-                        <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryAccent}"/>
-                        </VisualState.Setters>
-                    </VisualState>
-                    <VisualState x:Name="PointerOver">
-                        <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryAccent}"/>
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateGroupList>
-        </Setter>
-    </Style>
-
     <Style TargetType="CheckBox">
         <Setter Property="Color" Value="{StaticResource OnBackground}" />
         <Setter Property="MinimumHeightRequest" Value="44"/>

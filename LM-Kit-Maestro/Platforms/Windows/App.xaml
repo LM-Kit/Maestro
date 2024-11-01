@@ -10,7 +10,7 @@
                     <!--Background="#512BD4"-->
             <Grid >
                 <Border
-                    Background="#0D1117"
+                    Background="#12181F"
                     Canvas.ZIndex="1"
                     Padding="0"
                     VerticalAlignment="Stretch"

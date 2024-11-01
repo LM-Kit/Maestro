@@ -3,6 +3,7 @@ using LMKit.TextGeneration.Chat;
 using LMKitMaestro.Models;
 using CommunityToolkit.Mvvm.Input;
 using LMKitMaestro.Services;
+using static LMKit.TextGeneration.TextGenerationResult;
 
 namespace LMKitMaestro.ViewModels;
 public partial class MessageViewModel : ViewModelBase
@@ -23,6 +24,10 @@ public partial class MessageViewModel : ViewModelBase
                 Text = _lmKitMessage.Content;
                 MessageModel.Text = Text;
                 MessageModel.Sender = Sender;
+#if NEW_LMKIT
+                TerminationReason = _lmKitMessage.TerminationReason;
+                GeneratedTokens = _lmKitMessage.GeneratedTokens;
+#endif
                 _lmKitMessage.PropertyChanged += OnMessagePropertyChanged;
             }
 
@@ -46,6 +51,12 @@ public partial class MessageViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool _isHovered;
+
+    [ObservableProperty]
+    private StopReason _terminationReason;
+
+    [ObservableProperty]
+    private double _generatedTokens;
 
     public event EventHandler? MessageContentUpdated;
 
@@ -88,6 +99,16 @@ public partial class MessageViewModel : ViewModelBase
 
             MessageContentUpdated?.Invoke(this, EventArgs.Empty);
         }
+#if NEW_LMKIT
+        else if (e.PropertyName == nameof(ChatHistory.Message.GeneratedTokens))
+        {
+            GeneratedTokens = LmKitMessage!.GeneratedTokens;
+        }
+        else if (e.PropertyName == nameof(ChatHistory.Message.TerminationReason))
+        {
+            TerminationReason = LmKitMessage!.TerminationReason;
+        }
+#endif
     }
 
     private static MessageSender AuthorRoleToMessageSender(AuthorRole authorRole)

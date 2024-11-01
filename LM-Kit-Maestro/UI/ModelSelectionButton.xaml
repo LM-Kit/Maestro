@@ -14,47 +14,106 @@
              x:Class="LMKitMaestro.UI.ModelSelectionButton"
              x:DataType="vm:ChatPageViewModel"
              x:Name="modelSelectionButton">
+    
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style x:Key="EjectButtonStyle" TargetType="Button">
+                <Setter Property="HeightRequest" Value="24"/>
+                <Setter Property="WidthRequest" Value="24"/>
+                <Setter Property="MinimumHeightRequest" Value="24"/>
+                <Setter Property="MinimumWidthRequest" Value="24"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="ToolTipProperties.Text" Value="Eject model"/>
+                <Setter Property="TextColor" Value="{StaticResource Primary}"/>
+                <Setter Property="FontFamily" Value="MaterialSharp"/>
+                <Setter Property="Text" Value="{x:Static icons:MaterialSharp.Eject}"/>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface2}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface3}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            
+                            <VisualState x:Name="Hover">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface3}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ModelSelectionButtonStyle" TargetType="uranium:StatefulContentView">
+                <Style.Triggers>
+                    <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
+                        <Setter Property="InputTransparent" Value="True" />
+                    </DataTrigger>
+
+                    <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
+                        <Setter Property="InputTransparent" Value="True" />
+                    </DataTrigger>
+                </Style.Triggers>
+                
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface2}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="PointerOver">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Surface}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
     <Border 
-        StrokeThickness="0"
+        StrokeThickness="1"
         StrokeShape="RoundRectangle 4"
         Grid.Column="1"
         InputTransparent="False"
-        Stroke="Transparent">
+        Stroke="{StaticResource Surface4}">
+        <Border.Triggers>
+            <DataTrigger TargetType="Border" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loaded}">
+                <Setter Property="Stroke" Value="{StaticResource Primary}" />
+            </DataTrigger>
+        </Border.Triggers>
+
         <uranium:StatefulContentView
             Style="{StaticResource ModelSelectionButtonStyle}"
             InputTransparent="False"
+            Hovered="OnModelSelectionButtonHovered"
+            HoverExited="OnModelSelectionButtonHoveredExited"
             Tapped="OnModelSelectionButtonClicked">
-            <uranium:StatefulContentView.Triggers>
-                <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
-                    <Setter Property="InputTransparent" Value="True" />
-                </DataTrigger>
-
-                <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
-                    <Setter Property="InputTransparent" Value="True" />
-                </DataTrigger>
-
-                <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
-                    <Setter Property="InputTransparent" Value="True" />
-                </DataTrigger>
-            </uranium:StatefulContentView.Triggers>
-
             <Grid RowDefinitions="*, auto">
                 <Grid Padding="12, 0" ColumnSpacing="8" ColumnDefinitions="24, *, 24">
                     <Button 
+                        Style="{StaticResource EjectButtonStyle}"
                         IsVisible="{Binding LmKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loaded}}"
-                        HeightRequest="24"
-                        WidthRequest="24"
-                        MinimumHeightRequest="24"
-                        MaximumHeightRequest="24"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"
-                        BackgroundColor="{StaticResource Surface}"
-                        CornerRadius="12"
-                        Padding="0"
-                        ToolTipProperties.Text="Eject model"
-                        TextColor="{StaticResource OnSurface}"
-                        Clicked="OnEjectModelButtonClicked"
-                        Text="{x:Static icons:MaterialRegular.Eject}" FontFamily="MaterialSharp">
+                        Clicked="OnEjectModelButtonClicked">
                     </Button>
 
                     <Label 
@@ -115,7 +174,7 @@
                         Grid.Column="2"
                         VerticalOptions="Center"
                         FontFamily="MaterialRegular"
-                        TextColor="{StaticResource OnSurface}"
+                        TextColor="{StaticResource Outline}"
                         Text="{x:Static icons:MaterialRegular.Keyboard_arrow_down}">
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
@@ -127,10 +186,11 @@
 
                 <ProgressBar 
                     Grid.ColumnSpan="3"
-                    IsVisible="{Binding LmKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loading}}"
                     VerticalOptions="End"
                     Grid.Row="1"
-                    ProgressColor="{StaticResource Outline}" 
+                    BackgroundColor="{StaticResource Surface2}"
+                    ProgressColor="{StaticResource Primary}" 
+                    IsVisible="{Binding LmKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loading}}"
                     Progress="{Binding LoadingProgress}"/>
             </Grid>
         </uranium:StatefulContentView>
