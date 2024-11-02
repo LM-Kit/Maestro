@@ -10,9 +10,11 @@ namespace LMKitMaestro.ViewModels
 {
     public sealed class AssistantsPageViewModel : PageViewModelBase
     {
-        public AssistantsPageViewModel(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation) : base(navigationService, popupService, popupNavigation)
-        {
+        public ModelListViewModel ModelListViewModel { get; }
 
+        public AssistantsPageViewModel(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation, ModelListViewModel modelListViewModel) : base(navigationService, popupService, popupNavigation)
+        {
+            ModelListViewModel = modelListViewModel;
         }
     }
 }

@@ -30,7 +30,7 @@
 
             <ui:ModelSelectionButton 
                 x:Name="modelSelectionButton"
-                BindingContext="{Binding}"
+                BindingContext="{Binding ModelListViewModel}"
                 VerticalOptions="Start"
                 Margin="16, 0"
                 MaximumWidthRequest="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"
