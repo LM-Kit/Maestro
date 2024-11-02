@@ -8,7 +8,7 @@ using Mopups.Interfaces;
 
 namespace LMKitMaestro.ViewModels
 {
-    internal class AssistantsPageViewModel : PageViewModelBase
+    public sealed class AssistantsPageViewModel : PageViewModelBase
     {
         public AssistantsPageViewModel(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation) : base(navigationService, popupService, popupNavigation)
         {
