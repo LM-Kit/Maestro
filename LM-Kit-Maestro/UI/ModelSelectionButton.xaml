@@ -12,9 +12,9 @@
              xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              x:Class="LMKitMaestro.UI.ModelSelectionButton"
-             x:DataType="vm:ChatPageViewModel"
+             x:DataType="vm:ModelListViewModel"
              x:Name="modelSelectionButton">
-    
+
     <ContentView.Resources>
         <ResourceDictionary>
             <Style x:Key="EjectButtonStyle" TargetType="Button">
@@ -43,7 +43,7 @@
                                     <Setter Property="BackgroundColor" Value="{StaticResource Surface3}"/>
                                 </VisualState.Setters>
                             </VisualState>
-                            
+
                             <VisualState x:Name="Hover">
                                 <VisualState.Setters>
                                     <Setter Property="BackgroundColor" Value="{StaticResource Surface3}"/>
@@ -64,7 +64,7 @@
                         <Setter Property="InputTransparent" Value="True" />
                     </DataTrigger>
                 </Style.Triggers>
-                
+
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
@@ -184,14 +184,13 @@
                     </Label>
                 </Grid>
 
-                <Label Text="{Binding LmKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loading}}"/>
-
-                    <!--IsVisible="{Binding LmKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loading}}"-->
+                <!--IsVisible="{Binding LmKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loading}}"-->
                 <ProgressBar 
                     Grid.ColumnSpan="3"
                     VerticalOptions="End"
                     Grid.Row="1"
-                    Progress="0.5"
+                    Progress="{Binding LoadingProgress}"
+                    
                     BackgroundColor="{StaticResource Surface2}"
                     ProgressColor="{StaticResource Primary}" 
                     />
