@@ -34,9 +34,9 @@
         <ShellContent Title="Models" ContentTemplate="{DataTemplate ui:ModelsPage}"/>
     </Tab>
 
-    <!--<FlyoutItem Route="ChatPage" Title="AI Chat">
-        <ShellContent ContentTemplate="{DataTemplate ui:ChatPage}"/>
-    </FlyoutItem>-->
+    <Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage">
+        <ShellContent ContentTemplate="{DataTemplate ui:AssistantsPage}"/>
+    </Tab>
 
     <!--<FlyoutItem Route="ModelsPage"  Title="Models">
         <ShellContent ContentTemplate="{DataTemplate ui:ModelsPage}"/>
@@ -76,8 +76,9 @@
                                     Text="{Binding Title}">
                                     <ui:LinkView.Triggers>
                                         <DataTrigger TargetType="ui:LinkView" Binding="{Binding IsSelected}" Value="True">
+
                                             <Setter Property="TextColor" Value="{StaticResource OnBackground}"/>
-                                            <Setter Property="FontFamily" Value="Segoe"/>
+                                            <Setter Property="FontFamily" Value="SegoeSemiLight"/>
                                         </DataTrigger>
                                     </ui:LinkView.Triggers>
                                 </ui:LinkView>

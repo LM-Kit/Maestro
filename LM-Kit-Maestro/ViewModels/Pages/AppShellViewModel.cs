@@ -27,13 +27,13 @@ public partial class AppShellViewModel : ViewModelBase
     LMKitMaestroTabViewModel _homeTab = new LMKitMaestroTabViewModel("Home", "HomePage");
 
     [ObservableProperty]
-    LMKitMaestroTabViewModel _chatTab = new LMKitMaestroTabViewModel("AI Chat", "ChatPage");
+    LMKitMaestroTabViewModel _chatTab = new LMKitMaestroTabViewModel("Chat", "ChatPage");
 
     [ObservableProperty]
     LMKitMaestroTabViewModel _modelsTab = new LMKitMaestroTabViewModel("Models", "ModelsPage");
 
     [ObservableProperty]
-    LMKitMaestroTabViewModel _assistantsTab = new LMKitMaestroTabViewModel("AI Assistants", "AssistantsPage");
+    LMKitMaestroTabViewModel _assistantsTab = new LMKitMaestroTabViewModel("Assistants", "AssistantsPage");
 
     private LMKitMaestroTabViewModel? _currentTab;
     public LMKitMaestroTabViewModel CurrentTab
@@ -65,8 +65,10 @@ public partial class AppShellViewModel : ViewModelBase
         _llmFileManager = llmFileManager;
         _appSettingsService = appSettingsService;
 
-        //Tabs.Add(HomeTab);
         Tabs.Add(ChatTab);
+#if BETA_ASSISTANTS_PAGE
+        Tabs.Add(AssistantsTab);
+#endif
         Tabs.Add(ModelsTab);
         CurrentTab = HomeTab;
     }

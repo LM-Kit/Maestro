@@ -13,10 +13,29 @@
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              x:DataType="vm:AssistantsPageViewModel"
              x:Class="LMKitMaestro.UI.AssistantsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{x:Static local:AppConstants.ChatPageHeaderHeight}"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid 
+            Margin="0, -8, 0, 0"
+            BackgroundColor="{StaticResource Surface}"
+            VerticalOptions="Start"
+            HeightRequest="{x:Static local:AppConstants.ChatPageHeaderHeight}"
+            Grid.ColumnSpan="3" 
+            ColumnDefinitions="auto, *, auto">
+
+            <ui:ModelSelectionButton 
+                x:Name="modelSelectionButton"
+                VerticalOptions="Start"
+                Margin="16, 0"
+                MaximumWidthRequest="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"
+                HeightRequest="{x:Static local:AppConstants.ModelSelectionButtonHeight}"
+                Grid.Column="1">
+            </ui:ModelSelectionButton>
+        </Grid>
+    </Grid>
 </ContentPage>
