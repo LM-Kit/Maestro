@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:LMKitMaestro"
+             xmlns:controls="clr-namespace:LMKitMaestro.Controls"
+             xmlns:ui="clr-namespace:LMKitMaestro.UI"
+             xmlns:converters="clr-namespace:LMKitMaestro.Converters"
+             xmlns:models="clr-namespace:LMKitMaestro.Models"
+             xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
+             xmlns:services="clr-namespace:LMKitMaestro.Services"
+             xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             x:DataType="vm:AssistantsPageViewModel"
+             x:Class="LMKitMaestro.UI.AssistantsPage">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{x:Static local:AppConstants.ChatPageHeaderHeight}"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid 
+            Margin="0, -8, 0, 0"
+            BackgroundColor="{StaticResource Surface}"
+            VerticalOptions="Start"
+            HeightRequest="{x:Static local:AppConstants.ChatPageHeaderHeight}"
+            Grid.ColumnSpan="3" 
+            ColumnDefinitions="auto, *, auto">
+
+            <ui:ModelSelectionButton 
+                x:Name="modelSelectionButton"
+                VerticalOptions="Start"
+                Margin="16, 0"
+                MaximumWidthRequest="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"
+                HeightRequest="{x:Static local:AppConstants.ModelSelectionButtonHeight}"
+                Grid.Column="1">
+            </ui:ModelSelectionButton>
+        </Grid>
+    </Grid>
+</ContentPage>
