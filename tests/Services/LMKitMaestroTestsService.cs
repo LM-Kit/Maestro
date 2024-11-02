@@ -144,8 +144,11 @@ namespace LMKitMaestro.Tests
         private static ModelListViewModel GetNewModelListViewModel(LMKitService lmKitService, ILLMFileManager llmFileManager)
         {
             var mainThread = new Mock<IMainThread>().Object;
+            var navigationService = new Mock<INavigationService>().Object;
+            var popupNavigation = new Mock<IPopupNavigation>().Object;
+            var popupService = new Mock<IPopupService>().Object;
 
-            return new ModelListViewModel(mainThread, llmFileManager, lmKitService);
+            return new ModelListViewModel(mainThread, llmFileManager, lmKitService, popupService, navigationService, popupNavigation);
         }
 
         private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService, ConversationListViewModel conversationListViewModel,

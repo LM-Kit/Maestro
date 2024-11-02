@@ -7,7 +7,7 @@ public partial class ModelSelectionButton : ContentView
 {
     private bool _mustIgnoreNextStatefulContentViewTap;
 
-    private ChatPageViewModel? _chatPageViewModel;
+    private ModelListViewModel? _modelListViewModel;
 
     public static readonly BindableProperty IsHoverdProperty = BindableProperty.Create(nameof(IsHovered), typeof(bool), typeof(ModelSelectionButton));
     public bool IsHovered
@@ -46,11 +46,11 @@ public partial class ModelSelectionButton : ContentView
     {
         base.OnBindingContextChanged();
 
-        if (BindingContext is ChatPageViewModel chatPageViewModel)
+        if (BindingContext is ModelListViewModel modelListViewModel)
         {
-            chatPageViewModel.LmKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
-            chatPageViewModel.LmKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
-            _chatPageViewModel = chatPageViewModel;
+            modelListViewModel.LmKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
+            modelListViewModel.LmKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
+            _modelListViewModel = modelListViewModel;
         }
     }
 
@@ -79,15 +79,15 @@ public partial class ModelSelectionButton : ContentView
 
     private void OnEjectModelButtonClicked(object sender, EventArgs e)
     {
-        if (_chatPageViewModel != null)
+        if (_modelListViewModel != null)
         {
             // Workaround: StatefulContentView events get fired whenever one of its child fires an event
             // -> ignore next click event
             _mustIgnoreNextStatefulContentViewTap = true;
 
-            if (_chatPageViewModel != null)
+            if (_modelListViewModel != null)
             {
-                _chatPageViewModel.EjectModel();
+                _modelListViewModel.EjectModel();
             }
         }
     }
@@ -96,13 +96,13 @@ public partial class ModelSelectionButton : ContentView
     {
         if (!_mustIgnoreNextStatefulContentViewTap)
         {
-            if (_chatPageViewModel != null)
+            if (_modelListViewModel != null)
             {
-                ModelSelectionPopupViewModel modelSelectionPopupViewModel = new ModelSelectionPopupViewModel(_chatPageViewModel);
+                ModelSelectionPopupViewModel modelSelectionPopupViewModel = new ModelSelectionPopupViewModel(_modelListViewModel);
 
-                var popup = new ModelSelectionPopup(_chatPageViewModel.PopupNavigation, modelSelectionPopupViewModel);
+                var popup = new ModelSelectionPopup(_modelListViewModel.PopupNavigation, modelSelectionPopupViewModel);
 
-                await _chatPageViewModel.PopupNavigation.PushAsync(popup, true);
+                await _modelListViewModel.PopupNavigation.PushAsync(popup, true);
             }
         }
 

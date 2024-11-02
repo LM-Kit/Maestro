@@ -13,18 +13,18 @@ public partial class ModelSelectionPopup : PopupView
 
         _modelSelectionPopupViewModel = modelSelectionPopupViewModel;
         BindingContext = modelSelectionPopupViewModel;
-        modelSelectionPopupViewModel.ChatPageViewModel.PropertyChanged += OnChatPageViewModelPropertyChanged;
+        modelSelectionPopupViewModel.ModelListViewModel.PropertyChanged += OnModelListSelectedModelPropertyChanged;
     }
 
     async void OnCloseButtonClicked(object? sender, EventArgs e) => await Dismiss();
 
     async void OnNavigateToModelPageClicked(object? sender, EventArgs e) => await Dismiss();
 
-    private async void OnChatPageViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private async void OnModelListSelectedModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ChatPageViewModel.SelectedModel))
+        if (e.PropertyName == nameof(_modelSelectionPopupViewModel.ModelListViewModel.SelectedModel))
         {
-            if (_modelSelectionPopupViewModel.ChatPageViewModel.SelectedModel != null)
+            if (_modelSelectionPopupViewModel.ModelListViewModel.SelectedModel != null)
             {
                 await Dismiss();
             }

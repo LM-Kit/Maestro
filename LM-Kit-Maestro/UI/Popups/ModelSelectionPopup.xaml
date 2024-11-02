@@ -40,7 +40,7 @@
                 RowDefinitions="*,*" 
                 RowSpacing="20"
                 Margin="0, 0, 0, 8"
-                IsVisible="{Binding ChatPageViewModel.ModelListViewModel.UserModels.Count, Converter={StaticResource EqualToZeroConverter}}">
+                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={StaticResource EqualToZeroConverter}}">
 
                 <Label 
                     TextColor="{StaticResource OutlineVariant}" 
@@ -62,9 +62,9 @@
                 Margin="0"
                 Spacing="8"
                 Grid.Row="1"
-                IsVisible="{Binding ChatPageViewModel.ModelListViewModel.UserModels.Count, Converter={StaticResource GreaterThanZeroConverter}}"
-                ItemsSource="{Binding ChatPageViewModel.ModelListViewModel.UserModels}"
-                SelectedItem="{Binding ChatPageViewModel.SelectedModel, Mode=TwoWay}">
+                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={StaticResource GreaterThanZeroConverter}}"
+                ItemsSource="{Binding ModelListViewModel.UserModels}"
+                SelectedItem="{Binding ModelListViewModel.SelectedModel, Mode=TwoWay}">
 
                 <controls:CustomCollectionView.ItemTemplate>
                     <DataTemplate x:DataType="vm:ModelInfoViewModel">

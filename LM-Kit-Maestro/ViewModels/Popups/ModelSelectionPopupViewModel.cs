@@ -6,16 +6,16 @@ namespace LMKitMaestro.ViewModels;
 public partial class ModelSelectionPopupViewModel : ViewModelBase
 {
     [ObservableProperty]
-    ChatPageViewModel _chatPageViewModel;
+    ModelListViewModel _modelListViewModel;
 
-    public ModelSelectionPopupViewModel(ChatPageViewModel chatPageViewModel)
+    public ModelSelectionPopupViewModel(ModelListViewModel modelListViewModel)
     {
-        ChatPageViewModel = chatPageViewModel;
+        ModelListViewModel = modelListViewModel;
     }
 
     [RelayCommand]
     public async Task NavigateToModelPage()
     {
-        await ChatPageViewModel.NavigationService.NavigateToAsync("//ModelsPage");
+        await ModelListViewModel.NavigationService.NavigateToAsync("//ModelsPage");
     }
 }
