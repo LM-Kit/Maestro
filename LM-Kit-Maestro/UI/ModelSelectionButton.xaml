@@ -184,14 +184,17 @@
                     </Label>
                 </Grid>
 
+                <Label Text="{Binding LmKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loading}}"/>
+
+                    <!--IsVisible="{Binding LmKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loading}}"-->
                 <ProgressBar 
                     Grid.ColumnSpan="3"
                     VerticalOptions="End"
                     Grid.Row="1"
+                    Progress="0.5"
                     BackgroundColor="{StaticResource Surface2}"
                     ProgressColor="{StaticResource Primary}" 
-                    IsVisible="{Binding LmKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loading}}"
-                    Progress="{Binding LoadingProgress}"/>
+                    />
             </Grid>
         </uranium:StatefulContentView>
     </Border>

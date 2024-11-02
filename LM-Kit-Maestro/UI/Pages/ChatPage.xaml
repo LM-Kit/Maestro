@@ -110,6 +110,7 @@
             </Grid>
 
             <ui:ModelSelectionButton 
+                BindingContext="{Binding ModelListViewModel}"
                 x:Name="modelSelectionButton"
                 VerticalOptions="Start"
                 Margin="16, 0"

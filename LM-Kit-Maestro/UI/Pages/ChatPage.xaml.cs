@@ -55,13 +55,6 @@ public partial class ChatPage : ContentPage
         SizeChanged += OnPageSizeChanged;
     }
 
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
-    {
-        base.OnNavigatedTo(args);
-
-        ((ChatPageViewModel)BindingContext).Initialize();
-    }
-
     private void OnPageSizeChanged(object? sender, EventArgs e)
     {
         ShowSidebarToggles = Width >= AppConstants.ChatWindowLayoutMinimumWidth;
