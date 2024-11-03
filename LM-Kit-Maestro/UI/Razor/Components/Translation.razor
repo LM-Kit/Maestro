@@ -1,11 +1,11 @@
 ﻿@inherits MvvmComponentBase<AssistantsPageViewModel>
 
-<Markdown @bind-Value="@ViewModel.Input" CustomButtonClicked="@OnTranslateButtonClicked">
+@* <Markdown @bind-Value="@ViewModel.Input" CustomButtonClicked="@OnTranslateButtonClicked">
     <Toolbar>
         <MarkdownToolbarButton Separator Name="Custom button" Value="@("hello")" Icon="fa fa fa-play" Title="Translate" Text="My Custom Button" />
         <MarkdownToolbarButton Separator Name="https://github.com/Ionaru/easy-markdown-editor" Icon="fa fab fa-github" Title="A Custom Link" />
     </Toolbar>
-</Markdown>
+</Markdown> *@
 
 @code {
     private async Task OnTranslateButtonClicked(MarkdownButtonEventArgs eventArgs)
