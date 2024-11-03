@@ -1,0 +1,26 @@
+﻿@inherits MvvmComponentBase<AssistantsPageViewModel>
+
+@<Markdown @bind-Value="@ViewModel.Input" CustomButtonClicked="@OnCustomButtonClicked">
+    <Toolbar>
+        <MarkdownToolbarButton Action="MarkdownAction.Bold" Icon="fa fa-bolt" Title="Bold" />
+        <MarkdownToolbarButton Separator Name="Custom button" Value="@("hello")" Icon="fa fa-star" Title="A Custom Button" Text="My Custom Button" />
+        <MarkdownToolbarButton Separator Name="https://github.com/Ionaru/easy-markdown-editor" Icon="fa fab fa-github" Title="A Custom Link" />
+    </Toolbar>
+</Markdown>
+
+@code{
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+
+    }
+
+    Task OnCustomButtonClicked(MarkdownButtonEventArgs eventArgs)
+    {
+
+        ViewModel.RunAssistantCommand.Execute(null);
+        return Task.CompletedTask;
+    }
+
+}
