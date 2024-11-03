@@ -8,7 +8,7 @@
              xmlns:converters="clr-namespace:LMKitMaestro.Converters"
              xmlns:models="clr-namespace:LMKitMaestro.Models"
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
-             xmlns:razor="clr-namespace:LMKitMaestro.UI.Razor"
+             xmlns:razor="clr-namespace:LMKitMaestro.UI.Razor.Components"
              xmlns:services="clr-namespace:LMKitMaestro.Services"
              xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
@@ -45,7 +45,7 @@
             Grid.Row="1" 
             HostPage="wwwroot/index.html">
             <BlazorWebView.RootComponents>
-                <RootComponent Selector="#app" ComponentType="{x:Type razor:Routes}" />
+                <RootComponent Selector="#app" ComponentType="{x:Type razor:Translation}" />
             </BlazorWebView.RootComponents>
         </BlazorWebView>
     </Grid>
