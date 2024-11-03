@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using LMKitMaestro.Services;
 using Mopups.Interfaces;
 
@@ -17,6 +18,9 @@ namespace LMKitMaestro.ViewModels
             }
         }
 
+        [ObservableProperty]
+        private string? _result;
+
         public ModelListViewModel ModelListViewModel { get; }
 
         public LMKitService LMKitService { get; }
@@ -28,9 +32,9 @@ namespace LMKitMaestro.ViewModels
         }
 
         [RelayCommand]
-        public void RunAssistant()
+        public async Task RunAssistant()
         {
-
+            Result = await LMKitService.SubmitTranslation(Input, LMKit.TextGeneration.Language.Undefined);
         }
     }
 }
