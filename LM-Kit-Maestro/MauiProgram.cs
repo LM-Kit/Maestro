@@ -14,8 +14,9 @@ using Majorsoft.Blazor.Components.Common.JsInterop;
 using Mopups.Hosting;
 using Mopups.Interfaces;
 using Mopups.Services;
-using Microsoft.AspNetCore.Components.Web;
-using System.Diagnostics.Metrics;
+using Blazorise;
+using Blazorise.Icons.FontAwesome;
+using Blazorise.Bootstrap5;
 
 namespace LMKitMaestro
 {
@@ -58,7 +59,16 @@ namespace LMKitMaestro
                 });
 
             builder.Services.AddMauiBlazorWebView();
+
             builder.Services.AddJsInteropExtensions();
+
+            builder.Services
+                .AddBlazorise(options =>
+                {
+                    options.Immediate = true;
+                })
+                .AddBootstrap5Providers()
+                .AddFontAwesomeIcons();
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
