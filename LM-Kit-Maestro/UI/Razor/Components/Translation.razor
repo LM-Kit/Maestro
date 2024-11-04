@@ -1,14 +1,53 @@
 ﻿@inherits MvvmComponentBase<AssistantsPageViewModel>
 
-<Markdown @bind-Value="@ViewModel.Input" CustomButtonClicked="@OnTranslateButtonClicked">
-    <Toolbar>
-        <MarkdownToolbarButton Separator Name="Custom button" Value="@("hello")" Icon="fa fa fa-play" Title="Translate" Text="My Custom Button" />
-        <MarkdownToolbarButton Separator Name="https://github.com/Ionaru/easy-markdown-editor" Icon="fa fab fa-github" Title="A Custom Link" />
-    </Toolbar>
-</Markdown>
+<div class="container">
+<textarea id="input" @bind="@ViewModel.Input"/>
+    <button id="translateButton" @onclick="OnTranslateButtonClicked">Translate</button>
 
-@code {
-    private async Task OnTranslateButtonClicked(MarkdownButtonEventArgs eventArgs)
+    @if (Result != null)
+    {
+        <div id="result">
+            @Result
+        </div>
+    }
+</div>
+
+<style>
+    #container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    #input {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #000000;
+        background-color: transparent;
+        width: 100%;
+        resize: none;
+        margin-right: 10px; /* Adds some spacing between the input and the button */
+    }
+
+    #translateButton {
+        padding: 8px;
+        background-color: black;
+        color: white;
+        cursor: pointer;
+    }
+
+    #result {
+        background-color: red;
+        margin-top: 10px;
+        padding: 10px;
+    }
+</style>
+
+@code
+{
+    private string? Result { get; set; } = null;
+
+    private async Task OnTranslateButtonClicked()
     {
         await ViewModel.RunAssistant();
     }
