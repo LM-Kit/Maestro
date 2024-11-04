@@ -175,8 +175,8 @@ h1:focus {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--Surface2);
-    border-radius: 8px;
+    background-color: var(--Surface3);
+    border-radius: 4px;
     border: 3px solid transparent;
 }
 
@@ -185,5 +185,5 @@ h1:focus {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--Surface3);
+    background-color: var(--Surface4);
 }
