@@ -6,6 +6,7 @@ using LMKitMaestro.Services;
 using static LMKit.TextGeneration.TextGenerationResult;
 
 namespace LMKitMaestro.ViewModels;
+
 public partial class MessageViewModel : ViewModelBase
 {
     private ChatHistory.Message? _lmKitMessage;
@@ -24,10 +25,8 @@ public partial class MessageViewModel : ViewModelBase
                 Text = _lmKitMessage.Content;
                 MessageModel.Text = Text;
                 MessageModel.Sender = Sender;
-#if NEW_LMKIT
                 TerminationReason = _lmKitMessage.TerminationReason;
                 GeneratedTokens = _lmKitMessage.GeneratedTokens;
-#endif
                 _lmKitMessage.PropertyChanged += OnMessagePropertyChanged;
             }
 
@@ -99,7 +98,6 @@ public partial class MessageViewModel : ViewModelBase
 
             MessageContentUpdated?.Invoke(this, EventArgs.Empty);
         }
-#if NEW_LMKIT
         else if (e.PropertyName == nameof(ChatHistory.Message.GeneratedTokens))
         {
             GeneratedTokens = LmKitMessage!.GeneratedTokens;
@@ -108,7 +106,6 @@ public partial class MessageViewModel : ViewModelBase
         {
             TerminationReason = LmKitMessage!.TerminationReason;
         }
-#endif
     }
 
     private static MessageSender AuthorRoleToMessageSender(AuthorRole authorRole)
