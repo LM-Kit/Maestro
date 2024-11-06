@@ -75,10 +75,10 @@
 
         <Style x:Key="ModelBorderStyle" TargetType="Border">
             <Setter Property="BackgroundColor" Value="{StaticResource Surface3}"/>
-            <Setter Property="StrokeThickness" Value="0"/>
+            <Setter Property="StrokeThickness" Value="1"/>
             <Setter Property="Padding" Value="16"/>
             <Setter Property="Margin" Value="20,0"/>
-            <Setter Property="Stroke" Value="{StaticResource OutlineVariant}"/>
+            <Setter Property="Stroke" Value="{StaticResource Surface4}"/>
             <Setter Property="StrokeShape" Value="RoundRectangle 4"/>
         </Style>
 
