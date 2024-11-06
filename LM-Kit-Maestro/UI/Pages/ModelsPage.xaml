@@ -251,6 +251,8 @@
             <Grid 
                 MaximumWidthRequest="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"
                 ColumnSpacing="12" 
+                VerticalOptions="Center"
+                
                 ColumnDefinitions="auto, *"
                 HorizontalOptions="Fill">
                 
@@ -276,14 +278,16 @@
                     </Border>
 
                     <Button 
-                        Style="{StaticResource SidebarToggleButtonStyle}"
+                        CornerRadius="4"
+                        Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="1" 
                         ToolTipProperties.Text="Select another folder"
                         Text="{x:Static icons:MaterialRegular.Edit}" 
                         Command="{Binding PickModelsFolderCommand}"/>
 
                     <Button 
-                        Style="{StaticResource SidebarToggleButtonStyle}"
+                        CornerRadius="4"
+                        Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="2"
                         Text="{x:Static icons:MaterialRegular.Folder}"
                         ToolTipProperties.Text="Open in File Explorer"
