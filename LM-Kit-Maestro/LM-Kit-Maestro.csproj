@@ -53,14 +53,17 @@
     <ItemGroup>
       <None Remove="Resources\CSS\font-awesome.css" />
       <None Remove="Resources\CSS\font-awesome.min.css" />
-      <None Remove="Resources\CSS\LmKitMaestro.css" />
       <None Remove="Resources\Fonts\FontAwesome.otf" />
     </ItemGroup>
 
     <ItemGroup>
       <MauiCss Include="Resources\CSS\font-awesome.css" />
       <MauiCss Include="Resources\CSS\font-awesome.min.css" />
-      <MauiCss Include="Resources\CSS\LmKitMaestro.css" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\css\bootstrap.min.css" />
+      <None Include="wwwroot\css\bootstrap.min.css.map" />
     </ItemGroup>
 
 	<ItemGroup>
