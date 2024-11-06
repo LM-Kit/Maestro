@@ -7,7 +7,7 @@
 
 @inherits MvvmComponentBase<ChatPageViewModel>
 
-<div id="container" style="border-color:red;border-width:2px;" class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
+<div id="container" class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
     @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
     {
         if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
@@ -72,7 +72,6 @@
     }
 
 
-    /* padding-inline: 20px; */
     #message-list {
         margin: auto;
         display: flex;
@@ -81,7 +80,7 @@
     }
 
     #empty-conversation {
-        max-width: 800px;
+        max-width: 568px;
         text-align: center;
         flex-direction: column;
         font-size: 12px;
@@ -119,8 +118,6 @@
     }
 
     .vertical-stack {
-        padding-inline: 20px;
-        max-width: 540px;
         gap: 8px;
         display: flex;
         flex-direction: column;
