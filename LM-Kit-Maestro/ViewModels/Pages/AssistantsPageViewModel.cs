@@ -1,13 +1,40 @@
-﻿using LMKitMaestro.Services;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using LMKitMaestro.Services;
 using Mopups.Interfaces;
 
 namespace LMKitMaestro.ViewModels
 {
-    internal partial class AssistantsPageViewModel : PageViewModelBase
+    public partial class AssistantsPageViewModel : PageViewModelBase
     {
-        public AssistantsPageViewModel(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation) : base(navigationService, popupService, popupNavigation)
+        private string _input = string.Empty;
+        public string Input
         {
+            get => _input;
+            set
+            {
+                _input = value;
+                OnPropertyChanged();
+            }
+        }
 
+        [ObservableProperty]
+        private string? _result;
+
+        public ModelListViewModel ModelListViewModel { get; }
+
+        public LMKitService LMKitService { get; }
+
+        public AssistantsPageViewModel(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation, ModelListViewModel modelListViewModel, LMKitService lMKitService) : base(navigationService, popupService, popupNavigation)
+        {
+            ModelListViewModel = modelListViewModel;
+            LMKitService = lMKitService;
+        }
+
+        [RelayCommand]
+        public async Task RunAssistant()
+        {
+            Result = await LMKitService.SubmitTranslation(Input, LMKit.TextGeneration.Language.Undefined);
         }
     }
 }

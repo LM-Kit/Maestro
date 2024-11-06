@@ -82,12 +82,14 @@ namespace LMKitMaestro
 
             builder.Services.AddSingleton<ChatPageViewModel>();
             builder.Services.AddTransient<ModelsPageViewModel>();
+            builder.Services.AddSingleton<AssistantsPageViewModel>();
         }
 
         private static void RegisterViews(this MauiAppBuilder builder)
         {
             builder.Services.AddTransient<ChatPage>();
             builder.Services.AddTransient<ModelsPage>();
+            builder.Services.AddTransient<AssistantsPage>();
         }
 
         private static void RegisterServices(this MauiAppBuilder builder)

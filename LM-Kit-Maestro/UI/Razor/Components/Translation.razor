@@ -1,0 +1,54 @@
+﻿@inherits MvvmComponentBase<AssistantsPageViewModel>
+
+<div class="container">
+<textarea id="input" @bind="@ViewModel.Input"/>
+    <button id="translateButton" @onclick="OnTranslateButtonClicked">Translate</button>
+
+    @if (Result != null)
+    {
+        <div id="result">
+            @Result
+        </div>
+    }
+</div>
+
+<style>
+    #container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    #input {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #000000;
+        background-color: transparent;
+        width: 100%;
+        resize: none;
+        margin-right: 10px; /* Adds some spacing between the input and the button */
+    }
+
+    #translateButton {
+        padding: 8px;
+        background-color: black;
+        color: white;
+        cursor: pointer;
+    }
+
+    #result {
+        background-color: red;
+        margin-top: 10px;
+        padding: 10px;
+    }
+</style>
+
+@code
+{
+    private string? Result { get; set; } = null;
+
+    private async Task OnTranslateButtonClicked()
+    {
+        await ViewModel.RunAssistant();
+    }
+}

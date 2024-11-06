@@ -2,6 +2,7 @@
 using LMKit.TextGeneration;
 using LMKit.TextGeneration.Sampling;
 using LMKit.TextGeneration.Chat;
+using LMKit.Translation;
 
 namespace LMKitMaestro.Services;
 
@@ -16,6 +17,8 @@ public partial class LMKitService : INotifyPropertyChanged
     private Conversation? _lastConversationUsed = null;
     private LMKit.Model.LLM? _model;
     private MultiTurnConversation? _multiTurnConversation;
+
+    private TextTranslation? _textTranslation;
 
     public LMKitConfig LMKitConfig { get; } = new LMKitConfig();
 
@@ -136,6 +139,17 @@ public partial class LMKitService : INotifyPropertyChanged
         ModelUnloaded?.Invoke(this, new NotifyModelStateChangedEventArgs(unloadedModelUri));
     }
 
+    public async Task<string> SubmitTranslation(string input, Language language)
+    {
+        if (_textTranslation == null)
+        {
+            _textTranslation = new TextTranslation(_model);
+        }
+
+        var result = await _textTranslation.TranslateAsync(input, language, default);
+
+        return result;
+    }
     public async Task<PromptResult> SubmitPrompt(Conversation conversation, string prompt)
     {
         var promptRequest = new PromptRequest(conversation, prompt, LMKitConfig.RequestTimeout);
