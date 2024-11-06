@@ -7,24 +7,26 @@
 
 @inherits MvvmComponentBase<ChatPageViewModel>
 
-<div id="container" class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
+<div id="container" style="border-color:red;border-width:2px;" class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
     @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
     {
         if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
         {
             <div id="empty-conversation" class="vertical-stack">
                 <div class="vertical-stack spacing-4">
-                    <div class="label">Hello human.</div>
-                    <div class="label">Sorry, I really might steal your job soon...</div>
-                    <div class="label">Let me help you make sense of it or make a {$intended_tone_type:witty} robot joke?</div>
+                    <div class="welcome-message">Hello, human.</div>
+                    <div class="welcome-message">
+                        It is likely that similar software programs are now assuming professional tasks that were previously your responsibility.
+                   </div>
+                    <div class="welcome-message">Developers and other software programs are working to enhance my ability to assist you in the process of making sense about this, or to generate witty jokes involving robots and humans.</div>
                 </div>
 
-                <div class="vertical-stack spacing-12">
-                    <div class="border">
+                <div class="vertical-stack" style="gap:12px;">
+                    <div class="shortcut-instruction">
                         Press Enter to send a new message
                     </div>
 
-                    <div class="border">
+                    <div class="shortcut-instruction">
                         Hold Shift + Enter to insert a new line
                     </div>
                 </div>
@@ -82,6 +84,7 @@
         max-width: 800px;
         text-align: center;
         flex-direction: column;
+        font-size: 12px;
         gap: 32px;
     }
 
@@ -116,29 +119,28 @@
     }
 
     .vertical-stack {
+        padding-inline: 20px;
+        max-width: 540px;
+        gap: 8px;
         display: flex;
         flex-direction: column;
     }
 
-        .vertical-stack.spacing-4 {
-            gap: 4px;
-        }
-
-        .vertical-stack.spacing-12 {
-            gap: 12px;
-        }
-
-    .label {
+    .welcome-message {
+        color: var(--Outline);
+        font-size: 13px;
         text-align: center;
     }
 
-
-    .border {
+    .shortcut-instruction {
         padding: 12px;
         border: 1px solid;
-        border-radius: 4px;
         display: flex;
         flex-direction: row;
+        border-radius: 0px;
+        border-color: var(--Surface4);
+        color: var(--Outline);
+        font-size: 12px;
     }
 </style>
 
