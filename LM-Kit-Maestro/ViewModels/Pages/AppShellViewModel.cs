@@ -66,7 +66,9 @@ public partial class AppShellViewModel : ViewModelBase
         _appSettingsService = appSettingsService;
 
         Tabs.Add(ChatTab);
+#if BETA_ASSISTANTS_PAGE
         Tabs.Add(AssistantsTab);
+#endif
         Tabs.Add(ModelsTab);
 
         CurrentTab = HomeTab;
