@@ -212,9 +212,10 @@
                             <Grid StyleClass="SettingGrid" ColumnDefinitions="3*, *">
                                 <Label VerticalOptions="Center" Text="Maximum completion tokens"/>
                                 <Border 
-                                        StrokeThickness="0.25"
-                                        StrokeShape="RoundRectangle 4" 
-                                        x:Name="maxCompletionTokensBorder" Grid.Column="1">
+                                    StrokeThickness="0.25"
+                                    StrokeShape="RoundRectangle 4" 
+                                    x:Name="maxCompletionTokensBorder" 
+                                    Grid.Column="1">
                                     <Border.Triggers>
                                         <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference maxCompletionTokensBorder}, Path=IsFocused}" Value="True">
                                             <Setter Property="Stroke" Value="{StaticResource OnSurface}"/>
@@ -224,7 +225,11 @@
                                         </DataTrigger>
                                     </Border.Triggers>
 
-                                    <plainer:EntryView x:Name=" maxCompletionTokensEntry"  Unfocused="EntryView_Unfocused" Text="{Binding MaximumCompletionTokens, Mode=TwoWay}" Keyboard="Numeric"/>
+                                    <plainer:EntryView 
+                                        x:Name="maxCompletionTokensEntry" 
+                                        Unfocused="OnMaxCompletionTokensEntryUnfocused"
+                                        Text="{Binding Source={x:Reference chatSettingsView}, Path=MaxCompletionTokensText, Mode=TwoWay}" 
+                                        Keyboard="Numeric"/>
                                 </Border>
                             </Grid>
 

@@ -7,6 +7,13 @@ public partial class ChatSettingsView : ContentView
 {
     private SettingsViewModel? _settingsViewModel;
 
+    public static readonly BindableProperty MaxCompletionTokensTextProperty = BindableProperty.Create(nameof(MaxCompletionTokensText), typeof(string), typeof(ChatSettingsView));
+    public string MaxCompletionTokensText
+    {
+        get => (string)GetValue(MaxCompletionTokensTextProperty);
+        set => SetValue(MaxCompletionTokensTextProperty, value);
+    }
+
     public ChatSettingsView()
     {
         InitializeComponent();
@@ -19,6 +26,15 @@ public partial class ChatSettingsView : ContentView
         if (BindingContext is SettingsViewModel settingsViewModel)
         {
             _settingsViewModel = settingsViewModel;
+            _settingsViewModel.PropertyChanged += OnSettingsViewModelPropertyChanged;
+        }
+    }
+
+    private void OnSettingsViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(SettingsViewModel.MaximumCompletionTokens))
+        {
+            MaxCompletionTokensText = _settingsViewModel!.MaximumCompletionTokens.ToString();
         }
     }
 
@@ -30,15 +46,15 @@ public partial class ChatSettingsView : ContentView
         }
     }
 
-    private void EntryView_Unfocused(object sender, FocusEventArgs e)
+    private void OnMaxCompletionTokensEntryUnfocused(object sender, FocusEventArgs e)
     {
-        if (int.TryParse(maxCompletionTokensEntry.Text, out int maxCompletionTokens))
+        if (int.TryParse(MaxCompletionTokensText, out int maxCompletionTokens))
         {
             _settingsViewModel!.MaximumCompletionTokens = Math.Max(maxCompletionTokens, 1);
         }
         else
         {
-            maxCompletionTokensEntry.Text = _settingsViewModel!.MaximumCompletionTokens.ToString();
+            MaxCompletionTokensText = _settingsViewModel!.MaximumCompletionTokens.ToString();
         }
     }
 }
