@@ -1,6 +1,6 @@
 # LM-Kit Maestro
 
-LM-Kit Maestro is a desktop app that provides a simple and reliable way of orchestrating AI agents on your local machine. It leverages advanced AI features from [LM-Kit.NET](https://github.com/Lk-it/LM-Kit.NET) through a modern and clean UI.
+LM-Kit Maestro is a desktop app that provides a simple and reliable way of orchestrating AI agents on your local machine. It leverages advanced AI features from [LM-Kit.NET](https://lm-kit.com/) through a modern and clean UI.
 
 ![LM-Kit Maestro](https://github.com/LM-Kit/LM-Kit-Maestro/blob/main/demo.gif?raw=true)
 
