@@ -17,7 +17,7 @@ You can see the full roadmap [here](https://github.com/orgs/LM-Kit/projects/1)
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/LM-Kit/LM-Kit-Maestro/blob/main/LICENSE.txt) file for details.
 
 
 ## Contributing
