@@ -215,5 +215,21 @@ namespace LMKitMaestro.Tests
             var result = await conversation1.PromptResultTask.Task;
             Assert.True(result != null && result.Status == LmKitTextGenerationStatus.Cancelled);
         }
+
+        [Fact]
+        public async Task Translate()
+        {
+            LMKitMaestroTestsService testService = new();
+            bool loadingSuccess = await testService.LoadModel();
+            Assert.True(loadingSuccess);
+
+            var result = await testService.LmKitService.SubmitTranslation("est-ce que ça marche cette merde ?", LMKit.TextGeneration.Language.French);
+            
+
+            LmKitDummyConversation conversation1 = new(testService.LmKitService);
+
+            conversation1.SubmitPrompt(testService.LmKitService, "bonjour");
+
+        }
     }
 }

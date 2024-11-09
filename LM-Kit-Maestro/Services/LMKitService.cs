@@ -11,6 +11,7 @@ public partial class LMKitService : INotifyPropertyChanged
     private readonly PromptSchedule<TitleGenerationRequest> _titleGenerationSchedule = new PromptSchedule<TitleGenerationRequest>();
     private readonly PromptSchedule<PromptRequest> _promptSchedule = new PromptSchedule<PromptRequest>();
     private readonly SemaphoreSlim _lmKitServiceSemaphore = new SemaphoreSlim(1);
+    private readonly PromptSchedule<TranslationRequest> _translationsSchedule = new PromptSchedule<TranslationRequest>();
 
     private Uri? _currentlyLoadingModelUri;
     private SingleTurnConversation? _singleTurnConversation;
@@ -148,8 +149,15 @@ public partial class LMKitService : INotifyPropertyChanged
 
         var result = await _textTranslation.TranslateAsync(input, language, default);
 
+        _textTranslation.AfterTextCompletion += _textTranslation_AfterTextCompletion;
         return result;
     }
+
+    private void _textTranslation_AfterTextCompletion(object? sender, LMKit.TextGeneration.Events.AfterTextCompletionEventArgs e)
+    {
+
+    }
+
     public async Task<PromptResult> SubmitPrompt(Conversation conversation, string prompt)
     {
         var promptRequest = new PromptRequest(conversation, prompt, LMKitConfig.RequestTimeout);
@@ -401,7 +409,7 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    private sealed class PromptSchedule<T> where T : LmKitPromptRequestBase
+    private sealed class PromptSchedule<T> where T : LmKitRequestBase
     {
         private readonly object _locker = new object();
 
@@ -475,7 +483,7 @@ public partial class LMKitService : INotifyPropertyChanged
             {
                 foreach (var scheduledPrompt in _scheduledPrompts)
                 {
-                    if (scheduledPrompt.Conversation == conversation)
+                    if (scheduledPrompt is LmKitPromptRequestBase promptRequestBase && promptRequestBase.Conversation == conversation)
                     {
                         prompt = scheduledPrompt;
                         break;
@@ -525,11 +533,16 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    private abstract class LmKitPromptRequestBase
+    private sealed class TranslationRequest : LmKitRequestBase
+    {
+        public TranslationRequest(string prompt, int requestTimeout) : base(prompt, requestTimeout)
+        {
+        }
+    }
+
+    private abstract class LmKitRequestBase
     {
         public string Prompt { get; }
-
-        public Conversation Conversation { get; }
 
         public TaskCompletionSource<PromptResult> TaskCompletionSource { get; } = new TaskCompletionSource<PromptResult>();
 
@@ -543,11 +556,20 @@ public partial class LMKitService : INotifyPropertyChanged
             TaskCompletionSource.Task.Wait();
         }
 
-        protected LmKitPromptRequestBase(Conversation conversation, string prompt, int requestTimeout)
+        protected LmKitRequestBase(string prompt, int requestTimeout)
         {
-            Conversation = conversation;
             Prompt = prompt;
             CancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(requestTimeout));
+        }
+    }
+
+    private abstract class LmKitPromptRequestBase : LmKitRequestBase
+    {
+        public Conversation Conversation { get; }
+
+        protected LmKitPromptRequestBase(Conversation conversation, string prompt, int requestTimeout) : base(prompt, requestTimeout)
+        {
+            Conversation = conversation;
         }
     }
 

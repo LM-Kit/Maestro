@@ -36,5 +36,18 @@ namespace LMKitMaestro.ViewModels
         {
             Result = await LMKitService.SubmitTranslation(Input, LMKit.TextGeneration.Language.Undefined);
         }
+
+        [RelayCommand]
+        public async Task RunTranslationAssistant()
+        {
+            if (LMKitService.ModelLoadingState != LmKitModelLoadingState.Loaded)
+            {
+                await PopupService.DisplayAlert("No model is loaded", "You need to load a model before you can submit a prompt", "OK");
+            }
+            else
+            {
+                Result = await LMKitService.SubmitTranslation(Input, LMKit.TextGeneration.Language.Undefined);
+            }
+        }
     }
 }

@@ -6,7 +6,9 @@
             <textarea id="input" />
 
             <div id="buttonsDiv">
-                <button class="primary-button fa-xs fa-solid fa-play" @onclick="OnTranslateButtonClicked"></button>
+                <button class="primary-button" @onclick="OnTranslateButtonClicked">
+                    Translate &nbsp;&nbsp;<i class="fa fa-play"></i>
+                </button>
             </div>
 
             @if (IsProcessing)
@@ -98,9 +100,13 @@
     }
 
     .primary-button {
+        font-family: "Segoe UI";
+        font-size: 12px;
+        color: var(--OnBackground);
         text-align: center;
         padding-block: 16px;
         padding-inline: 8px;
+        margin-right: 4px;
         border-width: 0;
         background-color: var(--Surface4);
         display: flex;
@@ -108,13 +114,13 @@
         justify-content: center;
     }
 
-        .primary-button:active {
-            background-color: var(--PrimaryAccent);
-        }
+    .primary-button:active {
+        background-color: var(--PrimaryAccent);
+    }
 
-        .primary-button:hover {
-            background-color: var(--Primary);
-        }
+    .primary-button:hover {
+        background-color: var(--Primary);
+    }
 
 </style>
 
@@ -127,7 +133,7 @@
     private async Task OnTranslateButtonClicked()
     {
         IsProcessing = true;
-        await ViewModel.RunAssistant();
+        await ViewModel.RunTranslationAssistant();
         IsProcessing = false;
     }
 }
