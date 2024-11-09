@@ -1,22 +1,79 @@
 ﻿@inherits MvvmComponentBase<AssistantsPageViewModel>
 
-<div class="container">
-<textarea id="input" @bind="@ViewModel.Input"/>
-    <button  class="primary-button" @onclick="OnTranslateButtonClicked">Translate</button>
+<div class="container, dark">
+    <div id="card">
 
-    @if (Result != null)
-    {
-        <div id="result">
-            @Result
+<textarea id="input" />
+        <div id="buttonsDiv">
+            <button class="primary-button" @onclick="OnTranslateButtonClicked">Translate</button>
+            <button class="primary-button" @onclick="OnTranslateButtonClicked">Test</button>
         </div>
-    }
+
+        @if (IsProcessing)
+        {
+            <div id="loaderDiv">
+                <div class="spinner">
+                    <div> </div>
+                    <div> </div>
+                    <div> </div>
+                    <div> </div>
+                </div>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(ViewModel.Result))
+        {
+            <div id="result">
+                @ViewModel.Result
+            </div>
+        }
+    </div>
 </div>
 
 <style>
+    .dark {
+        --Primary: #512BD4;
+        --PrimaryAccent: #3100AF;
+        --Error: #BB3D36;
+        --Background: #12181F;
+        --OnBackground: #F0F6FC;
+        --Surface: #06080A;
+        --Surface15: #0C1014;
+        --Surface2: #12181F;
+        --Surface3: #182129;
+        --Surface4: #1F2933;
+        --OnSurface: #F0F6FC;
+        --Outline: #9198A1;
+        --OutlineVariant: #2E3033;
+    }
+
+    #loaderDiv {
+        display: flex;
+        height: 72px;
+        background-color: transparent;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+    }
+
     #container {
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+
+    #card {
+        padding: 20px;
+        border: 1px solid var(--Surface4);
+        border-radius: 4px;
+    }
+
+    #buttonsDiv {
+        margin-block: 8px;
+        gap: 8px;
+        margin-left: auto;
+        display: flex;
+        justify-content: flex-end;
     }
 
     #input {
@@ -29,15 +86,10 @@
         margin-right: 10px; /* Adds some spacing between the input and the button */
     }
 
-    #translateButton {
-        padding: 8px;
-        background-color: black;
-        color: white;
-        cursor: pointer;
-    }
-
     #result {
-        background-color: red;
+        background-color: var(--Surface3);
+        color: white;
+        min-height: 72px;
         margin-top: 10px;
         padding: 10px;
     }
@@ -54,22 +106,26 @@
         justify-content: center;
     }
 
-    .primary-button:active {
-        background-color: var(--PrimaryAccent);
-    }
+        .primary-button:active {
+            background-color: var(--PrimaryAccent);
+        }
 
-    .primary-button:hover {
-        background-color: var(--Primary);
-    }
+        .primary-button:hover {
+            background-color: var(--Primary);
+        }
 
 </style>
 
 @code
 {
+    private bool IsProcessing { get; set; }
+
     private string? Result { get; set; } = null;
 
     private async Task OnTranslateButtonClicked()
     {
+        IsProcessing = true;
         await ViewModel.RunAssistant();
+        IsProcessing = false;
     }
 }
