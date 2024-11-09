@@ -1,32 +1,33 @@
 ﻿@inherits MvvmComponentBase<AssistantsPageViewModel>
 
-<div class="container, dark">
-    <div id="card">
+<div style="width:100vw; height:100vh; margin-top: 40px;padding: 20px">
+    <div id="container" class="dark container">
+        <div id="card">
+            <textarea id="input" />
 
-<textarea id="input" />
-        <div id="buttonsDiv">
-            <button class="primary-button" @onclick="OnTranslateButtonClicked">Translate</button>
-            <button class="primary-button" @onclick="OnTranslateButtonClicked">Test</button>
-        </div>
+            <div id="buttonsDiv">
+                <button class="primary-button fa-xs fa-solid fa-play" @onclick="OnTranslateButtonClicked"></button>
+            </div>
 
-        @if (IsProcessing)
-        {
-            <div id="loaderDiv">
-                <div class="spinner">
-                    <div> </div>
-                    <div> </div>
-                    <div> </div>
-                    <div> </div>
+            @if (IsProcessing)
+            {
+                <div id="loaderDiv">
+                    <div class="spinner">
+                        <div> </div>
+                        <div> </div>
+                        <div> </div>
+                        <div> </div>
+                    </div>
                 </div>
-            </div>
-        }
+            }
 
-        @if (!string.IsNullOrEmpty(ViewModel.Result))
-        {
-            <div id="result">
-                @ViewModel.Result
-            </div>
-        }
+            @if (!string.IsNullOrEmpty(ViewModel.Result))
+            {
+                <div id="result">
+                    @ViewModel.Result
+                </div>
+            }
+        </div>
     </div>
 </div>
 
@@ -57,12 +58,13 @@
     }
 
     #container {
+        max-width: 800px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
     }
 
     #card {
+        width: 100%;
         padding: 20px;
         border: 1px solid var(--Surface4);
         border-radius: 4px;
@@ -83,6 +85,7 @@
         background-color: transparent;
         width: 100%;
         resize: none;
+        color: white;
         margin-right: 10px; /* Adds some spacing between the input and the button */
     }
 
@@ -95,7 +98,6 @@
     }
 
     .primary-button {
-        font-size: 16px;
         text-align: center;
         padding-block: 16px;
         padding-inline: 8px;
