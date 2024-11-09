@@ -26,16 +26,16 @@
         <ShellContent Title="Home" ContentTemplate="{DataTemplate ui:HomePage}"/>
     </Tab>-->
 
+    <Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage">
+        <ShellContent ContentTemplate="{DataTemplate ui:AssistantsPage}"/>
+    </Tab>
+    
     <Tab BindingContext="{Binding ChatTab}" Title="{Binding ChatTab.Title}" Route="ChatPage">
         <ShellContent Title="AI Chat" ContentTemplate="{DataTemplate ui:ChatPage}"/>
     </Tab>
 
     <Tab BindingContext="{Binding ModelsTab}" Title="{Binding ModelsTab.Title}" Route="ModelsPage">
         <ShellContent Title="Models" ContentTemplate="{DataTemplate ui:ModelsPage}"/>
-    </Tab>
-
-    <Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage">
-        <ShellContent ContentTemplate="{DataTemplate ui:AssistantsPage}"/>
     </Tab>
 
     <!--<FlyoutItem Route="ModelsPage"  Title="Models">

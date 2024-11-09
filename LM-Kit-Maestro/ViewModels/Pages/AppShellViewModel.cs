@@ -65,10 +65,8 @@ public partial class AppShellViewModel : ViewModelBase
         _llmFileManager = llmFileManager;
         _appSettingsService = appSettingsService;
 
-        Tabs.Add(ChatTab);
-#if BETA_ASSISTANTS_PAGE
         Tabs.Add(AssistantsTab);
-#endif
+        Tabs.Add(ChatTab);
         Tabs.Add(ModelsTab);
 
         CurrentTab = HomeTab;

@@ -2,7 +2,7 @@
 
 <div class="container">
 <textarea id="input" @bind="@ViewModel.Input"/>
-    <button id="translateButton" @onclick="OnTranslateButtonClicked">Translate</button>
+    <button  class="primary-button" @onclick="OnTranslateButtonClicked">Translate</button>
 
     @if (Result != null)
     {
@@ -22,7 +22,7 @@
     #input {
         padding: 8px;
         border-radius: 4px;
-        border: 1px solid #000000;
+        border: 2px solid var(--Surface4);
         background-color: transparent;
         width: 100%;
         resize: none;
@@ -41,6 +41,27 @@
         margin-top: 10px;
         padding: 10px;
     }
+
+    .primary-button {
+        font-size: 16px;
+        text-align: center;
+        padding-block: 16px;
+        padding-inline: 8px;
+        border-width: 0;
+        background-color: var(--Surface4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .primary-button:active {
+        background-color: var(--PrimaryAccent);
+    }
+
+    .primary-button:hover {
+        background-color: var(--Primary);
+    }
+
 </style>
 
 @code

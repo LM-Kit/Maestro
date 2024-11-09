@@ -10,15 +10,3 @@ function getScrollHeight () {
 function getViewHeight () {
     return window.innerHeight;
 };
-
-var getHtmlElement = function () {
-    return document.getElementsByTagName("html")[0];
-}
-
-var addCssClassToHtml = function (cssClass) {
-    var html = getHtmlElement();
-
-    if (!html.classList.contains(cssClass)) {
-        html.classList.add(cssClass);
-    }
-}

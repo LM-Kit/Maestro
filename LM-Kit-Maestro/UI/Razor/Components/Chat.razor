@@ -175,7 +175,6 @@
 
         ViewModel.ConversationListViewModel.PropertyChanged += OnConversationListViewModelPropertyChanged;
 
-        await JS.InvokeVoidAsync("addCssClassToHtml", "dark");
         await ScrollHandler.RegisterPageScrollAsync(PageScrolled);
         await ResizeHandler.RegisterPageResizeAsync(Resized);
 

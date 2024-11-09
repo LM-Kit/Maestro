@@ -84,6 +84,8 @@ namespace LMKitMaestro.ViewModels
             {
                 Conversations.Add(new ConversationViewModel(_mainThread, _popupService, _appSettingsService, _lmKitService, _database));
             }
+
+            CurrentConversation = Conversations.First();
         }
 
         public void AddNewConversation()
