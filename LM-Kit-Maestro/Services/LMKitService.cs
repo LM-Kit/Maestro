@@ -140,22 +140,24 @@ public partial class LMKitService : INotifyPropertyChanged
         ModelUnloaded?.Invoke(this, new NotifyModelStateChangedEventArgs(unloadedModelUri));
     }
 
-    public async Task<string> SubmitTranslation(string input, Language language)
+    public async Task<string?> SubmitTranslation(string input, Language language)
     {
         if (_textTranslation == null)
         {
             _textTranslation = new TextTranslation(_model);
         }
 
-        var result = await _textTranslation.TranslateAsync(input, language, default);
+        TranslationRequest translationRequest = new TranslationRequest(input, LMKitConfig.RequestTimeout);
+        _translationsSchedule.Schedule(translationRequest);
 
-        _textTranslation.AfterTextCompletion += _textTranslation_AfterTextCompletion;
-        return result;
-    }
+        if (_translationsSchedule.Count > 1)
+        {
+            translationRequest.CanBeExecutedSignal.WaitOne();
+        }
 
-    private void _textTranslation_AfterTextCompletion(object? sender, LMKit.TextGeneration.Events.AfterTextCompletionEventArgs e)
-    {
+        var result = await HandleTranslationRequest(translationRequest);
 
+        return result.Result;
     }
 
     public async Task<PromptResult> SubmitPrompt(Conversation conversation, string prompt)
@@ -186,6 +188,40 @@ public partial class LMKitService : INotifyPropertyChanged
                 await conversationPrompt.TaskCompletionSource.Task.WaitAsync(TimeSpan.FromSeconds(10));
             }
         }
+    }
+
+    private async Task<TranslationResult> HandleTranslationRequest(TranslationRequest translationRequest)
+    {
+        // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this prompt request.
+        _lmKitServiceSemaphore.Wait();
+
+        TranslationResult translationResult;
+
+        if (translationRequest.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LmKitModelLoadingState.Unloaded)
+        {
+            translationResult = new TranslationResult()
+            {
+                Status = LmKitTextGenerationStatus.Cancelled
+            };
+
+            _lmKitServiceSemaphore.Release();
+        }
+        else
+        {
+            _lmKitServiceSemaphore.Release();
+
+            translationResult = await SubmitTranslationRequest(translationRequest);
+        }
+
+        if (_translationsSchedule.Contains(translationRequest))
+        {
+            _translationsSchedule.Remove(translationRequest);
+        }
+
+        translationRequest.TaskCompletionSource.TrySetResult(translationResult);
+
+        return translationResult;
+
     }
 
     private async Task<PromptResult> HandlePromptRequest(PromptRequest promptRequest)
@@ -270,6 +306,55 @@ public partial class LMKitService : INotifyPropertyChanged
         catch (Exception exception)
         {
             return new PromptResult()
+            {
+                Exception = exception,
+                Status = LmKitTextGenerationStatus.UnknownError
+            };
+        }
+        finally
+        {
+            _promptSchedule.RunningPromptRequest = null;
+        }
+    }
+
+    private async Task<TranslationResult> SubmitTranslationRequest(TranslationRequest translationRequest)
+    {
+        try
+        {
+            _translationsSchedule.RunningPromptRequest = translationRequest;
+
+            var result = new TranslationResult();
+
+            try
+            {
+                 await _textTranslation!.TranslateAsync(translationRequest.Prompt, Language.Undefined, translationRequest.CancellationTokenSource.Token);
+            }
+            catch (Exception exception)
+            {
+                result.Exception = exception;
+
+                if (result.Exception is OperationCanceledException)
+                {
+                    result.Status = LmKitTextGenerationStatus.Cancelled;
+                }
+                else
+                {
+                    result.Status = LmKitTextGenerationStatus.UnknownError;
+                }
+            }
+
+        
+
+            if (result.Exception != null && translationRequest.CancellationTokenSource.IsCancellationRequested)
+            {
+                result.Status = LmKitTextGenerationStatus.Cancelled;
+            }
+
+            return result;
+        }
+        catch (Exception exception)
+        {
+            return new TranslationResult()
             {
                 Exception = exception,
                 Status = LmKitTextGenerationStatus.UnknownError
@@ -610,5 +695,23 @@ public partial class LMKitService : INotifyPropertyChanged
         public LmKitTextGenerationStatus Status { get; set; }
 
         public TextGenerationResult? TextGenerationResult { get; set; }
+    }
+
+    public sealed class LmKitResult
+    {
+        public Exception? Exception { get; set; }
+
+        public LmKitTextGenerationStatus Status { get; set; }
+
+        public object? Result { get; set; }
+    }
+
+    public sealed class TranslationResult
+    {
+        public Exception? Exception { get; set; }
+
+        public string? Result { get; set; }
+
+        public LmKitTextGenerationStatus Status { get; set; }
     }
 }
