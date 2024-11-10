@@ -181,11 +181,11 @@ public partial class LMKitService : INotifyPropertyChanged
         if (conversationPrompt != null)
         {
             conversationPrompt.CancellationTokenSource.Cancel();
-            conversationPrompt.TaskCompletionSource.TrySetCanceled();
+            conversationPrompt.PromptResult.TrySetCanceled();
 
             if (shouldAwaitTermination)
             {
-                await conversationPrompt.TaskCompletionSource.Task.WaitAsync(TimeSpan.FromSeconds(10));
+                await conversationPrompt.PromptResult.Task.WaitAsync(TimeSpan.FromSeconds(10));
             }
         }
     }
@@ -218,7 +218,7 @@ public partial class LMKitService : INotifyPropertyChanged
             _translationsSchedule.Remove(translationRequest);
         }
 
-        translationRequest.TaskCompletionSource.TrySetResult(translationResult);
+        translationRequest.TranslationTask.TrySetResult(translationResult);
 
         return translationResult;
 
@@ -253,7 +253,7 @@ public partial class LMKitService : INotifyPropertyChanged
             _promptSchedule.Remove(promptRequest);
         }
 
-        promptRequest.TaskCompletionSource.TrySetResult(promptResult);
+        promptRequest.PromptResult.TrySetResult(promptResult);
 
         return promptResult;
 
@@ -327,7 +327,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                 await _textTranslation!.TranslateAsync(translationRequest.Prompt, Language.Undefined, translationRequest.CancellationTokenSource.Token);
+                result.Result = _textTranslation!.Translate(translationRequest.Prompt, Language.Undefined, translationRequest.CancellationTokenSource.Token);
             }
             catch (Exception exception)
             {
@@ -343,7 +343,6 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
             }
 
-        
 
             if (result.Exception != null && translationRequest.CancellationTokenSource.IsCancellationRequested)
             {
@@ -398,7 +397,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 _titleGenerationSchedule.RunningPromptRequest = null;
                 _titleGenerationSchedule.Remove(titleGenerationRequest);
                 conversation.SetGeneratedTitle(promptResult);
-                titleGenerationRequest.TaskCompletionSource.SetResult(promptResult);
+                titleGenerationRequest.PromptResult.SetResult(promptResult);
             }
         });
     }
@@ -620,16 +619,21 @@ public partial class LMKitService : INotifyPropertyChanged
 
     private sealed class TranslationRequest : LmKitRequestBase
     {
+        public TaskCompletionSource<TranslationResult> TranslationTask { get; } = new TaskCompletionSource<TranslationResult>();
+
         public TranslationRequest(string prompt, int requestTimeout) : base(prompt, requestTimeout)
         {
+        }
+
+        protected override void AwaitResult()
+        {
+            TranslationTask.Task.Wait();
         }
     }
 
     private abstract class LmKitRequestBase
     {
         public string Prompt { get; }
-
-        public TaskCompletionSource<PromptResult> TaskCompletionSource { get; } = new TaskCompletionSource<PromptResult>();
 
         public ManualResetEvent CanBeExecutedSignal { get; } = new ManualResetEvent(false);
 
@@ -638,8 +642,10 @@ public partial class LMKitService : INotifyPropertyChanged
         public void CancelAndAwaitTermination()
         {
             CancellationTokenSource.Cancel();
-            TaskCompletionSource.Task.Wait();
+            AwaitResult();
         }
+
+        protected abstract void AwaitResult();
 
         protected LmKitRequestBase(string prompt, int requestTimeout)
         {
@@ -651,10 +657,16 @@ public partial class LMKitService : INotifyPropertyChanged
     private abstract class LmKitPromptRequestBase : LmKitRequestBase
     {
         public Conversation Conversation { get; }
+        public TaskCompletionSource<PromptResult> PromptResult { get; } = new TaskCompletionSource<PromptResult>();
 
         protected LmKitPromptRequestBase(Conversation conversation, string prompt, int requestTimeout) : base(prompt, requestTimeout)
         {
             Conversation = conversation;
+        }
+
+        protected override void AwaitResult()
+        {
+            PromptResult.Task.Wait();
         }
     }
 
