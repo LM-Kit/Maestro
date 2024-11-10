@@ -225,7 +225,7 @@ namespace LMKitMaestro.Tests
 
             var result = await testService.LmKitService.SubmitTranslation("est-ce que ça marche cette merde ?", LMKit.TextGeneration.Language.French);
 
-            Assert.True(string.IsNullOrEmpty(result));
+            Assert.False(string.IsNullOrEmpty(result));
         }
     }
 }

@@ -21,6 +21,9 @@ namespace LMKitMaestro.ViewModels
         [ObservableProperty]
         private string? _result;
 
+        [ObservableProperty]
+        private bool _isProcessing;
+
         public ModelListViewModel ModelListViewModel { get; }
 
         public LMKitService LMKitService { get; }
@@ -46,7 +49,9 @@ namespace LMKitMaestro.ViewModels
             }
             else
             {
+                IsProcessing = true;
                 Result = await LMKitService.SubmitTranslation(Input, LMKit.TextGeneration.Language.Undefined);
+                IsProcessing = false;
             }
         }
     }

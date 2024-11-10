@@ -3,7 +3,7 @@
 <div style="width:100vw; height:100vh; margin-top: 40px;padding: 20px">
     <div id="container" class="dark container">
         <div id="card">
-            <textarea id="input" />
+            <textarea @bind=ViewModel.Input id="input" />
 
             <div id="buttonsDiv">
                 <button class="primary-button" @onclick="OnTranslateButtonClicked">
@@ -11,7 +11,7 @@
                 </button>
             </div>
 
-            @if (IsProcessing)
+            @if (ViewModel.IsProcessing)
             {
                 <div id="loaderDiv">
                     <div class="spinner">
@@ -22,8 +22,7 @@
                     </div>
                 </div>
             }
-
-            @if (!string.IsNullOrEmpty(ViewModel.Result))
+            else if (!string.IsNullOrEmpty(ViewModel.Result))
             {
                 <div id="result">
                     @ViewModel.Result
@@ -126,14 +125,8 @@
 
 @code
 {
-    private bool IsProcessing { get; set; }
-
-    private string? Result { get; set; } = null;
-
     private async Task OnTranslateButtonClicked()
     {
-        IsProcessing = true;
         await ViewModel.RunTranslationAssistant();
-        IsProcessing = false;
     }
 }

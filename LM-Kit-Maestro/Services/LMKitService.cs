@@ -327,7 +327,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                result.Result = _textTranslation!.Translate(translationRequest.Prompt, Language.Undefined, translationRequest.CancellationTokenSource.Token);
+                result.Result = await _textTranslation!.TranslateAsync(translationRequest.Prompt, Language.Undefined, translationRequest.CancellationTokenSource.Token);
             }
             catch (Exception exception)
             {
