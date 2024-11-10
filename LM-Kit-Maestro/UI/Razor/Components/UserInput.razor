@@ -1,0 +1,69 @@
+﻿<div class="chat-border">
+    <textarea class="chat-box" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+
+    <button class="send-button">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+</div>
+
+<style>
+    /* Chat border */
+    .chat-border {
+        display: flex;
+        border-radius: 12px;
+        background-color: var(--Surface);
+        transition: border-color 0.3s;
+        width: 100%;
+        border: 1px solid var(--Background);
+        border-radius: 12px;
+        background-color: var(--Surface);
+        transition: border-color 0.3s;
+    }
+
+    .chat-border:focus-within {
+        border-color: var(--Surface4);
+    }
+
+
+    /* Chat box editor */
+    .chat-box {
+        color: var(--OnSurface);
+        width: 100%;
+        height: 24px;
+        margin-block: 8px;
+        max-height: 200px;
+        background-color: transparent;
+        margin-inline: 10px;
+        border: none;
+        outline: none;
+        resize: none;
+    }
+
+    /* Send button */
+    .send-button {
+        margin-top: auto;
+        margin-left: auto;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        width: 32px;
+        height: 32px;
+        font-family: 'FontAwesome';
+        font-size: 14px;
+        border: none;
+        border-radius: 50%;
+        background-color: var(--Surface4);
+        color: var(--OnSurface);
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .send-button:disabled {
+        color: var(--Surface);
+        cursor: not-allowed;
+    }
+
+    .send-button:hover:not(:disabled) {
+        background-color: var(--OutlineVariant);
+    }
+
+</style>

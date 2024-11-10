@@ -3,7 +3,9 @@
 <div style="width:100vw; height:100vh; margin-top: 40px;padding: 20px">
     <div id="container" class="dark container">
         <div id="card">
-            <textarea @bind=ViewModel.Input id="input" />
+            @* <textarea @bind=ViewModel.Input id="input" /> *@
+
+            <UserInput />
 
             <div id="buttonsDiv">
                 <button class="primary-button" @onclick="OnTranslateButtonClicked">
@@ -113,13 +115,13 @@
         justify-content: center;
     }
 
-    .primary-button:active {
-        background-color: var(--PrimaryAccent);
-    }
+        .primary-button:active {
+            background-color: var(--PrimaryAccent);
+        }
 
-    .primary-button:hover {
-        background-color: var(--Primary);
-    }
+        .primary-button:hover {
+            background-color: var(--Primary);
+        }
 
 </style>
 
