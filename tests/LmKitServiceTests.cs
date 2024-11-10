@@ -224,12 +224,8 @@ namespace LMKitMaestro.Tests
             Assert.True(loadingSuccess);
 
             var result = await testService.LmKitService.SubmitTranslation("est-ce que ça marche cette merde ?", LMKit.TextGeneration.Language.French);
-            
 
-            LmKitDummyConversation conversation1 = new(testService.LmKitService);
-
-            conversation1.SubmitPrompt(testService.LmKitService, "bonjour");
-
+            Assert.True(string.IsNullOrEmpty(result));
         }
     }
 }
