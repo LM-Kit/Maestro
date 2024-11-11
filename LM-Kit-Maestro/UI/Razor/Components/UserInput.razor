@@ -6,25 +6,13 @@
                   @onkeypress="OnKeyPress"
                   @onkeydown="OnKeyDown"
                   @onkeyup="OnKeyUp"
-                  @bind=Input id="chat-box" @oninput="OnInputChange"></textarea>
-
-        @if (InputIsEmpty)
-        {
-            <p>
-                empty
-            </p>
-        }
-        else
-        {
-            <p>
-                not empty
-            </p>
-        }
+                  @bind=Input id="chat-box"
+                  @oninput="OnInputChange"></textarea>
 
         <button @ref="sendButton"
                 disabled="@(InputIsEmpty)"
                 @onclick="OnSendButtonClicked" class="send-button">
-            <i class="fas fa-arrow-up"></i>
+            <i class="fas @(IsProcessing ?  "fa-stop" : "fa-arrow-up")"></i>
         </button>
     </div>
 </div>
@@ -41,8 +29,6 @@
         margin: 0px;
         max-width: 800px;
         margin-bottom: 32px;
-        background-color: var(--Surface);
-        transition: border-color 0.3s;
         width: 100%;
         padding-block: 8px;
         border: 1px solid var(--Background);
@@ -51,7 +37,7 @@
     }
 
     .chat-border:focus-within {
-        border-color: var(--Surface4);
+        border-color: var(--Primary);
     }
 
     #chat-box {
@@ -82,14 +68,14 @@
         transition: background-color 0.3s;
     }
 
-    .send-button:disabled {
+        .send-button:disabled {
             color: var(--Surface);
             cursor: not-allowed;
-    }
+        }
 
     /*     .send-button:hover:not(:disabled) {
-                                            background-color: var(--OutlineVariant);
-                                        } */
+                                                    background-color: var(--OutlineVariant);
+                                                } */
 
     ::-webkit-scrollbar {
         width: 8px;
@@ -144,7 +130,22 @@
                 _input = value;
                 InputChanged?.InvokeAsync(value);
                 InputIsEmpty = string.IsNullOrEmpty(_input);
-                // StateHasChanged();
+                StateHasChanged();
+            }
+        }
+    }
+
+    bool _isProcessing;
+    [Parameter]
+    public bool IsProcessing
+    {
+        get => _isProcessing;
+        set
+        {
+            if (_isProcessing != value)
+            {
+                _isProcessing = value;
+                StateHasChanged();
             }
         }
     }
@@ -153,7 +154,13 @@
     public EventCallback<string?>? InputChanged { get; set; }
 
     [Parameter]
+    public EventCallback<bool>? IsProcessingChanged { get; set; }
+
+    [Parameter]
     public EventCallback OnSubmit { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -166,7 +173,14 @@
 
     private void OnSendButtonClicked()
     {
-        OnSubmit.InvokeAsync();
+        if (IsProcessing)
+        {
+            OnCancel.InvokeAsync();
+        }
+        else
+        {
+            OnSubmit.InvokeAsync();
+        }
     }
 
     private async Task OnInputChange(ChangeEventArgs changeEventArgs)

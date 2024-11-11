@@ -57,7 +57,10 @@
     </div>
 
     <div id="userInputDiv">
-        <UserInput @bind-Input=ViewModel!.ConversationListViewModel.CurrentConversation!.InputText OnSubmit="HandleSubmit" />
+        <UserInput 
+            @bind-IsProcessing=ViewModel!.ConversationListViewModel.CurrentConversation!.AwaitingResponse
+            @bind-Input=ViewModel!.ConversationListViewModel.CurrentConversation!.InputText 
+        OnSubmit="HandleSubmit" />
     </div>
 
 </div>
