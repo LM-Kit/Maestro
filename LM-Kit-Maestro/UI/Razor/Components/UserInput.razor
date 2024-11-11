@@ -1,8 +1,9 @@
 ﻿<div id="container">
     <div class="chat-border">
-        <textarea @bind=Input class="chat-box" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+        <textarea @bind=Input class="chat-box" @oninput="OnInputChange"></textarea>
 
-        <button @onclick="OnSendButtonClicked" class="send-button @(string.IsNullOrEmpty(Input) ? "send-button-disabled" : "send-button-enabled")">
+        <button disabled="@(InputIsEmpty ? "disabled" : null)"
+                @onclick="OnSendButtonClicked" class="send-button @(string.IsNullOrEmpty(Input) ? "send-button-disabled" : "send-button-enabled")">
             <i class="fas fa-arrow-up"></i>
         </button>
     </div>
@@ -10,7 +11,7 @@
 
 <style>
 
-    #container{
+    #container {
         display: flex;
         justify-content: center;
     }
@@ -74,8 +75,8 @@
         color: var(--OnSurface);
     }
     /*     .send-button:hover:not(:disabled) {
-            background-color: var(--OutlineVariant);
-        } */
+                background-color: var(--OutlineVariant);
+            } */
 
     ::-webkit-scrollbar {
         width: 8px;
@@ -99,8 +100,21 @@
 
 @code
 {
-    private string? _input;
+    bool _inputIsEmpty = true;
+    private bool InputIsEmpty
+    {
+        get => _inputIsEmpty;
+        set
+        {
+            if (_inputIsEmpty != value)
+            {
+                _inputIsEmpty = value;
+                StateHasChanged();
+            }
+        }
+    }
 
+    string? _input;
     [Parameter]
     public string? Input
     {
@@ -111,6 +125,7 @@
             {
                 _input = value;
                 InputChanged?.InvokeAsync(value);
+                InputIsEmpty = string.IsNullOrEmpty(_input);
                 StateHasChanged();
             }
         }
@@ -128,5 +143,12 @@
     {
         SendButtonClicked?.Invoke(this, EventArgs.Empty);
         ButtonClicked.InvokeAsync();
+    }
+
+    private void OnInputChange(ChangeEventArgs changeEventArgs)
+    {
+        // this.style.height = ""; this.style.height = this.scrollHeight + "px"
+        InputIsEmpty = string.IsNullOrEmpty((string?)changeEventArgs.Value);
+        StateHasChanged();
     }
 }
