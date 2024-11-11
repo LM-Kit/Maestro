@@ -8,6 +8,7 @@
              xmlns:converters="clr-namespace:LMKitMaestro.Converters"
              xmlns:models="clr-namespace:LMKitMaestro.Models"
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
+             xmlns:razor="clr-namespace:LMKitMaestro.UI.Razor.Components"
              xmlns:services="clr-namespace:LMKitMaestro.Services"
              xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
@@ -157,12 +158,22 @@
             WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth}"
             Grid.Row="1"/>
 
-        <ui:ChatView
+        <BlazorWebView
+            x:Name="blazorWebView"
+            Grid.Row="1"
+            Grid.Column="1"
+            HostPage="wwwroot/index.html">
+            <BlazorWebView.RootComponents>
+                <RootComponent Selector="#app" ComponentType="{x:Type razor:Chat}" />
+            </BlazorWebView.RootComponents>
+        </BlazorWebView>
+        
+        <!--<ui:ChatView
             x:Name="chatView"
             Grid.RowSpan="2"
             Margin="{x:Static ui:ChatPage.ChatViewMargin}"
             BindingContext="{Binding ConversationListViewModel.CurrentConversation}"
-            Grid.Column="1"/>
+            Grid.Column="1"/>-->
 
         <ui:ChatSettingsView
             x:Name="settingsSidebar"

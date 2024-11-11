@@ -1,16 +1,27 @@
-﻿<div class="chat-border">
-    <textarea @bind=Input class="chat-box" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+﻿<div id="container">
+    <div class="chat-border">
+        <textarea @bind=Input class="chat-box" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
 
-    <button @onclick="OnSendButtonClicked" class="send-button @(string.IsNullOrEmpty(Input) ? "send-button-disabled" : "send-button-enabled")">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+        <button @onclick="OnSendButtonClicked" class="send-button @(string.IsNullOrEmpty(Input) ? "send-button-disabled" : "send-button-enabled")">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </div>
 </div>
 
 <style>
+
+    #container{
+        display: flex;
+        justify-content: center;
+    }
+
     /* Chat border */
     .chat-border {
         display: flex;
         border-radius: 32px;
+        margin: 0px;
+        max-width: 800px;
+        margin-bottom: 32px;
         background-color: var(--Surface);
         transition: border-color 0.3s;
         width: 100%;
@@ -19,9 +30,9 @@
         transition: border-color 0.3s;
     }
 
-    .chat-border:focus-within {
-        border-color: var(--Surface4);
-    }
+        .chat-border:focus-within {
+            border-color: var(--Surface4);
+        }
 
     /* Chat box editor */
     .chat-box {
@@ -62,9 +73,9 @@
     .send-button-enabled {
         color: var(--OnSurface);
     }
-/*     .send-button:hover:not(:disabled) {
-        background-color: var(--OutlineVariant);
-    } */
+    /*     .send-button:hover:not(:disabled) {
+            background-color: var(--OutlineVariant);
+        } */
 
     ::-webkit-scrollbar {
         width: 8px;
