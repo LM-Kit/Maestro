@@ -8,15 +8,28 @@
                   @onkeyup="OnKeyUp"
                   @bind=Input id="chat-box" @oninput="OnInputChange"></textarea>
 
-        <button disabled="@(InputIsEmpty ? "disabled" : null)"
-                @onclick="OnSendButtonClicked" class="send-button @(string.IsNullOrEmpty(Input) ? "send-button-disabled" : "send-button-enabled")">
+        @if (InputIsEmpty)
+        {
+            <p>
+                empty
+            </p>
+        }
+        else
+        {
+            <p>
+                not empty
+            </p>
+        }
+
+        <button @ref="sendButton"
+                disabled="@(InputIsEmpty)"
+                @onclick="OnSendButtonClicked" class="send-button">
             <i class="fas fa-arrow-up"></i>
         </button>
     </div>
 </div>
 
 <style>
-
     #container {
         display: flex;
         justify-content: center;
@@ -69,14 +82,11 @@
         transition: background-color 0.3s;
     }
 
-    .send-button-disabled {
-        color: var(--Surface);
-        cursor: not-allowed;
+    .send-button:disabled {
+            color: var(--Surface);
+            cursor: not-allowed;
     }
 
-    .send-button-enabled {
-        color: var(--OnSurface);
-    }
     /*     .send-button:hover:not(:disabled) {
                                             background-color: var(--OutlineVariant);
                                         } */
@@ -106,6 +116,7 @@
     private bool _shiftIsPressed;
 
     private ElementReference inputTextArea;
+    private ElementReference sendButton;
 
     bool _inputIsEmpty = true;
     private bool InputIsEmpty
@@ -133,7 +144,7 @@
                 _input = value;
                 InputChanged?.InvokeAsync(value);
                 InputIsEmpty = string.IsNullOrEmpty(_input);
-                StateHasChanged();
+                // StateHasChanged();
             }
         }
     }
