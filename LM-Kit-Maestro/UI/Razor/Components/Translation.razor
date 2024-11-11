@@ -5,14 +5,6 @@
         <div id="card">
             @* <textarea @bind=ViewModel.Input id="input" /> *@
 
-            <UserInput />
-
-            <div id="buttonsDiv">
-                <button class="primary-button" @onclick="OnTranslateButtonClicked">
-                    Translate &nbsp;&nbsp;<i class="fa fa-play"></i>
-                </button>
-            </div>
-
             @if (ViewModel.IsProcessing)
             {
                 <div id="loaderDiv">
@@ -30,27 +22,25 @@
                     @ViewModel.Result
                 </div>
             }
+
+            <UserInput ButtonClicked="OnTranslateButtonClicked" @bind-Input=ViewModel.Input />
+
+            <p>
+                @ViewModel.Input
+            </p>
+
+
+
+            @*       <div id="buttonsDiv">
+            <button class="primary-button" @onclick="OnTranslateButtonClicked">
+            Translate &nbsp;&nbsp;<i class="fa fa-play"></i>
+            </button>
+            </div> *@
         </div>
     </div>
 </div>
 
 <style>
-    .dark {
-        --Primary: #512BD4;
-        --PrimaryAccent: #3100AF;
-        --Error: #BB3D36;
-        --Background: #12181F;
-        --OnBackground: #F0F6FC;
-        --Surface: #06080A;
-        --Surface15: #0C1014;
-        --Surface2: #12181F;
-        --Surface3: #182129;
-        --Surface4: #1F2933;
-        --OnSurface: #F0F6FC;
-        --Outline: #9198A1;
-        --OutlineVariant: #2E3033;
-    }
-
     #loaderDiv {
         display: flex;
         height: 72px;
