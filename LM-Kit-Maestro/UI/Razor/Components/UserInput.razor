@@ -1,7 +1,7 @@
 ﻿<div class="chat-border">
     <textarea @bind=Input class="chat-box" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
 
-    <button @onclick="OnSendButtonClicked" class="send-button">
+    <button @onclick="OnSendButtonClicked" class="send-button @(string.IsNullOrEmpty(Input) ? "send-button-disabled" : "send-button-enabled")">
         <i class="fas fa-arrow-up"></i>
     </button>
 </div>
@@ -45,7 +45,6 @@
         margin-bottom: 8px;
         margin-right: 12px;
         height: 32px;
-        font-family: 'FontAwesome';
         font-size: 14px;
         border: none;
         border-radius: 50%;
@@ -55,14 +54,17 @@
         transition: background-color 0.3s;
     }
 
-    .send-button:disabled {
+    .send-button-disabled {
         color: var(--Surface);
         cursor: not-allowed;
     }
 
-    .send-button:hover:not(:disabled) {
-        background-color: var(--OutlineVariant);
+    .send-button-enabled {
+        color: var(--OnSurface);
     }
+/*     .send-button:hover:not(:disabled) {
+        background-color: var(--OutlineVariant);
+    } */
 
     ::-webkit-scrollbar {
         width: 8px;
@@ -98,6 +100,7 @@
             {
                 _input = value;
                 InputChanged?.InvokeAsync(value);
+                StateHasChanged();
             }
         }
     }

@@ -1,5 +1,7 @@
 ﻿@inherits MvvmComponentBase<AssistantsPageViewModel>
 
+@inject IClipboardHandler ClipboardHandler
+
 <div style="width:100vw; height:100vh; margin-top: 40px;padding: 20px">
     <div id="container" class="dark container">
         <div id="card">
@@ -19,23 +21,20 @@
             else if (!string.IsNullOrEmpty(ViewModel.Result))
             {
                 <div id="result">
-                    @ViewModel.Result
+                    <p>
+                        @ViewModel.Result
+                    </p>
+
+                    <div id="actionIcons">
+                        <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
+                            @(ResultJustCopied ? "check" : "content_copy")
+                        </button>
+
+                    </div>
                 </div>
             }
 
             <UserInput ButtonClicked="OnTranslateButtonClicked" @bind-Input=ViewModel.Input />
-
-            <p>
-                @ViewModel.Input
-            </p>
-
-
-
-            @*       <div id="buttonsDiv">
-            <button class="primary-button" @onclick="OnTranslateButtonClicked">
-            Translate &nbsp;&nbsp;<i class="fa fa-play"></i>
-            </button>
-            </div> *@
         </div>
     </div>
 </div>
@@ -83,11 +82,20 @@
     }
 
     #result {
-        background-color: var(--Surface3);
+        margin-block: 16px;
+        background-color: var(--Surface15);
         color: white;
         min-height: 72px;
         margin-top: 10px;
         padding: 10px;
+    }
+
+/*         #result:hover {
+            background-color: var(--Surface3);
+        } */
+
+    #actionIcons {
+        display: inline
     }
 
     .primary-button {
@@ -113,12 +121,57 @@
             background-color: var(--Primary);
         }
 
+    .chatActionButton {
+        height: 28px;
+        width: 28px;
+        border-radius: 50%;
+        border-width: 0;
+        font-size: 12px;
+        background-color: transparent;
+        color: var(--OnBackground);
+        color: var(--Outline);
+    }
+
+    .chatActionButton:hover {
+        background-color: var(--Surface3);
+    }
+
 </style>
 
 @code
 {
+    bool resultJustCopied;
+    bool ResultJustCopied
+    {
+        get => resultJustCopied;
+        set
+        {
+            resultJustCopied = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
     private async Task OnTranslateButtonClicked()
     {
         await ViewModel.RunTranslationAssistant();
+    }
+
+
+    private async Task OnCopyMessageButtonClicked()
+    {
+        bool success = await ClipboardHandler.CopyTextToClipboardAsync(ViewModel.Result != null ? ViewModel.Result : "");
+
+        if (success)
+        {
+            if (!ResultJustCopied)
+            {
+                var _ = Task.Run(async () =>
+                {
+                    ResultJustCopied = true;
+                    await Task.Delay(3000);
+                    ResultJustCopied = false;
+                });
+            }
+        }
     }
 }
