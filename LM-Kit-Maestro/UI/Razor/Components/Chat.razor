@@ -57,7 +57,7 @@
     </div>
 
     <div id="userInputDiv">
-        <UserInput />
+        <UserInput @bind-Input=ViewModel!.ConversationListViewModel.CurrentConversation!.InputText OnSubmit="HandleSubmit" />
     </div>
 
 </div>
@@ -349,5 +349,10 @@
     public async Task OnScrollToEndButtonClicked()
     {
         await ScrollToEnd(true);
+    }
+
+    private void HandleSubmit()
+    {
+        ViewModel.ConversationListViewModel.CurrentConversation!.Send();
     }
 }

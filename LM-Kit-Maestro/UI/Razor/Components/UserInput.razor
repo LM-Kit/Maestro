@@ -2,7 +2,11 @@
 
 <div id="container">
     <div id="chat-border">
-        <textarea @ref=inputTextArea rows="1" @bind=Input id="chat-box" @oninput="OnInputChange"></textarea>
+        <textarea @ref=inputTextArea rows="1"
+                  @onkeypress="OnKeyPress"
+                  @onkeydown="OnKeyDown"
+                  @onkeyup="OnKeyUp"
+                  @bind=Input id="chat-box" @oninput="OnInputChange"></textarea>
 
         <button disabled="@(InputIsEmpty ? "disabled" : null)"
                 @onclick="OnSendButtonClicked" class="send-button @(string.IsNullOrEmpty(Input) ? "send-button-disabled" : "send-button-enabled")">
@@ -74,8 +78,8 @@
         color: var(--OnSurface);
     }
     /*     .send-button:hover:not(:disabled) {
-                                        background-color: var(--OutlineVariant);
-                                    } */
+                                            background-color: var(--OutlineVariant);
+                                        } */
 
     ::-webkit-scrollbar {
         width: 8px;
@@ -99,6 +103,8 @@
 
 @code
 {
+    private bool _shiftIsPressed;
+
     private ElementReference inputTextArea;
 
     bool _inputIsEmpty = true;
@@ -136,9 +142,7 @@
     public EventCallback<string?>? InputChanged { get; set; }
 
     [Parameter]
-    public EventCallback ButtonClicked { get; set; }
-
-    public event EventHandler? SendButtonClicked;
+    public EventCallback OnSubmit { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -151,8 +155,7 @@
 
     private void OnSendButtonClicked()
     {
-        SendButtonClicked?.Invoke(this, EventArgs.Empty);
-        ButtonClicked.InvokeAsync();
+        OnSubmit.InvokeAsync();
     }
 
     private async Task OnInputChange(ChangeEventArgs changeEventArgs)
@@ -162,5 +165,32 @@
         await JS.InvokeVoidAsync("resizeUserInput", null);
 
         StateHasChanged();
+    }
+
+    private void OnKeyUp(KeyboardEventArgs keyboardEventArgs)
+    {
+        if (keyboardEventArgs.Key == "Shift")
+        {
+            _shiftIsPressed = false;
+        }
+    }
+
+    private void OnKeyDown(KeyboardEventArgs keyboardEventArgs)
+    {
+        if (keyboardEventArgs.Key == "Shift")
+        {
+            _shiftIsPressed = true;
+        }
+    }
+
+    private void OnKeyPress(KeyboardEventArgs keyboardEventArgs)
+    {
+        if (keyboardEventArgs.Key == "Enter")
+        {
+            if (!_shiftIsPressed && !string.IsNullOrEmpty(Input))
+            {
+                OnSubmit.InvokeAsync();
+            }
+        }
     }
 }
