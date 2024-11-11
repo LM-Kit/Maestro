@@ -10,3 +10,11 @@ function getScrollHeight () {
 function getViewHeight () {
     return window.innerHeight;
 };
+
+function resizeUserInput() {
+    const element = document.getElementById("chat-box");
+
+    // this.style.height = ""; this.style.height = this.scrollHeight + "px"
+    element.style.height = "";
+    element.style.height = element.scrollHeight + "px";
+}
