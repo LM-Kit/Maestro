@@ -18,3 +18,9 @@ function resizeUserInput() {
     element.style.height = "";
     element.style.height = element.scrollHeight + "px";
 }
+
+function setUserInputFocus() {
+    const element = document.getElementById("chat-box");
+
+    element.focus();
+}

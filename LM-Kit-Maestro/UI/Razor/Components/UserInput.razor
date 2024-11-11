@@ -2,7 +2,7 @@
 
 <div id="container">
     <div id="chat-border">
-        <textarea rows="1" @bind=Input id="chat-box" @oninput="OnInputChange"></textarea>
+        <textarea @ref=inputTextArea rows="1" @bind=Input id="chat-box" @oninput="OnInputChange"></textarea>
 
         <button disabled="@(InputIsEmpty ? "disabled" : null)"
                 @onclick="OnSendButtonClicked" class="send-button @(string.IsNullOrEmpty(Input) ? "send-button-disabled" : "send-button-enabled")">
@@ -33,9 +33,9 @@
         transition: border-color 0.3s;
     }
 
-        .chat-border:focus-within {
-            border-color: var(--Surface4);
-        }
+    .chat-border:focus-within {
+        border-color: var(--Surface4);
+    }
 
     #chat-box {
         color: var(--OnBackgound);
@@ -74,8 +74,8 @@
         color: var(--OnSurface);
     }
     /*     .send-button:hover:not(:disabled) {
-                background-color: var(--OutlineVariant);
-            } */
+                                        background-color: var(--OutlineVariant);
+                                    } */
 
     ::-webkit-scrollbar {
         width: 8px;
@@ -99,6 +99,8 @@
 
 @code
 {
+    private ElementReference inputTextArea;
+
     bool _inputIsEmpty = true;
     private bool InputIsEmpty
     {
@@ -137,6 +139,15 @@
     public EventCallback ButtonClicked { get; set; }
 
     public event EventHandler? SendButtonClicked;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await inputTextArea.FocusAsync();
+            await JS.InvokeVoidAsync("setUserInputFocus");
+        }
+    }
 
     private void OnSendButtonClicked()
     {
