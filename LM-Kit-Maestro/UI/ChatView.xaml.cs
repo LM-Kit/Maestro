@@ -50,7 +50,7 @@ public partial class ChatView : ContentView
     {
         if (_conversationViewModel != null && !string.IsNullOrWhiteSpace(_conversationViewModel.InputText) && !_conversationViewModel.AwaitingResponse)
         {
-            _conversationViewModel.Send();
+            _conversationViewModel.Submit();
         }
     }
 

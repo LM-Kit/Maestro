@@ -56,7 +56,7 @@ public class ChatPageViewModelTests
         var conversation = new ConversationViewModelWrapper(chatPageViewModel.ConversationListViewModel.CurrentConversation);
 
         conversation.ConversationViewModel!.InputText = "tell me a story";
-        conversation.ConversationViewModel.Send();
+        conversation.ConversationViewModel.Submit();
         await Task.Delay(500);
 
         await conversation.ConversationViewModel.Cancel();
