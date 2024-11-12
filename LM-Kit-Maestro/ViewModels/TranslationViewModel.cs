@@ -9,6 +9,9 @@ namespace LMKitMaestro.ViewModels
         [ObservableProperty]
         Language _language;
 
+        public EventHandler? TranslationCompleted;
+        public EventHandler? TranslationFailed;
+
         public TranslationViewModel(IPopupService popupService, LMKitService lmKitService) : base(popupService, lmKitService)
         {
         }
@@ -18,20 +21,30 @@ namespace LMKitMaestro.ViewModels
             string prompt = InputText;
             //OnNewlySubmittedPrompt(prompt);
 
-            LMKitService.PromptResult? promptResult = null;
-
             Task.Run(async () =>
             {
                 try
                 {
-                    _lmKitService.SubmitTranslation(InputText, Language);
-                    //OnPromptResult(promptResult);
+                    var result = await _lmKitService.SubmitTranslation(InputText, Language);
+                    OnTranslationResult(result);
                 }
                 catch (Exception ex)
                 {
-                    //OnPromptResult(null, ex);
+                    OnTranslationResult(null, ex);
                 }
             });
+        }
+
+        private void OnTranslationResult(string? result, Exception? exception = null)
+        {
+            if (exception != null)
+            {
+                TranslationFailed?.Invoke(this, EventArgs.Empty);  
+            }
+            else
+            {
+                TranslationCompleted?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }
