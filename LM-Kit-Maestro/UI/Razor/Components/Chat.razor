@@ -7,84 +7,60 @@
 
 @inherits MvvmComponentBase<ChatPageViewModel>
 
-<div id="grid">
-    <div id="container" class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
-        @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
+<div id="container" class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
+    @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
+    {
+        if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
         {
-            if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
-            {
-                <div id="empty-conversation" class="vertical-stack">
-                    <div class="vertical-stack spacing-4">
-                        <div class="welcome-message">Hello, human.</div>
-                        <div class="welcome-message">
-                            It is likely that similar software programs are now assuming professional tasks that were previously your responsibility.
-                        </div>
-                        <div class="welcome-message">Developers and other software programs are working to enhance my ability to assist you in the process of making sense about this, or to generate witty jokes involving robots and humans.</div>
+            <div id="empty-conversation" class="vertical-stack">
+                <div class="vertical-stack spacing-4">
+                    <div class="welcome-message">Hello, human.</div>
+                    <div class="welcome-message">
+                        It is likely that similar software programs are now assuming professional tasks that were previously your responsibility.
+                    </div>
+                    <div class="welcome-message">Developers and other software programs are working to enhance my ability to assist you in the process of making sense about this, or to generate witty jokes involving robots and humans.</div>
+                </div>
+
+                <div class="vertical-stack" style="gap:12px;">
+                    <div class="shortcut-instruction">
+                        Press Enter to send a new message
                     </div>
 
-                    <div class="vertical-stack" style="gap:12px;">
-                        <div class="shortcut-instruction">
-                            Press Enter to send a new message
-                        </div>
-
-                        <div class="shortcut-instruction">
-                            Hold Shift + Enter to insert a new line
-                        </div>
+                    <div class="shortcut-instruction">
+                        Hold Shift + Enter to insert a new line
                     </div>
                 </div>
-            }
-            else
-            {
-                <div id="message-list">
-                    @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
-                    {
-                        <ChatMessage MessageViewModel="message" />
-                    }
-                </div>
-            }
+            </div>
         }
-
-        <div id="chat-info">
-            <div id="scroll-to-end">
-                @if (!IsScrolledToEnd)
+        else
+        {
+            <div id="message-list">
+                @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                 {
-                    <button @onclick="OnScrollToEndButtonClicked" class="material-icons scroll-to-end-button">
-                        arrow_downward
-                    </button>
+                    <ChatMessage MessageViewModel="message" />
                 }
             </div>
+        }
+    }
+
+    <div id="chat-info">
+        <div id="scroll-to-end">
+            @if (!IsScrolledToEnd)
+            {
+                <button @onclick="OnScrollToEndButtonClicked" class="material-icons scroll-to-end-button">
+                    arrow_downward
+                </button>
+            }
         </div>
     </div>
-
-    <div id="userInputDiv">
-        <UserInput 
-            @bind-IsProcessing=ViewModel!.ConversationListViewModel.CurrentConversation!.AwaitingResponse
-            @bind-Input=ViewModel!.ConversationListViewModel.CurrentConversation!.InputText 
-        OnSubmit="HandleSubmit" />
-    </div>
-
 </div>
 
 <style>
-    #grid {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 100vh; /* This makes sure the grid takes up the full viewport height */
-    }
-
     #container {
-        overflow-y: auto;
         color: white;
         font-size: 16px;
+        scrollbar-gutter: both-edges;
         width: 100%;
-        scrollbar-gutter: stable both-edges;
-        flex: 1;
-    }
-
-    #userInputDiv {
-        margin-inline: 8px;
-        display: flex;
     }
 
     .top-align-container {
@@ -99,14 +75,13 @@
 
 
     #message-list {
+        margin: auto;
+        display: flex;
         max-width: 800px;
-        width: 100%;
         flex-direction: column;
     }
 
     #empty-conversation {
-        margin-block: auto;
-        margin-inline: 16px;
         max-width: 568px;
         text-align: center;
         flex-direction: column;
@@ -352,10 +327,5 @@
     public async Task OnScrollToEndButtonClicked()
     {
         await ScrollToEnd(true);
-    }
-
-    private void HandleSubmit()
-    {
-        ViewModel.ConversationListViewModel.CurrentConversation!.Send();
     }
 }
