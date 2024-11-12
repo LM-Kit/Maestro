@@ -1,37 +1,52 @@
-﻿<div class="chat-border">
-    <textarea @bind=Input class="chat-box" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+﻿@inject IJSRuntime JS
 
-    <button @onclick="OnSendButtonClicked" class="send-button @(string.IsNullOrEmpty(Input) ? "send-button-disabled" : "send-button-enabled")">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+<div id="container">
+    <div id="chat-border">
+        <textarea @ref=inputTextArea rows="1"
+                  @onkeypress="OnKeyPress"
+                  @onkeydown="OnKeyDown"
+                  @onkeyup="OnKeyUp"
+                  @bind=Input id="chat-box"
+                  @oninput="OnInputChange"></textarea>
+
+        <button @ref="sendButton"
+                disabled="@(InputIsEmpty)"
+                @onclick="OnSendButtonClicked" class="send-button">
+            <i class="fas @(IsProcessing ?  "fa-stop" : "fa-arrow-up")"></i>
+        </button>
+    </div>
 </div>
 
 <style>
-    /* Chat border */
-    .chat-border {
+    #container {
+        display: flex;
+        justify-content: center;
+    }
+
+    #chat-border {
         display: flex;
         border-radius: 32px;
-        background-color: var(--Surface);
-        transition: border-color 0.3s;
+        margin: 0px;
+        max-width: 800px;
+        margin-bottom: 32px;
         width: 100%;
+        padding-block: 8px;
         border: 1px solid var(--Background);
         background-color: var(--Surface);
         transition: border-color 0.3s;
     }
 
     .chat-border:focus-within {
-        border-color: var(--Surface4);
+        border-color: var(--Primary);
     }
 
-    /* Chat box editor */
-    .chat-box {
-        color: var(--OnSurface);
-        width: 100%;
-        height: 24px;
-        margin-block: 12px;
-        max-height: 200px;
+    #chat-box {
+        color: var(--OnBackgound);
+        margin-block: auto;
+        padding-inline: 20px;
         background-color: transparent;
-        margin-inline: 20px;
+        width: 100%;
+        max-height: 200px;
         border: none;
         outline: none;
         resize: none;
@@ -42,7 +57,6 @@
         margin-top: auto;
         margin-left: auto;
         width: 32px;
-        margin-bottom: 8px;
         margin-right: 12px;
         height: 32px;
         font-size: 14px;
@@ -54,17 +68,14 @@
         transition: background-color 0.3s;
     }
 
-    .send-button-disabled {
-        color: var(--Surface);
-        cursor: not-allowed;
-    }
+        .send-button:disabled {
+            color: var(--Surface);
+            cursor: not-allowed;
+        }
 
-    .send-button-enabled {
-        color: var(--OnSurface);
-    }
-/*     .send-button:hover:not(:disabled) {
-        background-color: var(--OutlineVariant);
-    } */
+    /*     .send-button:hover:not(:disabled) {
+                                                    background-color: var(--OutlineVariant);
+                                                } */
 
     ::-webkit-scrollbar {
         width: 8px;
@@ -88,8 +99,26 @@
 
 @code
 {
-    private string? _input;
+    private bool _shiftIsPressed;
 
+    private ElementReference inputTextArea;
+    private ElementReference sendButton;
+
+    bool _inputIsEmpty = true;
+    private bool InputIsEmpty
+    {
+        get => _inputIsEmpty;
+        set
+        {
+            if (_inputIsEmpty != value)
+            {
+                _inputIsEmpty = value;
+                StateHasChanged();
+            }
+        }
+    }
+
+    string? _input;
     [Parameter]
     public string? Input
     {
@@ -100,6 +129,22 @@
             {
                 _input = value;
                 InputChanged?.InvokeAsync(value);
+                InputIsEmpty = string.IsNullOrEmpty(_input);
+                StateHasChanged();
+            }
+        }
+    }
+
+    bool _isProcessing;
+    [Parameter]
+    public bool IsProcessing
+    {
+        get => _isProcessing;
+        set
+        {
+            if (_isProcessing != value)
+            {
+                _isProcessing = value;
                 StateHasChanged();
             }
         }
@@ -109,13 +154,68 @@
     public EventCallback<string?>? InputChanged { get; set; }
 
     [Parameter]
-    public EventCallback ButtonClicked { get; set; }
+    public EventCallback<bool>? IsProcessingChanged { get; set; }
 
-    public event EventHandler? SendButtonClicked;
+    [Parameter]
+    public EventCallback OnSubmit { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await inputTextArea.FocusAsync();
+            await JS.InvokeVoidAsync("setUserInputFocus");
+        }
+    }
 
     private void OnSendButtonClicked()
     {
-        SendButtonClicked?.Invoke(this, EventArgs.Empty);
-        ButtonClicked.InvokeAsync();
+        if (IsProcessing)
+        {
+            OnCancel.InvokeAsync();
+        }
+        else
+        {
+            OnSubmit.InvokeAsync();
+        }
+    }
+
+    private async Task OnInputChange(ChangeEventArgs changeEventArgs)
+    {
+        InputIsEmpty = string.IsNullOrEmpty((string?)changeEventArgs.Value);
+
+        await JS.InvokeVoidAsync("resizeUserInput", null);
+
+        StateHasChanged();
+    }
+
+    private void OnKeyUp(KeyboardEventArgs keyboardEventArgs)
+    {
+        if (keyboardEventArgs.Key == "Shift")
+        {
+            _shiftIsPressed = false;
+        }
+    }
+
+    private void OnKeyDown(KeyboardEventArgs keyboardEventArgs)
+    {
+        if (keyboardEventArgs.Key == "Shift")
+        {
+            _shiftIsPressed = true;
+        }
+    }
+
+    private void OnKeyPress(KeyboardEventArgs keyboardEventArgs)
+    {
+        if (keyboardEventArgs.Key == "Enter")
+        {
+            if (!_shiftIsPressed && !string.IsNullOrEmpty(Input))
+            {
+                OnSubmit.InvokeAsync();
+            }
+        }
     }
 }
