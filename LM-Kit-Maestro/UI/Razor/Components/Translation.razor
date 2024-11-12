@@ -7,7 +7,7 @@
         <div id="card">
             @* <textarea @bind=ViewModel.Input id="input" /> *@
 
-            @if (ViewModel.IsProcessing)
+            @if (ViewModel.CurrentTranslation.AwaitingResponse)
             {
                 <div id="loaderDiv">
                     <div class="spinner">
@@ -34,7 +34,7 @@
                 </div>
             }
 
-            <UserInput OnSubmit="OnTranslateButtonClicked" @bind-Input=ViewModel.Input />
+            <UserInput OnSubmit="OnTranslateButtonClicked" @bind-Input=ViewModel.CurrentTranslation.InputText />
         </div>
     </div>
 </div>
@@ -151,9 +151,9 @@
         }
     }
 
-    private async Task OnTranslateButtonClicked()
+    private void OnTranslateButtonClicked()
     {
-        await ViewModel.RunTranslationAssistant();
+        ViewModel.CurrentTranslation.Submit();
     }
 
 

@@ -28,6 +28,7 @@ namespace LMKitMaestro.ViewModels
             }
             else
             {
+                AwaitingResponse = true;
                 HandleSubmit();
                 InputText = string.Empty;
             }

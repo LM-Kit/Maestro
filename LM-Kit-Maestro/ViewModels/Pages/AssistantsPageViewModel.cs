@@ -7,22 +7,11 @@ namespace LMKitMaestro.ViewModels
 {
     public partial class AssistantsPageViewModel : PageViewModelBase
     {
-        private string _input = string.Empty;
-        public string Input
-        {
-            get => _input;
-            set
-            {
-                _input = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private TranslationViewModel _currentTranslation;
 
         [ObservableProperty]
         private string? _result;
-
-        [ObservableProperty]
-        private bool _isProcessing;
 
         public ModelListViewModel ModelListViewModel { get; }
 
@@ -30,28 +19,22 @@ namespace LMKitMaestro.ViewModels
 
         public AssistantsPageViewModel(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation, ModelListViewModel modelListViewModel, LMKitService lMKitService) : base(navigationService, popupService, popupNavigation)
         {
+            _currentTranslation = new TranslationViewModel(popupService, lMKitService);
+
+            _currentTranslation.TranslationCompleted += OnTranslationCompleted;   
             ModelListViewModel = modelListViewModel;
             LMKitService = lMKitService;
         }
 
-        [RelayCommand]
-        public async Task RunAssistant()
+        private void OnTranslationCompleted(object? sender, EventArgs e)
         {
-            Result = await LMKitService.SubmitTranslation(Input, LMKit.TextGeneration.Language.Undefined);
-        }
+            var args = (TranslationViewModel.TranslationCompletedEventArgs)e;
 
-        [RelayCommand]
-        public async Task RunTranslationAssistant()
-        {
-            if (LMKitService.ModelLoadingState != LmKitModelLoadingState.Loaded)
+            Result = args.Translation;
+
+            if (args.Exception != null)
             {
-                await PopupService.DisplayAlert("No model is loaded", "You need to load a model before you can submit a prompt", "OK");
-            }
-            else
-            {
-                IsProcessing = true;
-                Result = await LMKitService.SubmitTranslation(Input, LMKit.TextGeneration.Language.Undefined);
-                IsProcessing = false;
+                // error
             }
         }
     }

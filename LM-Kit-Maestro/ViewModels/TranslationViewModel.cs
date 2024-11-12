@@ -32,6 +32,8 @@ namespace LMKitMaestro.ViewModels
                 {
                     OnTranslationResult(null, ex);
                 }
+
+                AwaitingResponse = false;
             });
         }
 
@@ -39,11 +41,24 @@ namespace LMKitMaestro.ViewModels
         {
             if (exception != null)
             {
-                TranslationFailed?.Invoke(this, EventArgs.Empty);  
+                TranslationFailed?.Invoke(this, new TranslationCompletedEventArgs(null, exception));
             }
             else
             {
-                TranslationCompleted?.Invoke(this, EventArgs.Empty);
+                TranslationCompleted?.Invoke(this, new TranslationCompletedEventArgs(result, null));
+            }
+        }
+
+        public sealed class TranslationCompletedEventArgs : EventArgs
+        {
+            public Exception? Exception { get; }
+
+            public string? Translation { get; }
+
+            public TranslationCompletedEventArgs(string? translation, Exception? exception = null)
+            {
+                Translation = translation;
+                Exception = exception;
             }
         }
     }
