@@ -18,14 +18,14 @@ namespace LMKitMaestro.ViewModels
 
         protected override void HandleSubmit()
         {
-            string prompt = InputText;
+            string input = InputText;
             //OnNewlySubmittedPrompt(prompt);
 
             Task.Run(async () =>
             {
                 try
                 {
-                    var result = await _lmKitService.SubmitTranslation(InputText, Language);
+                    var result = await _lmKitService.SubmitTranslation(input, Language);
                     OnTranslationResult(result);
                 }
                 catch (Exception ex)

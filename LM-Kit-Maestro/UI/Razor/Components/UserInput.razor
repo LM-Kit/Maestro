@@ -1,4 +1,5 @@
-﻿@inject IJSRuntime JS
+﻿@using System.Diagnostics
+@inject IJSRuntime JS
 
 <div id="container">
     <div id="chat-border">
@@ -6,14 +7,23 @@
                   @onkeypress="OnKeyPress"
                   @onkeydown="OnKeyDown"
                   @onkeyup="OnKeyUp"
-                  @bind=ViewModel.InputText id="chat-box"
+                  id="chat-box"
+                  @bind=ViewModel.InputText
                   @oninput="OnInputChange"></textarea>
 
-        <button @ref="sendButton"
-                disabled="@(InputIsEmpty)"
-                @onclick="OnSendButtonClicked" class="send-button">
-            <i class="fas @(ViewModel.AwaitingResponse ?  "fa-stop" : "fa-arrow-up")"></i>
-        </button>
+
+        @if (!ViewModel.AwaitingResponse)
+        {
+            <button @ref="sendButton" disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked" class="send-button">
+                <i class="fa fa-arrow-up"/>
+            </button>
+        }
+        else
+        {
+            <button class="send-button">
+                <i class="fas fa-stop" />
+            </button>
+        }
     </div>
 </div>
 
@@ -74,9 +84,9 @@
             cursor: not-allowed;
         }
 
-/*     .send-button:hover:not(:disabled) {
-                                                background-color: var(--OutlineVariant);
-                                            } */
+    /*     .send-button:hover:not(:disabled) {
+                                                                                        background-color: var(--OutlineVariant);
+                                                                                    } */
 
     ::-webkit-scrollbar {
         width: 8px;
@@ -120,10 +130,17 @@
     }
 
     [Parameter]
-    public AssistantSessionViewModelBase? ViewModel { get; set; }
+    public required AssistantSessionViewModelBase ViewModel { get; set; }
 
     [Parameter]
-    public EventCallback<AssistantSessionViewModelBase?> ViewModelChanged { get; set; }
+    public EventCallback<AssistantSessionViewModelBase> ViewModelChanged { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        ViewModel.PropertyChanged += (_, _) => InvokeAsync(() => StateHasChanged());
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -181,4 +198,10 @@
             }
         }
     }
+
+    // private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    // {
+    //     Trace.WriteLine("---propertyChanged:   " + e.PropertyName);
+    //     // StateHasChanged();
+    // }
 }
