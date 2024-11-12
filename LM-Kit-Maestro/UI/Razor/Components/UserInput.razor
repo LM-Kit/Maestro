@@ -6,13 +6,13 @@
                   @onkeypress="OnKeyPress"
                   @onkeydown="OnKeyDown"
                   @onkeyup="OnKeyUp"
-                  @bind=Input id="chat-box"
+                  @bind=ViewModel.InputText id="chat-box"
                   @oninput="OnInputChange"></textarea>
 
         <button @ref="sendButton"
                 disabled="@(InputIsEmpty)"
                 @onclick="OnSendButtonClicked" class="send-button">
-            <i class="fas @(IsProcessing ?  "fa-stop" : "fa-arrow-up")"></i>
+            <i class="fas @(ViewModel.AwaitingResponse ?  "fa-stop" : "fa-arrow-up")"></i>
         </button>
     </div>
 </div>
@@ -74,9 +74,9 @@
             cursor: not-allowed;
         }
 
-    /*     .send-button:hover:not(:disabled) {
-                                                    background-color: var(--OutlineVariant);
-                                                } */
+/*     .send-button:hover:not(:disabled) {
+                                                background-color: var(--OutlineVariant);
+                                            } */
 
     ::-webkit-scrollbar {
         width: 8px;
@@ -119,49 +119,11 @@
         }
     }
 
-    string? _input;
     [Parameter]
-    public string? Input
-    {
-        get => _input;
-        set
-        {
-            if (_input != value)
-            {
-                _input = value;
-                InputChanged?.InvokeAsync(value);
-                InputIsEmpty = string.IsNullOrEmpty(_input);
-                StateHasChanged();
-            }
-        }
-    }
-
-    bool _isProcessing;
-    [Parameter]
-    public bool IsProcessing
-    {
-        get => _isProcessing;
-        set
-        {
-            if (_isProcessing != value)
-            {
-                _isProcessing = value;
-                StateHasChanged();
-            }
-        }
-    }
+    public AssistantSessionViewModelBase? ViewModel { get; set; }
 
     [Parameter]
-    public EventCallback<string?>? InputChanged { get; set; }
-
-    [Parameter]
-    public EventCallback<bool>? IsProcessingChanged { get; set; }
-
-    [Parameter]
-    public EventCallback OnSubmit { get; set; }
-
-    [Parameter]
-    public EventCallback OnCancel { get; set; }
+    public EventCallback<AssistantSessionViewModelBase?> ViewModelChanged { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -174,13 +136,13 @@
 
     private void OnSendButtonClicked()
     {
-        if (IsProcessing)
+        if (!ViewModel.AwaitingResponse)
         {
-            OnCancel.InvokeAsync();
+            ViewModel.Submit();
         }
         else
         {
-            OnSubmit.InvokeAsync();
+            ViewModel.Cancel();
         }
     }
 
@@ -213,9 +175,9 @@
     {
         if (keyboardEventArgs.Key == "Enter")
         {
-            if (!_shiftIsPressed && !string.IsNullOrEmpty(Input))
+            if (!_shiftIsPressed && !string.IsNullOrEmpty(ViewModel.InputText))
             {
-                OnSubmit.InvokeAsync();
+                ViewModel.Submit();
             }
         }
     }

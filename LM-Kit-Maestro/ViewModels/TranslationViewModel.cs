@@ -49,6 +49,11 @@ namespace LMKitMaestro.ViewModels
             }
         }
 
+        protected override async Task HandleCancel(bool shouldAwait)
+        {
+            //todo
+        }
+
         public sealed class TranslationCompletedEventArgs : EventArgs
         {
             public Exception? Exception { get; }

@@ -148,7 +148,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     {
         if (AwaitingResponse)
         {
-            await CancelPendingPrompt(true);
+            await HandleCancel(true);
         }
     }
 
@@ -171,15 +171,6 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
                 OnPromptResult(null, ex);
             }
         });
-    }
-
-    [RelayCommand]
-    public async Task Cancel()
-    {
-        if (AwaitingResponse)
-        {
-            await CancelPendingPrompt(false);
-        }
     }
 
     private void OnPromptResult(LMKitService.PromptResult? promptResult, Exception? submitPromptException = null)
@@ -237,7 +228,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         _pendingCancellation &= false;
     }
 
-    private async Task CancelPendingPrompt(bool shouldAwaitTermination)
+    protected override async Task HandleCancel(bool shouldAwaitTermination)
     {
         _pendingCancellation = true;
         await _lmKitService.CancelPrompt(_lmKitConversation, shouldAwaitTermination);
@@ -367,7 +358,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     {
         if (AwaitingResponse)
         {
-            await CancelPendingPrompt(false);
+            await HandleCancel(false);
         }
 
         UsedDifferentModel = false;

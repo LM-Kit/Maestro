@@ -34,7 +34,18 @@ namespace LMKitMaestro.ViewModels
             }
         }
 
+        [RelayCommand]
+        public async Task Cancel()
+        {
+            if (AwaitingResponse)
+            {
+                await HandleCancel(false);
+            }
+        }
+
         protected abstract void HandleSubmit();
+
+        protected abstract Task HandleCancel(bool shouldAwait);
 
         protected AssistantSessionViewModelBase(IPopupService popupService, LMKitService lmKitService)
         {
