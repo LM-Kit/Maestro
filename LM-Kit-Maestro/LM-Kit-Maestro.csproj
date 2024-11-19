@@ -1,26 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-    <PropertyGroup>
-		<TargetFrameworks>net9.0;net9.0-ios;net9.0-maccatalyst;net9.0-android</TargetFrameworks>
+	<PropertyGroup>
+		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
 
-		<OutputType Condition="'$(TargetFramework)' != 'net8.0'">Exe</OutputType>
+		<!-- Note for MacCatalyst:
+      The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
+      When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
+      The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
+      either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
+		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
+
+		<OutputType>Exe</OutputType>
 		<RootNamespace>LMKitMaestro</RootNamespace>
-        <UseMaui>true</UseMaui>
-        <SingleProject>true</SingleProject>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <EnableDefaultCssItems>false</EnableDefaultCssItems>
-        <Nullable>enable</Nullable>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<EnableDefaultCssItems>false</EnableDefaultCssItems>
+		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
 		<!-- Display name -->
-        <ApplicationTitle>LM-Kit Maestro</ApplicationTitle>
+		<ApplicationTitle>LM-Kit Maestro</ApplicationTitle>
 
-        <!-- App Identifier -->
-        <ApplicationId>com.companyname.lm-kit-maestro</ApplicationId>
+		<!-- App Identifier -->
+		<ApplicationId>com.companyname.lm-kit-maestro</ApplicationId>
 
-        <!-- Versions -->
-        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-        <ApplicationVersion>1</ApplicationVersion>
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
@@ -28,41 +38,39 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-    </PropertyGroup>
+	</PropertyGroup>
 
-    <PropertyGroup>
-      <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
-    </PropertyGroup>
 
-    <ItemGroup>
-        <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
-        <!-- Splash Screen -->
-        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+	<ItemGroup>
+		<!-- App Icon -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
-        <!-- Images -->
-        <MauiImage Include="Resources\Images\*" />
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
-        <!-- Custom Fonts -->
-        <MauiFont Include="Resources\Fonts\*" />
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
 
-        <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-    </ItemGroup>
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
 
-    <ItemGroup>
-      <None Remove="Resources\Fonts\FontAwesome.otf" />
-    </ItemGroup>
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
 
-    <ItemGroup>
-      <MauiCss Include="wwwroot\css\font-awesome.css" />
-      <MauiCss Include="wwwroot\css\font-awesome.min.css" />
-    </ItemGroup>
+	<ItemGroup>
+		<None Remove="Resources\Fonts\FontAwesome.otf" />
+	</ItemGroup>
 
-    <ItemGroup>
-      <None Include="wwwroot\css\bootstrap.min.css" />
-    </ItemGroup>
+	<ItemGroup>
+		<MauiCss Include="wwwroot\css\font-awesome.css" />
+		<MauiCss Include="wwwroot\css\font-awesome.min.css" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="wwwroot\css\bootstrap.min.css" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="LM-Kit.NET" Version="2024.11.4" />
@@ -89,39 +97,39 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="UI\Popups\AlertPopup.xaml.cs">
-	    <DependentUpon>AlertPopup.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="UI\Popups\ChatConversationActionPopup.xaml.cs">
-	    <DependentUpon>ChatConversationActionPopup.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="UI\Popups\ModelSelectionPopup.xaml.cs">
-	    <DependentUpon>ModelSelectionPopup.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="UI\Popups\PopupView.xaml.cs">
-	    <DependentUpon>PopupView.xaml</DependentUpon>
-	  </Compile>
+		<Compile Update="UI\Popups\AlertPopup.xaml.cs">
+			<DependentUpon>AlertPopup.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="UI\Popups\ChatConversationActionPopup.xaml.cs">
+			<DependentUpon>ChatConversationActionPopup.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="UI\Popups\ModelSelectionPopup.xaml.cs">
+			<DependentUpon>ModelSelectionPopup.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="UI\Popups\PopupView.xaml.cs">
+			<DependentUpon>PopupView.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Controls\CustomCollectionView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="UI\ModelSelectionButton.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="UI\Pages\AssistantsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="UI\Popups\ChatConversationActionPopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="UI\Popups\ModelSelectionPopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="UI\Popups\PopupView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="Controls\CustomCollectionView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="UI\ModelSelectionButton.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="UI\Pages\AssistantsPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="UI\Popups\ChatConversationActionPopup.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="UI\Popups\ModelSelectionPopup.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="UI\Popups\PopupView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 </Project>
