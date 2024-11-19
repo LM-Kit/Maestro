@@ -12,7 +12,7 @@
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False"
-    Title="LM-Kit Chat Playground"
+    Title="LM-Kit Maestro"
     x:DataType="vm:AppShellViewModel"
     x:Name="thisShell"
     >
