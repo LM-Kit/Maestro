@@ -10,15 +10,15 @@
 
         @if (!ViewModel.AwaitingResponse)
         {
-                <button @ref="sendButton" disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked" class="send-button">
-                    <i class="fa fa-arrow-up" />
-                </button>
+            <button @ref="sendButton" disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked" class="send-button">
+                <i class="fa fa-arrow-up" />
+            </button>
         }
         else
         {
-                <button class="send-button">
-                    <i class="fas fa-stop" />
-                </button>
+            <button class="send-button">
+                <i class="fas fa-stop" />
+            </button>
         }
     </div>
 </div>
@@ -129,17 +129,25 @@
         get => _input;
         set
         {
-            var _ = Task.Run(async () =>
+            if (_ignoreNextTextChange)
             {
-                await JS.InvokeVoidAsync("resizeUserInput");
-            });
-
-            Trace.WriteLine("input changed: " + value);
-
-            if (_input != value)
+                Trace.WriteLine("input ignored: " + value);
+                _ignoreNextTextChange = false;
+            }
+            else
             {
-                _input = value;
-                StateHasChanged();
+                var _ = Task.Run(async () =>
+                {
+                    await JS.InvokeVoidAsync("resizeUserInput");
+                });
+
+                Trace.WriteLine("input changed: " + value);
+
+                if (_input != value)
+                {
+                    _input = value;
+                    StateHasChanged();
+                }
             }
         }
     }
@@ -149,6 +157,8 @@
 
     [Parameter]
     public EventCallback<AssistantSessionViewModelBase> ViewModelChanged { get; set; }
+
+    private bool _ignoreNextTextChange = false;
 
     protected override void OnParametersSet()
     {
@@ -225,6 +235,7 @@
 #endif
         ViewModel.InputText = Input;
         Input = string.Empty;
+        _ignoreNextTextChange = true;
 
         ViewModel.Submit();
     }
