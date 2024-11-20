@@ -15,7 +15,7 @@ public class ConversationViewModelTests
         var testConversation = testService.GetNewConversationViewModel();
 
         testConversation.ConversationViewModel.InputText = "hello";
-        testConversation.ConversationViewModel.Send();
+        testConversation.ConversationViewModel.Submit();
 
         await testConversation.PromptResultTask.Task;
         LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
@@ -31,7 +31,7 @@ public class ConversationViewModelTests
         var testConversation = testService.GetNewConversationViewModel();
 
         testConversation.ConversationViewModel.InputText = "tell me a fucking story";
-        testConversation.ConversationViewModel.Send();
+        testConversation.ConversationViewModel.Submit();
 
         await Task.Delay(1000);
 
@@ -51,7 +51,7 @@ public class ConversationViewModelTests
         var testConversation = testService.GetNewConversationViewModel();
 
         testConversation.ConversationViewModel.InputText = "tell me a fucking story";
-        testConversation.ConversationViewModel.Send();
+        testConversation.ConversationViewModel.Submit();
 
         await Task.Delay(50);
 
@@ -71,7 +71,7 @@ public class ConversationViewModelTests
         var testConversation = testService.GetNewConversationViewModel();
 
         testConversation.ConversationViewModel.InputText = "tell me a fucking story";
-        testConversation.ConversationViewModel.Send();
+        testConversation.ConversationViewModel.Submit();
 
         await testConversation.ConversationViewModel.Cancel();
 
@@ -92,8 +92,8 @@ public class ConversationViewModelTests
         conversation1.ConversationViewModel.InputText = "tell me breaking bad";
         conversation2.ConversationViewModel.InputText = "hello";
 
-        conversation1.ConversationViewModel.Send();
-        conversation2.ConversationViewModel.Send();
+        conversation1.ConversationViewModel.Submit();
+        conversation2.ConversationViewModel.Submit();
 
         await Task.Delay(25);
         await conversation1.ConversationViewModel.Cancel();
@@ -117,7 +117,7 @@ public class ConversationViewModelTests
         var testConversation = testService.GetNewConversationViewModel();
 
         testConversation.ConversationViewModel.InputText = "Comment écrire une page web de mentions legales ?";
-        testConversation.ConversationViewModel.Send();
+        testConversation.ConversationViewModel.Submit();
 
         await testConversation.PromptResultTask.Task;
         LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
@@ -136,11 +136,11 @@ public class ConversationViewModelTests
         
         var conversation1 = testService.GetNewConversationViewModel();
         conversation1.ConversationViewModel.InputText = "1+1";
-        conversation1.ConversationViewModel.Send();
+        conversation1.ConversationViewModel.Submit();
 
         var conversation2 = testService.GetNewConversationViewModel();
         conversation2.ConversationViewModel.InputText = "what is the capital of france ?";
-        conversation2.ConversationViewModel.Send();
+        conversation2.ConversationViewModel.Submit();
 
         await conversation1.PromptResultTask.Task;
         LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(conversation1);
@@ -163,7 +163,7 @@ public class ConversationViewModelTests
 
         var conversation = testService.GetNewConversationViewModel();
         conversation.ConversationViewModel.InputText = "1+1";
-        conversation.ConversationViewModel.Send();
+        conversation.ConversationViewModel.Submit();
 
         await conversation.PromptResultTask.Task;
         LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(conversation);

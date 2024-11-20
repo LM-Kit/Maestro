@@ -5,18 +5,16 @@ using LMKit.TextGeneration.Chat;
 using LMKitMaestro.Models;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using LMKitMaestro.Data ;
+using LMKitMaestro.Data;
 using LMKitMaestro.Services;
 
 namespace LMKitMaestro.ViewModels;
 
-public partial class ConversationViewModel : ViewModelBase
+public partial class ConversationViewModel : AssistantSessionViewModelBase
 {
     private readonly IMainThread _mainThread;
     private readonly IAppSettingsService _appSettingsService;
     private readonly ILMKitMaestroDatabase _database;
-    private readonly IPopupService _popupService;
-    private readonly LMKitService _lmKitService;
     private readonly LMKitService.Conversation _lmKitConversation;
 
     private bool _isSynchedWithLog = true;
@@ -26,15 +24,6 @@ public partial class ConversationViewModel : ViewModelBase
     private bool _awaitingLMKitAssistantMessage;
     private MessageViewModel? _pendingPrompt;
     private MessageViewModel? _pendingResponse;
-
-    [ObservableProperty]
-    bool _isEmpty = true;
-
-    [ObservableProperty]
-    string _inputText = string.Empty;
-
-    [ObservableProperty]
-    bool _awaitingResponse;
 
     [ObservableProperty]
     bool _usedDifferentModel;
@@ -81,7 +70,7 @@ public partial class ConversationViewModel : ViewModelBase
     }
 
     private Uri? _lastUsedModel;
-    public Uri? LastUsedModel 
+    public Uri? LastUsedModel
     {
         get => _lastUsedModel;
         set
@@ -106,7 +95,7 @@ public partial class ConversationViewModel : ViewModelBase
     {
     }
 
-    public ConversationViewModel(IMainThread mainThread, IPopupService popupService, IAppSettingsService appSettingsService, LMKitService lmKitService, ILMKitMaestroDatabase database, ConversationLog conversationLog)
+    public ConversationViewModel(IMainThread mainThread, IPopupService popupService, IAppSettingsService appSettingsService, LMKitService lmKitService, ILMKitMaestroDatabase database, ConversationLog conversationLog) : base(popupService, lmKitService)
     {
         _mainThread = mainThread;
         _appSettingsService = appSettingsService;
@@ -159,46 +148,29 @@ public partial class ConversationViewModel : ViewModelBase
     {
         if (AwaitingResponse)
         {
-            await CancelPendingPrompt(true);
+            await HandleCancel(true);
         }
     }
 
-    [RelayCommand]
-    public void Send()
+    protected override void HandleSubmit()
     {
-        if (_lmKitService.ModelLoadingState == LmKitModelLoadingState.Loaded)
+        string prompt = InputText;
+        OnNewlySubmittedPrompt(prompt);
+
+        LMKitService.PromptResult? promptResult = null;
+
+        Task.Run(async () =>
         {
-            string prompt = InputText;
-            OnNewlySubmittedPrompt(prompt);
-
-            LMKitService.PromptResult? promptResult = null;
-
-            Task.Run(async () =>
+            try
             {
-                try
-                {
-                    promptResult = await _lmKitService.SubmitPrompt(_lmKitConversation, prompt);
-                    OnPromptResult(promptResult);
-                }
-                catch (Exception ex)
-                {
-                    OnPromptResult(null, ex);
-                }
-            });
-        }
-        else
-        {
-            _popupService.DisplayAlert("No model is loaded", "You need to load a model in order to submit a prompt", "OK");
-        }
-    }
-
-    [RelayCommand]
-    public async Task Cancel()
-    {
-        if (AwaitingResponse)
-        {
-            await CancelPendingPrompt(false);
-        }
+                promptResult = await _lmKitService.SubmitPrompt(_lmKitConversation, prompt);
+                OnPromptResult(promptResult);
+            }
+            catch (Exception ex)
+            {
+                OnPromptResult(null, ex);
+            }
+        });
     }
 
     private void OnPromptResult(LMKitService.PromptResult? promptResult, Exception? submitPromptException = null)
@@ -256,7 +228,7 @@ public partial class ConversationViewModel : ViewModelBase
         _pendingCancellation &= false;
     }
 
-    private async Task CancelPendingPrompt(bool shouldAwaitTermination)
+    protected override async Task HandleCancel(bool shouldAwaitTermination)
     {
         _pendingCancellation = true;
         await _lmKitService.CancelPrompt(_lmKitConversation, shouldAwaitTermination);
@@ -386,7 +358,7 @@ public partial class ConversationViewModel : ViewModelBase
     {
         if (AwaitingResponse)
         {
-            await CancelPendingPrompt(false);
+            await HandleCancel(false);
         }
 
         UsedDifferentModel = false;

@@ -1,4 +1,5 @@
-﻿@inject IJSRuntime JS
+﻿@using System.Diagnostics
+@inject IJSRuntime JS
 
 <div id="container">
     <div id="chat-border">
@@ -6,14 +7,23 @@
                   @onkeypress="OnKeyPress"
                   @onkeydown="OnKeyDown"
                   @onkeyup="OnKeyUp"
-                  @bind=Input id="chat-box"
+                  id="chat-box"
+                  @bind=ViewModel.InputText
                   @oninput="OnInputChange"></textarea>
 
-        <button @ref="sendButton"
-                disabled="@(InputIsEmpty)"
-                @onclick="OnSendButtonClicked" class="send-button">
-            <i class="fas @(IsProcessing ?  "fa-stop" : "fa-arrow-up")"></i>
-        </button>
+
+        @if (!ViewModel.AwaitingResponse)
+        {
+            <button @ref="sendButton" disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked" class="send-button">
+                <i class="fa fa-arrow-up"/>
+            </button>
+        }
+        else
+        {
+            <button class="send-button">
+                <i class="fas fa-stop" />
+            </button>
+        }
     </div>
 </div>
 
@@ -34,6 +44,7 @@
         border: 1px solid var(--Background);
         background-color: var(--Surface);
         transition: border-color 0.3s;
+        color: white;
     }
 
     .chat-border:focus-within {
@@ -74,8 +85,8 @@
         }
 
     /*     .send-button:hover:not(:disabled) {
-                                                    background-color: var(--OutlineVariant);
-                                                } */
+                                                                                        background-color: var(--OutlineVariant);
+                                                                                    } */
 
     ::-webkit-scrollbar {
         width: 8px;
@@ -118,49 +129,18 @@
         }
     }
 
-    string? _input;
     [Parameter]
-    public string? Input
+    public required AssistantSessionViewModelBase ViewModel { get; set; }
+
+    [Parameter]
+    public EventCallback<AssistantSessionViewModelBase> ViewModelChanged { get; set; }
+
+    protected override void OnParametersSet()
     {
-        get => _input;
-        set
-        {
-            if (_input != value)
-            {
-                _input = value;
-                InputChanged?.InvokeAsync(value);
-                InputIsEmpty = string.IsNullOrEmpty(_input);
-                StateHasChanged();
-            }
-        }
+        base.OnParametersSet();
+
+        ViewModel.PropertyChanged += (_, _) => InvokeAsync(() => StateHasChanged());
     }
-
-    bool _isProcessing;
-    [Parameter]
-    public bool IsProcessing
-    {
-        get => _isProcessing;
-        set
-        {
-            if (_isProcessing != value)
-            {
-                _isProcessing = value;
-                StateHasChanged();
-            }
-        }
-    }
-
-    [Parameter]
-    public EventCallback<string?>? InputChanged { get; set; }
-
-    [Parameter]
-    public EventCallback<bool>? IsProcessingChanged { get; set; }
-
-    [Parameter]
-    public EventCallback OnSubmit { get; set; }
-
-    [Parameter]
-    public EventCallback OnCancel { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -173,13 +153,13 @@
 
     private void OnSendButtonClicked()
     {
-        if (IsProcessing)
+        if (!ViewModel.AwaitingResponse)
         {
-            OnCancel.InvokeAsync();
+            ViewModel.Submit();
         }
         else
         {
-            OnSubmit.InvokeAsync();
+            ViewModel.Cancel();
         }
     }
 
@@ -212,10 +192,16 @@
     {
         if (keyboardEventArgs.Key == "Enter")
         {
-            if (!_shiftIsPressed && !string.IsNullOrEmpty(Input))
+            if (!_shiftIsPressed && !string.IsNullOrEmpty(ViewModel.InputText))
             {
-                OnSubmit.InvokeAsync();
+                ViewModel.Submit();
             }
         }
     }
+
+    // private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    // {
+    //     Trace.WriteLine("---propertyChanged:   " + e.PropertyName);
+    //     // StateHasChanged();
+    // }
 }

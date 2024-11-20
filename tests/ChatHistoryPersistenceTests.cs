@@ -17,7 +17,7 @@ public class ChatHistoryPersistenceTests
         var testConversation = testService.GetNewConversationViewModel();
 
         testConversation.ConversationViewModel.InputText = "how much is  1 + 1 ?";
-        testConversation.ConversationViewModel.Send();
+        testConversation.ConversationViewModel.Submit();
 
         await testConversation.PromptResultTask.Task;
         LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
@@ -42,7 +42,7 @@ public class ChatHistoryPersistenceTests
         var testConversation = testService.GetNewConversationViewModel();
 
         testConversation.ConversationViewModel.InputText = "how much is  1 + 1 ?";
-        testConversation.ConversationViewModel.Send();
+        testConversation.ConversationViewModel.Submit();
 
         // Adding a delay before requesting model unload:
         // If we are unloading the model right after sending the request, we don't expect the conversation log to be saved in the database:
@@ -85,7 +85,7 @@ public class ChatHistoryPersistenceTests
 
         var testConversation = new ConversationViewModelWrapper(testService.ConversationListViewModel.Conversations[0]);
         testConversation.ConversationViewModel.InputText = "now add 69";
-        testConversation.ConversationViewModel.Send();
+        testConversation.ConversationViewModel.Submit();
         await testConversation.PromptResultTask.Task;
         LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation, 4);
 
