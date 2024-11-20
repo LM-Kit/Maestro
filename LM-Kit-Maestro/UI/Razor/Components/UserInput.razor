@@ -10,15 +10,15 @@
 
         @if (!ViewModel.AwaitingResponse)
         {
-            <button @ref="sendButton" disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked" class="send-button">
-                <i class="fa fa-arrow-up" />
-            </button>
+                <button @ref="sendButton" disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked" class="send-button">
+                    <i class="fa fa-arrow-up" />
+                </button>
         }
         else
         {
-            <button class="send-button">
-                <i class="fas fa-stop" />
-            </button>
+                <button class="send-button">
+                    <i class="fas fa-stop" />
+                </button>
         }
     </div>
 </div>
@@ -129,6 +129,11 @@
         get => _input;
         set
         {
+            var _ = Task.Run(async () =>
+            {
+                await JS.InvokeVoidAsync("resizeUserInput");
+            });
+
             Trace.WriteLine("input changed: " + value);
 
             if (_input != value)
@@ -176,6 +181,10 @@
     private async Task OnInputChange(ChangeEventArgs changeEventArgs)
     {
         InputIsEmpty = string.IsNullOrEmpty((string?)changeEventArgs.Value);
+
+#if DEBUG
+    Trace.WriteLine("OnInputChange");
+#endif
 
         await JS.InvokeVoidAsync("resizeUserInput", null);
 
