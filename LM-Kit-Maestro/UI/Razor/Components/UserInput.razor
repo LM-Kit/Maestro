@@ -1,5 +1,4 @@
-﻿@using System.Diagnostics
-@inject IJSRuntime JS
+﻿@inject IJSRuntime JS
 
 <div id="container">
     <div id="chat-border">
@@ -8,14 +7,14 @@
                   @onkeydown="OnKeyDown"
                   @onkeyup="OnKeyUp"
                   id="chat-box"
-                  @bind=ViewModel.InputText
+                  @bind=Input
                   @oninput="OnInputChange"></textarea>
 
 
         @if (!ViewModel.AwaitingResponse)
         {
             <button @ref="sendButton" disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked" class="send-button">
-                <i class="fa fa-arrow-up"/>
+                <i class="fa fa-arrow-up" />
             </button>
         }
         else
@@ -85,8 +84,8 @@
         }
 
     /*     .send-button:hover:not(:disabled) {
-                                                                                        background-color: var(--OutlineVariant);
-                                                                                    } */
+        background-color: var(--OutlineVariant);
+        } */
 
     ::-webkit-scrollbar {
         width: 8px;
@@ -129,6 +128,20 @@
         }
     }
 
+    string _input;
+    private string Input
+    {
+        get => _input;
+        set
+        {
+            if (_input != value)
+            {
+                _input = value;
+                StateHasChanged();
+            }
+        }
+    }
+
     [Parameter]
     public required AssistantSessionViewModelBase ViewModel { get; set; }
 
@@ -155,7 +168,7 @@
     {
         if (!ViewModel.AwaitingResponse)
         {
-            ViewModel.Submit();
+            Submit();
         }
         else
         {
@@ -192,11 +205,18 @@
     {
         if (keyboardEventArgs.Key == "Enter")
         {
-            if (!_shiftIsPressed && !string.IsNullOrEmpty(ViewModel.InputText))
+            if (!_shiftIsPressed && !string.IsNullOrEmpty(Input))
             {
-                ViewModel.Submit();
+                Submit();
             }
         }
+    }
+
+
+    private void Submit()
+    {
+        ViewModel.InputText = Input;
+        ViewModel.Submit();
     }
 
     // private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
