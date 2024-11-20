@@ -1,14 +1,15 @@
-﻿@inject IJSRuntime JS
+﻿@using System.Diagnostics
+@inject IJSRuntime JS
 
 <div id="container">
     <div id="chat-border">
         <textarea @ref=inputTextArea rows="1"
-        @onkeypress="OnKeyPress"
-        @onkeydown="OnKeyDown"
-        @onkeyup="OnKeyUp"
-        id="chat-box"
-        @bind=Input
-        @oninput="OnInputChange"></textarea>
+                  @onkeypress="OnKeyPress"
+                  @onkeydown="OnKeyDown"
+                  @onkeyup="OnKeyUp"
+                  id="chat-box"
+                  @bind=ViewModel.InputText
+                  @oninput="OnInputChange"></textarea>
 
 
         @if (!ViewModel.AwaitingResponse)
@@ -28,82 +29,82 @@
 
 <style>
     #container {
-    display: flex;
-    justify-content: center;
+        display: flex;
+        justify-content: center;
     }
 
     #chat-border {
-    display: flex;
-    border-radius: 32px;
-    margin: 0px;
-    max-width: 800px;
-    margin-bottom: 32px;
-    width: 100%;
-    padding-block: 8px;
-    border: 1px solid var(--Background);
-    background-color: var(--Surface);
-    transition: border-color 0.3s;
-    color: white;
+        display: flex;
+        border-radius: 32px;
+        margin: 0px;
+        max-width: 800px;
+        margin-bottom: 32px;
+        width: 100%;
+        padding-block: 8px;
+        border: 1px solid var(--Background);
+        background-color: var(--Surface);
+        transition: border-color 0.3s;
+        color: white;
     }
 
     .chat-border:focus-within {
-    border-color: var(--Primary);
+        border-color: var(--Primary);
     }
 
     #chat-box {
-    color: var(--OnBackgound);
-    margin-block: auto;
-    padding-inline: 20px;
-    background-color: transparent;
-    width: 100%;
-    max-height: 200px;
-    border: none;
-    outline: none;
-    resize: none;
+        color: var(--OnBackgound);
+        margin-block: auto;
+        padding-inline: 20px;
+        background-color: transparent;
+        width: 100%;
+        max-height: 200px;
+        border: none;
+        outline: none;
+        resize: none;
     }
 
     /* Send button */
     .send-button {
-    margin-top: auto;
-    margin-left: auto;
-    width: 32px;
-    margin-right: 12px;
-    height: 32px;
-    font-size: 14px;
-    border: none;
-    border-radius: 50%;
-    background-color: var(--Surface4);
-    color: var(--OnSurface);
-    cursor: pointer;
-    transition: background-color 0.3s;
+        margin-top: auto;
+        margin-left: auto;
+        width: 32px;
+        margin-right: 12px;
+        height: 32px;
+        font-size: 14px;
+        border: none;
+        border-radius: 50%;
+        background-color: var(--Surface4);
+        color: var(--OnSurface);
+        cursor: pointer;
+        transition: background-color 0.3s;
     }
 
-    .send-button:disabled {
-    color: var(--Surface);
-    cursor: not-allowed;
-    }
+        .send-button:disabled {
+            color: var(--Surface);
+            cursor: not-allowed;
+        }
 
     /*     .send-button:hover:not(:disabled) {
-    background-color: var(--OutlineVariant);
-    } */
+                                                                                        background-color: var(--OutlineVariant);
+                                                                                    } */
 
     ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+        width: 8px;
+        height: 8px;
     }
 
     ::-webkit-scrollbar-thumb {
-    background-color: var(--Surface3);
-    border-radius: 0px;
-    border: 3px solid transparent;
+        background-color: var(--Surface3);
+        border-radius: 0px;
+        border: 3px solid transparent;
     }
 
     ::-webkit-scrollbar-track {
-    background-color: transparent;
+        background-color: transparent;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--Surface4);
+        background-color: var(--Surface4);
     }
 </style>
 
@@ -123,20 +124,6 @@
             if (_inputIsEmpty != value)
             {
                 _inputIsEmpty = value;
-                StateHasChanged();
-            }
-        }
-    }
-
-    string _input;
-    private string Input
-    {
-        get => _input;
-        set
-        {
-            if (_input != value)
-            {
-                _input = value;
                 StateHasChanged();
             }
         }
@@ -168,7 +155,7 @@
     {
         if (!ViewModel.AwaitingResponse)
         {
-            Submit();
+            ViewModel.Submit();
         }
         else
         {
@@ -205,18 +192,11 @@
     {
         if (keyboardEventArgs.Key == "Enter")
         {
-            if (!_shiftIsPressed && !string.IsNullOrEmpty(Input))
+            if (!_shiftIsPressed && !string.IsNullOrEmpty(ViewModel.InputText))
             {
-                Submit();
+                ViewModel.Submit();
             }
         }
-    }
-
-
-    private void Submit()
-    {
-        ViewModel.InputText = Input;
-        ViewModel.Submit();
     }
 
     // private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
