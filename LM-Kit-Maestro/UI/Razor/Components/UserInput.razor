@@ -106,8 +106,6 @@
 
 @code
 {
-    private bool _shiftIsPressed;
-
     private ElementReference inputTextArea;
     private ElementReference sendButton;
 
@@ -184,27 +182,15 @@
         StateHasChanged();
     }
 
-    private void OnKeyUp(KeyboardEventArgs keyboardEventArgs)
-    {
-        if (keyboardEventArgs.Key == "Shift")
-        {
-            _shiftIsPressed = false;
-        }
-    }
-
     private void OnKeyDown(KeyboardEventArgs keyboardEventArgs)
     {
-        if (keyboardEventArgs.Key == "Shift")
-        {
-            _shiftIsPressed = true;
-        }
-        else if (keyboardEventArgs.Key == "Enter")
+        if (keyboardEventArgs.Key == "Enter")
         {
 #if DEBUG
-    Trace.WriteLine("enter pressed - Input = " + Input);
+    Trace.WriteLine($"enter pressed (shift held: {keyboardEventArgs.ShiftKey}) - Input = {Input}");
 #endif
 
-            if (!_shiftIsPressed && !string.IsNullOrEmpty(Input))
+            if (!keyboardEventArgs.ShiftKey && !string.IsNullOrEmpty(Input))
             {
                 Submit();
             }
