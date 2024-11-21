@@ -384,7 +384,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                string titleSummaryPrompt = $"What is the topic of the following sentance: {prompt}";
+                string titleSummaryPrompt = $"What is the topic of the following sentence: {prompt}";
 
                 promptResult.TextGenerationResult = await _singleTurnConversation!.SubmitAsync(titleSummaryPrompt, titleGenerationRequest.CancellationTokenSource.Token);
             }
@@ -451,7 +451,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 MaximumContextLength = 512,
                 MaximumCompletionTokens = 50,
                 SamplingMode = new GreedyDecoding(),
-                SystemPrompt = "You receive a sentance. You are to summarize, with a single sentance containing a maximum of 10 words, the topic of this sentance. You start your answer with 'topic:'"
+                SystemPrompt = "You receive a sentence. You are to summarize, with a single sentence containing a maximum of 10 words, the topic of this sentence. You start your answer with 'topic:'"
                 //SystemPrompt = "You receive one question and one response taken from a conversation, and you are to provide, with a maximum of 10 words, a summary of the conversation topic."
             };
         }

@@ -113,21 +113,21 @@ public partial class LMKitService
 
             if (textGenerationResult.TextGenerationResult != null && !string.IsNullOrEmpty(textGenerationResult.TextGenerationResult.Completion))
             {
-                foreach (var sentance in textGenerationResult.TextGenerationResult.Completion.Split('\n'))
+                foreach (var sentence in textGenerationResult.TextGenerationResult.Completion.Split('\n'))
                 {
-                    if (sentance.ToLower().StartsWith("topic"))
+                    if (sentence.ToLower().StartsWith("topic"))
                     {
-                        conversationTopic = sentance.Substring("topic".Length, sentance.Length - "topic".Length);
+                        conversationTopic = sentence.Substring("topic".Length, sentence.Length - "topic".Length);
                         break;
                     }
-                    else if (sentance.ToLower().StartsWith("the topic of the sentance is"))
+                    else if (sentence.ToLower().StartsWith("the topic of the sentence is"))
                     {
-                        conversationTopic = sentance.Substring("the topic of the sentance is".Length, sentance.Length - "the topic of the sentance is".Length);
+                        conversationTopic = sentence.Substring("the topic of the sentence is".Length, sentence.Length - "the topic of the sentence is".Length);
                         break;
                     }
-                    else if (sentance.ToLower().StartsWith("the topic of this sentance is"))
+                    else if (sentence.ToLower().StartsWith("the topic of this sentence is"))
                     {
-                        conversationTopic = sentance.Substring("the topic of this sentance is".Length, sentance.Length - "the topic of this sentance is".Length);
+                        conversationTopic = sentence.Substring("the topic of this sentence is".Length, sentence.Length - "the topic of this sentence is".Length);
                         break;
                     }
                 }

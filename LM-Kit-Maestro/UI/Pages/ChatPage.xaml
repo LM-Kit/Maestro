@@ -26,7 +26,7 @@
                 <Setter Property="IsVisible" Value="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles}"/>
             </Style>
 
-            <Style TargetType="Grid" x:Key="TuckedSidebarUpperGridSyle">
+            <Style TargetType="Grid" x:Key="TuckedSidebarUpperGridStyle">
                 <Setter Property="WidthRequest" Value="{x:Static local:AppConstants.ChatPageSideTogglesWidth}"/>
                 <Setter Property="VerticalOptions" Value="Start"/>
                 <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ModelSelectionButtonHeight}"/>
@@ -40,7 +40,7 @@
             </Style>
             
             <ControlTemplate x:Key="TuckedSettingsSidebarUpperGrid">
-                <Grid Style="{StaticResource TuckedSidebarUpperGridSyle}" Grid.Column="2">
+                <Grid Style="{StaticResource TuckedSidebarUpperGridStyle}" Grid.Column="2">
                     <Button
                       Margin="12, 0"
                       Style="{StaticResource SidebarToggleButtonStyle}"

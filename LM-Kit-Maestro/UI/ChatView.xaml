@@ -68,7 +68,7 @@
             </VerticalStackLayout>
         </Grid>
 
-        <!-- Mesage history Blazor view -->
+        <!-- Message history Blazor view -->
         <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
             <BlazorWebView.RootComponents>
                 <RootComponent Selector="#app" ComponentType="{x:Type razor:Chat}" />
