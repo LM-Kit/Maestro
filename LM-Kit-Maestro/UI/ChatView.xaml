@@ -207,12 +207,12 @@
                         x:Name="reloadIcon"
                         Margin="2, 0"
                         IsVisible="False"
-                        FontSize="13"
                         TranslationX="{Binding Source={x:Reference reloadLabel}, Path=Width}"
-                        FontFamily="MaterialRegular" 
                         VerticalOptions="Center"
                         TextColor="{StaticResource Outline}" 
-                        Text="{x:Static icons:MaterialRegular.Refresh}"/>
+                        StyleClass="Icon"
+                        Text="{StaticResource RotateRight}"
+                        />
                 </Grid>
             </uranium:StatefulContentView>
         </Grid>

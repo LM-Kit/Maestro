@@ -168,10 +168,10 @@
                                 <Label VerticalOptions="Center" StyleClass="Icon">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference generalSettingsExpander}, Path=IsExpanded}" Value="True">
-                                            <Setter Property="Text" Value="{StaticResource chevron-up}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronUp}"/>
                                         </DataTrigger>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference generalSettingsExpander}, Path=IsExpanded}" Value="False">
-                                            <Setter Property="Text" Value="{StaticResource chevron-down}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronDown}"/>
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>
@@ -274,13 +274,13 @@
                                 <Label 
                                     VerticalOptions="Center" 
                                     StyleClass="Icon"
-                                    Text="{StaticResource chevron-right}">
+                                    Text="{StaticResource ChevronRight}">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded}" Value="True">
-                                            <Setter Property="Text" Value="{StaticResource chevron-up}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronUp}"/>
                                         </DataTrigger>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded}" Value="False">
-                                            <Setter Property="Text" Value="{StaticResource chevron-down}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronDown}"/>
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>

@@ -165,7 +165,8 @@
                     Grid.Column="2"
                     FontSize="20"
                     Clicked="OnShowMoreButtonClicked"
-                    Text="{x:Static icons:MaterialRegular.More_horiz}">
+                    FontFamily="FA"
+                    Text="{StaticResource Exclamation}">
                     <Button.IsVisible>
                         <MultiBinding Converter="{StaticResource AnyTrueConverter}">
                             <Binding Path="IsHovered"/>

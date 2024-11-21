@@ -27,8 +27,8 @@
                 <Setter Property="Padding" Value="0"/>
                 <Setter Property="ToolTipProperties.Text" Value="Eject model"/>
                 <Setter Property="TextColor" Value="{StaticResource Primary}"/>
-                <Setter Property="FontFamily" Value="MaterialSharp"/>
-                <Setter Property="Text" Value="{x:Static icons:MaterialSharp.Eject}"/>
+                <Setter Property="FontFamily" Value="FA"/>
+                <Setter Property="Text" Value="{StaticResource Eject}"/>
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
@@ -176,7 +176,7 @@
                         FontFamily="FA"
                         FontSize="9"
                         TextColor="{StaticResource Outline}"
-                        Text="{StaticResource chevron-down}">
+                        Text="{StaticResource ChevronDown}">
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
                                 <Setter Property="IsVisible" Value="False"/>
