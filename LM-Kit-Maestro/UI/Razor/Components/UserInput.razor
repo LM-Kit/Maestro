@@ -1,117 +1,123 @@
-﻿@using System.Diagnostics
-@inject IJSRuntime JS
+﻿@inject IJSRuntime JS
 
 <div id="container">
     <div id="chat-border">
-        <textarea @ref=inputTextArea rows="1"
-                  @onkeypress="OnKeyPress"
-                  @onkeydown="OnKeyDown"
-                  @onkeyup="OnKeyUp"
-                  id="chat-box"
-                  @bind=ViewModel.InputText
-                  @oninput="OnInputChange"></textarea>
+        @*         @onkeypress="OnKeyPress"
+        @onkeydown="OnKeyDown"
+        @onkeyup="OnKeyUp" *@
+        <textarea rows="1" id="chat-box" @bind="Input" @onkeydown="OnKeyDown" @bind:event="oninput"></textarea>
 
 
         @if (!ViewModel.AwaitingResponse)
         {
-            <button @ref="sendButton" disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked" class="send-button">
-                <i class="fa fa-arrow-up"/>
-            </button>
+                <button @ref="sendButton" disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked" class="send-button">
+                    <i class="fa fa-arrow-up" />
+                </button>
         }
         else
         {
-            <button class="send-button">
-                <i class="fas fa-stop" />
-            </button>
+                <button class="send-button">
+                    <i class="fas fa-stop" />
+                </button>
         }
     </div>
 </div>
 
 <style>
     #container {
-        display: flex;
-        justify-content: center;
+    display: flex;
+    justify-content: center;
     }
 
     #chat-border {
-        display: flex;
-        border-radius: 32px;
-        margin: 0px;
-        max-width: 800px;
-        margin-bottom: 32px;
-        width: 100%;
-        padding-block: 8px;
-        border: 1px solid var(--Background);
-        background-color: var(--Surface);
-        transition: border-color 0.3s;
-        color: white;
+    display: flex;
+    border-radius: 32px;
+    margin: 0px;
+    max-width: 800px;
+    margin-bottom: 32px;
+    width: 100%;
+    padding-block: 8px;
+    border: 1px solid var(--Background);
+    background-color: var(--Surface);
+    transition: border-color 0.3s;
+    color: white;
     }
 
     .chat-border:focus-within {
-        border-color: var(--Primary);
+    border-color: var(--Primary);
     }
 
     #chat-box {
-        color: var(--OnBackgound);
-        margin-block: auto;
-        padding-inline: 20px;
-        background-color: transparent;
-        width: 100%;
-        max-height: 200px;
-        border: none;
-        outline: none;
-        resize: none;
+    color: var(--OnBackground);
+    margin-block: auto;
+    padding-inline: 20px;
+    background-color: transparent;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border: none;
+    outline: none;
+    resize: none;
     }
 
     /* Send button */
     .send-button {
-        margin-top: auto;
-        margin-left: auto;
-        width: 32px;
-        margin-right: 12px;
-        height: 32px;
-        font-size: 14px;
-        border: none;
-        border-radius: 50%;
-        background-color: var(--Surface4);
-        color: var(--OnSurface);
-        cursor: pointer;
-        transition: background-color 0.3s;
+    margin-top: auto;
+    margin-left: auto;
+    width: 32px;
+    margin-right: 12px;
+    height: 32px;
+    font-size: 14px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--Surface4);
+    color: var(--OnSurface);
+    cursor: pointer;
+    transition: background-color 0.3s;
     }
 
-        .send-button:disabled {
-            color: var(--Surface);
-            cursor: not-allowed;
-        }
+    .send-button:disabled {
+    color: var(--Surface);
+    cursor: not-allowed;
+    }
 
     /*     .send-button:hover:not(:disabled) {
-                                                                                        background-color: var(--OutlineVariant);
-                                                                                    } */
+    background-color: var(--OutlineVariant);
+    } */
 
     ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+    width: 8px;
+    height: 8px;
     }
 
     ::-webkit-scrollbar-thumb {
-        background-color: var(--Surface3);
-        border-radius: 0px;
-        border: 3px solid transparent;
+    background-color: var(--Surface3);
+    border-radius: 0px;
+    border: 3px solid transparent;
     }
 
     ::-webkit-scrollbar-track {
-        background-color: transparent;
+    background-color: transparent;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        background-color: var(--Surface4);
+    background-color: var(--Surface4);
     }
 </style>
 
+<script>
+
+document.getElementById('chat-box').addEventListener('keydown', function (e) {
+if (e.keyCode == 13 && !e.shiftKey)
+{
+  // prevent default behavior
+  e.preventDefault();
+  return false;
+  }}, false);
+</script>
+
 @code
 {
-    private bool _shiftIsPressed;
-
     private ElementReference inputTextArea;
     private ElementReference sendButton;
 
@@ -129,11 +135,42 @@
         }
     }
 
+    string _input;
+    private string Input
+    {
+        get => _input;
+        set
+        {
+            if (_ignoreNextTextChange)
+            {
+                Trace.WriteLine("input ignored: " + value);
+                _ignoreNextTextChange = false;
+            }
+            else
+            {
+                var _ = Task.Run(async () =>
+                {
+                    await JS.InvokeVoidAsync("resizeUserInput");
+                });
+
+                Trace.WriteLine("input changed: " + value);
+
+                if (_input != value)
+                {
+                    _input = value;
+                    StateHasChanged();
+                }
+            }
+        }
+    }
+
     [Parameter]
     public required AssistantSessionViewModelBase ViewModel { get; set; }
 
     [Parameter]
     public EventCallback<AssistantSessionViewModelBase> ViewModelChanged { get; set; }
+
+    private bool _ignoreNextTextChange = false;
 
     protected override void OnParametersSet()
     {
@@ -146,8 +183,8 @@
     {
         if (firstRender)
         {
-            await inputTextArea.FocusAsync();
-            await JS.InvokeVoidAsync("setUserInputFocus");
+            // await inputTextArea.FocusAsync();
+            // await JS.InvokeVoidAsync("setUserInputFocus");
         }
     }
 
@@ -155,7 +192,7 @@
     {
         if (!ViewModel.AwaitingResponse)
         {
-            ViewModel.Submit();
+            Submit();
         }
         else
         {
@@ -167,36 +204,52 @@
     {
         InputIsEmpty = string.IsNullOrEmpty((string?)changeEventArgs.Value);
 
+#if DEBUG
+    Trace.WriteLine("OnInputChange");
+#endif
+
         await JS.InvokeVoidAsync("resizeUserInput", null);
 
         StateHasChanged();
     }
 
-    private void OnKeyUp(KeyboardEventArgs keyboardEventArgs)
-    {
-        if (keyboardEventArgs.Key == "Shift")
-        {
-            _shiftIsPressed = false;
-        }
-    }
-
     private void OnKeyDown(KeyboardEventArgs keyboardEventArgs)
     {
-        if (keyboardEventArgs.Key == "Shift")
+        if (keyboardEventArgs.Key == "Enter")
         {
-            _shiftIsPressed = true;
+#if DEBUG
+    Trace.WriteLine($"enter pressed (shift held: {keyboardEventArgs.ShiftKey}) - Input = {Input}");
+#endif
+
+            if (!keyboardEventArgs.ShiftKey && !string.IsNullOrEmpty(Input))
+            {
+                Submit();
+            }
         }
     }
 
     private void OnKeyPress(KeyboardEventArgs keyboardEventArgs)
     {
-        if (keyboardEventArgs.Key == "Enter")
-        {
-            if (!_shiftIsPressed && !string.IsNullOrEmpty(ViewModel.InputText))
-            {
-                ViewModel.Submit();
-            }
-        }
+        // if (keyboardEventArgs.Key == "Enter")
+        // {
+        //     if (!_shiftIsPressed && !string.IsNullOrEmpty(Input))
+        //     {
+        //         Submit();
+        //     }
+        // }
+    }
+
+
+    private void Submit()
+    {
+#if DEBUG
+    Trace.WriteLine("submitted");
+#endif
+        ViewModel.InputText = Input;
+        Input = string.Empty;
+        _ignoreNextTextChange = true;
+
+        ViewModel.Submit();
     }
 
     // private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

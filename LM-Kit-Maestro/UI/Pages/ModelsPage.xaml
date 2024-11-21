@@ -325,7 +325,7 @@
                         <Label 
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
-                            IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={StaticResource GreaterThanZeroConverter}}">
+                            IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:GreaterThanZeroConverter}}">
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="You have "/>
@@ -343,7 +343,7 @@
                             TextColor="{StaticResource Error}"
                             Text="{Binding FileManager.UnsortedModels.Count, StringFormat='{}You have {0} unsorted model files'}"
                             Command="{Binding Source={x:Reference modelsPage}, Path=ShowUnsortedModelFilesPopupCommand}"
-                            IsVisible="{Binding FileManager.UnsortedModels.Count, Converter={StaticResource GreaterThanZeroConverter}}"/>
+                            IsVisible="{Binding FileManager.UnsortedModels.Count, Converter={converters:GreaterThanZeroConverter}}"/>
                     </Grid>
                 </VerticalStackLayout>
 
@@ -353,7 +353,7 @@
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.Triggers>
-                        <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding Source={x:Reference modelsCollectionView}, Path=ItemsSource.Count, Converter={StaticResource EqualToZeroConverter}}">
+                        <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding Source={x:Reference modelsCollectionView}, Path=ItemsSource.Count, Converter={converters:EqualToZeroConverter}}">
                             <Setter Property="VerticalOptions" Value="Center"/>
                         </DataTrigger>
 

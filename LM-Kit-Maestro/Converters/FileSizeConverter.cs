@@ -1,41 +1,40 @@
 ﻿using System.Globalization;
 
-namespace LMKitMaestro.Converters
+namespace LMKitMaestro.Converters;
+
+internal sealed class FileSizeConverter : IValueConverter
 {
-    class FileSizeConverter : IValueConverter
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        if (value != null)
         {
-            if (value != null)
+            Type type = value.GetType();
+
+            if (value is long bytes)
             {
-                Type type = value.GetType();
-
-                if (value is long bytes)
-                {
-                    return FormatFileSize(bytes);
-                }
+                return FormatFileSize(bytes);
             }
-
-            return string.Empty;
         }
 
-        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        return string.Empty;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+
+    private static string FormatFileSize(long bytes)
+    {
+        var unit = 1024;
+
+        if (bytes < unit)
         {
-            throw new NotImplementedException();
+            return $"{bytes} B";
         }
 
-        private static string FormatFileSize(long bytes)
-        {
-            var unit = 1024;
+        var exp = (int)(Math.Log(bytes) / Math.Log(unit));
 
-            if (bytes < unit)
-            {
-                return $"{bytes} B";
-            }
-
-            var exp = (int)(Math.Log(bytes) / Math.Log(unit));
-
-            return $"{bytes / Math.Pow(unit, exp):F2} {("KMGTPE")[exp - 1]}B";
-        }
+        return $"{bytes / Math.Pow(unit, exp):F2} {("KMGTPE")[exp - 1]}B";
     }
 }

@@ -17,6 +17,11 @@ function resizeUserInput() {
     // this.style.height = ""; this.style.height = this.scrollHeight + "px"
     element.style.height = "";
     element.style.height = element.scrollHeight + "px";
+
+    // If the height exceeds max-height (200px), the scrollbar should appear.
+    if (element.scrollHeight > 200) {
+        element.style.height = "200px"; // Limit height to 200px
+    }
 }
 
 function setUserInputFocus() {
