@@ -10,15 +10,15 @@
 
         @if (!ViewModel.AwaitingResponse)
         {
-            <button @ref="sendButton" disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked" class="send-button">
-                <i class="fa fa-arrow-up" />
-            </button>
+                <button @ref="sendButton" disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked" class="send-button">
+                    <i class="fa fa-arrow-up" />
+                </button>
         }
         else
         {
-            <button class="send-button">
-                <i class="fas fa-stop" />
-            </button>
+                <button class="send-button">
+                    <i class="fas fa-stop" />
+                </button>
         }
     </div>
 </div>
@@ -104,6 +104,17 @@
     background-color: var(--Surface4);
     }
 </style>
+
+<script>
+
+document.getElementById('chat-box').addEventListener('keydown', function (e) {
+if (e.keyCode == 13 && !e.shiftKey)
+{
+  // prevent default behavior
+  e.preventDefault();
+  return false;
+  }}, false);
+</script>
 
 @code
 {
