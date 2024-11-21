@@ -1,0 +1,32 @@
+name: build_test
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET 9
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Install MAUI Workload
+      run: dotnet workload install maui 
+
+
+    - name: Restore Dependencies
+      run: dotnet restore LM-Kit-Maestro.sln
+
+    - name: Build Debug Configuration
+      run: dotnet build LM-Kit-Maestro.sln --no-restore --configuration Debug
+
+    - name: Build Release Configuration
+      run: dotnet build LM-Kit-Maestro.sln --no-restore --configuration Release
+
