@@ -30,7 +30,7 @@ public class ConversationViewModelTests
 
         var testConversation = testService.GetNewConversationViewModel();
 
-        testConversation.ConversationViewModel.InputText = "tell me a fucking story";
+        testConversation.ConversationViewModel.InputText = "tell me a story";
         testConversation.ConversationViewModel.Submit();
 
         await Task.Delay(1000);
@@ -50,7 +50,7 @@ public class ConversationViewModelTests
 
         var testConversation = testService.GetNewConversationViewModel();
 
-        testConversation.ConversationViewModel.InputText = "tell me a fucking story";
+        testConversation.ConversationViewModel.InputText = "tell me a story";
         testConversation.ConversationViewModel.Submit();
 
         await Task.Delay(50);
@@ -70,7 +70,7 @@ public class ConversationViewModelTests
 
         var testConversation = testService.GetNewConversationViewModel();
 
-        testConversation.ConversationViewModel.InputText = "tell me a fucking story";
+        testConversation.ConversationViewModel.InputText = "tell me a story";
         testConversation.ConversationViewModel.Submit();
 
         await testConversation.ConversationViewModel.Cancel();
