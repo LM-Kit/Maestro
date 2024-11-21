@@ -31,8 +31,6 @@ namespace LMKitMaestro
                 .ConfigureMopups()
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     // Roboto
                     fonts.AddFont("Roboto-Thin.ttf", "RobotoThin");
                     fonts.AddFont("Roboto-Light.ttf", "RobotoLight");
@@ -45,6 +43,9 @@ namespace LMKitMaestro
                     fonts.AddFont("Segoe UI Semi Light.ttf", "SegoeSemiLight");
                     fonts.AddFont("Segoe UI.ttf", "Segoe");
                     fonts.AddFont("Segoe UI Bold.ttf", "SegoeBold");
+
+                    // FontAwesome
+                    fonts.AddFont("FontAwesome.otf", "FA");
 
                     fonts.AddFontAwesomeIconFonts();
                     fonts.AddMaterialIconFonts();

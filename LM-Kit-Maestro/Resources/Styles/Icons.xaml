@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LMKitMaestro.Resources.Styles.Icons">
+
+    <x:String x:Key="chevron-down">&#xf078;</x:String>
+    <x:String x:Key="sort-down">&#xf0dd;</x:String>
+    
+</ResourceDictionary>

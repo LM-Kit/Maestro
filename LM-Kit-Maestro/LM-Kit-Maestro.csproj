@@ -113,6 +113,9 @@
 		<MauiXaml Update="Controls\CustomCollectionView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Resources\Styles\Icons.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="UI\ModelSelectionButton.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

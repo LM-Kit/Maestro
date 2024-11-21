@@ -173,9 +173,10 @@
                         HorizontalOptions="End"
                         Grid.Column="2"
                         VerticalOptions="Center"
-                        FontFamily="MaterialRegular"
+                        FontFamily="FA"
+                        FontSize="9"
                         TextColor="{StaticResource Outline}"
-                        Text="{x:Static icons:MaterialRegular.Keyboard_arrow_down}">
+                        Text="{StaticResource chevron-down}">
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
                                 <Setter Property="IsVisible" Value="False"/>
