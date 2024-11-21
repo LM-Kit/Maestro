@@ -278,6 +278,11 @@
         </Setter>
     </Style>
 
+    <Style TargetType="Label" Class="Icon">
+        <Setter Property="FontFamily" Value="FA"/>
+        <Setter Property="FontSize" Value="9"/>
+    </Style>
+
     <Style TargetType="Span">
         <Setter Property="TextColor" Value="{StaticResource OnBackground}" />
     </Style>

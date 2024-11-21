@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LMKitMaestro.Resources.Styles.Icons">
 
-    <x:String x:Key="chevron-down">&#xf078;</x:String>
     <x:String x:Key="sort-down">&#xf0dd;</x:String>
-    
+    <x:String x:Key="chevron-up">&#xf077;</x:String>
+    <x:String x:Key="chevron-down">&#xf078;</x:String>
+    <x:String x:Key="chevron-right">&#xf054;</x:String>
 </ResourceDictionary>
