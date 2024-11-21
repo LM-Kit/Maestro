@@ -325,7 +325,7 @@
                         <Label 
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
-                            IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={StaticResource GreaterThanZeroConverter}}">
+                            IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:GreaterThanZeroConverter}}">
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="You have "/>
