@@ -15,7 +15,6 @@
 
             <x:Int32 x:Key="1">1</x:Int32>
             <x:Int32 x:Key="0">0</x:Int32>
-            <x:Double x:Key="0D">0d</x:Double>
 
             <mct:CompareConverter
                 x:Key="GreaterThanOneConverter"
@@ -38,13 +37,6 @@
                 TrueObject="True"
                 FalseObject="False" />
 
-            <mct:CompareConverter
-                x:Key="GreaterThanZeroDoubleConverter"
-                ComparingValue="{StaticResource 0D}"
-                ComparisonOperator="Greater"
-                TrueObject="True"
-                FalseObject="False" />
-            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary x:Name="colors" Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
