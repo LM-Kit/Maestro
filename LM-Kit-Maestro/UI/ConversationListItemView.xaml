@@ -166,7 +166,7 @@
                     FontSize="20"
                     Clicked="OnShowMoreButtonClicked"
                     FontFamily="FA"
-                    Text="{StaticResource Exclamation}">
+                    Text="{StaticResource Ellipsis}">
                     <Button.IsVisible>
                         <MultiBinding Converter="{StaticResource AnyTrueConverter}">
                             <Binding Path="IsHovered"/>
