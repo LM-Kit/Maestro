@@ -2,19 +2,16 @@
 
 namespace LMKitMaestro.Converters;
 
-internal sealed class FileNameConverter : IValueConverter
+internal sealed class EqualToZeroConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value != null)
+        if (value != null && value is int integer)
         {
-            if (value is Uri uri && uri.IsFile)
-            {
-                return Path.GetFileName(uri.LocalPath);
-            }
+            return integer == 0;
         }
 
-        return string.Empty;
+        return false;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

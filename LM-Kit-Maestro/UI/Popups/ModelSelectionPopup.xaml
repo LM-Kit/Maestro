@@ -40,7 +40,7 @@
                 RowDefinitions="*,*" 
                 RowSpacing="20"
                 Margin="0, 0, 0, 8"
-                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={StaticResource EqualToZeroConverter}}">
+                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:EqualToZeroConverter}}">
 
                 <Label 
                     TextColor="{StaticResource OutlineVariant}" 
@@ -62,7 +62,7 @@
                 Margin="0"
                 Spacing="8"
                 Grid.Row="1"
-                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={StaticResource GreaterThanZeroConverter}}"
+                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:GreaterThanZeroConverter}}"
                 ItemsSource="{Binding ModelListViewModel.UserModels}"
                 SelectedItem="{Binding ModelListViewModel.SelectedModel, Mode=TwoWay}">
 

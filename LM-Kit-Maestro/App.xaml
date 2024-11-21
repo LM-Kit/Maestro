@@ -13,30 +13,6 @@
             <mct:VariableMultiValueConverter x:Key="AllFalseConverter" ConditionType="None"/>
             <mct:VariableMultiValueConverter x:Key="AnyTrueConverter" ConditionType="Any"/>
 
-            <x:Int32 x:Key="1">1</x:Int32>
-            <x:Int32 x:Key="0">0</x:Int32>
-
-            <mct:CompareConverter
-                x:Key="GreaterThanOneConverter"
-                ComparingValue="{StaticResource 1}"
-                ComparisonOperator="Greater"
-                TrueObject="True"
-                FalseObject="False" />
-
-            <mct:CompareConverter
-                x:Key="GreaterThanZeroConverter"
-                ComparingValue="{StaticResource 0}"
-                ComparisonOperator="Greater"
-                TrueObject="True"
-                FalseObject="False" />
-
-            <mct:CompareConverter
-                x:Key="EqualToZeroConverter"
-                ComparingValue="{StaticResource 0}"
-                ComparisonOperator="Equal"
-                TrueObject="True"
-                FalseObject="False" />
-
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary x:Name="colors" Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
