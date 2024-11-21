@@ -94,23 +94,23 @@ namespace LMKitMaestro
 
         private static void RegisterServices(this MauiAppBuilder builder)
         {
-            builder.Services.AddSingleton<IPopupNavigation>(MopupService.Instance);
+            builder.Services.AddSingleton(MopupService.Instance);
 
             builder.Services.AddSingleton<AppSettingsService>();
             builder.Services.AddSingleton<ILMKitMaestroDatabase, LMKitMaestroDatabase>();
             builder.Services.AddSingleton<ILLMFileManager, LLMFileManager>();
             builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
-            builder.Services.AddSingleton<LMKitMaestro.Services.IPopupService, LMKitMaestro.Services.PopupService>();
-            builder.Services.AddSingleton<LMKitMaestro.Services.ILauncher, LMKitMaestro.Services.Launcher>();
-            builder.Services.AddSingleton<LMKitMaestro.Services.INavigationService, LMKitMaestro.Services.NavigationService>();
-            builder.Services.AddSingleton<LMKitMaestro.Services.IMainThread, LMKitMaestro.Services.MainThread>();
+            builder.Services.AddSingleton<IPopupService, Services.PopupService>();
+            builder.Services.AddSingleton<Services.ILauncher, Services.Launcher>();
+            builder.Services.AddSingleton<INavigationService, NavigationService>();
+            builder.Services.AddSingleton<IMainThread, Services.MainThread>();
             builder.Services.AddSingleton<CommunityToolkit.Maui.Core.IPopupService, CommunityToolkit.Maui.PopupService>();
 
 #if WINDOWS
-            builder.Services.AddSingleton<LMKitMaestro.Services.IFolderPicker, LMKitMaestro.WinUI.FolderPicker>();
+            builder.Services.AddSingleton<IFolderPicker, WinUI.FolderPicker>();
 #endif
 
-            builder.Services.AddSingleton<IPreferences>(Preferences.Default);
+            builder.Services.AddSingleton(Preferences.Default);
             builder.Services.AddSingleton<LMKitService>();
             builder.Services.AddSingleton<LLMFileManager>();
             builder.Services.AddSingleton<HttpClient>();

@@ -39,7 +39,7 @@ namespace LMKitMaestro.Controls
             AppCompatEditText appCompatEditText = (AppCompatEditText)Handler!.PlatformView!;
             using (var gradientDrawable = new GradientDrawable())
             {
-                gradientDrawable.SetColor(global::Android.Graphics.Color.Transparent);
+                gradientDrawable.SetColor(Android.Graphics.Color.Transparent);
                 appCompatEditText.SetBackground(gradientDrawable);
                 appCompatEditText.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Colors.Transparent.ToAndroid());
             }
@@ -49,7 +49,7 @@ namespace LMKitMaestro.Controls
 
 
 #if WINDOWS
-        private void OnKeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
+        private void OnKeyUp(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Shift)
             {

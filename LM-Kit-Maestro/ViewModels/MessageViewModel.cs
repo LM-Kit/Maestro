@@ -66,7 +66,7 @@ public partial class MessageViewModel : ViewModelBase
         LmKitMessage = message;
     }
 
-    public MessageViewModel(Models.Message message)
+    public MessageViewModel(Message message)
     {
         MessageModel = message;
         Sender = message.Sender;

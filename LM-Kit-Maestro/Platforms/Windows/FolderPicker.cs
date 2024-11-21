@@ -8,7 +8,7 @@ internal class FolderPicker : IFolderPicker
     {
         var result = await CommunityToolkit.Maui.Storage.FolderPicker.PickAsync(initialPath, cancellationToken);
 
-        return new LMKitMaestro.Services.FolderPickerResult(result.IsSuccessful, 
+        return new FolderPickerResult(result.IsSuccessful, 
             result.Folder?.Path, result.Exception);
     }
 }

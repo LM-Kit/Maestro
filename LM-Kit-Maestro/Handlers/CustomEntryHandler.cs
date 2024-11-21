@@ -35,7 +35,7 @@ public partial class CustomEntryHandler : EntryHandler
 
         using (var gradientDrawable = new GradientDrawable())
         {
-            gradientDrawable.SetColor(global::Android.Graphics.Color.Transparent);
+            gradientDrawable.SetColor(Android.Graphics.Color.Transparent);
             nativeView.SetBackground(gradientDrawable);
             nativeView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Colors.Transparent.ToAndroid());
         }
