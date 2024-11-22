@@ -27,7 +27,7 @@ public partial class CustomEditorHandler : EditorHandler
 }
 
 #if ANDROID
-public partial class EditorViewHandler : EditorHandler
+public partial class CustomEditorHandler : EditorHandler
 {
     protected override AppCompatEditText CreatePlatformView()
     {
@@ -46,7 +46,7 @@ public partial class EditorViewHandler : EditorHandler
 #endif
 
 #if IOS || MACCATALYST
-public partial class EditorViewHandler : EditorHandler
+public partial class CustomEditorHandler : EditorHandler
 {
     /* No any custom implementation required
      * Just keeping this handler to prevent build errors.
@@ -55,7 +55,7 @@ public partial class EditorViewHandler : EditorHandler
 #endif
 
 #if WINDOWS
-public partial class EditorViewHandler : EditorHandler
+public partial class CustomEditorHandler : EditorHandler
 {
     protected override TextBox CreatePlatformView()
     {
