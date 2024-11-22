@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
-
 	<PropertyGroup>
 		<TargetFrameworks>net9.0;net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
@@ -60,10 +59,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Resources\Fonts\FontAwesome.otf" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<MauiCss Include="wwwroot\css\font-awesome.css" />
 		<MauiCss Include="wwwroot\css\font-awesome.min.css" />
 	</ItemGroup>
@@ -85,14 +80,10 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
 		<PackageReference Include="MetroLog.Maui" Version="2.1.0" />
 		<PackageReference Include="Mopups" Version="1.3.2" />
-		<PackageReference Include="Plainer.Maui" Version="1.7.1" />
 		<PackageReference Include="SimpleToolkit.Core" Version="5.1.2" />
 		<PackageReference Include="SimpleToolkit.SimpleShell" Version="4.1.3" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="System.Text.Json" Version="9.0.0" />
-		<PackageReference Include="UraniumUI" Version="2.10.2" />
-		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.10.2" />
-		<PackageReference Include="UraniumUI.Icons.MaterialIcons" Version="2.10.2" />
-		<PackageReference Include="UraniumUI.Material" Version="2.10.2" />
 	</ItemGroup>
+
 </Project>
