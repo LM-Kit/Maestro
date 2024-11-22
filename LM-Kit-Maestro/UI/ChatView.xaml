@@ -207,7 +207,7 @@
                         TranslationX="{Binding Source={x:Reference reloadLabel}, Path=Width}"
                         VerticalOptions="Center"
                         TextColor="{StaticResource Outline}" 
-                        StyleClass="Icon"
+                        StyleClass="IconSmall"
                         Text="{StaticResource RotateRight}"
                         />
                 </Grid>
