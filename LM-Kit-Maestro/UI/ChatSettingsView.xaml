@@ -165,7 +165,7 @@
                         <Grid RowDefinitions="*, auto">
                             <HorizontalStackLayout Padding="16" Spacing="8">
                                 <Label Text="General settings"/>
-                                <Label VerticalOptions="Center" StyleClass="Icon">
+                                <Label VerticalOptions="Center" StyleClass="IconSmall">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference generalSettingsExpander}, Path=IsExpanded}" Value="True">
                                             <Setter Property="Text" Value="{StaticResource ChevronUp}"/>
@@ -273,7 +273,7 @@
                                 <Label Text="Sampling configuration"/>
                                 <Label 
                                     VerticalOptions="Center" 
-                                    StyleClass="Icon"
+                                    StyleClass="IconSmall"
                                     Text="{StaticResource ChevronRight}">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded}" Value="True">

@@ -278,6 +278,11 @@
         </Setter>
     </Style>
 
+    <Style TargetType="Label" Class="IconSmall">
+        <Setter Property="FontFamily" Value="FASolid"/>
+        <Setter Property="FontSize" Value="9"/>
+    </Style>
+    
     <Style TargetType="Label" Class="Icon">
         <Setter Property="FontFamily" Value="FASolid"/>
         <Setter Property="FontSize" Value="12"/>

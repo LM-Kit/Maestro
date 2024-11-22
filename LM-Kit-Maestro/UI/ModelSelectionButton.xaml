@@ -172,8 +172,7 @@
                         HorizontalOptions="End"
                         Grid.Column="2"
                         VerticalOptions="Center"
-                        FontFamily="FASolid"
-                        FontSize="9"
+                        StyleClass="IconSmall"
                         TextColor="{StaticResource Outline}"
                         Text="{StaticResource ChevronDown}">
                         <Label.Triggers>
