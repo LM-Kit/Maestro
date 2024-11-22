@@ -10,7 +10,6 @@
     xmlns:models="clr-namespace:LMKitMaestro.Models"
     xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
     xmlns:services="clr-namespace:LMKitMaestro.Services"
-    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     x:Class="LMKitMaestro.UI.PopupView"
     x:Name="popupView">
 

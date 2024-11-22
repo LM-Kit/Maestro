@@ -9,7 +9,6 @@
              xmlns:models="clr-namespace:LMKitMaestro.Models"
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
              xmlns:services="clr-namespace:LMKitMaestro.Services"
-             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              x:Class="LMKitMaestro.UI.ModelSelectionButton"
              x:DataType="vm:ModelListViewModel"
              x:Name="modelSelectionButton">
@@ -53,13 +52,13 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="ModelSelectionButtonStyle" TargetType="uranium:StatefulContentView">
+            <Style x:Key="ModelSelectionButtonStyle" TargetType="controls:StatefulContentView">
                 <Style.Triggers>
-                    <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
+                    <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
                         <Setter Property="InputTransparent" Value="True" />
                     </DataTrigger>
 
-                    <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
+                    <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
                         <Setter Property="InputTransparent" Value="True" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -101,7 +100,7 @@
             </DataTrigger>
         </Border.Triggers>
 
-        <uranium:StatefulContentView
+        <controls:StatefulContentView
             Style="{StaticResource ModelSelectionButtonStyle}"
             InputTransparent="False"
             Hovered="OnModelSelectionButtonHovered"
@@ -194,6 +193,6 @@
                     ProgressColor="{StaticResource Primary}" 
                     />
             </Grid>
-        </uranium:StatefulContentView>
+        </controls:StatefulContentView>
     </Border>
 </ContentView>

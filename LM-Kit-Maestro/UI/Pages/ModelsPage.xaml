@@ -9,8 +9,6 @@
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
              xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
              xmlns:converters="clr-namespace:LMKitMaestro.Converters"
-             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
              x:DataType="vm:ModelsPageViewModel"
              x:Class="LMKitMaestro.UI.ModelsPage"
              x:Name="modelsPage"
@@ -28,7 +26,7 @@
         </ControlTemplate>
     </ContentPage.Resources>-->
     <ContentPage.Resources>
-        <!--<Style TargetType="uranium:StatefulContentView">
+        <!--<Style TargetType="controls:StatefulContentView">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup x:Name="CommonStates">
@@ -48,7 +46,7 @@
             </Setter>
         </Style>-->
 
-        <Style x:Key="ModelCardButton" TargetType="uranium:StatefulContentView">
+        <Style x:Key="ModelCardButton" TargetType="controls:StatefulContentView">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup x:Name="CommonStates">
@@ -94,7 +92,7 @@
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
 
-                        <uranium:StatefulContentView 
+                        <controls:StatefulContentView 
                             Grid.Column="1"
                             Grid.RowSpan="2"
                             IsEnabled="False"
@@ -120,7 +118,7 @@
                                     </Label.FormattedText>
                                 </Label>
                             </Border>
-                        </uranium:StatefulContentView>
+                        </controls:StatefulContentView>
                         <Grid
                             IsVisible="False"
                             Margin="0, 20, 0, 0"
@@ -376,7 +374,7 @@
                 <!--<Grid RowDefinitions="1, *" Margin="0, 0" Grid.Row="2">
                     <BoxView  Margin="16,0"/>
                     <Grid Padding="16" VerticalOptions="Center" Grid.Row="1" ColumnDefinitions="*, auto, *">
-                        <uranium:StatefulContentView Grid.Row="1" Tapped="UserModelsTabTapped">
+                        <controls:StatefulContentView Grid.Row="1" Tapped="UserModelsTabTapped">
                             <Label TextColor="{StaticResource Outline}" HorizontalOptions="Center" Text="My models">
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.UserModels}">
@@ -384,11 +382,11 @@
                                     </DataTrigger>
                                 </Label.Triggers>
                             </Label>
-                        </uranium:StatefulContentView>
+                        </controls:StatefulContentView>
 
                         <BoxView  WidthRequest="1" Grid.Column="1"/>
 
-                        <uranium:StatefulContentView Tapped="LmKitModelsTabTapped" Grid.Column="2">
+                        <controls:StatefulContentView Tapped="LmKitModelsTabTapped" Grid.Column="2">
                             <Label TextColor="{StaticResource Outline}" HorizontalOptions="Center" Text="LM-Kit models">
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.LmKitModels}">
@@ -396,13 +394,13 @@
                                     </DataTrigger>
                                 </Label.Triggers>
                             </Label>
-                        </uranium:StatefulContentView>
+                        </controls:StatefulContentView>
                     </Grid>
                 </Grid>-->
             </Grid>
         </Border>
 
-        <uranium:StatefulContentView TappedCommand="{Binding OpenHuggingFaceLinkCommand}" Grid.Row="2">
+        <controls:StatefulContentView TappedCommand="{Binding OpenHuggingFaceLinkCommand}" Grid.Row="2">
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroupList>
                     <VisualStateGroup x:Name="CommonStates">
@@ -430,7 +428,7 @@
                 <Image x:Name="hfLogo" VerticalOptions="Center" HeightRequest="16" WidthRequest="16" Source="hugging_face.png"/>
                 <Label x:Name="hfLabel" TextColor="{StaticResource Outline}" Text="See more models"/>
             </HorizontalStackLayout>
-        </uranium:StatefulContentView>
+        </controls:StatefulContentView>
     </Grid>
 
 </ContentPage>
