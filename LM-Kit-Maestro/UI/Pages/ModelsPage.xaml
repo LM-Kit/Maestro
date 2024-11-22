@@ -7,7 +7,6 @@
              xmlns:local="clr-namespace:LMKitMaestro"
              xmlns:models="clr-namespace:LMKitMaestro.Models"
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
-             xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
              xmlns:converters="clr-namespace:LMKitMaestro.Converters"
              x:DataType="vm:ModelsPageViewModel"
              x:Class="LMKitMaestro.UI.ModelsPage"
@@ -267,7 +266,7 @@
                         BackgroundColor="Transparent"
                         Stroke="{StaticResource Surface4}">
                         
-                        <plainer:EntryView  VerticalOptions="End"  IsReadOnly="True" Text="{Binding AppSettingsService.ModelsFolderPath}"/>
+                        <controls:CustomEntry VerticalOptions="End"  IsReadOnly="True" Text="{Binding AppSettingsService.ModelsFolderPath}"/>
                     </Border>
 
                     <Button 
