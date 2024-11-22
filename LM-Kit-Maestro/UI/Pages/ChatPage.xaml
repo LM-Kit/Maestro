@@ -10,7 +10,6 @@
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
              xmlns:razor="clr-namespace:LMKitMaestro.UI.Razor.Components"
              xmlns:services="clr-namespace:LMKitMaestro.Services"
-             xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              x:Class="LMKitMaestro.UI.ChatPage"
              x:DataType="vm:ChatPageViewModel"
@@ -44,7 +43,7 @@
                     <Button
                       Margin="12, 0"
                       Style="{StaticResource SidebarToggleButtonStyle}"
-                      Text="{x:Static icons:MaterialRegular.Settings}"
+                      Text="{StaticResource Gear}"
                       Command="{Binding ToggleSettingsSidebarCommand}"
                       HorizontalOptions="End"
                       Grid.Column="2"/>
@@ -90,7 +89,7 @@
 
                 <Button
                     Style="{StaticResource SidebarToggleButtonStyle}"
-                    Text="{x:Static icons:MaterialRegular.Forum}"
+                    Text="{StaticResource Comments}"
                     Command="{Binding ToggleChatsSidebarCommand}"
                     HorizontalOptions="Start"/>
 
@@ -105,8 +104,8 @@
                     ToolTipProperties.Text="Start a new chat"
                     Style="{StaticResource SecondaryActionButtonStyle}"
                     Grid.Column="2" 
-                    FontFamily="MaterialRegular"
-                    Text="{x:Static icons:MaterialRegular.Add}"
+                    FontFamily="FASolid"
+                    Text="{StaticResource Plus}"
                     Command="{Binding StartNewConversationCommand}"/>
             </Grid>
 
@@ -136,7 +135,7 @@
                     HorizontalOptions="Start"
                     ToolTipProperties.Text="Reset default settings"
                     Style="{StaticResource SecondaryActionButtonStyle}"
-                    Text="{x:Static icons:MaterialRegular.Restart_alt}" 
+                    Text="{StaticResource ArrowRotateLeft}"
                     Command="{Binding SettingsViewModel.ResetDefaultValuesCommand}" />
 
                 <Label 
@@ -148,7 +147,7 @@
                 <Button 
                     Grid.Column="2"
                     Style="{StaticResource SidebarToggleButtonStyle}"
-                    Text="{x:Static icons:MaterialRegular.Settings}"
+                    Text="{StaticResource Gear}"
                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ToggleSettingsSidebarCommand}"/>
             </Grid>
         </Grid>

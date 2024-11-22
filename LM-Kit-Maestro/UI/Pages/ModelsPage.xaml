@@ -7,7 +7,6 @@
              xmlns:local="clr-namespace:LMKitMaestro"
              xmlns:models="clr-namespace:LMKitMaestro.Models"
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
-             xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
              xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
              xmlns:converters="clr-namespace:LMKitMaestro.Converters"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
@@ -205,15 +204,11 @@
                         <Label VerticalOptions="Center" Grid.Column="1" Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
                         <Button
                             Grid.Column="2"
-                            Padding="10"
-                            CornerRadius="20"
-                            BorderColor="Transparent"
-                            TextColor="{StaticResource Outline}"
-                            FontFamily="MaterialRegular"
+                            Style="{StaticResource SecondaryActionButtonStyle}"
                             BackgroundColor="Transparent"
                             CommandParameter="{Binding}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand}"
-                            Text="{x:Static icons:MaterialRegular.Delete}">
+                            Text="{StaticResource Trash}">
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroupList>
                                     <VisualStateGroup x:Name="CommonStates">
@@ -282,14 +277,14 @@
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="1" 
                         ToolTipProperties.Text="Select another folder"
-                        Text="{x:Static icons:MaterialRegular.Edit}" 
+                        Text="{StaticResource Pen}" 
                         Command="{Binding PickModelsFolderCommand}"/>
 
                     <Button 
                         CornerRadius="4"
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="2"
-                        Text="{x:Static icons:MaterialRegular.Folder}"
+                        Text="{StaticResource FolderOpen}"
                         ToolTipProperties.Text="Open in File Explorer"
                         Command="{Binding OpenModelsFolderCommand}"/>
                 </Grid>
@@ -339,7 +334,7 @@
 
                     <Grid>
                         <ui:LinkView 
-                            Icon="{x:Static icons:MaterialRegular.Report}"
+                            Icon="{StaticResource CircleInfo}"
                             TextColor="{StaticResource Error}"
                             Text="{Binding FileManager.UnsortedModels.Count, StringFormat='{}You have {0} unsorted model files'}"
                             Command="{Binding Source={x:Reference modelsPage}, Path=ShowUnsortedModelFilesPopupCommand}"

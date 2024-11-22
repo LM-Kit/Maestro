@@ -10,7 +10,6 @@
     xmlns:models="clr-namespace:LMKitMaestro.Models"
     xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
     xmlns:services="clr-namespace:LMKitMaestro.Services"
-    xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     x:Class="LMKitMaestro.UI.PopupView"
     x:Name="popupView">
@@ -42,7 +41,8 @@
                     IsVisible="{Binding Source={x:Reference popupView}, Path=ShowCloseButton}"
                     Clicked="OnCloseButtonClicked"
                     CornerRadius="20"
-                    HorizontalOptions="End" Text="{x:Static icons:MaterialRegular.Close}" 
+                    HorizontalOptions="End" 
+                    Text="{StaticResource Xmark}" 
                     Style="{StaticResource SecondaryActionButtonStyle}">
                 </Button>
 

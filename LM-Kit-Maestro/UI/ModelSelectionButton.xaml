@@ -9,7 +9,6 @@
              xmlns:models="clr-namespace:LMKitMaestro.Models"
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
              xmlns:services="clr-namespace:LMKitMaestro.Services"
-             xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              x:Class="LMKitMaestro.UI.ModelSelectionButton"
              x:DataType="vm:ModelListViewModel"
@@ -27,8 +26,8 @@
                 <Setter Property="Padding" Value="0"/>
                 <Setter Property="ToolTipProperties.Text" Value="Eject model"/>
                 <Setter Property="TextColor" Value="{StaticResource Primary}"/>
-                <Setter Property="FontFamily" Value="MaterialSharp"/>
-                <Setter Property="Text" Value="{x:Static icons:MaterialSharp.Eject}"/>
+                <Setter Property="FontFamily" Value="FASolid"/>
+                <Setter Property="Text" Value="{StaticResource Eject}"/>
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
@@ -173,9 +172,9 @@
                         HorizontalOptions="End"
                         Grid.Column="2"
                         VerticalOptions="Center"
-                        FontFamily="MaterialRegular"
+                        StyleClass="IconSmall"
                         TextColor="{StaticResource Outline}"
-                        Text="{x:Static icons:MaterialRegular.Keyboard_arrow_down}">
+                        Text="{StaticResource ChevronDown}">
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
                                 <Setter Property="IsVisible" Value="False"/>

@@ -58,10 +58,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Resources\Fonts\FontAwesome.otf" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<MauiCss Include="wwwroot\css\font-awesome.css" />
 		<MauiCss Include="wwwroot\css\font-awesome.min.css" />
 	</ItemGroup>
@@ -89,8 +85,6 @@
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="System.Text.Json" Version="9.0.0" />
 		<PackageReference Include="UraniumUI" Version="2.10.2" />
-		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.10.2" />
-		<PackageReference Include="UraniumUI.Icons.MaterialIcons" Version="2.10.2" />
 		<PackageReference Include="UraniumUI.Material" Version="2.10.2" />
 	</ItemGroup>
 
@@ -112,6 +106,9 @@
 	<ItemGroup>
 		<MauiXaml Update="Controls\CustomCollectionView.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Resources\Styles\Icons.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="UI\ModelSelectionButton.xaml">
 			<Generator>MSBuild:Compile</Generator>

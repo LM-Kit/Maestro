@@ -10,7 +10,6 @@
              xmlns:controls="clr-namespace:LMKitMaestro.Controls"
              xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
              xmlns:local="clr-namespace:LMKitMaestro"
-             xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
              x:DataType="vm:SettingsViewModel"
              x:Name="chatSettingsView"
              >
@@ -166,13 +165,13 @@
                         <Grid RowDefinitions="*, auto">
                             <HorizontalStackLayout Padding="16" Spacing="8">
                                 <Label Text="General settings"/>
-                                <Label VerticalOptions="Center" FontFamily="MaterialRegular">
+                                <Label VerticalOptions="Center" StyleClass="IconSmall">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference generalSettingsExpander}, Path=IsExpanded}" Value="True">
-                                            <Setter Property="Text" Value="{x:Static icons:MaterialRegular.Keyboard_arrow_up}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronUp}"/>
                                         </DataTrigger>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference generalSettingsExpander}, Path=IsExpanded}" Value="False">
-                                            <Setter Property="Text" Value="{x:Static icons:MaterialRegular.Keyboard_arrow_right}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronDown}"/>
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>
@@ -272,13 +271,16 @@
                         <Grid RowDefinitions="*, auto">
                             <HorizontalStackLayout Padding="16" Spacing="8">
                                 <Label Text="Sampling configuration"/>
-                                <Label VerticalOptions="Center" FontFamily="MaterialRegular" Text="{x:Static icons:MaterialRegular.Keyboard_arrow_right}">
+                                <Label 
+                                    VerticalOptions="Center" 
+                                    StyleClass="IconSmall"
+                                    Text="{StaticResource ChevronRight}">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded}" Value="True">
-                                            <Setter Property="Text" Value="{x:Static icons:MaterialRegular.Keyboard_arrow_up}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronUp}"/>
                                         </DataTrigger>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded}" Value="False">
-                                            <Setter Property="Text" Value="{x:Static icons:MaterialRegular.Keyboard_arrow_right}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronDown}"/>
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>
