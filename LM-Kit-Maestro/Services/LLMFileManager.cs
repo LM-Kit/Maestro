@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using LMKit.Model;
 
 namespace LMKitMaestro.Services;
 
@@ -79,13 +80,13 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         ModelsFolderPath = _appSettingsService.ModelsFolderPath;
 
 #if WINDOWS
-            _fileSystemWatcher.Changed += OnFileChanged;
-            _fileSystemWatcher.Deleted += OnFileDeleted;
-            _fileSystemWatcher.Renamed += OnFileRenamed;
-            _fileSystemWatcher.Created += OnFileCreated;
+        _fileSystemWatcher.Changed += OnFileChanged;
+        _fileSystemWatcher.Deleted += OnFileDeleted;
+        _fileSystemWatcher.Renamed += OnFileRenamed;
+        _fileSystemWatcher.Created += OnFileCreated;
 
-            _fileSystemWatcher.IncludeSubdirectories = true;
-            _fileSystemWatcher.EnableRaisingEvents = true;
+        _fileSystemWatcher.IncludeSubdirectories = true;
+        _fileSystemWatcher.EnableRaisingEvents = true;
 #endif
     }
 
@@ -483,14 +484,24 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             UserModels[index] = new ModelInfo(publisher, repository, fileName, fileRecordPathChangedEventArgs.NewPath, UserModels[index].FileSize);
         }
     }
-#endregion
+    #endregion
 
     #region Static methods
 
+    private static bool IsTextCompletionModel(string filePath)
+    {
+        using (var model = new LLM(filePath, loadingOptions: new LLM.LoadingOptions() { LoadTensors = false }))
+        {
+            return !model.IsEmbeddingModel;
+        }
+    }
+
     private static bool TryValidateModelFile(string filePath, string modelFolderPath, out ModelInfo? modelInfo)
     {
-        if (LMKit.Model.LLM.ValidateFormat(filePath))
+        if (LLM.ValidateFormat(filePath) &&
+            IsTextCompletionModel(filePath))
         {
+
             if (FileHelpers.GetModelInfoFromPath(filePath, modelFolderPath,
                 out string publisher, out string repository, out string fileName))
             {
