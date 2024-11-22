@@ -1,0 +1,340 @@
+﻿@inherits ComponentBase
+
+@inject IClipboardHandler ClipboardHandler
+
+<div class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageRootContainer" : "userMessageRootContainer")">
+    <div class="messageDiv @(MessageViewModel.Sender == MessageSender.User ? "userMessageDiv" : "assistantMessageDiv")">
+        <div>
+            <div class="messageContent @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageContent" : "userMessageContent")">
+                @if (MessageViewModel.Sender == MessageSender.Assistant)
+                {
+                    if (MessageHtml != null)
+                    {
+                        @((MarkupString)MessageHtml)
+                    }
+                }
+                else
+                {
+                    @MessageViewModel.Text
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="messageFooter @(MessageJustTerminated ? "show" : "hide")">
+        <div class="messageActions @(MessageViewModel.Sender == MessageSender.User ? "userMessageActions" : "")">
+            <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
+                @(MessageJustCopied ? "check" : "content_copy")
+            </button>
+        </div>
+
+        @if (MessageViewModel.Sender == MessageSender.Assistant)
+        {
+            @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
+            {
+                <span class="assistantResponseInfo">
+                    @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
+                </span>
+            }
+        }
+    </div>
+
+</div>
+
+<style>
+    .rootContainer {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        margin-top: 2px;
+        margin-bottom: 20px;
+        padding-inline: 8px;
+        padding-block: 16px;
+        border-radius: 0px;
+    }
+
+    .assistantMessageRootContainer:hover {
+        background-color: var(--Surface15);
+    }
+
+    .userMessageRootContainer:hover  .userMessageContent{
+        background-color: var(--Surface15);
+    }
+
+    .rootContainer:hover > div {
+        visibility: visible;
+    }
+
+    .userMessageDiv {
+        max-width: 75%;
+        margin-left: auto;
+    }
+
+    .userMessageDiv {
+    }
+
+    .messageContent {
+        padding-block: 12px;
+        padding-inline: 16px;
+        word-break: break-word; /* Ensures long words break and wrap */
+        overflow-wrap: break-word; /* Allows wrapping long words */
+        max-width: 100%; /* Prevents the div from exceeding the width of its container */
+    }
+
+    .userMessageContent {
+        display: block;
+        background-color: var(--Surface);
+        border-radius: 32px;
+    }
+
+
+    .assistantMessageContent {
+        padding: 4px;
+        margin-bottom: -16px; /* workaround: this syntax adds 16px bottom margin to the html block '(MarkupString)Markdig.Markdown.ToHtml(MessageViewModel.Text)'*/
+    }
+
+    .show {
+        visibility: visible;
+    }
+
+    .hide {
+       visibility: hidden;
+    }
+
+    .chatActionButton {
+        height: 28px;
+        width: 28px;
+        border-radius: 50%;
+        border-width: 0;
+        font-size: 12px;
+        background-color: transparent;
+        color: var(--OnBackground);
+        color: var(--Outline);
+    }
+
+        .chatActionButton:hover {
+            background-color: var(--Surface3);
+        }
+
+    .dot {
+        height: 10px;
+        width: 10px;
+        margin-left: 4px;
+        background-color: var(--OnBackground);
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .align-right {
+        margin-left: auto;
+    }
+
+    .align-left {
+        margin-right: auto;
+    }
+
+    .messageFooter {
+        margin-top: 12px;
+        display: flex;
+    }
+
+        .messageFooter:hover {
+            visibility: visible;
+        }
+
+    .assistantResponseInfo {
+        font-size: 11px;
+        margin-left: 8px;
+        align-content: center;
+        color: var(--Outline);
+    }
+
+    .messageButtonDiv {
+        display: inline;
+    }
+
+    .messageActions {
+        display: inline;
+    }
+
+    .userMessageActions {
+        margin-left: auto;
+    }
+</style>
+
+@code {
+    const string ProgressIndicatorHtml = "<span class=\"dot \"></span>";
+
+    bool messageJustCopied;
+    bool MessageJustCopied
+    {
+        get => messageJustCopied;
+        set
+        {
+            messageJustCopied = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
+    string? messageHtml;
+    string? MessageHtml
+    {
+        get => messageHtml;
+        set
+        {
+            messageHtml = value;
+        }
+    }
+
+    bool messageJustTerminated;
+    bool MessageJustTerminated
+    {
+        get => messageJustTerminated;
+        set
+        {
+            messageJustTerminated = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
+    MessageViewModel? messageViewModel;
+    [Parameter]
+    [EditorRequired]
+#pragma warning disable BL0007
+    public MessageViewModel MessageViewModel
+    {
+        get => messageViewModel!;
+        set
+        {
+            if (messageViewModel != null)
+            {
+                messageViewModel.PropertyChanged -= OnMessageViewModelPropertyChanged;
+            }
+
+            messageViewModel = value;
+            messageViewModel.PropertyChanged += OnMessageViewModelPropertyChanged;
+
+            if (messageViewModel.Sender == MessageSender.Assistant)
+            {
+                messageHtml = GenerateAssistantResponseHtml(messageViewModel);
+            }
+
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+#pragma warning restore BL0007
+
+    private void OnMessageViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (MessageViewModel.Sender == MessageSender.Assistant)
+        {
+            if (e.PropertyName == nameof(MessageViewModel.Text))
+            {
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel);
+            }
+            else if (e.PropertyName == nameof(MessageViewModel.MessageInProgress))
+            {
+                if (!MessageViewModel.MessageInProgress)
+                {
+                    OnAssistantMessageJustTerminated();
+
+                    if (MessageHtml != null && MessageHtml.Contains(ProgressIndicatorHtml))
+                    {
+                        MessageHtml = MessageHtml.Replace(ProgressIndicatorHtml, string.Empty);
+                    }
+                }
+            }
+        }
+
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    private void OnAssistantMessageJustTerminated()
+    {
+        var _ = Task.Run(async () =>
+        {
+            MessageJustTerminated = true;
+            try
+            {
+                await Task.Delay(5000);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            MessageJustTerminated = false;
+        });
+    }
+
+    private async Task OnCopyMessageButtonClicked()
+    {
+        bool success = await ClipboardHandler.CopyTextToClipboardAsync(MessageViewModel.Text);
+
+        if (success)
+        {
+            if (!MessageJustCopied)
+            {
+                var _ = Task.Run(async () =>
+                {
+                    MessageJustCopied = true;
+                    await Task.Delay(3000);
+                    MessageJustCopied = false;
+                });
+            }
+        }
+    }
+
+    private static string GenerateAssistantResponseHtml(MessageViewModel messageViewModel)
+    {
+        string html = !string.IsNullOrEmpty(messageViewModel.Text) ? Markdig.Markdown.ToHtml(messageViewModel.Text) : string.Empty;
+
+        bool responseIsEmpty = html.Length == 0;
+
+        if (messageViewModel.MessageInProgress)
+        {
+            var closingTagIndex = Math.Max(0, html.LastIndexOf(@"</"));
+
+            if (closingTagIndex != -1)
+            {
+                html = html.Insert(closingTagIndex, ProgressIndicatorHtml);
+
+                if (responseIsEmpty)
+                {
+                    html = $"<p>{html}</p>";
+                }
+            }
+        }
+
+        if (!responseIsEmpty)
+        {
+            // Ensuring we don't insert an unwanted new-line at the end of the message.
+            if (html.EndsWith(">\n"))
+            {
+                html = html.Remove(html.Length - ">\n".Length);
+            }
+            else if (html == "\n")
+            {
+                html = string.Empty;
+            }
+        }
+
+        return html;
+    }
+
+    private static string GetStatusText(LmKitTextGenerationStatus status)
+    {
+        switch (status)
+        {
+            default:
+                return string.Empty;
+
+            case LmKitTextGenerationStatus.Cancelled:
+                return "Cancelled";
+
+            case LmKitTextGenerationStatus.UnknownError:
+                return "Unknown error";
+        }
+    }
+}

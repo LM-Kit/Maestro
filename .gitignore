@@ -1,0 +1,6 @@
+.vs
+LM-Kit-Maestro/bin
+LM-Kit-Maestro/obj
+*.user
+/tests/bin
+/tests/obj

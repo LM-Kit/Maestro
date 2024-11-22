@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<shell:SimpleShell
+    x:Class="LMKitMaestro.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ui="clr-namespace:LMKitMaestro.UI"
+    xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
+    xmlns:local="clr-namespace:LMKitMaestro"
+    xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:shell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
+    xmlns:converters="clr-namespace:LMKitMaestro.Converters"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False"
+    Title="LM-Kit Maestro"
+    x:DataType="vm:AppShellViewModel"
+    x:Name="thisShell"
+    >
+    <!-- WinUI TitleBar issue: https://stackoverflow.com/questions/78200704/net-maui-flyout-menu-is-overlapping-the-windows-title-bar-->
+
+    <!--<FlyoutItem Route="HomePage" Title="Home">
+        <ShellContent ContentTemplate="{DataTemplate ui:HomePage}"/>
+    </FlyoutItem>-->
+
+    <!--<Tab BindingContext="{Binding HomeTab}" Title="{Binding HomeTab.Title}" Route="HomePage">
+        <ShellContent Title="Home" ContentTemplate="{DataTemplate ui:HomePage}"/>
+    </Tab>-->
+
+    <!--<Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage">
+        <ShellContent ContentTemplate="{DataTemplate ui:AssistantsPage}"/>
+    </Tab>-->
+    
+    <Tab BindingContext="{Binding ChatTab}" Title="{Binding ChatTab.Title}" Route="ChatPage">
+        <ShellContent Title="AI Chat" ContentTemplate="{DataTemplate ui:ChatPage}"/>
+    </Tab>
+
+    <Tab BindingContext="{Binding ModelsTab}" Title="{Binding ModelsTab.Title}" Route="ModelsPage">
+        <ShellContent Title="Models" ContentTemplate="{DataTemplate ui:ModelsPage}"/>
+    </Tab>
+
+    <!--<FlyoutItem Route="ModelsPage"  Title="Models">
+        <ShellContent ContentTemplate="{DataTemplate ui:ModelsPage}"/>
+    </FlyoutItem>-->
+
+    <shell:SimpleShell.RootPageContainer>
+        <Grid x:Name="rootPageContainer">
+            <shell:SimpleNavigationHost/>
+        </Grid>
+    </shell:SimpleShell.RootPageContainer>
+
+    <shell:SimpleShell.Content>
+        <Grid BackgroundColor="{StaticResource Surface}" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{x:Static local:AppConstants.AppBarHeight}"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <BoxView HeightRequest="1" VerticalOptions="Start"/>
+            <BoxView HeightRequest="1" VerticalOptions="End"/>
+
+            <Grid RowDefinitions="*">
+                <Grid Padding="12, 24">
+                    <HorizontalStackLayout
+                        VerticalOptions="Center"
+                        BindableLayout.ItemsSource="{Binding Tabs}"
+                        Spacing="12">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:LMKitMaestroTabViewModel">
+                                <ui:LinkView
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=NavigateCommand}"
+                                    CommandParameter="{Binding}"
+                                    FontFamily="SegoeLight"
+                                    VerticalOptions="End"
+                                    StyleClass="Title"
+                                    TextColor="{StaticResource Outline}"
+                                    Text="{Binding Title}">
+                                    <ui:LinkView.Triggers>
+                                        <DataTrigger TargetType="ui:LinkView" Binding="{Binding IsSelected}" Value="True">
+
+                                            <Setter Property="TextColor" Value="{StaticResource OnBackground}"/>
+                                            <Setter Property="FontFamily" Value="SegoeSemiLight"/>
+                                        </DataTrigger>
+                                    </ui:LinkView.Triggers>
+                                </ui:LinkView>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </HorizontalStackLayout>
+                </Grid>
+
+            </Grid>
+            <shell:SimpleNavigationHost Grid.Row="1"/>
+        </Grid>
+    </shell:SimpleShell.Content>
+</shell:SimpleShell>

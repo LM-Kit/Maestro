@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:ui="clr-namespace:LMKitMaestro.UI"
+             xmlns:models="clr-namespace:LMKitMaestro.Models"
+             xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
+             xmlns:controls="clr-namespace:LMKitMaestro.Controls"
+             x:DataType="vm:ConversationViewModel"
+             ToolTipProperties.Text="{Binding Title}"
+             x:Class="LMKitMaestro.UI.ConversationListItemView"
+             x:Name="conversationListItemView"
+             >
+    <ContentView.Resources>
+        <Style TargetType="Button" x:Key="ActionButton">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="MinimumHeightRequest" Value="0"/>
+            <Setter Property="MinimumWidthRequest" Value="0"/>
+            <Setter Property="FontFamily" Value="MaterialRegular"/>
+            <Setter Property="BorderWidth" Value="0"/>
+            <Setter Property="TextColor" Value="{StaticResource Gray700}"/>
+        </Style>
+
+        <Style BasedOn="{StaticResource ActionButton}" Class="DeletingAction" TargetType="Button">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="TextColor" Value="{StaticResource Error}"/>
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="TextColor" Value="{StaticResource Error}"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
+        <Style BasedOn="{StaticResource ActionButton}" Class="RegularAction" TargetType="Button">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="TextColor" Value="{StaticResource OnBackground}"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="TextColor" Value="{StaticResource OnBackground}"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentView.Resources>
+
+
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroupList>
+            <VisualStateGroup x:Name="CustomCollectionViewStates">
+                <VisualState x:Name="_Normal">
+                    <VisualState.Setters>
+                        <Setter Property="BackgroundColor" Value="Transparent"/>
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="_Hovered">
+                    <VisualState.Setters>
+                        <Setter TargetName="statefulContentView" Property="BackgroundColor" Value="{StaticResource Background}"/>
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="_Selected">
+                    <VisualState.Setters>
+                        <Setter TargetName="statefulContentView" Property="BackgroundColor" Value="{StaticResource Background}"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateGroupList>
+    </VisualStateManager.VisualStateGroups>
+
+
+    <Border 
+        Margin="12, 0"
+        StrokeShape="RoundRectangle 4" 
+        Stroke="Transparent" 
+        StrokeThickness="0">
+
+        <controls:StatefulContentView 
+            x:Name="statefulContentView"
+            CascadeInputTransparent="False"
+            Hovered="OnHovered"
+            HoverExited="OnHoverExited">
+
+            <controls:StatefulContentView.Triggers>
+                <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding IsShowingActionPopup}" Value="True">
+                    <Setter Property="BackgroundColor" Value="{StaticResource Background}"/>
+                </DataTrigger>
+                <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding IsRenaming}" Value="True">
+                    <Setter Property="BackgroundColor" Value="{StaticResource Background}"/>
+                </DataTrigger>
+            </controls:StatefulContentView.Triggers>
+
+            <Grid
+                Margin="8"
+                RowDefinitions="*, auto" 
+                ColumnDefinitions="*, auto">
+
+                <Label 
+                    Margin="10, 4, 0, 6"
+                    MaxLines="1"
+                    LineBreakMode="TailTruncation"
+                    ZIndex="2"
+                    StyleClass="Subtitle"
+                    Text="{Binding Title}"
+                    VerticalTextAlignment="Center"
+                    IsVisible="{Binding IsRenaming, Converter={mct:InvertedBoolConverter}}">
+                </Label>
+
+                <controls:CustomEntry
+                    IsVisible="{Binding IsRenaming}"
+                    x:Name="conversationTitle"
+                    FontFamily="SegoeLight"
+                    FontSize="16"
+                    InputTransparent="True"
+                    ZIndex="2"
+                    ClearButtonVisibility="Never"
+                    Focused="ConversationTitleFocused"
+                    VerticalTextAlignment="Center"
+                    PlaceholderColor="Transparent"
+                    IsReadOnly="True"
+                    Unfocused="ConversationTitleUnfocused">
+                    <controls:CustomEntry.Triggers>
+                        <DataTrigger TargetType="controls:CustomEntry" Binding="{Binding IsSelected}" Value="True">
+                            <Setter Property="TextColor" Value="{StaticResource OnSurface}"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="controls:CustomEntry" Binding="{Binding IsSelected}" Value="False">
+                            <Setter Property="TextColor" Value="{StaticResource OnSurface}"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="controls:CustomEntry" Binding="{Binding IsRenaming}" Value="True">
+                            <Setter Property="InputTransparent" Value="False"/>
+                            <Setter Property="IsReadOnly" Value="False"/>
+                        </DataTrigger>
+
+                    </controls:CustomEntry.Triggers>
+                </controls:CustomEntry>
+
+                <Button
+                    VerticalOptions="Center"
+                    StyleClass="RegularAction"
+                    ZIndex="2"
+                    Grid.Column="2"
+                    FontSize="16"
+                    Clicked="OnShowMoreButtonClicked"
+                    FontFamily="FASolid"
+                    Text="{StaticResource Ellipsis}">
+                    <Button.IsVisible>
+                        <MultiBinding Converter="{StaticResource AnyTrueConverter}">
+                            <Binding Path="IsHovered"/>
+                            <Binding Path="IsShowingActionPopup" />
+                            <Binding Path="IsSelected"/>
+                        </MultiBinding>
+                    </Button.IsVisible>
+                </Button>
+            </Grid>
+        </controls:StatefulContentView>
+    </Border>
+</ContentView>

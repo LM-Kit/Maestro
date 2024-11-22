@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="True" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Dark colors-->
+    <Color x:Key="Primary">#512BD4</Color>
+    <Color x:Key="PrimaryAccent">#361C8C</Color>
+    <Color x:Key="Error">#BB3D36</Color>
+    <Color x:Key="Background">#12181F</Color>
+    <Color x:Key="OnBackground">#F0F6FC</Color>
+
+    <Color x:Key="OnSurface">#F0F6FC</Color>
+    <Color x:Key="Outline">#9198A1</Color>
+    <Color x:Key="OutlineVariant">#2E3033</Color>
+
+    <!-- Gray palette -->
+    <Color x:Key="Gray50">#FAFAFA</Color>
+    <Color x:Key="Gray100">#F5F5F5</Color>
+    <Color x:Key="Gray200">#EEEEEE</Color>
+    <Color x:Key="Gray300">#E0E0E0</Color>
+    <Color x:Key="Gray400">#BDBDBD</Color>
+    <Color x:Key="Gray500">#9E9E9E</Color>
+    <Color x:Key="Gray600">#757575</Color>
+    <Color x:Key="Gray700">#616161</Color>
+    <Color x:Key="Gray800">#424242</Color>
+    <Color x:Key="Gray900">#212121</Color>
+    <Color x:Key="Gray950">#121212</Color>
+
+    <!-- HSV palette -->
+    <!-- 4-->
+    <Color x:Key="Surface">#06080A</Color>
+    <!-- 8-->
+    <Color x:Key="Surface15">#0C1014</Color>
+    <!-- 12-->
+    <Color x:Key="Surface2">#12181F</Color>
+    <!-- 16-->
+    <Color x:Key="Surface3">#182129</Color>
+    <!-- 20-->
+    <Color x:Key="Surface4">#1F2933</Color>
+    <!-- 24-->
+    <Color x:Key="Surface5">#25313D</Color>
+
+</ResourceDictionary>

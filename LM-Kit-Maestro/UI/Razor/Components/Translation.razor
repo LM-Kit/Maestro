@@ -1,0 +1,177 @@
+﻿@inherits MvvmComponentBase<AssistantsPageViewModel>
+
+@inject IClipboardHandler ClipboardHandler
+
+<div style="width:100vw; height:100vh; margin-top: 40px;padding: 20px">
+    <div id="container" class="dark container">
+        <div id="card">
+            @* <textarea @bind=ViewModel.Input id="input" /> *@
+
+            @if (ViewModel.CurrentTranslation.AwaitingResponse)
+            {
+                <div id="loaderDiv">
+                    <div class="spinner">
+                        <div> </div>
+                        <div> </div>
+                        <div> </div>
+                        <div> </div>
+                    </div>
+                </div>
+            }
+            else if (!string.IsNullOrEmpty(ViewModel.Result))
+            {
+                <div id="result">
+                    <p>
+                        @ViewModel.Result
+                    </p>
+
+                    <div id="actionIcons">
+                        <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
+                            @(ResultJustCopied ? "check" : "content_copy")
+                        </button>
+
+                    </div>
+                </div>
+            }
+
+            <UserInput ViewModel="ViewModel.CurrentTranslation"/>
+        </div>
+    </div>
+</div>
+
+<style>
+    #loaderDiv {
+        display: flex;
+        height: 72px;
+        background-color: transparent;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+    }
+
+    #container {
+        max-width: 800px;
+        display: flex;
+        align-items: center;
+    }
+
+    #card {
+        width: 100%;
+        padding: 20px;
+        border: 1px solid var(--Surface4);
+        border-radius: 4px;
+    }
+
+    #buttonsDiv {
+        margin-block: 8px;
+        gap: 8px;
+        margin-left: auto;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    #input {
+        padding: 8px;
+        border-radius: 4px;
+        border: 2px solid var(--Surface4);
+        background-color: transparent;
+        width: 100%;
+        resize: none;
+        color: white;
+        margin-right: 10px; /* Adds some spacing between the input and the button */
+    }
+
+    #result {
+        margin-block: 16px;
+        background-color: var(--Surface15);
+        color: white;
+        min-height: 72px;
+        margin-top: 10px;
+        padding: 10px;
+    }
+
+/*         #result:hover {
+            background-color: var(--Surface3);
+        } */
+
+    #actionIcons {
+        display: inline
+    }
+
+    .primary-button {
+        font-family: "Segoe UI";
+        font-size: 12px;
+        color: var(--OnBackground);
+        text-align: center;
+        padding-block: 16px;
+        padding-inline: 8px;
+        margin-right: 4px;
+        border-width: 0;
+        background-color: var(--Surface4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .primary-button:active {
+            background-color: var(--PrimaryAccent);
+        }
+
+        .primary-button:hover {
+            background-color: var(--Primary);
+        }
+
+    .chatActionButton {
+        height: 28px;
+        width: 28px;
+        border-radius: 50%;
+        border-width: 0;
+        font-size: 12px;
+        background-color: transparent;
+        color: var(--OnBackground);
+        color: var(--Outline);
+    }
+
+    .chatActionButton:hover {
+        background-color: var(--Surface3);
+    }
+
+</style>
+
+@code
+{
+    bool resultJustCopied;
+    bool ResultJustCopied
+    {
+        get => resultJustCopied;
+        set
+        {
+            resultJustCopied = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
+    private void OnTranslateButtonClicked()
+    {
+        ViewModel.CurrentTranslation.Submit();
+    }
+
+
+    private async Task OnCopyMessageButtonClicked()
+    {
+        bool success = await ClipboardHandler.CopyTextToClipboardAsync(ViewModel.Result != null ? ViewModel.Result : "");
+
+        if (success)
+        {
+            if (!ResultJustCopied)
+            {
+                var _ = Task.Run(async () =>
+                {
+                    ResultJustCopied = true;
+                    await Task.Delay(3000);
+                    ResultJustCopied = false;
+                });
+            }
+        }
+    }
+}
