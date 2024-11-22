@@ -10,7 +10,6 @@
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
              xmlns:razor="clr-namespace:LMKitMaestro.UI.Razor.Components"
              xmlns:services="clr-namespace:LMKitMaestro.Services"
-             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              x:Class="LMKitMaestro.UI.ChatPage"
              x:DataType="vm:ChatPageViewModel"
              x:Name="chatPage">

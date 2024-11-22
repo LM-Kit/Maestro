@@ -11,7 +11,6 @@
              xmlns:converters="clr-namespace:LMKitMaestro.Converters"
              xmlns:services="clr-namespace:LMKitMaestro.Services"
              xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
-             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              x:Class="LMKitMaestro.UI.ChatView"
              x:DataType="vm:ConversationViewModel"
              IsEnabled="{Binding ., Converter={mct:IsNotNullConverter}}"
@@ -165,7 +164,7 @@
                 </DataTrigger>
             </Grid.Triggers>
 
-            <uranium:StatefulContentView
+            <controls:StatefulContentView
                 TappedCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=LoadModelCommand}"
                 CommandParameter="{Binding LastUsedModel}"
                 ToolTipProperties.Text="Click to reload this model">
@@ -208,11 +207,11 @@
                         TranslationX="{Binding Source={x:Reference reloadLabel}, Path=Width}"
                         VerticalOptions="Center"
                         TextColor="{StaticResource Outline}" 
-                        StyleClass="Icon"
+                        StyleClass="IconSmall"
                         Text="{StaticResource RotateRight}"
                         />
                 </Grid>
-            </uranium:StatefulContentView>
+            </controls:StatefulContentView>
         </Grid>
     </Grid>
 </ContentView>

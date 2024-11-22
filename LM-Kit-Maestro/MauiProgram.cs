@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using LMKitMaestro.UI;
 using LMKitMaestro.ViewModels;
 using LMKitMaestro.Services;
-using UraniumUI;
 using LMKitMaestro.Data;
 using Plainer.Maui;
 using SimpleToolkit.SimpleShell;
@@ -12,7 +11,6 @@ using MetroLog.MicrosoftExtensions;
 using MetroLog.Operators;
 using Majorsoft.Blazor.Components.Common.JsInterop;
 using Mopups.Hosting;
-using Mopups.Interfaces;
 using Mopups.Services;
 
 namespace LMKitMaestro
@@ -26,8 +24,6 @@ namespace LMKitMaestro
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseSimpleShell()
-                .UseUraniumUI()
-                .UseUraniumUIMaterial()
                 .ConfigureMopups()
                 .ConfigureFonts(fonts =>
                 {

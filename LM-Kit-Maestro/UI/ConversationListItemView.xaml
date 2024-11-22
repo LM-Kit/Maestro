@@ -6,7 +6,6 @@
              xmlns:models="clr-namespace:LMKitMaestro.Models"
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
              xmlns:controls="clr-namespace:LMKitMaestro.Controls"
-             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
              x:DataType="vm:ConversationViewModel"
              ToolTipProperties.Text="{Binding Title}"
@@ -98,20 +97,20 @@
         Stroke="Transparent" 
         StrokeThickness="0">
 
-        <uranium:StatefulContentView 
+        <controls:StatefulContentView 
             x:Name="statefulContentView"
             CascadeInputTransparent="False"
             Hovered="OnHovered"
             HoverExited="OnHoverExited">
 
-            <uranium:StatefulContentView.Triggers>
-                <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding IsShowingActionPopup}" Value="True">
+            <controls:StatefulContentView.Triggers>
+                <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding IsShowingActionPopup}" Value="True">
                     <Setter Property="BackgroundColor" Value="{StaticResource Background}"/>
                 </DataTrigger>
-                <DataTrigger TargetType="uranium:StatefulContentView" Binding="{Binding IsRenaming}" Value="True">
+                <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding IsRenaming}" Value="True">
                     <Setter Property="BackgroundColor" Value="{StaticResource Background}"/>
                 </DataTrigger>
-            </uranium:StatefulContentView.Triggers>
+            </controls:StatefulContentView.Triggers>
 
             <Grid
                 Margin="8"
@@ -175,6 +174,6 @@
                     </Button.IsVisible>
                 </Button>
             </Grid>
-        </uranium:StatefulContentView>
+        </controls:StatefulContentView>
     </Border>
 </ContentView>

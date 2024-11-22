@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:LMKitMaestro"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
              x:Class="LMKitMaestro.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -17,11 +16,6 @@
                 <ResourceDictionary x:Name="colors" Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Icons.xaml"/>
-                <!--<material:StyleResource ColorsOverride="{x:Reference colors}">
-                    <material:StyleResource.Overrides>
-                        <ResourceDictionary Source="Resources/Styles/Styles.xaml"/>
-                    </material:StyleResource.Overrides>
-                </material:StyleResource>-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
