@@ -7,7 +7,6 @@
              xmlns:local="clr-namespace:LMKitMaestro"
              xmlns:models="clr-namespace:LMKitMaestro.Models"
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
-             xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
              xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
              xmlns:converters="clr-namespace:LMKitMaestro.Converters"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"

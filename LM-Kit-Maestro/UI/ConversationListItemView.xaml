@@ -7,7 +7,6 @@
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
              xmlns:controls="clr-namespace:LMKitMaestro.Controls"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-             xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
              xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
              x:DataType="vm:ConversationViewModel"
              ToolTipProperties.Text="{Binding Title}"

@@ -5,7 +5,6 @@
     xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:ui="clr-namespace:LMKitMaestro.UI"
     xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
-    xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
     x:DataType="vm:UnsortedModelFilesPopupViewModel"
     ShowOkButton="True"
     ShowCloseButton="False"

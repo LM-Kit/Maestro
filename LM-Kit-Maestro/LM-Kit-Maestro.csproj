@@ -85,8 +85,6 @@
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="System.Text.Json" Version="9.0.0" />
 		<PackageReference Include="UraniumUI" Version="2.10.2" />
-		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.10.2" />
-		<PackageReference Include="UraniumUI.Icons.MaterialIcons" Version="2.10.2" />
 		<PackageReference Include="UraniumUI.Material" Version="2.10.2" />
 	</ItemGroup>
 
