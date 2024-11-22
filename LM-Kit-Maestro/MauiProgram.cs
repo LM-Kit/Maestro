@@ -4,6 +4,7 @@ using LMKitMaestro.UI;
 using LMKitMaestro.ViewModels;
 using LMKitMaestro.Services;
 using LMKitMaestro.Data;
+using Plainer.Maui;
 using SimpleToolkit.SimpleShell;
 using LMKitMaestro.Handlers;
 using MetroLog.MicrosoftExtensions;
@@ -46,6 +47,7 @@ namespace LMKitMaestro
                 .ConfigureMauiHandlers(handlers =>
                 {
                     handlers.AddCustomHandlers();
+                    handlers.AddPlainer();
                 });
 
             builder.Services.AddMauiBlazorWebView();

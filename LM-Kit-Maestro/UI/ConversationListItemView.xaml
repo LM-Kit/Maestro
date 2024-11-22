@@ -6,6 +6,7 @@
              xmlns:models="clr-namespace:LMKitMaestro.Models"
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
              xmlns:controls="clr-namespace:LMKitMaestro.Controls"
+             xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
              x:DataType="vm:ConversationViewModel"
              ToolTipProperties.Text="{Binding Title}"
              x:Class="LMKitMaestro.UI.ConversationListItemView"
