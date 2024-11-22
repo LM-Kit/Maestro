@@ -10,7 +10,6 @@
              xmlns:controls="clr-namespace:LMKitMaestro.Controls"
              xmlns:converters="clr-namespace:LMKitMaestro.Converters"
              xmlns:services="clr-namespace:LMKitMaestro.Services"
-             xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
              x:Class="LMKitMaestro.UI.ChatView"
              x:DataType="vm:ConversationViewModel"
              IsEnabled="{Binding ., Converter={mct:IsNotNullConverter}}"

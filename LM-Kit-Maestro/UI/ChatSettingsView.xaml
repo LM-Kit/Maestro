@@ -8,7 +8,6 @@
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
              xmlns:services="clr-namespace:LMKitMaestro.Services"
              xmlns:controls="clr-namespace:LMKitMaestro.Controls"
-             xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
              xmlns:local="clr-namespace:LMKitMaestro"
              x:DataType="vm:SettingsViewModel"
              x:Name="chatSettingsView"
@@ -188,13 +187,13 @@
                             <Grid StyleClass="SettingGrid">
                                 <Label VerticalOptions="Center" Text="System prompt"/>
                                 <Border  
-                                        x:Name="systemPromptBorder"
-                                        StrokeThickness="0.25"
-                                        StrokeShape="RoundRectangle 4" 
-                                        Padding="0, 8" 
-                                        Grid.ColumnSpan="2" 
-                                        Grid.Row="1" 
-                                        HeightRequest="120">
+                                    x:Name="systemPromptBorder"
+                                    StrokeThickness="0.25"
+                                    StrokeShape="RoundRectangle 4" 
+                                    Padding="0, 8" 
+                                    Grid.ColumnSpan="2" 
+                                    Grid.Row="1" 
+                                    HeightRequest="120">
                                     <Border.Triggers>
                                         <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference systemPromptBorder}, Path=IsFocused}" Value="True">
                                             <Setter Property="Stroke" Value="{StaticResource OnSurface}"/>
@@ -204,7 +203,7 @@
                                         </DataTrigger>
                                     </Border.Triggers>
 
-                                    <plainer:EditorView Unfocused="OnSystemPromptUnfocused" x:Name="systemPromptEditor" BackgroundColor="Transparent"  Text="{Binding SystemPrompt, Mode=TwoWay}"/>
+                                    <controls:CustomEditor Unfocused="OnSystemPromptUnfocused" x:Name="systemPromptEditor" BackgroundColor="Transparent"  Text="{Binding SystemPrompt, Mode=TwoWay}"/>
                                 </Border>
                             </Grid>
 
@@ -224,7 +223,7 @@
                                         </DataTrigger>
                                     </Border.Triggers>
 
-                                    <plainer:EntryView 
+                                    <controls:CustomEntry 
                                         x:Name="maxCompletionTokensEntry" 
                                         Unfocused="OnMaxCompletionTokensEntryUnfocused"
                                         Text="{Binding Source={x:Reference chatSettingsView}, Path=MaxCompletionTokensText, Mode=TwoWay}" 
