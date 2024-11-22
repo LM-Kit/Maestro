@@ -6,15 +6,13 @@
     xmlns:ui="clr-namespace:LMKitMaestro.UI"
     xmlns:models="clr-namespace:LMKitMaestro.Models"
     xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
-    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-    xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
-    xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
+    xmlns:controls="clr-namespace:LMKitMaestro.Controls"
     x:DataType="vm:ChatConversationActionPopupViewModel"
     x:Class="LMKitMaestro.UI.ChatConversationActionPopup">
 
     <ui:PopupBase.Resources>
         <ResourceDictionary>
-            <Style TargetType="uranium:StatefulContentView">
+            <Style TargetType="controls:StatefulContentView">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
@@ -70,23 +68,23 @@
                 <Grid HorizontalOptions="Start">
                     <VerticalStackLayout Padding="8, 0" HorizontalOptions="Fill" Spacing="0">
                         <Border StrokeShape="RoundRectangle 4" Stroke="Transparent" StrokeThickness="0">
-                            <uranium:StatefulContentView Padding="8" Tapped="OnSelectClicked">
+                            <controls:StatefulContentView Padding="8" Tapped="OnSelectClicked">
                                 <Label HorizontalOptions="Center" StyleClass="ChatActionText" Margin="0, 0" Text="Select"/>
-                            </uranium:StatefulContentView>
+                            </controls:StatefulContentView>
                         </Border>
                         <!--<BoxView Margin="4,0" HeightRequest="1"/>-->
 
                         <Border StrokeShape="RoundRectangle 4" Stroke="Transparent" StrokeThickness="0">
-                            <uranium:StatefulContentView Padding="8" Tapped="OnRenameClicked">
+                            <controls:StatefulContentView Padding="8" Tapped="OnRenameClicked">
                                 <Label HorizontalOptions="Center" StyleClass="ChatActionText" Margin="0, 0" Text="Rename"/>
-                            </uranium:StatefulContentView>
+                            </controls:StatefulContentView>
                         </Border>
                         <!--<BoxView Margin="4,0" HeightRequest="1"/>-->
 
                         <Border StrokeShape="RoundRectangle 4" Stroke="Transparent" StrokeThickness="0">
-                            <uranium:StatefulContentView Padding="8" Tapped="OnDeleteClicked">
+                            <controls:StatefulContentView Padding="8" Tapped="OnDeleteClicked">
                                 <Label HorizontalOptions="Center" TextColor="{StaticResource Error}" StyleClass="ChatActionText" Margin="0, 0" Text="Delete"/>
-                            </uranium:StatefulContentView>
+                            </controls:StatefulContentView>
                         </Border>
                     </VerticalStackLayout>
                 </Grid>

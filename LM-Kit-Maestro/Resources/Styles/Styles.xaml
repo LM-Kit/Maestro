@@ -4,8 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:LMKitMaestro"
-    xmlns:ui="clr-namespace:LMKitMaestro.UI"
-    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui">
+    xmlns:ui="clr-namespace:LMKitMaestro.UI">
 
 
     <Style TargetType="ActivityIndicator">
@@ -96,8 +95,8 @@
         <Setter Property="WidthRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="FontFamily" Value="MaterialRegular"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontFamily" Value="FASolid"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="Padding" Value="8"/>
         <Setter Property="BorderWidth" Value="0"/>
         <Setter Property="TextColor" Value="{StaticResource OnBackground}" />
@@ -118,7 +117,7 @@
                         </VisualState.Setters>
                     </VisualState>
 
-                    <VisualState x:Name="Hover">
+                    <VisualState x:Name="PointerOver">
                         <VisualState.Setters>
                             <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
                         </VisualState.Setters>
@@ -129,10 +128,10 @@
     </Style>
     
     <Style x:Key="SecondaryActionButtonStyle" TargetType="Button">
-        <Setter Property="FontFamily" Value="MaterialRegular"/>
+        <Setter Property="FontFamily" Value="FASolid"/>
         <Setter Property="CornerRadius" Value="16"/>
         <Setter Property="Padding" Value="8"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="WidthRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="BackgroundColor" Value="{StaticResource Background}"/>
@@ -276,6 +275,16 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+    </Style>
+
+    <Style TargetType="Label" Class="IconSmall">
+        <Setter Property="FontFamily" Value="FASolid"/>
+        <Setter Property="FontSize" Value="9"/>
+    </Style>
+    
+    <Style TargetType="Label" Class="Icon">
+        <Setter Property="FontFamily" Value="FASolid"/>
+        <Setter Property="FontSize" Value="12"/>
     </Style>
 
     <Style TargetType="Span">

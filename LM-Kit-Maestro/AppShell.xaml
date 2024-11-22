@@ -9,7 +9,6 @@
     xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:shell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
     xmlns:converters="clr-namespace:LMKitMaestro.Converters"
-    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False"
     Title="LM-Kit Maestro"

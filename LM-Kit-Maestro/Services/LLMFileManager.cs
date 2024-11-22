@@ -337,7 +337,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         await CollectModelFilesAsync();
     }
 
-    private void OnAppSettingsServicePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void OnAppSettingsServicePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IAppSettingsService.ModelsFolderPath))
         {

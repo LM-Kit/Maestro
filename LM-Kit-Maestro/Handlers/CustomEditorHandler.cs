@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Handlers;
+﻿using System;
+using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 
 #if ANDROID
@@ -10,24 +11,23 @@ using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 
 #if WINDOWS
 using Microsoft.UI.Xaml.Controls;
-using Windows.UI.Notifications;
 #endif
 
 namespace LMKitMaestro.Handlers;
 
-public partial class CustomEntryHandler : EntryHandler
+public partial class CustomEditorHandler : EditorHandler
 {
-    public CustomEntryHandler()
+    public CustomEditorHandler()
     {
     }
 
-    public CustomEntryHandler(IPropertyMapper? mapper = null) : base(mapper)
+    public CustomEditorHandler(IPropertyMapper mapper = null) : base(mapper)
     {
     }
 }
 
 #if ANDROID
-public partial class CustomEntryHandler : EntryHandler
+public partial class CustomEditorHandler : EditorHandler
 {
     protected override AppCompatEditText CreatePlatformView()
     {
@@ -35,7 +35,7 @@ public partial class CustomEntryHandler : EntryHandler
 
         using (var gradientDrawable = new GradientDrawable())
         {
-            gradientDrawable.SetColor(Android.Graphics.Color.Transparent);
+            gradientDrawable.SetColor(global::Android.Graphics.Color.Transparent);
             nativeView.SetBackground(gradientDrawable);
             nativeView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Colors.Transparent.ToAndroid());
         }
@@ -46,21 +46,16 @@ public partial class CustomEntryHandler : EntryHandler
 #endif
 
 #if IOS || MACCATALYST
-public partial class CustomEntryHandler  : EntryHandler
+public partial class CustomEditorHandler : EditorHandler
 {
-    protected override MauiTextField CreatePlatformView()
-    {
-        var nativeView = base.CreatePlatformView();
-
-        nativeView.BorderStyle = UIKit.UITextBorderStyle.None;
-
-        return nativeView;
-    }
+    /* No any custom implementation required
+     * Just keeping this handler to prevent build errors.
+     */
 }
 #endif
 
 #if WINDOWS
-public partial class CustomEntryHandler : EntryHandler
+public partial class CustomEditorHandler : EditorHandler
 {
     protected override TextBox CreatePlatformView()
     {

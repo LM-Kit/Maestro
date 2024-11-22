@@ -3,16 +3,13 @@ using Microsoft.Extensions.Logging;
 using LMKitMaestro.UI;
 using LMKitMaestro.ViewModels;
 using LMKitMaestro.Services;
-using UraniumUI;
 using LMKitMaestro.Data;
-using Plainer.Maui;
 using SimpleToolkit.SimpleShell;
 using LMKitMaestro.Handlers;
 using MetroLog.MicrosoftExtensions;
 using MetroLog.Operators;
 using Majorsoft.Blazor.Components.Common.JsInterop;
 using Mopups.Hosting;
-using Mopups.Interfaces;
 using Mopups.Services;
 
 namespace LMKitMaestro
@@ -26,13 +23,9 @@ namespace LMKitMaestro
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseSimpleShell()
-                .UseUraniumUI()
-                .UseUraniumUIMaterial()
                 .ConfigureMopups()
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     // Roboto
                     fonts.AddFont("Roboto-Thin.ttf", "RobotoThin");
                     fonts.AddFont("Roboto-Light.ttf", "RobotoLight");
@@ -46,13 +39,13 @@ namespace LMKitMaestro
                     fonts.AddFont("Segoe UI.ttf", "Segoe");
                     fonts.AddFont("Segoe UI Bold.ttf", "SegoeBold");
 
-                    fonts.AddFontAwesomeIconFonts();
-                    fonts.AddMaterialIconFonts();
+                    // FontAwesome
+                    fonts.AddFont("Font Awesome 6 Free-Regular-400.otf", "FARegular");
+                    fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FASolid");
                 })
                 .ConfigureMauiHandlers(handlers =>
                 {
                     handlers.AddCustomHandlers();
-                    handlers.AddPlainer();
                 });
 
             builder.Services.AddMauiBlazorWebView();
@@ -94,23 +87,23 @@ namespace LMKitMaestro
 
         private static void RegisterServices(this MauiAppBuilder builder)
         {
-            builder.Services.AddSingleton<IPopupNavigation>(MopupService.Instance);
+            builder.Services.AddSingleton(MopupService.Instance);
 
             builder.Services.AddSingleton<AppSettingsService>();
             builder.Services.AddSingleton<ILMKitMaestroDatabase, LMKitMaestroDatabase>();
             builder.Services.AddSingleton<ILLMFileManager, LLMFileManager>();
             builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
-            builder.Services.AddSingleton<LMKitMaestro.Services.IPopupService, LMKitMaestro.Services.PopupService>();
-            builder.Services.AddSingleton<LMKitMaestro.Services.ILauncher, LMKitMaestro.Services.Launcher>();
-            builder.Services.AddSingleton<LMKitMaestro.Services.INavigationService, LMKitMaestro.Services.NavigationService>();
-            builder.Services.AddSingleton<LMKitMaestro.Services.IMainThread, LMKitMaestro.Services.MainThread>();
+            builder.Services.AddSingleton<IPopupService, Services.PopupService>();
+            builder.Services.AddSingleton<Services.ILauncher, Services.Launcher>();
+            builder.Services.AddSingleton<INavigationService, NavigationService>();
+            builder.Services.AddSingleton<IMainThread, Services.MainThread>();
             builder.Services.AddSingleton<CommunityToolkit.Maui.Core.IPopupService, CommunityToolkit.Maui.PopupService>();
 
 #if WINDOWS
-            builder.Services.AddSingleton<LMKitMaestro.Services.IFolderPicker, LMKitMaestro.WinUI.FolderPicker>();
+            builder.Services.AddSingleton<IFolderPicker, WinUI.FolderPicker>();
 #endif
 
-            builder.Services.AddSingleton<IPreferences>(Preferences.Default);
+            builder.Services.AddSingleton(Preferences.Default);
             builder.Services.AddSingleton<LMKitService>();
             builder.Services.AddSingleton<LLMFileManager>();
             builder.Services.AddSingleton<HttpClient>();

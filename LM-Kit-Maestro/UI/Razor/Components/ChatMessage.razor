@@ -236,7 +236,7 @@
             {
                 if (!MessageViewModel.MessageInProgress)
                 {
-                    OnAssisantMessageJustTerminated();
+                    OnAssistantMessageJustTerminated();
 
                     if (MessageHtml != null && MessageHtml.Contains(ProgressIndicatorHtml))
                     {
@@ -249,7 +249,7 @@
         InvokeAsync(() => StateHasChanged());
     }
 
-    private void OnAssisantMessageJustTerminated()
+    private void OnAssistantMessageJustTerminated()
     {
         var _ = Task.Run(async () =>
         {

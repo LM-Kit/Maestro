@@ -8,9 +8,7 @@
              xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
              xmlns:services="clr-namespace:LMKitMaestro.Services"
              xmlns:controls="clr-namespace:LMKitMaestro.Controls"
-             xmlns:plainer="clr-namespace:Plainer.Maui.Controls;assembly=Plainer.Maui"
              xmlns:local="clr-namespace:LMKitMaestro"
-             xmlns:icons="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
              x:DataType="vm:SettingsViewModel"
              x:Name="chatSettingsView"
              >
@@ -166,13 +164,13 @@
                         <Grid RowDefinitions="*, auto">
                             <HorizontalStackLayout Padding="16" Spacing="8">
                                 <Label Text="General settings"/>
-                                <Label VerticalOptions="Center" FontFamily="MaterialRegular">
+                                <Label VerticalOptions="Center" StyleClass="IconSmall">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference generalSettingsExpander}, Path=IsExpanded}" Value="True">
-                                            <Setter Property="Text" Value="{x:Static icons:MaterialRegular.Keyboard_arrow_up}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronUp}"/>
                                         </DataTrigger>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference generalSettingsExpander}, Path=IsExpanded}" Value="False">
-                                            <Setter Property="Text" Value="{x:Static icons:MaterialRegular.Keyboard_arrow_right}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronDown}"/>
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>
@@ -189,13 +187,13 @@
                             <Grid StyleClass="SettingGrid">
                                 <Label VerticalOptions="Center" Text="System prompt"/>
                                 <Border  
-                                        x:Name="systemPromptBorder"
-                                        StrokeThickness="0.25"
-                                        StrokeShape="RoundRectangle 4" 
-                                        Padding="0, 8" 
-                                        Grid.ColumnSpan="2" 
-                                        Grid.Row="1" 
-                                        HeightRequest="120">
+                                    x:Name="systemPromptBorder"
+                                    StrokeThickness="0.25"
+                                    StrokeShape="RoundRectangle 4" 
+                                    Padding="0, 8" 
+                                    Grid.ColumnSpan="2" 
+                                    Grid.Row="1" 
+                                    HeightRequest="120">
                                     <Border.Triggers>
                                         <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference systemPromptBorder}, Path=IsFocused}" Value="True">
                                             <Setter Property="Stroke" Value="{StaticResource OnSurface}"/>
@@ -205,7 +203,7 @@
                                         </DataTrigger>
                                     </Border.Triggers>
 
-                                    <plainer:EditorView Unfocused="OnSystemPromptUnfocused" x:Name="systemPromptEditor" BackgroundColor="Transparent"  Text="{Binding SystemPrompt, Mode=TwoWay}"/>
+                                    <controls:CustomEditor Unfocused="OnSystemPromptUnfocused" x:Name="systemPromptEditor" BackgroundColor="Transparent"  Text="{Binding SystemPrompt, Mode=TwoWay}"/>
                                 </Border>
                             </Grid>
 
@@ -225,7 +223,7 @@
                                         </DataTrigger>
                                     </Border.Triggers>
 
-                                    <plainer:EntryView 
+                                    <controls:CustomEntry 
                                         x:Name="maxCompletionTokensEntry" 
                                         Unfocused="OnMaxCompletionTokensEntryUnfocused"
                                         Text="{Binding Source={x:Reference chatSettingsView}, Path=MaxCompletionTokensText, Mode=TwoWay}" 
@@ -272,13 +270,16 @@
                         <Grid RowDefinitions="*, auto">
                             <HorizontalStackLayout Padding="16" Spacing="8">
                                 <Label Text="Sampling configuration"/>
-                                <Label VerticalOptions="Center" FontFamily="MaterialRegular" Text="{x:Static icons:MaterialRegular.Keyboard_arrow_right}">
+                                <Label 
+                                    VerticalOptions="Center" 
+                                    StyleClass="IconSmall"
+                                    Text="{StaticResource ChevronRight}">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded}" Value="True">
-                                            <Setter Property="Text" Value="{x:Static icons:MaterialRegular.Keyboard_arrow_up}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronUp}"/>
                                         </DataTrigger>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded}" Value="False">
-                                            <Setter Property="Text" Value="{x:Static icons:MaterialRegular.Keyboard_arrow_right}"/>
+                                            <Setter Property="Text" Value="{StaticResource ChevronDown}"/>
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>
