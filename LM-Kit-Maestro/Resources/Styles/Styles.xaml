@@ -96,8 +96,8 @@
         <Setter Property="WidthRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="FontFamily" Value="MaterialRegular"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontFamily" Value="FASolid"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="Padding" Value="8"/>
         <Setter Property="BorderWidth" Value="0"/>
         <Setter Property="TextColor" Value="{StaticResource OnBackground}" />
@@ -129,10 +129,10 @@
     </Style>
     
     <Style x:Key="SecondaryActionButtonStyle" TargetType="Button">
-        <Setter Property="FontFamily" Value="MaterialRegular"/>
+        <Setter Property="FontFamily" Value="FASolid"/>
         <Setter Property="CornerRadius" Value="16"/>
         <Setter Property="Padding" Value="8"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="WidthRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="BackgroundColor" Value="{StaticResource Background}"/>
@@ -279,8 +279,8 @@
     </Style>
 
     <Style TargetType="Label" Class="Icon">
-        <Setter Property="FontFamily" Value="FA"/>
-        <Setter Property="FontSize" Value="9"/>
+        <Setter Property="FontFamily" Value="FASolid"/>
+        <Setter Property="FontSize" Value="12"/>
     </Style>
 
     <Style TargetType="Span">

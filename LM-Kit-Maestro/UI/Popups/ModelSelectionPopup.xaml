@@ -53,7 +53,7 @@
                     Text="Go to Models tab"
                     Clicked="OnCloseButtonClicked"
                     Command="{Binding NavigateToModelPageCommand}"
-                    Icon="{x:Static icons:MaterialRegular.Download}"/>
+                    Icon="{StaticResource Download}"/>
             </Grid>
 
             <!-- Model list view -->

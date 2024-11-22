@@ -27,7 +27,7 @@
                 <Setter Property="Padding" Value="0"/>
                 <Setter Property="ToolTipProperties.Text" Value="Eject model"/>
                 <Setter Property="TextColor" Value="{StaticResource Primary}"/>
-                <Setter Property="FontFamily" Value="FA"/>
+                <Setter Property="FontFamily" Value="FASolid"/>
                 <Setter Property="Text" Value="{StaticResource Eject}"/>
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
@@ -173,7 +173,7 @@
                         HorizontalOptions="End"
                         Grid.Column="2"
                         VerticalOptions="Center"
-                        FontFamily="FA"
+                        FontFamily="FASolid"
                         FontSize="9"
                         TextColor="{StaticResource Outline}"
                         Text="{StaticResource ChevronDown}">

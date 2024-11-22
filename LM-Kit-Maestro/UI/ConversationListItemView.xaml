@@ -163,9 +163,9 @@
                     StyleClass="RegularAction"
                     ZIndex="2"
                     Grid.Column="2"
-                    FontSize="20"
+                    FontSize="16"
                     Clicked="OnShowMoreButtonClicked"
-                    FontFamily="FA"
+                    FontFamily="FASolid"
                     Text="{StaticResource Ellipsis}">
                     <Button.IsVisible>
                         <MultiBinding Converter="{StaticResource AnyTrueConverter}">

@@ -58,10 +58,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Resources\Fonts\FontAwesome.otf" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<MauiCss Include="wwwroot\css\font-awesome.css" />
 		<MauiCss Include="wwwroot\css\font-awesome.min.css" />
 	</ItemGroup>

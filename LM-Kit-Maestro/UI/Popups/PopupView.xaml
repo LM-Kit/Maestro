@@ -42,7 +42,8 @@
                     IsVisible="{Binding Source={x:Reference popupView}, Path=ShowCloseButton}"
                     Clicked="OnCloseButtonClicked"
                     CornerRadius="20"
-                    HorizontalOptions="End" Text="{x:Static icons:MaterialRegular.Close}" 
+                    HorizontalOptions="End" 
+                    Text="{StaticResource Xmark}" 
                     Style="{StaticResource SecondaryActionButtonStyle}">
                 </Button>
 
