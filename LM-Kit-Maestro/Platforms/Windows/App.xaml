@@ -6,14 +6,23 @@
     xmlns:local="using:LMKitMaestro.WinUI">
     <maui:MauiWinUIApplication.Resources>
         <DataTemplate x:Key="MauiAppTitleBarTemplate">
+
+                    <!--Background="#512BD4"-->
             <Grid >
                 <Border
-                    Background="#512BD4"
+                    Background="#12181F"
                     Canvas.ZIndex="1"
                     Padding="0"
                     VerticalAlignment="Stretch"
                     Margin="0,0,0,0">
                     
+                    <!--<TextBlock
+                        FontSize="12"
+                        FontFamily="Segoe"
+                        Foreground="#FFFFFF"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Text="LM-Kit Maestro"/>-->
                 </Border>
             </Grid>
         </DataTemplate>

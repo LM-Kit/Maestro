@@ -1,18 +1,18 @@
 ﻿using CommunityToolkit.Maui;
-using LMKitMaestro.Data;
-using LMKitMaestro.Handlers;
-using LMKitMaestro.Services;
+using Microsoft.Extensions.Logging;
 using LMKitMaestro.UI;
 using LMKitMaestro.ViewModels;
-using Majorsoft.Blazor.Components.Common.JsInterop;
+using LMKitMaestro.Services;
+using LMKitMaestro.Data;
+using SimpleToolkit.SimpleShell;
+using LMKitMaestro.Handlers;
 using MetroLog.MicrosoftExtensions;
 using MetroLog.Operators;
-using Microsoft.Extensions.Logging;
+using Majorsoft.Blazor.Components.Common.JsInterop;
 using Mopups.Hosting;
 using Mopups.Services;
-using SimpleToolkit.SimpleShell;
 
-namespace LMKitMaestro 
+namespace LMKitMaestro
 {
     public static class MauiProgram
     {
