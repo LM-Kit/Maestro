@@ -10,7 +10,7 @@
     xmlns:vm="clr-namespace:LMKit.Maestro.ViewModels"
     x:Class="LMKit.Maestro.UI.TopBarScaffold">
     <Grid 
-        HeightRequest="{x:Static local:AppConstants.ChatPageTopBarHeight}"
+        HeightRequest="128"
         BackgroundColor="{StaticResource Surface}">
     </Grid>
 </ContentView>

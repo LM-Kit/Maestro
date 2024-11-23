@@ -28,11 +28,9 @@ internal static class AppConstants
 
     public const double AlertPopupWidth = 400;
 
-    public const double TabBarHeight = 64;
+    public const double TabBarHeight = 48;
 
     public const double PageTopBarHeight = 64;
-
-    public const double ChatPageTopBarHeight = TabBarHeight + 64 - 8;
 
     public const double ModelSelectionButtonMaxWidth = 568;
 

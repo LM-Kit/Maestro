@@ -54,10 +54,9 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!--<BoxView Grid.RowSpan="" HeightRequest="1" VerticalOptions="Start"/>-->
-            <!--<BoxView Grid.RowSpan="3" HeightRequest="1" VerticalOptions="End"/>-->
 
-            <Grid BackgroundColor="Transparent">
+            <Grid BackgroundColor="{StaticResource Primary}"/>
+            <Border StrokeThickness="0" BackgroundColor="{StaticResource Surface}" Stroke="Transparent" StrokeShape="RoundRectangle 4 4 0 0" ZIndex="1">
                 <Grid Padding="12, 0">
                     <HorizontalStackLayout
                         VerticalOptions="Center"
@@ -85,7 +84,7 @@
                         </BindableLayout.ItemTemplate>
                     </HorizontalStackLayout>
                 </Grid>
-            </Grid>
+            </Border>
 
             <shell:SimpleNavigationHost Grid.Row="1"/>
         </Grid>

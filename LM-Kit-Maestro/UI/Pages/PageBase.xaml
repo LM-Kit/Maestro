@@ -6,13 +6,16 @@
              Title="PageBase"
              x:Name="pageBase"
              >
-    <Grid RowDefinitions="auto, *">
+    <Grid RowDefinitions="auto, 1, *">
+        <Border StrokeThickness="0" BackgroundColor="{StaticResource Surface}" Stroke="Transparent" StrokeShape="RoundRectangle 0 0 0 0" ZIndex="1">
+            <ContentView 
+                HeightRequest="{x:Static local:AppConstants.PageTopBarHeight}"
+                Content="{Binding Source={x:Reference pageBase}, Path=Header}"/>
+        </Border>
+
+        <BoxView Grid.Row="1" />
         <ContentView 
-            BackgroundColor="Red"
-            HeightRequest="{x:Static local:AppConstants.PageTopBarHeight}"
-            Content="{Binding Source={x:Reference pageBase}, Path=Header}"/>
-        <ContentView 
-            Grid.Row="1"
+            Grid.Row="2"
             Content="{Binding Source={x:Reference pageBase}, Path=Body}"/>
     </Grid>
 </ContentPage>
