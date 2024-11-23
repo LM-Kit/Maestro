@@ -1,4 +1,4 @@
-namespace LMKit.Maestro.UI.Pages;
+namespace LMKit.Maestro.UI;
 
 public partial class PageBase : ContentPage
 {
