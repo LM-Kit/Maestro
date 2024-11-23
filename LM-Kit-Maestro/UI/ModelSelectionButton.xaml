@@ -161,7 +161,7 @@
 
                             <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
                                 <Setter Property="TextColor" Value="{StaticResource Outline}"/>
-                                <Setter Property="Text" Value="Chat Playground is initializing..."/>
+                                <Setter Property="Text" Value="Maestro is initializing..."/>
                             </DataTrigger>
                         </Label.Triggers>
                     </Label>
