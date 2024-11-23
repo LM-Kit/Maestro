@@ -40,11 +40,10 @@ namespace LMKit.Maestro
                     fonts.AddFont("Segoe UI Bold.ttf", "SegoeBold");
 
                     fonts.AddFont("MaterialIcons-Regular.ttf", "Material");
-                    //fonts.AddFont("fontawesome-webfont.ttf", "Material");
-                    //fonts.AddFont("FontAwesome.ttf", "Material");
+                    fonts.AddFont("Font Awesome 6 Free-Solid-900.ttf", "FA");
                     // FontAwesome
                     //fonts.AddFont("Font Awesome 6 Free-Regular-400.otf", "FARegular");
-                    //fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "Material");
+                    //fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FA");
                 })
                 .ConfigureMauiHandlers(handlers =>
                 {

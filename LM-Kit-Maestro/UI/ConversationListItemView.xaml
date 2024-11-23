@@ -162,7 +162,7 @@
                     Grid.Column="2"
                     FontSize="16"
                     Clicked="OnShowMoreButtonClicked"
-                    FontFamily="FASolid"
+                    FontFamily="FA"
                     Text="{StaticResource Ellipsis}">
                     <Button.IsVisible>
                         <MultiBinding Converter="{StaticResource AnyTrueConverter}">

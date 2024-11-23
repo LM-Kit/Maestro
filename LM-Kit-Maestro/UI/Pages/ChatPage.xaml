@@ -88,7 +88,7 @@
 
                 <Button
                     Style="{StaticResource SidebarToggleButtonStyle}"
-                    Text="{StaticResource Comments}"
+                    Text="{StaticResource ChevronDown}"
                     Command="{Binding ToggleChatsSidebarCommand}"
                     HorizontalOptions="Start"/>
 
@@ -103,7 +103,7 @@
                     ToolTipProperties.Text="Start a new chat"
                     Style="{StaticResource SecondaryActionButtonStyle}"
                     Grid.Column="2" 
-                    FontFamily="FASolid"
+                    FontFamily="FA"
                     Text="{StaticResource Plus}"
                     Command="{Binding StartNewConversationCommand}"/>
             </Grid>
