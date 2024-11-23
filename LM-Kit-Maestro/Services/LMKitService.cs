@@ -423,7 +423,7 @@ public partial class LMKitService : INotifyPropertyChanged
             {
                 ChatHistory? chatHistory = shouldUseCurrentChatHistory ? conversation.ChatHistory : ChatHistory.Deserialize(conversation.LatestChatHistoryData, _model);
 
-                _multiTurnConversation = new MultiTurnConversation(_model, chatHistory)
+                _multiTurnConversation = new MultiTurnConversation(_model, chatHistory, LMKitConfig.ContextSize)
                 {
                     SamplingMode = GetTokenSampling(LMKitConfig),
                     MaximumCompletionTokens = LMKitConfig.MaximumCompletionTokens,
@@ -442,6 +442,17 @@ public partial class LMKitService : INotifyPropertyChanged
             conversation.ChatHistory = _multiTurnConversation.ChatHistory;
             conversation.LastUsedModelUri = LMKitConfig.LoadedModelUri;
             _lastConversationUsed = conversation;
+        }
+        else //updating sampling options, if any.
+        {
+            //todo: Implement a mechanism to determine whether SamplingMode and MaximumCompletionTokens need to be updated.
+            _multiTurnConversation.SamplingMode = GetTokenSampling(LMKitConfig);
+            _multiTurnConversation.MaximumCompletionTokens = LMKitConfig.MaximumCompletionTokens;
+
+            if (LMKitConfig.ContextSize != _multiTurnConversation.ContextSize)
+            {
+                //todo: implement context size update.
+            }
         }
 
         if (_singleTurnConversation == null)
