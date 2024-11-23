@@ -173,7 +173,7 @@
                         Grid.Column="2"
                         VerticalOptions="Center"
                         StyleClass="IconSmall"
-                        TextColor="{StaticResource Outline}"
+                        TextColor="{StaticResource Outline}">
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
                                 <Setter Property="IsVisible" Value="False"/>
