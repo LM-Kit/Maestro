@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using LMKitMaestro.Services;
-using LMKitMaestro.Helpers;
+using LMKit.Maestro.Services;
+using LMKit.Maestro.Helpers;
 
-namespace LMKitMaestro.ViewModels;
+namespace LMKit.Maestro.ViewModels;
 
 public partial class AppShellViewModel : ViewModelBase
 {
@@ -21,22 +21,22 @@ public partial class AppShellViewModel : ViewModelBase
     private bool _appIsInitialized = false;
 
     [ObservableProperty]
-    List<LMKitMaestroTabViewModel> _tabs = new List<LMKitMaestroTabViewModel>();
+    List<MaestroTabViewModel> _tabs = new List<MaestroTabViewModel>();
 
     [ObservableProperty]
-    LMKitMaestroTabViewModel _homeTab = new LMKitMaestroTabViewModel("Home", "HomePage");
+    MaestroTabViewModel _homeTab = new MaestroTabViewModel("Home", "HomePage");
 
     [ObservableProperty]
-    LMKitMaestroTabViewModel _chatTab = new LMKitMaestroTabViewModel("Chat", "ChatPage");
+    MaestroTabViewModel _chatTab = new MaestroTabViewModel("Chat", "ChatPage");
 
     [ObservableProperty]
-    LMKitMaestroTabViewModel _modelsTab = new LMKitMaestroTabViewModel("Models", "ModelsPage");
+    MaestroTabViewModel _modelsTab = new MaestroTabViewModel("Models", "ModelsPage");
 
     [ObservableProperty]
-    LMKitMaestroTabViewModel _assistantsTab = new LMKitMaestroTabViewModel("Assistants", "AssistantsPage");
+    MaestroTabViewModel _assistantsTab = new MaestroTabViewModel("Assistants", "AssistantsPage");
 
-    private LMKitMaestroTabViewModel? _currentTab;
-    public LMKitMaestroTabViewModel CurrentTab
+    private MaestroTabViewModel? _currentTab;
+    public MaestroTabViewModel CurrentTab
     {
         get => _currentTab!;
         set
@@ -156,7 +156,7 @@ public partial class AppShellViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task Navigate(LMKitMaestroTabViewModel tab)
+    private async Task Navigate(MaestroTabViewModel tab)
     {
         if (!tab.IsSelected)
         {

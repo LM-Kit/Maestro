@@ -1,15 +1,15 @@
-﻿using LMKitMaestro.Services;
-using LMKitMaestro.Tests.Services;
+﻿using LMKit.Maestro.Services;
+using LMKit.Maestro.Tests.Services;
 using System.Reflection;
 using System.Text;
 
-namespace LMKitMaestro.Tests
+namespace LMKit.Maestro.Tests
 {
-    internal static class LMKitMaestroTestsHelpers
+    internal static class MaestroTestsHelpers
     {
         public static void AssertPromptResponseIsSuccessful(LMKitService.PromptResult promptResult)
         {
-            Assert.Equal(promptResult.Status, LmKitTextGenerationStatus.Undefined);
+            Assert.Equal(promptResult.Status, LMKitTextGenerationStatus.Undefined);
             Assert.Null(promptResult.Exception);
             Assert.NotNull(promptResult.TextGenerationResult);
         }
@@ -18,8 +18,8 @@ namespace LMKitMaestro.Tests
         {
             Assert.True(testConversation.PromptResultTask.Task.Result);
             Assert.True(testConversation.ConversationViewModel.Messages.Count == expectedMessageCount);
-            Assert.Equal(LmKitTextGenerationStatus.Undefined, testConversation.ConversationViewModel.Messages[0].Status);
-            Assert.Equal(LmKitTextGenerationStatus.Undefined, testConversation.ConversationViewModel.Messages[1].Status);
+            Assert.Equal(LMKitTextGenerationStatus.Undefined, testConversation.ConversationViewModel.Messages[0].Status);
+            Assert.Equal(LMKitTextGenerationStatus.Undefined, testConversation.ConversationViewModel.Messages[1].Status);
             Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[0].Text));
             Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[1].Text));
             Assert.False(testConversation.ConversationViewModel.AwaitingResponse);
@@ -30,8 +30,8 @@ namespace LMKitMaestro.Tests
         {
             Assert.False(testConversation.PromptResultTask.Task.Result);
             Assert.Equal(2, testConversation.ConversationViewModel.Messages.Count);
-            Assert.Equal(LmKitTextGenerationStatus.Cancelled, testConversation.ConversationViewModel.Messages[0].Status);
-            Assert.Equal(LmKitTextGenerationStatus.Cancelled, testConversation.ConversationViewModel.Messages[1].Status);
+            Assert.Equal(LMKitTextGenerationStatus.Cancelled, testConversation.ConversationViewModel.Messages[0].Status);
+            Assert.Equal(LMKitTextGenerationStatus.Cancelled, testConversation.ConversationViewModel.Messages[1].Status);
             Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[0].Text));
             //Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[1].Text));
             Assert.False(testConversation.ConversationViewModel.AwaitingResponse);
@@ -42,7 +42,7 @@ namespace LMKitMaestro.Tests
         {
             var assembly = Assembly.GetExecutingAssembly();
 
-            using (Stream chatHistoryStream = assembly!.GetManifestResourceStream("LMKitMaestroTests.ChatHistorySerialized.txt")!)
+            using (Stream chatHistoryStream = assembly!.GetManifestResourceStream("MaestroTests.ChatHistorySerialized.txt")!)
             using (StreamReader reader = new(chatHistoryStream))
             {
                 string result = reader.ReadToEnd();

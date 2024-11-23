@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Text.Json;
 
-namespace LMKitMaestro.Services;
+namespace LMKit.Maestro.Services;
 
 
 public partial class AppSettingsService : ObservableObject, IAppSettingsService

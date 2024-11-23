@@ -1,6 +1,6 @@
-﻿using LMKitMaestro.Services;
+﻿using LMKit.Maestro.Services;
 
-namespace LMKitMaestro.WinUI;
+namespace LMKit.Maestro.WinUI;
 
 internal class FolderPicker : IFolderPicker
 {

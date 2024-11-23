@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LMKitMaestro.Services;
+using LMKit.Maestro.Services;
 using LMKit.TextGeneration;
 
-namespace LMKitMaestro.ViewModels
+namespace LMKit.Maestro.ViewModels
 {
     public partial class TranslationViewModel : AssistantSessionViewModelBase
     {

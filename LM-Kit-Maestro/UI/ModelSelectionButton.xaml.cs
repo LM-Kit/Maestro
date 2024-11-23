@@ -1,7 +1,7 @@
-using LMKitMaestro.ViewModels;
-using LMKitMaestro.Services;
+using LMKit.Maestro.ViewModels;
+using LMKit.Maestro.Services;
 
-namespace LMKitMaestro.UI;
+namespace LMKit.Maestro.UI;
 
 public partial class ModelSelectionButton : ContentView
 {
@@ -48,8 +48,8 @@ public partial class ModelSelectionButton : ContentView
 
         if (BindingContext is ModelListViewModel modelListViewModel)
         {
-            modelListViewModel.LmKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
-            modelListViewModel.LmKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
+            modelListViewModel.LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
+            modelListViewModel.LMKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
             _modelListViewModel = modelListViewModel;
         }
     }

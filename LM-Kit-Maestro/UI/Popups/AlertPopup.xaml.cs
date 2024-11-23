@@ -1,7 +1,7 @@
-using LMKitMaestro.ViewModels;
+using LMKit.Maestro.ViewModels;
 using Mopups.Interfaces;
 
-namespace LMKitMaestro.UI;
+namespace LMKit.Maestro.UI;
 
 public partial class AlertPopup : PopupView
 {

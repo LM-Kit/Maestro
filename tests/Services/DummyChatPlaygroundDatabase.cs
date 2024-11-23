@@ -1,9 +1,9 @@
-﻿using LMKitMaestro.Data;
-using LMKitMaestro.Models;
+﻿using LMKit.Maestro.Data;
+using LMKit.Maestro.Models;
 
-namespace LMKitMaestro.Tests.Services;
+namespace LMKit.Maestro.Tests.Services;
 
-internal class DummyLMKitMaestroDatabase : ILMKitMaestroDatabase
+internal class DummyMaestroDatabase : IMaestroDatabase
 {
     public List<ConversationLog> Conversations = new();
 

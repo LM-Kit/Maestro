@@ -2,15 +2,15 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:local="clr-namespace:LMKitMaestro"
-             xmlns:ui="clr-namespace:LMKitMaestro.UI"
-             xmlns:razor="clr-namespace:LMKitMaestro.UI.Razor.Components"
-             xmlns:models="clr-namespace:LMKitMaestro.Models"
-             xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
-             xmlns:controls="clr-namespace:LMKitMaestro.Controls"
-             xmlns:converters="clr-namespace:LMKitMaestro.Converters"
-             xmlns:services="clr-namespace:LMKitMaestro.Services"
-             x:Class="LMKitMaestro.UI.ChatView"
+             xmlns:local="clr-namespace:LMKit.Maestro"
+             xmlns:ui="clr-namespace:LMKit.Maestro.UI"
+             xmlns:razor="clr-namespace:LMKit.Maestro.UI.Razor.Components"
+             xmlns:models="clr-namespace:LMKit.Maestro.Models"
+             xmlns:vm="clr-namespace:LMKit.Maestro.ViewModels"
+             xmlns:controls="clr-namespace:LMKit.Maestro.Controls"
+             xmlns:converters="clr-namespace:LMKit.Maestro.Converters"
+             xmlns:services="clr-namespace:LMKit.Maestro.Services"
+             x:Class="LMKit.Maestro.UI.ChatView"
              x:DataType="vm:ConversationViewModel"
              IsEnabled="{Binding ., Converter={mct:IsNotNullConverter}}"
              x:Name="chatView"
@@ -145,7 +145,7 @@
                             <Binding Source="{RelativeSource AncestorType={x:Type vm:AppShellViewModel}}" Path="AppIsInitialized"/>
                             <Binding Source="{RelativeSource AncestorType={x:Type vm:ConversationViewModel}}" Path="IsInitialized"/>
                             <Binding Source="{RelativeSource AncestorType={x:Type vm:ConversationViewModel}}" Path="LastUsedModel" Converter="{mct:IsNotNullConverter}"/>
-                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LmKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static services:LmKitModelLoadingState.Unloaded}"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LMKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static services:LMKitModelLoadingState.Unloaded}"/>
                         </MultiBinding>
                     </DataTrigger.Binding>
                     <Setter Property="IsVisible" Value="True"/>
@@ -156,7 +156,7 @@
                         <MultiBinding Converter="{StaticResource AllTrueConverter}">
                             <Binding Source="{RelativeSource AncestorType={x:Type vm:AppShellViewModel}}" Path="AppIsInitialized"/>
                             <Binding Path="UsedDifferentModel"/>
-                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LmKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static services:LmKitModelLoadingState.Loaded}"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LMKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static services:LMKitModelLoadingState.Loaded}"/>
                         </MultiBinding>
                     </DataTrigger.Binding>
                     <Setter Property="IsVisible" Value="True"/>

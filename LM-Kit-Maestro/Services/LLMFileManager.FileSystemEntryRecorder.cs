@@ -1,7 +1,7 @@
-﻿using LMKitMaestro.Helpers;
+﻿using LMKit.Maestro.Helpers;
 using System.Diagnostics;
 
-namespace LMKitMaestro.Services;
+namespace LMKit.Maestro.Services;
 
 public partial class LLMFileManager
 {

@@ -1,4 +1,4 @@
-﻿namespace LMKitMaestro.Services;
+﻿namespace LMKit.Maestro.Services;
 
 internal sealed class MainThread : IMainThread
 {

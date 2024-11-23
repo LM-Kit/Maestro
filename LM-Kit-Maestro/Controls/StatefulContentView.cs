@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace LMKitMaestro.Controls
+namespace LMKit.Maestro.Controls
 {
     public class StatefulContentView : ContentView
     {

@@ -1,4 +1,4 @@
-﻿namespace LMKitMaestro.Services;
+﻿namespace LMKit.Maestro.Services;
 
 public enum SamplingMode
 {
@@ -7,14 +7,14 @@ public enum SamplingMode
     Mirostat2
 }
 
-public enum LmKitModelLoadingState
+public enum LMKitModelLoadingState
 {
     Unloaded,
     Loading,
     Loaded
 }
 
-public enum LmKitTextGenerationStatus
+public enum LMKitTextGenerationStatus
 {
     Undefined,
     Cancelled,

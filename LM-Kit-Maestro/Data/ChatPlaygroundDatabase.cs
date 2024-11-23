@@ -1,11 +1,11 @@
-﻿using LMKitMaestro.Models;
+﻿using LMKit.Maestro.Models;
 using SQLite;
 
-namespace LMKitMaestro.Data
+namespace LMKit.Maestro.Data
 {
-    public sealed class LMKitMaestroDatabase : ILMKitMaestroDatabase
+    public sealed class MaestroDatabase : IMaestroDatabase
     {
-        public static string DatabasePath => Path.Combine(FileSystem.AppDataDirectory, "LMKitMaestroSQLite.db3");
+        public static string DatabasePath => Path.Combine(FileSystem.AppDataDirectory, "MaestroSQLite.db3");
 
         private SQLiteAsyncConnection? _sqlDatabase;
 

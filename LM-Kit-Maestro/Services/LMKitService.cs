@@ -4,7 +4,7 @@ using LMKit.TextGeneration.Sampling;
 using LMKit.TextGeneration.Chat;
 using LMKit.Translation;
 
-namespace LMKitMaestro.Services;
+namespace LMKit.Maestro.Services;
 
 public partial class LMKitService : INotifyPropertyChanged
 {
@@ -31,8 +31,8 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public delegate void NotifyModelStateChangedEventHandler(object? sender, NotifyModelStateChangedEventArgs notifyModelStateChangedEventArgs);
 
-    private LmKitModelLoadingState _modelLoadingState;
-    public LmKitModelLoadingState ModelLoadingState
+    private LMKitModelLoadingState _modelLoadingState;
+    public LMKitModelLoadingState ModelLoadingState
     {
         get => _modelLoadingState;
         set
@@ -51,7 +51,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         _lmKitServiceSemaphore.Wait();
         _currentlyLoadingModelUri = fileUri;
-        ModelLoadingState = LmKitModelLoadingState.Loading;
+        ModelLoadingState = LMKitModelLoadingState.Loading;
 
         var modelLoadingTask = new Task(() =>
         {
@@ -78,11 +78,11 @@ public partial class LMKitService : INotifyPropertyChanged
             {
                 LMKitConfig.LoadedModelUri = fileUri!;
                 ModelLoadingCompleted?.Invoke(this, new NotifyModelStateChangedEventArgs(LMKitConfig.LoadedModelUri));
-                ModelLoadingState = LmKitModelLoadingState.Loaded;
+                ModelLoadingState = LMKitModelLoadingState.Loaded;
             }
             else
             {
-                ModelLoadingState = LmKitModelLoadingState.Unloaded;
+                ModelLoadingState = LMKitModelLoadingState.Unloaded;
             }
 
         });
@@ -134,7 +134,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         _singleTurnConversation = null;
         _lastConversationUsed = null;
-        ModelLoadingState = LmKitModelLoadingState.Unloaded;
+        ModelLoadingState = LMKitModelLoadingState.Unloaded;
         LMKitConfig.LoadedModelUri = null;
 
         ModelUnloaded?.Invoke(this, new NotifyModelStateChangedEventArgs(unloadedModelUri));
@@ -197,11 +197,11 @@ public partial class LMKitService : INotifyPropertyChanged
 
         TranslationResult translationResult;
 
-        if (translationRequest.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LmKitModelLoadingState.Unloaded)
+        if (translationRequest.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
         {
             translationResult = new TranslationResult()
             {
-                Status = LmKitTextGenerationStatus.Cancelled
+                Status = LMKitTextGenerationStatus.Cancelled
             };
 
             _lmKitServiceSemaphore.Release();
@@ -231,11 +231,11 @@ public partial class LMKitService : INotifyPropertyChanged
 
         PromptResult promptResult;
 
-        if (promptRequest.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LmKitModelLoadingState.Unloaded)
+        if (promptRequest.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
         {
             promptResult = new PromptResult()
             {
-                Status = LmKitTextGenerationStatus.Cancelled
+                Status = LMKitTextGenerationStatus.Cancelled
             };
 
             _lmKitServiceSemaphore.Release();
@@ -277,11 +277,11 @@ public partial class LMKitService : INotifyPropertyChanged
 
                 if (result.Exception is OperationCanceledException)
                 {
-                    result.Status = LmKitTextGenerationStatus.Cancelled;
+                    result.Status = LMKitTextGenerationStatus.Cancelled;
                 }
                 else
                 {
-                    result.Status = LmKitTextGenerationStatus.UnknownError;
+                    result.Status = LMKitTextGenerationStatus.UnknownError;
                 }
             }
 
@@ -290,7 +290,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 promptRequest.Conversation.ChatHistory = _multiTurnConversation.ChatHistory;
                 promptRequest.Conversation.LatestChatHistoryData = _multiTurnConversation.ChatHistory.Serialize();
 
-                if (promptRequest.Conversation.GeneratedTitleSummary == null && result.Status == LmKitTextGenerationStatus.Undefined && result.TextGenerationResult?.Completion != null)
+                if (promptRequest.Conversation.GeneratedTitleSummary == null && result.Status == LMKitTextGenerationStatus.Undefined && result.TextGenerationResult?.Completion != null)
                 {
                     GenerateConversationSummaryTitle(promptRequest.Conversation, promptRequest.Prompt, result.TextGenerationResult?.Completion!);
                 }
@@ -298,7 +298,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             if (result.Exception != null && promptRequest.CancellationTokenSource.IsCancellationRequested)
             {
-                result.Status = LmKitTextGenerationStatus.Cancelled;
+                result.Status = LMKitTextGenerationStatus.Cancelled;
             }
 
             return result;
@@ -308,7 +308,7 @@ public partial class LMKitService : INotifyPropertyChanged
             return new PromptResult()
             {
                 Exception = exception,
-                Status = LmKitTextGenerationStatus.UnknownError
+                Status = LMKitTextGenerationStatus.UnknownError
             };
         }
         finally
@@ -335,18 +335,18 @@ public partial class LMKitService : INotifyPropertyChanged
 
                 if (result.Exception is OperationCanceledException)
                 {
-                    result.Status = LmKitTextGenerationStatus.Cancelled;
+                    result.Status = LMKitTextGenerationStatus.Cancelled;
                 }
                 else
                 {
-                    result.Status = LmKitTextGenerationStatus.UnknownError;
+                    result.Status = LMKitTextGenerationStatus.UnknownError;
                 }
             }
 
 
             if (result.Exception != null && translationRequest.CancellationTokenSource.IsCancellationRequested)
             {
-                result.Status = LmKitTextGenerationStatus.Cancelled;
+                result.Status = LMKitTextGenerationStatus.Cancelled;
             }
 
             return result;
@@ -356,7 +356,7 @@ public partial class LMKitService : INotifyPropertyChanged
             return new TranslationResult()
             {
                 Exception = exception,
-                Status = LmKitTextGenerationStatus.UnknownError
+                Status = LMKitTextGenerationStatus.UnknownError
             };
         }
         finally
@@ -493,7 +493,7 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    private sealed class PromptSchedule<T> where T : LmKitRequestBase
+    private sealed class PromptSchedule<T> where T : LMKitRequestBase
     {
         private readonly object _locker = new object();
 
@@ -567,7 +567,7 @@ public partial class LMKitService : INotifyPropertyChanged
             {
                 foreach (var scheduledPrompt in _scheduledPrompts)
                 {
-                    if (scheduledPrompt is LmKitPromptRequestBase promptRequestBase && promptRequestBase.Conversation == conversation)
+                    if (scheduledPrompt is LMKitPromptRequestBase promptRequestBase && promptRequestBase.Conversation == conversation)
                     {
                         prompt = scheduledPrompt;
                         break;
@@ -600,14 +600,14 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    private sealed class PromptRequest : LmKitPromptRequestBase
+    private sealed class PromptRequest : LMKitPromptRequestBase
     {
         public PromptRequest(Conversation conversation, string prompt, int requestTimeout) : base(conversation, prompt, requestTimeout)
         {
         }
     }
 
-    private sealed class TitleGenerationRequest : LmKitPromptRequestBase
+    private sealed class TitleGenerationRequest : LMKitPromptRequestBase
     {
         public string Response { get; }
 
@@ -617,7 +617,7 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    private sealed class TranslationRequest : LmKitRequestBase
+    private sealed class TranslationRequest : LMKitRequestBase
     {
         public TaskCompletionSource<TranslationResult> TranslationTask { get; } = new TaskCompletionSource<TranslationResult>();
 
@@ -631,7 +631,7 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    private abstract class LmKitRequestBase
+    private abstract class LMKitRequestBase
     {
         public string Prompt { get; }
 
@@ -647,19 +647,19 @@ public partial class LMKitService : INotifyPropertyChanged
 
         protected abstract void AwaitResult();
 
-        protected LmKitRequestBase(string prompt, int requestTimeout)
+        protected LMKitRequestBase(string prompt, int requestTimeout)
         {
             Prompt = prompt;
             CancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(requestTimeout));
         }
     }
 
-    private abstract class LmKitPromptRequestBase : LmKitRequestBase
+    private abstract class LMKitPromptRequestBase : LMKitRequestBase
     {
         public Conversation Conversation { get; }
         public TaskCompletionSource<PromptResult> PromptResult { get; } = new TaskCompletionSource<PromptResult>();
 
-        protected LmKitPromptRequestBase(Conversation conversation, string prompt, int requestTimeout) : base(prompt, requestTimeout)
+        protected LMKitPromptRequestBase(Conversation conversation, string prompt, int requestTimeout) : base(prompt, requestTimeout)
         {
             Conversation = conversation;
         }
@@ -704,16 +704,16 @@ public partial class LMKitService : INotifyPropertyChanged
     {
         public Exception? Exception { get; set; }
 
-        public LmKitTextGenerationStatus Status { get; set; }
+        public LMKitTextGenerationStatus Status { get; set; }
 
         public TextGenerationResult? TextGenerationResult { get; set; }
     }
 
-    public sealed class LmKitResult
+    public sealed class LMKitResult
     {
         public Exception? Exception { get; set; }
 
-        public LmKitTextGenerationStatus Status { get; set; }
+        public LMKitTextGenerationStatus Status { get; set; }
 
         public object? Result { get; set; }
     }
@@ -724,6 +724,6 @@ public partial class LMKitService : INotifyPropertyChanged
 
         public string? Result { get; set; }
 
-        public LmKitTextGenerationStatus Status { get; set; }
+        public LMKitTextGenerationStatus Status { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace LMKitMaestro
+namespace LMKit.Maestro
 {
     [Application]
     public class MainApplication : MauiApplication

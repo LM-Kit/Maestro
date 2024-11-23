@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using LMKitMaestro.Services;
+using LMKit.Maestro.Services;
 using Mopups.Interfaces;
 
-namespace LMKitMaestro.ViewModels
+namespace LMKit.Maestro.ViewModels
 {
     public partial class AssistantsPageViewModel : PageViewModelBase
     {

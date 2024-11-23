@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace LMKitMaestro.Services;
+namespace LMKit.Maestro.Services;
 
 public partial class LLMFileManager : ObservableObject
 {

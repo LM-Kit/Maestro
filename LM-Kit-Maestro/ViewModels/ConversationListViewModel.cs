@@ -1,16 +1,16 @@
-﻿using LMKitMaestro.Services;
-using LMKitMaestro.Data;
-using LMKitMaestro.Models;
+﻿using LMKit.Maestro.Services;
+using LMKit.Maestro.Data;
+using LMKit.Maestro.Models;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 
-namespace LMKitMaestro.ViewModels
+namespace LMKit.Maestro.ViewModels
 {
     public partial class ConversationListViewModel : ViewModelBase
     {
         private readonly IMainThread _mainThread;
         private readonly ILogger<ConversationListViewModel> _logger;
-        private readonly ILMKitMaestroDatabase _database;
+        private readonly IMaestroDatabase _database;
         private readonly LMKitService _lmKitService;
         private readonly IPopupService _popupService;
         private readonly IAppSettingsService _appSettingsService;
@@ -39,7 +39,7 @@ namespace LMKitMaestro.ViewModels
 
         public ObservableCollection<ConversationViewModel> Conversations { get; } = new ObservableCollection<ConversationViewModel>();
 
-        public ConversationListViewModel(IMainThread mainThread, IPopupService popupService, ILogger<ConversationListViewModel> logger, ILMKitMaestroDatabase database, LMKitService lmKitService, IAppSettingsService appSettingsService)
+        public ConversationListViewModel(IMainThread mainThread, IPopupService popupService, ILogger<ConversationListViewModel> logger, IMaestroDatabase database, LMKitService lmKitService, IAppSettingsService appSettingsService)
         {
             _mainThread = mainThread;
             _logger = logger;

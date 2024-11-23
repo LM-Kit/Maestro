@@ -1,7 +1,7 @@
-﻿using LMKitMaestro.Services;
+﻿using LMKit.Maestro.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace LMKitMaestro.ViewModels
+namespace LMKit.Maestro.ViewModels
 {
     public partial class ModelInfoViewModel : ViewModelBase
     {

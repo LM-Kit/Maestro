@@ -1,7 +1,7 @@
 ﻿using Mopups.Interfaces;
 using Mopups.Pages;
 
-namespace LMKitMaestro.UI
+namespace LMKit.Maestro.UI
 {
     public abstract class PopupBase : PopupPage
     {

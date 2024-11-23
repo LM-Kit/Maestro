@@ -1,6 +1,6 @@
-using LMKitMaestro.ViewModels;
+using LMKit.Maestro.ViewModels;
 
-namespace LMKitMaestro.UI;
+namespace LMKit.Maestro.UI;
 
 public partial class ChatView : ContentView
 {

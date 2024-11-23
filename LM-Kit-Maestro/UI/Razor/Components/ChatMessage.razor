@@ -323,17 +323,17 @@
         return html;
     }
 
-    private static string GetStatusText(LmKitTextGenerationStatus status)
+    private static string GetStatusText(LMKitTextGenerationStatus status)
     {
         switch (status)
         {
             default:
                 return string.Empty;
 
-            case LmKitTextGenerationStatus.Cancelled:
+            case LMKitTextGenerationStatus.Cancelled:
                 return "Cancelled";
 
-            case LmKitTextGenerationStatus.UnknownError:
+            case LMKitTextGenerationStatus.UnknownError:
                 return "Unknown error";
         }
     }

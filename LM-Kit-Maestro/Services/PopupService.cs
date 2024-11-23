@@ -1,8 +1,8 @@
-﻿using LMKitMaestro.ViewModels;
-using LMKitMaestro.UI;
+﻿using LMKit.Maestro.ViewModels;
+using LMKit.Maestro.UI;
 using Mopups.Interfaces;
 
-namespace LMKitMaestro.Services;
+namespace LMKit.Maestro.Services;
 
 internal class PopupService : IPopupService
 {

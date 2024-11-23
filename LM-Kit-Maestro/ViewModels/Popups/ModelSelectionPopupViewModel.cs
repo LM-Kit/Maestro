@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace LMKitMaestro.ViewModels;
+namespace LMKit.Maestro.ViewModels;
 
 public partial class ModelSelectionPopupViewModel : ViewModelBase
 {

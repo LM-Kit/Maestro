@@ -9,7 +9,7 @@ using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 #endif
 
-namespace LMKitMaestro.Controls
+namespace LMKit.Maestro.Controls
 {
     internal class ChatBoxEditor : Editor
     {

@@ -1,4 +1,4 @@
-namespace LMKitMaestro.Resources.Styles;
+namespace LMKit.Maestro.Resources.Styles;
 
 public partial class Icons : ResourceDictionary
 {

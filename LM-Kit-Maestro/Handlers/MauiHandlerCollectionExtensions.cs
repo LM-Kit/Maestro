@@ -1,6 +1,6 @@
-﻿using LMKitMaestro.Controls;
+﻿using LMKit.Maestro.Controls;
 
-namespace LMKitMaestro.Handlers;
+namespace LMKit.Maestro.Handlers;
 
 public static class MauiHandlerCollectionExtensions
 {

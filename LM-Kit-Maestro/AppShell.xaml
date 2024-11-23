@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <shell:SimpleShell
-    x:Class="LMKitMaestro.AppShell"
+    x:Class="LMKit.Maestro.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:ui="clr-namespace:LMKitMaestro.UI"
-    xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
-    xmlns:local="clr-namespace:LMKitMaestro"
+    xmlns:ui="clr-namespace:LMKit.Maestro.UI"
+    xmlns:vm="clr-namespace:LMKit.Maestro.ViewModels"
+    xmlns:local="clr-namespace:LMKit.Maestro"
     xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:shell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
-    xmlns:converters="clr-namespace:LMKitMaestro.Converters"
+    xmlns:converters="clr-namespace:LMKit.Maestro.Converters"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False"
-    Title="LM-Kit Maestro"
+    Title="Maestro"
     x:DataType="vm:AppShellViewModel"
     x:Name="thisShell"
     >
@@ -64,7 +64,7 @@
                         BindableLayout.ItemsSource="{Binding Tabs}"
                         Spacing="12">
                         <BindableLayout.ItemTemplate>
-                            <DataTemplate x:DataType="vm:LMKitMaestroTabViewModel">
+                            <DataTemplate x:DataType="vm:MaestroTabViewModel">
                                 <ui:LinkView
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=NavigateCommand}"
                                     CommandParameter="{Binding}"

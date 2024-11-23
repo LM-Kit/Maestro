@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 
-namespace LMKitMaestro.ViewModels;
+namespace LMKit.Maestro.ViewModels;
 
 public partial class UnsortedModelFilesPopupViewModel : ViewModelBase
 {

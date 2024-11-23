@@ -1,10 +1,10 @@
-﻿using LMKitMaestro.Helpers;
+﻿using LMKit.Maestro.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using LMKit.Model;
 
-namespace LMKitMaestro.Services;
+namespace LMKit.Maestro.Services;
 
 public partial class LLMFileManager : ObservableObject, ILLMFileManager
 {

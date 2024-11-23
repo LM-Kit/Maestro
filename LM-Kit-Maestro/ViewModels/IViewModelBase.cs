@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace LMKitMaestro.ViewModels;
+namespace LMKit.Maestro.ViewModels;
 
 public interface IViewModelBase : INotifyPropertyChanged
 {

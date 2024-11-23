@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using LMKitMaestro.Services;
+using LMKit.Maestro.Services;
 
-namespace LMKitMaestro.ViewModels
+namespace LMKit.Maestro.ViewModels
 {
     public abstract partial class AssistantSessionViewModelBase : ViewModelBase
     {
@@ -22,7 +22,7 @@ namespace LMKitMaestro.ViewModels
         [RelayCommand]
         public void Submit()
         {
-            if (_lmKitService.ModelLoadingState != LmKitModelLoadingState.Loaded)
+            if (_lmKitService.ModelLoadingState != LMKitModelLoadingState.Loaded)
             {
                 _popupService.DisplayAlert("No model is loaded", "You need to load a model in order to submit a prompt", "OK");
             }

@@ -1,4 +1,4 @@
-﻿namespace LMKitMaestro;
+﻿namespace LMKit.Maestro;
 
 public static class MauiExceptions
 {

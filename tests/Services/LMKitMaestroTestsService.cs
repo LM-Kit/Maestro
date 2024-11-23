@@ -1,15 +1,15 @@
-﻿using LMKitMaestro.Data;
-using LMKitMaestro.Helpers;
-using LMKitMaestro.Services;
-using LMKitMaestro.Tests.Services;
-using LMKitMaestro.ViewModels;
+﻿using LMKit.Maestro.Data;
+using LMKit.Maestro.Helpers;
+using LMKit.Maestro.Services;
+using LMKit.Maestro.Tests.Services;
+using LMKit.Maestro.ViewModels;
 using Microsoft.Extensions.Logging;
 using Mopups.Interfaces;
 using Moq;
 
-namespace LMKitMaestro.Tests
+namespace LMKit.Maestro.Tests
 {
-    internal class LMKitMaestroTestsService
+    internal class MaestroTestsService
     {
         public static readonly Uri Model1 = new(@"https://huggingface.co/lm-kit/phi-3.1-mini-4k-3.8b-instruct-gguf/resolve/main/Phi-3.1-mini-4k-Instruct-Q3_K_M.gguf?download=true");
         public static readonly Uri Model2 = new(@"https://huggingface.co/lm-kit/llama-3-8b-instruct-gguf/resolve/main/Llama-3-8B-Instruct-Q4_K_M.gguf?download=true");
@@ -21,27 +21,27 @@ namespace LMKitMaestro.Tests
         public bool ProgressEventWasRaided { get; private set; }
 
         public ILLMFileManager LLmFileManager { get; } = new DummyLLmFileManager();
-        public LMKitService LmKitService { get; } = new LMKitService();
-        public ILMKitMaestroDatabase Database { get; } = new DummyLMKitMaestroDatabase();
+        public LMKitService LMKitService { get; } = new LMKitService();
+        public IMaestroDatabase Database { get; } = new DummyMaestroDatabase();
 
         public SettingsViewModel SettingsViewModel { get; }
         public ConversationListViewModel ConversationListViewModel { get; }
         public ModelListViewModel ModelListViewModel { get; }
         public ChatPageViewModel ChatPageViewModel { get; }
 
-        public LMKitMaestroTestsService()
+        public MaestroTestsService()
         {
-            SettingsViewModel = GetNewSettingsViewModel(LmKitService);
-            ConversationListViewModel = GetNewConversationListViewModel(LmKitService, Database);
-            ModelListViewModel = GetNewModelListViewModel(LmKitService, LLmFileManager);
-            ChatPageViewModel = GetNewChatPageViewModel(LmKitService, ConversationListViewModel, ModelListViewModel, Database, LLmFileManager, SettingsViewModel);
-            LmKitService.LMKitConfig.MaximumCompletionTokens = 200;
-            LmKitService.LMKitConfig.RequestTimeout = 15;
+            SettingsViewModel = GetNewSettingsViewModel(LMKitService);
+            ConversationListViewModel = GetNewConversationListViewModel(LMKitService, Database);
+            ModelListViewModel = GetNewModelListViewModel(LMKitService, LLmFileManager);
+            ChatPageViewModel = GetNewChatPageViewModel(LMKitService, ConversationListViewModel, ModelListViewModel, Database, LLmFileManager, SettingsViewModel);
+            LMKitService.LMKitConfig.MaximumCompletionTokens = 200;
+            LMKitService.LMKitConfig.RequestTimeout = 15;
         }
 
-        public LMKitService.Conversation GetNewLmKitConversation()
+        public LMKitService.Conversation GetNewLMKitConversation()
         {
-            return new LMKitService.Conversation(LmKitService);
+            return new LMKitService.Conversation(LMKitService);
         }
 
         public ConversationViewModelWrapper GetNewConversationViewModel()
@@ -60,9 +60,9 @@ namespace LMKitMaestro.Tests
 
             _modelLoadingTask = new TaskCompletionSource<bool>();
             ProgressEventWasRaided = false;
-            LmKitService.ModelLoadingProgressed += LmKitService_ModelLoadingProgressed;
-            LmKitService.ModelLoadingCompleted += LmKitService_ModelLoadingCompleted;
-            LmKitService.ModelLoadingFailed += LmKitService_ModelLoadingFailed;
+            LMKitService.ModelLoadingProgressed += LMKitService_ModelLoadingProgressed;
+            LMKitService.ModelLoadingCompleted += LMKitService_ModelLoadingCompleted;
+            LMKitService.ModelLoadingFailed += LMKitService_ModelLoadingFailed;
 
             string? localFilePath = FileHelpers.GetModelFilePathFromUrl(modelUri, LMKitDefaultSettings.DefaultModelsFolderPath);
 
@@ -71,7 +71,7 @@ namespace LMKitMaestro.Tests
                 throw new Exception("Failed to create local file path from model download url");
             }
 
-            LmKitService.LoadModel(modelUri!, localFilePath);
+            LMKitService.LoadModel(modelUri!, localFilePath);
 
 
             var result = await _modelLoadingTask.Task;
@@ -82,8 +82,8 @@ namespace LMKitMaestro.Tests
         public async Task<bool> UnloadModel()
         {
             _modelUnloadedTask = new TaskCompletionSource<bool>();
-            LmKitService.ModelUnloaded += OnModelUnloaded;
-            LmKitService.UnloadModel();
+            LMKitService.ModelUnloaded += OnModelUnloaded;
+            LMKitService.UnloadModel();
 
 
             var result = await _modelUnloadedTask.Task;
@@ -96,18 +96,18 @@ namespace LMKitMaestro.Tests
             _modelUnloadedTask?.SetResult(true);
         }
 
-        private void LmKitService_ModelLoadingProgressed(object? sender, EventArgs e)
+        private void LMKitService_ModelLoadingProgressed(object? sender, EventArgs e)
         {
             var args = (LMKitService.ModelLoadingProgressedEventArgs)e;
             ProgressEventWasRaided = true;
         }
 
-        private void LmKitService_ModelLoadingCompleted(object? sender, EventArgs e)
+        private void LMKitService_ModelLoadingCompleted(object? sender, EventArgs e)
         {
             _modelLoadingTask?.TrySetResult(true);
         }
 
-        private void LmKitService_ModelLoadingFailed(object? sender, EventArgs e)
+        private void LMKitService_ModelLoadingFailed(object? sender, EventArgs e)
         {
             var args = (LMKitService.ModelLoadingFailedEventArgs)e;
 
@@ -115,7 +115,7 @@ namespace LMKitMaestro.Tests
             _modelLoadingTask?.TrySetResult(false);
         }
 
-        private static ConversationViewModel GetNewConversationViewModel(LMKitService lmKitService, ILMKitMaestroDatabase database)
+        private static ConversationViewModel GetNewConversationViewModel(LMKitService lmKitService, IMaestroDatabase database)
         {
             var popupService = new Mock<IPopupService>().Object;
             var mainThread = new Mock<IMainThread>().Object;
@@ -131,7 +131,7 @@ namespace LMKitMaestro.Tests
             return new SettingsViewModel(appSettingsService, lmKitService);
         }
 
-        private static ConversationListViewModel GetNewConversationListViewModel(LMKitService lmKitService, ILMKitMaestroDatabase database)
+        private static ConversationListViewModel GetNewConversationListViewModel(LMKitService lmKitService, IMaestroDatabase database)
         {
             var popupService = new Mock<IPopupService>().Object;
             var mainThread = new Mock<IMainThread>().Object;
@@ -152,7 +152,7 @@ namespace LMKitMaestro.Tests
         }
 
         private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService, ConversationListViewModel conversationListViewModel,
-            ModelListViewModel modelListViewModel, ILMKitMaestroDatabase database,  ILLMFileManager llmFileManager, SettingsViewModel settingsViewModel)
+            ModelListViewModel modelListViewModel, IMaestroDatabase database,  ILLMFileManager llmFileManager, SettingsViewModel settingsViewModel)
         {
             var popupService = new Mock<IPopupService>().Object;
             var mainThread = new Mock<IMainThread>().Object;

@@ -1,6 +1,6 @@
 using Mopups.Interfaces;
 
-namespace LMKitMaestro.UI;
+namespace LMKit.Maestro.UI;
 
 public partial class PopupView : PopupBase
 {

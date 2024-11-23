@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace LMKitMaestro
+namespace LMKit.Maestro
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

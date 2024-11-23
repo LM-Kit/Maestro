@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace LMKitMaestro.Converters;
+namespace LMKit.Maestro.Converters;
 
 internal sealed class GreaterThanZeroConverter : IValueConverter
 {

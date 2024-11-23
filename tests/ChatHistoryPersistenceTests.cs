@@ -1,16 +1,16 @@
-﻿using LMKitMaestro.Models;
+﻿using LMKit.Maestro.Models;
 using LMKit.TextGeneration.Chat;
-using LMKitMaestro.Tests.Services;
+using LMKit.Maestro.Tests.Services;
 
-namespace LMKitMaestro.Tests;
+namespace LMKit.Maestro.Tests;
 
-[Collection("LM-Kit Maestro Tests")]
+[Collection("Maestro Tests")]
 public class ChatHistoryPersistenceTests
 {
     [Fact]
     public async Task SubmittedPromptAndResponseArePersisted()
     {
-        LMKitMaestroTestsService testService = new();
+        MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -20,7 +20,7 @@ public class ChatHistoryPersistenceTests
         testConversation.ConversationViewModel.Submit();
 
         await testConversation.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
+        MaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
 
         await testConversation.DatabaseSyncTask.Task;
         var savedConversations = await testService.Database.GetConversations();
@@ -35,7 +35,7 @@ public class ChatHistoryPersistenceTests
     [Fact]
     public async Task MessageCorrectlyPersistedWhenUnloadingModelDuringGeneration()
     {
-        LMKitMaestroTestsService testService = new();
+        MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -53,7 +53,7 @@ public class ChatHistoryPersistenceTests
         Assert.True(unloadingSuccess);
 
         await testConversation.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
+        MaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
 
         var messages = testConversation.ConversationViewModel.Messages.Count;
         await testConversation.DatabaseSyncTask.Task;
@@ -69,13 +69,13 @@ public class ChatHistoryPersistenceTests
     [Fact]
     public async Task ChatHistoryIsRestored()
     {
-        LMKitMaestroTestsService testService = new();
-        bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
+        MaestroTestsService testService = new();
+        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
         Assert.True(loadingSuccess);
 
         ConversationLog dummyConversationLog = new()
         {
-            ChatHistoryData = LMKitMaestroTestsHelpers.GetTestChatHistoryData(),
+            ChatHistoryData = MaestroTestsHelpers.GetTestChatHistoryData(),
         };
 
         await testService.Database.SaveConversation(dummyConversationLog);
@@ -87,7 +87,7 @@ public class ChatHistoryPersistenceTests
         testConversation.ConversationViewModel.InputText = "now add 69";
         testConversation.ConversationViewModel.Submit();
         await testConversation.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation, 4);
+        MaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation, 4);
 
         await testConversation.DatabaseSyncTask.Task;
         var savedConversations = await testService.Database.GetConversations();

@@ -1,11 +1,11 @@
 ﻿#if IOS || MACCATALYST
 using Foundation;
-using LMKitMaestro.Controls;
+using LMKit.Maestro.Controls;
 using System.Diagnostics;
 using UIKit;
 using static Microsoft.Maui.Controls.VisualStateManager;
 
-namespace LMKitMaestro.Handlers;
+namespace LMKit.Maestro.Handlers;
 
 public partial class StatefulContentViewHandler
 {

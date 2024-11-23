@@ -1,7 +1,7 @@
 ﻿using SimpleToolkit.SimpleShell;
-using LMKitMaestro.ViewModels;
+using LMKit.Maestro.ViewModels;
 
-namespace LMKitMaestro
+namespace LMKit.Maestro
 {
     public partial class AppShell : SimpleShell
     {

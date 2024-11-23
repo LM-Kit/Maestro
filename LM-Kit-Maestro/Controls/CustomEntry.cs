@@ -3,7 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using Windows.System;
 #endif
 
-namespace LMKitMaestro.Controls;
+namespace LMKit.Maestro.Controls;
 
 class CustomEntry : Entry
 {

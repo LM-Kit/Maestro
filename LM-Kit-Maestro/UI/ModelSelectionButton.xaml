@@ -2,14 +2,14 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:local="clr-namespace:LMKitMaestro"
-             xmlns:controls="clr-namespace:LMKitMaestro.Controls"
-             xmlns:ui="clr-namespace:LMKitMaestro.UI"
-             xmlns:converters="clr-namespace:LMKitMaestro.Converters"
-             xmlns:models="clr-namespace:LMKitMaestro.Models"
-             xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
-             xmlns:services="clr-namespace:LMKitMaestro.Services"
-             x:Class="LMKitMaestro.UI.ModelSelectionButton"
+             xmlns:local="clr-namespace:LMKit.Maestro"
+             xmlns:controls="clr-namespace:LMKit.Maestro.Controls"
+             xmlns:ui="clr-namespace:LMKit.Maestro.UI"
+             xmlns:converters="clr-namespace:LMKit.Maestro.Converters"
+             xmlns:models="clr-namespace:LMKit.Maestro.Models"
+             xmlns:vm="clr-namespace:LMKit.Maestro.ViewModels"
+             xmlns:services="clr-namespace:LMKit.Maestro.Services"
+             x:Class="LMKit.Maestro.UI.ModelSelectionButton"
              x:DataType="vm:ModelListViewModel"
              x:Name="modelSelectionButton">
 
@@ -55,7 +55,7 @@
 
             <Style x:Key="ModelSelectionButtonStyle" TargetType="controls:StatefulContentView">
                 <Style.Triggers>
-                    <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
+                    <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding LMKitService.ModelLoadingState}" Value="{x:Static services:LMKitModelLoadingState.Loading}">
                         <Setter Property="InputTransparent" Value="True" />
                     </DataTrigger>
 
@@ -96,7 +96,7 @@
         InputTransparent="False"
         Stroke="{StaticResource Surface4}">
         <Border.Triggers>
-            <DataTrigger TargetType="Border" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loaded}">
+            <DataTrigger TargetType="Border" Binding="{Binding LMKitService.ModelLoadingState}" Value="{x:Static services:LMKitModelLoadingState.Loaded}">
                 <Setter Property="Stroke" Value="{StaticResource Primary}" />
             </DataTrigger>
         </Border.Triggers>
@@ -111,7 +111,7 @@
                 <Grid Padding="12, 0" ColumnSpacing="8" ColumnDefinitions="24, *, 24">
                     <Button 
                         Style="{StaticResource EjectButtonStyle}"
-                        IsVisible="{Binding LmKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loaded}}"
+                        IsVisible="{Binding LMKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LMKitModelLoadingState.Loaded}}"
                         Clicked="OnEjectModelButtonClicked">
                     </Button>
 
@@ -126,7 +126,7 @@
                             <!--<DataTrigger TargetType="Label">
                                             <DataTrigger.Binding>
                                                 <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                                                    <Binding  Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LmKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static vm:ModelLoadingState.Loading}"/>
+                                                    <Binding  Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LMKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static vm:ModelLoadingState.Loading}"/>
                                                     <Binding  Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="ModelLoadingIsFinishingUp" Converter="{mct:InvertedBoolConverter}"/>
                                                 </MultiBinding>
                                             </DataTrigger.Binding>
@@ -138,7 +138,7 @@
                                         <DataTrigger TargetType="Label">
                                             <DataTrigger.Binding>
                                                 <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                                                    <Binding  Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LmKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static vm:ModelLoadingState.Loading}"/>
+                                                    <Binding  Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LMKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static vm:ModelLoadingState.Loading}"/>
                                                     <Binding  Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="ModelLoadingIsFinishingUp"/>
                                                 </MultiBinding>
                                             </DataTrigger.Binding>
@@ -146,16 +146,16 @@
                                             <Setter Property="TextColor" Value="{StaticResource Outline}"/>
                                         </DataTrigger>-->
 
-                            <DataTrigger TargetType="Label" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loading}">
+                            <DataTrigger TargetType="Label" Binding="{Binding LMKitService.ModelLoadingState}" Value="{x:Static services:LMKitModelLoadingState.Loading}">
                                 <Setter Property="TextColor" Value="{StaticResource Outline}"/>
                                 <Setter Property="Text" Value="{Binding Source={x:Reference modelSelectionButton}, Path=LoadingText}"/>
                             </DataTrigger>
 
-                            <DataTrigger TargetType="Label" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Loaded}">
+                            <DataTrigger TargetType="Label" Binding="{Binding LMKitService.ModelLoadingState}" Value="{x:Static services:LMKitModelLoadingState.Loaded}">
                                 <Setter Property="Text" Value="{Binding SelectedModel.Name}"/>
                             </DataTrigger>
 
-                            <DataTrigger TargetType="Label" Binding="{Binding LmKitService.ModelLoadingState}" Value="{x:Static services:LmKitModelLoadingState.Unloaded}">
+                            <DataTrigger TargetType="Label" Binding="{Binding LMKitService.ModelLoadingState}" Value="{x:Static services:LMKitModelLoadingState.Unloaded}">
                                 <Setter Property="Text" Value="Select a model to load"/>
                             </DataTrigger>
 
@@ -167,7 +167,7 @@
                     </Label>
 
                     <Label 
-                        IsVisible="{Binding LmKitService.ModelLoadingState, Converter={mct:IsNotEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loading}}"
+                        IsVisible="{Binding LMKitService.ModelLoadingState, Converter={mct:IsNotEqualConverter}, ConverterParameter={x:Static services:LMKitModelLoadingState.Loading}}"
                         BackgroundColor="Transparent"
                         HorizontalOptions="End"
                         Grid.Column="2"
@@ -183,7 +183,7 @@
                     </Label>
                 </Grid>
 
-                <!--IsVisible="{Binding LmKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LmKitModelLoadingState.Loading}}"-->
+                <!--IsVisible="{Binding LMKitService.ModelLoadingState, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static services:LMKitModelLoadingState.Loading}}"-->
                 <ProgressBar 
                     Grid.ColumnSpan="3"
                     VerticalOptions="End"

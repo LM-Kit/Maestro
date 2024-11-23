@@ -1,14 +1,14 @@
-﻿using LMKitMaestro.Tests.Services;
+﻿using LMKit.Maestro.Tests.Services;
 
-namespace LMKitMaestro.Tests;
+namespace LMKit.Maestro.Tests;
 
-[Collection("LM-Kit Maestro Tests")]
+[Collection("Maestro Tests")]
 public class ChatPageViewModelTests
 {
     [Fact]
     public void AddNewConversation()
     {
-        var testService = new LMKitMaestroTestsService();
+        var testService = new MaestroTestsService();
         var chatPageViewModel = testService.ChatPageViewModel;
 
         chatPageViewModel.StartNewConversation();
@@ -21,7 +21,7 @@ public class ChatPageViewModelTests
     [Fact]
     public async Task DeleteConversation()
     {
-        var testService = new LMKitMaestroTestsService();
+        var testService = new MaestroTestsService();
         var chatPageViewModel = testService.ChatPageViewModel;
 
         // Starting 2 conversations
@@ -41,12 +41,12 @@ public class ChatPageViewModelTests
     [Fact]
     public async Task DeleteConversationWhileGeneratingResponse()
     {
-        var testService = new LMKitMaestroTestsService();
+        var testService = new MaestroTestsService();
 
-        testService.LmKitService.LMKitConfig.RequestTimeout = 60;
+        testService.LMKitService.LMKitConfig.RequestTimeout = 60;
         var chatPageViewModel = testService.ChatPageViewModel;
 
-        bool loadingSuccess = await testService.LoadModel(LMKitMaestroTestsService.Model2);
+        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
         Assert.True(loadingSuccess);
 
         testService.ChatPageViewModel.StartNewConversation();
@@ -72,6 +72,6 @@ public class ChatPageViewModelTests
             Assert.Fail("The response generation was not cancelled within less than 1 sec");
         }
 
-        LMKitMaestroTestsHelpers.AssertConversationPromptCancelledState(conversation);
+        MaestroTestsHelpers.AssertConversationPromptCancelledState(conversation);
     }
 }

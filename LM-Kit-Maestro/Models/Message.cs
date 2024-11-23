@@ -1,5 +1,5 @@
 ﻿
-namespace LMKitMaestro.Models;
+namespace LMKit.Maestro.Models;
 
 public sealed class Message
 {
