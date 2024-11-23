@@ -16,6 +16,7 @@
                 <ResourceDictionary x:Name="colors" Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 <ResourceDictionary Source="Resources/Styles/MaterialIcons.xaml"/>
+                <ResourceDictionary Source="Resources/Styles/FontAwesome.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
