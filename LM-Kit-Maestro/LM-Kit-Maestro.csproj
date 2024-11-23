@@ -21,6 +21,8 @@
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
+		<WindowsPackageType>None</WindowsPackageType>
+
 		<!-- Display name -->
 		<ApplicationTitle>Maestro</ApplicationTitle>
 
