@@ -103,7 +103,7 @@
                     ToolTipProperties.Text="Start a new chat"
                     Style="{StaticResource SecondaryActionButtonStyle}"
                     Grid.Column="2" 
-                    FontFamily="FA"
+                    FontFamily="Material"
                     Text="{StaticResource Plus}"
                     Command="{Binding StartNewConversationCommand}"/>
             </Grid>

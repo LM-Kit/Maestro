@@ -160,10 +160,10 @@
                     StyleClass="RegularAction"
                     ZIndex="2"
                     Grid.Column="2"
-                    FontSize="16"
+                    FontSize="20"
                     Clicked="OnShowMoreButtonClicked"
-                    FontFamily="FA"
-                    Text="{StaticResource Ellipsis}">
+                    FontFamily="Material"
+                    Text="{StaticResource More_horiz}">
                     <Button.IsVisible>
                         <MultiBinding Converter="{StaticResource AnyTrueConverter}">
                             <Binding Path="IsHovered"/>

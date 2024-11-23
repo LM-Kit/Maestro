@@ -32,23 +32,23 @@
                 <Border Style="{StaticResource InnerBorderStyle}" Grid.Row="1">
                     <VerticalStackLayout Margin="8, 0" Spacing="6">
                         <HorizontalStackLayout Spacing="8">
-                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="FA" Text="{StaticResource Folder}"/>
+                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="Material" Text="{StaticResource Folder}"/>
                             <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" Text="Models folder"/>
                         </HorizontalStackLayout>
 
                         <HorizontalStackLayout Margin="20, 0" Spacing="6">
-                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="FA" Text="{StaticResource Folder}"/>
+                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="Material" Text="{StaticResource Folder}"/>
                             <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" Text="Publisher"/>
                         </HorizontalStackLayout>
 
 
                         <HorizontalStackLayout Margin="40, 0" Spacing="6">
-                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="FA" Text="{StaticResource Folder}"/>
+                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="Material" Text="{StaticResource Folder}"/>
                             <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" Text="Repository"/>
                         </HorizontalStackLayout>
 
                         <HorizontalStackLayout Margin="60, 0" Spacing="0">
-                            <Label TextColor="Transparent" VerticalOptions="Center" FontFamily="FA" Text="{StaticResource Folder}"/>
+                            <Label TextColor="Transparent" VerticalOptions="Center" FontFamily="Material" Text="{StaticResource Folder}"/>
                             <Label TextColor="{StaticResource Primary}" Text=" model file.gguf"/>
                         </HorizontalStackLayout>
 

@@ -25,7 +25,7 @@
                 <Setter Property="Padding" Value="0"/>
                 <Setter Property="ToolTipProperties.Text" Value="Eject model"/>
                 <Setter Property="TextColor" Value="{StaticResource Primary}"/>
-                <Setter Property="FontFamily" Value="FA"/>
+                <Setter Property="FontFamily" Value="Material"/>
                 <Setter Property="FontSize" Value="9"/>
                 <Setter Property="Text" Value="{StaticResource Eject}"/>
                 <Setter Property="VisualStateManager.VisualStateGroups">
