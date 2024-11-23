@@ -18,7 +18,7 @@ public partial class StatefulContentViewHandler
 
     protected override void ConnectHandler(Microsoft.Maui.Platform.ContentView platformView)
     {
-        platformView.AddGestureRecognizer(new UIContinousGestureRecognizer(Tapped));
+        platformView.AddGestureRecognizer(new UIContinuousGestureRecognizer(Tapped));
         if (OperatingSystem.IsIOSVersionAtLeast(13))
         {
             platformView.AddGestureRecognizer(new UIHoverGestureRecognizer(OnHover));
@@ -83,11 +83,11 @@ public partial class StatefulContentViewHandler
     }
 
     // TODO: Move it to the different file
-    internal class UIContinousGestureRecognizer : UIGestureRecognizer
+    internal class UIContinuousGestureRecognizer : UIGestureRecognizer
     {
         private readonly Action<UIGestureRecognizer> action;
 
-        public UIContinousGestureRecognizer(Action<UIGestureRecognizer> action)
+        public UIContinuousGestureRecognizer(Action<UIGestureRecognizer> action)
         {
             this.action = action;
         }
