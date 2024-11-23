@@ -30,17 +30,15 @@ internal static class AppConstants
 
     public const double TabBarHeight = 64;
 
-    public const double PageTopBarHeight = ChatPageHeaderHeight;
+    public const double PageTopBarHeight = 64;
 
-    public const double ChatPageTopBarHeight = TabBarHeight + ChatPageHeaderHeight - 8;
+    public const double ChatPageTopBarHeight = TabBarHeight + 64 - 8;
 
     public const double ModelSelectionButtonMaxWidth = 568;
 
     public const double MinimizedHeaderButtonWidth = ChatWindowLayoutMinimumWidth - (16 * 2);
 
     public const double ModelSelectionButtonHeight = 48;
-
-    public const double ChatPageHeaderHeight = ModelSelectionButtonHeight + (8 * 2);
 
     public const double ChatPageSidebarWidth = 300;
 
