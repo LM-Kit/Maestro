@@ -116,7 +116,7 @@
                         </DataTrigger>
 
                         <DataTrigger TargetType="Button" Binding="{Binding AwaitingResponse}" Value="False">
-                            <Setter Property="Command" Value="{Binding SendCommand}"/>
+                            <Setter Property="Command" Value="{Binding SubmitCommand}"/>
                             <Setter Property="IsEnabled" Value="{Binding InputText, Converter={mct:IsStringNotNullOrWhiteSpaceConverter}}"/>
                         </DataTrigger>
 
