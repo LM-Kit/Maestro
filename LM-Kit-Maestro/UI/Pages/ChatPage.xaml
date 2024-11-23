@@ -36,18 +36,7 @@
                 <Setter Property="VerticalOptions" Value="Center"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
             </Style>
-            
-            <ControlTemplate x:Key="TuckedSettingsSidebarUpperGrid">
-                <Grid Style="{StaticResource TuckedSidebarUpperGridStyle}" Grid.Column="2">
-                    <Button
-                      Margin="12, 0"
-                      Style="{StaticResource SidebarToggleButtonStyle}"
-                      Text="{StaticResource Gear}"
-                      Command="{Binding ToggleSettingsSidebarCommand}"
-                      HorizontalOptions="End"
-                      Grid.Column="2"/>
-                </Grid>
-            </ControlTemplate>
+  
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -88,7 +77,7 @@
 
                 <Button
                     Style="{StaticResource SidebarToggleButtonStyle}"
-                    Text="{StaticResource ChevronDown}"
+                    Text="{StaticResource Forum}"
                     Command="{Binding ToggleChatsSidebarCommand}"
                     HorizontalOptions="Start"/>
 
@@ -104,7 +93,7 @@
                     Style="{StaticResource SecondaryActionButtonStyle}"
                     Grid.Column="2" 
                     FontFamily="Material"
-                    Text="{StaticResource Plus}"
+                    Text="{StaticResource Add}"
                     Command="{Binding StartNewConversationCommand}"/>
             </Grid>
 
@@ -134,7 +123,7 @@
                     HorizontalOptions="Start"
                     ToolTipProperties.Text="Reset default settings"
                     Style="{StaticResource SecondaryActionButtonStyle}"
-                    Text="{StaticResource ArrowRotateLeft}"
+                    Text="{StaticResource Rotate_right}"
                     Command="{Binding SettingsViewModel.ResetDefaultValuesCommand}" />
 
                 <Label 
@@ -146,7 +135,7 @@
                 <Button 
                     Grid.Column="2"
                     Style="{StaticResource SidebarToggleButtonStyle}"
-                    Text="{StaticResource Gear}"
+                    Text="{StaticResource Tune}"
                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ToggleSettingsSidebarCommand}"/>
             </Grid>
         </Grid>

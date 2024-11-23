@@ -170,6 +170,7 @@
                         IsVisible="{Binding LMKitService.ModelLoadingState, Converter={mct:IsNotEqualConverter}, ConverterParameter={x:Static services:LMKitModelLoadingState.Loading}}"
                         BackgroundColor="Transparent"
                         HorizontalOptions="End"
+                        Text="{StaticResource Keyboard_arrow_down}"
                         Grid.Column="2"
                         VerticalOptions="Center"
                         StyleClass="IconSmall"

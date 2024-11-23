@@ -25,7 +25,7 @@
                 <Setter Property="BorderWidth" Value="0"/>
                 <Setter Property="Padding" Value="0"/>
                 <Setter Property="VerticalOptions" Value="End"/>
-                <Setter Property="FontFamily" Value="MaterialRegular"/>
+                <Setter Property="FontFamily" Value="Material"/>
                 <Setter Property="BackgroundColor" Value="{StaticResource Surface4}"/>
                 <Setter Property="TextColor" Value="{StaticResource OnSurface}"/>
                 <Setter Property="VisualStateManager.VisualStateGroups">
@@ -103,10 +103,9 @@
 
                 <Button 
                     Grid.Column="1" 
-                    FontFamily="Material"
-                    FontSize="14"
+                    StyleClass="Icon"
                     Margin="0, 0, 0, 10"
-                    Text="{StaticResource ArrowUp}"
+                    Text="{StaticResource Arrow_upward}"
                     Style="{StaticResource SendButtonStyle}"
                     >
 
@@ -207,7 +206,7 @@
                         VerticalOptions="Center"
                         TextColor="{StaticResource Outline}" 
                         StyleClass="IconSmall"
-                        Text="{StaticResource RotateRight}"
+                        Text="{StaticResource Rotate_right}"
                         />
                 </Grid>
             </controls:StatefulContentView>
