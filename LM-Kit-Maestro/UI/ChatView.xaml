@@ -18,7 +18,7 @@
 
     <ContentView.Resources>
         <ResourceDictionary>
-            <Style x:Key="SendButtonStyle" TargetType="Button">
+            <Style x:Key="SubmitButtonStyle" TargetType="Button">
                 <Setter Property="WidthRequest" Value="32"/>
                 <Setter Property="HeightRequest" Value="32"/>
                 <Setter Property="CornerRadius" Value="16"/>
@@ -105,9 +105,8 @@
                     Grid.Column="1" 
                     StyleClass="Icon"
                     Margin="0, 0, 0, 10"
-                    FontSize="20"
                     Text="{StaticResource Arrow_upward}"
-                    Style="{StaticResource SendButtonStyle}"
+                    Style="{StaticResource SubmitButtonStyle}"
                     >
 
                     <Button.Triggers>
