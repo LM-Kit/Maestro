@@ -1,4 +1,4 @@
-﻿namespace LMKitMaestro.Services;
+﻿namespace LMKit.Maestro.Services;
 
 public interface ILauncher
 {

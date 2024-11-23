@@ -1,14 +1,14 @@
-using LMKitMaestro.Tests.Services;
+using LMKit.Maestro.Tests.Services;
 
-namespace LMKitMaestro.Tests;
+namespace LMKit.Maestro.Tests;
 
-[Collection("LM-Kit Maestro Tests")]
+[Collection("Maestro Tests")]
 public class ConversationViewModelTests
 {
     [Fact]
     public async Task SendsAndReceivesResponse()
     {
-        LMKitMaestroTestsService testService = new();
+        MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -18,13 +18,13 @@ public class ConversationViewModelTests
         testConversation.ConversationViewModel.Submit();
 
         await testConversation.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
+        MaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
     }
 
     [Fact]
     public async Task CancelPromptAfter1sec()
     {
-        LMKitMaestroTestsService testService = new();
+        MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -38,13 +38,13 @@ public class ConversationViewModelTests
         await testConversation.ConversationViewModel.Cancel();
 
         await testConversation.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
+        MaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
     }
 
     [Fact]
     public async Task CancelPromptAfter50Ms()
     {
-        LMKitMaestroTestsService testService = new();
+        MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -58,13 +58,13 @@ public class ConversationViewModelTests
         await testConversation.ConversationViewModel.Cancel();
 
         await testConversation.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
+        MaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
     }
 
     [Fact]
     public async Task CancelPromptImmediatelyAfterSubmit()
     {
-        LMKitMaestroTestsService testService = new();
+        MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -76,13 +76,13 @@ public class ConversationViewModelTests
         await testConversation.ConversationViewModel.Cancel();
 
         await testConversation.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
+        MaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
     }
 
     [Fact]
     public async Task SubmitTwoPromptThenCancelFirst()
     {
-        LMKitMaestroTestsService testService = new();
+        MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -100,17 +100,17 @@ public class ConversationViewModelTests
 
 
         await conversation1.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptCancelledState(conversation1);
+        MaestroTestsHelpers.AssertConversationPromptCancelledState(conversation1);
 
         await conversation2.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(conversation2);
+        MaestroTestsHelpers.AssertConversationPromptSuccessState(conversation2);
     }
 
 
     [Fact]
     public async Task GenerateConversationTitle()
     {
-        LMKitMaestroTestsService testService = new();
+        MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -120,7 +120,7 @@ public class ConversationViewModelTests
         testConversation.ConversationViewModel.Submit();
 
         await testConversation.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
+        MaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
 
         var title = await testConversation.TitleGenerationTask.Task;
         Assert.False(string.IsNullOrEmpty(title));
@@ -129,7 +129,7 @@ public class ConversationViewModelTests
     [Fact]
     public async Task GenerateConversationTitle2Conversations()
     {
-        LMKitMaestroTestsService testService = new();
+        MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -143,9 +143,9 @@ public class ConversationViewModelTests
         conversation2.ConversationViewModel.Submit();
 
         await conversation1.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(conversation1);
+        MaestroTestsHelpers.AssertConversationPromptSuccessState(conversation1);
         await conversation2.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(conversation2);
+        MaestroTestsHelpers.AssertConversationPromptSuccessState(conversation2);
 
         var title1 = await conversation1.TitleGenerationTask.Task;
         Assert.False(string.IsNullOrEmpty(title1));
@@ -156,8 +156,8 @@ public class ConversationViewModelTests
     [Fact]
     public async Task UnloadModelWhileGeneratingTitle()
     {
-        LMKitMaestroTestsService testService = new();
-        testService.LmKitService.LMKitConfig.RequestTimeout = 30;
+        MaestroTestsService testService = new();
+        testService.LMKitService.LMKitConfig.RequestTimeout = 30;
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -166,7 +166,7 @@ public class ConversationViewModelTests
         conversation.ConversationViewModel.Submit();
 
         await conversation.PromptResultTask.Task;
-        LMKitMaestroTestsHelpers.AssertConversationPromptSuccessState(conversation);
+        MaestroTestsHelpers.AssertConversationPromptSuccessState(conversation);
 
         // Delay the call to Unload so that it happens while the title is being generated.
         await Task.Delay(500);

@@ -1,7 +1,7 @@
-﻿using LMKitMaestro.Services;
+﻿using LMKit.Maestro.Services;
 using System.Web;
 
-namespace LMKitMaestro.Helpers;
+namespace LMKit.Maestro.Helpers;
 
 public static class FileHelpers
 {

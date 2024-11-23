@@ -2,19 +2,19 @@
 using CommunityToolkit.Mvvm.Input;
 using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
-using LMKitMaestro.Models;
+using LMKit.Maestro.Models;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using LMKitMaestro.Data;
-using LMKitMaestro.Services;
+using LMKit.Maestro.Data;
+using LMKit.Maestro.Services;
 
-namespace LMKitMaestro.ViewModels;
+namespace LMKit.Maestro.ViewModels;
 
 public partial class ConversationViewModel : AssistantSessionViewModelBase
 {
     private readonly IMainThread _mainThread;
     private readonly IAppSettingsService _appSettingsService;
-    private readonly ILMKitMaestroDatabase _database;
+    private readonly IMaestroDatabase _database;
     private readonly LMKitService.Conversation _lmKitConversation;
 
     private bool _isSynchedWithLog = true;
@@ -35,7 +35,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     bool _isInitialized;
 
     [ObservableProperty]
-    public LmKitTextGenerationStatus _latestPromptStatus;
+    public LMKitTextGenerationStatus _latestPromptStatus;
 
     [ObservableProperty]
     bool _isSelected;
@@ -91,11 +91,11 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     public EventHandler? DatabaseSaveOperationCompleted;
     public EventHandler? DatabaseSaveOperationFailed;
 
-    public ConversationViewModel(IMainThread mainThread, IPopupService popupService, IAppSettingsService appSettingsService, LMKitService lmKitService, ILMKitMaestroDatabase database) : this(mainThread, popupService, appSettingsService, lmKitService, database, new ConversationLog("Untitled conversation"))
+    public ConversationViewModel(IMainThread mainThread, IPopupService popupService, IAppSettingsService appSettingsService, LMKitService lmKitService, IMaestroDatabase database) : this(mainThread, popupService, appSettingsService, lmKitService, database, new ConversationLog("Untitled conversation"))
     {
     }
 
-    public ConversationViewModel(IMainThread mainThread, IPopupService popupService, IAppSettingsService appSettingsService, LMKitService lmKitService, ILMKitMaestroDatabase database, ConversationLog conversationLog) : base(popupService, lmKitService)
+    public ConversationViewModel(IMainThread mainThread, IPopupService popupService, IAppSettingsService appSettingsService, LMKitService lmKitService, IMaestroDatabase database, ConversationLog conversationLog) : base(popupService, lmKitService)
     {
         _mainThread = mainThread;
         _appSettingsService = appSettingsService;
@@ -106,9 +106,9 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         _popupService = popupService;
         _title = conversationLog.Title!;
         _lmKitConversation = new LMKitService.Conversation(lmKitService, conversationLog.ChatHistoryData);
-        _lmKitConversation.ChatHistoryChanged += OnLmKitChatHistoryChanged;
+        _lmKitConversation.ChatHistoryChanged += OnLMKitChatHistoryChanged;
         _lmKitConversation.SummaryTitleGenerated += OnConversationSummaryTitleGenerated;
-        _lmKitConversation.PropertyChanged += OnLmKitConversationPropertyChanged;
+        _lmKitConversation.PropertyChanged += OnLMKitConversationPropertyChanged;
         Messages.CollectionChanged += OnMessagesCollectionChanged;
         ConversationLog = conversationLog;
         IsInitialized = conversationLog.ChatHistoryData == null;
@@ -181,13 +181,13 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         {
             if (submitPromptException is OperationCanceledException operationCancelledException)
             {
-                _pendingResponse!.Status = LmKitTextGenerationStatus.Cancelled;
-                _pendingPrompt!.Status = LmKitTextGenerationStatus.Cancelled;
+                _pendingResponse!.Status = LMKitTextGenerationStatus.Cancelled;
+                _pendingPrompt!.Status = LMKitTextGenerationStatus.Cancelled;
             }
             else
             {
-                _pendingResponse!.Status = LmKitTextGenerationStatus.UnknownError;
-                _pendingPrompt!.Status = LmKitTextGenerationStatus.UnknownError;
+                _pendingResponse!.Status = LMKitTextGenerationStatus.UnknownError;
+                _pendingPrompt!.Status = LMKitTextGenerationStatus.UnknownError;
             }
 
             // todo: provide more error info with event args.
@@ -199,7 +199,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
             _pendingResponse!.Status = LatestPromptStatus;
             _pendingPrompt!.Status = LatestPromptStatus;
 
-            if (promptResult.Status == LmKitTextGenerationStatus.Undefined && promptResult.TextGenerationResult != null)
+            if (promptResult.Status == LMKitTextGenerationStatus.Undefined && promptResult.TextGenerationResult != null)
             {
                 OnTextGenerationSuccess(promptResult.TextGenerationResult);
             }
@@ -255,7 +255,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     {
         InputText = string.Empty;
         UsedDifferentModel &= false;
-        LatestPromptStatus = LmKitTextGenerationStatus.Undefined;
+        LatestPromptStatus = LMKitTextGenerationStatus.Undefined;
         AwaitingResponse = true;
         _awaitingLMKitUserMessage = true;
         _awaitingLMKitAssistantMessage = true;
@@ -281,7 +281,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         TextGenerationFailed?.Invoke(this, EventArgs.Empty);
     }
 
-    private void OnLmKitChatHistoryChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void OnLMKitChatHistoryChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         _isSynchedWithLog &= false;
 
@@ -295,7 +295,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
                 {
                     if (_pendingPrompt != null && _awaitingLMKitUserMessage)
                     {
-                        _pendingPrompt.LmKitMessage = message;
+                        _pendingPrompt.LMKitMessage = message;
                         _awaitingLMKitUserMessage = false;
 
                         if (!AwaitingResponse)
@@ -308,7 +308,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
                 {
                     if (_pendingResponse != null && _awaitingLMKitAssistantMessage)
                     {
-                        _pendingResponse.LmKitMessage = message;
+                        _pendingResponse.LMKitMessage = message;
                         _awaitingLMKitUserMessage = false;
 
                         if (!AwaitingResponse)
@@ -364,7 +364,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         UsedDifferentModel = false;
     }
 
-    private void OnLmKitConversationPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void OnLMKitConversationPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(LMKitService.Conversation.LastUsedModelUri))
         {

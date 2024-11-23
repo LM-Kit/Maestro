@@ -1,14 +1,14 @@
-﻿using LMKitMaestro.Services;
+﻿using LMKit.Maestro.Services;
 
-namespace LMKitMaestro.Tests.Services
+namespace LMKit.Maestro.Tests.Services
 {
-    internal class LmKitDummyConversation
+    internal class LMKitDummyConversation
     {
         LMKitService.Conversation Conversation { get; }
 
         public TaskCompletionSource<LMKitService.PromptResult?> PromptResultTask { get; private set; } = new TaskCompletionSource<LMKitService.PromptResult?>();
 
-        public LmKitDummyConversation(LMKitService lmKitService)
+        public LMKitDummyConversation(LMKitService lmKitService)
         {
             Conversation = new LMKitService.Conversation(lmKitService);
         }

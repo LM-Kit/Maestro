@@ -1,17 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using LMKitMaestro.Data;
+using LMKit.Maestro.Data;
 using Microsoft.Extensions.Logging;
-using LMKitMaestro.Helpers;
-using LMKitMaestro.Services;
+using LMKit.Maestro.Helpers;
+using LMKit.Maestro.Services;
 using Mopups.Interfaces;
 
-namespace LMKitMaestro.ViewModels;
+namespace LMKit.Maestro.ViewModels;
 
 public partial class ChatPageViewModel : PageViewModelBase
 {
     private readonly ILogger<ChatPageViewModel> _logger;
-    private readonly ILMKitMaestroDatabase _database;
+    private readonly IMaestroDatabase _database;
     private readonly ILLMFileManager _llmFileManager;
 
     [ObservableProperty]
@@ -23,13 +23,13 @@ public partial class ChatPageViewModel : PageViewModelBase
     [ObservableProperty]
     private SettingsViewModel _settingsViewModel;
 
-    public LMKitService LmKitService { get; }
+    public LMKitService LMKitService { get; }
     public ConversationListViewModel ConversationListViewModel { get; }
     public ModelListViewModel ModelListViewModel { get; }
 
     public ChatPageViewModel(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation,
         ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
-        ILogger<ChatPageViewModel> logger, ILMKitMaestroDatabase database,
+        ILogger<ChatPageViewModel> logger, IMaestroDatabase database,
         LMKitService lmKitService, ILLMFileManager llmFileManager, SettingsViewModel settingsViewModel) : base(navigationService, popupService, popupNavigation)
     {
         _logger = logger;
@@ -37,7 +37,7 @@ public partial class ChatPageViewModel : PageViewModelBase
         ModelListViewModel = modelListViewModel;
         _database = database;
         _llmFileManager = llmFileManager;
-        LmKitService = lmKitService;
+        LMKitService = lmKitService;
         SettingsViewModel = settingsViewModel;
 
         ConversationListViewModel.Conversations.CollectionChanged += OnConversationListChanged;

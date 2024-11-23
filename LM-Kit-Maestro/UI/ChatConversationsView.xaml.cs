@@ -1,8 +1,8 @@
-using LMKitMaestro.ViewModels;
+using LMKit.Maestro.ViewModels;
 using CommunityToolkit.Mvvm.Input;
 using Mopups.Animations;
 
-namespace LMKitMaestro.UI;
+namespace LMKit.Maestro.UI;
 
 public partial class ChatConversationsView : ContentView
 {

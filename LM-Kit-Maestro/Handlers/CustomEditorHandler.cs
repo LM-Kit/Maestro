@@ -13,7 +13,7 @@ using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.UI.Xaml.Controls;
 #endif
 
-namespace LMKitMaestro.Handlers;
+namespace LMKit.Maestro.Handlers;
 
 public partial class CustomEditorHandler : EditorHandler
 {

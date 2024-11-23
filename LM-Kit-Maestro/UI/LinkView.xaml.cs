@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace LMKitMaestro.UI;
+namespace LMKit.Maestro.UI;
 
 public partial class LinkView : ContentView
 {

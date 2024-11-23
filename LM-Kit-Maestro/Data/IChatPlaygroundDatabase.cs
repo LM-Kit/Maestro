@@ -1,8 +1,8 @@
-﻿using LMKitMaestro.Models;
+﻿using LMKit.Maestro.Models;
 
-namespace LMKitMaestro.Data;
+namespace LMKit.Maestro.Data;
 
-public interface ILMKitMaestroDatabase
+public interface IMaestroDatabase
 {
     Task<List<ConversationLog>> GetConversations();
     Task<int> SaveConversation(ConversationLog conversationLog);

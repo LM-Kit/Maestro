@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace LMKitMaestro.ViewModels;
+namespace LMKit.Maestro.ViewModels;
 
-public partial class LMKitMaestroTabViewModel : ViewModelBase
+public partial class MaestroTabViewModel : ViewModelBase
 {
     public string Route { get; }
 
@@ -12,7 +12,7 @@ public partial class LMKitMaestroTabViewModel : ViewModelBase
     [ObservableProperty]
     bool isSelected;
 
-    public LMKitMaestroTabViewModel(string title, string route)
+    public MaestroTabViewModel(string title, string route)
     {
         Title = title;
         Route = route;

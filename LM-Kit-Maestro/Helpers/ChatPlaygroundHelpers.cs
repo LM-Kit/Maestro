@@ -1,9 +1,9 @@
-﻿using LMKitMaestro.Services;
-using LMKitMaestro.ViewModels;
+﻿using LMKit.Maestro.Services;
+using LMKit.Maestro.ViewModels;
 
-namespace LMKitMaestro.Helpers
+namespace LMKit.Maestro.Helpers
 {
-    internal static class LMKitMaestroHelpers
+    internal static class MaestroHelpers
     {
         public static ModelInfoViewModel? TryGetExistingModelInfoViewModel(ICollection<ModelInfoViewModel> modelInfoViewModels, ModelInfo modelInfo)
         {

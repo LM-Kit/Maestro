@@ -2,16 +2,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:local="clr-namespace:LMKitMaestro"
-             xmlns:controls="clr-namespace:LMKitMaestro.Controls"
-             xmlns:ui="clr-namespace:LMKitMaestro.UI"
-             xmlns:converters="clr-namespace:LMKitMaestro.Converters"
-             xmlns:models="clr-namespace:LMKitMaestro.Models"
-             xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
-             xmlns:razor="clr-namespace:LMKitMaestro.UI.Razor.Components"
-             xmlns:services="clr-namespace:LMKitMaestro.Services"
+             xmlns:local="clr-namespace:LMKit.Maestro"
+             xmlns:controls="clr-namespace:LMKit.Maestro.Controls"
+             xmlns:ui="clr-namespace:LMKit.Maestro.UI"
+             xmlns:converters="clr-namespace:LMKit.Maestro.Converters"
+             xmlns:models="clr-namespace:LMKit.Maestro.Models"
+             xmlns:vm="clr-namespace:LMKit.Maestro.ViewModels"
+             xmlns:razor="clr-namespace:LMKit.Maestro.UI.Razor.Components"
+             xmlns:services="clr-namespace:LMKit.Maestro.Services"
              x:DataType="vm:AssistantsPageViewModel"
-             x:Class="LMKitMaestro.UI.AssistantsPage">
+             x:Class="LMKit.Maestro.UI.AssistantsPage">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="{x:Static local:AppConstants.ChatPageHeaderHeight}"/>

@@ -1,7 +1,7 @@
-﻿using LMKitMaestro.ViewModels;
+﻿using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components.WebView.Maui;
 
-namespace LMKitMaestro
+namespace LMKit.Maestro
 {
     public partial class App : Application
     {

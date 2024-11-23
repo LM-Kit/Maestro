@@ -1,8 +1,8 @@
-﻿using LMKitMaestro.ViewModels;
+﻿using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
 
-namespace LMKitMaestro.UI.Razor.Components
+namespace LMKit.Maestro.UI.Razor.Components
 {
     public abstract class MvvmComponentBase<TViewModel> : ComponentBase where TViewModel : IViewModelBase
     {

@@ -1,9 +1,9 @@
-﻿using LMKitMaestro.Services;
+﻿using LMKit.Maestro.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mopups.Interfaces;
 
-namespace LMKitMaestro.ViewModels;
+namespace LMKit.Maestro.ViewModels;
 
 public partial class ModelsPageViewModel : PageViewModelBase
 {
@@ -94,7 +94,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
 
             if (result.Success)
             {
-                if (_lmKitService.ModelLoadingState != LmKitModelLoadingState.Unloaded)
+                if (_lmKitService.ModelLoadingState != LMKitModelLoadingState.Unloaded)
                 {
                     _lmKitService.UnloadModel();
                 }
@@ -135,7 +135,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
     {
         var downloadOperationStateChangedEventArgs = (DownloadOperationStateChangedEventArgs)e;
 
-        var modelViewModel = LMKitMaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.AvailableModels,
+        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.AvailableModels,
             downloadOperationStateChangedEventArgs.DownloadUrl)!;
 
         modelViewModel!.DownloadInfo.Progress = downloadOperationStateChangedEventArgs.Progress;
@@ -147,13 +147,13 @@ public partial class ModelsPageViewModel : PageViewModelBase
     {
         var downloadOperationStateChangedEventArgs = (DownloadOperationStateChangedEventArgs)e;
 
-        var modelViewModel = LMKitMaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.AvailableModels,
+        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.AvailableModels,
             downloadOperationStateChangedEventArgs.DownloadUrl)!;
 
         if (downloadOperationStateChangedEventArgs.Exception != null)
         {
             modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-            await LMKitMaestroHelpers.DisplayError("Model download failure",
+            await MaestroHelpers.DisplayError("Model download failure",
                 $"Download of model '{modelViewModel.Name}' failed:\n{downloadOperationStateChangedEventArgs.Exception.Message}");
         }
         else if (downloadOperationStateChangedEventArgs.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled)

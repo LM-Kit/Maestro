@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace LMKitMaestro.Controls;
+namespace LMKit.Maestro.Controls;
 
 public partial class CustomCollectionView : ScrollView
 {

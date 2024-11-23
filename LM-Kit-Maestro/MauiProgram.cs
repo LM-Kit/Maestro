@@ -1,18 +1,18 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using LMKitMaestro.UI;
-using LMKitMaestro.ViewModels;
-using LMKitMaestro.Services;
-using LMKitMaestro.Data;
+using LMKit.Maestro.UI;
+using LMKit.Maestro.ViewModels;
+using LMKit.Maestro.Services;
+using LMKit.Maestro.Data;
 using SimpleToolkit.SimpleShell;
-using LMKitMaestro.Handlers;
+using LMKit.Maestro.Handlers;
 using MetroLog.MicrosoftExtensions;
 using MetroLog.Operators;
 using Majorsoft.Blazor.Components.Common.JsInterop;
 using Mopups.Hosting;
 using Mopups.Services;
 
-namespace LMKitMaestro
+namespace LMKit.Maestro
 {
     public static class MauiProgram
     {
@@ -90,7 +90,7 @@ namespace LMKitMaestro
             builder.Services.AddSingleton(MopupService.Instance);
 
             builder.Services.AddSingleton<AppSettingsService>();
-            builder.Services.AddSingleton<ILMKitMaestroDatabase, LMKitMaestroDatabase>();
+            builder.Services.AddSingleton<IMaestroDatabase, MaestroDatabase>();
             builder.Services.AddSingleton<ILLMFileManager, LLMFileManager>();
             builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
             builder.Services.AddSingleton<IPopupService, Services.PopupService>();

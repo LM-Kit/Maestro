@@ -1,17 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LMKit.TextGeneration.Chat;
-using LMKitMaestro.Models;
+using LMKit.Maestro.Models;
 using CommunityToolkit.Mvvm.Input;
-using LMKitMaestro.Services;
+using LMKit.Maestro.Services;
 using static LMKit.TextGeneration.TextGenerationResult;
 
-namespace LMKitMaestro.ViewModels;
+namespace LMKit.Maestro.ViewModels;
 
 public partial class MessageViewModel : ViewModelBase
 {
     private ChatHistory.Message? _lmKitMessage;
 
-    public ChatHistory.Message? LmKitMessage
+    public ChatHistory.Message? LMKitMessage
     {
         get => _lmKitMessage;
         set
@@ -46,7 +46,7 @@ public partial class MessageViewModel : ViewModelBase
     private bool _messageInProgress;
 
     [ObservableProperty]
-    private LmKitTextGenerationStatus _status;
+    private LMKitTextGenerationStatus _status;
 
     [ObservableProperty]
     private bool _isHovered;
@@ -63,7 +63,7 @@ public partial class MessageViewModel : ViewModelBase
     {
         MessageModel = new Message();
         Text = message.Content;
-        LmKitMessage = message;
+        LMKitMessage = message;
     }
 
     public MessageViewModel(Message message)
@@ -84,27 +84,27 @@ public partial class MessageViewModel : ViewModelBase
     {
         if (e.PropertyName == nameof(ChatHistory.Message.IsProcessed))
         {
-            MessageInProgress = !LmKitMessage!.IsProcessed;
+            MessageInProgress = !LMKitMessage!.IsProcessed;
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.AuthorRole))
         {
-            Sender = AuthorRoleToMessageSender(LmKitMessage!.AuthorRole);
+            Sender = AuthorRoleToMessageSender(LMKitMessage!.AuthorRole);
             MessageModel.Sender = Sender;
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.Content))
         {
-            Text = LmKitMessage!.Content;
+            Text = LMKitMessage!.Content;
             MessageModel.Text = Text;
 
             MessageContentUpdated?.Invoke(this, EventArgs.Empty);
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.GeneratedTokens))
         {
-            GeneratedTokens = LmKitMessage!.GeneratedTokens;
+            GeneratedTokens = LMKitMessage!.GeneratedTokens;
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.TerminationReason))
         {
-            TerminationReason = LmKitMessage!.TerminationReason;
+            TerminationReason = LMKitMessage!.TerminationReason;
         }
     }
 

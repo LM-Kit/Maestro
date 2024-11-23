@@ -1,8 +1,8 @@
-using LMKitMaestro.Helpers;
-using LMKitMaestro.ViewModels;
+using LMKit.Maestro.Helpers;
+using LMKit.Maestro.ViewModels;
 using CommunityToolkit.Mvvm.Input;
 
-namespace LMKitMaestro.UI;
+namespace LMKit.Maestro.UI;
 
 public partial class ModelsPage : ContentPage
 {
@@ -27,9 +27,9 @@ public partial class ModelsPage : ContentPage
         SelectedTab = ModelsPageTab.UserModels;
     }
 
-    private void LmKitModelsTabTapped(object sender, EventArgs e)
+    private void LMKitModelsTabTapped(object sender, EventArgs e)
     {
-        SelectedTab = ModelsPageTab.LmKitModels;
+        SelectedTab = ModelsPageTab.LMKitModels;
     }
 
     [RelayCommand]

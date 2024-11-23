@@ -1,7 +1,7 @@
-﻿namespace LMKitMaestro.UI;
+﻿namespace LMKit.Maestro.UI;
 
 public enum ModelsPageTab
 {
     UserModels,
-    LmKitModels
+    LMKitModels
 }

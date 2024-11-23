@@ -1,10 +1,10 @@
 ﻿#if ANDROID
 using Android.Views;
-using LMKitMaestro.Controls;
+using LMKit.Maestro.Controls;
 using Microsoft.Maui.Platform;
 using static Microsoft.Maui.Controls.VisualStateManager;
 
-namespace LMKitMaestro.Handlers;
+namespace LMKit.Maestro.Handlers;
 
 public partial class StatefulContentViewHandler
 {

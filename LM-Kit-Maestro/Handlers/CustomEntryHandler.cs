@@ -13,7 +13,7 @@ using Microsoft.UI.Xaml.Controls;
 using Windows.UI.Notifications;
 #endif
 
-namespace LMKitMaestro.Handlers;
+namespace LMKit.Maestro.Handlers;
 
 public partial class CustomEntryHandler : EntryHandler
 {

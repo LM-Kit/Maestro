@@ -1,7 +1,7 @@
-﻿using LMKitMaestro.Services;
+﻿using LMKit.Maestro.Services;
 using Mopups.Interfaces;
 
-namespace LMKitMaestro.ViewModels;
+namespace LMKit.Maestro.ViewModels;
 
 public abstract partial class PageViewModelBase : ViewModelBase
 {

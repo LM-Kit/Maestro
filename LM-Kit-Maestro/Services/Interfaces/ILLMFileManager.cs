@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace LMKitMaestro.Services;
+namespace LMKit.Maestro.Services;
 
 public interface ILLMFileManager
 {

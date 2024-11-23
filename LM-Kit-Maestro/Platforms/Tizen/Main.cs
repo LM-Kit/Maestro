@@ -2,7 +2,7 @@ using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace LMKitMaestro
+namespace LMKit.Maestro
 {
     internal class Program : MauiApplication
     {

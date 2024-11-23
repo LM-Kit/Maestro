@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace LMKitMaestro
+namespace LMKit.Maestro
 {
     public class Program
     {

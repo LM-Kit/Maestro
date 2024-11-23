@@ -1,12 +1,12 @@
 ﻿<?xml version = "1.0" encoding = "UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:LMKitMaestro"
+             xmlns:local="clr-namespace:LMKit.Maestro"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="LMKitMaestro.App">
+             x:Class="LMKit.Maestro.App">
     <Application.Resources>
         <ResourceDictionary>
-            <!--<StyleSheet Source="Resources/CSS/LmKitMaestro.css"/>
+            <!--<StyleSheet Source="Resources/CSS/LMKitMaestro.css"/>
             <StyleSheet Source="Resources/CSS/font-awesome.css"/>-->
             <mct:VariableMultiValueConverter x:Key="AllTrueConverter" ConditionType="All"/>
             <mct:VariableMultiValueConverter x:Key="AllFalseConverter" ConditionType="None"/>

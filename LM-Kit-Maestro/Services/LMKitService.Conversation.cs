@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using LMKit.TextGeneration.Chat;
 
-namespace LMKitMaestro.Services;
+namespace LMKit.Maestro.Services;
 
 public partial class LMKitService
 {

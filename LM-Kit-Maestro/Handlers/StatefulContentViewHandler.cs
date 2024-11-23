@@ -1,7 +1,7 @@
 ﻿using static Microsoft.Maui.Controls.VisualStateManager;
 using Microsoft.Maui.Handlers;
 using System.Windows.Input;
-using LMKitMaestro.Controls;
+using LMKit.Maestro.Controls;
 
 #if ANDROID
 using Android.Views;
@@ -14,7 +14,7 @@ using Foundation;
 using UIKit;
 #endif
 
-namespace LMKitMaestro.Handlers;
+namespace LMKit.Maestro.Handlers;
 
 /// <summary>
 /// A handler for <see cref="StatefulContentView"/>.

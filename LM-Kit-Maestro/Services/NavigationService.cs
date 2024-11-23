@@ -1,4 +1,4 @@
-﻿namespace LMKitMaestro.Services;
+﻿namespace LMKit.Maestro.Services;
 
 internal class NavigationService : INavigationService
 {

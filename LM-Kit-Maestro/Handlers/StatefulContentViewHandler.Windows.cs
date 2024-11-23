@@ -1,10 +1,10 @@
 ﻿#if WINDOWS
-using LMKitMaestro.Controls;
+using LMKit.Maestro.Controls;
 using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Input;
 using static Microsoft.Maui.Controls.VisualStateManager;
 
-namespace LMKitMaestro.Handlers;
+namespace LMKit.Maestro.Handlers;
 
 public partial class StatefulContentViewHandler
 {

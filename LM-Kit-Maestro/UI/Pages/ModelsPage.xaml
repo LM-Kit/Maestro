@@ -2,14 +2,14 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:controls="clr-namespace:LMKitMaestro.Controls"
-             xmlns:ui="clr-namespace:LMKitMaestro.UI"
-             xmlns:local="clr-namespace:LMKitMaestro"
-             xmlns:models="clr-namespace:LMKitMaestro.Models"
-             xmlns:vm="clr-namespace:LMKitMaestro.ViewModels"
-             xmlns:converters="clr-namespace:LMKitMaestro.Converters"
+             xmlns:controls="clr-namespace:LMKit.Maestro.Controls"
+             xmlns:ui="clr-namespace:LMKit.Maestro.UI"
+             xmlns:local="clr-namespace:LMKit.Maestro"
+             xmlns:models="clr-namespace:LMKit.Maestro.Models"
+             xmlns:vm="clr-namespace:LMKit.Maestro.ViewModels"
+             xmlns:converters="clr-namespace:LMKit.Maestro.Converters"
              x:DataType="vm:ModelsPageViewModel"
-             x:Class="LMKitMaestro.UI.ModelsPage"
+             x:Class="LMKit.Maestro.UI.ModelsPage"
              x:Name="modelsPage"
              Title="ModelsPage">
 
@@ -78,7 +78,7 @@
             <Setter Property="StrokeShape" Value="RoundRectangle 4"/>
         </Style>
 
-        <!--<DataTemplate x:Key="LmKitModelsTemplate" x:DataType="vm:ModelInfoViewModel">
+        <!--<DataTemplate x:Key="LMKitModelsTemplate" x:DataType="vm:ModelInfoViewModel">
             <Grid Padding="16, 0">
                 <Border Style="{StaticResource ModelBorderStyle}">
                     <Grid RowDefinitions="*, *, auto" ColumnSpacing="8" ColumnDefinitions="*, auto">
@@ -363,9 +363,9 @@
                             </Setter>
                         </DataTrigger>
 
-                        <!--<DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.LmKitModels}">
+                        <!--<DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.LMKitModels}">
                             <Setter Property="ItemsSource" Value="{Binding ModelListViewModel.AvailableModels}"/>
-                            <Setter Property="ItemTemplate" Value="{StaticResource LmKitModelsTemplate}"/>
+                            <Setter Property="ItemTemplate" Value="{StaticResource LMKitModelsTemplate}"/>
                         </DataTrigger>-->
                     </CollectionView.Triggers>
                 </CollectionView>
@@ -385,10 +385,10 @@
 
                         <BoxView  WidthRequest="1" Grid.Column="1"/>
 
-                        <controls:StatefulContentView Tapped="LmKitModelsTabTapped" Grid.Column="2">
+                        <controls:StatefulContentView Tapped="LMKitModelsTabTapped" Grid.Column="2">
                             <Label TextColor="{StaticResource Outline}" HorizontalOptions="Center" Text="LM-Kit models">
                                 <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.LmKitModels}">
+                                    <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.LMKitModels}">
                                         <Setter Property="TextColor" Value="{StaticResource OnSurface}"/>
                                     </DataTrigger>
                                 </Label.Triggers>

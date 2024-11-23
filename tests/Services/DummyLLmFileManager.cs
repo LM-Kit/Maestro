@@ -1,7 +1,7 @@
-﻿using LMKitMaestro.Services;
+﻿using LMKit.Maestro.Services;
 using System.Collections.ObjectModel;
 
-namespace LMKitMaestro.Tests.Services;
+namespace LMKit.Maestro.Tests.Services;
 
 internal class DummyLLmFileManager : ILLMFileManager
 {
