@@ -51,11 +51,12 @@
         <Grid BackgroundColor="{StaticResource Surface}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="{x:Static local:AppConstants.AppBarHeight}"/>
+                <RowDefinition Height="{x:Static local:AppConstants.ChatPageHeaderHeight}"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <BoxView HeightRequest="1" VerticalOptions="Start"/>
-            <BoxView HeightRequest="1" VerticalOptions="End"/>
+            <BoxView Grid.RowSpan="3" HeightRequest="1" VerticalOptions="Start"/>
+            <BoxView Grid.RowSpan="3" HeightRequest="1" VerticalOptions="End"/>
 
             <Grid RowDefinitions="*">
                 <Grid Padding="12, 24">
@@ -87,7 +88,14 @@
                 </Grid>
 
             </Grid>
-            <shell:SimpleNavigationHost Grid.Row="1"/>
+
+            <ui:TopBarScaffold>
+                
+            </ui:TopBarScaffold>
+            <Grid Grid.Row="1" BackgroundColor="{StaticResource Surface}">
+                
+            </Grid>
+            <shell:SimpleNavigationHost Grid.Row="2"/>
         </Grid>
     </shell:SimpleShell.Content>
 </shell:SimpleShell>
