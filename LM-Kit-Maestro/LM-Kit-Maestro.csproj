@@ -21,6 +21,9 @@
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
+		<AssemblyName>Maestro</AssemblyName>
+		<OutputName>Maestro</OutputName>
+
 		<!-- Display name -->
 		<ApplicationTitle>Maestro</ApplicationTitle>
 
