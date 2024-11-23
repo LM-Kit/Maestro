@@ -272,8 +272,7 @@
                                 <Label Text="Sampling configuration"/>
                                 <Label 
                                     VerticalOptions="Center" 
-                                    StyleClass="IconSmall"
-                                    Text="{StaticResource ChevronRight}">
+                                    StyleClass="IconSmall">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded}" Value="True">
                                             <Setter Property="Text" Value="{StaticResource Keyboard_arrow_up}"/>

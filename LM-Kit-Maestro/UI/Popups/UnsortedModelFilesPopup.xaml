@@ -5,6 +5,7 @@
     xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:ui="clr-namespace:LMKit.Maestro.UI"
     xmlns:vm="clr-namespace:LMKit.Maestro.ViewModels"
+    xmlns:converters="clr-namespace:LMKit.Maestro.Converters"
     x:DataType="vm:UnsortedModelFilesPopupViewModel"
     ShowOkButton="True"
     ShowCloseButton="False"
@@ -32,18 +33,18 @@
                 <Border Style="{StaticResource InnerBorderStyle}" Grid.Row="1">
                     <VerticalStackLayout Margin="8, 0" Spacing="6">
                         <HorizontalStackLayout Spacing="8">
-                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="Material" Text="{StaticResource Folder}"/>
+                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="Material" Text="{StaticResource Folder_open}"/>
                             <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" Text="Models folder"/>
                         </HorizontalStackLayout>
 
                         <HorizontalStackLayout Margin="20, 0" Spacing="6">
-                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="Material" Text="{StaticResource Folder}"/>
+                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="Material" Text="{StaticResource Folder_open}"/>
                             <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" Text="Publisher"/>
                         </HorizontalStackLayout>
 
 
                         <HorizontalStackLayout Margin="40, 0" Spacing="6">
-                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="Material" Text="{StaticResource Folder}"/>
+                            <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" FontFamily="Material" Text="{StaticResource Folder_open}"/>
                             <Label TextColor="{StaticResource OnSurface}" VerticalOptions="Center" Text="Repository"/>
                         </HorizontalStackLayout>
 
@@ -64,9 +65,9 @@
                             <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="x:Uri">
                                 <Grid Padding="0, 0" RowSpacing="8" BackgroundColor="Transparent"  RowDefinitions="*, auto">
-                                    <Label TextColor="{StaticResource OnSurface}" Text="{Binding}"/>
+                                    <Label TextColor="{StaticResource OnSurface}" Text="{Binding ., Converter={converters:FileNameConverter}}"/>
                                     <BoxView Grid.Row="1" StyleClass="Separator"/>
                                 </Grid>
                             </DataTemplate>

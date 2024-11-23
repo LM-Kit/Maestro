@@ -274,14 +274,14 @@
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="1" 
                         ToolTipProperties.Text="Select another folder"
-                        Text="{StaticResource Pen}" 
+                        Text="{StaticResource Edit}" 
                         Command="{Binding PickModelsFolderCommand}"/>
 
                     <Button 
                         CornerRadius="4"
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="2"
-                        Text="{StaticResource FolderOpen}"
+                        Text="{StaticResource Folder_open}"
                         ToolTipProperties.Text="Open in File Explorer"
                         Command="{Binding OpenModelsFolderCommand}"/>
                 </Grid>

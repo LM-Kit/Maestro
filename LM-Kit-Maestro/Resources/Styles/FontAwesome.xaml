@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
+
+    <!--
 	<x:String x:Key="Exclamation">&#xf015;</x:String>
 	<x:String x:Key="Hashtag">&#x0023;</x:String>
 	<x:String x:Key="DollarSign">&#x0024;</x:String>
@@ -1393,5 +1395,5 @@
 	<x:String x:Key="Radio">&#xf8d7;</x:String>
 	<x:String x:Key="RecordVinyl">&#xf8d9;</x:String>
 	<x:String x:Key="WalkieTalkie">&#xf8ef;</x:String>
-	<x:String x:Key="Caravan">&#xf8ff;</x:String>
+	<x:String x:Key="Caravan">&#xf8ff;</x:String>-->
 </ResourceDictionary>

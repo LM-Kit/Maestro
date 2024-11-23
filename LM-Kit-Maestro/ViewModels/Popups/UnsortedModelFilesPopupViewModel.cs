@@ -6,15 +6,10 @@ namespace LMKit.Maestro.ViewModels;
 public partial class UnsortedModelFilesPopupViewModel : ViewModelBase
 {
     [ObservableProperty]
-    ObservableCollection<string> _unsortedModelFiles = new ObservableCollection<string>();
+    ObservableCollection<Uri> _unsortedModelFiles = new ObservableCollection<Uri>();
 
-    public void Load(ICollection<string> unsortedModelFiles)
+    public void Load(ObservableCollection<Uri> unsortedModels)
     {
-        UnsortedModelFiles.Clear();
-
-        foreach (var unsortedModelFile in unsortedModelFiles)
-        {
-            UnsortedModelFiles.Add(unsortedModelFile);
-        }
+        UnsortedModelFiles = unsortedModels;
     }
 }
