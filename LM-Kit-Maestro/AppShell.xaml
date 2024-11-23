@@ -28,7 +28,7 @@
     <!--<Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage">
         <ShellContent ContentTemplate="{DataTemplate ui:AssistantsPage}"/>
     </Tab>-->
-    
+
     <Tab BindingContext="{Binding ChatTab}" Title="{Binding ChatTab.Title}" Route="ChatPage">
         <ShellContent Title="AI Chat" ContentTemplate="{DataTemplate ui:ChatPage}"/>
     </Tab>
@@ -50,16 +50,15 @@
     <shell:SimpleShell.Content>
         <Grid BackgroundColor="{StaticResource Surface}" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="{x:Static local:AppConstants.AppBarHeight}"/>
-                <RowDefinition Height="{x:Static local:AppConstants.ChatPageHeaderHeight}"/>
+                <RowDefinition Height="{x:Static local:AppConstants.TabBarHeight}"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <BoxView Grid.RowSpan="3" HeightRequest="1" VerticalOptions="Start"/>
-            <BoxView Grid.RowSpan="3" HeightRequest="1" VerticalOptions="End"/>
+            <!--<BoxView Grid.RowSpan="" HeightRequest="1" VerticalOptions="Start"/>-->
+            <!--<BoxView Grid.RowSpan="3" HeightRequest="1" VerticalOptions="End"/>-->
 
-            <Grid RowDefinitions="*">
-                <Grid Padding="12, 24">
+            <Grid BackgroundColor="Transparent">
+                <Grid Padding="12, 0">
                     <HorizontalStackLayout
                         VerticalOptions="Center"
                         BindableLayout.ItemsSource="{Binding Tabs}"
@@ -86,16 +85,9 @@
                         </BindableLayout.ItemTemplate>
                     </HorizontalStackLayout>
                 </Grid>
-
             </Grid>
 
-            <ui:TopBarScaffold>
-                
-            </ui:TopBarScaffold>
-            <Grid Grid.Row="1" BackgroundColor="{StaticResource Surface}">
-                
-            </Grid>
-            <shell:SimpleNavigationHost Grid.Row="2"/>
+            <shell:SimpleNavigationHost Grid.Row="1"/>
         </Grid>
     </shell:SimpleShell.Content>
 </shell:SimpleShell>
