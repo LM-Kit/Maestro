@@ -163,7 +163,7 @@
             </Grid.Triggers>
 
             <controls:StatefulContentView
-                TappedCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelListViewModel}}, Path=LoadModelCommand}"
+                TappedCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ModelListViewModel.LoadModelCommand}"
                 CommandParameter="{Binding LastUsedModel}"
                 ToolTipProperties.Text="Click to reload this model">
                 <VisualStateManager.VisualStateGroups>
