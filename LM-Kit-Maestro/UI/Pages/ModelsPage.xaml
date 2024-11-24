@@ -205,7 +205,7 @@
                             BackgroundColor="Transparent"
                             CommandParameter="{Binding}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand}"
-                            Text="{StaticResource Trash}">
+                            Text="{StaticResource Delete}">
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroupList>
                                     <VisualStateGroup x:Name="CommonStates">
@@ -274,14 +274,14 @@
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="1" 
                         ToolTipProperties.Text="Select another folder"
-                        Text="{StaticResource Pen}" 
+                        Text="{StaticResource Edit}" 
                         Command="{Binding PickModelsFolderCommand}"/>
 
                     <Button 
                         CornerRadius="4"
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="2"
-                        Text="{StaticResource FolderOpen}"
+                        Text="{StaticResource Folder_open}"
                         ToolTipProperties.Text="Open in File Explorer"
                         Command="{Binding OpenModelsFolderCommand}"/>
                 </Grid>
@@ -331,8 +331,8 @@
 
                     <Grid>
                         <ui:LinkView 
-                            Icon="{StaticResource CircleInfo}"
-                            TextColor="{StaticResource Error}"
+                            Icon="{StaticResource Report}"
+                            TextColor="{StaticResource Primary}"
                             Text="{Binding FileManager.UnsortedModels.Count, StringFormat='{}You have {0} unsorted model files'}"
                             Command="{Binding Source={x:Reference modelsPage}, Path=ShowUnsortedModelFilesPopupCommand}"
                             IsVisible="{Binding FileManager.UnsortedModels.Count, Converter={converters:GreaterThanZeroConverter}}"/>

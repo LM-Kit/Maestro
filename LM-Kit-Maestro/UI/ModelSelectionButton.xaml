@@ -25,8 +25,8 @@
                 <Setter Property="Padding" Value="0"/>
                 <Setter Property="ToolTipProperties.Text" Value="Eject model"/>
                 <Setter Property="TextColor" Value="{StaticResource Primary}"/>
-                <Setter Property="FontFamily" Value="FASolid"/>
-                <Setter Property="FontSize" Value="9"/>
+                <Setter Property="FontFamily" Value="Material"/>
+                <Setter Property="FontSize" Value="{x:Static local:AppConstants.IconFontSize}"/>
                 <Setter Property="Text" Value="{StaticResource Eject}"/>
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
@@ -170,11 +170,11 @@
                         IsVisible="{Binding LMKitService.ModelLoadingState, Converter={mct:IsNotEqualConverter}, ConverterParameter={x:Static services:LMKitModelLoadingState.Loading}}"
                         BackgroundColor="Transparent"
                         HorizontalOptions="End"
+                        Text="{StaticResource Keyboard_arrow_down}"
                         Grid.Column="2"
                         VerticalOptions="Center"
                         StyleClass="IconSmall"
-                        TextColor="{StaticResource Outline}"
-                        Text="{StaticResource ChevronDown}">
+                        TextColor="{StaticResource Outline}">
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
                                 <Setter Property="IsVisible" Value="False"/>
