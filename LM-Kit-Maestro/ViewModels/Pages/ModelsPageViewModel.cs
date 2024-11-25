@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mopups.Interfaces;
+using CommunityToolkit.Maui.Storage;
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -9,22 +10,26 @@ public partial class ModelsPageViewModel : PageViewModelBase
 {
     private readonly IFolderPicker _folderPicker;
     private readonly IPopupService _popupService;
-    private readonly Services.ILauncher _launcher;
+    private readonly ILauncher _launcher;
     private readonly LMKitService _lmKitService;
+    private readonly IMainThread _mainThread;
 
     public ILLMFileManager FileManager { get; }
     public IAppSettingsService AppSettingsService { get; }
     public ModelListViewModel ModelListViewModel { get; }
 
-    [ObservableProperty]
-    long _totalModelSize;
+    [ObservableProperty] long _totalModelSize;
 
-    public ModelsPageViewModel(INavigationService navigationService, IFolderPicker folderPicker, Services.ILauncher launcher,
-        IPopupService popupService, IPopupNavigation popupNavigation, ILLMFileManager llmFileManager, LMKitService lmKitService,
-        IAppSettingsService appSettingsService, ModelListViewModel modelListViewModel) : base(navigationService, popupService, popupNavigation)
+    public ModelsPageViewModel(INavigationService navigationService, IFolderPicker folderPicker,
+        ILauncher launcher, IMainThread mainThread,
+        IPopupService popupService, IPopupNavigation popupNavigation, ILLMFileManager llmFileManager,
+        LMKitService lmKitService,
+        IAppSettingsService appSettingsService, ModelListViewModel modelListViewModel) : base(navigationService,
+        popupService, popupNavigation)
     {
         _folderPicker = folderPicker;
         _launcher = launcher;
+        _mainThread = mainThread;
         _lmKitService = lmKitService;
         _popupService = popupService;
         FileManager = llmFileManager;
@@ -42,7 +47,8 @@ public partial class ModelsPageViewModel : PageViewModelBase
     public void DownloadModel(ModelInfoViewModel modelInfoViewModel)
     {
         modelInfoViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
-        modelInfoViewModel.ModelInfo.Metadata.FileUri = FileHelpers.GetModelFileUri(modelInfoViewModel.ModelInfo, AppSettingsService.ModelsFolderPath);
+        modelInfoViewModel.ModelInfo.Metadata.FileUri =
+ FileHelpers.GetModelFileUri(modelInfoViewModel.ModelInfo, AppSettingsService.ModelsFolderPath);
 
         FileManager.DownloadModel(modelInfoViewModel.ModelInfo);
     }
@@ -81,25 +87,26 @@ public partial class ModelsPageViewModel : PageViewModelBase
         }
         catch (Exception ex)
         {
-            _popupService.DisplayAlert("Failure to delete model file", $"The model file could not be deleted:\n {ex.Message}", "OK");
+            _popupService.DisplayAlert("Failure to delete model file",
+                $"The model file could not be deleted:\n {ex.Message}", "OK");
         }
     }
 
     [RelayCommand]
-    public void PickModelsFolder()
+    private void PickModelsFolder()
     {
-        Task.Run(async () =>
+        _mainThread.BeginInvokeOnMainThread(async () =>
         {
             var result = await _folderPicker.PickAsync(AppSettingsService.ModelsFolderPath);
 
-            if (result.Success)
+            if (result.IsSuccessful)
             {
                 if (_lmKitService.ModelLoadingState != LMKitModelLoadingState.Unloaded)
                 {
                     _lmKitService.UnloadModel();
                 }
 
-                AppSettingsService.ModelsFolderPath = result.FolderPath!;
+                AppSettingsService.ModelsFolderPath = result.Folder.Path!;
             }
         });
     }
@@ -109,11 +116,10 @@ public partial class ModelsPageViewModel : PageViewModelBase
     {
         try
         {
-            await _launcher.OpenAsync(new Uri(AppSettingsService.ModelsFolderPath));
+            await _launcher.OpenAsync(new Uri($"file://{AppSettingsService.ModelsFolderPath}"));
         }
-        catch
+        catch (Exception exception)
         {
-
         }
     }
 
@@ -126,7 +132,6 @@ public partial class ModelsPageViewModel : PageViewModelBase
         }
         catch
         {
-
         }
     }
 

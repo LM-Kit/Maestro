@@ -11,6 +11,7 @@ using MetroLog.Operators;
 using Majorsoft.Blazor.Components.Common.JsInterop;
 using Mopups.Hosting;
 using Mopups.Services;
+using CommunityToolkit.Maui.Storage;
 
 namespace LMKit.Maestro
 {
@@ -93,18 +94,14 @@ namespace LMKit.Maestro
             builder.Services.AddSingleton<ILLMFileManager, LLMFileManager>();
             builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
             builder.Services.AddSingleton<IPopupService, Services.PopupService>();
-            builder.Services.AddSingleton<Services.ILauncher, Services.Launcher>();
             builder.Services.AddSingleton<INavigationService, NavigationService>();
             builder.Services.AddSingleton<IMainThread, Services.MainThread>();
             builder.Services
                 .AddSingleton<CommunityToolkit.Maui.Core.IPopupService, CommunityToolkit.Maui.PopupService>();
 
-#if WINDOWS
-            builder.Services.AddSingleton<IFolderPicker, WinUI.FolderPicker>();
-#elif MACCATALYST
-            builder.Services.AddSingleton<IFolderPicker, LMKit.Maestro.MacFolderPicker>();
-#endif
+            builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
 
+            builder.Services.AddSingleton(Launcher.Default);
             builder.Services.AddSingleton(Preferences.Default);
             builder.Services.AddSingleton<LMKitService>();
             builder.Services.AddSingleton<LLMFileManager>();
