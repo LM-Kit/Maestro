@@ -10,7 +10,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
 {
     private readonly IFolderPicker _folderPicker;
     private readonly IPopupService _popupService;
-    private readonly Services.ILauncher _launcher;
+    private readonly ILauncher _launcher;
     private readonly LMKitService _lmKitService;
     private readonly IMainThread _mainThread;
 
@@ -21,7 +21,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
     [ObservableProperty] long _totalModelSize;
 
     public ModelsPageViewModel(INavigationService navigationService, IFolderPicker folderPicker,
-        Services.ILauncher launcher, IMainThread mainThread,
+        ILauncher launcher, IMainThread mainThread,
         IPopupService popupService, IPopupNavigation popupNavigation, ILLMFileManager llmFileManager,
         LMKitService lmKitService,
         IAppSettingsService appSettingsService, ModelListViewModel modelListViewModel) : base(navigationService,
@@ -116,9 +116,9 @@ public partial class ModelsPageViewModel : PageViewModelBase
     {
         try
         {
-            await _launcher.OpenAsync(new Uri(AppSettingsService.ModelsFolderPath));
+            await _launcher.OpenAsync(new Uri($"file://{AppSettingsService.ModelsFolderPath}"));
         }
-        catch
+        catch (Exception exception)
         {
         }
     }

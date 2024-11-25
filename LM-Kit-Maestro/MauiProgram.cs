@@ -94,7 +94,6 @@ namespace LMKit.Maestro
             builder.Services.AddSingleton<ILLMFileManager, LLMFileManager>();
             builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
             builder.Services.AddSingleton<IPopupService, Services.PopupService>();
-            builder.Services.AddSingleton<Services.ILauncher, Services.Launcher>();
             builder.Services.AddSingleton<INavigationService, NavigationService>();
             builder.Services.AddSingleton<IMainThread, Services.MainThread>();
             builder.Services
@@ -102,6 +101,7 @@ namespace LMKit.Maestro
 
             builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
 
+            builder.Services.AddSingleton(Launcher.Default);
             builder.Services.AddSingleton(Preferences.Default);
             builder.Services.AddSingleton<LMKitService>();
             builder.Services.AddSingleton<LLMFileManager>();
