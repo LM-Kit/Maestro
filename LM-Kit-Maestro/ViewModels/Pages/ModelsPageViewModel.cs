@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mopups.Interfaces;
+using CommunityToolkit.Maui.Storage;
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -92,14 +93,14 @@ public partial class ModelsPageViewModel : PageViewModelBase
         {
             var result = await _folderPicker.PickAsync(AppSettingsService.ModelsFolderPath);
 
-            if (result.Success)
+            if (result.IsSuccessful)
             {
                 if (_lmKitService.ModelLoadingState != LMKitModelLoadingState.Unloaded)
                 {
                     _lmKitService.UnloadModel();
                 }
 
-                AppSettingsService.ModelsFolderPath = result.FolderPath!;
+                AppSettingsService.ModelsFolderPath = result.Folder.Path!;
             }
         });
     }
