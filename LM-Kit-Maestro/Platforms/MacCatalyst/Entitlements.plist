@@ -9,6 +9,11 @@
         <!-- When App Sandbox is enabled, this value is required to open outgoing network connections. -->
         <key>com.apple.security.network.client</key>
         <true/>
+
+        <!-- The entitlements below are mandatory to use CommunityToolkit FolderPicker service on Mac. -->
+        <key>com.apple.security.files.user-selected.read-only</key>
+        <true/>
+        <key>com.apple.security.files.user-selected.read-write</key>
+        <true/>
     </dict>
 </plist>
-
