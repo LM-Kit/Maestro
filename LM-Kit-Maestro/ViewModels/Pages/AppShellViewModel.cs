@@ -99,9 +99,9 @@ public partial class AppShellViewModel : ViewModelBase
     private void TryLoadLastUsedModel()
     {
         if (FileHelpers.TryCreateFileUri(_appSettingsService.LastLoadedModel!, out Uri? fileUri) &&
-            File.Exists(_appSettingsService.LastLoadedModel) &&
+            File.Exists(_appSettingsService.LastLoadedModel)/* &&
             FileHelpers.GetModelInfoFromFileUri(fileUri!, _appSettingsService.ModelsFolderPath,
-            out string publisher, out string repository, out string fileName))
+            out string publisher, out string repository, out string fileName)*/)
         {
             _lmKitService.LoadModel(fileUri!);
         }
