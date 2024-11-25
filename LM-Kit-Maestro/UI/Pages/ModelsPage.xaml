@@ -333,8 +333,8 @@
 
                         <Grid>
                             <ui:LinkView
-                            Icon="{StaticResource CircleInfo}"
-                            TextColor="{StaticResource Error}"
+                            Icon="{StaticResource Report}"
+                            TextColor="{StaticResource Primary}"
                             Text="{Binding FileManager.UnsortedModels.Count, StringFormat='{}You have {0} unsorted model files'}"
                             Command="{Binding Source={x:Reference modelsPage}, Path=ShowUnsortedModelFilesPopupCommand}"
                             IsVisible="{Binding FileManager.UnsortedModels.Count, Converter={converters:GreaterThanZeroConverter}}"/>
