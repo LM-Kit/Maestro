@@ -40,7 +40,7 @@ public partial class ModelsPage : PageBase
 
         UnsortedModelFilesPopup popup = new UnsortedModelFilesPopup(_modelsPageViewModel.PopupNavigation, new UnsortedModelFilesPopupViewModel()
         {
-            UnsortedModelFiles = new System.Collections.ObjectModel.ObservableCollection<string>(fileNames)
+            UnsortedModelFiles = _modelsPageViewModel.FileManager.UnsortedModels
         });
 
         await _modelsPageViewModel.PopupNavigation.PushAsync(popup);

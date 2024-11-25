@@ -41,7 +41,7 @@
                     Clicked="OnCloseButtonClicked"
                     CornerRadius="20"
                     HorizontalOptions="End" 
-                    Text="{StaticResource Xmark}" 
+                    Text="{StaticResource Close}" 
                     Style="{StaticResource SecondaryActionButtonStyle}">
                 </Button>
 

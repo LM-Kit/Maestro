@@ -14,7 +14,7 @@
 
     <!--<ContentPage.Resources>
         <ControlTemplate "ModelDownloadingTemplate">
-            
+
         </ControlTemplate>
         <ControlTemplate "ModelDownloadedTemplate">
 
@@ -90,7 +90,7 @@
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
 
-                        <controls:StatefulContentView 
+                        <controls:StatefulContentView
                             Grid.Column="1"
                             Grid.RowSpan="2"
                             IsEnabled="False"
@@ -99,11 +99,11 @@
                             CommandParameter="{Binding}"
                             VerticalOptions="Center">
 
-                            <Border 
+                            <Border
                                 IsEnabled="False"
-                                StrokeThickness="0" 
+                                StrokeThickness="0"
                                 StrokeShape="RoundRectangle 4"
-                                Stroke="{StaticResource SecondaryContainer}" 
+                                Stroke="{StaticResource SecondaryContainer}"
                                 BackgroundColor="{StaticResource SecondaryContainer}"
                                 Padding="8, 6">
 
@@ -172,7 +172,7 @@
                                 </Label.Text>
                             </Label>
 
-                            <ProgressBar 
+                            <ProgressBar
                                 Grid.Row="1"
                                 Grid.ColumnSpan="2"
                                 Progress="{Binding DownloadInfo.Progress}"/>
@@ -204,7 +204,7 @@
                             BackgroundColor="Transparent"
                             CommandParameter="{Binding}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand}"
-                            Text="{StaticResource Trash}">
+                            Text="{StaticResource Delete}">
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroupList>
                                     <VisualStateGroup x:Name="CommonStates">
@@ -231,56 +231,56 @@
     </ui:PageBase.Resources>
 
     <ui:PageBase.Header>
-        <Grid 
+        <Grid
             Margin="0, -8, 0, 0"
             Padding="20, 0"
             ColumnSpacing="8"
             BackgroundColor="{StaticResource Surface}"
-            RowSpacing="0" 
+            RowSpacing="0"
             HeightRequest="{x:Static local:AppConstants.PageTopBarHeight}">
 
-            <Grid 
+            <Grid
                 MaximumWidthRequest="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"
-                ColumnSpacing="12" 
+                ColumnSpacing="12"
                 VerticalOptions="Center"
-                
+
                 ColumnDefinitions="auto, *"
                 HorizontalOptions="Fill">
 
-                <Label 
+                <Label
                     VerticalOptions="Center"
                     StyleClass="Subtitle"
                     Text="Model folder :"/>
 
-                <Grid 
+                <Grid
                     HorizontalOptions="Fill"
                     Grid.Column="1"
                     ColumnSpacing="8"
                     ColumnDefinitions="*, auto, auto">
 
-                    <Border 
+                    <Border
                         StrokeThickness="1"
                         VerticalOptions="Center"
-                        StrokeShape="RoundRectangle 4" 
+                        StrokeShape="RoundRectangle 4"
                         BackgroundColor="Transparent"
                         Stroke="{StaticResource Surface4}">
 
                         <controls:CustomEntry VerticalOptions="End"  IsReadOnly="True" Text="{Binding AppSettingsService.ModelsFolderPath}"/>
                     </Border>
 
-                    <Button 
+                    <Button
                         CornerRadius="4"
                         Style="{StaticResource SecondaryActionButtonStyle}"
-                        Grid.Column="1" 
+                        Grid.Column="1"
                         ToolTipProperties.Text="Select another folder"
-                        Text="{StaticResource Pen}" 
+                        Text="{StaticResource Edit}"
                         Command="{Binding PickModelsFolderCommand}"/>
 
-                    <Button 
+                    <Button
                         CornerRadius="4"
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="2"
-                        Text="{StaticResource FolderOpen}"
+                        Text="{StaticResource Folder_open}"
                         ToolTipProperties.Text="Open in File Explorer"
                         Command="{Binding OpenModelsFolderCommand}"/>
                 </Grid>
@@ -289,12 +289,12 @@
     </ui:PageBase.Header>
 
     <ui:PageBase.Body>
-        <Grid 
+        <Grid
             Margin="0, 0, 0, 20" RowSpacing="20"
             RowDefinitions="*, 20">
-            <Border 
-                Stroke="Transparent" 
-                StrokeShape="RoundRectangle 4" 
+            <Border
+                Stroke="Transparent"
+                StrokeShape="RoundRectangle 4"
                 StrokeThickness="0">
                 <Grid RowDefinitions="auto, *, auto">
                     <VerticalStackLayout
@@ -308,7 +308,7 @@
                                 </DataTrigger>
                             </HorizontalStackLayout.Triggers>
 
-                            <ActivityIndicator 
+                            <ActivityIndicator
                                 HorizontalOptions="Center"
                                 IsVisible="{Binding FileManager.FileCollectingInProgress}"
                                 BackgroundColor="Transparent"
@@ -316,7 +316,7 @@
                                 Color="{StaticResource Outline}"
                                 Margin="0" IsRunning="True" HeightRequest="12" WidthRequest="12"/>
 
-                            <Label 
+                            <Label
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center"
                                 IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:GreaterThanZeroConverter}}">
@@ -332,7 +332,7 @@
                         </HorizontalStackLayout>
 
                         <Grid>
-                            <ui:LinkView 
+                            <ui:LinkView
                             Icon="{StaticResource CircleInfo}"
                             TextColor="{StaticResource Error}"
                             Text="{Binding FileManager.UnsortedModels.Count, StringFormat='{}You have {0} unsorted model files'}"

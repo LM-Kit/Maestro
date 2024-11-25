@@ -39,14 +39,13 @@ namespace LMKit.Maestro
                     fonts.AddFont("Segoe UI.ttf", "Segoe");
                     fonts.AddFont("Segoe UI Bold.ttf", "SegoeBold");
 
+                    fonts.AddFont("MaterialIcons-Regular.ttf", "Material");
+
+                    //fonts.AddFont("FontAkwesome.ttf", "Material");
                     // FontAwesome
-                    fonts.AddFont("Font Awesome 6 Free-Regular-400.otf", "FARegular");
-                    fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FASolid");
+                    //fonts.AddFont("Font Awesome 6 Free-Regular-400.otf", "FARegular");
                 })
-                .ConfigureMauiHandlers(handlers =>
-                {
-                    handlers.AddCustomHandlers();
-                });
+                .ConfigureMauiHandlers(handlers => { handlers.AddCustomHandlers(); });
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddJsInteropExtensions();
@@ -97,10 +96,13 @@ namespace LMKit.Maestro
             builder.Services.AddSingleton<Services.ILauncher, Services.Launcher>();
             builder.Services.AddSingleton<INavigationService, NavigationService>();
             builder.Services.AddSingleton<IMainThread, Services.MainThread>();
-            builder.Services.AddSingleton<CommunityToolkit.Maui.Core.IPopupService, CommunityToolkit.Maui.PopupService>();
+            builder.Services
+                .AddSingleton<CommunityToolkit.Maui.Core.IPopupService, CommunityToolkit.Maui.PopupService>();
 
 #if WINDOWS
             builder.Services.AddSingleton<IFolderPicker, WinUI.FolderPicker>();
+#elif MACCATALYST
+            builder.Services.AddSingleton<IFolderPicker, LMKit.Maestro.MacFolderPicker>();
 #endif
 
             builder.Services.AddSingleton(Preferences.Default);
@@ -120,27 +122,27 @@ namespace LMKit.Maestro
         public static void ConfigureLogger(this MauiAppBuilder builder)
         {
             builder.Logging
-            .AddTraceLogger(
-                options =>
-                {
-                    options.MinLevel = LogLevel.Trace;
-                    options.MaxLevel = LogLevel.Critical;
-                }) // Will write to the Debug Output
-            .AddInMemoryLogger(
-                options =>
-                {
-                    options.MaxLines = 1024;
-                    options.MinLevel = LogLevel.Debug;
-                    options.MaxLevel = LogLevel.Critical;
-                })
-            .AddStreamingFileLogger(
-                options =>
-                {
-                    options.RetainDays = 2;
-                    options.FolderPath = Path.Combine(
-                        FileSystem.CacheDirectory,
-                        "MetroLogs");
-                });
+                .AddTraceLogger(
+                    options =>
+                    {
+                        options.MinLevel = LogLevel.Trace;
+                        options.MaxLevel = LogLevel.Critical;
+                    }) // Will write to the Debug Output
+                .AddInMemoryLogger(
+                    options =>
+                    {
+                        options.MaxLines = 1024;
+                        options.MinLevel = LogLevel.Debug;
+                        options.MaxLevel = LogLevel.Critical;
+                    })
+                .AddStreamingFileLogger(
+                    options =>
+                    {
+                        options.RetainDays = 2;
+                        options.FolderPath = Path.Combine(
+                            FileSystem.CacheDirectory,
+                            "MetroLogs");
+                    });
 
             var path = FileSystem.CacheDirectory;
             builder.Services.AddSingleton(LogOperatorRetriever.Instance);

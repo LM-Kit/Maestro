@@ -4,3 +4,4 @@ LM-Kit-Maestro/obj
 *.user
 /tests/bin
 /tests/obj
+/.idea

@@ -36,35 +36,23 @@
                 <Setter Property="VerticalOptions" Value="Center"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
             </Style>
-
-            <ControlTemplate x:Key="TuckedSettingsSidebarUpperGrid">
-                <Grid Style="{StaticResource TuckedSidebarUpperGridStyle}" Grid.Column="2">
-                    <Button
-                      Margin="12, 0"
-                      Style="{StaticResource SidebarToggleButtonStyle}"
-                      Text="{StaticResource Gear}"
-                      Command="{Binding ToggleSettingsSidebarCommand}"
-                      HorizontalOptions="End"
-                      Grid.Column="2"/>
-                </Grid>
-            </ControlTemplate>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ui:PageBase.Header>
-        <Grid 
+        <Grid
             VerticalOptions="Center"
-            Grid.ColumnSpan="3" 
+            Grid.ColumnSpan="3"
             ColumnDefinitions="auto, *, auto">
 
-            <Grid 
+            <Grid
                 Style="{StaticResource SidebarHeaderGrid}"
                 Padding="16, 0, 0, 0"
                 WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth}">
 
                 <Button
                     Style="{StaticResource SidebarToggleButtonStyle}"
-                    Text="{StaticResource Comments}"
+                    Text="{StaticResource Forum}"
                     Command="{Binding ToggleChatsSidebarCommand}"
                     HorizontalOptions="Start"/>
 
@@ -78,13 +66,13 @@
                     HorizontalOptions="End"
                     ToolTipProperties.Text="Start a new chat"
                     Style="{StaticResource SecondaryActionButtonStyle}"
-                    Grid.Column="2" 
-                    FontFamily="FASolid"
-                    Text="{StaticResource Plus}"
+                    Grid.Column="2"
+                    FontFamily="Material"
+                    Text="{StaticResource Add}"
                     Command="{Binding StartNewConversationCommand}"/>
             </Grid>
 
-            <ui:ModelSelectionButton 
+            <ui:ModelSelectionButton
                 BindingContext="{Binding ModelListViewModel}"
                 x:Name="modelSelectionButton"
                 VerticalOptions="Start"
@@ -109,19 +97,19 @@
                     HorizontalOptions="Start"
                     ToolTipProperties.Text="Reset default settings"
                     Style="{StaticResource SecondaryActionButtonStyle}"
-                    Text="{StaticResource ArrowRotateLeft}"
+                    Text="{StaticResource Rotate_right}"
                     Command="{Binding SettingsViewModel.ResetDefaultValuesCommand}" />
 
-                <Label 
+                <Label
                     StyleClass="Title"
                     Style="{StaticResource SidebarTitleStyle}"
                     IsVisible="{Binding SettingsSidebarIsToggled}"
                     Text="Settings"/>
 
-                <Button 
+                <Button
                     Grid.Column="2"
                     Style="{StaticResource SidebarToggleButtonStyle}"
-                    Text="{StaticResource Gear}"
+                    Text="{StaticResource Tune}"
                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ToggleSettingsSidebarCommand}"/>
             </Grid>
         </Grid>

@@ -18,14 +18,14 @@
 
     <ContentView.Resources>
         <ResourceDictionary>
-            <Style x:Key="SendButtonStyle" TargetType="Button">
+            <Style x:Key="SubmitButtonStyle" TargetType="Button">
                 <Setter Property="WidthRequest" Value="32"/>
                 <Setter Property="HeightRequest" Value="32"/>
                 <Setter Property="CornerRadius" Value="16"/>
                 <Setter Property="BorderWidth" Value="0"/>
                 <Setter Property="Padding" Value="0"/>
                 <Setter Property="VerticalOptions" Value="End"/>
-                <Setter Property="FontFamily" Value="MaterialRegular"/>
+                <Setter Property="FontFamily" Value="Material"/>
                 <Setter Property="BackgroundColor" Value="{StaticResource Surface4}"/>
                 <Setter Property="TextColor" Value="{StaticResource OnSurface}"/>
                 <Setter Property="VisualStateManager.VisualStateGroups">
@@ -103,11 +103,10 @@
 
                 <Button 
                     Grid.Column="1" 
-                    FontFamily="FASolid"
-                    FontSize="14"
+                    StyleClass="Icon"
                     Margin="0, 0, 0, 10"
-                    Text="{StaticResource ArrowUp}"
-                    Style="{StaticResource SendButtonStyle}"
+                    Text="{StaticResource Arrow_upward}"
+                    Style="{StaticResource SubmitButtonStyle}"
                     >
 
                     <Button.Triggers>
@@ -164,7 +163,7 @@
             </Grid.Triggers>
 
             <controls:StatefulContentView
-                TappedCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=LoadModelCommand}"
+                TappedCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ModelListViewModel.LoadModelCommand}"
                 CommandParameter="{Binding LastUsedModel}"
                 ToolTipProperties.Text="Click to reload this model">
                 <VisualStateManager.VisualStateGroups>
@@ -207,7 +206,7 @@
                         VerticalOptions="Center"
                         TextColor="{StaticResource Outline}" 
                         StyleClass="IconSmall"
-                        Text="{StaticResource RotateRight}"
+                        Text="{StaticResource Rotate_right}"
                         />
                 </Grid>
             </controls:StatefulContentView>

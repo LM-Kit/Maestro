@@ -46,6 +46,8 @@ internal static class AppConstants
 
     public const double ChatPageToggleButtonWidth = 32;
 
+    public const double IconFontSize = 16;
+
 #if BETA_DOWNLOAD_MODELS
     //LM-Kit models catalog: https://huggingface.co/lm-kit
     public static readonly ModelInfo[] AvailableModels =
