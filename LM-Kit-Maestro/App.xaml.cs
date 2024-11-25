@@ -10,6 +10,7 @@ namespace LMKit.Maestro
         public App(AppShellViewModel appShellViewModel)
         {
             InitializeComponent();
+            LMKit.Global.Runtime.Initialize();
 
             BlazorWebViewHandler.BlazorWebViewMapper.AppendToMapping("CustomBlazorWebView", (handler, view) =>
             {
