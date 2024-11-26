@@ -20,9 +20,9 @@ namespace LMKit.Maestro.Helpers
             return null;
         }
 
-        public static ModelInfoViewModel? TryGetExistingModelInfoViewModel(ICollection<ModelInfoViewModel> modelInfoViewModels, Uri modelFileUri)
+        public static ModelInfoViewModel? TryGetExistingModelInfoViewModel(string modelsFolderPath, ICollection<ModelInfoViewModel> modelInfoViewModels, Uri modelFileUri)
         {
-            if (FileHelpers.GetModelInfoFromPath(modelFileUri.LocalPath, out string publisher, out string repository, out string fileName))
+            if (FileHelpers.GetModelInfoFromPath(modelFileUri.LocalPath, modelsFolderPath, out string publisher, out string repository, out string fileName))
             {
                 foreach (var modelInfoViewModel in modelInfoViewModels)
                 {
@@ -34,8 +34,21 @@ namespace LMKit.Maestro.Helpers
                     }
                 }
             }
+            else
+            {
+                //handling unsorted models.
+                foreach (var modelInfoViewModel in modelInfoViewModels)
+                {
+                    if (modelInfoViewModel.ModelInfo.FileUri == modelFileUri)
+                    {
+                        return modelInfoViewModel;
+                    }
+                }
+            }
 
-            return null;
+            //Loïc: we have an architecture defect. We can reach this stage, especially at startup, while modelInfoViewModels is not completely loaded.
+            //todo Evan: fix.
+            return new ModelInfoViewModel(new ModelInfo(publisher, repository, fileName, modelFileUri));
         }
     }
 }

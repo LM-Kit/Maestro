@@ -80,6 +80,9 @@ public partial class AppShellViewModel : ViewModelBase
 
         await _conversationListViewModel.LoadConversationLogs();
 
+        _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
+        _llmFileManager.Initialize();
+
         _lmKitService.ModelLoadingFailed += OnModelLoadingFailed;
 
         if (_appSettingsService.LastLoadedModel != null)
@@ -87,9 +90,6 @@ public partial class AppShellViewModel : ViewModelBase
             TryLoadLastUsedModel();
         }
 
-        _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
-        _llmFileManager.Initialize();
-        
         // todo: we should ensure UI is loaded before starting loading a model with this call.
         _modelListViewModel.Initialize();
 
