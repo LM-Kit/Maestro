@@ -77,6 +77,7 @@ public partial class LMKitService : INotifyPropertyChanged
             if (modelLoadingSuccess)
             {
                 LMKitConfig.LoadedModelUri = fileUri!;
+
                 ModelLoadingCompleted?.Invoke(this, new NotifyModelStateChangedEventArgs(LMKitConfig.LoadedModelUri));
                 ModelLoadingState = LMKitModelLoadingState.Loaded;
             }

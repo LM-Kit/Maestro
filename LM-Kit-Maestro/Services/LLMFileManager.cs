@@ -212,7 +212,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             await CancelOngoingFileCollecting();
         }
 
-
         _cancellationTokenSource = new CancellationTokenSource();
 
         Exception? exception = null;

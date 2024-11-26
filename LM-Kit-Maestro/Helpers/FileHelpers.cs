@@ -63,39 +63,6 @@ public static class FileHelpers
         return false;
     }
 
-    public static bool GetModelInfoFromPath(string filePath, out string publisher, out string repository, out string fileName)
-    {
-        repository = string.Empty;
-        publisher = string.Empty;
-        fileName = string.Empty;
-
-        Uri fileUri;
-
-        try
-        {
-            fileUri = new Uri(filePath);
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-
-        if (fileUri.IsFile && fileUri.Segments.Length > 4)
-        {
-            publisher = SanitizeUriSegment(fileUri.Segments[fileUri.Segments.Length - 3]);
-            repository = SanitizeUriSegment(fileUri.Segments[fileUri.Segments.Length - 2]);
-            fileName = SanitizeUriSegment(fileUri.Segments[fileUri.Segments.Length - 1]);
-
-            return true;
-        }
-
-        repository = string.Empty;
-        publisher = string.Empty;
-        fileName = string.Empty;
-
-        return false;
-    }
-
     public static bool TryCreateFileUri(string filePath, out Uri? uri)
     {
         try
