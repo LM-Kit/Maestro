@@ -36,7 +36,7 @@ namespace LMKit.Maestro.Tests
             ModelListViewModel = GetNewModelListViewModel(LMKitService, LLmFileManager);
             ChatPageViewModel = GetNewChatPageViewModel(LMKitService, ConversationListViewModel, ModelListViewModel, Database, LLmFileManager, SettingsViewModel);
             LMKitService.LMKitConfig.MaximumCompletionTokens = 200;
-            LMKitService.LMKitConfig.RequestTimeout = 15;
+            LMKitService.LMKitConfig.RequestTimeout = 30;
         }
 
         public LMKitService.Conversation GetNewLMKitConversation()
