@@ -244,28 +244,30 @@ public partial class LMKitService : INotifyPropertyChanged
 
     }
 
-    private async Task<LMKitResult> SubmitRequest(LMKitRequest promptRequest)
+    private async Task<LMKitResult> SubmitRequest(LMKitRequest request)
     {
-        PromptRequestParameters parameter = (promptRequest.Parameters as PromptRequestParameters)!;
-
         try
         {
-            _requestSchedule.RunningPromptRequest = promptRequest;
+            _requestSchedule.RunningPromptRequest = request;
 
             var result = new LMKitResult();
 
             try
             {
-                if (promptRequest.RequestType == LMKitRequestType.Prompt)
+                if (request.RequestType == LMKitRequestType.Prompt)
                 {
-                     result.Result = await _multiTurnConversation!.SubmitAsync(parameter.Prompt,
-                        promptRequest.CancellationTokenSource.Token);
+                    result.Result = await _multiTurnConversation!.SubmitAsync(((PromptRequestParameters)request.Parameters!).Prompt,
+                        request.CancellationTokenSource.Token);
                 }
-                else if (promptRequest.RequestType == LMKitRequestType.Translate)
+                else if (request.RequestType == LMKitRequestType.Translate)
                 {
-                    TranslationRequestParameters translationRequestParameters = (TranslationRequestParameters)promptRequest.Parameters!;
+                    TranslationRequestParameters translationRequestParameters = (TranslationRequestParameters)request.Parameters!;
                     result.Result = await _textTranslation!.TranslateAsync(translationRequestParameters.InputText,
-                        translationRequestParameters.Language, promptRequest.CancellationTokenSource.Token);
+                        translationRequestParameters.Language, request.CancellationTokenSource.Token);
+                }
+                else if (request.RequestType == LMKitRequestType.RegenerateResponse)
+                {
+                    result.Result = await _multiTurnConversation!.RegenerateResponseAsync(request.CancellationTokenSource.Token);
                 }
             }
             catch (Exception exception)
@@ -282,18 +284,21 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
             }
 
-            if (promptRequest.RequestType == LMKitRequestType.Prompt && _multiTurnConversation != null)
+            if (request.RequestType == LMKitRequestType.Prompt && _multiTurnConversation != null)
             {
+                PromptRequestParameters parameter = (request.Parameters as PromptRequestParameters)!;
+
                 parameter.Conversation.ChatHistory = _multiTurnConversation.ChatHistory;
                 parameter.Conversation.LatestChatHistoryData = _multiTurnConversation.ChatHistory.Serialize();
 
-                if (parameter.Conversation.GeneratedTitleSummary == null && result.Status == LMKitTextGenerationStatus.Undefined && !string.IsNullOrEmpty(((TextGenerationResult)result.Result!).Completion))
+                if (parameter.Conversation.GeneratedTitleSummary == null && result.Status == LMKitTextGenerationStatus.Undefined 
+                    && !string.IsNullOrEmpty(((TextGenerationResult)result.Result!).Completion))
                 {
                     GenerateConversationSummaryTitle(parameter.Conversation, parameter.Prompt);
                 }
             }
 
-            if (result.Exception != null && promptRequest.CancellationTokenSource.IsCancellationRequested)
+            if (result.Exception != null && request.CancellationTokenSource.IsCancellationRequested)
             {
                 result.Status = LMKitTextGenerationStatus.Cancelled;
             }

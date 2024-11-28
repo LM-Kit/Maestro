@@ -155,6 +155,8 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     [RelayCommand]
     private async Task RegenerateResponse(MessageViewModel message)
     {
+        message.Text = "";
+        message.MessageInProgress = true;
         var response = await _lmKitService.RegenerateResponse(_lmKitConversation, message.LMKitMessage!);
     }
 
