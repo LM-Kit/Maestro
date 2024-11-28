@@ -163,7 +163,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         string prompt = InputText;
         OnNewlySubmittedPrompt(prompt);
 
-        LMKitService.PromptResult? promptResult = null;
+        LMKitService.LMKitResult? promptResult = null;
 
         Task.Run(async () =>
         {
@@ -179,7 +179,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         });
     }
 
-    private void OnPromptResult(LMKitService.PromptResult? promptResult, Exception? submitPromptException = null)
+    private void OnPromptResult(LMKitService.LMKitResult? promptResult, Exception? submitPromptException = null)
     {
         AwaitingResponse = false;
 
@@ -205,9 +205,9 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
             _pendingResponse!.Status = LatestPromptStatus;
             _pendingPrompt!.Status = LatestPromptStatus;
 
-            if (promptResult.Status == LMKitTextGenerationStatus.Undefined && promptResult.TextGenerationResult != null)
+            if (promptResult.Status == LMKitTextGenerationStatus.Undefined && promptResult.Result is TextGenerationResult textGenerationResult)
             {
-                OnTextGenerationSuccess(promptResult.TextGenerationResult);
+                OnTextGenerationSuccess(textGenerationResult);
             }
             else
             {
