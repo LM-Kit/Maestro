@@ -70,7 +70,7 @@ public class ChatHistoryPersistenceTests
     public async Task ChatHistoryIsRestored()
     {
         MaestroTestsService testService = new();
-        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
+        bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
         ConversationLog dummyConversationLog = new()

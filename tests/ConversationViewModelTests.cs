@@ -116,7 +116,7 @@ public class ConversationViewModelTests
 
         var testConversation = testService.GetNewConversationViewModel();
 
-        testConversation.ConversationViewModel.InputText = "Comment écrire une page web de mentions legales ?";
+        testConversation.ConversationViewModel.InputText = "1+1";
         testConversation.ConversationViewModel.Submit();
 
         await testConversation.PromptResultTask.Task;

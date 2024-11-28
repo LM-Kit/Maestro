@@ -258,7 +258,7 @@ public partial class LMKitService : INotifyPropertyChanged
             {
                 if (promptRequest.RequestType == LMKitRequestType.Prompt)
                 {
-                    result.Result = await _multiTurnConversation!.SubmitAsync(parameter.Prompt,
+                     result.Result = await _multiTurnConversation!.SubmitAsync(parameter.Prompt,
                         promptRequest.CancellationTokenSource.Token);
                 }
                 else if (promptRequest.RequestType == LMKitRequestType.Translate)
