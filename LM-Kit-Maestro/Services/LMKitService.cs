@@ -182,12 +182,20 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public async Task<LMKitResult> RegenerateResponse(Conversation conversation)
     {
+        var prompt = conversation.ChatHistory.Messages[conversation.ChatHistory.Messages.Count - 1];
+        var message = conversation.ChatHistory.Messages.Last();
         //var message = conversation.ChatHistory.Messages.Last();
 
-        //var regeneratePromptRequest = new RegenerateResponseRequest(string.Empty, LMKitConfig.RequestTimeout);
+        var regenerateResponseRequest = new LMKitRequest(LMKitRequestType.RegenerateResponse, prompt.Content, LMKitConfig.RequestTimeout);
 
-        //_promptSchedule.Schedule()
-        return null;
+        _promptSchedule.Schedule(regenerateResponseRequest);
+
+        if (_promptSchedule.Count > 1)
+        {
+            regenerateResponseRequest.CanBeExecutedSignal.WaitOne();
+        }
+
+        return await HandlePromptRequest(regenerateResponseRequest);
     }
 
     public async Task CancelPrompt(Conversation conversation, bool shouldAwaitTermination = false)

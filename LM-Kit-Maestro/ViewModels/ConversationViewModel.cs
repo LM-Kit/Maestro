@@ -126,7 +126,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
                 {
                     if (message.AuthorRole == AuthorRole.Assistant || message.AuthorRole == AuthorRole.User)
                     {
-                        Messages.Add(new MessageViewModel(message) { MessageInProgress = false });
+                        Messages.Add(new MessageViewModel(this, message) { MessageInProgress = false });
                     }
                 }
 
@@ -265,8 +265,8 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         AwaitingResponse = true;
         _awaitingLMKitUserMessage = true;
         _awaitingLMKitAssistantMessage = true;
-        _pendingPrompt = new MessageViewModel(new Message() { Sender = MessageSender.User, Text = prompt });
-        _pendingResponse = new MessageViewModel(new Message() { Sender = MessageSender.Assistant }) { MessageInProgress = true };
+        _pendingPrompt = new MessageViewModel(this, new Message() { Sender = MessageSender.User, Text = prompt });
+        _pendingResponse = new MessageViewModel(this, new Message() { Sender = MessageSender.Assistant }) { MessageInProgress = true };
 
         Messages.Add(_pendingPrompt);
         Messages.Add(_pendingResponse);
@@ -325,7 +325,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
                 }
                 else
                 {
-                    MessageViewModel messageViewModel = new MessageViewModel(message);
+                    MessageViewModel messageViewModel = new MessageViewModel(this, message);
                     _mainThread.BeginInvokeOnMainThread(() => Messages.Add(messageViewModel));
                 }
             }
