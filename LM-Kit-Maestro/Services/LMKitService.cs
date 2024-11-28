@@ -167,7 +167,7 @@ public partial class LMKitService : INotifyPropertyChanged
     public async Task<LMKitResult> SubmitPrompt(Conversation conversation, string prompt)
     {
         var promptRequest = new LMKitRequest(LMKitRequestType.Prompt,
-            new LMKitPromptRequestParameters(conversation, prompt),
+            new PromptRequestParameters(conversation, prompt),
             LMKitConfig.RequestTimeout);
 
         _promptSchedule.Schedule(promptRequest);
@@ -180,7 +180,7 @@ public partial class LMKitService : INotifyPropertyChanged
         return await HandlePromptRequest(promptRequest);
     }
 
-    public async Task<PromptResult> RegenerateResponse(Conversation conversation)
+    public async Task<LMKitResult> RegenerateResponse(Conversation conversation)
     {
         //var message = conversation.ChatHistory.Messages.Last();
 
@@ -258,7 +258,7 @@ public partial class LMKitService : INotifyPropertyChanged
         }
         else
         {
-            BeforeSubmittingPrompt(((LMKitPromptRequestParameters)promptRequest.Parameters!).Conversation);
+            BeforeSubmittingPrompt(((PromptRequestParameters)promptRequest.Parameters!).Conversation);
             _lmKitServiceSemaphore.Release();
 
             promptResult = await SubmitPromptRequest(promptRequest);
@@ -277,7 +277,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
     private async Task<LMKitResult> SubmitPromptRequest(LMKitRequest promptRequest)
     {
-        LMKitPromptRequestParameters parameter = (promptRequest.Parameters as LMKitPromptRequestParameters)!;
+        PromptRequestParameters parameter = (promptRequest.Parameters as PromptRequestParameters)!;
 
         try
         {
@@ -390,7 +390,7 @@ public partial class LMKitService : INotifyPropertyChanged
     private void GenerateConversationSummaryTitle(Conversation conversation, string prompt)
     {
         LMKitRequest titleGenerationRequest = new LMKitRequest(LMKitRequestType.GenerateTitle,
-            new LMKitPromptRequestParameters(conversation, prompt), 60);
+            new PromptRequestParameters(conversation, prompt), 60);
 
         _titleGenerationSchedule.Schedule(titleGenerationRequest);
 
@@ -527,6 +527,8 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
+    #region Data structures
+
     private sealed class PromptSchedule
     {
         private readonly object _locker = new object();
@@ -601,7 +603,7 @@ public partial class LMKitService : INotifyPropertyChanged
             {
                 foreach (var scheduledPrompt in _scheduledPrompts)
                 {
-                    if (scheduledPrompt.Parameters is LMKitPromptRequestParameters parameter && parameter.Conversation == conversation)
+                    if (scheduledPrompt.Parameters is PromptRequestParameters parameter && parameter.Conversation == conversation)
                     {
                         prompt = scheduledPrompt;
                         break;
@@ -631,37 +633,6 @@ public partial class LMKitService : INotifyPropertyChanged
             {
                 scheduledPrompt.CanBeExecutedSignal.Set();
             }
-        }
-    }
-
-    private sealed class PromptRequest : LMKitPromptRequestBase
-    {
-        public PromptRequest(Conversation conversation, string prompt, int requestTimeout) : base(conversation, prompt, requestTimeout)
-        {
-        }
-    }
-
-    private sealed class TitleGenerationRequest : LMKitPromptRequestBase
-    {
-        public string Response { get; }
-
-        public TitleGenerationRequest(Conversation conversation, string prompt, string response, int requestTimeout) : base(conversation, prompt, requestTimeout)
-        {
-            Response = response;
-        }
-    }
-
-    private sealed class TranslationRequest : LMKitRequestBase
-    {
-        public TaskCompletionSource<TranslationResult> TranslationTask { get; } = new TaskCompletionSource<TranslationResult>();
-
-        public TranslationRequest(string prompt, int requestTimeout) : base(prompt, requestTimeout)
-        {
-        }
-
-        protected override void AwaitResult()
-        {
-            TranslationTask.Task.Wait();
         }
     }
 
@@ -696,13 +667,13 @@ public partial class LMKitService : INotifyPropertyChanged
         Translate
     }
 
-    private sealed class LMKitPromptRequestParameters
+    private sealed class PromptRequestParameters
     {
         public Conversation Conversation { get; set; }
 
         public string Prompt { get; set; }
 
-        public LMKitPromptRequestParameters(Conversation conversation, string prompt)
+        public PromptRequestParameters(Conversation conversation, string prompt)
         {
             Conversation = conversation;
             Prompt = prompt;
@@ -719,45 +690,6 @@ public partial class LMKitService : INotifyPropertyChanged
         {
             InputText = inputText;
             Language = language;
-        }
-    }
-
-    private abstract class LMKitRequestBase
-    {
-        public string Prompt { get; }
-
-        public ManualResetEvent CanBeExecutedSignal { get; } = new ManualResetEvent(false);
-
-        public CancellationTokenSource CancellationTokenSource { get; }
-
-        public void CancelAndAwaitTermination()
-        {
-            CancellationTokenSource.Cancel();
-            AwaitResult();
-        }
-
-        protected abstract void AwaitResult();
-
-        protected LMKitRequestBase(string prompt, int requestTimeout)
-        {
-            Prompt = prompt;
-            CancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(requestTimeout));
-        }
-    }
-
-    private abstract class LMKitPromptRequestBase : LMKitRequestBase
-    {
-        public Conversation Conversation { get; }
-        public TaskCompletionSource<PromptResult> PromptResult { get; } = new TaskCompletionSource<PromptResult>();
-
-        protected LMKitPromptRequestBase(Conversation conversation, string prompt, int requestTimeout) : base(prompt, requestTimeout)
-        {
-            Conversation = conversation;
-        }
-
-        protected override void AwaitResult()
-        {
-            PromptResult.Task.Wait();
         }
     }
 
@@ -791,15 +723,6 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    public sealed class PromptResult
-    {
-        public Exception? Exception { get; set; }
-
-        public LMKitTextGenerationStatus Status { get; set; }
-
-        public TextGenerationResult? TextGenerationResult { get; set; }
-    }
-
     public sealed class LMKitResult
     {
         public Exception? Exception { get; set; }
@@ -808,15 +731,5 @@ public partial class LMKitService : INotifyPropertyChanged
 
         public object? Result { get; set; }
     }
-
-    public sealed class TranslationResult
-    {
-        public Exception? Exception { get; set; }
-
-        public string? Result { get; set; }
-
-        public LMKitTextGenerationStatus Status { get; set; }
-    }
-
-
+    #endregion
 }
