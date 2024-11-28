@@ -6,7 +6,7 @@ namespace LMKit.Maestro.Tests.Services
     {
         LMKitService.Conversation Conversation { get; }
 
-        public TaskCompletionSource<LMKitService.PromptResult?> PromptResultTask { get; private set; } = new TaskCompletionSource<LMKitService.PromptResult?>();
+        public TaskCompletionSource<LMKitService.LMKitResult?> PromptResultTask { get; private set; } = new TaskCompletionSource<LMKitService.LMKitResult?>();
 
         public LMKitDummyConversation(LMKitService lmKitService)
         {
@@ -15,7 +15,7 @@ namespace LMKit.Maestro.Tests.Services
 
         public void SubmitPrompt(LMKitService lmKitService, string prompt)
         {
-            LMKitService.PromptResult? promptResult = null;
+            LMKitService.LMKitResult? promptResult = null;
 
             Task.Run(async () =>
             {
