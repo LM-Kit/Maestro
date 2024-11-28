@@ -12,7 +12,7 @@ namespace LMKit.Maestro.Tests
     internal class MaestroTestsService
     {
         public static readonly Uri Model1 = new(@"https://huggingface.co/lm-kit/phi-3.1-mini-4k-3.8b-instruct-gguf/resolve/main/Phi-3.1-mini-4k-Instruct-Q3_K_M.gguf?download=true");
-        public static readonly Uri Model2 = new(@"https://huggingface.co/lm-kit/llama-3-8b-instruct-gguf/resolve/main/Llama-3-8B-Instruct-Q4_K_M.gguf?download=true");
+        public static readonly Uri Model2 = new(@"https://huggingface.co/lm-kit/phi-3.5-mini-3.8b-instruct-gguf/blob/main/Phi-3.5-mini-Instruct-Q2_K.gguf?download=true");
 
         private Exception? _errorLoadingException;
         TaskCompletionSource<bool>? _modelLoadingTask;
