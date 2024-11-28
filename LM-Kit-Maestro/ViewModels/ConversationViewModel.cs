@@ -155,7 +155,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     [RelayCommand]
     private async Task RegenerateResponse(MessageViewModel message)
     {
-        var response = await _lmKitService.RegenerateResponse(_lmKitConversation, message.LMKitMessage);
+        var response = await _lmKitService.RegenerateResponse(_lmKitConversation, message.LMKitMessage!);
     }
 
     protected override void HandleSubmit()

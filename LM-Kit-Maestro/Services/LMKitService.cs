@@ -210,11 +210,11 @@ public partial class LMKitService : INotifyPropertyChanged
         // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this prompt request.
         _lmKitServiceSemaphore.Wait();
 
-        LMKitResult promptResult;
+        LMKitResult result;
 
         if (promptRequest.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
         {
-            promptResult = new LMKitResult()
+            result = new LMKitResult()
             {
                 Status = LMKitTextGenerationStatus.Cancelled
             };
@@ -223,10 +223,14 @@ public partial class LMKitService : INotifyPropertyChanged
         }
         else
         {
-            BeforeSubmittingPrompt(((PromptRequestParameters)promptRequest.Parameters!).Conversation);
+            if (promptRequest.RequestType == LMKitRequestType.Prompt)
+            {
+                BeforeSubmittingPrompt(((PromptRequestParameters)promptRequest.Parameters!).Conversation);
+            }
+
             _lmKitServiceSemaphore.Release();
 
-            promptResult = await SubmitRequest(promptRequest);
+            result = await SubmitRequest(promptRequest);
         }
 
         if (_requestSchedule.Contains(promptRequest))
@@ -234,9 +238,9 @@ public partial class LMKitService : INotifyPropertyChanged
             _requestSchedule.Remove(promptRequest);
         }
 
-        promptRequest.ResponseTask.TrySetResult(promptResult);
+        promptRequest.ResponseTask.TrySetResult(result);
 
-        return promptResult;
+        return result;
 
     }
 
