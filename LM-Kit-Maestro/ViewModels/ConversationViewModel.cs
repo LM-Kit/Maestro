@@ -152,6 +152,12 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         }
     }
 
+    [RelayCommand]
+    private async Task RegenerateResponse(MessageViewModel message)
+    {
+        var response = await _lmKitService.RegenerateResponse(_lmKitConversation);
+    }
+
     protected override void HandleSubmit()
     {
         string prompt = InputText;
