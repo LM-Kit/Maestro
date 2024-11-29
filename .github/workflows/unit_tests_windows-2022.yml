@@ -11,16 +11,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-
-    runs-on: windows-2022
+ build:
+    runs-on: windows-latest
 
     steps:
+    - uses: actions/checkout@v3
+
     - name: Setup .NET 9
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 9.0.x
-    - name: Restore dependencies
-      run: dotnet restore LM-Kit-Maestro.sln       
+
+    #- name: Install MAUI Workload
+    #  run: dotnet workload install maui 
+
+
+    - name: Restore Dependencies
+      run: dotnet restore LM-Kit-Maestro.sln
+
     - name: Test
       run: dotnet test tests/LM-Kit-Maestro.Tests.csproj --verbosity normal
+
