@@ -7,11 +7,11 @@ namespace LMKit.Maestro.Tests
 {
     internal static class MaestroTestsHelpers
     {
-        public static void AssertPromptResponseIsSuccessful(LMKitService.PromptResult promptResult)
+        public static void AssertPromptResponseIsSuccessful(LMKitService.LMKitResult promptResult)
         {
             Assert.Equal(promptResult.Status, LMKitTextGenerationStatus.Undefined);
             Assert.Null(promptResult.Exception);
-            Assert.NotNull(promptResult.TextGenerationResult);
+            Assert.NotNull(promptResult.Result);
         }
 
         public static void AssertConversationPromptSuccessState(ConversationViewModelWrapper testConversation, int expectedMessageCount = 2)

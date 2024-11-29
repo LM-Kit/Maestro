@@ -26,6 +26,10 @@
             <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
                 @(MessageJustCopied ? "check" : "content_copy")
             </button>
+
+            <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
+                sync
+            </button>
         </div>
 
         @if (MessageViewModel.Sender == MessageSender.Assistant)
@@ -284,6 +288,11 @@
                 });
             }
         }
+    }
+
+    private async Task OnRegenerateResponseButtonClicked()
+    {
+        MessageViewModel.ParentConversation.RegenerateResponseCommand.Execute(MessageViewModel);
     }
 
     private static string GenerateAssistantResponseHtml(MessageViewModel messageViewModel)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.ComponentModel;
+using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
 
 namespace LMKit.Maestro.Services;
@@ -107,13 +108,14 @@ public partial class LMKitService
             ChatHistoryChanged?.Invoke(this, e);
         }
 
-        public void SetGeneratedTitle(PromptResult textGenerationResult)
+        public void SetGeneratedTitle(LMKitResult result)
         {
             string? conversationTopic = null;
 
-            if (textGenerationResult.TextGenerationResult != null && !string.IsNullOrEmpty(textGenerationResult.TextGenerationResult.Completion))
+            if (result.Result != null && result.Result is TextGenerationResult textGenerationResult &&
+                !string.IsNullOrEmpty(textGenerationResult.Completion))
             {
-                foreach (var sentence in textGenerationResult.TextGenerationResult.Completion.Split('\n'))
+                foreach (var sentence in textGenerationResult.Completion.Split('\n'))
                 {
                     if (sentence.ToLower().StartsWith("topic"))
                     {

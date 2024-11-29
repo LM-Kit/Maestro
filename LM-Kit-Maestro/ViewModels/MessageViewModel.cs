@@ -9,6 +9,8 @@ namespace LMKit.Maestro.ViewModels;
 
 public partial class MessageViewModel : ViewModelBase
 {
+    public ConversationViewModel ParentConversation { get; }
+
     private ChatHistory.Message? _lmKitMessage;
 
     public ChatHistory.Message? LMKitMessage
@@ -59,15 +61,17 @@ public partial class MessageViewModel : ViewModelBase
 
     public event EventHandler? MessageContentUpdated;
 
-    public MessageViewModel(ChatHistory.Message message)
+    public MessageViewModel(ConversationViewModel parentConversation, ChatHistory.Message message)
     {
+        ParentConversation = parentConversation;
         MessageModel = new Message();
         Text = message.Content;
         LMKitMessage = message;
     }
 
-    public MessageViewModel(Message message)
+    public MessageViewModel(ConversationViewModel parentConversation, Message message)
     {
+        ParentConversation = parentConversation;
         MessageModel = message;
         Sender = message.Sender;
         Text = message.Text ?? string.Empty;

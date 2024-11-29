@@ -116,7 +116,7 @@ public class ConversationViewModelTests
 
         var testConversation = testService.GetNewConversationViewModel();
 
-        testConversation.ConversationViewModel.InputText = "Comment écrire une page web de mentions legales ?";
+        testConversation.ConversationViewModel.InputText = "1+1";
         testConversation.ConversationViewModel.Submit();
 
         await testConversation.PromptResultTask.Task;
@@ -176,4 +176,27 @@ public class ConversationViewModelTests
         var title1 = await conversation.TitleGenerationTask.Task;
         Assert.False(string.IsNullOrEmpty(title1));
     }
+
+#if BETA
+    [Fact]
+    public async Task RegeneratesResponse()
+    {
+        MaestroTestsService testService = new();
+        bool loadingSuccess = await testService.LoadModel();
+        Assert.True(loadingSuccess);
+
+        var testConversation = testService.GetNewConversationViewModel();
+
+        testConversation.ConversationViewModel.InputText = "hello";
+        testConversation.ConversationViewModel.Submit();
+
+        await testConversation.PromptResultTask.Task;
+        MaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
+
+        var lastMessageViewModel = testConversation.ConversationViewModel.Messages.Last();
+        testConversation.ConversationViewModel.RegenerateResponseCommand.Execute(lastMessageViewModel);
+        await testConversation.PromptResultTask.Task;
+        MaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
+    }
+#endif
 }
