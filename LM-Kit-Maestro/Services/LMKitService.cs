@@ -10,8 +10,8 @@ public partial class LMKitService : INotifyPropertyChanged
 {
     private readonly SemaphoreSlim _lmKitServiceSemaphore = new SemaphoreSlim(1);
 
-    private readonly LmKitRequestSchedule _titleGenerationSchedule = new LmKitRequestSchedule();
-    private readonly LmKitRequestSchedule _requestSchedule = new LmKitRequestSchedule();
+    private readonly RequestSchedule _titleGenerationSchedule = new RequestSchedule();
+    private readonly RequestSchedule _requestSchedule = new RequestSchedule();
 
     private Uri? _currentlyLoadingModelUri;
     private SingleTurnConversation? _singleTurnConversation;
@@ -148,8 +148,8 @@ public partial class LMKitService : INotifyPropertyChanged
             _textTranslation = new TextTranslation(_model);
         }
 
-        var translationRequest = new LMKitRequest(LMKitRequestType.Translate,
-            new TranslationRequestParameters(input, language), LMKitConfig.RequestTimeout);
+        var translationRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.Translate,
+            new LMKitRequest.TranslationRequestParameters(input, language), LMKitConfig.RequestTimeout);
 
         ScheduleRequest(translationRequest);
 
@@ -160,8 +160,8 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public async Task<LMKitResult> SubmitPrompt(Conversation conversation, string prompt)
     {
-        var promptRequest = new LMKitRequest(LMKitRequestType.Prompt,
-            new PromptRequestParameters(conversation, prompt),
+        var promptRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.Prompt,
+            new LMKitRequest.PromptRequestParameters(conversation, prompt),
             LMKitConfig.RequestTimeout);
 
         ScheduleRequest(promptRequest);
@@ -174,7 +174,7 @@ public partial class LMKitService : INotifyPropertyChanged
         // Ignoring message parameter, only regenerate the latest response for now.
         var prompt = conversation.ChatHistory!.Messages[conversation.ChatHistory.Messages.Count - 1];
 
-        var regenerateResponseRequest = new LMKitRequest(LMKitRequestType.RegenerateResponse, prompt.Content, LMKitConfig.RequestTimeout);
+        var regenerateResponseRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.RegenerateResponse, prompt.Content, LMKitConfig.RequestTimeout);
 
         return await HandleLmKitRequest(regenerateResponseRequest);
     }
@@ -223,9 +223,9 @@ public partial class LMKitService : INotifyPropertyChanged
         }
         else
         {
-            if (promptRequest.RequestType == LMKitRequestType.Prompt)
+            if (promptRequest.RequestType == LMKitRequest.LMKitRequestType.Prompt)
             {
-                BeforeSubmittingPrompt(((PromptRequestParameters)promptRequest.Parameters!).Conversation);
+                BeforeSubmittingPrompt(((LMKitRequest.PromptRequestParameters)promptRequest.Parameters!).Conversation);
             }
 
             _lmKitServiceSemaphore.Release();
@@ -254,18 +254,18 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                if (request.RequestType == LMKitRequestType.Prompt)
+                if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt)
                 {
-                    result.Result = await _multiTurnConversation!.SubmitAsync(((PromptRequestParameters)request.Parameters!).Prompt,
+                    result.Result = await _multiTurnConversation!.SubmitAsync(((LMKitRequest.PromptRequestParameters)request.Parameters!).Prompt,
                         request.CancellationTokenSource.Token);
                 }
-                else if (request.RequestType == LMKitRequestType.Translate)
+                else if (request.RequestType == LMKitRequest.LMKitRequestType.Translate)
                 {
-                    TranslationRequestParameters translationRequestParameters = (TranslationRequestParameters)request.Parameters!;
+                    var translationRequestParameters = (LMKitRequest.TranslationRequestParameters)request.Parameters!;
                     result.Result = await _textTranslation!.TranslateAsync(translationRequestParameters.InputText,
                         translationRequestParameters.Language, request.CancellationTokenSource.Token);
                 }
-                else if (request.RequestType == LMKitRequestType.RegenerateResponse)
+                else if (request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
                 {
                     result.Result = await _multiTurnConversation!.RegenerateResponseAsync(request.CancellationTokenSource.Token);
                 }
@@ -284,9 +284,9 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
             }
 
-            if (request.RequestType == LMKitRequestType.Prompt && _multiTurnConversation != null)
+            if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt && _multiTurnConversation != null)
             {
-                PromptRequestParameters parameter = (request.Parameters as PromptRequestParameters)!;
+                LMKitRequest.PromptRequestParameters parameter = (request.Parameters as LMKitRequest.PromptRequestParameters)!;
 
                 parameter.Conversation.ChatHistory = _multiTurnConversation.ChatHistory;
                 parameter.Conversation.LatestChatHistoryData = _multiTurnConversation.ChatHistory.Serialize();
@@ -321,8 +321,8 @@ public partial class LMKitService : INotifyPropertyChanged
 
     private void GenerateConversationSummaryTitle(Conversation conversation, string prompt)
     {
-        LMKitRequest titleGenerationRequest = new LMKitRequest(LMKitRequestType.GenerateTitle,
-            new PromptRequestParameters(conversation, prompt), 60);
+        LMKitRequest titleGenerationRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.GenerateTitle,
+            new LMKitRequest.PromptRequestParameters(conversation, prompt), 60);
 
         _titleGenerationSchedule.Schedule(titleGenerationRequest);
 
@@ -459,171 +459,6 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    #region Data structures
-
-    private sealed class LmKitRequestSchedule
-    {
-        private readonly object _locker = new object();
-
-        private List<LMKitRequest> _scheduledPrompts = new List<LMKitRequest>();
-
-        public int Count
-        {
-            get
-            {
-                lock (_locker)
-                {
-                    return _scheduledPrompts.Count;
-                }
-            }
-        }
-
-        public LMKitRequest? Next
-        {
-            get
-            {
-                lock (_locker)
-                {
-                    if (_scheduledPrompts.Count > 0)
-                    {
-                        var scheduledPrompt = _scheduledPrompts[0];
-
-                        return scheduledPrompt;
-                    }
-
-                    return null;
-                }
-            }
-        }
-
-        public LMKitRequest? RunningPromptRequest { get; set; }
-
-        public void Schedule(LMKitRequest promptRequest)
-        {
-            lock (_locker)
-            {
-                _scheduledPrompts.Add(promptRequest);
-
-                if (Count == 1)
-                {
-                    promptRequest.CanBeExecutedSignal.Set();
-                }
-            }
-        }
-
-        public bool Contains(LMKitRequest scheduledPrompt)
-        {
-            lock (_locker)
-            {
-                return _scheduledPrompts.Contains(scheduledPrompt);
-            }
-        }
-
-        public void Remove(LMKitRequest scheduledPrompt)
-        {
-            lock (_locker)
-            {
-                HandleScheduledPromptRemoval(scheduledPrompt);
-            }
-        }
-
-        public LMKitRequest? Unschedule(Conversation conversation)
-        {
-            LMKitRequest? prompt = null;
-
-            lock (_locker)
-            {
-                foreach (var scheduledPrompt in _scheduledPrompts)
-                {
-                    if (scheduledPrompt.Parameters is PromptRequestParameters parameter && parameter.Conversation == conversation)
-                    {
-                        prompt = scheduledPrompt;
-                        break;
-                    }
-                }
-
-                if (prompt != null)
-                {
-                    HandleScheduledPromptRemoval(prompt);
-                }
-            }
-
-            return prompt;
-        }
-
-        private void HandleScheduledPromptRemoval(LMKitRequest scheduledPrompt)
-        {
-            bool wasFirstInLine = scheduledPrompt == _scheduledPrompts[0];
-
-            _scheduledPrompts.Remove(scheduledPrompt);
-
-            if (wasFirstInLine && Next != null)
-            {
-                Next.CanBeExecutedSignal.Set();
-            }
-            else
-            {
-                scheduledPrompt.CanBeExecutedSignal.Set();
-            }
-        }
-    }
-
-    private sealed class LMKitRequest
-    {
-        public ManualResetEvent CanBeExecutedSignal { get; } = new ManualResetEvent(false);
-        public CancellationTokenSource CancellationTokenSource { get; }
-        public TaskCompletionSource<LMKitResult> ResponseTask { get; } = new TaskCompletionSource<LMKitResult>();
-        public object? Parameters { get; }
-
-        public LMKitRequestType RequestType { get; }
-
-        public LMKitRequest(LMKitRequestType requestType, object? parameter, int requestTimeout)
-        {
-            RequestType = requestType;
-            Parameters = parameter;
-            CancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(requestTimeout));
-        }
-
-        public void CancelAndAwaitTermination()
-        {
-            CancellationTokenSource.Cancel();
-            ResponseTask.Task.Wait();
-        }
-    }
-
-    private enum LMKitRequestType
-    {
-        Prompt,
-        RegenerateResponse,
-        GenerateTitle,
-        Translate
-    }
-
-    private sealed class PromptRequestParameters
-    {
-        public Conversation Conversation { get; set; }
-
-        public string Prompt { get; set; }
-
-        public PromptRequestParameters(Conversation conversation, string prompt)
-        {
-            Conversation = conversation;
-            Prompt = prompt;
-        }
-    }
-
-    private sealed class TranslationRequestParameters
-    {
-        public string InputText { get; set; }
-
-        public Language Language { get; set; }
-
-        public TranslationRequestParameters(string inputText, Language language)
-        {
-            InputText = inputText;
-            Language = language;
-        }
-    }
 
     public class NotifyModelStateChangedEventArgs : EventArgs
     {
@@ -663,5 +498,4 @@ public partial class LMKitService : INotifyPropertyChanged
 
         public object? Result { get; set; }
     }
-    #endregion
 }
