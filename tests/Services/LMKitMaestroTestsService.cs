@@ -11,8 +11,8 @@ namespace LMKit.Maestro.Tests
 {
     internal class MaestroTestsService
     {
-        public static readonly Uri Model1 = new(@"https://huggingface.co/lm-kit/phi-3.1-mini-4k-3.8b-instruct-gguf/resolve/main/Phi-3.1-mini-4k-Instruct-Q3_K_M.gguf?download=true");
-        public static readonly Uri Model2 = new(@"https://huggingface.co/lm-kit/tinyllama-1.0-1.1b-chat-gguf/resolve/main/TinyLlama-1.0-1.1B-Chat-Q2_K.gguf");
+        public static readonly Uri Model1 = new(@"https://huggingface.co/lm-kit/llama-3.2-1b-instruct.gguf/resolve/main/Llama-3.2-1B-Instruct-Q4_K_M.gguf?download=true");
+        public static readonly Uri Model2 = new(@"https://huggingface.co/lm-kit/qwen-2.5-0.5b-instruct-gguf/resolve/main/Qwen-2.5-0.5B-Instruct-Q4_K_M.gguf?download=true");
 
         private Exception? _errorLoadingException;
         TaskCompletionSource<bool>? _modelLoadingTask;
@@ -36,7 +36,7 @@ namespace LMKit.Maestro.Tests
             ModelListViewModel = GetNewModelListViewModel(LMKitService, LLmFileManager);
             ChatPageViewModel = GetNewChatPageViewModel(LMKitService, ConversationListViewModel, ModelListViewModel, Database, LLmFileManager, SettingsViewModel);
             LMKitService.LMKitConfig.MaximumCompletionTokens = 200;
-            LMKitService.LMKitConfig.RequestTimeout = 30;
+            LMKitService.LMKitConfig.RequestTimeout = 15;
         }
 
         public LMKitService.Conversation GetNewLMKitConversation()
