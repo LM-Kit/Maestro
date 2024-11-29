@@ -155,9 +155,9 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     [RelayCommand]
     private async Task RegenerateResponse(MessageViewModel message)
     {
-        message.Text = "";
-        message.MessageInProgress = true;
         var response = await _lmKitService.RegenerateResponse(_lmKitConversation, message.LMKitMessage!);
+
+        OnResponseRegenerated();
     }
 
     protected override void HandleSubmit()
@@ -181,6 +181,33 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         });
     }
 
+    private void OnResponseRegenerating(MessageViewModel message)
+    {
+        message.Text = string.Empty;
+        message.MessageInProgress = true;
+        AwaitingResponse = true;
+        _awaitingLMKitAssistantMessage = true;
+    }
+
+    private void OnNewlySubmittedPrompt(string prompt)
+    {
+        InputText = string.Empty;
+        UsedDifferentModel &= false;
+        LatestPromptStatus = LMKitTextGenerationStatus.Undefined;
+        AwaitingResponse = true;
+        _awaitingLMKitUserMessage = true;
+        _awaitingLMKitAssistantMessage = true;
+        _pendingPrompt = new MessageViewModel(this, new Message() { Sender = MessageSender.User, Text = prompt });
+        _pendingResponse = new MessageViewModel(this, new Message() { Sender = MessageSender.Assistant }) { MessageInProgress = true };
+
+        Messages.Add(_pendingPrompt);
+        Messages.Add(_pendingResponse);
+    }
+
+    private void OnResponseRegenerated()
+    {
+
+    }
     private void OnPromptResult(LMKitService.LMKitResult? promptResult, Exception? submitPromptException = null)
     {
         AwaitingResponse = false;
@@ -259,20 +286,6 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         });
     }
 
-    private void OnNewlySubmittedPrompt(string prompt)
-    {
-        InputText = string.Empty;
-        UsedDifferentModel &= false;
-        LatestPromptStatus = LMKitTextGenerationStatus.Undefined;
-        AwaitingResponse = true;
-        _awaitingLMKitUserMessage = true;
-        _awaitingLMKitAssistantMessage = true;
-        _pendingPrompt = new MessageViewModel(this, new Message() { Sender = MessageSender.User, Text = prompt });
-        _pendingResponse = new MessageViewModel(this, new Message() { Sender = MessageSender.Assistant }) { MessageInProgress = true };
-
-        Messages.Add(_pendingPrompt);
-        Messages.Add(_pendingResponse);
-    }
 
     private void OnTextGenerationSuccess(TextGenerationResult result)
     {
@@ -334,10 +347,17 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
         {
+            int count = 0;
+
             foreach (var item in e.OldItems!)
             {
-                _mainThread.BeginInvokeOnMainThread(() => Messages.RemoveAt(e.OldStartingIndex));
+                _mainThread.BeginInvokeOnMainThread(() => Messages.RemoveAt(e.OldStartingIndex - e.OldItems.Count + count));
+                count++;
             }
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Replace)
+        {
+
         }
     }
 
