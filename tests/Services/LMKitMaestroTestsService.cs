@@ -6,13 +6,14 @@ using LMKit.Maestro.ViewModels;
 using Microsoft.Extensions.Logging;
 using Mopups.Interfaces;
 using Moq;
+using System.Diagnostics;
 
 namespace LMKit.Maestro.Tests
 {
     internal class MaestroTestsService
     {
-        public static readonly Uri Model1 = new(@"https://huggingface.co/lm-kit/phi-3.1-mini-4k-3.8b-instruct-gguf/resolve/main/Phi-3.1-mini-4k-Instruct-Q3_K_M.gguf?download=true");
-        public static readonly Uri Model2 = new(@"https://huggingface.co/lm-kit/llama-3-8b-instruct-gguf/resolve/main/Llama-3-8B-Instruct-Q4_K_M.gguf?download=true");
+        public static readonly Uri Model1 = new(@"https://huggingface.co/lm-kit/llama-3.2-1b-instruct.gguf/resolve/main/Llama-3.2-1B-Instruct-Q4_K_M.gguf?download=true");
+        public static readonly Uri Model2 = new(@"https://huggingface.co/lm-kit/qwen-2.5-0.5b-instruct-gguf/resolve/main/Qwen-2.5-0.5B-Instruct-Q4_K_M.gguf?download=true");
 
         private Exception? _errorLoadingException;
         TaskCompletionSource<bool>? _modelLoadingTask;
@@ -99,6 +100,16 @@ namespace LMKit.Maestro.Tests
         private void LMKitService_ModelLoadingProgressed(object? sender, EventArgs e)
         {
             var args = (LMKitService.ModelLoadingProgressedEventArgs)e;
+
+            if (args.Progress == 0)
+            {
+                Trace.WriteLine("Downloading model...");
+            }
+            else if (args.Progress % 10 == 0)
+            {
+                Trace.WriteLine(args.Progress);
+            }
+
             ProgressEventWasRaided = true;
         }
 
