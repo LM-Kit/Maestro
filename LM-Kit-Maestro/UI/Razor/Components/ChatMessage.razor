@@ -23,6 +23,23 @@
 
     @if (MessageViewModel.Sender == MessageSender.User || (MessageViewModel.Sender == MessageSender.Assistant && !MessageViewModel.MessageInProgress))
     {
+        @if (HasMultipleResponses)
+        {
+            @*             <div>
+                <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
+                    chevron_left
+                </button>
+
+                <span>
+                    @($"{responseIndex + 1} /: {MessageViewModel.PreviousContent.Count + 1}")
+                </span>
+
+                <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
+                    chevron_right
+                </button>
+            </div> *@
+        }
+
         <div class="messageFooter @(MessageJustTerminated ? "show" : "hide")">
             <div class="messageActions @(MessageViewModel.Sender == MessageSender.User ? "userMessageActions" : "")">
                 <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
@@ -53,127 +70,138 @@
 
 <style>
     .rootContainer {
-        display: flex;
-        position: relative;
-        flex-direction: column;
-        margin-top: 2px;
-        margin-bottom: 20px;
-        padding-inline: 8px;
-        padding-block: 16px;
-        border-radius: 0px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    margin-top: 2px;
+    margin-bottom: 20px;
+    padding-inline: 8px;
+    padding-block: 16px;
+    border-radius: 0px;
     }
 
     .assistantMessageRootContainer:hover {
-        background-color: var(--Surface15);
+    background-color: var(--Surface15);
     }
 
     .userMessageRootContainer:hover .userMessageContent {
-        background-color: var(--Surface15);
+    background-color: var(--Surface15);
     }
 
     .rootContainer:hover > div {
-        visibility: visible;
+    visibility: visible;
     }
 
     .userMessageDiv {
-        max-width: 75%;
-        margin-left: auto;
+    max-width: 75%;
+    margin-left: auto;
     }
 
     .userMessageDiv {
     }
 
     .messageContent {
-        padding-block: 12px;
-        padding-inline: 16px;
-        word-break: break-word; /* Ensures long words break and wrap */
-        overflow-wrap: break-word; /* Allows wrapping long words */
-        max-width: 100%; /* Prevents the div from exceeding the width of its container */
+    padding-block: 12px;
+    padding-inline: 16px;
+    word-break: break-word; /* Ensures long words break and wrap */
+    overflow-wrap: break-word; /* Allows wrapping long words */
+    max-width: 100%; /* Prevents the div from exceeding the width of its container */
     }
 
     .userMessageContent {
-        display: block;
-        background-color: var(--Surface);
-        border-radius: 32px;
+    display: block;
+    background-color: var(--Surface);
+    border-radius: 32px;
     }
 
 
     .assistantMessageContent {
-        padding: 4px;
-        margin-bottom: -16px; /* workaround: this syntax adds 16px bottom margin to the html block '(MarkupString)Markdig.Markdown.ToHtml(MessageViewModel.Text)'*/
+    padding: 4px;
+    margin-bottom: -16px; /* workaround: this syntax adds 16px bottom margin to the html block '(MarkupString)Markdig.Markdown.ToHtml(MessageViewModel.Text)'*/
     }
 
     .show {
-        visibility: visible;
+    visibility: visible;
     }
 
     .hide {
-        visibility: hidden;
+    visibility: hidden;
     }
 
     .chatActionButton {
-        height: 28px;
-        width: 28px;
-        border-radius: 50%;
-        border-width: 0;
-        font-size: 12px;
-        background-color: transparent;
-        color: var(--OnBackground);
-        color: var(--Outline);
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+    border-width: 0;
+    font-size: 12px;
+    background-color: transparent;
+    color: var(--OnBackground);
+    color: var(--Outline);
     }
 
-        .chatActionButton:hover {
-            background-color: var(--Surface3);
-        }
+    .chatActionButton:hover {
+    background-color: var(--Surface3);
+    }
 
     .dot {
-        height: 10px;
-        width: 10px;
-        margin-left: 4px;
-        background-color: var(--OnBackground);
-        border-radius: 50%;
-        display: inline-block;
+    height: 10px;
+    width: 10px;
+    margin-left: 4px;
+    background-color: var(--OnBackground);
+    border-radius: 50%;
+    display: inline-block;
     }
 
     .align-right {
-        margin-left: auto;
+    margin-left: auto;
     }
 
     .align-left {
-        margin-right: auto;
+    margin-right: auto;
     }
 
     .messageFooter {
-        margin-top: 12px;
-        display: flex;
+    margin-top: 12px;
+    display: flex;
     }
 
-        .messageFooter:hover {
-            visibility: visible;
-        }
+    .messageFooter:hover {
+    visibility: visible;
+    }
 
     .assistantResponseInfo {
-        font-size: 11px;
-        margin-left: 8px;
-        align-content: center;
-        color: var(--Outline);
+    font-size: 11px;
+    margin-left: 8px;
+    align-content: center;
+    color: var(--Outline);
     }
 
     .messageButtonDiv {
-        display: inline;
+    display: inline;
     }
 
     .messageActions {
-        display: inline;
+    display: inline;
     }
 
     .userMessageActions {
-        margin-left: auto;
+    margin-left: auto;
     }
 </style>
 
 @code {
     const string ProgressIndicatorHtml = "<span class=\"dot \"></span>";
+
+    private int responseIndex;
+    private int ResponseIndex
+    {
+        get => responseIndex;
+        set
+        {
+            responseIndex = value;
+            MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.PreviousContent[value], false);
+        }
+    }
 
     bool messageJustCopied;
     bool MessageJustCopied
@@ -207,6 +235,17 @@
         }
     }
 
+    bool hasMultipleResponses;
+    bool HasMultipleResponses
+    {
+        get => hasMultipleResponses;
+        set
+        {
+            hasMultipleResponses = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
     MessageViewModel? messageViewModel;
     [Parameter]
     [EditorRequired]
@@ -226,7 +265,7 @@
 
             if (messageViewModel.Sender == MessageSender.Assistant)
             {
-                messageHtml = GenerateAssistantResponseHtml(messageViewModel);
+                messageHtml = GenerateAssistantResponseHtml(messageViewModel.Text, messageViewModel.MessageInProgress);
             }
 
             InvokeAsync(() => StateHasChanged());
@@ -240,7 +279,7 @@
         {
             if (e.PropertyName == nameof(MessageViewModel.Text))
             {
-                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel);
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.Text, messageViewModel.MessageInProgress);
             }
             else if (e.PropertyName == nameof(MessageViewModel.MessageInProgress))
             {
@@ -252,6 +291,15 @@
                     {
                         MessageHtml = MessageHtml.Replace(ProgressIndicatorHtml, string.Empty);
                     }
+                }
+            }
+            else if (e.PropertyName == nameof(MessageViewModel.PreviousContent))
+            {
+                HasMultipleResponses = MessageViewModel.PreviousContent?.Count > 0;
+
+                if (HasMultipleResponses)
+                {
+                    ResponseIndex = MessageViewModel.PreviousContent.Count - 1;
                 }
             }
         }
@@ -301,13 +349,29 @@
         MessageViewModel.ParentConversation.RegenerateResponseCommand.Execute(MessageViewModel);
     }
 
-    private static string GenerateAssistantResponseHtml(MessageViewModel messageViewModel)
+    private async Task OnPreviousResponseButtonClicked()
     {
-        string html = !string.IsNullOrEmpty(messageViewModel.Text) ? Markdig.Markdown.ToHtml(messageViewModel.Text) : string.Empty;
+        if (ResponseIndex > 1)
+        {
+            ResponseIndex--;
+        }
+    }
+
+    private async Task OnNextResponseButtonClicked()
+    {
+        if (ResponseIndex < messageViewModel.PreviousContent.Count - 2)
+        {
+            ResponseIndex++;
+        }
+    }
+
+    private static string GenerateAssistantResponseHtml(string content, bool messageInProgress)
+    {
+        string html = !string.IsNullOrEmpty(content) ? Markdig.Markdown.ToHtml(content) : string.Empty;
 
         bool responseIsEmpty = html.Length == 0;
 
-        if (messageViewModel.MessageInProgress)
+        if (messageInProgress)
         {
             var closingTagIndex = Math.Max(0, html.LastIndexOf(@"</"));
 

@@ -29,6 +29,7 @@ public partial class MessageViewModel : ViewModelBase
                 MessageModel.Sender = Sender;
                 TerminationReason = _lmKitMessage.TerminationReason;
                 GeneratedTokens = _lmKitMessage.GeneratedTokens;
+                PreviousContent = _lmKitMessage.PreviousContent;
                 _lmKitMessage.PropertyChanged += OnMessagePropertyChanged;
             }
 
@@ -58,6 +59,9 @@ public partial class MessageViewModel : ViewModelBase
 
     [ObservableProperty]
     private double _generatedTokens;
+
+    [ObservableProperty]
+    private IReadOnlyList<string>? _previousContent;
 
     public event EventHandler? MessageContentUpdated;
 
@@ -100,6 +104,10 @@ public partial class MessageViewModel : ViewModelBase
         else if (e.PropertyName == nameof(ChatHistory.Message.TerminationReason))
         {
             TerminationReason = LMKitMessage!.TerminationReason;
+        }
+        else if (e.PropertyName == nameof(ChatHistory.Message.PreviousContent))
+        {
+            PreviousContent = LMKitMessage!.PreviousContent;
         }
     }
 
