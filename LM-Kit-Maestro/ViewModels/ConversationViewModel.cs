@@ -153,11 +153,25 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     }
 
     [RelayCommand]
-    private async Task RegenerateResponse(MessageViewModel message)
+    private void RegenerateResponse(MessageViewModel message)
     {
-        var response = await _lmKitService.RegenerateResponse(_lmKitConversation, message.LMKitMessage!);
+        OnResponseRegenerationRequested(message);
 
-        OnResponseRegenerated();
+        Task.Run(async () =>
+        {
+            LMKitService.LMKitResult? result = null;
+
+            try
+            {
+                result = await _lmKitService.RegenerateResponse(_lmKitConversation, message.LMKitMessage!);
+                OnTextGenerationResult(result);
+            }
+            catch (Exception exception)
+            {
+                OnTextGenerationResult(null, exception);
+            }
+        });
+
     }
 
     protected override void HandleSubmit()
@@ -172,21 +186,23 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
             try
             {
                 promptResult = await _lmKitService.SubmitPrompt(_lmKitConversation, prompt);
-                OnPromptResult(promptResult);
+                OnTextGenerationResult(promptResult);
             }
             catch (Exception ex)
             {
-                OnPromptResult(null, ex);
+                OnTextGenerationResult(null, ex);
             }
         });
     }
 
-    private void OnResponseRegenerating(MessageViewModel message)
+    private void OnResponseRegenerationRequested(MessageViewModel message)
     {
         message.Text = string.Empty;
         message.MessageInProgress = true;
         AwaitingResponse = true;
         _awaitingLMKitAssistantMessage = true;
+        _pendingResponse = new MessageViewModel(this, new Message() { Sender = MessageSender.Assistant }) { MessageInProgress = true };
+        Messages.Add(_pendingResponse);
     }
 
     private void OnNewlySubmittedPrompt(string prompt)
@@ -204,37 +220,40 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         Messages.Add(_pendingResponse);
     }
 
-    private void OnResponseRegenerated()
-    {
-
-    }
-    private void OnPromptResult(LMKitService.LMKitResult? promptResult, Exception? submitPromptException = null)
+    private void OnTextGenerationResult(LMKitService.LMKitResult? result, Exception? exception = null)
     {
         AwaitingResponse = false;
 
-        if (submitPromptException != null)
+        if (exception != null)
         {
-            if (submitPromptException is OperationCanceledException operationCancelledException)
+            if (exception is OperationCanceledException operationCancelledException)
             {
                 _pendingResponse!.Status = LMKitTextGenerationStatus.Cancelled;
-                _pendingPrompt!.Status = LMKitTextGenerationStatus.Cancelled;
+
+                if (_pendingPrompt != null)
+                {
+                    _pendingPrompt.Status = LMKitTextGenerationStatus.Cancelled;
+                }
             }
             else
             {
                 _pendingResponse!.Status = LMKitTextGenerationStatus.UnknownError;
-                _pendingPrompt!.Status = LMKitTextGenerationStatus.UnknownError;
+
+                if (_pendingPrompt != null)
+                {
+                    _pendingPrompt!.Status = LMKitTextGenerationStatus.UnknownError;
+                }
             }
 
             // todo: provide more error info with event args.
             OnTextGenerationFailure();
         }
-        else if (promptResult != null)
+        else if (result != null)
         {
-            LatestPromptStatus = promptResult.Status;
+            LatestPromptStatus = result.Status;
             _pendingResponse!.Status = LatestPromptStatus;
-            _pendingPrompt!.Status = LatestPromptStatus;
 
-            if (promptResult.Status == LMKitTextGenerationStatus.Undefined && promptResult.Result is TextGenerationResult textGenerationResult)
+            if (result.Status == LMKitTextGenerationStatus.Undefined && result.Result is TextGenerationResult textGenerationResult)
             {
                 OnTextGenerationSuccess(textGenerationResult);
             }
