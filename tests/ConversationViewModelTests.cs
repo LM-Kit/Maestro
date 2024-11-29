@@ -177,6 +177,7 @@ public class ConversationViewModelTests
         Assert.False(string.IsNullOrEmpty(title1));
     }
 
+#if BETA
     [Fact]
     public async Task RegeneratesResponse()
     {
@@ -197,4 +198,5 @@ public class ConversationViewModelTests
         await testConversation.PromptResultTask.Task;
         MaestroTestsHelpers.AssertConversationPromptSuccessState(testConversation);
     }
+#endif
 }

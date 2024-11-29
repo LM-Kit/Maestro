@@ -6,6 +6,7 @@ using LMKit.Maestro.ViewModels;
 using Microsoft.Extensions.Logging;
 using Mopups.Interfaces;
 using Moq;
+using System.Diagnostics;
 
 namespace LMKit.Maestro.Tests
 {
@@ -99,6 +100,16 @@ namespace LMKit.Maestro.Tests
         private void LMKitService_ModelLoadingProgressed(object? sender, EventArgs e)
         {
             var args = (LMKitService.ModelLoadingProgressedEventArgs)e;
+
+            if (args.Progress == 0)
+            {
+                Trace.WriteLine("Downloading model...");
+            }
+            else if (args.Progress % 10 == 0)
+            {
+                Trace.WriteLine(args.Progress);
+            }
+
             ProgressEventWasRaided = true;
         }
 
