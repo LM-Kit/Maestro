@@ -69,15 +69,6 @@ public partial class MessageViewModel : ViewModelBase
         LMKitMessage = message;
     }
 
-    public MessageViewModel(ConversationViewModel parentConversation, Message message)
-    {
-        ParentConversation = parentConversation;
-        MessageModel = message;
-        Sender = message.Sender;
-        Text = message.Text ?? string.Empty;
-    }
-
-
     [RelayCommand]
     private void ToggleHoveredState()
     {

@@ -172,7 +172,7 @@ public partial class LMKitService : INotifyPropertyChanged
     public async Task<LMKitResult> RegenerateResponse(Conversation conversation, ChatHistory.Message message)
     {
         var regenerateResponseRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.RegenerateResponse,
-            message, LMKitConfig.RequestTimeout);
+            new LMKitRequest.RegenerateResponseParameters(conversation, message), LMKitConfig.RequestTimeout);
 
         ScheduleRequest(regenerateResponseRequest);
 
@@ -207,7 +207,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
     private async Task<LMKitResult> HandleLmKitRequest(LMKitRequest request)
     {
-        // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this prompt request.
+        // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this request.
         _lmKitServiceSemaphore.Wait();
 
         LMKitResult result;
@@ -223,13 +223,13 @@ public partial class LMKitService : INotifyPropertyChanged
         }
         else
         {
-            if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt)
+            if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
             {
-                BeforeSubmittingPrompt(((LMKitRequest.PromptRequestParameters)request.Parameters!).Conversation);
-            }
-            else if (request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
-            {
-                BeforeSubmittingPrompt(((LMKitRequest.RegenerateResponseParameters)request.Parameters!).Conversation);
+                var conversation = request.RequestType == LMKitRequest.LMKitRequestType.Prompt ?
+                    ((LMKitRequest.PromptRequestParameters)request.Parameters!).Conversation :
+                    ((LMKitRequest.RegenerateResponseParameters)request.Parameters!).Conversation;
+
+                BeforeSubmittingPrompt(conversation);
             }
 
             _lmKitServiceSemaphore.Release();

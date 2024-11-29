@@ -150,26 +150,29 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     [RelayCommand]
     private void RegenerateResponse(MessageViewModel message)
     {
-        OnResponseRegenerationRequested(message);
-
-        Task.Run(async () =>
+        if (_lmKitService.ModelLoadingState != LMKitModelLoadingState.Loaded)
         {
-            LMKitService.LMKitResult? result = null;
+            _popupService.DisplayAlert("No model is loaded", "You need to load a model in order to regenarate a response", "OK");
+        }
+        else
+        {
+            OnResponseRegenerationRequested(message);
 
-            try
+            Task.Run(async () =>
             {
-                result = await _lmKitService.RegenerateResponse(_lmKitConversation, message.LMKitMessage!);
-                Trace.WriteLine("regenerate ok: " + result.Result!);
-                OnTextGenerationResult(result);
-            }
-            catch (Exception exception)
-            {
-                Trace.WriteLine("regenerate ex: " + exception.Message!);
+                LMKitService.LMKitResult? result = null;
 
-                OnTextGenerationResult(null, exception);
-            }
-        });
-
+                try
+                {
+                    result = await _lmKitService.RegenerateResponse(_lmKitConversation, message.LMKitMessage!);
+                    OnTextGenerationResult(result);
+                }
+                catch (Exception exception)
+                {
+                    OnTextGenerationResult(null, exception);
+                }
+            });
+        }
     }
 
     protected override void HandleSubmit()
@@ -195,8 +198,8 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
 
     private void OnResponseRegenerationRequested(MessageViewModel message)
     {
-        message.Text = string.Empty;
-        message.MessageInProgress = true;
+        //message.Text = string.Empty;
+        //message.MessageInProgress = true;
         AwaitingResponse = true;
     }
 
@@ -212,23 +215,8 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     {
         AwaitingResponse = false;
 
-        if (exception != null)
+        if (exception != null || result?.Exception != null)
         {
-            if (exception is OperationCanceledException operationCancelledException)
-            {
-                //if (_pendingPrompt != null)
-                //{
-                //    _pendingPrompt.Status = LMKitTextGenerationStatus.Cancelled;
-                //}
-            }
-            else
-            {
-                //if (_pendingPrompt != null)
-                //{
-                //    _pendingPrompt!.Status = LMKitTextGenerationStatus.UnknownError;
-                //}
-            }
-
             // todo: provide more error info with event args.
             OnTextGenerationFailure();
         }
