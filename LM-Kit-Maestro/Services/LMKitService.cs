@@ -171,10 +171,10 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public async Task<LMKitResult> RegenerateResponse(Conversation conversation, ChatHistory.Message message)
     {
-        // Ignoring message parameter, only regenerate the latest response for now.
-        var prompt = conversation.ChatHistory!.Messages[conversation.ChatHistory.Messages.Count - 1];
+        var regenerateResponseRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.RegenerateResponse,
+            message, LMKitConfig.RequestTimeout);
 
-        var regenerateResponseRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.RegenerateResponse, prompt.Content, LMKitConfig.RequestTimeout);
+        ScheduleRequest(regenerateResponseRequest);
 
         return await HandleLmKitRequest(regenerateResponseRequest);
     }
@@ -205,14 +205,14 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    private async Task<LMKitResult> HandleLmKitRequest(LMKitRequest promptRequest)
+    private async Task<LMKitResult> HandleLmKitRequest(LMKitRequest request)
     {
         // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this prompt request.
         _lmKitServiceSemaphore.Wait();
 
         LMKitResult result;
 
-        if (promptRequest.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
+        if (request.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
         {
             result = new LMKitResult()
             {
@@ -223,22 +223,26 @@ public partial class LMKitService : INotifyPropertyChanged
         }
         else
         {
-            if (promptRequest.RequestType == LMKitRequest.LMKitRequestType.Prompt)
+            if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt)
             {
-                BeforeSubmittingPrompt(((LMKitRequest.PromptRequestParameters)promptRequest.Parameters!).Conversation);
+                BeforeSubmittingPrompt(((LMKitRequest.PromptRequestParameters)request.Parameters!).Conversation);
+            }
+            else if (request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
+            {
+                BeforeSubmittingPrompt(((LMKitRequest.RegenerateResponseParameters)request.Parameters!).Conversation);
             }
 
             _lmKitServiceSemaphore.Release();
 
-            result = await SubmitRequest(promptRequest);
+            result = await SubmitRequest(request);
         }
 
-        if (_requestSchedule.Contains(promptRequest))
+        if (_requestSchedule.Contains(request))
         {
-            _requestSchedule.Remove(promptRequest);
+            _requestSchedule.Remove(request);
         }
 
-        promptRequest.ResponseTask.TrySetResult(result);
+        request.ResponseTask.TrySetResult(result);
 
         return result;
 

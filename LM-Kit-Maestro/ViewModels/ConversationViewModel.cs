@@ -294,7 +294,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         {
             foreach (var item in e.NewItems!)
             {
-                _mainThread.BeginInvokeOnMainThread(() => Messages.Add(new MessageViewModel(this, (ChatHistory.Message)item)));
+                Messages.Add(new MessageViewModel(this, (ChatHistory.Message)item));
             }
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -306,10 +306,6 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
                 Messages.RemoveAt(e.OldStartingIndex - e.OldItems.Count + count);
                 count++;
             }
-        }
-        else if (e.Action == NotifyCollectionChangedAction.Replace)
-        {
-
         }
     }
 
