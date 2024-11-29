@@ -29,9 +29,12 @@
                     @(MessageJustCopied ? "check" : "content_copy")
                 </button>
 
-                <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
-                    sync
-                </button>
+                @if (MessageViewModel.Sender == MessageSender.Assistant)
+                {
+                    <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
+                        sync
+                    </button>
+                } 
             </div>
 
             @if (MessageViewModel.Sender == MessageSender.Assistant)
