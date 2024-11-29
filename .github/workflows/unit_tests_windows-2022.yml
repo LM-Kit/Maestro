@@ -21,6 +21,6 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: dotnet LM-Kit-Maestro.sln       
+      run: dotnet restore LM-Kit-Maestro.sln       
     - name: Test
       run: dotnet test tests/LM-Kit-Maestro.Tests.csproj --verbosity normal
