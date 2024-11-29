@@ -23,47 +23,50 @@
 
     @if (MessageViewModel.Sender == MessageSender.User || (MessageViewModel.Sender == MessageSender.Assistant && !MessageViewModel.MessageInProgress))
     {
-        @if (HasMultipleResponses)
-        {
-            <div>
-                <button @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
-                    chevron_left
-                </button>
 
-                <span>
-                    @($"{responseIndex + 1} / {MessageViewModel.PreviousContent.Count + 1}")
-                </span>
 
-                <button @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
-                    chevron_right
-                </button>
-            </div>
-        }
+            <div class="messageFooter @(MessageJustTerminated ? "show" : "hide")">
+                <div class="messageFooterContent @(MessageViewModel.Sender == MessageSender.User ? "userMessageFooterContent" : "")">
+                @if (HasMultipleResponses)
+                {
 
-        <div class="messageFooter @(MessageJustTerminated ? "show" : "hide")">
-            <div class="messageActions @(MessageViewModel.Sender == MessageSender.User ? "userMessageActions" : "")">
-                <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
+                    @*      <button @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
+                                            chevron_left
+                                        </button>
+
+                                        <span class="messageFooterText">
+                        @($"{responseIndex + 1} / {MessageViewModel.PreviousContent.Count + 1}")
+                                        </span>
+
+                                        <button @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
+                                            chevron_right
+                                        </button> *@
+                }
+
+                    <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
                     @(MessageJustCopied ? "check" : "content_copy")
-                </button>
+                    </button>
 
                 @if (MessageViewModel.Sender == MessageSender.Assistant)
                 {
-                    <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
-                        sync
-                    </button>
-                }
-            </div>
+                            <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
+                                sync
+                            </button>
 
-            @if (MessageViewModel.Sender == MessageSender.Assistant)
-            {
-                @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
-                {
-                    <span class="assistantResponseInfo">
-                        @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
-                    </span>
+                    @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
+                    {
+                                    <span class="assistantResponseInfo messageFooterText">
+                            @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
+                                    </span>
+
+                                    <span class="messageFooterText" style="margin-inline: 8px">
+                            @($"{responseIndex + 1} / 2")
+                                    </span>
+
+                    }
                 }
-            }
-        </div>
+                </div>
+            </div>
     }
 
 </div>
@@ -129,8 +132,7 @@
     }
 
     .chatActionButton {
-        height: 28px;
-        width: 28px;
+        padding: 4px;
         border-radius: 50%;
         border-width: 0;
         font-size: 12px;
@@ -163,28 +165,29 @@
     .messageFooter {
         margin-top: 12px;
         display: flex;
+        align-items: center;
     }
 
         .messageFooter:hover {
             visibility: visible;
         }
 
-    .assistantResponseInfo {
+    .messageFooterText {
         font-size: 11px;
-        margin-left: 8px;
-        align-content: center;
         color: var(--Outline);
+        margin: 0 8px;
+        display: inline-block;
+    }
+
+    .assistantResponseInfo {
+        margin-left: 8px;
     }
 
     .messageButtonDiv {
         display: inline;
     }
 
-    .messageActions {
-        display: inline;
-    }
-
-    .userMessageActions {
+    .userMessageFooterContent {
         margin-left: auto;
     }
 </style>
@@ -199,7 +202,15 @@
         set
         {
             responseIndex = value;
-            MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.PreviousContent[value], false);
+
+            if (responseIndex == (MessageViewModel.PreviousContent != null ? MessageViewModel.PreviousContent.Count : 0))
+            {
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.Text, false);
+            }
+            else
+            {
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.PreviousContent[value], false);
+            }
         }
     }
 
@@ -351,7 +362,7 @@
 
     private async Task OnPreviousResponseButtonClicked()
     {
-        if (ResponseIndex > 1)
+        if (ResponseIndex > 0)
         {
             ResponseIndex--;
         }
@@ -359,7 +370,7 @@
 
     private async Task OnNextResponseButtonClicked()
     {
-        if (ResponseIndex < messageViewModel.PreviousContent.Count - 2)
+        if (ResponseIndex < (messageViewModel.PreviousContent.Count + 1) - 1)
         {
             ResponseIndex++;
         }
