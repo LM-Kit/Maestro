@@ -25,48 +25,43 @@
     {
 
 
-            <div class="messageFooter @(MessageJustTerminated ? "show" : "hide")">
-                <div class="messageFooterContent @(MessageViewModel.Sender == MessageSender.User ? "userMessageFooterContent" : "")">
+                    <div class="messageFooter @(MessageJustTerminated ? "show" : "hide")">
+                        <div class="messageFooterContent @(MessageViewModel.Sender == MessageSender.User ? "userMessageFooterContent" : "")">
                 @if (HasMultipleResponses)
                 {
+                                    <button @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
+                                        chevron_left
+                                    </button>
 
-                    @*      <button @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
-                                            chevron_left
-                                        </button>
-
-                                        <span class="messageFooterText">
+                                    <span class="messageFooterText">
                         @($"{responseIndex + 1} / {MessageViewModel.PreviousContent.Count + 1}")
-                                        </span>
+                                    </span>
 
-                                        <button @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
-                                            chevron_right
-                                        </button> *@
+                                    <button @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
+                                        chevron_right
+                                    </button>
                 }
 
-                    <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
+                            <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
                     @(MessageJustCopied ? "check" : "content_copy")
-                    </button>
+                            </button>
 
                 @if (MessageViewModel.Sender == MessageSender.Assistant)
                 {
-                            <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
-                                sync
-                            </button>
+                                            <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
+                                                sync
+                                            </button>
 
                     @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
                     {
-                                    <span class="assistantResponseInfo messageFooterText">
+                                                            <span class="assistantResponseInfo messageFooterText">
                             @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
-                                    </span>
-
-                                    <span class="messageFooterText" style="margin-inline: 8px">
-                            @($"{responseIndex + 1} / 2")
-                                    </span>
+                                                            </span>
 
                     }
                 }
-                </div>
-            </div>
+                        </div>
+                    </div>
     }
 
 </div>
