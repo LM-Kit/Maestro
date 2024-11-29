@@ -10,7 +10,17 @@ internal class DummyLLmFileManager : ILLMFileManager
     public ObservableCollection<Uri> UnsortedModels { get; } = new ObservableCollection<Uri>();
 
     public bool FileCollectingInProgress { get; private set; }
-    public string ModelsFolderPath { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public string ModelsFolderPath
+    {
+        get
+        {
+            return "";
+        }
+        set
+        {
+
+        }
+    }
 
 #pragma warning disable 67
     public event EventHandler? FileCollectingCompleted;
