@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using LMKit.Maestro.Data;
 using LMKit.Maestro.Services;
+using System.Diagnostics;
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -18,12 +19,11 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     private readonly LMKitService.Conversation _lmKitConversation;
 
     private bool _isSynchedWithLog = true;
-    private bool _pendingCancellation;
 
     private bool _awaitingLMKitUserMessage;
     private bool _awaitingLMKitAssistantMessage;
     private MessageViewModel? _pendingPrompt;
-    private MessageViewModel? _pendingResponse;
+    //private MessageViewModel? _pendingResponse;
 
     [ObservableProperty]
     bool _usedDifferentModel;
@@ -164,10 +164,13 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
             try
             {
                 result = await _lmKitService.RegenerateResponse(_lmKitConversation, message.LMKitMessage!);
+                Trace.WriteLine("regenerate ok: " + result.Result!);
                 OnTextGenerationResult(result);
             }
             catch (Exception exception)
             {
+                Trace.WriteLine("regenerate ex: " + exception.Message!);
+
                 OnTextGenerationResult(null, exception);
             }
         });
@@ -201,8 +204,8 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         message.MessageInProgress = true;
         AwaitingResponse = true;
         _awaitingLMKitAssistantMessage = true;
-        _pendingResponse = new MessageViewModel(this, new Message() { Sender = MessageSender.Assistant }) { MessageInProgress = true };
-        Messages.Add(_pendingResponse);
+        //_pendingResponse = new MessageViewModel(this, new Message() { Sender = MessageSender.Assistant }) { MessageInProgress = true };
+        //Messages.Add(_pendingResponse);
     }
 
     private void OnNewlySubmittedPrompt(string prompt)
@@ -214,10 +217,10 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         _awaitingLMKitUserMessage = true;
         _awaitingLMKitAssistantMessage = true;
         _pendingPrompt = new MessageViewModel(this, new Message() { Sender = MessageSender.User, Text = prompt });
-        _pendingResponse = new MessageViewModel(this, new Message() { Sender = MessageSender.Assistant }) { MessageInProgress = true };
+        //_pendingResponse = new MessageViewModel(this, new Message() { Sender = MessageSender.Assistant }) { MessageInProgress = true };
 
         Messages.Add(_pendingPrompt);
-        Messages.Add(_pendingResponse);
+        //Messages.Add(_pendingResponse);
     }
 
     private void OnTextGenerationResult(LMKitService.LMKitResult? result, Exception? exception = null)
@@ -228,7 +231,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         {
             if (exception is OperationCanceledException operationCancelledException)
             {
-                _pendingResponse!.Status = LMKitTextGenerationStatus.Cancelled;
+                //_pendingResponse!.Status = LMKitTextGenerationStatus.Cancelled;
 
                 if (_pendingPrompt != null)
                 {
@@ -237,7 +240,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
             }
             else
             {
-                _pendingResponse!.Status = LMKitTextGenerationStatus.UnknownError;
+                //_pendingResponse!.Status = LMKitTextGenerationStatus.UnknownError;
 
                 if (_pendingPrompt != null)
                 {
@@ -251,7 +254,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         else if (result != null)
         {
             LatestPromptStatus = result.Status;
-            _pendingResponse!.Status = LatestPromptStatus;
+            //_pendingResponse!.Status = LatestPromptStatus;
 
             if (result.Status == LMKitTextGenerationStatus.Undefined && result.Result is TextGenerationResult textGenerationResult)
             {
@@ -271,7 +274,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
 
         if (!_awaitingLMKitAssistantMessage)
         {
-            _pendingResponse = null;
+            //_pendingResponse = null;
         }
 
         if (!_awaitingLMKitUserMessage)
@@ -279,12 +282,10 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
             _pendingPrompt = null;
         }
 
-        _pendingCancellation &= false;
     }
 
     protected override async Task HandleCancel(bool shouldAwaitTermination)
     {
-        _pendingCancellation = true;
         await _lmKitService.CancelPrompt(_lmKitConversation, shouldAwaitTermination);
     }
 
@@ -313,10 +314,10 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
 
     private void OnTextGenerationFailure()
     {
-        if (_pendingResponse != null)
-        {
-            _pendingResponse.MessageInProgress = false;
-        }
+        //if (_pendingResponse != null)
+        //{
+        //    _pendingResponse.MessageInProgress = false;
+        //}
 
         TextGenerationFailed?.Invoke(this, EventArgs.Empty);
     }
@@ -330,6 +331,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
             foreach (var item in e.NewItems!)
             {
                 ChatHistory.Message message = (ChatHistory.Message)item;
+                MessageViewModel messageViewModel = new MessageViewModel(this, message);
 
                 if (message.AuthorRole == AuthorRole.User)
                 {
@@ -343,25 +345,28 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
                             _pendingPrompt = null;
                         }
                     }
+
+                    if (AwaitingResponse)
+                    {
+                        _pendingPrompt = messageViewModel;
+                    }
+
                 }
                 else if (message.AuthorRole == AuthorRole.Assistant)
                 {
-                    if (_pendingResponse != null && _awaitingLMKitAssistantMessage)
+                    if (/*_pendingResponse != null &&*/ _awaitingLMKitAssistantMessage)
                     {
-                        _pendingResponse.LMKitMessage = message;
+                        //_pendingResponse.LMKitMessage = message;
                         _awaitingLMKitUserMessage = false;
 
                         if (!AwaitingResponse)
                         {
-                            _pendingResponse = null;
+                            //_pendingResponse = null;
                         }
                     }
                 }
-                else
-                {
-                    MessageViewModel messageViewModel = new MessageViewModel(this, message);
-                    _mainThread.BeginInvokeOnMainThread(() => Messages.Add(messageViewModel));
-                }
+
+                _mainThread.BeginInvokeOnMainThread(() => Messages.Add(messageViewModel));
             }
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
