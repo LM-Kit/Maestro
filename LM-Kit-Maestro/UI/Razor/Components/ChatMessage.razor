@@ -57,13 +57,11 @@
                         <span class="assistantResponseInfo messageFooterText">
                             @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
                         </span>
-
                     }
                 }
             </div>
         </div>
     }
-
 </div>
 
 <style>
@@ -127,18 +125,20 @@
     }
 
     .chatActionButton {
+        align-self:center;
         padding: 4px;
         border-radius: 50%;
         border-width: 0;
         font-size: 12px;
+        display: inline-block;
         background-color: transparent;
         color: var(--OnBackground);
         color: var(--Outline);
     }
 
-        .chatActionButton:hover {
-            background-color: var(--Surface3);
-        }
+    .chatActionButton:hover {
+        background-color: var(--Surface3);
+    }
 
     .dot {
         height: 10px;
@@ -163,19 +163,19 @@
         align-items: center;
     }
 
-        .messageFooter:hover {
-            visibility: visible;
-        }
+    .messageFooter:hover {
+        visibility: visible;
+    }
 
     .messageFooterText {
+        align-self: center;
         font-size: 11px;
         color: var(--Outline);
-        margin: 0 8px;
         display: inline-block;
     }
 
     .assistantResponseInfo {
-        margin-left: 8px;
+        /* margin-left: 8px; */
     }
 
     .messageButtonDiv {
