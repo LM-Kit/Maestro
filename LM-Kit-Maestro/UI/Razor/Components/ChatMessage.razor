@@ -29,7 +29,7 @@
             <div class="messageFooterContent @(MessageViewModel.Sender == MessageSender.User ? "userMessageFooterContent" : "")">
                 @if (HasMultipleResponses)
                 {
-                    <button @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
+                    <button style="margin-inline:4px"  @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
                         chevron_left
                     </button>
 
@@ -37,7 +37,7 @@
                         @($"{responseIndex + 1} / {MessageViewModel.PreviousContent!.Count + 1}")
                     </span>
 
-                    <button @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
+                    <button style="margin-inline:4px" @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
                         chevron_right
                     </button>
                 }
@@ -132,7 +132,6 @@
         font-size: 12px;
         display: inline-block;
         background-color: transparent;
-        color: var(--OnBackground);
         color: var(--Outline);
     }
 
@@ -169,7 +168,9 @@
 
     .messageFooterText {
         align-self: center;
+        margin-inline: 8px;
         font-size: 11px;
+        margin-bottom: 10px;
         color: var(--Outline);
         display: inline-block;
     }
