@@ -34,7 +34,7 @@
                     </button>
 
                     <span class="messageFooterText">
-                        @($"{responseIndex + 1} / {MessageViewModel.PreviousContent.Count + 1}")
+                        @($"{responseIndex + 1} / {MessageViewModel.PreviousContent!.Count + 1}")
                     </span>
 
                     <button @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
