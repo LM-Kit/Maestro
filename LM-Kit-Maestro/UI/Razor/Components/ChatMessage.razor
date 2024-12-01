@@ -305,7 +305,7 @@
 
                 if (HasMultipleResponses)
                 {
-                    ResponseIndex = MessageViewModel.PreviousContent.Count - 1;
+                    ResponseIndex = MessageViewModel.PreviousContent!.Count - 1 + 1;
                 }
             }
         }
@@ -350,12 +350,12 @@
         }
     }
 
-    private async Task OnRegenerateResponseButtonClicked()
+    private void OnRegenerateResponseButtonClicked()
     {
         MessageViewModel.ParentConversation.RegenerateResponseCommand.Execute(MessageViewModel);
     }
 
-    private async Task OnPreviousResponseButtonClicked()
+    private void OnPreviousResponseButtonClicked()
     {
         if (ResponseIndex > 0)
         {
@@ -363,9 +363,9 @@
         }
     }
 
-    private async Task OnNextResponseButtonClicked()
+    private void OnNextResponseButtonClicked()
     {
-        if (ResponseIndex < (messageViewModel.PreviousContent.Count + 1) - 1)
+        if (ResponseIndex < (MessageViewModel.PreviousContent.Count + 1) - 1)
         {
             ResponseIndex++;
         }
