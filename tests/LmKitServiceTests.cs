@@ -1,3 +1,4 @@
+using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
 using LMKit.Maestro.Tests.Services;
 
@@ -226,6 +227,33 @@ namespace LMKit.Maestro.Tests
             var result = await testService.LMKitService.SubmitTranslation("est-ce que ça marche cette merde ?", LMKit.TextGeneration.Language.French);
 
             Assert.False(string.IsNullOrEmpty(result));
+        }
+
+        [Fact]
+        public async Task RegenerateResponseRestoredChatHistory()
+        {
+            MaestroTestsService testService = new();
+            bool loadingSuccess = await testService.LoadModel();
+            Assert.True(loadingSuccess);
+
+            ConversationLog dummyConversationLog = new()
+            {
+                ChatHistoryData = MaestroTestsHelpers.GetTestChatHistoryData(),
+            };
+
+            await testService.Database.SaveConversation(dummyConversationLog);
+
+            await testService.ConversationListViewModel.LoadConversationLogs();
+            Assert.Single(testService.ConversationListViewModel.Conversations);
+
+
+            var conversation = testService.ConversationListViewModel.Conversations.First()!;
+            var lastMessage = conversation.Messages.Last().LMKitMessage;
+
+            var response = await testService.LMKitService.RegenerateResponse(conversation.LmKitConversation, lastMessage!);
+
+            MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
+
         }
     }
 }

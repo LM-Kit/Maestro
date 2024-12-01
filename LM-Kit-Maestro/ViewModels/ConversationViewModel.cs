@@ -16,7 +16,9 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     private readonly IMainThread _mainThread;
     private readonly IAppSettingsService _appSettingsService;
     private readonly IMaestroDatabase _database;
-    private readonly LMKitService.Conversation _lmKitConversation;
+    
+    public LMKitService.Conversation LmKitConversation { get; private set; }
+
 
     private bool _isSynchedWithLog = true;
 
@@ -100,10 +102,10 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         _database = database;
         _popupService = popupService;
         _title = conversationLog.Title!;
-        _lmKitConversation = new LMKitService.Conversation(lmKitService, conversationLog.ChatHistoryData);
-        _lmKitConversation.ChatHistoryChanged += OnLMKitChatHistoryChanged;
-        _lmKitConversation.SummaryTitleGenerated += OnConversationSummaryTitleGenerated;
-        _lmKitConversation.PropertyChanged += OnLMKitConversationPropertyChanged;
+        LmKitConversation = new LMKitService.Conversation(lmKitService, conversationLog.ChatHistoryData);
+        LmKitConversation.ChatHistoryChanged += OnLMKitChatHistoryChanged;
+        LmKitConversation.SummaryTitleGenerated += OnConversationSummaryTitleGenerated;
+        LmKitConversation.PropertyChanged += OnLMKitConversationPropertyChanged;
         Messages.CollectionChanged += OnMessagesCollectionChanged;
         ConversationLog = conversationLog;
         IsInitialized = conversationLog.ChatHistoryData == null;
@@ -164,7 +166,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
 
                 try
                 {
-                    result = await _lmKitService.RegenerateResponse(_lmKitConversation, message.LMKitMessage!);
+                    result = await _lmKitService.RegenerateResponse(LmKitConversation, message.LMKitMessage!);
                     OnTextGenerationResult(result);
                 }
                 catch (Exception exception)
@@ -186,7 +188,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         {
             try
             {
-                promptResult = await _lmKitService.SubmitPrompt(_lmKitConversation, prompt);
+                promptResult = await _lmKitService.SubmitPrompt(LmKitConversation, prompt);
                 OnTextGenerationResult(promptResult);
             }
             catch (Exception ex)
@@ -243,7 +245,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
 
     protected override async Task HandleCancel(bool shouldAwaitTermination)
     {
-        await _lmKitService.CancelPrompt(_lmKitConversation, shouldAwaitTermination);
+        await _lmKitService.CancelPrompt(LmKitConversation, shouldAwaitTermination);
     }
 
     private void SaveConversation()
@@ -306,7 +308,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     {
         if (Title == "Untitled conversation")
         {
-            Title = _lmKitConversation.GeneratedTitleSummary!;
+            Title = LmKitConversation.GeneratedTitleSummary!;
         }
     }
 
@@ -332,11 +334,11 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     {
         if (e.PropertyName == nameof(LMKitService.Conversation.LastUsedModelUri))
         {
-            LastUsedModel = _lmKitConversation.LastUsedModelUri;
+            LastUsedModel = LmKitConversation.LastUsedModelUri;
         }
         else if (e.PropertyName == nameof(LMKitService.Conversation.LatestChatHistoryData))
         {
-            ConversationLog.ChatHistoryData = _lmKitConversation.LatestChatHistoryData;
+            ConversationLog.ChatHistoryData = LmKitConversation.LatestChatHistoryData;
         }
     }
 
