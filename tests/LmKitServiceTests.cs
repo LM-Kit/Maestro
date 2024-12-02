@@ -167,7 +167,7 @@ namespace LMKit.Maestro.Tests
 
             var firstPromptResult = await firstResponseTask;
 
-            Assert.True(firstPromptResult.Status == LMKitTextGenerationStatus.Cancelled || firstPromptResult.Status == LMKitTextGenerationStatus.UnknownError);
+            Assert.True(firstPromptResult.Status == LMKitTextGenerationStatus.Cancelled || firstPromptResult.Status == LMKitTextGenerationStatus.GenericError);
 
             loadingSuccess = await secondModelLoadingTask;
             Assert.True(loadingSuccess);

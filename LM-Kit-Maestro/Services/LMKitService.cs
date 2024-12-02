@@ -284,7 +284,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
                 else
                 {
-                    result.Status = LMKitTextGenerationStatus.UnknownError;
+                    result.Status = LMKitTextGenerationStatus.GenericError;
                 }
             }
 
@@ -314,7 +314,7 @@ public partial class LMKitService : INotifyPropertyChanged
             return new LMKitResult()
             {
                 Exception = exception,
-                Status = LMKitTextGenerationStatus.UnknownError
+                Status = LMKitTextGenerationStatus.GenericError
             };
         }
         finally
