@@ -29,7 +29,7 @@
             <div class="messageFooterContent @(MessageViewModel.Sender == MessageSender.User ? "userMessageFooterContent" : "")">
                 @if (HasMultipleResponses)
                 {
-                    <button style="margin-inline:4px" @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
+                    <button @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
                         chevron_left
                     </button>
 
@@ -37,7 +37,7 @@
                         @($"{responseIndex + 1} / {MessageViewModel.PreviousContent!.Count + 1}")
                     </span>
 
-                    <button style="margin-inline:4px" @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
+                    <button @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
                         chevron_right
                     </button>
                 }
@@ -57,7 +57,7 @@
 
                     @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
                     {
-                        <span class="assistantResponseInfo messageFooterText">
+                        <span class="messageFooterText">
                             @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
                         </span>
                     }
@@ -129,14 +129,18 @@
 
     .chatActionButton {
         align-self: center;
-        padding: 4px;
         border-radius: 50%;
         border-width: 0;
         font-size: 12px;
-        display: inline-block;
+        padding: 2px;
+        min-height: 20px;
+        min-width: 20px; 
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
         background-color: transparent;
         color: var(--Outline);
-    }
+        }
 
         .chatActionButton:hover {
             background-color: var(--Surface3);
@@ -165,20 +169,18 @@
         align-items: center;
     }
 
-        .messageFooter:hover {
-            visibility: visible;
-        }
-
-    .messageFooterText {
-        align-self: center;
-        margin-inline: 8px;
-        font-size: 11px;
-        color: var(--Outline);
-        display: inline-block;
+    .messageFooter:hover {
+        visibility: visible;
     }
 
-    .assistantResponseInfo {
-        /* margin-left: 8px; */
+    .messageFooterText {
+        font-size: 12px; 
+        line-height: 20px; 
+        color: var(--Outline);
+        display: inline-block;
+        transform: translateY(-2px); /* tweaking text vertical position to align it with button icons */
+        align-self: center;
+        margin-inline: 4px;
     }
 
     .messageButtonDiv {
