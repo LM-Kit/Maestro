@@ -219,6 +219,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     private void OnTextGenerationResult(LMKitService.LMKitResult? result, Exception? exception = null)
     {
         AwaitingResponse = false;
+        Messages.Last().Status = result != null ? result.Status : LMKitTextGenerationStatus.GenericError;
 
         if (exception != null || result?.Exception != null)
         {
@@ -227,8 +228,6 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         }
         else if (result != null)
         {
-            LatestPromptStatus = result.Status;
-
             if (result.Status == LMKitTextGenerationStatus.Undefined && result.Result is TextGenerationResult textGenerationResult)
             {
                 OnTextGenerationSuccess(textGenerationResult);
@@ -238,7 +237,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
                 OnTextGenerationFailure();
             }
         }
-
+         
         if (!_isSynchedWithLog)
         {
             SaveConversation();
