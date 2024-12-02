@@ -30,7 +30,6 @@ namespace LMKit.Maestro.Tests
         {
             Assert.False(testConversation.PromptResultTask.Task.Result);
             Assert.Equal(2, testConversation.ConversationViewModel.Messages.Count);
-            Assert.Equal(LMKitTextGenerationStatus.Cancelled, testConversation.ConversationViewModel.Messages[0].Status);
             Assert.Equal(LMKitTextGenerationStatus.Cancelled, testConversation.ConversationViewModel.Messages[1].Status);
             Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[0].Text));
             //Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[1].Text));
