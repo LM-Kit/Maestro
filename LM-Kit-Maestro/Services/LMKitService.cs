@@ -3,6 +3,7 @@ using LMKit.TextGeneration;
 using LMKit.TextGeneration.Sampling;
 using LMKit.TextGeneration.Chat;
 using LMKit.Translation;
+using System.Diagnostics;
 
 namespace LMKit.Maestro.Services;
 
@@ -185,13 +186,16 @@ public partial class LMKitService : INotifyPropertyChanged
 
         if (conversationPrompt != null)
         {
+            _lmKitServiceSemaphore.Wait();
             conversationPrompt.CancellationTokenSource.Cancel();
             conversationPrompt.ResponseTask.TrySetCanceled();
+            _lmKitServiceSemaphore.Release();
 
             if (shouldAwaitTermination)
             {
                 await conversationPrompt.ResponseTask.Task.WaitAsync(TimeSpan.FromSeconds(10));
             }
+
         }
     }
 
@@ -234,6 +238,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             _lmKitServiceSemaphore.Release();
 
+
             result = await SubmitRequest(request);
         }
 
@@ -275,7 +280,6 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
             }
             catch (Exception exception)
-            {
                 result.Exception = exception;
 
                 if (result.Exception is OperationCanceledException)
@@ -295,7 +299,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 parameter.Conversation.ChatHistory = _multiTurnConversation.ChatHistory;
                 parameter.Conversation.LatestChatHistoryData = _multiTurnConversation.ChatHistory.Serialize();
 
-                if (parameter.Conversation.GeneratedTitleSummary == null && result.Status == LMKitTextGenerationStatus.Undefined 
+                if (parameter.Conversation.GeneratedTitleSummary == null && result.Status == LMKitTextGenerationStatus.Undefined
                     && !string.IsNullOrEmpty(((TextGenerationResult)result.Result!).Completion))
                 {
                     GenerateConversationSummaryTitle(parameter.Conversation, parameter.Prompt);

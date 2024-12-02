@@ -75,7 +75,15 @@ public class ConversationViewModelTests
 
         await testConversation.ConversationViewModel.Cancel();
 
-        await testConversation.PromptResultTask.Task;
+        try
+        {
+            await testConversation.PromptResultTask.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        }
+        catch (TimeoutException)
+        {
+            Assert.Fail("The response generation was not immediately cancelled");
+        }
+
         MaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
     }
 

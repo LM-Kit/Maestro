@@ -201,6 +201,31 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         });
     }
 
+    private void SetLastAssistantMessage()
+    {
+        try
+        {
+            var lastAssistantMessages = Messages.Where(message => message.Sender == MessageSender.Assistant).ToList();
+
+            lastAssistantMessages = lastAssistantMessages.Skip(Math.Max(lastAssistantMessages.Count - 2, 0)).ToList();
+
+            if (lastAssistantMessages.Count > 0)
+            {
+                lastAssistantMessages[lastAssistantMessages.Count - 1].IsLastAssistantMessage = true;
+
+                if (lastAssistantMessages.Count == 2)
+                {
+                    lastAssistantMessages[0].IsLastAssistantMessage = false;
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
     private void OnResponseRegenerationRequested(MessageViewModel message)
     {
         //message.Text = string.Empty;
@@ -219,8 +244,12 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     private void OnTextGenerationResult(LMKitService.LMKitResult? result, Exception? exception = null)
     {
         AwaitingResponse = false;
-        Messages.Last().Status = result != null ? result.Status : exception is OperationCanceledException ?
-            LMKitTextGenerationStatus.Cancelled : LMKitTextGenerationStatus.GenericError;
+
+        if (Messages.Count >= 2)
+        {
+            // An error may occur before messages consecutive from a prompt have been added to the list, add count check.  
+            Messages.Last().Status = result != null ? result.Status : exception is OperationCanceledException ? LMKitTextGenerationStatus.Cancelled : LMKitTextGenerationStatus.GenericError;
+        }
 
         if (exception != null || result?.Exception != null)
         {
@@ -238,7 +267,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
                 OnTextGenerationFailure();
             }
         }
-         
+
         if (!_isSynchedWithLog)
         {
             SaveConversation();
@@ -344,24 +373,6 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         else if (e.PropertyName == nameof(LMKitService.Conversation.LatestChatHistoryData))
         {
             ConversationLog.ChatHistoryData = LmKitConversation.LatestChatHistoryData;
-        }
-    }
-
-    private void SetLastAssistantMessage()
-    {
-        var lastAssistantMessages = Messages.Where(message => message.Sender == MessageSender.Assistant).ToList();
-
-        lastAssistantMessages = lastAssistantMessages.Skip(Math.Max(lastAssistantMessages.Count - 2, 0)).ToList();
-
-        if (lastAssistantMessages.Count > 0)
-        {
-            lastAssistantMessages[lastAssistantMessages.Count - 1].IsLastAssistantMessage = true;
-
-            if (lastAssistantMessages.Count == 2)
-            {
-                lastAssistantMessages[0].IsLastAssistantMessage = false;
-            }
-
         }
     }
 
