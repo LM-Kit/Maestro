@@ -8,6 +8,7 @@ using System.Collections.Specialized;
 using LMKit.Maestro.Data;
 using LMKit.Maestro.Services;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -16,7 +17,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     private readonly IMainThread _mainThread;
     private readonly IAppSettingsService _appSettingsService;
     private readonly IMaestroDatabase _database;
-    
+
     public LMKitService.Conversation LmKitConversation { get; private set; }
 
 
@@ -131,6 +132,8 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
                 {
                     LastUsedModel = new Uri(ConversationLog.LastUsedModel);
                 }
+
+                SetLastAssistantMessage();
             }
         }
         catch (Exception)
@@ -297,6 +300,8 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
                 count++;
             }
         }
+
+        SetLastAssistantMessage();
     }
 
     private void OnMessagesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -339,6 +344,24 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         else if (e.PropertyName == nameof(LMKitService.Conversation.LatestChatHistoryData))
         {
             ConversationLog.ChatHistoryData = LmKitConversation.LatestChatHistoryData;
+        }
+    }
+
+    private void SetLastAssistantMessage()
+    {
+        var lastAssistantMessages = Messages.Where(message => message.Sender == MessageSender.Assistant).ToList();
+
+        lastAssistantMessages = lastAssistantMessages.Skip(Math.Max(lastAssistantMessages.Count - 2, 0)).ToList();
+
+        if (lastAssistantMessages.Count > 0)
+        {
+            lastAssistantMessages[lastAssistantMessages.Count - 1].IsLastAssistantMessage = true;
+
+            if (lastAssistantMessages.Count == 2)
+            {
+                lastAssistantMessages[0].IsLastAssistantMessage = false;
+            }
+
         }
     }
 

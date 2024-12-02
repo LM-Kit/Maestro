@@ -29,7 +29,7 @@
             <div class="messageFooterContent @(MessageViewModel.Sender == MessageSender.User ? "userMessageFooterContent" : "")">
                 @if (HasMultipleResponses)
                 {
-                    <button style="margin-inline:4px"  @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
+                    <button style="margin-inline:4px" @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
                         chevron_left
                     </button>
 
@@ -48,9 +48,12 @@
 
                 @if (MessageViewModel.Sender == MessageSender.Assistant)
                 {
-                    <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
-                        sync
-                    </button>
+                    if (MessageViewModel.IsLastAssistantMessage)
+                    {
+                        <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
+                            sync
+                        </button>
+                    }
 
                     @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
                     {
@@ -125,7 +128,7 @@
     }
 
     .chatActionButton {
-        align-self:center;
+        align-self: center;
         padding: 4px;
         border-radius: 50%;
         border-width: 0;
@@ -135,9 +138,9 @@
         color: var(--Outline);
     }
 
-    .chatActionButton:hover {
-        background-color: var(--Surface3);
-    }
+        .chatActionButton:hover {
+            background-color: var(--Surface3);
+        }
 
     .dot {
         height: 10px;
@@ -162,9 +165,9 @@
         align-items: center;
     }
 
-    .messageFooter:hover {
-        visibility: visible;
-    }
+        .messageFooter:hover {
+            visibility: visible;
+        }
 
     .messageFooterText {
         align-self: center;

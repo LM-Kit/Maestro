@@ -59,6 +59,9 @@ public partial class MessageViewModel : ViewModelBase
     [ObservableProperty]
     private IReadOnlyList<string>? _previousContent;
 
+    [ObservableProperty]
+    private bool _isLastAssistantMessage;
+
     public event EventHandler? MessageContentUpdated;
 
     public MessageViewModel(ConversationViewModel parentConversation, ChatHistory.Message message)
