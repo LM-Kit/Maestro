@@ -219,7 +219,8 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     private void OnTextGenerationResult(LMKitService.LMKitResult? result, Exception? exception = null)
     {
         AwaitingResponse = false;
-        Messages.Last().Status = result != null ? result.Status : LMKitTextGenerationStatus.GenericError;
+        Messages.Last().Status = result != null ? result.Status : exception is OperationCanceledException ?
+            LMKitTextGenerationStatus.Cancelled : LMKitTextGenerationStatus.GenericError;
 
         if (exception != null || result?.Exception != null)
         {
