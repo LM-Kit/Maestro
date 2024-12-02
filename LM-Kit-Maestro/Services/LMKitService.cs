@@ -280,6 +280,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
             }
             catch (Exception exception)
+            { 
                 result.Exception = exception;
 
                 if (result.Exception is OperationCanceledException)
