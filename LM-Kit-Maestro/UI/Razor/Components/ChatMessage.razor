@@ -23,13 +23,11 @@
 
     @if (MessageViewModel.Sender == MessageSender.User || (MessageViewModel.Sender == MessageSender.Assistant && !MessageViewModel.MessageInProgress))
     {
-
-
         <div class="messageFooter @(MessageJustTerminated ? "show" : "hide")">
             <div class="messageFooterContent @(MessageViewModel.Sender == MessageSender.User ? "userMessageFooterContent" : "")">
                 @if (HasMultipleResponses)
                 {
-                    <button @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
+                    <button title="@TooltipLabels.PREVIOUS_GENERATED_RESPONSE" @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
                         chevron_left
                     </button>
 
@@ -37,12 +35,12 @@
                         @($"{responseIndex + 1} / {MessageViewModel.PreviousContent!.Count + 1}")
                     </span>
 
-                    <button @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
+                    <button title="@TooltipLabels.NEXT_GENERATED_RESPONSE" @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
                         chevron_right
                     </button>
                 }
 
-                <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
+                <button title="@TooltipLabels.COPY_MESSAGE" @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
                     @(MessageJustCopied ? "check" : "content_copy")
                 </button>
 
@@ -50,7 +48,7 @@
                 {
                     if (MessageViewModel.IsLastAssistantMessage)
                     {
-                        <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
+                        <button title="@TooltipLabels.REGENERATE_RESPONSE" @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
                             sync
                         </button>
                     }
@@ -134,13 +132,13 @@
         font-size: 12px;
         padding: 2px;
         min-height: 20px;
-        min-width: 20px; 
+        min-width: 20px;
         display: inline-flex;
         justify-content: center;
         align-items: center;
         background-color: transparent;
         color: var(--Outline);
-        }
+    }
 
         .chatActionButton:hover {
             background-color: var(--Surface3);
@@ -169,13 +167,13 @@
         align-items: center;
     }
 
-    .messageFooter:hover {
-        visibility: visible;
-    }
+        .messageFooter:hover {
+            visibility: visible;
+        }
 
     .messageFooterText {
-        font-size: 12px; 
-        line-height: 20px; 
+        font-size: 12px;
+        line-height: 20px;
         color: var(--Outline);
         display: inline-block;
         transform: translateY(-2px); /* tweaking text vertical position to align it with button icons */
