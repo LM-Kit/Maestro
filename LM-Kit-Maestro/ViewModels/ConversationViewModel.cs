@@ -157,7 +157,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     {
         if (_lmKitService.ModelLoadingState != LMKitModelLoadingState.Loaded)
         {
-            _popupService.DisplayAlert("No model is loaded", "You need to load a model in order to regenarate a response", "OK");
+            _popupService.DisplayAlert("No model is loaded", "You need to load a model in order to regenerate a response", "OK");
         }
         else
         {
