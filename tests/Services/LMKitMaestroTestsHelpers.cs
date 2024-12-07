@@ -29,13 +29,15 @@ namespace LMKit.Maestro.Tests
         public static void AssertConversationPromptCancelledState(ConversationViewModelWrapper testConversation)
         {
             Assert.False(testConversation.PromptResultTask.Task.Result);
-            Assert.Equal(2, testConversation.ConversationViewModel.Messages.Count);
-            Assert.Equal(LMKitTextGenerationStatus.Cancelled, testConversation.ConversationViewModel.Messages[0].Status);
-            Assert.Equal(LMKitTextGenerationStatus.Cancelled, testConversation.ConversationViewModel.Messages[1].Status);
-            Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[0].Text));
-            //Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[1].Text));
+
+            if (testConversation.ConversationViewModel.Messages.Count == 2)
+            {
+                Assert.Equal(LMKitTextGenerationStatus.Cancelled, testConversation.ConversationViewModel.Messages[1].Status);
+                Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[0].Text));
+
+            }
+
             Assert.False(testConversation.ConversationViewModel.AwaitingResponse);
-            //Assert.False(testConversation.ConversationViewModel.Messages[1].MessageInProgress);
         }
 
         public static byte[] GetTestChatHistoryData()

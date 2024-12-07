@@ -3,6 +3,7 @@ using LMKit.TextGeneration;
 using LMKit.TextGeneration.Sampling;
 using LMKit.TextGeneration.Chat;
 using LMKit.Translation;
+using System.Diagnostics;
 
 namespace LMKit.Maestro.Services;
 
@@ -171,10 +172,10 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public async Task<LMKitResult> RegenerateResponse(Conversation conversation, ChatHistory.Message message)
     {
-        // Ignoring message parameter, only regenerate the latest response for now.
-        var prompt = conversation.ChatHistory!.Messages[conversation.ChatHistory.Messages.Count - 1];
+        var regenerateResponseRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.RegenerateResponse,
+            new LMKitRequest.RegenerateResponseParameters(conversation, message), LMKitConfig.RequestTimeout);
 
-        var regenerateResponseRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.RegenerateResponse, prompt.Content, LMKitConfig.RequestTimeout);
+        ScheduleRequest(regenerateResponseRequest);
 
         return await HandleLmKitRequest(regenerateResponseRequest);
     }
@@ -185,13 +186,16 @@ public partial class LMKitService : INotifyPropertyChanged
 
         if (conversationPrompt != null)
         {
+            _lmKitServiceSemaphore.Wait();
             conversationPrompt.CancellationTokenSource.Cancel();
             conversationPrompt.ResponseTask.TrySetCanceled();
+            _lmKitServiceSemaphore.Release();
 
             if (shouldAwaitTermination)
             {
                 await conversationPrompt.ResponseTask.Task.WaitAsync(TimeSpan.FromSeconds(10));
             }
+
         }
     }
 
@@ -205,14 +209,14 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    private async Task<LMKitResult> HandleLmKitRequest(LMKitRequest promptRequest)
+    private async Task<LMKitResult> HandleLmKitRequest(LMKitRequest request)
     {
-        // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this prompt request.
+        // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this request.
         _lmKitServiceSemaphore.Wait();
 
         LMKitResult result;
 
-        if (promptRequest.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
+        if (request.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
         {
             result = new LMKitResult()
             {
@@ -223,22 +227,27 @@ public partial class LMKitService : INotifyPropertyChanged
         }
         else
         {
-            if (promptRequest.RequestType == LMKitRequest.LMKitRequestType.Prompt)
+            if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
             {
-                BeforeSubmittingPrompt(((LMKitRequest.PromptRequestParameters)promptRequest.Parameters!).Conversation);
+                var conversation = request.RequestType == LMKitRequest.LMKitRequestType.Prompt ?
+                    ((LMKitRequest.PromptRequestParameters)request.Parameters!).Conversation :
+                    ((LMKitRequest.RegenerateResponseParameters)request.Parameters!).Conversation;
+
+                BeforeSubmittingPrompt(conversation);
             }
 
             _lmKitServiceSemaphore.Release();
 
-            result = await SubmitRequest(promptRequest);
+
+            result = await SubmitRequest(request);
         }
 
-        if (_requestSchedule.Contains(promptRequest))
+        if (_requestSchedule.Contains(request))
         {
-            _requestSchedule.Remove(promptRequest);
+            _requestSchedule.Remove(request);
         }
 
-        promptRequest.ResponseTask.TrySetResult(result);
+        request.ResponseTask.TrySetResult(result);
 
         return result;
 
@@ -271,7 +280,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
             }
             catch (Exception exception)
-            {
+            { 
                 result.Exception = exception;
 
                 if (result.Exception is OperationCanceledException)
@@ -280,7 +289,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
                 else
                 {
-                    result.Status = LMKitTextGenerationStatus.UnknownError;
+                    result.Status = LMKitTextGenerationStatus.GenericError;
                 }
             }
 
@@ -291,7 +300,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 parameter.Conversation.ChatHistory = _multiTurnConversation.ChatHistory;
                 parameter.Conversation.LatestChatHistoryData = _multiTurnConversation.ChatHistory.Serialize();
 
-                if (parameter.Conversation.GeneratedTitleSummary == null && result.Status == LMKitTextGenerationStatus.Undefined 
+                if (parameter.Conversation.GeneratedTitleSummary == null && result.Status == LMKitTextGenerationStatus.Undefined
                     && !string.IsNullOrEmpty(((TextGenerationResult)result.Result!).Completion))
                 {
                     GenerateConversationSummaryTitle(parameter.Conversation, parameter.Prompt);
@@ -310,7 +319,7 @@ public partial class LMKitService : INotifyPropertyChanged
             return new LMKitResult()
             {
                 Exception = exception,
-                Status = LMKitTextGenerationStatus.UnknownError
+                Status = LMKitTextGenerationStatus.GenericError
             };
         }
         finally

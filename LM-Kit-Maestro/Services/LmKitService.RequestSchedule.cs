@@ -79,7 +79,12 @@ public partial class LMKitService : INotifyPropertyChanged
             {
                 foreach (var scheduledPrompt in _scheduledPrompts)
                 {
-                    if (scheduledPrompt.Parameters is LMKitRequest.PromptRequestParameters parameter && parameter.Conversation == conversation)
+                    if (scheduledPrompt.Parameters is LMKitRequest.PromptRequestParameters promptParameters && promptParameters.Conversation == conversation)
+                    {
+                        prompt = scheduledPrompt;
+                        break;
+                    }
+                    else if (scheduledPrompt.Parameters is LMKitRequest.RegenerateResponseParameters regenerateParameters && regenerateParameters.Conversation == conversation)
                     {
                         prompt = scheduledPrompt;
                         break;

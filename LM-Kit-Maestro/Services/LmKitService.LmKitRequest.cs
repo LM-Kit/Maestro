@@ -1,4 +1,5 @@
 ﻿using LMKit.TextGeneration;
+using LMKit.TextGeneration.Chat;
 using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
@@ -45,6 +46,19 @@ public partial class LMKitService : INotifyPropertyChanged
             {
                 Conversation = conversation;
                 Prompt = prompt;
+            }
+        }
+
+        public sealed class RegenerateResponseParameters
+        {
+            public Conversation Conversation { get; set; }
+
+            public ChatHistory.Message Message { get; set; }
+
+            public RegenerateResponseParameters(Conversation conversation, ChatHistory.Message message)
+            {
+                Conversation = conversation;
+                Message = message;
             }
         }
 

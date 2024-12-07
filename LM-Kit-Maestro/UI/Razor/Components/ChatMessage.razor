@@ -21,28 +21,50 @@
         </div>
     </div>
 
-    <div class="messageFooter @(MessageJustTerminated ? "show" : "hide")">
-        <div class="messageActions @(MessageViewModel.Sender == MessageSender.User ? "userMessageActions" : "")">
-            <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
-                @(MessageJustCopied ? "check" : "content_copy")
-            </button>
+    @if (MessageViewModel.Sender == MessageSender.User || (MessageViewModel.Sender == MessageSender.Assistant && !MessageViewModel.MessageInProgress))
+    {
 
-            <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
-                sync
-            </button>
+
+        <div class="messageFooter @(MessageJustTerminated ? "show" : "hide")">
+            <div class="messageFooterContent @(MessageViewModel.Sender == MessageSender.User ? "userMessageFooterContent" : "")">
+                @if (HasMultipleResponses)
+                {
+                    <button @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
+                        chevron_left
+                    </button>
+
+                    <span class="messageFooterText">
+                        @($"{responseIndex + 1} / {MessageViewModel.PreviousContent!.Count + 1}")
+                    </span>
+
+                    <button @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
+                        chevron_right
+                    </button>
+                }
+
+                <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
+                    @(MessageJustCopied ? "check" : "content_copy")
+                </button>
+
+                @if (MessageViewModel.Sender == MessageSender.Assistant)
+                {
+                    if (MessageViewModel.IsLastAssistantMessage)
+                    {
+                        <button @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
+                            sync
+                        </button>
+                    }
+
+                    @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
+                    {
+                        <span class="messageFooterText">
+                            @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
+                        </span>
+                    }
+                }
+            </div>
         </div>
-
-        @if (MessageViewModel.Sender == MessageSender.Assistant)
-        {
-            @if (MessageViewModel.TerminationReason != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
-            {
-                <span class="assistantResponseInfo">
-                    @($"{MessageViewModel.GeneratedTokens} tokens • Termination reason: {MessageViewModel.TerminationReason}")
-                </span>
-            }
-        }
-    </div>
-
+    }
 </div>
 
 <style>
@@ -61,7 +83,7 @@
         background-color: var(--Surface15);
     }
 
-    .userMessageRootContainer:hover  .userMessageContent{
+    .userMessageRootContainer:hover .userMessageContent {
         background-color: var(--Surface15);
     }
 
@@ -102,19 +124,23 @@
     }
 
     .hide {
-       visibility: hidden;
+        visibility: hidden;
     }
 
     .chatActionButton {
-        height: 28px;
-        width: 28px;
+        align-self: center;
         border-radius: 50%;
         border-width: 0;
         font-size: 12px;
+        padding: 2px;
+        min-height: 20px;
+        min-width: 20px; 
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
         background-color: transparent;
-        color: var(--OnBackground);
         color: var(--Outline);
-    }
+        }
 
         .chatActionButton:hover {
             background-color: var(--Surface3);
@@ -140,34 +166,53 @@
     .messageFooter {
         margin-top: 12px;
         display: flex;
+        align-items: center;
     }
 
-        .messageFooter:hover {
-            visibility: visible;
-        }
+    .messageFooter:hover {
+        visibility: visible;
+    }
 
-    .assistantResponseInfo {
-        font-size: 11px;
-        margin-left: 8px;
-        align-content: center;
+    .messageFooterText {
+        font-size: 12px; 
+        line-height: 20px; 
         color: var(--Outline);
+        display: inline-block;
+        transform: translateY(-2px); /* tweaking text vertical position to align it with button icons */
+        align-self: center;
+        margin-inline: 4px;
     }
 
     .messageButtonDiv {
         display: inline;
     }
 
-    .messageActions {
-        display: inline;
-    }
-
-    .userMessageActions {
+    .userMessageFooterContent {
         margin-left: auto;
     }
 </style>
 
 @code {
     const string ProgressIndicatorHtml = "<span class=\"dot \"></span>";
+
+    private int responseIndex;
+    private int ResponseIndex
+    {
+        get => responseIndex;
+        set
+        {
+            responseIndex = value;
+
+            if (responseIndex == (MessageViewModel.PreviousContent != null ? MessageViewModel.PreviousContent.Count : 0))
+            {
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.Text, false);
+            }
+            else
+            {
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.PreviousContent[value], false);
+            }
+        }
+    }
 
     bool messageJustCopied;
     bool MessageJustCopied
@@ -201,6 +246,17 @@
         }
     }
 
+    bool hasMultipleResponses;
+    bool HasMultipleResponses
+    {
+        get => hasMultipleResponses;
+        set
+        {
+            hasMultipleResponses = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
     MessageViewModel? messageViewModel;
     [Parameter]
     [EditorRequired]
@@ -220,7 +276,7 @@
 
             if (messageViewModel.Sender == MessageSender.Assistant)
             {
-                messageHtml = GenerateAssistantResponseHtml(messageViewModel);
+                messageHtml = GenerateAssistantResponseHtml(messageViewModel.Text, messageViewModel.MessageInProgress);
             }
 
             InvokeAsync(() => StateHasChanged());
@@ -234,7 +290,7 @@
         {
             if (e.PropertyName == nameof(MessageViewModel.Text))
             {
-                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel);
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.Text, messageViewModel.MessageInProgress);
             }
             else if (e.PropertyName == nameof(MessageViewModel.MessageInProgress))
             {
@@ -246,6 +302,15 @@
                     {
                         MessageHtml = MessageHtml.Replace(ProgressIndicatorHtml, string.Empty);
                     }
+                }
+            }
+            else if (e.PropertyName == nameof(MessageViewModel.PreviousContent))
+            {
+                HasMultipleResponses = MessageViewModel.PreviousContent?.Count > 0;
+
+                if (HasMultipleResponses)
+                {
+                    ResponseIndex = MessageViewModel.PreviousContent!.Count - 1 + 1;
                 }
             }
         }
@@ -290,18 +355,34 @@
         }
     }
 
-    private async Task OnRegenerateResponseButtonClicked()
+    private void OnRegenerateResponseButtonClicked()
     {
         MessageViewModel.ParentConversation.RegenerateResponseCommand.Execute(MessageViewModel);
     }
 
-    private static string GenerateAssistantResponseHtml(MessageViewModel messageViewModel)
+    private void OnPreviousResponseButtonClicked()
     {
-        string html = !string.IsNullOrEmpty(messageViewModel.Text) ? Markdig.Markdown.ToHtml(messageViewModel.Text) : string.Empty;
+        if (ResponseIndex > 0)
+        {
+            ResponseIndex--;
+        }
+    }
+
+    private void OnNextResponseButtonClicked()
+    {
+        if (ResponseIndex < (MessageViewModel.PreviousContent.Count + 1) - 1)
+        {
+            ResponseIndex++;
+        }
+    }
+
+    private static string GenerateAssistantResponseHtml(string content, bool messageInProgress)
+    {
+        string html = !string.IsNullOrEmpty(content) ? Markdig.Markdown.ToHtml(content) : string.Empty;
 
         bool responseIsEmpty = html.Length == 0;
 
-        if (messageViewModel.MessageInProgress)
+        if (messageInProgress)
         {
             var closingTagIndex = Math.Max(0, html.LastIndexOf(@"</"));
 
@@ -342,7 +423,7 @@
             case LMKitTextGenerationStatus.Cancelled:
                 return "Cancelled";
 
-            case LMKitTextGenerationStatus.UnknownError:
+            case LMKitTextGenerationStatus.GenericError:
                 return "Unknown error";
         }
     }
