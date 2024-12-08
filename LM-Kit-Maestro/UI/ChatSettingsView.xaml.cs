@@ -26,6 +26,7 @@ public partial class ChatSettingsView : ContentView
         if (BindingContext is SettingsViewModel settingsViewModel)
         {
             _settingsViewModel = settingsViewModel;
+            updateMaxCompletionTokensText();
             _settingsViewModel.PropertyChanged += OnSettingsViewModelPropertyChanged;
         }
     }
@@ -34,7 +35,7 @@ public partial class ChatSettingsView : ContentView
     {
         if (e.PropertyName == nameof(SettingsViewModel.MaximumCompletionTokens))
         {
-            MaxCompletionTokensText = _settingsViewModel!.MaximumCompletionTokens.ToString();
+            updateMaxCompletionTokensText();
         }
     }
 
@@ -54,7 +55,12 @@ public partial class ChatSettingsView : ContentView
         }
         else
         {
-            MaxCompletionTokensText = _settingsViewModel!.MaximumCompletionTokens.ToString();
+            updateMaxCompletionTokensText();
         }
+    }
+
+    private void updateMaxCompletionTokensText()
+    {//Loïc: can't we bind _settingsViewModel!.MaximumCompletionTokens to MaxCompletionTokensText??
+        MaxCompletionTokensText = _settingsViewModel!.MaximumCompletionTokens.ToString();
     }
 }
