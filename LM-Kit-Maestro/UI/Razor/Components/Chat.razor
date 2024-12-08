@@ -8,7 +8,8 @@
 @inherits MvvmComponentBase<ChatPageViewModel>
 
 <div id="container">
-    <div id="conversation-content" class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
+    <div id="conversation-content"
+         class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
         @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
         {
             if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
@@ -59,7 +60,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="user-input">
         <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
     </div>
@@ -82,10 +83,10 @@
         width: 100%;
     }
 
-     #user-input {
-         width: 100%;
-         background-color: red;
-         max-width: 800px;
+    #user-input {
+        width: 100%;
+        background-color: red;
+        max-width: 800px;
     }
 
     .top-align-container {
@@ -169,6 +170,8 @@
 </style>
 
 @code
+
+
 
 {
 
@@ -371,5 +374,10 @@
     public async Task OnScrollToEndButtonClicked()
     {
         await ScrollTo(ScrollDirection.End);
+    }
+
+    public async Task OnSubmit()
+    {
+        ViewModel.ConversationListViewModel.CurrentConversation.Submit();
     }
 }

@@ -150,12 +150,6 @@
         }
     }
 
-    private void OnTranslateButtonClicked()
-    {
-        ViewModel.CurrentTranslation.Submit();
-    }
-
-
     private async Task OnCopyMessageButtonClicked()
     {
         bool success = await ClipboardHandler.CopyTextToClipboardAsync(ViewModel.Result != null ? ViewModel.Result : "");
