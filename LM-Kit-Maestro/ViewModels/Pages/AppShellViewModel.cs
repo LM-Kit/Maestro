@@ -87,7 +87,7 @@ public partial class AppShellViewModel : ViewModelBase
 
         if (_appSettingsService.LastLoadedModel != null)
         {
-            TryLoadLastUsedModel();
+            _ = Task.Run(TryLoadLastUsedModel); //Loading model in the background to avoid blocking UI initialization.
         }
 
         // todo: we should ensure UI is loaded before starting loading a model with this call.
