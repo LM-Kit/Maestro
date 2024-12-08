@@ -15,7 +15,8 @@ namespace LMKit.Maestro
         public App(AppShellViewModel appShellViewModel)
         {
             InitializeComponent();
-            LMKit.Global.Runtime.Initialize();
+
+            Task.Run(() => Global.Runtime.Initialize()); //Initialize LM-Kit in the background to avoid blocking UI initialization.
 
             BlazorWebViewHandler.BlazorWebViewMapper.AppendToMapping("CustomBlazorWebView", (handler, view) =>
             {
@@ -38,7 +39,6 @@ namespace LMKit.Maestro
             });
 
             _appShellViewModel = appShellViewModel;
-            MainPage = new AppShell(appShellViewModel);
         }
 
         protected override async void OnStart()
@@ -51,17 +51,17 @@ namespace LMKit.Maestro
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            Window window = base.CreateWindow(activationState);
+            Window window = new Window(new AppShell(_appShellViewModel));
 
 #if WINDOWS
-    window.HandlerChanged += (sender, args) =>
-    {
-        var nativeWindow = window.Handler?.PlatformView as Microsoft.UI.Xaml.Window;
-        if (nativeWindow != null)
-        {
-            CustomizeTitleBar(nativeWindow);
-        }
-    };
+            window.HandlerChanged += (sender, args) =>
+            {
+                var nativeWindow = window.Handler?.PlatformView as Microsoft.UI.Xaml.Window;
+                if (nativeWindow != null)
+                {
+                    CustomizeTitleBar(nativeWindow);
+                }
+            };
 #endif
 
             window.Destroying += OnAppWindowDestroying;
@@ -78,29 +78,29 @@ namespace LMKit.Maestro
         }
 
 #if WINDOWS
-private void CustomizeTitleBar(Microsoft.UI.Xaml.Window nativeWindow)
-{
-    var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
-    var windowId = Win32Interop.GetWindowIdFromWindow(hwnd);
-    var appWindow = AppWindow.GetFromWindowId(windowId);
+        private void CustomizeTitleBar(Microsoft.UI.Xaml.Window nativeWindow)
+        {
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
+            var windowId = Win32Interop.GetWindowIdFromWindow(hwnd);
+            var appWindow = AppWindow.GetFromWindowId(windowId);
 
-    if (appWindow is not null && AppWindowTitleBar.IsCustomizationSupported())
-    {
-        var titleBar = appWindow.TitleBar;
+            if (appWindow is not null && AppWindowTitleBar.IsCustomizationSupported())
+            {
+                var titleBar = appWindow.TitleBar;
 
-        // Set the minimize, maximize, and close button icon colors
-        titleBar.ButtonForegroundColor = Microsoft.UI.Colors.White;
-        titleBar.ButtonHoverForegroundColor = Microsoft.UI.Colors.White;
-        titleBar.ButtonPressedForegroundColor = Microsoft.UI.Colors.White;
-        titleBar.ButtonInactiveForegroundColor = Microsoft.UI.Colors.White;
+                // Set the minimize, maximize, and close button icon colors
+                titleBar.ButtonForegroundColor = Microsoft.UI.Colors.White;
+                titleBar.ButtonHoverForegroundColor = Microsoft.UI.Colors.White;
+                titleBar.ButtonPressedForegroundColor = Microsoft.UI.Colors.White;
+                titleBar.ButtonInactiveForegroundColor = Microsoft.UI.Colors.White;
 
-        //  Set background colors for different states
-        titleBar.ButtonBackgroundColor = ColorHelper.FromArgb(255, 81, 43, 212);
-        titleBar.ButtonHoverBackgroundColor = ColorHelper.FromArgb(255, 100, 60, 230);
-        titleBar.ButtonPressedBackgroundColor = ColorHelper.FromArgb(255, 60, 30, 150);
-        titleBar.ButtonInactiveBackgroundColor = ColorHelper.FromArgb(255, 81, 43, 212);
-    }
-}
+                //  Set background colors for different states
+                titleBar.ButtonBackgroundColor = ColorHelper.FromArgb(255, 81, 43, 212);
+                titleBar.ButtonHoverBackgroundColor = ColorHelper.FromArgb(255, 100, 60, 230);
+                titleBar.ButtonPressedBackgroundColor = ColorHelper.FromArgb(255, 60, 30, 150);
+                titleBar.ButtonInactiveBackgroundColor = ColorHelper.FromArgb(255, 81, 43, 212);
+            }
+        }
 #endif
     }
 }
