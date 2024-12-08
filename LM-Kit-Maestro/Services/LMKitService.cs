@@ -1,9 +1,8 @@
-﻿using System.ComponentModel;
-using LMKit.TextGeneration;
-using LMKit.TextGeneration.Sampling;
+﻿using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
+using LMKit.TextGeneration.Sampling;
 using LMKit.Translation;
-using System.Diagnostics;
+using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
 
@@ -254,84 +253,84 @@ public partial class LMKitService : INotifyPropertyChanged
     }
 
     private async Task<LMKitResult> SubmitRequest(LMKitRequest request)
-  {
-      try
-      {
-          _requestSchedule.RunningPromptRequest = request;
+    {
+        try
+        {
+            _requestSchedule.RunningPromptRequest = request;
 
-          var result = new LMKitResult();
+            var result = new LMKitResult();
 
-          try
-          {
-              if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt)
-              {
-                  result.Result = await _multiTurnConversation!.SubmitAsync(((LMKitRequest.PromptRequestParameters)request.Parameters!).Prompt,
-                      request.CancellationTokenSource.Token);
-              }
-              else if (request.RequestType == LMKitRequest.LMKitRequestType.Translate)
-              {
-                  var translationRequestParameters = (LMKitRequest.TranslationRequestParameters)request.Parameters!;
-                  result.Result = await _textTranslation!.TranslateAsync(translationRequestParameters.InputText,
-                      translationRequestParameters.Language, request.CancellationTokenSource.Token);
-              }
-              else if (request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
-              {
-                  result.Result = await _multiTurnConversation!.RegenerateResponseAsync(request.CancellationTokenSource.Token);
-              }
-          }
-          catch (Exception exception)
-          {
-              result.Exception = exception;
+            try
+            {
+                if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt)
+                {
+                    result.Result = await _multiTurnConversation!.SubmitAsync(((LMKitRequest.PromptRequestParameters)request.Parameters!).Prompt,
+                        request.CancellationTokenSource.Token);
+                }
+                else if (request.RequestType == LMKitRequest.LMKitRequestType.Translate)
+                {
+                    var translationRequestParameters = (LMKitRequest.TranslationRequestParameters)request.Parameters!;
+                    result.Result = await _textTranslation!.TranslateAsync(translationRequestParameters.InputText,
+                        translationRequestParameters.Language, request.CancellationTokenSource.Token);
+                }
+                else if (request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
+                {
+                    result.Result = await _multiTurnConversation!.RegenerateResponseAsync(request.CancellationTokenSource.Token);
+                }
+            }
+            catch (Exception exception)
+            {
+                result.Exception = exception;
 
-              if (result.Exception is OperationCanceledException)
-              {
-                  result.Status = LMKitTextGenerationStatus.Cancelled;
-              }
-              else
-              {
-                  result.Status = LMKitTextGenerationStatus.GenericError;
-              }
-          }
+                if (result.Exception is OperationCanceledException)
+                {
+                    result.Status = LMKitTextGenerationStatus.Cancelled;
+                }
+                else
+                {
+                    result.Status = LMKitTextGenerationStatus.GenericError;
+                }
+            }
 
-          if ((request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse) && _multiTurnConversation != null)
-          {
-              var promptParameters = request.Parameters as LMKitRequest.PromptRequestParameters;
-              var regenerateParameters = request.Parameters as LMKitRequest.RegenerateResponseParameters;
-              var conversation = promptParameters != null ? promptParameters.Conversation : regenerateParameters!.Conversation;
+            if ((request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse) && _multiTurnConversation != null)
+            {
+                var promptParameters = request.Parameters as LMKitRequest.PromptRequestParameters;
+                var regenerateParameters = request.Parameters as LMKitRequest.RegenerateResponseParameters;
+                var conversation = promptParameters != null ? promptParameters.Conversation : regenerateParameters!.Conversation;
 
-              conversation.ChatHistory = _multiTurnConversation.ChatHistory;
+                conversation.ChatHistory = _multiTurnConversation.ChatHistory;
 
-              conversation.LatestChatHistoryData = _multiTurnConversation.ChatHistory.Serialize();
+                conversation.LatestChatHistoryData = _multiTurnConversation.ChatHistory.Serialize();
 
-              if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt &&
-                  conversation.GeneratedTitleSummary == null &&
-                  result.Status == LMKitTextGenerationStatus.Undefined &&
-                  !string.IsNullOrEmpty(((TextGenerationResult)result.Result!).Completion))
-              {
-                  GenerateConversationSummaryTitle(conversation, promptParameters!.Prompt);
-              }
-          }
+                if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt &&
+                    conversation.GeneratedTitleSummary == null &&
+                    result.Status == LMKitTextGenerationStatus.Undefined &&
+                    !string.IsNullOrEmpty(((TextGenerationResult)result.Result!).Completion))
+                {
+                    GenerateConversationSummaryTitle(conversation, promptParameters!.Prompt);
+                }
+            }
 
-          if (result.Exception != null && request.CancellationTokenSource.IsCancellationRequested)
-          {
-              result.Status = LMKitTextGenerationStatus.Cancelled;
-          }
+            if (result.Exception != null && request.CancellationTokenSource.IsCancellationRequested)
+            {
+                result.Status = LMKitTextGenerationStatus.Cancelled;
+            }
 
-          return result;
-      }
-      catch (Exception exception)
-      {
-          return new LMKitResult()
-          {
-              Exception = exception,
-              Status = LMKitTextGenerationStatus.GenericError
-          };
-      }
-      finally
-      {
-          _requestSchedule.RunningPromptRequest = null;
-      }
-  }
+            return result;
+        }
+        catch (Exception exception)
+        {
+            return new LMKitResult()
+            {
+                Exception = exception,
+                Status = LMKitTextGenerationStatus.GenericError
+            };
+        }
+        finally
+        {
+            _requestSchedule.RunningPromptRequest = null;
+        }
+    }
 
     private void GenerateConversationSummaryTitle(Conversation conversation, string prompt)
     {

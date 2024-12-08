@@ -67,126 +67,126 @@
 
 <style>
     .rootContainer {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    margin-top: 2px;
-    margin-bottom: 20px;
-    padding-inline: 8px;
-    padding-block: 16px;
-    border-radius: 0px;
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        margin-top: 2px;
+        margin-bottom: 20px;
+        padding-inline: 8px;
+        padding-block: 16px;
+        border-radius: 0px;
     }
 
     .assistantMessageRootContainer:hover {
-    background-color: var(--Surface15);
+        background-color: var(--Surface15);
     }
 
     .userMessageRootContainer:hover .userMessageContent {
-    background-color: var(--Surface15);
+        background-color: var(--Surface15);
     }
 
     .rootContainer:hover > div {
-    visibility: visible;
+        visibility: visible;
     }
 
     .userMessageDiv {
-    max-width: 75%;
-    margin-left: auto;
+        max-width: 75%;
+        margin-left: auto;
     }
 
     .userMessageDiv {
     }
 
     .messageContent {
-    padding-block: 12px;
-    padding-inline: 16px;
-    word-break: break-word; /* Ensures long words break and wrap */
-    overflow-wrap: break-word; /* Allows wrapping long words */
-    max-width: 100%; /* Prevents the div from exceeding the width of its container */
+        padding-block: 12px;
+        padding-inline: 16px;
+        word-break: break-word; /* Ensures long words break and wrap */
+        overflow-wrap: break-word; /* Allows wrapping long words */
+        max-width: 100%; /* Prevents the div from exceeding the width of its container */
     }
 
     .userMessageContent {
-    display: block;
-    background-color: var(--Surface);
-    border-radius: 32px;
+        display: block;
+        background-color: var(--Surface);
+        border-radius: 32px;
     }
 
 
     .assistantMessageContent {
-    padding: 4px;
-    margin-bottom: -16px; /* workaround: this syntax adds 16px bottom margin to the html block '(MarkupString)Markdig.Markdown.ToHtml(MessageViewModel.Text)'*/
+        padding: 4px;
+        margin-bottom: -16px; /* workaround: this syntax adds 16px bottom margin to the html block '(MarkupString)Markdig.Markdown.ToHtml(MessageViewModel.Text)'*/
     }
 
     .show {
-    visibility: visible;
+        visibility: visible;
     }
 
     .hide {
-    visibility: hidden;
+        visibility: hidden;
     }
 
     .chatActionButton {
-    align-self: center;
-    border-radius: 50%;
-    border-width: 0;
-    font-size: 12px;
-    padding: 2px;
-    min-height: 20px;
-    min-width: 20px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    color: var(--Outline);
+        align-self: center;
+        border-radius: 50%;
+        border-width: 0;
+        font-size: 12px;
+        padding: 2px;
+        min-height: 20px;
+        min-width: 20px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        color: var(--Outline);
     }
 
-    .chatActionButton:hover {
-    background-color: var(--Surface3);
-    }
+        .chatActionButton:hover {
+            background-color: var(--Surface3);
+        }
 
     .dot {
-    height: 10px;
-    width: 10px;
-    margin-left: 4px;
-    background-color: var(--OnBackground);
-    border-radius: 50%;
-    display: inline-block;
+        height: 10px;
+        width: 10px;
+        margin-left: 4px;
+        background-color: var(--OnBackground);
+        border-radius: 50%;
+        display: inline-block;
     }
 
     .align-right {
-    margin-left: auto;
+        margin-left: auto;
     }
 
     .align-left {
-    margin-right: auto;
+        margin-right: auto;
     }
 
     .messageFooter {
-    margin-top: 12px;
-    display: flex;
-    align-items: center;
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
     }
 
-    .messageFooter:hover {
-    visibility: visible;
-    }
+        .messageFooter:hover {
+            visibility: visible;
+        }
 
     .messageFooterText {
-    font-size: 12px;
-    line-height: 20px;
-    color: var(--Outline);
-    display: inline-block;
-    transform: translateY(-2px); /* tweaking text vertical position to align it with button icons */
-    align-self: center;
-    margin-inline: 4px;
+        font-size: 12px;
+        line-height: 20px;
+        color: var(--Outline);
+        display: inline-block;
+        transform: translateY(-2px); /* tweaking text vertical position to align it with button icons */
+        align-self: center;
+        margin-inline: 4px;
     }
 
     .messageButtonDiv {
-    display: inline;
+        display: inline;
     }
 
     .userMessageFooterContent {
-    margin-left: auto;
+        margin-left: auto;
     }
 </style>
 
