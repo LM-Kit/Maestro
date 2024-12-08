@@ -7,10 +7,8 @@
 
 @inherits MvvmComponentBase<ChatPageViewModel>
 
-<div>
-
-    <div id="container"
-         class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
+<div id="container">
+    <div id="conversation-content" class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
         @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
         {
             if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
@@ -61,19 +59,38 @@
             </div>
         </div>
     </div>
+    
+    <div id="user-input">
+        <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
+    </div>
 </div>
 
 <style>
     #container {
         color: white;
         font-size: 16px;
+        display: flex;
         scrollbar-gutter: both-edges;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         width: 100%;
+    }
+
+    #conversation-content {
+        max-width: 800px;
+        width: 100%;
+    }
+
+     #user-input {
+         width: 100%;
+         background-color: red;
+         max-width: 800px;
     }
 
     .top-align-container {
         justify-content: start;
-        align-self: start;
+        align-self: center;
     }
 
     .centered-container {

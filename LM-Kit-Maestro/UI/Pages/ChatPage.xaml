@@ -36,7 +36,7 @@
                 <Setter Property="VerticalOptions" Value="Center"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
             </Style>
-  
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -145,7 +145,7 @@
             WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth}"
             Grid.Row="1"/>
 
-        <!--<BlazorWebView
+        <BlazorWebView
             x:Name="blazorWebView"
             Grid.Row="1"
             Grid.Column="1"
@@ -153,14 +153,7 @@
             <BlazorWebView.RootComponents>
                 <RootComponent Selector="#app" ComponentType="{x:Type razor:Chat}" />
             </BlazorWebView.RootComponents>
-        </BlazorWebView>-->
-        
-        <ui:ChatView
-            x:Name="chatView"
-            Grid.RowSpan="2"
-            Margin="{x:Static ui:ChatPage.ChatViewMargin}"
-            BindingContext="{Binding ConversationListViewModel.CurrentConversation}"
-            Grid.Column="1"/>
+        </BlazorWebView>
 
         <ui:ChatSettingsView
             x:Name="settingsSidebar"
