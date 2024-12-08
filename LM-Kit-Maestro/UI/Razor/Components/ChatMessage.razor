@@ -279,6 +279,11 @@
 
             HasMultipleResponses = MessageViewModel.PreviousContent?.Count > 0;
 
+            if (HasMultipleResponses)
+            {
+                ResponseIndex = messageViewModel.PreviousContent!.Count;
+            }
+
             InvokeAsync(() => StateHasChanged());
         }
     }
