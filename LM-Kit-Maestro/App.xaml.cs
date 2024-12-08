@@ -3,8 +3,11 @@ using Microsoft.UI;
 using Microsoft.UI.Windowing;
 #endif
 
+
 using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components.WebView.Maui;
+
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
 namespace LMKit.Maestro
 {
