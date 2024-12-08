@@ -89,7 +89,7 @@
 
                 <Button
                     HorizontalOptions="End"
-                    ToolTipProperties.Text="Start a new chat"
+                    ToolTipProperties.Text="{x:Static local:UI.TooltipLabels.START_NEW_CHAT}"
                     Style="{StaticResource SecondaryActionButtonStyle}"
                     Grid.Column="2" 
                     FontFamily="Material"
@@ -121,7 +121,7 @@
                 <Button
                     IsVisible="{Binding SettingsSidebarIsToggled}"
                     HorizontalOptions="Start"
-                    ToolTipProperties.Text="Reset default settings"
+                    ToolTipProperties.Text="{x:Static local:UI.TooltipLabels.RESET_DEFAULT_SETTINGS}"
                     Style="{StaticResource SecondaryActionButtonStyle}"
                     Text="{StaticResource Rotate_right}"
                     Command="{Binding SettingsViewModel.ResetDefaultValuesCommand}" />
