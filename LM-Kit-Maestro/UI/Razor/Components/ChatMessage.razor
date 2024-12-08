@@ -277,6 +277,8 @@
                 messageHtml = GenerateAssistantResponseHtml(messageViewModel.Text, messageViewModel.MessageInProgress);
             }
 
+            HasMultipleResponses = MessageViewModel.PreviousContent?.Count > 0;
+
             InvokeAsync(() => StateHasChanged());
         }
     }

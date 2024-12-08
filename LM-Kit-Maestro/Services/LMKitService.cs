@@ -1,9 +1,8 @@
-﻿using System.ComponentModel;
-using LMKit.TextGeneration;
-using LMKit.TextGeneration.Sampling;
+﻿using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
+using LMKit.TextGeneration.Sampling;
 using LMKit.Translation;
-using System.Diagnostics;
+using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
 
@@ -107,7 +106,7 @@ public partial class LMKitService : INotifyPropertyChanged
         }
         else if (_requestSchedule.Count > 1)
         {
-            // A prompt is scheduled, but it is not running. 
+            // A prompt is scheduled, but it is not running.
             _requestSchedule.Next!.CancelAndAwaitTermination();
         }
 
@@ -280,7 +279,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
             }
             catch (Exception exception)
-            { 
+            {
                 result.Exception = exception;
 
                 if (result.Exception is OperationCanceledException)
@@ -293,17 +292,22 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
             }
 
-            if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt && _multiTurnConversation != null)
+            if ((request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse) && _multiTurnConversation != null)
             {
-                LMKitRequest.PromptRequestParameters parameter = (request.Parameters as LMKitRequest.PromptRequestParameters)!;
+                var promptParameters = request.Parameters as LMKitRequest.PromptRequestParameters;
+                var regenerateParameters = request.Parameters as LMKitRequest.RegenerateResponseParameters;
+                var conversation = promptParameters != null ? promptParameters.Conversation : regenerateParameters!.Conversation;
 
-                parameter.Conversation.ChatHistory = _multiTurnConversation.ChatHistory;
-                parameter.Conversation.LatestChatHistoryData = _multiTurnConversation.ChatHistory.Serialize();
+                conversation.ChatHistory = _multiTurnConversation.ChatHistory;
 
-                if (parameter.Conversation.GeneratedTitleSummary == null && result.Status == LMKitTextGenerationStatus.Undefined
-                    && !string.IsNullOrEmpty(((TextGenerationResult)result.Result!).Completion))
+                conversation.LatestChatHistoryData = _multiTurnConversation.ChatHistory.Serialize();
+
+                if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt &&
+                    conversation.GeneratedTitleSummary == null &&
+                    result.Status == LMKitTextGenerationStatus.Undefined &&
+                    !string.IsNullOrEmpty(((TextGenerationResult)result.Result!).Completion))
                 {
-                    GenerateConversationSummaryTitle(parameter.Conversation, parameter.Prompt);
+                    GenerateConversationSummaryTitle(conversation, promptParameters!.Prompt);
                 }
             }
 
