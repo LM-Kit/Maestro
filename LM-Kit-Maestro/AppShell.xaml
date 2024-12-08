@@ -11,7 +11,7 @@
     xmlns:converters="clr-namespace:LMKit.Maestro.Converters"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False"
-    Title="Maestro"
+    Title="{x:Static local:AppConstants.AppNameWithVersion}"
     x:DataType="vm:AppShellViewModel"
     x:Name="thisShell"
     >
@@ -28,7 +28,7 @@
     <!--<Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage">
         <ShellContent ContentTemplate="{DataTemplate ui:AssistantsPage}"/>
     </Tab>-->
-    
+
     <Tab BindingContext="{Binding ChatTab}" Title="{Binding ChatTab.Title}" Route="ChatPage">
         <ShellContent Title="AI Chat" ContentTemplate="{DataTemplate ui:ChatPage}"/>
     </Tab>
