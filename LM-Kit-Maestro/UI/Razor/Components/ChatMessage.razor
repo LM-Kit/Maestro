@@ -265,31 +265,34 @@
         get => messageViewModel!;
         set
         {
-            if (messageViewModel != null)
+            if (messageViewModel != value)
             {
-                messageViewModel.PropertyChanged -= OnMessageViewModelPropertyChanged;
-            }
+                if (messageViewModel != null)
+                {
+                    messageViewModel.PropertyChanged -= OnMessageViewModelPropertyChanged;
+                }
 
-            messageViewModel = value;
-            messageViewModel.PropertyChanged += OnMessageViewModelPropertyChanged;
+                messageViewModel = value;
+                messageViewModel.PropertyChanged += OnMessageViewModelPropertyChanged;
 
-            if (messageViewModel.Sender == MessageSender.Assistant)
-            {
-                messageHtml = GenerateAssistantResponseHtml(messageViewModel.Text, messageViewModel.MessageInProgress);
-            }
+                if (messageViewModel.Sender == MessageSender.Assistant)
+                {
+                    messageHtml = GenerateAssistantResponseHtml(messageViewModel.Text, messageViewModel.MessageInProgress);
+                }
 
-            if (MessageViewModel.PreviousContent?.Count > 0)
-            {
-                HasMultipleResponses = true;
-                responseIndex = MessageViewModel.PreviousContent.Count;
-            }
-            else
-            {
-                HasMultipleResponses = false;
-                responseIndex = 0;
-            }
+                if (MessageViewModel.PreviousContent?.Count > 0)
+                {
+                    HasMultipleResponses = true;
+                    responseIndex = MessageViewModel.PreviousContent.Count;
+                }
+                else
+                {
+                    HasMultipleResponses = false;
+                    responseIndex = 0;
+                }
 
-            InvokeAsync(() => StateHasChanged());
+                InvokeAsync(() => StateHasChanged());
+            }
         }
     }
 #pragma warning restore BL0007
