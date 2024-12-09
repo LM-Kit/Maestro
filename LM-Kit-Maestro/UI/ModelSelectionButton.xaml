@@ -148,7 +148,7 @@
 
                             <DataTrigger TargetType="Label" Binding="{Binding LMKitService.ModelLoadingState}" Value="{x:Static services:LMKitModelLoadingState.Loading}">
                                 <Setter Property="TextColor" Value="{StaticResource Outline}"/>
-                                <Setter Property="Text" Value="{Binding Source={x:Reference modelSelectionButton}, Path=LoadingText}"/>
+                                <Setter Property="Text" Value="{Binding Source={x:Reference modelSelectionButton}, Path=LoadingText, x:DataType=ui:ModelSelectionButton}"/>
                             </DataTrigger>
 
                             <DataTrigger TargetType="Label" Binding="{Binding LMKitService.ModelLoadingState}" Value="{x:Static services:LMKitModelLoadingState.Loaded}">

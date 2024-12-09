@@ -135,7 +135,8 @@
             IsVisible="False" 
             HorizontalOptions="Center"
             VerticalOptions="Center" 
-            Margin="16, 0" 
+            Margin="16, 0"
+            x:DataType="{x:Null}"
             Grid.Row="2">
             <Grid.Triggers>
                 <DataTrigger Value="True" TargetType="Grid">
