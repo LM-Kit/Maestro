@@ -208,7 +208,7 @@
             }
             else
             {
-                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.PreviousContent[value], false);
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.PreviousContent![value], false);
             }
         }
     }
@@ -303,7 +303,7 @@
         {
             if (e.PropertyName == nameof(MessageViewModel.Text))
             {
-                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.Text, messageViewModel.MessageInProgress);
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.Text, MessageViewModel.MessageInProgress);
             }
             else if (e.PropertyName == nameof(MessageViewModel.MessageInProgress))
             {
@@ -341,7 +341,7 @@
                 await Task.Delay(5000);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -383,7 +383,7 @@
 
     private void OnNextResponseButtonClicked()
     {
-        if (ResponseIndex < (MessageViewModel.PreviousContent.Count + 1) - 1)
+        if (ResponseIndex < (MessageViewModel.PreviousContent!.Count + 1) - 1)
         {
             ResponseIndex++;
         }

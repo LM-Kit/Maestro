@@ -38,4 +38,16 @@ public sealed class ModelInfo
         FileUri = fileUri;
         FileSize = fileSize;
     }
+
+    public override int GetHashCode()
+    {
+        int hash = 17;
+
+        hash = hash * 31 + (Publisher?.GetHashCode() ?? 0);
+        hash = hash * 31 + (Repository?.GetHashCode() ?? 0);
+        hash = hash * 31 + (FileName?.GetHashCode() ?? 0);
+        hash = hash * 31 + (FileSize?.GetHashCode() ?? 0);
+
+        return hash;
+    }
 }

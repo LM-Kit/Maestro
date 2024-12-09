@@ -118,7 +118,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
         {
             await _launcher.OpenAsync(new Uri($"file://{AppSettingsService.ModelsFolderPath}"));
         }
-        catch (Exception exception)
+        catch (Exception)
         {
         }
     }
