@@ -204,7 +204,7 @@
                             Style="{StaticResource SecondaryActionButtonStyle}"
                             BackgroundColor="Transparent"
                             CommandParameter="{Binding}"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand, x:DataType=vm:ModelsPageViewModel}"
                             Text="{StaticResource Delete}">
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroupList>
