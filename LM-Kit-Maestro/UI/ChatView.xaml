@@ -83,10 +83,10 @@
             StrokeShape="RoundRectangle 32"
             Grid.Row="1">
             <Border.Triggers>
-                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference chatView}, Path=ChatEntryIsFocused}" Value="True">
+                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference chatView}, Path=ChatEntryIsFocused, x:DataType=ui:ChatView}" Value="True">
                     <Setter Property="Stroke" Value="{StaticResource Surface4}"/>
                 </DataTrigger>
-                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference chatView}, Path=ChatEntryIsFocused}" Value="False">
+                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference chatView}, Path=ChatEntryIsFocused, x:DataType=ui:ChatView}" Value="False">
                     <Setter Property="Stroke" Value="{StaticResource Background}"/>
                 </DataTrigger>
             </Border.Triggers>
