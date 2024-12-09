@@ -59,7 +59,7 @@
                         <Setter Property="InputTransparent" Value="True" />
                     </DataTrigger>
 
-                    <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
+                    <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized, x:DataType=vm:AppShellViewModel}" Value="False">
                         <Setter Property="InputTransparent" Value="True" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -159,7 +159,7 @@
                                 <Setter Property="Text" Value="Select a model to load"/>
                             </DataTrigger>
 
-                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized, x:DataType=vm:AppShellViewModel}" Value="False">
                                 <Setter Property="TextColor" Value="{StaticResource Outline}"/>
                                 <Setter Property="Text" Value="Maestro is initializing..."/>
                             </DataTrigger>
@@ -176,7 +176,7 @@
                         StyleClass="IconSmall"
                         TextColor="{StaticResource Outline}">
                         <Label.Triggers>
-                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized, x:DataType=vm:AppShellViewModel}" Value="False">
                                 <Setter Property="IsVisible" Value="False"/>
                             </DataTrigger>
                         </Label.Triggers>

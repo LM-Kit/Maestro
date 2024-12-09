@@ -298,7 +298,7 @@
                 <VerticalStackLayout
                     Spacing="16"
                     Margin="0, 16, 0, 0"
-                    IsVisible="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static ui:ModelsPageTab.UserModels}}">
+                    IsVisible="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static ui:ModelsPageTab.UserModels}, x:DataType=ui:ModelsPage}">
                     <HorizontalStackLayout Spacing="12" VerticalOptions="Center" HorizontalOptions="Center">
                         <HorizontalStackLayout.Triggers>
                             <DataTrigger TargetType="HorizontalStackLayout" Binding="{Binding FileManager.FileCollectingInProgress}" Value="True">
@@ -334,7 +334,7 @@
                             Icon="{StaticResource Report}"
                             TextColor="{StaticResource Primary}"
                             Text="{Binding FileManager.UnsortedModels.Count, StringFormat='{}You have {0} unsorted model files'}"
-                            Command="{Binding Source={x:Reference modelsPage}, Path=ShowUnsortedModelFilesPopupCommand}"
+                            Command="{Binding Source={x:Reference modelsPage}, Path=ShowUnsortedModelFilesPopupCommand, x:DataType=ui:ModelsPage}"
                             IsVisible="{Binding FileManager.UnsortedModels.Count, Converter={converters:GreaterThanZeroConverter}}"/>
                     </Grid>
                 </VerticalStackLayout>
@@ -345,11 +345,11 @@
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.Triggers>
-                        <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding Source={x:Reference modelsCollectionView}, Path=ItemsSource.Count, Converter={converters:EqualToZeroConverter}}">
+                        <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding Source={x:Reference modelsCollectionView}, Path=ItemsSource.Count, Converter={converters:EqualToZeroConverter}, x:DataType=CollectionView}">
                             <Setter Property="VerticalOptions" Value="Center"/>
                         </DataTrigger>
 
-                        <DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.UserModels}">
+                        <DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, x:DataType=ui:ModelsPage}" Value="{x:Static ui:ModelsPageTab.UserModels}">
                             <Setter Property="ItemsSource" Value="{Binding ModelListViewModel.UserModels}"/>
                             <Setter Property="ItemTemplate" Value="{StaticResource UserModelsTemplate}"/>
                             <Setter Property="EmptyView">

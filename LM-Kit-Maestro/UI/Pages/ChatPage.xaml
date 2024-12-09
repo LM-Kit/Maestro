@@ -105,7 +105,7 @@
                 HeightRequest="{x:Static local:AppConstants.ModelSelectionButtonHeight}"
                 Grid.Column="1">
                 <ui:ModelSelectionButton.Triggers>
-                    <DataTrigger TargetType="ui:ModelSelectionButton" Binding="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles}" Value="True">
+                    <DataTrigger TargetType="ui:ModelSelectionButton" Binding="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles, x:DataType=ui:ChatPage}" Value="True">
                         <Setter Property="MaximumWidthRequest" Value="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"/>
                     </DataTrigger>
                 </ui:ModelSelectionButton.Triggers>
@@ -142,7 +142,7 @@
 
         <ui:ChatConversationsView
             x:Name="chatsSidebar"
-            WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth}"
+            WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}"
             Grid.Row="1"/>
 
         <!--<BlazorWebView
@@ -166,7 +166,7 @@
             x:Name="settingsSidebar"
             Grid.Row="1"
             Grid.Column="2"
-            WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth}"
+            WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"
             BindingContext="{Binding SettingsViewModel}"/>
     </Grid>
 </ContentPage>

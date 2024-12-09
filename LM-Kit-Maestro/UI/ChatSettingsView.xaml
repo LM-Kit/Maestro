@@ -229,7 +229,7 @@
                                     <controls:CustomEntry 
                                         x:Name="maxCompletionTokensEntry" 
                                         Unfocused="OnMaxCompletionTokensEntryUnfocused"
-                                        Text="{Binding Source={x:Reference chatSettingsView}, Path=MaxCompletionTokensText, Mode=TwoWay, x:DataType=View}" 
+                                        Text="{Binding Source={x:Reference chatSettingsView}, Path=MaxCompletionTokensText, Mode=TwoWay, x:DataType=ui:ChatSettingsView}" 
                                         Keyboard="Numeric"/>
                                 </Border>
                             </Grid>
@@ -277,10 +277,10 @@
                                     VerticalOptions="Center" 
                                     StyleClass="IconSmall">
                                     <Label.Triggers>
-                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded, x:DataType=View}" Value="True">
+                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded, x:DataType=mct:Expander}" Value="True">
                                             <Setter Property="Text" Value="{StaticResource Keyboard_arrow_up}"/>
                                         </DataTrigger>
-                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded, x:DataType=View}" Value="False">
+                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference samplingSettingsExpander}, Path=IsExpanded, x:DataType=mct:Expander}" Value="False">
                                             <Setter Property="Text" Value="{StaticResource Keyboard_arrow_down}"/>
                                         </DataTrigger>
                                     </Label.Triggers>
