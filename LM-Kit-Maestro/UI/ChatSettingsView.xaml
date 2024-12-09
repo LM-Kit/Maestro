@@ -110,7 +110,7 @@
             </ControlTemplate>
 
             <ControlTemplate x:Key="Mirostat2SettingsTemplate" x:DataType="vm:Mirostat2SamplingSettingsViewModel">
-                <VerticalStackLayout Padding="0" BindingContext="{TemplateBinding Path=Parent.BindingContext.Mirostat2SamplingSettings}">
+                <VerticalStackLayout Padding="0" BindingContext="{TemplateBinding Path=Parent.BindingContext.Mirostat2SamplingSettings, x:DataType=vm:Mirostat2SamplingSettingsViewModel}">
                     <Grid StyleClass="SettingGrid">
                         <Label Text="Temperature"/>
                         <Label 
@@ -166,10 +166,10 @@
                                 <Label Text="General settings"/>
                                 <Label VerticalOptions="Center" StyleClass="IconSmall">
                                     <Label.Triggers>
-                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference generalSettingsExpander}, Path=IsExpanded}" Value="True">
+                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference generalSettingsExpander}, Path=IsExpanded, x:DataType=mct:Expander}" Value="True">
                                             <Setter Property="Text" Value="{StaticResource Keyboard_arrow_up}"/>
                                         </DataTrigger>
-                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference generalSettingsExpander}, Path=IsExpanded}" Value="False">
+                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference generalSettingsExpander}, Path=IsExpanded, x:DataType=mct:Expander}" Value="False">
                                             <Setter Property="Text" Value="{StaticResource Keyboard_arrow_down}"/>
                                         </DataTrigger>
                                     </Label.Triggers>

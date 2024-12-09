@@ -242,7 +242,7 @@
 #if DEBUG
     Trace.WriteLine("submitted");
 #endif
-        ViewModel.InputText = Input;
+        ViewModel.InputText = Input ?? string.Empty;
         Input = string.Empty;
         _ignoreNextTextChange = true;
 
