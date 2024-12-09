@@ -21,7 +21,7 @@
                 <Setter Property="VerticalOptions" Value="Start"/>
                 <Setter Property="MinimumWidthRequest" Value="{x:Static local:AppConstants.ChatPageSideTogglesWidth}"/>
                 <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ModelSelectionButtonHeight}"/>
-                <Setter Property="IsVisible" Value="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles}"/>
+                <Setter Property="IsVisible" Value="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles, x:DataType=ui:ChatPage}"/>
             </Style>
 
             <Style TargetType="Grid" x:Key="TuckedSidebarUpperGridStyle">
@@ -46,9 +46,9 @@
         ColumnSpacing="0">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth}"/>
+            <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth}"/>
+            <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -73,7 +73,7 @@
             <Grid 
                 Style="{StaticResource SidebarHeaderGrid}"
                 Padding="16, 0, 0, 0"
-                WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth}">
+                WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}">
 
                 <Button
                     Style="{StaticResource SidebarToggleButtonStyle}"
@@ -115,7 +115,7 @@
             <Grid
                 Style="{StaticResource SidebarHeaderGrid}"
                 Padding="0, 0, 16, 0"
-                WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth}"
+                WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"
                 Grid.Column="2">
 
                 <Button
