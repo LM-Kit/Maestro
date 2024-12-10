@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LMKit.TextGeneration.Chat;
-using LMKit.Maestro.Models;
 using CommunityToolkit.Mvvm.Input;
+using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
+using LMKit.TextGeneration.Chat;
 using static LMKit.TextGeneration.TextGenerationResult;
+
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -25,9 +26,9 @@ public partial class MessageViewModel : ViewModelBase
                 MessageInProgress = !_lmKitMessage.IsProcessed;
                 Sender = AuthorRoleToMessageSender(_lmKitMessage.AuthorRole);
                 Text = _lmKitMessage.Content;
-                TerminationReason = _lmKitMessage.TerminationReason;
-                GeneratedTokens = _lmKitMessage.GeneratedTokens;
-                PreviousContent = _lmKitMessage.PreviousContent;
+                // TerminationReason = _lmKitMessage.TerminationReason;
+                // GeneratedTokens = _lmKitMessage.GeneratedTokens;
+                //  PreviousContent = _lmKitMessage.PreviousContent;
                 _lmKitMessage.PropertyChanged += OnMessagePropertyChanged;
             }
 
@@ -51,24 +52,70 @@ public partial class MessageViewModel : ViewModelBase
     private bool _isHovered;
 
     [ObservableProperty]
-    private StopReason _terminationReason;
-
-    [ObservableProperty]
-    private double _generatedTokens;
-
-    [ObservableProperty]
-    private IReadOnlyList<string>? _previousContent;
-
-    [ObservableProperty]
     private bool _isLastAssistantMessage;
 
     public event EventHandler? MessageContentUpdated;
 
+    public event EventHandler? OnRegeneratedResponse;
+
+    public StopReason GetTerminationReason(int messageIndex)
+    {
+        return GetMessageByIndex(messageIndex).TerminationReason;
+    }
+
+    public int GetGeneratedTokens(int messageIndex)
+    {
+        return GetMessageByIndex(messageIndex).GeneratedTokens;
+    }
+
+    public string GetContent(int messageIndex)
+    {
+        return GetMessageByIndex(messageIndex).Content;
+    }
+
+    public int GetResponseCount()
+    {
+        if (_lmKitMessage != null)
+        {
+            if (_lmKitMessage.PreviousContent != null && _lmKitMessage.PreviousContent.Count > 0)
+            {
+                return _lmKitMessage.PreviousContent.Count + 1;
+            }
+
+            return 1;
+        }
+
+        throw new InvalidOperationException();
+    }
+
+    private ChatHistory.Message GetMessageByIndex(int index)
+    {
+        if (_lmKitMessage != null)
+        {
+            if (_lmKitMessage.PreviousContent != null && _lmKitMessage.PreviousContent.Count > 0)
+            {
+                if (index == _lmKitMessage.PreviousContent.Count)
+                {
+                    return _lmKitMessage;
+                }
+                else
+                {
+                    return _lmKitMessage.PreviousContent[index];
+                }
+            }
+            else
+            {
+                return _lmKitMessage;
+            }
+        }
+
+        throw new InvalidOperationException();
+    }
+
     public MessageViewModel(ConversationViewModel parentConversation, ChatHistory.Message message)
     {
         ParentConversation = parentConversation;
-        Text = message.Content;
-        LMKitMessage = message;
+         LMKitMessage = message;
     }
 
     [RelayCommand]
@@ -92,17 +139,9 @@ public partial class MessageViewModel : ViewModelBase
             Text = LMKitMessage!.Content;
             MessageContentUpdated?.Invoke(this, EventArgs.Empty);
         }
-        else if (e.PropertyName == nameof(ChatHistory.Message.GeneratedTokens))
-        {
-            GeneratedTokens = LMKitMessage!.GeneratedTokens;
-        }
-        else if (e.PropertyName == nameof(ChatHistory.Message.TerminationReason))
-        {
-            TerminationReason = LMKitMessage!.TerminationReason;
-        }
         else if (e.PropertyName == nameof(ChatHistory.Message.PreviousContent))
         {
-            PreviousContent = LMKitMessage!.PreviousContent;
+            OnRegeneratedResponse?.Invoke(this, EventArgs.Empty);
         }
     }
 
