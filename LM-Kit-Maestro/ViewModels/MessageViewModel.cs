@@ -73,7 +73,7 @@ public partial class MessageViewModel : ViewModelBase
         return GetMessageByIndex(messageIndex).Content;
     }
 
-    public int GetReponseCount()
+    public int GetResponseCount()
     {
         if (_lmKitMessage != null)
         {
