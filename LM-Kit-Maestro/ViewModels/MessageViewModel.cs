@@ -5,7 +5,6 @@ using LMKit.Maestro.Services;
 using LMKit.TextGeneration.Chat;
 using static LMKit.TextGeneration.TextGenerationResult;
 
-
 namespace LMKit.Maestro.ViewModels;
 
 public partial class MessageViewModel : ViewModelBase
@@ -25,10 +24,7 @@ public partial class MessageViewModel : ViewModelBase
             {
                 MessageInProgress = !_lmKitMessage.IsProcessed;
                 Sender = AuthorRoleToMessageSender(_lmKitMessage.AuthorRole);
-                Text = _lmKitMessage.Content;
-                // TerminationReason = _lmKitMessage.TerminationReason;
-                // GeneratedTokens = _lmKitMessage.GeneratedTokens;
-                //  PreviousContent = _lmKitMessage.PreviousContent;
+                Content = _lmKitMessage.Content;
                 _lmKitMessage.PropertyChanged += OnMessagePropertyChanged;
             }
 
@@ -40,7 +36,7 @@ public partial class MessageViewModel : ViewModelBase
     private MessageSender _sender;
 
     [ObservableProperty]
-    private string _text;
+    private string _content;
 
     [ObservableProperty]
     private bool _messageInProgress;
@@ -54,6 +50,7 @@ public partial class MessageViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isLastAssistantMessage;
 
+    // Loïc: We should not require introducing the MessageContentUpdated event as Content is observable
     public event EventHandler? MessageContentUpdated;
 
     public event EventHandler? OnRegeneratedResponse;
@@ -115,7 +112,8 @@ public partial class MessageViewModel : ViewModelBase
     public MessageViewModel(ConversationViewModel parentConversation, ChatHistory.Message message)
     {
         ParentConversation = parentConversation;
-         LMKitMessage = message;
+        LMKitMessage = message;
+        Content = "";
     }
 
     [RelayCommand]
@@ -136,7 +134,8 @@ public partial class MessageViewModel : ViewModelBase
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.Content))
         {
-            Text = LMKitMessage!.Content;
+            Content = LMKitMessage!.Content;
+            // Loïc: We should not require introducing the MessageContentUpdated event as Content is observable
             MessageContentUpdated?.Invoke(this, EventArgs.Empty);
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.PreviousContent))

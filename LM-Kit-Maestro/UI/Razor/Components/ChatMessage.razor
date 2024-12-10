@@ -114,7 +114,7 @@
 
     .assistantMessageContent {
     padding: 4px;
-    margin-bottom: -16px; /* workaround: this syntax adds 16px bottom margin to the html block '(MarkupString)Markdig.Markdown.ToHtml(MessageViewModel.Text)'*/
+    margin-bottom: -16px; /* workaround: this syntax adds 16px bottom margin to the html block '(MarkupString)Markdig.Markdown.ToHtml(MessageViewModel.Content)'*/
     }
 
     .show {
@@ -288,9 +288,9 @@
     {
         if (MessageViewModel.Sender == MessageSender.Assistant)
         {
-            if (e.PropertyName == nameof(MessageViewModel.Text))
+            if (e.PropertyName == nameof(MessageViewModel.Content))
             {
-                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.Text, MessageViewModel.MessageInProgress);
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.Content, MessageViewModel.MessageInProgress);
             }
             else if (e.PropertyName == nameof(MessageViewModel.MessageInProgress))
             {
