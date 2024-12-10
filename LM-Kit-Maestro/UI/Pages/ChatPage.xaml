@@ -79,6 +79,7 @@
                     Style="{StaticResource SidebarToggleButtonStyle}"
                     Text="{StaticResource Forum}"
                     Command="{Binding ToggleChatsSidebarCommand}"
+                    ToolTipProperties.Text="{x:Static local:UI.TooltipLabels.DISPLAY_CHATS}"
                     HorizontalOptions="Start"/>
 
                 <Label
@@ -136,6 +137,7 @@
                     Grid.Column="2"
                     Style="{StaticResource SidebarToggleButtonStyle}"
                     Text="{StaticResource Tune}"
+                    ToolTipProperties.Text="{x:Static local:UI.TooltipLabels.DISPLAY_SETTINGS}"
                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ToggleSettingsSidebarCommand}"/>
             </Grid>
         </Grid>
