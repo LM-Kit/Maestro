@@ -16,20 +16,6 @@ public partial class MessageViewModel : ViewModelBase
     public ChatHistory.Message? LMKitMessage
     {
         get => _lmKitMessage;
-        set
-        {
-            _lmKitMessage = value;
-
-            if (_lmKitMessage != null)
-            {
-                MessageInProgress = !_lmKitMessage.IsProcessed;
-                Sender = AuthorRoleToMessageSender(_lmKitMessage.AuthorRole);
-                Content = _lmKitMessage.Content;
-                _lmKitMessage.PropertyChanged += OnMessagePropertyChanged;
-            }
-
-            OnPropertyChanged();
-        }
     }
 
     [ObservableProperty]
@@ -112,7 +98,11 @@ public partial class MessageViewModel : ViewModelBase
     public MessageViewModel(ConversationViewModel parentConversation, ChatHistory.Message message)
     {
         ParentConversation = parentConversation;
-        LMKitMessage = message;
+        _lmKitMessage = message;
+        MessageInProgress = !_lmKitMessage.IsProcessed;
+        Sender = AuthorRoleToMessageSender(_lmKitMessage.AuthorRole);
+        Content = _lmKitMessage.Content;
+        _lmKitMessage.PropertyChanged += OnMessagePropertyChanged;
         Content = "";
     }
 
@@ -126,15 +116,15 @@ public partial class MessageViewModel : ViewModelBase
     {
         if (e.PropertyName == nameof(ChatHistory.Message.IsProcessed))
         {
-            MessageInProgress = !LMKitMessage!.IsProcessed;
+            MessageInProgress = !_lmKitMessage!.IsProcessed;
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.AuthorRole))
         {
-            Sender = AuthorRoleToMessageSender(LMKitMessage!.AuthorRole);
+            Sender = AuthorRoleToMessageSender(_lmKitMessage!.AuthorRole);
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.Content))
         {
-            Content = LMKitMessage!.Content;
+            Content = _lmKitMessage!.Content;
             // Loïc: We should not require introducing the MessageContentUpdated event as Content is observable
             MessageContentUpdated?.Invoke(this, EventArgs.Empty);
         }
