@@ -361,7 +361,7 @@
 
     private void OnNextResponseButtonClicked()
     {
-        if (ResponseIndex < (MessageViewModel.PreviousContent.Count + 1) - 1)
+        if (ResponseIndex < MessageViewModel.GetResponseCount() - 1)
         {
             ResponseIndex++;
         }
