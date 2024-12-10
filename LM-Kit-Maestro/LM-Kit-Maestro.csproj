@@ -71,8 +71,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="LM-Kit.NET" Version="2024.12.3" />
-		<PackageReference Include="LM-Kit.NET.Backend.Cuda12.Windows" Version="2024.12.3" />
+		<PackageReference Include="LM-Kit.NET" Version="2024.12.4" />
+		<PackageReference Include="LM-Kit.NET.Backend.Cuda12.Windows" Version="2024.12.4" />
 		<PackageReference Include="Majorsoft.Blazor.Components.Common.JsInterop" Version="1.5.0" />
 		<PackageReference Include="Markdig" Version="0.38.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.12" />
