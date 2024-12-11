@@ -11,12 +11,7 @@ public partial class MessageViewModel : ViewModelBase
 {
     public ConversationViewModel ParentConversation { get; }
 
-    private ChatHistory.Message? _lmKitMessage;
-
-    public ChatHistory.Message? LMKitMessage
-    {
-        get => _lmKitMessage;
-    }
+    public ChatHistory.Message? LMKitMessage { get; }
 
     [ObservableProperty]
     private MessageSender _sender;
@@ -58,11 +53,11 @@ public partial class MessageViewModel : ViewModelBase
 
     public int GetResponseCount()
     {
-        if (_lmKitMessage != null)
+        if (LMKitMessage != null)
         {
-            if (_lmKitMessage.PreviousContent != null && _lmKitMessage.PreviousContent.Count > 0)
+            if (LMKitMessage.PreviousContent != null && LMKitMessage.PreviousContent.Count > 0)
             {
-                return _lmKitMessage.PreviousContent.Count + 1;
+                return LMKitMessage.PreviousContent.Count + 1;
             }
 
             return 1;
@@ -73,22 +68,22 @@ public partial class MessageViewModel : ViewModelBase
 
     private ChatHistory.Message GetMessageByIndex(int index)
     {
-        if (_lmKitMessage != null)
+        if (LMKitMessage != null)
         {
-            if (_lmKitMessage.PreviousContent != null && _lmKitMessage.PreviousContent.Count > 0)
+            if (LMKitMessage.PreviousContent != null && LMKitMessage.PreviousContent.Count > 0)
             {
-                if (index == _lmKitMessage.PreviousContent.Count)
+                if (index == LMKitMessage.PreviousContent.Count)
                 {
-                    return _lmKitMessage;
+                    return LMKitMessage;
                 }
                 else
                 {
-                    return _lmKitMessage.PreviousContent[index];
+                    return LMKitMessage.PreviousContent[index];
                 }
             }
             else
             {
-                return _lmKitMessage;
+                return LMKitMessage;
             }
         }
 
@@ -98,12 +93,11 @@ public partial class MessageViewModel : ViewModelBase
     public MessageViewModel(ConversationViewModel parentConversation, ChatHistory.Message message)
     {
         ParentConversation = parentConversation;
-        _lmKitMessage = message;
-        MessageInProgress = !_lmKitMessage.IsProcessed;
-        Sender = AuthorRoleToMessageSender(_lmKitMessage.AuthorRole);
-        Content = _lmKitMessage.Content;
-        _lmKitMessage.PropertyChanged += OnMessagePropertyChanged;
-        Content = "";
+        LMKitMessage = message;
+        MessageInProgress = !LMKitMessage.IsProcessed;
+        Sender = AuthorRoleToMessageSender(LMKitMessage.AuthorRole);
+        Content = LMKitMessage.Content;
+        LMKitMessage.PropertyChanged += OnMessagePropertyChanged;
     }
 
     [RelayCommand]
@@ -116,15 +110,15 @@ public partial class MessageViewModel : ViewModelBase
     {
         if (e.PropertyName == nameof(ChatHistory.Message.IsProcessed))
         {
-            MessageInProgress = !_lmKitMessage!.IsProcessed;
+            MessageInProgress = !LMKitMessage!.IsProcessed;
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.AuthorRole))
         {
-            Sender = AuthorRoleToMessageSender(_lmKitMessage!.AuthorRole);
+            Sender = AuthorRoleToMessageSender(LMKitMessage!.AuthorRole);
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.Content))
         {
-            Content = _lmKitMessage!.Content;
+            Content = LMKitMessage!.Content;
             // Loïc: We should not require introducing the MessageContentUpdated event as Content is observable
             MessageContentUpdated?.Invoke(this, EventArgs.Empty);
         }
