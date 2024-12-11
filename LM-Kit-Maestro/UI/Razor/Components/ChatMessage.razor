@@ -27,7 +27,7 @@
             <div class="messageFooterContent @(MessageViewModel.Sender == MessageSender.User ? "userMessageFooterContent" : "")">
                 @if (MessageViewModel.GetResponseCount() > 1)
                 {
-                    <button title="@TooltipLabels.PREVIOUS_GENERATED_RESPONSE" @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
+                    <button title="@TooltipLabels.PreviousGeneratedResponse" @onclick="OnPreviousResponseButtonClicked" class="chatActionButton material-icons">
                         chevron_left
                     </button>
 
@@ -35,12 +35,12 @@
                         @($"{responseIndex + 1} / {MessageViewModel.GetResponseCount()}")
                     </span>
 
-                    <button title="@TooltipLabels.NEXT_GENERATED_RESPONSE" @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
+                    <button title="@TooltipLabels.NextGeneratedResponse" @onclick="OnNextResponseButtonClicked" class="chatActionButton material-icons">
                         chevron_right
                     </button>
                 }
 
-                <button title="@TooltipLabels.COPY_MESSAGE" @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
+                <button title="@TooltipLabels.CopyMessage" @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
                     @(MessageJustCopied ? "check" : "content_copy")
                 </button>
 
@@ -48,7 +48,7 @@
                 {
                     if (MessageViewModel.IsLastAssistantMessage)
                     {
-                        <button title="@TooltipLabels.REGENERATE_RESPONSE" @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
+                        <button title="@TooltipLabels.RegenerateResponse" @onclick="OnRegenerateResponseButtonClicked" class="chatActionButton material-icons">
                             sync
                         </button>
                     }

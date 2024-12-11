@@ -273,7 +273,7 @@
                         CornerRadius="4"
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="1" 
-                        ToolTipProperties.Text="{x:Static local:UI.TooltipLabels.SELECT_ANOTHER_FOLDER}"
+                        ToolTipProperties.Text="{x:Static ui:TooltipLabels.SelectAnotherFolder}"
                         Text="{StaticResource Edit}" 
                         Command="{Binding PickModelsFolderCommand}"/>
 
@@ -282,7 +282,7 @@
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="2"
                         Text="{StaticResource Folder_open}"
-                        ToolTipProperties.Text="{x:Static local:UI.TooltipLabels.OPEN_IN_FILE_EXPLORER}"
+                        ToolTipProperties.Text="{x:Static ui:TooltipLabels.OpenInFileExplorer}"
                         Command="{Binding OpenModelsFolderCommand}"/>
                 </Grid>
             </Grid>
