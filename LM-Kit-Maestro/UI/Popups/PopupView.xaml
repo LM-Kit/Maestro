@@ -10,6 +10,7 @@
     xmlns:models="clr-namespace:LMKit.Maestro.Models"
     xmlns:vm="clr-namespace:LMKit.Maestro.ViewModels"
     xmlns:services="clr-namespace:LMKit.Maestro.Services"
+    x:DataType="ui:PopupView"
     x:Class="LMKit.Maestro.UI.PopupView"
     x:Name="popupView">
 

@@ -5,42 +5,19 @@ using LMKit.Maestro.Services;
 using LMKit.TextGeneration.Chat;
 using static LMKit.TextGeneration.TextGenerationResult;
 
-
 namespace LMKit.Maestro.ViewModels;
 
 public partial class MessageViewModel : ViewModelBase
 {
     public ConversationViewModel ParentConversation { get; }
 
-    private ChatHistory.Message? _lmKitMessage;
-
-    public ChatHistory.Message? LMKitMessage
-    {
-        get => _lmKitMessage;
-        set
-        {
-            _lmKitMessage = value;
-
-            if (_lmKitMessage != null)
-            {
-                MessageInProgress = !_lmKitMessage.IsProcessed;
-                Sender = AuthorRoleToMessageSender(_lmKitMessage.AuthorRole);
-                Text = _lmKitMessage.Content;
-                // TerminationReason = _lmKitMessage.TerminationReason;
-                // GeneratedTokens = _lmKitMessage.GeneratedTokens;
-                //  PreviousContent = _lmKitMessage.PreviousContent;
-                _lmKitMessage.PropertyChanged += OnMessagePropertyChanged;
-            }
-
-            OnPropertyChanged();
-        }
-    }
+    public ChatHistory.Message? LMKitMessage { get; }
 
     [ObservableProperty]
     private MessageSender _sender;
 
     [ObservableProperty]
-    private string _text;
+    private string _content;
 
     [ObservableProperty]
     private bool _messageInProgress;
@@ -54,6 +31,7 @@ public partial class MessageViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isLastAssistantMessage;
 
+    // Loïc: We should not require introducing the MessageContentUpdated event as Content is observable
     public event EventHandler? MessageContentUpdated;
 
     public event EventHandler? OnRegeneratedResponse;
@@ -75,11 +53,11 @@ public partial class MessageViewModel : ViewModelBase
 
     public int GetResponseCount()
     {
-        if (_lmKitMessage != null)
+        if (LMKitMessage != null)
         {
-            if (_lmKitMessage.PreviousContent != null && _lmKitMessage.PreviousContent.Count > 0)
+            if (LMKitMessage.PreviousContent != null && LMKitMessage.PreviousContent.Count > 0)
             {
-                return _lmKitMessage.PreviousContent.Count + 1;
+                return LMKitMessage.PreviousContent.Count + 1;
             }
 
             return 1;
@@ -90,22 +68,22 @@ public partial class MessageViewModel : ViewModelBase
 
     private ChatHistory.Message GetMessageByIndex(int index)
     {
-        if (_lmKitMessage != null)
+        if (LMKitMessage != null)
         {
-            if (_lmKitMessage.PreviousContent != null && _lmKitMessage.PreviousContent.Count > 0)
+            if (LMKitMessage.PreviousContent != null && LMKitMessage.PreviousContent.Count > 0)
             {
-                if (index == _lmKitMessage.PreviousContent.Count)
+                if (index == LMKitMessage.PreviousContent.Count)
                 {
-                    return _lmKitMessage;
+                    return LMKitMessage;
                 }
                 else
                 {
-                    return _lmKitMessage.PreviousContent[index];
+                    return LMKitMessage.PreviousContent[index];
                 }
             }
             else
             {
-                return _lmKitMessage;
+                return LMKitMessage;
             }
         }
 
@@ -115,7 +93,11 @@ public partial class MessageViewModel : ViewModelBase
     public MessageViewModel(ConversationViewModel parentConversation, ChatHistory.Message message)
     {
         ParentConversation = parentConversation;
-         LMKitMessage = message;
+        LMKitMessage = message;
+        MessageInProgress = !LMKitMessage.IsProcessed;
+        Sender = AuthorRoleToMessageSender(LMKitMessage.AuthorRole);
+        Content = LMKitMessage.Content;
+        LMKitMessage.PropertyChanged += OnMessagePropertyChanged;
     }
 
     [RelayCommand]
@@ -136,7 +118,8 @@ public partial class MessageViewModel : ViewModelBase
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.Content))
         {
-            Text = LMKitMessage!.Content;
+            Content = LMKitMessage!.Content;
+            // Loïc: We should not require introducing the MessageContentUpdated event as Content is observable
             MessageContentUpdated?.Invoke(this, EventArgs.Empty);
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.PreviousContent))

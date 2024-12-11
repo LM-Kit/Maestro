@@ -414,7 +414,7 @@ public partial class LMKitService : INotifyPropertyChanged
         else //updating sampling options, if any.
         {
             //todo: Implement a mechanism to determine whether SamplingMode and MaximumCompletionTokens need to be updated.
-            _multiTurnConversation.SamplingMode = GetTokenSampling(LMKitConfig);
+            _multiTurnConversation!.SamplingMode = GetTokenSampling(LMKitConfig);
             _multiTurnConversation.MaximumCompletionTokens = LMKitConfig.MaximumCompletionTokens;
 
             if (LMKitConfig.ContextSize != _multiTurnConversation.ContextSize)

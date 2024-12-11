@@ -31,7 +31,7 @@ public partial class StatefulContentViewHandler : ContentViewHandler
     {
     }
 
-    public StatefulContentView StatefulView => VirtualView as StatefulContentView;
+    public StatefulContentView StatefulView => (VirtualView as StatefulContentView)!;
 
     private void ExecuteCommandIfCan(ICommand command)
     {

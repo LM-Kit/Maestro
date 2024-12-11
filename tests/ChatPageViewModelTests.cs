@@ -13,7 +13,7 @@ public class ChatPageViewModelTests
 
         chatPageViewModel.StartNewConversation();
 
-        Assert.Equal(1, chatPageViewModel.ConversationListViewModel.Conversations.Count);
+        Assert.Single(chatPageViewModel.ConversationListViewModel.Conversations);
         Assert.True(chatPageViewModel.ConversationListViewModel.CurrentConversation == chatPageViewModel.ConversationListViewModel.Conversations[0]);
     }
 
@@ -34,7 +34,7 @@ public class ChatPageViewModelTests
 
         await testService.ChatPageViewModel.DeleteConversation(conversationToDelete);
 
-        Assert.Equal(1, chatPageViewModel.ConversationListViewModel.Conversations.Count);
+        Assert.Single(chatPageViewModel.ConversationListViewModel.Conversations);
         Assert.True(chatPageViewModel.ConversationListViewModel.CurrentConversation != conversationToDelete);
     }
 

@@ -89,7 +89,7 @@ namespace LMKit.Maestro.Tests
             var response = await testService.LMKitService.SubmitPrompt(conversation, "tell me a story");
 
             Assert.NotNull(response);
-            Assert.Equal(response.Status, LMKitTextGenerationStatus.Cancelled);
+            Assert.Equal(LMKitTextGenerationStatus.Cancelled, response.Status);
             Assert.True(response.Exception is OperationCanceledException operationCancelled);
         }
 

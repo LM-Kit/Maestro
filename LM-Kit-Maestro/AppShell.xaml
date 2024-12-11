@@ -66,7 +66,7 @@
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="vm:MaestroTabViewModel">
                                 <ui:LinkView
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=NavigateCommand}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=NavigateCommand, x:DataType=vm:AppShellViewModel}"
                                     CommandParameter="{Binding}"
                                     FontFamily="SegoeLight"
                                     VerticalOptions="End"
