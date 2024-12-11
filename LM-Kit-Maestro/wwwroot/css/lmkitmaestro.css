@@ -2,7 +2,7 @@
     background-color: #12181F;
     color: white;
     font-size: 14px;
-    font-family: 'Segoe UI';
+    font-family: 'Segoe';
 }
 
 a, .btn-link {
@@ -98,7 +98,7 @@ h1:focus {
 }
 
 @font-face {
-    font-family: 'Segoe UI';
+    font-family: 'Segoe';
     src: url('fonts/Segoe UI.ttf');
 }
 
