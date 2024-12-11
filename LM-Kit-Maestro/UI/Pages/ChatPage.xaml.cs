@@ -5,7 +5,7 @@ namespace LMKit.Maestro.UI;
 public partial class ChatPage : PageBase
 {
     private const int SidebarAnimationLength = 100;
-    public static readonly Thickness ChatViewMargin = new Thickness(AppConstants.HeaderHorizontalMargin, AppConstants.PageTopBarHeight + AppConstants.TabBarHeight, AppConstants.HeaderHorizontalMargin, 0);
+    public static readonly Thickness ChatViewMargin = new Thickness(AppConstants.HeaderHorizontalMargin, 0, AppConstants.HeaderHorizontalMargin, 0);
 
     private readonly ChatPageViewModel _chatViewModel;
 
