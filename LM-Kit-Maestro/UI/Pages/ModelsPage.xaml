@@ -233,12 +233,8 @@
 
     <ui:PageBase.Header>
         <Grid 
-            Margin="0, -8, 0, 0"
             Padding="20, 0"
-            ColumnSpacing="8"
-            BackgroundColor="{StaticResource Surface}"
-            RowSpacing="0" 
-            HeightRequest="{x:Static local:AppConstants.PageTopBarHeight}">
+            ColumnSpacing="8">
 
             <Grid 
                 MaximumWidthRequest="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"
