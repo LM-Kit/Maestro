@@ -1,6 +1,6 @@
 ﻿html, body {
-    background-color: var(--Background);
-    color: var(--OnBackground);
+    background-color: #12181F;
+    color: white;
     font-size: 14px;
     font-family: 'Segoe UI';
 }
