@@ -345,7 +345,7 @@
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.Triggers>
-                        <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding Source={x:Reference modelsCollectionView}, Path=ItemsSource.Count, Converter={converters:EqualToZeroConverter}, x:DataType=CollectionView}">
+                        <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding ModelListViewModel.UserModels.Count, Converter={converters:EqualToZeroConverter}}">
                             <Setter Property="VerticalOptions" Value="Center"/>
                         </DataTrigger>
 
