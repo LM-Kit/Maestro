@@ -262,7 +262,7 @@
         <Setter Property="TextColor" Value="{StaticResource OnBackground}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="Segoe" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=14}" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
