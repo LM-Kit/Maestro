@@ -34,6 +34,7 @@
             </Style>
 
             <ControlTemplate x:Key="RandomSamplingSettingsTemplate" x:DataType="vm:RandomSamplingSettingsViewModel">
+                <!-- note Evan: .net9 broke TemplateBinding it seems: https://github.com/dotnet/maui/issues/24949 - code below causes a warning but no actual error at runtime. -->
                 <VerticalStackLayout BindingContext="{TemplateBinding Path=Parent.BindingContext.RandomSamplingSettings}">
                     <Grid StyleClass="SettingGrid">
                         <Label Text="Temperature"/>
