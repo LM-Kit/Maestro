@@ -1,8 +1,8 @@
 ﻿html, body {
     background-color: #12181F;
     color: white;
-    font-size: 14px;
-    font-family: 'Segoe';
+    font-size: 20px;
+    font-family: 'Segoe', serif;
 }
 
 a, .btn-link {
