@@ -26,7 +26,7 @@
                 <Setter Property="ToolTipProperties.Text" Value="{x:Static ui:TooltipLabels.EjectModel}"/>
                 <Setter Property="TextColor" Value="{StaticResource Primary}"/>
                 <Setter Property="FontFamily" Value="Material"/>
-                <Setter Property="FontSize" Value="{x:Static local:AppConstants.IconFontSize}"/>
+                <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />
                 <Setter Property="Text" Value="{StaticResource Eject}"/>
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
