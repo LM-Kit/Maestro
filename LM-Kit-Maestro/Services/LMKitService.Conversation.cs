@@ -84,6 +84,38 @@ public partial class LMKitService
             }
         }
 
+        private int _contextSize;
+
+        public int ContextSize
+        {
+            get => _contextSize;
+            private set
+            {
+                if (_contextSize != value)
+                {
+                    _contextSize = value;
+
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ContextSize)));
+                }
+            }
+        }
+
+        private int _contextRemainingSpace;
+
+        public int ContextRemainingSpace
+        {
+            get => _contextRemainingSpace;
+            private set
+            {
+                if (_contextRemainingSpace != value)
+                {
+                    _contextRemainingSpace = value;
+
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ContextRemainingSpace)));
+                }
+            }
+        }
+
         public event EventHandler? SummaryTitleGenerated;
         public event NotifyCollectionChangedEventHandler? ChatHistoryChanged;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -147,7 +179,8 @@ public partial class LMKitService
 
         internal void AfterTokenSampling(object? sender, TextGeneration.Events.AfterTokenSamplingEventArgs e)
         {
-         
+            ContextSize = e.ContextSize;
+            ContextRemainingSpace = e.ContextRemainingSpace;
         }
     }
 }
