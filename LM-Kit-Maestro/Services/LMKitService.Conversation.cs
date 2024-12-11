@@ -1,7 +1,7 @@
-﻿using System.Collections.Specialized;
-using System.ComponentModel;
-using LMKit.TextGeneration;
+﻿using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
 
@@ -143,6 +143,11 @@ public partial class LMKitService
             var firstUserMessage = ChatHistory!.Messages.FirstOrDefault(message => message.AuthorRole == AuthorRole.User);
 
             GeneratedTitleSummary = !string.IsNullOrWhiteSpace(conversationTopic) ? conversationTopic : firstUserMessage?.Content ?? "Untitled conversation";
+        }
+
+        internal void AfterTokenSampling(object? sender, TextGeneration.Events.AfterTokenSamplingEventArgs e)
+        {
+         
         }
     }
 }
