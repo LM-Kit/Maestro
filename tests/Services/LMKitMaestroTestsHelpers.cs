@@ -9,7 +9,7 @@ namespace LMKit.Maestro.Tests
     {
         public static void AssertPromptResponseIsSuccessful(LMKitService.LMKitResult promptResult)
         {
-            Assert.Equal(promptResult.Status, LMKitTextGenerationStatus.Undefined);
+            Assert.Equal(LMKitTextGenerationStatus.Undefined, promptResult.Status);
             Assert.Null(promptResult.Exception);
             Assert.NotNull(promptResult.Result);
         }

@@ -120,7 +120,7 @@
                         VerticalOptions="Center"
                         HorizontalTextAlignment="Center"
                         LineBreakMode="TailTruncation"
-                        ToolTipProperties.Text="{Binding Source={RelativeSource Self}, Path=Text}"
+                        ToolTipProperties.Text="{Binding Source={RelativeSource Self}, Path=Text, x:DataType=Label}"
                         TextColor="{StaticResource OnBackground}">
                         <Label.Triggers>
                             <!--<DataTrigger TargetType="Label">
