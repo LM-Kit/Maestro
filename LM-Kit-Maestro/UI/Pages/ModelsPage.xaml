@@ -10,11 +10,12 @@
              xmlns:converters="clr-namespace:LMKit.Maestro.Converters"
              x:DataType="vm:ModelsPageViewModel"
              x:Class="LMKit.Maestro.UI.ModelsPage"
-             x:Name="modelsPage">
+             x:Name="modelsPage"
+             Title="ModelsPage">
 
     <!--<ContentPage.Resources>
         <ControlTemplate "ModelDownloadingTemplate">
-
+            
         </ControlTemplate>
         <ControlTemplate "ModelDownloadedTemplate">
 
@@ -90,7 +91,7 @@
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
 
-                        <controls:StatefulContentView
+                        <controls:StatefulContentView 
                             Grid.Column="1"
                             Grid.RowSpan="2"
                             IsEnabled="False"
@@ -99,11 +100,11 @@
                             CommandParameter="{Binding}"
                             VerticalOptions="Center">
 
-                            <Border
+                            <Border 
                                 IsEnabled="False"
-                                StrokeThickness="0"
+                                StrokeThickness="0" 
                                 StrokeShape="RoundRectangle 4"
-                                Stroke="{StaticResource SecondaryContainer}"
+                                Stroke="{StaticResource SecondaryContainer}" 
                                 BackgroundColor="{StaticResource SecondaryContainer}"
                                 Padding="8, 6">
 
@@ -172,7 +173,7 @@
                                 </Label.Text>
                             </Label>
 
-                            <ProgressBar
+                            <ProgressBar 
                                 Grid.Row="1"
                                 Grid.ColumnSpan="2"
                                 Progress="{Binding DownloadInfo.Progress}"/>
@@ -231,52 +232,52 @@
     </ui:PageBase.Resources>
 
     <ui:PageBase.Header>
-        <Grid
+        <Grid 
             Margin="0, -8, 0, 0"
             Padding="20, 0"
             ColumnSpacing="8"
             BackgroundColor="{StaticResource Surface}"
-            RowSpacing="0"
+            RowSpacing="0" 
             HeightRequest="{x:Static local:AppConstants.PageTopBarHeight}">
 
-            <Grid
+            <Grid 
                 MaximumWidthRequest="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"
-                ColumnSpacing="12"
+                ColumnSpacing="12" 
                 VerticalOptions="Center"
-
+                
                 ColumnDefinitions="auto, *"
                 HorizontalOptions="Fill">
 
-                <Label
+                <Label 
                     VerticalOptions="Center"
                     StyleClass="Subtitle"
                     Text="Model folder :"/>
 
-                <Grid
+                <Grid 
                     HorizontalOptions="Fill"
                     Grid.Column="1"
                     ColumnSpacing="8"
                     ColumnDefinitions="*, auto, auto">
 
-                    <Border
+                    <Border 
                         StrokeThickness="1"
                         VerticalOptions="Center"
-                        StrokeShape="RoundRectangle 4"
+                        StrokeShape="RoundRectangle 4" 
                         BackgroundColor="Transparent"
                         Stroke="{StaticResource Surface4}">
 
                         <controls:CustomEntry VerticalOptions="End"  IsReadOnly="True" Text="{Binding AppSettingsService.ModelsFolderPath}"/>
                     </Border>
 
-                    <Button
+                    <Button 
                         CornerRadius="4"
                         Style="{StaticResource SecondaryActionButtonStyle}"
-                        Grid.Column="1"
+                        Grid.Column="1" 
                         ToolTipProperties.Text="{x:Static ui:TooltipLabels.SelectAnotherFolder}"
-                        Text="{StaticResource Edit}"
+                        Text="{StaticResource Edit}" 
                         Command="{Binding PickModelsFolderCommand}"/>
 
-                    <Button
+                    <Button 
                         CornerRadius="4"
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="2"
@@ -289,18 +290,21 @@
     </ui:PageBase.Header>
 
     <ui:PageBase.Body>
-        <Grid
-            Margin="0, 0, 0, 20" RowSpacing="20"
+        <Grid 
+            Margin="0, 0, 0, 20" 
+            RowSpacing="20"
             RowDefinitions="*, 20">
-            <Border
-                Stroke="Transparent"
-                StrokeShape="RoundRectangle 4"
+
+            <Border 
+                Stroke="Transparent" 
+                StrokeShape="RoundRectangle 4" 
                 StrokeThickness="0">
                 <Grid RowDefinitions="auto, *, auto">
+
                     <VerticalStackLayout
                         Spacing="16"
                         Margin="0, 16, 0, 0"
-                        IsVisible="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static ui:ModelsPageTab.UserModels}}">
+                        IsVisible="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static ui:ModelsPageTab.UserModels}, x:DataType=ui:ModelsPage}">
                         <HorizontalStackLayout Spacing="12" VerticalOptions="Center" HorizontalOptions="Center">
                             <HorizontalStackLayout.Triggers>
                                 <DataTrigger TargetType="HorizontalStackLayout" Binding="{Binding FileManager.FileCollectingInProgress}" Value="True">
@@ -308,18 +312,18 @@
                                 </DataTrigger>
                             </HorizontalStackLayout.Triggers>
 
-                <VerticalStackLayout
-                    Spacing="16"
-                    Margin="0, 16, 0, 0"
-                    IsVisible="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static ui:ModelsPageTab.UserModels}, x:DataType=ui:ModelsPage}">
-                    <HorizontalStackLayout Spacing="12" VerticalOptions="Center" HorizontalOptions="Center">
-                        <HorizontalStackLayout.Triggers>
-                            <DataTrigger TargetType="HorizontalStackLayout" Binding="{Binding FileManager.FileCollectingInProgress}" Value="True">
-                                <Setter Property="ToolTipProperties.Text" Value="Folder scan in progress"/>
-                            </DataTrigger>
-                        </HorizontalStackLayout.Triggers>
+                            <ActivityIndicator 
+                                HorizontalOptions="Center"
+                                IsVisible="{Binding FileManager.FileCollectingInProgress}"
+                                BackgroundColor="Transparent"
+                                VerticalOptions="Center"
+                                Color="{StaticResource Outline}"
+                                Margin="0"
+                                IsRunning="True" 
+                                HeightRequest="12" 
+                                WidthRequest="12"/>
 
-                            <Label
+                            <Label 
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center"
                                 IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:GreaterThanZeroConverter}}">
@@ -335,7 +339,7 @@
                         </HorizontalStackLayout>
 
                         <Grid>
-                            <ui:LinkView
+                            <ui:LinkView 
                             Icon="{StaticResource Report}"
                             TextColor="{StaticResource Primary}"
                             Text="{Binding FileManager.UnsortedModels.Count, StringFormat='{}You have {0} unsorted model files'}"
@@ -349,20 +353,20 @@
                             <LinearItemsLayout ItemSpacing="8" Orientation="Vertical"/>
                         </CollectionView.ItemsLayout>
 
-                    <CollectionView.Triggers>
-                        <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding ModelListViewModel.UserModels.Count, Converter={converters:EqualToZeroConverter}}">
-                            <Setter Property="VerticalOptions" Value="Center"/>
-                        </DataTrigger>
+                        <CollectionView.Triggers>
+                            <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding ModelListViewModel.UserModels.Count, Converter={converters:EqualToZeroConverter}}">
+                                <Setter Property="VerticalOptions" Value="Center"/>
+                            </DataTrigger>
 
-                        <DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, x:DataType=ui:ModelsPage}" Value="{x:Static ui:ModelsPageTab.UserModels}">
-                            <Setter Property="ItemsSource" Value="{Binding ModelListViewModel.UserModels}"/>
-                            <Setter Property="ItemTemplate" Value="{StaticResource UserModelsTemplate}"/>
-                            <Setter Property="EmptyView">
-                                <Setter.Value>
-                                    <VerticalStackLayout VerticalOptions="End" HorizontalOptions="Center" Spacing="8">
-                                        <Label HorizontalTextAlignment="Center" Text="It looks like you don't have any model yet."/>
-                                        <Label HorizontalTextAlignment="Center" Text="Model files added to your model folder will appear here."/>
-                                    </VerticalStackLayout>
+                            <DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, x:DataType=ui:ModelsPage}" Value="{x:Static ui:ModelsPageTab.UserModels}">
+                                <Setter Property="ItemsSource" Value="{Binding ModelListViewModel.UserModels}"/>
+                                <Setter Property="ItemTemplate" Value="{StaticResource UserModelsTemplate}"/>
+                                <Setter Property="EmptyView">
+                                    <Setter.Value>
+                                        <VerticalStackLayout VerticalOptions="End" HorizontalOptions="Center" Spacing="8">
+                                            <Label HorizontalTextAlignment="Center" Text="It looks like you don't have any model yet."/>
+                                            <Label HorizontalTextAlignment="Center" Text="Model files added to your model folder will appear here."/>
+                                        </VerticalStackLayout>
 
                                     </Setter.Value>
                                 </Setter>
@@ -433,7 +437,6 @@
                     <Label x:Name="hfLabel" TextColor="{StaticResource Outline}" Text="See more models"/>
                 </HorizontalStackLayout>
             </controls:StatefulContentView>
-
         </Grid>
     </ui:PageBase.Body>
 </ui:PageBase>
