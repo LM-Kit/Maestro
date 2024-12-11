@@ -111,6 +111,7 @@
             </ControlTemplate>
 
             <ControlTemplate x:Key="Mirostat2SettingsTemplate" x:DataType="vm:Mirostat2SamplingSettingsViewModel">
+                <!-- note Evan: .net9 broke TemplateBinding it seems: https://github.com/dotnet/maui/issues/24949 - code below causes a warning but no actual error at runtime. -->
                 <VerticalStackLayout Padding="0" BindingContext="{TemplateBinding Path=Parent.BindingContext.Mirostat2SamplingSettings, x:DataType=vm:Mirostat2SamplingSettingsViewModel}">
                     <Grid StyleClass="SettingGrid">
                         <Label Text="Temperature"/>

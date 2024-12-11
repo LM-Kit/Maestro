@@ -95,6 +95,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
     [RelayCommand]
     private void PickModelsFolder()
     {
+#if MACCATALYST  || WINDOWS
         _mainThread.BeginInvokeOnMainThread(async () =>
         {
             var result = await _folderPicker.PickAsync(AppSettingsService.ModelsFolderPath);
@@ -109,6 +110,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
                 AppSettingsService.ModelsFolderPath = result.Folder.Path!;
             }
         });
+#endif
     }
 
     [RelayCommand]
