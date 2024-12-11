@@ -220,7 +220,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
 
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
 
         }

@@ -21,7 +21,7 @@ public partial class CustomEditorHandler : EditorHandler
     {
     }
 
-    public CustomEditorHandler(IPropertyMapper mapper = null) : base(mapper)
+    public CustomEditorHandler(IPropertyMapper? mapper = null) : base(mapper)
     {
     }
 }

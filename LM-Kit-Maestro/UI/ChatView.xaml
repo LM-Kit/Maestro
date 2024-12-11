@@ -83,10 +83,10 @@
             StrokeShape="RoundRectangle 32"
             Grid.Row="1">
             <Border.Triggers>
-                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference chatView}, Path=ChatEntryIsFocused}" Value="True">
+                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference chatView}, Path=ChatEntryIsFocused, x:DataType=ui:ChatView}" Value="True">
                     <Setter Property="Stroke" Value="{StaticResource Surface4}"/>
                 </DataTrigger>
-                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference chatView}, Path=ChatEntryIsFocused}" Value="False">
+                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference chatView}, Path=ChatEntryIsFocused, x:DataType=ui:ChatView}" Value="False">
                     <Setter Property="Stroke" Value="{StaticResource Background}"/>
                 </DataTrigger>
             </Border.Triggers>
@@ -135,16 +135,16 @@
             IsVisible="False" 
             HorizontalOptions="Center"
             VerticalOptions="Center" 
-            Margin="16, 0" 
+            Margin="16, 0"
             Grid.Row="2">
             <Grid.Triggers>
                 <DataTrigger Value="True" TargetType="Grid">
                     <DataTrigger.Binding>
                         <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                            <Binding Source="{RelativeSource AncestorType={x:Type vm:AppShellViewModel}}" Path="AppIsInitialized"/>
-                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ConversationViewModel}}" Path="IsInitialized"/>
-                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ConversationViewModel}}" Path="LastUsedModel" Converter="{mct:IsNotNullConverter}"/>
-                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LMKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static services:LMKitModelLoadingState.Unloaded}"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:AppShellViewModel}}" Path="AppIsInitialized" x:DataType="vm:AppShellViewModel"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ConversationViewModel}}" Path="IsInitialized" x:DataType="vm:ConversationViewModel"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ConversationViewModel}}" Path="LastUsedModel" Converter="{mct:IsNotNullConverter}" x:DataType="vm:ConversationViewModel"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LMKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static services:LMKitModelLoadingState.Unloaded}" x:DataType="vm:ChatPageViewModel"/>
                         </MultiBinding>
                     </DataTrigger.Binding>
                     <Setter Property="IsVisible" Value="True"/>
@@ -153,9 +153,9 @@
                 <DataTrigger Value="True" TargetType="Grid">
                     <DataTrigger.Binding>
                         <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                            <Binding Source="{RelativeSource AncestorType={x:Type vm:AppShellViewModel}}" Path="AppIsInitialized"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:AppShellViewModel}}" Path="AppIsInitialized" x:DataType="vm:AppShellViewModel"/>
                             <Binding Path="UsedDifferentModel"/>
-                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LMKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static services:LMKitModelLoadingState.Loaded}"/>
+                            <Binding Source="{RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}" Path="LMKitService.ModelLoadingState" Converter="{mct:IsEqualConverter}" ConverterParameter="{x:Static services:LMKitModelLoadingState.Loaded}" x:DataType="vm:ChatPageViewModel"/>
                         </MultiBinding>
                     </DataTrigger.Binding>
                     <Setter Property="IsVisible" Value="True"/>
@@ -163,7 +163,7 @@
             </Grid.Triggers>
 
             <controls:StatefulContentView
-                TappedCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ModelListViewModel.LoadModelCommand}"
+                TappedCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ModelListViewModel.LoadModelCommand, x:DataType=vm:ChatPageViewModel}"
                 CommandParameter="{Binding LastUsedModel}"
                 ToolTipProperties.Text="Click to reload this model">
                 <VisualStateManager.VisualStateGroups>
@@ -202,7 +202,7 @@
                         x:Name="reloadIcon"
                         Margin="2, 0"
                         IsVisible="False"
-                        TranslationX="{Binding Source={x:Reference reloadLabel}, Path=Width}"
+                        TranslationX="{Binding Source={x:Reference reloadLabel}, Path=Width, x:DataType=View}"
                         VerticalOptions="Center"
                         TextColor="{StaticResource Outline}" 
                         StyleClass="IconSmall"

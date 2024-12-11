@@ -204,7 +204,7 @@
                             Style="{StaticResource SecondaryActionButtonStyle}"
                             BackgroundColor="Transparent"
                             CommandParameter="{Binding}"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand, x:DataType=vm:ModelsPageViewModel}"
                             Text="{StaticResource Delete}">
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroupList>
@@ -273,7 +273,7 @@
                         CornerRadius="4"
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="1" 
-                        ToolTipProperties.Text="{x:Static local:UI.TooltipLabels.SELECT_ANOTHER_FOLDER}"
+                        ToolTipProperties.Text="{x:Static ui:TooltipLabels.SelectAnotherFolder}"
                         Text="{StaticResource Edit}" 
                         Command="{Binding PickModelsFolderCommand}"/>
 
@@ -282,7 +282,7 @@
                         Style="{StaticResource SecondaryActionButtonStyle}"
                         Grid.Column="2"
                         Text="{StaticResource Folder_open}"
-                        ToolTipProperties.Text="{x:Static local:UI.TooltipLabels.OPEN_IN_FILE_EXPLORER}"
+                        ToolTipProperties.Text="{x:Static ui:TooltipLabels.OpenInFileExplorer}"
                         Command="{Binding OpenModelsFolderCommand}"/>
                 </Grid>
             </Grid>
@@ -298,7 +298,7 @@
                 <VerticalStackLayout
                     Spacing="16"
                     Margin="0, 16, 0, 0"
-                    IsVisible="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static ui:ModelsPageTab.UserModels}}">
+                    IsVisible="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static ui:ModelsPageTab.UserModels}, x:DataType=ui:ModelsPage}">
                     <HorizontalStackLayout Spacing="12" VerticalOptions="Center" HorizontalOptions="Center">
                         <HorizontalStackLayout.Triggers>
                             <DataTrigger TargetType="HorizontalStackLayout" Binding="{Binding FileManager.FileCollectingInProgress}" Value="True">
@@ -334,7 +334,7 @@
                             Icon="{StaticResource Report}"
                             TextColor="{StaticResource Primary}"
                             Text="{Binding FileManager.UnsortedModels.Count, StringFormat='{}You have {0} unsorted model files'}"
-                            Command="{Binding Source={x:Reference modelsPage}, Path=ShowUnsortedModelFilesPopupCommand}"
+                            Command="{Binding Source={x:Reference modelsPage}, Path=ShowUnsortedModelFilesPopupCommand, x:DataType=ui:ModelsPage}"
                             IsVisible="{Binding FileManager.UnsortedModels.Count, Converter={converters:GreaterThanZeroConverter}}"/>
                     </Grid>
                 </VerticalStackLayout>
@@ -345,11 +345,11 @@
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.Triggers>
-                        <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding Source={x:Reference modelsCollectionView}, Path=ItemsSource.Count, Converter={converters:EqualToZeroConverter}}">
+                        <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding ModelListViewModel.UserModels.Count, Converter={converters:EqualToZeroConverter}}">
                             <Setter Property="VerticalOptions" Value="Center"/>
                         </DataTrigger>
 
-                        <DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.UserModels}">
+                        <DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, x:DataType=ui:ModelsPage}" Value="{x:Static ui:ModelsPageTab.UserModels}">
                             <Setter Property="ItemsSource" Value="{Binding ModelListViewModel.UserModels}"/>
                             <Setter Property="ItemTemplate" Value="{StaticResource UserModelsTemplate}"/>
                             <Setter Property="EmptyView">
