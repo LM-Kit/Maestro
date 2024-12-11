@@ -108,7 +108,7 @@
 <script>
 
     document.getElementById('chat-box').addEventListener('keydown', function (e) {
-    if (e.keyCode == 13 && !e.shiftKey)
+    if (e.key == 'Enter' && !e.shiftKey)
     {
       // prevent default behavior
       e.preventDefault();
