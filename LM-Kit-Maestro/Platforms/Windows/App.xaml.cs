@@ -1,5 +1,4 @@
-﻿using Microsoft.UI.Xaml;
-
+﻿
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -19,7 +18,14 @@ namespace LMKit.Maestro.WinUI
             this.InitializeComponent();
         }
 
+        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        {
+            base.OnLaunched(args);
+
+            this.Resources["AppNameWithVersion"] = AppConstants.AppNameWithVersion;
+        }
+
+
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     }
-
 }

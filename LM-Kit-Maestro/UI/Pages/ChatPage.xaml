@@ -21,7 +21,7 @@
                 <Setter Property="VerticalOptions" Value="Start"/>
                 <Setter Property="MinimumWidthRequest" Value="{x:Static local:AppConstants.ChatPageSideTogglesWidth}"/>
                 <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ModelSelectionButtonHeight}"/>
-                <Setter Property="IsVisible" Value="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles}"/>
+                <Setter Property="IsVisible" Value="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles, x:DataType=ui:ChatPage}"/>
             </Style>
 
             <Style TargetType="Grid" x:Key="TuckedSidebarUpperGridStyle">
@@ -48,12 +48,13 @@
             <Grid
                 Style="{StaticResource SidebarHeaderGrid}"
                 Padding="16, 0, 0, 0"
-                WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth}">
+                WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}">
 
                 <Button
                     Style="{StaticResource SidebarToggleButtonStyle}"
                     Text="{StaticResource Forum}"
                     Command="{Binding ToggleChatsSidebarCommand}"
+                    ToolTipProperties.Text="{x:Static ui:TooltipLabels.DisplayChats}"
                     HorizontalOptions="Start"/>
 
                 <Label
@@ -64,7 +65,7 @@
 
                 <Button
                     HorizontalOptions="End"
-                    ToolTipProperties.Text="Start a new chat"
+                    ToolTipProperties.Text="{x:Static ui:TooltipLabels.StartNewChat}"
                     Style="{StaticResource SecondaryActionButtonStyle}"
                     Grid.Column="2"
                     FontFamily="Material"
@@ -80,7 +81,7 @@
                 HeightRequest="{x:Static local:AppConstants.ModelSelectionButtonHeight}"
                 Grid.Column="1">
                 <ui:ModelSelectionButton.Triggers>
-                    <DataTrigger TargetType="ui:ModelSelectionButton" Binding="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles}" Value="True">
+                    <DataTrigger TargetType="ui:ModelSelectionButton" Binding="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles, x:DataType=ui:ChatPage}" Value="True">
                         <Setter Property="MaximumWidthRequest" Value="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"/>
                     </DataTrigger>
                 </ui:ModelSelectionButton.Triggers>
@@ -89,13 +90,13 @@
             <Grid
                 Style="{StaticResource SidebarHeaderGrid}"
                 Padding="0, 0, 16, 0"
-                WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth}"
+                WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"
                 Grid.Column="2">
 
                 <Button
                     IsVisible="{Binding SettingsSidebarIsToggled}"
                     HorizontalOptions="Start"
-                    ToolTipProperties.Text="Reset default settings"
+                    ToolTipProperties.Text="{x:Static ui:TooltipLabels.ResetDefaultSettings}"
                     Style="{StaticResource SecondaryActionButtonStyle}"
                     Text="{StaticResource Rotate_right}"
                     Command="{Binding SettingsViewModel.ResetDefaultValuesCommand}" />
@@ -110,6 +111,7 @@
                     Grid.Column="2"
                     Style="{StaticResource SidebarToggleButtonStyle}"
                     Text="{StaticResource Tune}"
+                    ToolTipProperties.Text="{x:Static ui:TooltipLabels.DisplaySettings}"
                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ToggleSettingsSidebarCommand}"/>
             </Grid>
         </Grid>

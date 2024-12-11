@@ -212,7 +212,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             await CancelOngoingFileCollecting();
         }
 
-
         _cancellationTokenSource = new CancellationTokenSource();
 
         Exception? exception = null;
@@ -276,18 +275,36 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
-    private void HandleFile(string filePath)
+    private bool HasModel(ModelInfo modelInfo)
+    {
+        foreach(var model in UserModels)
+        {
+            if(model.Equals(modelInfo))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void HandleFile(string filePath, bool collectAll = true)
     {
         bool isModelFile = TryValidateModelFile(filePath, ModelsFolderPath, out ModelInfo? modelInfo);
+
+        void tryCollectModel(ModelInfo modelInfo)
+        {
+            if (!HasModel(modelInfo))
+            {
+                UserModels.Add(modelInfo);
+            }
+        }
 
         if (isModelFile)
         {
             if (modelInfo != null)
             {
-                if (!UserModels.Contains(modelInfo))
-                {
-                    UserModels.Add(modelInfo);
-                }
+                tryCollectModel(modelInfo);
             }
             else
             {
@@ -296,6 +313,12 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 if (!UnsortedModels.Contains(fileUri))
                 {
                     UnsortedModels.Add(fileUri);
+                }
+
+                if(collectAll)
+                {
+                    modelInfo = new ModelInfo("unknown publisher", "unknown repository", Path.GetFileName(filePath), fileUri, FileHelpers.GetFileSize(filePath));
+                    tryCollectModel(modelInfo);
                 }
             }
         }

@@ -11,7 +11,7 @@
     xmlns:converters="clr-namespace:LMKit.Maestro.Converters"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False"
-    Title="Maestro"
+    Title="{x:Static local:AppConstants.AppNameWithVersion}"
     x:DataType="vm:AppShellViewModel"
     x:Name="thisShell"
     >
@@ -65,7 +65,7 @@
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="vm:MaestroTabViewModel">
                                 <ui:LinkView
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=NavigateCommand}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=NavigateCommand, x:DataType=vm:AppShellViewModel}"
                                     CommandParameter="{Binding}"
                                     FontFamily="SegoeLight"
                                     VerticalOptions="End"

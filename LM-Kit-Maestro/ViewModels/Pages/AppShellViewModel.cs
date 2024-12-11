@@ -80,16 +80,16 @@ public partial class AppShellViewModel : ViewModelBase
 
         await _conversationListViewModel.LoadConversationLogs();
 
+        _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
+        _llmFileManager.Initialize();
+
         _lmKitService.ModelLoadingFailed += OnModelLoadingFailed;
 
         if (_appSettingsService.LastLoadedModel != null)
         {
-            TryLoadLastUsedModel();
+            _ = Task.Run(TryLoadLastUsedModel); //Loading model in the background to avoid blocking UI initialization.
         }
 
-        _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
-        _llmFileManager.Initialize();
-        
         // todo: we should ensure UI is loaded before starting loading a model with this call.
         _modelListViewModel.Initialize();
 
@@ -99,9 +99,9 @@ public partial class AppShellViewModel : ViewModelBase
     private void TryLoadLastUsedModel()
     {
         if (FileHelpers.TryCreateFileUri(_appSettingsService.LastLoadedModel!, out Uri? fileUri) &&
-            File.Exists(_appSettingsService.LastLoadedModel) &&
+            File.Exists(_appSettingsService.LastLoadedModel)/* &&
             FileHelpers.GetModelInfoFromFileUri(fileUri!, _appSettingsService.ModelsFolderPath,
-            out string publisher, out string repository, out string fileName))
+            out string publisher, out string repository, out string fileName)*/)
         {
             _lmKitService.LoadModel(fileUri!);
         }

@@ -30,13 +30,6 @@ public partial class ModelSelectionButton : ContentView
         private set => SetValue(BorderColorProperty, value);
     }
 
-    public static readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(ModelSelectionButton));
-    public Color BackgroundColor
-    {
-        get => (Color)GetValue(BackgroundColorProperty);
-        private set => SetValue(BackgroundColorProperty, value);
-    }
-
     public ModelSelectionButton()
     {
         InitializeComponent();

@@ -2,6 +2,10 @@
 
 internal static class AppConstants
 {
+    public const string AppVersion = "0.1.0";
+    public const string AppName = "LM-Kit Maestro";
+    public static string AppNameWithVersion => $"{AppName} {AppVersion}";
+
     public const string DatabaseFilename = "MaestroSQLite.db3";
 
     public const SQLite.SQLiteOpenFlags Flags =

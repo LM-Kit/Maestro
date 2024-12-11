@@ -2,13 +2,13 @@
 
 namespace LMKit.Maestro.Controls
 {
-    public class StatefulContentView : ContentView
+    public partial class StatefulContentView : ContentView
     {
-        public event EventHandler<EventArgs> Pressed;
-        public event EventHandler<EventArgs> LongPressed;
-        public event EventHandler<EventArgs> Hovered;
-        public event EventHandler<EventArgs> HoverExited;
-        public event EventHandler<EventArgs> Tapped;
+        public event EventHandler<EventArgs>? Pressed;
+        public event EventHandler<EventArgs>? LongPressed;
+        public event EventHandler<EventArgs>? Hovered;
+        public event EventHandler<EventArgs>? HoverExited;
+        public event EventHandler<EventArgs>? Tapped;
 
         internal void InvokePressed() => Pressed?.Invoke(this, EventArgs.Empty);
 

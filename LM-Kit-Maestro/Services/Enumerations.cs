@@ -18,5 +18,5 @@ public enum LMKitTextGenerationStatus
 {
     Undefined,
     Cancelled,
-    UnknownError
+    GenericError
 }
