@@ -6,6 +6,8 @@ using Microsoft.UI.Windowing;
 
 using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components.WebView.Maui;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls.PlatformConfiguration;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
@@ -23,12 +25,12 @@ namespace LMKit.Maestro
 
             BlazorWebViewHandler.BlazorWebViewMapper.AppendToMapping("CustomBlazorWebView", (handler, view) =>
             {
-#if WINDOWS
                 // Setting background color of Blazor Web View to the page background color
                 // to avoid visual white flash while the view is loading.
                 if (App.Current != null && App.Current.Resources.TryGetValue("Background", out object value) && value is Color color)
                 {
                     color.ToRgb(out byte r, out byte g, out byte b);
+#if WINDOWS
 
                     handler.PlatformView.DefaultBackgroundColor = new Windows.UI.Color()
                     {
@@ -37,8 +39,10 @@ namespace LMKit.Maestro
                         G = g,
                         B = b
                     };
-                }
+#elif MACCATALYST
+                    handler.PlatformView.Layer.BackgroundColor = new CoreGraphics.CGColor(r, g, b, 255);
 #endif
+                }
             });
 
             _appShellViewModel = appShellViewModel;
