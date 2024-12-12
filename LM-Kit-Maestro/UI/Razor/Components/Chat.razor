@@ -10,7 +10,7 @@
 <div id="container">
     <div id="conversation-container">
         <div id="conversation-content"
-             class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
+             class="chat-element dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
             @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
@@ -64,47 +64,66 @@
         </div>
     </div>
 
-    <div id="user-input">
+    <div id="user-input" class="chat-element">
         <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
+    </div>
+
+    <div id="bottom-space" class="chat-element">
+        <p>
+            barambibol wakatape baboune
+        </p>
     </div>
 </div>
 
 <style>
     #container {
+        background-color: gray;
         color: white;
         font-size: 16px;
-        width: 100%;
-        display: grid;
-        grid-template-rows: 1fr auto;
+        width: 100vw;
         height: 100vh;
+        overflow: hidden;
+        grid-template-rows: 1fr auto 32px;
+        display: grid;
     }
 
     #conversation-container {
+        background-color: green;
         flex: 1;
-        width: 100vw;
         display: flex;
         /*         display: flex;
-            flex-direction: column;
-     */
+                        flex-direction: column;
+                 */
         overflow-y: scroll;
         scrollbar-gutter: both-edges stable;
     }
 
     #conversation-content {
-        margin-left: auto;
-        margin-right: auto;
-        align-self: center;
-        justify-content: center;
-        max-width: 800px;
-        width: 100%;
+        background-color: pink;
     }
 
+
     #user-input {
+        align-self: center;
+        justify-content: center;
         width: 100%;
+        background-color: yellow;
+        overflow: hidden;
         max-height: 200px;
+    }
+
+    #bottom-space {
+        background-color: aqua;
+    }
+
+    .chat-element {
+        background-color: purple;
         max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
+        width: 100%;
+        /*         margin-left: auto;
+                margin-right: auto;
+                align-self: center;
+                justify-content: center; */
     }
 
     .top-align-container {
@@ -120,7 +139,6 @@
     #message-list {
         margin: auto;
         display: flex;
-        max-width: 800px;
         flex-direction: column;
     }
 
