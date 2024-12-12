@@ -1,8 +1,15 @@
 ﻿html, body {
     background-color: #12181F;
     color: white;
-    font-size: 20px;
-    font-family: 'Segoe', serif;
+    font-size: 16px;
+    font-family: 'Segoe UI', serif;
+}
+
+@media (-webkit-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Targeting Mac platforms */
+    html, body {
+        font-size: 24px;
+    }
 }
 
 a, .btn-link {
@@ -98,7 +105,7 @@ h1:focus {
 }
 
 @font-face {
-    font-family: 'Segoe';
+    font-family: 'Segoe UI';
     src: url('fonts/Segoe UI.ttf');
 }
 
