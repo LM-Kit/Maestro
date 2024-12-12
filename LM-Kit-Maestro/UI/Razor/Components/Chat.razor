@@ -275,6 +275,14 @@
 
     element.focus();
     }
+
+    function scrollToEnd(smooth) {
+        const container = document.getElementById('conversation-container');
+        container.scrollTo({
+            top: container.scrollHeight,
+            behavior: smooth ? 'smooth' : 'auto'
+        });
+    }
 </script>
 
 @code
@@ -447,7 +455,8 @@
     {
         IsScrolledToEnd = true;
         _ignoreScrollsUntilNextScrollUp = true;
-        await ScrollHandler.ScrollToPageEndAsync(smooth);
+
+        await JS.InvokeVoidAsync("scrollToEnd", smooth);
     }
 
     private async Task CheckIsScrolledToEnd()
