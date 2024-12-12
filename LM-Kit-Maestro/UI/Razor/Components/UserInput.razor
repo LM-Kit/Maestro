@@ -1,6 +1,6 @@
 ﻿@inject IJSRuntime JS
 
-<div id="container">
+@* <div id="container"> *@
     <div id="chat-border">
         @*         @onkeypress="OnKeyPress"
         @onkeydown="OnKeyDown"
@@ -15,7 +15,7 @@
             <i class="fas @(ViewModel.AwaitingResponse ? "fa-stop" : "fa-arrow-up")"/>
         </button>
     </div>
-</div>
+@* </div> *@
 
 <style>
     #container {
@@ -26,12 +26,10 @@
 
     #chat-border {
         background-color: red;
-        padding: 20px;
         display: flex;
         border-radius: 32px;
         margin: 0px;
         max-width: 800px;
-        margin-bottom: 32px;
         width: 100%;
         padding-block: 8px;
         border: 1px solid var(--Background);

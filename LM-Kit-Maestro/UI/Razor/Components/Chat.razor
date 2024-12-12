@@ -83,7 +83,7 @@
         width: 100vw;
         height: 100vh;
         overflow: hidden;
-        grid-template-rows: 1fr auto 32px;
+        grid-template-rows: 1fr auto auto;
         display: grid;
     }
 
@@ -106,10 +106,15 @@
     #user-input {
         background-color: yellow;
         overflow: hidden;
-        max-height: 200px;
     }
 
     #bottom-space {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0px;
+        height: 40px;
         background-color: aqua;
     }
 
