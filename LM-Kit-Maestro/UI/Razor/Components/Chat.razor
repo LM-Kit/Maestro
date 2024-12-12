@@ -239,8 +239,8 @@
     };
 
     function getConversationViewHeight() {
-        const element = document.getElementById('conversation-container');
-        return element.clientHeight;
+    const element = document.getElementById('conversation-container');
+    return element.clientHeight;
     };
 
     function resizeUserInput() {
@@ -320,7 +320,7 @@
         await ScrollHandler.RegisterPageScrollAsync(PageScrolled);
         await ResizeHandler.RegisterPageResizeAsync(Resized);
 
-        await ScrollTo(ScrollDirection.End);
+        await ScrollToEnd();
     }
 
     private DotNetObjectReference<Chat>? dotNetHelper;
@@ -337,7 +337,7 @@
             if (_hasPendingScrollEnd)
             {
                 _hasPendingScrollEnd = false;
-                await ScrollTo(ScrollDirection.End);
+                await ScrollToEnd();
             }
         }
     }
@@ -375,7 +375,7 @@
     {
         await InvokeAsync(() => StateHasChanged());
 
-        await ScrollTo(ScrollDirection.End);
+        await ScrollToEnd();
 
         var latestMessage = ViewModel.ConversationListViewModel.CurrentConversation!.Messages.LastOrDefault();
 
@@ -390,15 +390,7 @@
     {
         if (_shouldAutoScrollEnd)
         {
-            await ScrollTo(ScrollDirection.End);
-        }
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        if (ScrollHandler is not null)
-        {
-            await ScrollHandler.DisposeAsync();
+            await ScrollToEnd();
         }
     }
 
@@ -443,7 +435,7 @@
     {
         if (IsScrolledToEnd)
         {
-            await ScrollTo(ScrollDirection.End);
+            await ScrollToEnd();
         }
         else
         {
@@ -451,20 +443,11 @@
         }
     }
 
-    private async Task ScrollTo(ScrollDirection direction, bool smooth = false)
+    private async Task ScrollToEnd(bool smooth = false)
     {
-        switch (direction)
-        {
-            case ScrollDirection.Top:
-                await ScrollHandler.ScrollToPageTopAsync(smooth);
-                break;
-
-            case ScrollDirection.End:
-                IsScrolledToEnd = true;
-                _ignoreScrollsUntilNextScrollUp = true;
-                await ScrollHandler.ScrollToPageEndAsync(smooth);
-                break;
-        }
+        IsScrolledToEnd = true;
+        _ignoreScrollsUntilNextScrollUp = true;
+        await ScrollHandler.ScrollToPageEndAsync(smooth);
     }
 
     private async Task CheckIsScrolledToEnd()
@@ -490,7 +473,7 @@
 
     public async Task OnScrollToEndButtonClicked()
     {
-        await ScrollTo(ScrollDirection.End);
+        await ScrollToEnd();
     }
 
     public void OnSubmit()
