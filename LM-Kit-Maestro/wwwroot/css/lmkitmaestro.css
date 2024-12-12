@@ -1,8 +1,15 @@
 ﻿html, body {
-    background-color: var(--Background);
-    color: var(--OnBackground);
-    font-size: 14px;
-    font-family: 'Segoe UI';
+    background-color: #12181F;
+    color: white;
+    font-size: 16px;
+    font-family: 'Segoe UI', serif;
+}
+
+@media (-webkit-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Targeting Mac platforms */
+    html, body {
+        font-size: 24px;
+    }
 }
 
 a, .btn-link {

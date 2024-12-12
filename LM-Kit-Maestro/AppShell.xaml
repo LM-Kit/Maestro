@@ -50,15 +50,14 @@
     <shell:SimpleShell.Content>
         <Grid BackgroundColor="{StaticResource Surface}" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="{x:Static local:AppConstants.AppBarHeight}"/>
+                <RowDefinition Height="{x:Static local:AppConstants.TabBarHeight}"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <BoxView HeightRequest="1" VerticalOptions="Start"/>
-            <BoxView HeightRequest="1" VerticalOptions="End"/>
 
-            <Grid RowDefinitions="*">
-                <Grid Padding="12, 24">
+            <Grid BackgroundColor="{StaticResource Primary}"/>
+            <Border StrokeThickness="0" BackgroundColor="{StaticResource Surface}" Stroke="Transparent" StrokeShape="RoundRectangle 4 4 0 0" ZIndex="1">
+                <Grid Padding="12, 0">
                     <HorizontalStackLayout
                         VerticalOptions="Center"
                         BindableLayout.ItemsSource="{Binding Tabs}"
@@ -85,8 +84,8 @@
                         </BindableLayout.ItemTemplate>
                     </HorizontalStackLayout>
                 </Grid>
+            </Border>
 
-            </Grid>
             <shell:SimpleNavigationHost Grid.Row="1"/>
         </Grid>
     </shell:SimpleShell.Content>

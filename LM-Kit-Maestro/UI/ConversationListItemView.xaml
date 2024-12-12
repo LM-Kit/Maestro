@@ -131,7 +131,7 @@
                     IsVisible="{Binding IsRenaming}"
                     x:Name="conversationTitle"
                     FontFamily="SegoeLight"
-                    FontSize="16"
+                    StyleClass="Subtitle"
                     InputTransparent="True"
                     ZIndex="2"
                     ClearButtonVisibility="Never"
@@ -160,7 +160,7 @@
                     StyleClass="RegularAction"
                     ZIndex="2"
                     Grid.Column="2"
-                    FontSize="20"
+                    FontSize="{OnPlatform MacCatalyst=26, WinUI=20}"
                     Clicked="OnShowMoreButtonClicked"
                     FontFamily="Material"
                     Text="{StaticResource More_horiz}">

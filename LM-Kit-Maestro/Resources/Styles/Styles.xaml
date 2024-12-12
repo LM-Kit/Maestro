@@ -61,7 +61,7 @@
 
     <Style TargetType="Button">
         <Setter Property="FontFamily" Value="Segoe"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=17, WinUI=14}" />
         <Setter Property="BorderWidth" Value="0"/>
         <Setter Property="CornerRadius" Value="4"/>
         <Setter Property="Padding" Value="12, 4"/>
@@ -91,12 +91,13 @@
         </Setter>
     </Style>
 
+    
     <Style x:Key="SidebarToggleButtonStyle" TargetType="Button">
         <Setter Property="WidthRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="FontFamily" Value="Material"/>
-        <Setter Property="FontSize" Value="{x:Static local:AppConstants.IconFontSize}"/>
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />
         <Setter Property="Padding" Value="0"/>
         <Setter Property="BorderWidth" Value="0"/>
         <Setter Property="TextColor" Value="{StaticResource OnBackground}" />
@@ -131,7 +132,7 @@
         <Setter Property="FontFamily" Value="Material"/>
         <Setter Property="CornerRadius" Value="16"/>
         <Setter Property="Padding" Value="0"/>
-        <Setter Property="FontSize" Value="{x:Static local:AppConstants.IconFontSize}"/>
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />
         <Setter Property="WidthRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="BackgroundColor" Value="{StaticResource Background}"/>
@@ -173,7 +174,7 @@
         <Setter Property="TextColor" Value="{StaticResource OnBackground}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="Segoe"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=17, WinUI=14}" />
         <Setter Property="MinimumHeightRequest" Value="44"/>
         <Setter Property="MinimumWidthRequest" Value="44"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -193,7 +194,7 @@
     <Style TargetType="Editor" ApplyToDerivedTypes="True">
         <Setter Property="TextColor" Value="{StaticResource OnBackground}" />
         <Setter Property="FontFamily" Value="Segoe"/>
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=17, WinUI=14}" />
         <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -213,7 +214,7 @@
         <Setter Property="TextColor" Value="{StaticResource OnBackground}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="Segoe"/>
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=17, WinUI=14}" />
         <Setter Property="ClearButtonVisibility" Value="Never"/>
         <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -262,7 +263,7 @@
         <Setter Property="TextColor" Value="{StaticResource OnBackground}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="Segoe" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=17, WinUI=14}" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -279,7 +280,7 @@
 
     <Style TargetType="Label" Class="IconSmall">
         <Setter Property="FontFamily" Value="Material"/>
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=14, WinUI=12}" />
     </Style>
     
     <Style TargetType="Label" Class="Icon">
@@ -292,21 +293,21 @@
     </Style>
 
     <Style TargetType="Label" Class="Title">
-        <Setter Property="FontSize" Value="17" />
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=24, WinUI=17}" />
     </Style>
 
     <Style TargetType="ui:LinkView" Class="Subtitle">
         <Setter Property="FontFamily" Value="SegoeLight"/>
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />
     </Style>
 
     <Style TargetType="ui:LinkView" Class="Title">
-        <Setter Property="FontSize" Value="17" />
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=24, WinUI=17}" />
     </Style>
 
     <Style TargetType="Label" Class="Subtitle">
         <Setter Property="FontFamily" Value="SegoeLight"/>
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />
     </Style>
 
     <Style TargetType="Label" Class="ChatActionText">
@@ -323,7 +324,7 @@
         <Setter Property="TitleColor" Value="{StaticResource Gray200}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="Segoe"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=17, WinUI=14}" />
         <Setter Property="MinimumHeightRequest" Value="44"/>
         <Setter Property="MinimumWidthRequest" Value="44"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -361,7 +362,7 @@
         <Setter Property="BackgroundColor" Value="Transparent"/>
         <Setter Property="TextColor" Value="{StaticResource OnBackground}" />
         <Setter Property="FontFamily" Value="Segoe"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=17, WinUI=14}" />
         <Setter Property="MinimumHeightRequest" Value="44"/>
         <Setter Property="MinimumWidthRequest" Value="44"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -388,7 +389,7 @@
         <Setter Property="CancelButtonColor" Value="{StaticResource Gray500}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="Segoe" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=17, WinUI=14}" />
         <Setter Property="MinimumHeightRequest" Value="44"/>
         <Setter Property="MinimumWidthRequest" Value="44"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -411,7 +412,7 @@
         <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="Segoe" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=17, WinUI=14}" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -462,7 +463,7 @@
         <Setter Property="TextColor" Value="{StaticResource OnBackground}" />
         <Setter Property="BackgroundColor" Value="Transparent"/>
         <Setter Property="FontFamily" Value="Segoe"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=17, WinUI=14}" />
         <Setter Property="MinimumHeightRequest" Value="44"/>
         <Setter Property="MinimumWidthRequest" Value="44"/>
         <Setter Property="VisualStateManager.VisualStateGroups">

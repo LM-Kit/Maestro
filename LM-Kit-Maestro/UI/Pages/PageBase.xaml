@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:LMKit.Maestro"
+             x:Class="LMKit.Maestro.UI.PageBase"
+             Title="PageBase"
+             x:Name="pageBase"
+             >
+    <Grid RowDefinitions="auto, 1, *">
+        <Border StrokeThickness="0" BackgroundColor="{StaticResource Surface}" Stroke="Transparent" StrokeShape="RoundRectangle 0 0 0 0" ZIndex="1">
+            <ContentView 
+                HeightRequest="{x:Static local:AppConstants.PageTopBarHeight}"
+                Content="{Binding Source={x:Reference pageBase}, Path=Header}"/>
+        </Border>
+
+        <BoxView Grid.Row="1" />
+        <ContentView 
+            Grid.Row="2"
+            Content="{Binding Source={x:Reference pageBase}, Path=Body}"/>
+    </Grid>
+</ContentPage>

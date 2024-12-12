@@ -194,7 +194,7 @@
                         VerticalOptions="Center"
                         LineBreakMode="HeadTruncation"
                         StyleClass="Subtitle"
-                        FontSize="13"
+                        FontSize="{OnPlatform MacCatalyst=16, WinUI=13}"
                         TextColor="{StaticResource Outline}"
                         Text="{Binding LastUsedModel, Converter={converters:FileNameConverter}, StringFormat='{}This chat last used \'{0}\''}"/>
 
