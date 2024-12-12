@@ -9,11 +9,10 @@
 
 
         <button
-        @ref="sendButton"
-        disabled="@(InputIsEmpty)"
-        @onclick="OnSendButtonClicked"
-        class="send-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
-            <i class="fas @(ViewModel.AwaitingResponse ? "fa-stop" : "fa-arrow-up")" />
+            disabled="@(InputIsEmpty)"
+            @onclick="OnSendButtonClicked"
+            class="send-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
+            <i class="fas @(ViewModel.AwaitingResponse ? "fa-stop" : "fa-arrow-up")"/>
         </button>
     </div>
 </div>
@@ -57,26 +56,26 @@
 
     /* Send button */
     .send-button {
-    margin-top: auto;
-    margin-left: auto;
-    width: 32px;
-    margin-right: 12px;
-    height: 32px;
-    font-size: 14px;
-    border: none;
-    border-radius: 50%;
-    background-color: var(--Surface4);
-    cursor: pointer;
-    transition: background-color 0.3s;
+        margin-top: auto;
+        margin-left: auto;
+        width: 32px;
+        margin-right: 12px;
+        height: 32px;
+        font-size: 14px;
+        border: none;
+        border-radius: 50%;
+        background-color: var(--Surface4);
+        cursor: pointer;
+        transition: background-color 0.3s;
     }
 
     .disabled-button {
-    color: var(--Surface);
-    cursor: not-allowed;
+        color: var(--Surface);
+        cursor: not-allowed;
     }
 
     .enabled-button {
-    color: var(--OnSurface);
+        color: var(--OnSurface);
     }
 
     /*     .send-button:hover:not(:disabled) {
@@ -89,9 +88,9 @@
     }
 
     ::-webkit-scrollbar-thumb {
-    background-color: var(--Surface3);
-    border-radius: 0px;
-    border: 7px solid transparent;
+        background-color: var(--Surface3);
+        border-radius: 0px;
+        border: 7px solid transparent;
     }
 
     ::-webkit-scrollbar-track {
@@ -106,17 +105,19 @@
 <script>
 
     document.getElementById('chat-box').addEventListener('keydown', function (e) {
-    if (e.key == 'Enter' && !e.shiftKey)
-    {
-      // prevent default behavior
-      e.preventDefault();
-      return false;
-      }}, false);
+        if (e.key == 'Enter' && !e.shiftKey) {
+            // prevent default behavior
+            e.preventDefault();
+            return false;
+        }
+    }, false);
 </script>
 
 @code
+
 {
     bool _inputIsEmpty = true;
+
     private bool InputIsEmpty
     {
         get => _inputIsEmpty;
@@ -131,6 +132,7 @@
     }
 
     string? _input;
+
     private string? Input
     {
         get => _input;
@@ -142,10 +144,7 @@
             // }
             // else
             {
-                var _ = Task.Run(async () =>
-                {
-                    await JS.InvokeVoidAsync("resizeUserInput");
-                });
+                var _ = Task.Run(async () => { await JS.InvokeVoidAsync("resizeUserInput"); });
 
                 if (_input != value)
                 {
@@ -157,14 +156,11 @@
         }
     }
 
-    [Parameter]
-    public EventCallback OnSubmit { get; set; }
+    [Parameter] public EventCallback OnSubmit { get; set; }
 
-    [Parameter]
-    public required AssistantSessionViewModelBase ViewModel { get; set; }
+    [Parameter] public required AssistantSessionViewModelBase ViewModel { get; set; }
 
-    [Parameter]
-    public EventCallback<AssistantSessionViewModelBase> ViewModelChanged { get; set; }
+    [Parameter] public EventCallback<AssistantSessionViewModelBase> ViewModelChanged { get; set; }
 
     private bool _ignoreNextTextChange = false;
 
