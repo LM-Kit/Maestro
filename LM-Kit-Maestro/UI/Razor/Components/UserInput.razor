@@ -1,8 +1,7 @@
 ﻿@inject IJSRuntime JS
 
-@* <div id="container"> *@
 <div id="chat-border">
-    @*         @onkeypress="OnKeyPress"
+        @*         @onkeypress="OnKeyPress"
         @onkeydown="OnKeyDown"
         @onkeyup="OnKeyUp" *@
     <textarea rows="1" id="chat-box" @bind="Input" @onkeydown="OnKeyDown" @bind:event="oninput"></textarea>
@@ -10,30 +9,25 @@
 
     <button disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked"
             class="send-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
-        @if (!ViewModel.AwaitingResponse)
-        {
-            <span>
-                <i class="fas fa-arrow-up"></i>
-            </span>
-        }
-        else
-        {
-            <span>
-                <i class="fas fa-stop"></i>
-            </span>
-        }
+            @if (!ViewModel.AwaitingResponse)
+            {
+                <span>
+                    <i class="fas fa-arrow-up"></i>
+                </span>
+            }
+            else
+            {
+                <span>
+                    <i class="fas fa-stop"></i>
+                </span>
+            }
     </button>
 </div>
-@* </div> *@
 
 <style>
-    #container {
-        display: flex;
-        /* justify-content: center; */
-    }
-
     #chat-border {
         display: flex;
+        position: relative;
         border-radius: 32px;
         margin: 0px;
         max-width: 800px;
@@ -43,35 +37,12 @@
         border: 1.5px solid var(--OutlineVariant);
         transition: border-color 0.3s;
         color: white;
-    }
-
-    .chat-border:focus-within {
-        border-color: var(--Primary);
-    }
-
-    #chat-border::-webkit-scrollbar {
-        width: 8px;
-        height: 20px;
-    }
-
-    #chat-border::-webkit-scrollbar-thumb {
-        background-color: var(--Surface3);
-        border-radius: 0px;
-        border: 10px solid var(--Primary);
-    }
-
-    #chat-border::-webkit-scrollbar-track {
-        background-color: var(--Surface4);
-    }
-
-    #chat-border::-webkit-scrollbar-thumb:hover {
-        background-color: var(--Outlined);
+        
     }
 
     #chat-box {
         color: var(--OnBackground);
         margin-block: auto;
-        padding-inline: 20px;
         background-color: transparent;
         width: 100%;
         max-height: 200px;
@@ -79,14 +50,44 @@
         border: none;
         outline: none;
         resize: none;
+        margin-left: 20px;
+        margin-right: 10px;
+        margin-bottom: 0px;
+        overflow-y: auto;
+    }
+
+    .chat-box:focus-within {
+        border-color: var(--Primary);
+    }
+
+    #chat-box::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #chat-box::-webkit-scrollbar-thumb {
+        background-color: var(--Surface2);
+        border-radius: 4px;
+        border: 10px solid transparent);
+    }
+
+    #chat-box::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    #chat-box::-webkit-scrollbar-thumb:hover {
+        background-color: var(--Surface3);
     }
 
     /* Send button */
     .send-button {
+        position: absolute; /* Set position to absolute */
+        bottom: 8px; /* Align to the bottom */
+        right: 8px; /* Align to the right */
+
         margin-top: auto;
         margin-left: auto;
         width: 32px;
-        margin-right: 12px;
+        margin-right: 16px;
         height: 32px;
         font-size: 14px;
         border: none;
@@ -94,6 +95,7 @@
         background-color: var(--Surface4);
         cursor: pointer;
         transition: background-color 0.3s;
+        display: absolute;
     }
 
     .disabled-button {
@@ -122,9 +124,6 @@
 </script>
 
 @code
-
-
-
 {
     bool _inputIsEmpty = true;
 
