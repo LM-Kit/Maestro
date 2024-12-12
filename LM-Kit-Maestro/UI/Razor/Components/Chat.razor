@@ -270,16 +270,19 @@
         await ScrollTo(ScrollDirection.End);
     }
 
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     await base.OnAfterRenderAsync(firstRender);
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
 
-    //     if (_hasPendingScrollEnd)
-    //     {
-    //         await ScrollTo(ScrollDirection.End);
-    //         _hasPendingScrollEnd = false;
-    //     }
-    // }
+        if (firstRender || _hasPendingScrollEnd)
+        {
+            if (_hasPendingScrollEnd)
+            {
+                _hasPendingScrollEnd = false;
+                await ScrollTo(ScrollDirection.End);
+            }
+        }
+    }
 
 
     private void OnConversationListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
