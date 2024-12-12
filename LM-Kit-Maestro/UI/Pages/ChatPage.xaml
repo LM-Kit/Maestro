@@ -125,6 +125,11 @@
                 <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"/>
             </Grid.ColumnDefinitions>
 
+            <ui:ChatConversationsView
+                x:Name="chatsSidebar"
+                WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}"
+                Grid.Row="1"/>
+            
             <BlazorWebView
                 x:Name="blazorWebView"
                 Grid.RowSpan="2"
