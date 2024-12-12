@@ -1,4 +1,5 @@
-﻿using LMKit.TextGeneration;
+﻿using LMKit.Model;
+using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
 using LMKit.TextGeneration.Sampling;
 using LMKit.Translation;
@@ -14,12 +15,10 @@ public partial class LMKitService : INotifyPropertyChanged
     private readonly RequestSchedule _requestSchedule = new RequestSchedule();
 
     private Uri? _currentlyLoadingModelUri;
-    private SingleTurnConversation? _singleTurnConversation;
     private Conversation? _lastConversationUsed = null;
-    private LMKit.Model.LLM? _model;
+    private LLM? _model;
     private MultiTurnConversation? _multiTurnConversation;
 
-    private TextTranslation? _textTranslation;
 
     public LMKitConfig LMKitConfig { get; } = new LMKitConfig();
 
@@ -59,7 +58,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                _model = new LMKit.Model.LLM(fileUri, fileUri.IsFile ? fileUri.LocalPath : localFilePath, loadingProgress: OnModelLoadingProgressed);
+                _model = new LLM(fileUri, fileUri.IsFile ? fileUri.LocalPath : localFilePath, loadingProgress: OnModelLoadingProgressed);
 
                 modelLoadingSuccess = true;
             }
@@ -133,7 +132,6 @@ public partial class LMKitService : INotifyPropertyChanged
 
         _lmKitServiceSemaphore.Release();
 
-        _singleTurnConversation = null;
         _lastConversationUsed = null;
         ModelLoadingState = LMKitModelLoadingState.Unloaded;
         LMKitConfig.LoadedModelUri = null;
@@ -143,11 +141,6 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public async Task<string?> SubmitTranslation(string input, Language language)
     {
-        if (_textTranslation == null)
-        {
-            _textTranslation = new TextTranslation(_model);
-        }
-
         var translationRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.Translate,
             new LMKitRequest.TranslationRequestParameters(input, language), LMKitConfig.RequestTimeout);
 
@@ -267,15 +260,16 @@ public partial class LMKitService : INotifyPropertyChanged
                     result.Result = await _multiTurnConversation!.SubmitAsync(((LMKitRequest.PromptRequestParameters)request.Parameters!).Prompt,
                         request.CancellationTokenSource.Token);
                 }
-                else if (request.RequestType == LMKitRequest.LMKitRequestType.Translate)
-                {
-                    var translationRequestParameters = (LMKitRequest.TranslationRequestParameters)request.Parameters!;
-                    result.Result = await _textTranslation!.TranslateAsync(translationRequestParameters.InputText,
-                        translationRequestParameters.Language, request.CancellationTokenSource.Token);
-                }
                 else if (request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
                 {
                     result.Result = await _multiTurnConversation!.RegenerateResponseAsync(request.CancellationTokenSource.Token);
+                }
+                else if (request.RequestType == LMKitRequest.LMKitRequestType.Translate)
+                {
+                    TextTranslation textTranslation = new TextTranslation(_model);
+                    var translationRequestParameters = (LMKitRequest.TranslationRequestParameters)request.Parameters!;
+                    result.Result = await textTranslation!.TranslateAsync(translationRequestParameters.InputText,
+                        translationRequestParameters.Language, request.CancellationTokenSource.Token);
                 }
             }
             catch (Exception exception)
@@ -348,13 +342,21 @@ public partial class LMKitService : INotifyPropertyChanged
 
         Task.Run(async () =>
         {
+            SingleTurnConversation singleTurnConversation = new SingleTurnConversation(_model)
+            {
+                MaximumContextLength = 512,
+                MaximumCompletionTokens = 50,
+                SamplingMode = new GreedyDecoding(),
+                SystemPrompt = "You receive a sentence. You are to summarize, with a single sentence containing a maximum of 10 words, the topic of this sentence. You start your answer with 'topic:'"
+            };
+
             LMKitResult promptResult = new LMKitResult();
 
             try
             {
                 string titleSummaryPrompt = $"What is the topic of the following sentence: {prompt}";
 
-                promptResult.Result = await _singleTurnConversation!.SubmitAsync(titleSummaryPrompt, titleGenerationRequest.CancellationTokenSource.Token);
+                promptResult.Result = await singleTurnConversation!.SubmitAsync(titleSummaryPrompt, titleGenerationRequest.CancellationTokenSource.Token);
             }
             catch (Exception exception)
             {
@@ -406,7 +408,7 @@ public partial class LMKitService : INotifyPropertyChanged
                     SystemPrompt = LMKitConfig.SystemPrompt
                 };
             }
-
+            _multiTurnConversation.AfterTokenSampling += conversation.AfterTokenSampling;
             conversation.ChatHistory = _multiTurnConversation.ChatHistory;
             conversation.LastUsedModelUri = LMKitConfig.LoadedModelUri;
             _lastConversationUsed = conversation;
@@ -414,25 +416,13 @@ public partial class LMKitService : INotifyPropertyChanged
         else //updating sampling options, if any.
         {
             //todo: Implement a mechanism to determine whether SamplingMode and MaximumCompletionTokens need to be updated.
-            _multiTurnConversation.SamplingMode = GetTokenSampling(LMKitConfig);
+            _multiTurnConversation!.SamplingMode = GetTokenSampling(LMKitConfig);
             _multiTurnConversation.MaximumCompletionTokens = LMKitConfig.MaximumCompletionTokens;
 
             if (LMKitConfig.ContextSize != _multiTurnConversation.ContextSize)
             {
                 //todo: implement context size update.
             }
-        }
-
-        if (_singleTurnConversation == null)
-        {
-            _singleTurnConversation = new SingleTurnConversation(_model)
-            {
-                MaximumContextLength = 512,
-                MaximumCompletionTokens = 50,
-                SamplingMode = new GreedyDecoding(),
-                SystemPrompt = "You receive a sentence. You are to summarize, with a single sentence containing a maximum of 10 words, the topic of this sentence. You start your answer with 'topic:'"
-                //SystemPrompt = "You receive one question and one response taken from a conversation, and you are to provide, with a maximum of 10 words, a summary of the conversation topic."
-            };
         }
     }
 
@@ -470,45 +460,5 @@ public partial class LMKitService : INotifyPropertyChanged
                     TargetEntropy = config.Mirostat2SamplingConfig.TargetEntropy
                 };
         }
-    }
-
-
-    public class NotifyModelStateChangedEventArgs : EventArgs
-    {
-        public Uri FileUri { get; }
-
-        public NotifyModelStateChangedEventArgs(Uri fileUri)
-        {
-            FileUri = fileUri;
-        }
-    }
-
-    public sealed class ModelLoadingProgressedEventArgs : NotifyModelStateChangedEventArgs
-    {
-        public double Progress { get; }
-
-        public ModelLoadingProgressedEventArgs(Uri fileUri, double progress) : base(fileUri)
-        {
-            Progress = progress;
-        }
-    }
-
-    public sealed class ModelLoadingFailedEventArgs : NotifyModelStateChangedEventArgs
-    {
-        public Exception Exception { get; }
-
-        public ModelLoadingFailedEventArgs(Uri fileUri, Exception exception) : base(fileUri)
-        {
-            Exception = exception;
-        }
-    }
-
-    public sealed class LMKitResult
-    {
-        public Exception? Exception { get; set; }
-
-        public LMKitTextGenerationStatus Status { get; set; }
-
-        public object? Result { get; set; }
     }
 }

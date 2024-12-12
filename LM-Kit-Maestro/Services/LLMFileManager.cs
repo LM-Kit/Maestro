@@ -277,9 +277,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private bool HasModel(ModelInfo modelInfo)
     {
-        foreach(var model in UserModels)
+        foreach (var model in UserModels)
         {
-            if(model.Equals(modelInfo))
+            if (model.Equals(modelInfo))
             {
                 return true;
             }
@@ -315,7 +315,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                     UnsortedModels.Add(fileUri);
                 }
 
-                if(collectAll)
+                if (collectAll)
                 {
                     modelInfo = new ModelInfo("unknown publisher", "unknown repository", Path.GetFileName(filePath), fileUri, FileHelpers.GetFileSize(filePath));
                     tryCollectModel(modelInfo);
@@ -513,9 +513,17 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private static bool IsTextCompletionModel(string filePath)
     {
-        using (var model = new LLM(filePath, loadingOptions: new LLM.LoadingOptions() { LoadTensors = false }))
+        try
         {
-            return !model.IsEmbeddingModel;
+            using (var model = new LLM(filePath, loadingOptions: new LLM.LoadingOptions() { LoadTensors = false }))
+            {
+                return !model.IsEmbeddingModel;
+            }
+        }
+        catch (Exceptions.ModelNotLoadedException)
+        {
+            //todo: eventually log error.
+            return false;
         }
     }
 
@@ -524,7 +532,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         if (LLM.ValidateFormat(filePath) &&
             IsTextCompletionModel(filePath))
         {
-
             if (FileHelpers.GetModelInfoFromPath(filePath, modelFolderPath,
                 out string publisher, out string repository, out string fileName))
             {

@@ -2,11 +2,16 @@
 {
     internal static class TooltipLabels
     {
-        public const string REGENERATE_RESPONSE = "Regenerate response";
-        public const string PREVIOUS_GENERATED_RESPONSE = "Previous generated response";
-        public const string NEXT_GENERATED_RESPONSE = "Next generated response";
-        public const string COPY_MESSAGE = "Copy message";
-        public const string START_NEW_CHAT = "Start a new chat";
-        public const string RESET_DEFAULT_SETTINGS = "Reset default settings";
+        public const string RegenerateResponse = "Regenerate response";
+        public const string PreviousGeneratedResponse = "Previous generated response";
+        public const string NextGeneratedResponse = "Next generated response";
+        public const string CopyMessage = "Copy message";
+        public const string StartNewChat = "Start a new chat";
+        public const string ResetDefaultSettings = "Reset default settings";
+        public const string DisplaySettings = "Display Settings";
+        public const string DisplayChats = "Display Chats";
+        public const string EjectModel = "Eject model";
+        public const string SelectAnotherFolder = "Select another folder";
+        public const string OpenInFileExplorer = "Open in File Explorer";
     }
 }

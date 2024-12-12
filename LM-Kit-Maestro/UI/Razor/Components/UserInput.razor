@@ -9,8 +9,8 @@
 
 
         <button
-        @ref="sendButton" 
-        disabled="@(InputIsEmpty)" 
+        @ref="sendButton"
+        disabled="@(InputIsEmpty)"
         @onclick="OnSendButtonClicked"
         class="send-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
             <i class="fas @(ViewModel.AwaitingResponse ? "fa-stop" : "fa-arrow-up")" />
@@ -20,39 +20,39 @@
 
 <style>
     #container {
-    display: flex;
-    justify-content: center;
+        display: flex;
+        justify-content: center;
     }
 
     #chat-border {
-    display: flex;
-    border-radius: 32px;
-    margin: 0px;
-    max-width: 800px;
-    margin-bottom: 32px;
-    width: 100%;
-    padding-block: 8px;
-    border: 1px solid var(--Background);
-    background-color: var(--Surface);
-    transition: border-color 0.3s;
-    color: white;
+        display: flex;
+        border-radius: 32px;
+        margin: 0px;
+        max-width: 800px;
+        margin-bottom: 32px;
+        width: 100%;
+        padding-block: 8px;
+        border: 1px solid var(--Background);
+        background-color: var(--Surface);
+        transition: border-color 0.3s;
+        color: white;
     }
 
     .chat-border:focus-within {
-    border-color: var(--Primary);
+        border-color: var(--Primary);
     }
 
     #chat-box {
-    color: var(--OnBackground);
-    margin-block: auto;
-    padding-inline: 20px;
-    background-color: transparent;
-    width: 100%;
-    max-height: 200px;
-    overflow-y: auto;
-    border: none;
-    outline: none;
-    resize: none;
+        color: var(--OnBackground);
+        margin-block: auto;
+        padding-inline: 20px;
+        background-color: transparent;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        border: none;
+        outline: none;
+        resize: none;
     }
 
     /* Send button */
@@ -80,12 +80,12 @@
     }
 
     /*     .send-button:hover:not(:disabled) {
-    background-color: var(--OutlineVariant);
-    } */
+        background-color: var(--OutlineVariant);
+        } */
 
     ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+        width: 8px;
+        height: 8px;
     }
 
     ::-webkit-scrollbar-thumb {
@@ -95,30 +95,27 @@
     }
 
     ::-webkit-scrollbar-track {
-    background-color: transparent;
+        background-color: transparent;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--Surface4);
+        background-color: var(--Surface4);
     }
 </style>
 
 <script>
 
     document.getElementById('chat-box').addEventListener('keydown', function (e) {
-    if (e.keyCode == 13 && !e.shiftKey)
+    if (e.key == 'Enter' && !e.shiftKey)
     {
-    // prevent default behavior
-    e.preventDefault();
-    return false;
-    }}, false);
+      // prevent default behavior
+      e.preventDefault();
+      return false;
+      }}, false);
 </script>
 
 @code
 {
-    private ElementReference inputTextArea;
-    private ElementReference sendButton;
-
     bool _inputIsEmpty = true;
     private bool InputIsEmpty
     {
@@ -133,8 +130,8 @@
         }
     }
 
-    string _input;
-    private string Input
+    string? _input;
+    private string? Input
     {
         get => _input;
         set
@@ -178,16 +175,16 @@
         ViewModel.PropertyChanged += (_, _) => InvokeAsync(() => StateHasChanged());
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            // await inputTextArea.FocusAsync();
-            // await JS.InvokeVoidAsync("setUserInputFocus");
-        }
-    }
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (firstRender)
+    //     {
+    // await inputTextArea.FocusAsync();
+    // await JS.InvokeVoidAsync("setUserInputFocus");
+    //     }
+    // }
 
-    private void OnSendButtonClicked()
+    private async Task OnSendButtonClicked()
     {
         if (!ViewModel.AwaitingResponse)
         {
@@ -195,7 +192,7 @@
         }
         else
         {
-            ViewModel.Cancel();
+            await ViewModel.Cancel();
         }
     }
 

@@ -23,7 +23,7 @@
                 <Setter Property="HorizontalOptions" Value="Center"/>
                 <Setter Property="CornerRadius" Value="12"/>
                 <Setter Property="Padding" Value="0"/>
-                <Setter Property="ToolTipProperties.Text" Value="Eject model"/>
+                <Setter Property="ToolTipProperties.Text" Value="{x:Static ui:TooltipLabels.EjectModel}"/>
                 <Setter Property="TextColor" Value="{StaticResource Primary}"/>
                 <Setter Property="FontFamily" Value="Material"/>
                 <Setter Property="FontSize" Value="{x:Static local:AppConstants.IconFontSize}"/>
@@ -59,7 +59,7 @@
                         <Setter Property="InputTransparent" Value="True" />
                     </DataTrigger>
 
-                    <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
+                    <DataTrigger TargetType="controls:StatefulContentView" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized, x:DataType=vm:AppShellViewModel}" Value="False">
                         <Setter Property="InputTransparent" Value="True" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -120,7 +120,7 @@
                         VerticalOptions="Center"
                         HorizontalTextAlignment="Center"
                         LineBreakMode="TailTruncation"
-                        ToolTipProperties.Text="{Binding Source={RelativeSource Self}, Path=Text}"
+                        ToolTipProperties.Text="{Binding Source={RelativeSource Self}, Path=Text, x:DataType=Label}"
                         TextColor="{StaticResource OnBackground}">
                         <Label.Triggers>
                             <!--<DataTrigger TargetType="Label">
@@ -148,7 +148,7 @@
 
                             <DataTrigger TargetType="Label" Binding="{Binding LMKitService.ModelLoadingState}" Value="{x:Static services:LMKitModelLoadingState.Loading}">
                                 <Setter Property="TextColor" Value="{StaticResource Outline}"/>
-                                <Setter Property="Text" Value="{Binding Source={x:Reference modelSelectionButton}, Path=LoadingText}"/>
+                                <Setter Property="Text" Value="{Binding Source={x:Reference modelSelectionButton}, Path=LoadingText, x:DataType=ui:ModelSelectionButton}"/>
                             </DataTrigger>
 
                             <DataTrigger TargetType="Label" Binding="{Binding LMKitService.ModelLoadingState}" Value="{x:Static services:LMKitModelLoadingState.Loaded}">
@@ -159,7 +159,7 @@
                                 <Setter Property="Text" Value="Select a model to load"/>
                             </DataTrigger>
 
-                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized, x:DataType=vm:AppShellViewModel}" Value="False">
                                 <Setter Property="TextColor" Value="{StaticResource Outline}"/>
                                 <Setter Property="Text" Value="Maestro is initializing..."/>
                             </DataTrigger>
@@ -176,7 +176,7 @@
                         StyleClass="IconSmall"
                         TextColor="{StaticResource Outline}">
                         <Label.Triggers>
-                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized}" Value="False">
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=AppIsInitialized, x:DataType=vm:AppShellViewModel}" Value="False">
                                 <Setter Property="IsVisible" Value="False"/>
                             </DataTrigger>
                         </Label.Triggers>

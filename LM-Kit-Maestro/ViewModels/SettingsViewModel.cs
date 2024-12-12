@@ -9,63 +9,70 @@ namespace LMKit.Maestro.ViewModels
         private readonly IAppSettingsService _appSettingsService;
         private readonly LMKitConfig _config;
 
-        private string _systemPrompt = string.Empty;
         public string SystemPrompt
         {
-            get => _systemPrompt;
+            get => _config.SystemPrompt;
             set
             {
-                _systemPrompt = value;
-                _config.SystemPrompt = _systemPrompt;
-                OnPropertyChanged();
+                if (_config.SystemPrompt != value)
+                {
+                    _config.SystemPrompt = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private int _maximumCompletionTokens;
         public int MaximumCompletionTokens
         {
-            get => _maximumCompletionTokens;
+            get => _config.MaximumCompletionTokens;
             set
             {
-                _maximumCompletionTokens = value;
-                _config.MaximumCompletionTokens = _maximumCompletionTokens;
-                OnPropertyChanged();
+                if (_config.MaximumCompletionTokens != value)
+                {
+                    _config.MaximumCompletionTokens = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private int _requestTimeout;
         public int RequestTimeout
         {
-            get => _requestTimeout;
+            get => _config.RequestTimeout;
             set
             {
-                _requestTimeout = value;
-                _config.RequestTimeout = _requestTimeout;
-                OnPropertyChanged();
+                if (_config.RequestTimeout != value)
+                {
+                    _config.RequestTimeout = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private int _contextSize;
         public int ContextSize
         {
-            get => _contextSize;
+            get => _config.ContextSize;
             set
             {
-                _contextSize = value;
-                _config.ContextSize = _contextSize;
-                OnPropertyChanged();
+                int newValue = (int)Math.Round(value / 128.0) * 128;
+
+                if (_config.ContextSize != newValue)
+                {
+                    _config.ContextSize = newValue;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private SamplingMode _samplingMode;
         public SamplingMode SamplingMode
         {
-            get => _samplingMode;
+            get => _config.SamplingMode;
             set
             {
-                _samplingMode = value;
-                _config.SamplingMode = _samplingMode;
-                OnPropertyChanged();
+                if (_config.SamplingMode != value)
+                {
+                    _config.SamplingMode = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -135,91 +142,97 @@ namespace LMKit.Maestro.ViewModels
     {
         private readonly RandomSamplingConfig _config;
 
-        private float _temperature;
         public float Temperature
         {
-            get => _temperature;
+            get => _config.Temperature;
             set
             {
-                _temperature = value;
-                _config.Temperature = _temperature;
-                OnPropertyChanged();
+                float newValue = (float)Math.Round(value, 2);
+
+                if (newValue != _config.Temperature)
+                {
+                    _config.Temperature = newValue;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private float _dynamicTemperatureRange;
         public float DynamicTemperatureRange
         {
-            get => _dynamicTemperatureRange;
+            get => _config.DynamicTemperatureRange;
             set
             {
-                _dynamicTemperatureRange = value;
-                _config.DynamicTemperatureRange = _dynamicTemperatureRange;
-                OnPropertyChanged();
+                float newValue = (float)Math.Round(value, 2);
+
+                if (newValue != _config.DynamicTemperatureRange)
+                {
+                    _config.DynamicTemperatureRange = newValue;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private float _topP;
         public float TopP
         {
-            get => _topP;
+            get => _config.TopP;
             set
             {
-                _topP = value;
-                _config.TopP = _topP;
-                OnPropertyChanged();
+                float newValue = (float)Math.Round(value, 2);
+
+                if (newValue != _config.TopP)
+                {
+                    _config.TopP = newValue;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private float _minP;
         public float MinP
         {
-            get => _minP;
+            get => _config.MinP;
             set
             {
-                _minP = value;
-                _config.MinP = _minP;
-                OnPropertyChanged();
+                float newValue = (float)Math.Round(value, 2);
+
+                if (newValue != _config.MinP)
+                {
+                    _config.MinP = newValue;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private int _topK;
         public int TopK
         {
-            get => _topK;
+            get => _config.TopK;
             set
             {
-                _topK = value;
-                _config.TopK = _topK;
-                OnPropertyChanged();
+                if (_config.TopK != value)
+                {
+                    _config.TopK = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private float _locallyTypical;
         public float LocallyTypical
         {
-            get => _locallyTypical;
+            get => _config.LocallyTypical;
             set
             {
-                _locallyTypical = value;
-                _config.LocallyTypical = _locallyTypical;
-                OnPropertyChanged();
+                float newValue = (float)Math.Round(value, 2);
+
+                if (newValue != _config.LocallyTypical)
+                {
+                    _config.LocallyTypical = newValue;
+                    OnPropertyChanged();
+                }
             }
         }
 
         public RandomSamplingSettingsViewModel(RandomSamplingConfig randomSamplingConfig)
         {
             _config = randomSamplingConfig;
-        }
-
-        public void Init()
-        {
-            Temperature = _config.Temperature;
-            DynamicTemperatureRange = _config.DynamicTemperatureRange;
-            TopP = _config.TopP;
-            MinP = _config.MinP;
-            TopK = _config.TopK;
-            LocallyTypical = _config.LocallyTypical;
         }
 
         public void Reset()
@@ -237,52 +250,52 @@ namespace LMKit.Maestro.ViewModels
     {
         private readonly Mirostat2SamplingConfig _config;
 
-        private float _temperature;
         public float Temperature
         {
-            get => _temperature;
+            get => _config.Temperature;
             set
             {
-                _temperature = value;
-                _config.Temperature = _temperature;
-                OnPropertyChanged();
+                float newValue = (float)Math.Round(value, 2);
+
+                if (newValue != _config.Temperature)
+                {
+                    _config.Temperature = newValue;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        float _targetEntropy;
         public float TargetEntropy
         {
-            get => _targetEntropy;
+            get => _config.TargetEntropy;
             set
             {
-                _targetEntropy = value;
-                _config.TargetEntropy = _targetEntropy;
-                OnPropertyChanged();
+                if (_config.TargetEntropy != value)
+                {
+                    _config.TargetEntropy = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        float _learningRate;
         public float LearningRate
         {
-            get => _learningRate;
+            get => _config.LearningRate;
             set
             {
-                _learningRate = value;
-                _config.LearningRate = _learningRate;
-                OnPropertyChanged();
+                float newValue = (float)Math.Round(value, 2);
+
+                if (newValue != _config.LearningRate)
+                {
+                    _config.LearningRate = newValue;
+                    OnPropertyChanged();
+                }
             }
         }
 
         public Mirostat2SamplingSettingsViewModel(Mirostat2SamplingConfig Mirostat2SamplingConfig)
         {
             _config = Mirostat2SamplingConfig;
-        }
-
-        public void Init()
-        {
-            Temperature = _config.Temperature;
-            TargetEntropy = _config.TargetEntropy;
-            LearningRate = _config.LearningRate;
         }
 
         public void Reset()
