@@ -125,22 +125,15 @@
                 <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"/>
             </Grid.ColumnDefinitions>
 
-        <BlazorWebView
-            x:Name="blazorWebView"
-            Grid.Row="1"
-            Grid.Column="1"
-            HostPage="wwwroot/index.html">
-            <BlazorWebView.RootComponents>
-                <RootComponent Selector="#app" ComponentType="{x:Type razor:Chat}" />
-            </BlazorWebView.RootComponents>
-        </BlazorWebView>
-
-            <ui:ChatView
-                x:Name="chatView"
+            <BlazorWebView
+                x:Name="blazorWebView"
                 Grid.RowSpan="2"
-                Margin="{x:Static ui:ChatPage.ChatViewMargin}"
-                BindingContext="{Binding ConversationListViewModel.CurrentConversation}"
-                Grid.Column="1"/>
+                Grid.Column="1"
+                HostPage="wwwroot/index.html">
+                <BlazorWebView.RootComponents>
+                    <RootComponent Selector="#app" ComponentType="{x:Type razor:Chat}" />
+                </BlazorWebView.RootComponents>
+            </BlazorWebView>
 
             <ui:ChatSettingsView
                 x:Name="settingsSidebar"
