@@ -8,46 +8,49 @@
 @inherits MvvmComponentBase<ChatPageViewModel>
 
 <div id="container">
-    <div id="conversation-content"
-         class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
-        @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
-        {
-            if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
+    <div id="conversation-container">
+        <div id="conversation-content"
+             class="dark @(ViewModel != null && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty ? "centered-container" : "top-align-container")">
+            @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
-                <div id="empty-conversation" class="vertical-stack">
-                    <div class="vertical-stack spacing-4">
-                        <div class="welcome-message">Hello, human.</div>
-                        <div class="welcome-message">
-                            It is likely that similar software programs are now assuming professional tasks that were
-                            previously your responsibility.
-                        </div>
-                        <div class="welcome-message">Developers and other software programs are working to enhance my
-                            ability to assist you in the process of making sense about this, or to generate witty jokes
-                            involving robots and humans.
-                        </div>
-                    </div>
-
-                    <div class="vertical-stack" style="gap:12px;">
-                        <div class="shortcut-instruction">
-                            Press Enter to send a new message
+                if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
+                {
+                    <div id="empty-conversation" class="vertical-stack">
+                        <div class="vertical-stack spacing-4">
+                            <div class="welcome-message">Hello, human.</div>
+                            <div class="welcome-message">
+                                It is likely that similar software programs are now assuming professional tasks that were
+                                previously your responsibility.
+                            </div>
+                            <div class="welcome-message">
+                                Developers and other software programs are working to enhance my
+                                ability to assist you in the process of making sense about this, or to generate witty jokes
+                                involving robots and humans.
+                            </div>
                         </div>
 
-                        <div class="shortcut-instruction">
-                            Hold Shift + Enter to insert a new line
+                        <div class="vertical-stack" style="gap:12px;">
+                            <div class="shortcut-instruction">
+                                Press Enter to send a new message
+                            </div>
+
+                            <div class="shortcut-instruction">
+                                Hold Shift + Enter to insert a new line
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
+                else
+                {
+                    <div id="message-list">
+                        @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
+                        {
+                            <ChatMessage MessageViewModel="message" />
+                        }
+                    </div>
+                }
             }
-            else
-            {
-                <div id="message-list">
-                    @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
-                    {
-                        <ChatMessage MessageViewModel="message"/>
-                    }
-                </div>
-            }
-        }
+        </div>
 
         <div id="chat-info">
             <div id="scroll-to-end">
@@ -62,7 +65,7 @@
     </div>
 
     <div id="user-input">
-        <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
+        <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
     </div>
 </div>
 
@@ -70,23 +73,36 @@
     #container {
         color: white;
         font-size: 16px;
-        display: flex;
-        scrollbar-gutter: both-edges stable;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
         width: 100%;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        height: 100vh;
+    }
+
+    #conversation-container {
+        grid-row: 1;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        scrollbar-gutter: both-edges stable;
     }
 
     #conversation-content {
+        align-self: center;
+        justify-content: center;
         max-width: 800px;
         width: 100%;
     }
 
     #user-input {
+        height: 80px;
+        grid-row: 2;
         width: 100%;
-        background-color: red;
+        max-height: 200px;
         max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .top-align-container {
@@ -98,7 +114,6 @@
         display: flex;
         justify-content: center;
     }
-
 
     #message-list {
         margin: auto;
@@ -170,9 +185,6 @@
 </style>
 
 @code
-
-
-
 {
 
     enum ScrollDirection
