@@ -32,17 +32,15 @@ internal static class AppConstants
 
     public const double AlertPopupWidth = 400;
 
-    public const double AppBarHeight = 72;
+    public const double TabBarHeight = 48;
 
-    public const double ChatPageTopBarHeight = AppBarHeight + ChatPageHeaderHeight - 8;
+    public const double PageTopBarHeight = 64;
 
     public const double ModelSelectionButtonMaxWidth = 568;
 
     public const double MinimizedHeaderButtonWidth = ChatWindowLayoutMinimumWidth - (16 * 2);
 
     public const double ModelSelectionButtonHeight = 48;
-
-    public const double ChatPageHeaderHeight = ModelSelectionButtonHeight + (8 * 2);
 
     public const double ChatPageSidebarWidth = 300;
 
@@ -51,8 +49,6 @@ internal static class AppConstants
     public const double ChatPageSideTogglesWidth = (ChatPageToggleButtonWidth * 2) + 16 + 8;
 
     public const double ChatPageToggleButtonWidth = 32;
-
-    public const double IconFontSize = 16;
 
 #if BETA_DOWNLOAD_MODELS
     //LM-Kit models catalog: https://huggingface.co/lm-kit

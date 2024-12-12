@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ui:PageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:local="clr-namespace:LMKit.Maestro"
@@ -36,41 +36,16 @@
                 <Setter Property="VerticalOptions" Value="Center"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
             </Style>
-
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <!-- Note: negative margin is to overlap the section bar black space -->
-    <Grid
-        Margin="0, -8, 0, 0"
-        ColumnSpacing="0">
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{x:Static local:AppConstants.ChatPageHeaderHeight}"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!-- Header background overlay-->
-        <Grid Grid.ColumnSpan="3" BackgroundColor="{StaticResource Surface}"/>
-
-        <!-- Header horizontal separator-->
-        <BoxView Grid.ColumnSpan="3" StyleClass="Separator" VerticalOptions="End"/>
-
-        <!-- Header -->
-        <Grid 
-            VerticalOptions="Start"
-            HeightRequest="{x:Static local:AppConstants.ChatPageHeaderHeight}"
-            Grid.ColumnSpan="3" 
+    <ui:PageBase.Header>
+        <Grid
+            VerticalOptions="Center"
+            Grid.ColumnSpan="3"
             ColumnDefinitions="auto, *, auto">
 
-            <!-- Chats sidebar header section -->
-            <Grid 
+            <Grid
                 Style="{StaticResource SidebarHeaderGrid}"
                 Padding="16, 0, 0, 0"
                 WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}">
@@ -92,13 +67,13 @@
                     HorizontalOptions="End"
                     ToolTipProperties.Text="{x:Static ui:TooltipLabels.StartNewChat}"
                     Style="{StaticResource SecondaryActionButtonStyle}"
-                    Grid.Column="2" 
+                    Grid.Column="2"
                     FontFamily="Material"
                     Text="{StaticResource Add}"
                     Command="{Binding StartNewConversationCommand}"/>
             </Grid>
 
-            <ui:ModelSelectionButton 
+            <ui:ModelSelectionButton
                 BindingContext="{Binding ModelListViewModel}"
                 x:Name="modelSelectionButton"
                 VerticalOptions="Start"
@@ -112,7 +87,6 @@
                 </ui:ModelSelectionButton.Triggers>
             </ui:ModelSelectionButton>
 
-            <!-- Settings sidebar header section -->
             <Grid
                 Style="{StaticResource SidebarHeaderGrid}"
                 Padding="0, 0, 16, 0"
@@ -127,13 +101,13 @@
                     Text="{StaticResource Rotate_right}"
                     Command="{Binding SettingsViewModel.ResetDefaultValuesCommand}" />
 
-                <Label 
+                <Label
                     StyleClass="Title"
                     Style="{StaticResource SidebarTitleStyle}"
                     IsVisible="{Binding SettingsSidebarIsToggled}"
                     Text="Settings"/>
 
-                <Button 
+                <Button
                     Grid.Column="2"
                     Style="{StaticResource SidebarToggleButtonStyle}"
                     Text="{StaticResource Tune}"
@@ -141,11 +115,15 @@
                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ToggleSettingsSidebarCommand}"/>
             </Grid>
         </Grid>
+    </ui:PageBase.Header>
 
-        <ui:ChatConversationsView
-            x:Name="chatsSidebar"
-            WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}"
-            Grid.Row="1"/>
+    <ui:PageBase.Body>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"/>
+            </Grid.ColumnDefinitions>
 
         <BlazorWebView
             x:Name="blazorWebView"
@@ -157,11 +135,19 @@
             </BlazorWebView.RootComponents>
         </BlazorWebView>
 
-        <ui:ChatSettingsView
-            x:Name="settingsSidebar"
-            Grid.Row="1"
-            Grid.Column="2"
-            WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"
-            BindingContext="{Binding SettingsViewModel}"/>
-    </Grid>
-</ContentPage>
+            <ui:ChatView
+                x:Name="chatView"
+                Grid.RowSpan="2"
+                Margin="{x:Static ui:ChatPage.ChatViewMargin}"
+                BindingContext="{Binding ConversationListViewModel.CurrentConversation}"
+                Grid.Column="1"/>
+
+            <ui:ChatSettingsView
+                x:Name="settingsSidebar"
+                Grid.Row="1"
+                Grid.Column="2"
+                WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"
+                BindingContext="{Binding SettingsViewModel}"/>
+        </Grid>
+    </ui:PageBase.Body>
+</ui:PageBase>

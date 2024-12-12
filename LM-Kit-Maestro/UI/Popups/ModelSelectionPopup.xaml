@@ -14,10 +14,17 @@
     ShowOkButton="False"
     ShowBackgroundOverlay="True"
     ShowCloseButton="True"
-    BodyMargin="8, 72, 8, 8"
+    BodyMargin="8, 48, 8, 8"
     CloseWhenBackgroundIsClicked="False"
     x:Class="LMKit.Maestro.UI.ModelSelectionPopup"
     x:DataType="vm:ModelSelectionPopupViewModel">
+    
+    <ui:PopupView.BodyMargin>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="Windows" Value="16, 72, 16, 16" />
+            <On Platform="MacCatalyst" Value="16, 48, 16, 16" />
+        </OnPlatform>
+    </ui:PopupView.BodyMargin>
 
     <ui:PopupView.Resources>
         <Style x:Key="ModelInfoBadge" TargetType="Border">
