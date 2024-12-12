@@ -90,8 +90,8 @@
         flex: 1;
         display: flex;
         /*         display: flex;
-        flex-direction: column;
-        */
+            flex-direction: column;
+            */
         overflow-y: hidden;
         scrollbar-gutter: both-edges stable;
     }
@@ -228,7 +228,6 @@
 
     enum ScrollDirection
     {
-        Undefined,
         Top,
         End
     }
@@ -283,7 +282,6 @@
             }
         }
     }
-
 
     private void OnConversationListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -396,27 +394,17 @@
 
     private async Task ScrollTo(ScrollDirection direction, bool smooth = false)
     {
-        try
+        switch (direction)
         {
-            switch (direction)
-            {
-                case ScrollDirection.Top:
-                    await ScrollHandler.ScrollToPageTopAsync(smooth);
-                    break;
+            case ScrollDirection.Top:
+                await ScrollHandler.ScrollToPageTopAsync(smooth);
+                break;
 
-                case ScrollDirection.End:
-                    IsScrolledToEnd = true;
-                    _ignoreScrollsUntilNextScrollUp = true;
-                    await ScrollHandler.ScrollToPageEndAsync(smooth);
-                    break;
-
-                default:
-                    throw new InvalidOperationException();
-            }
-        }
-        catch (Exception ex)
-        {
-
+            case ScrollDirection.End:
+                IsScrolledToEnd = true;
+                _ignoreScrollsUntilNextScrollUp = true;
+                await ScrollHandler.ScrollToPageEndAsync(smooth);
+                break;
         }
     }
 
