@@ -15,39 +15,39 @@
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
                 {
-                            <div id="empty-conversation" class="vertical-stack">
-                                <div class="vertical-stack spacing-4">
-                                    <div class="welcome-message">Hello, human.</div>
-                                    <div class="welcome-message">
-                                        It is likely that similar software programs are now assuming professional tasks that were
-                                        previously your responsibility.
-                                    </div>
-                                    <div class="welcome-message">
-                                        Developers and other software programs are working to enhance my
-                                        ability to assist you in the process of making sense about this, or to generate witty jokes
-                                        involving robots and humans.
-                                    </div>
-                                </div>
-
-                                <div class="vertical-stack" style="gap:12px;">
-                                    <div class="shortcut-instruction">
-                                        Press Enter to send a new message
-                                    </div>
-
-                                    <div class="shortcut-instruction">
-                                        Hold Shift + Enter to insert a new line
-                                    </div>
-                                </div>
+                    <div id="empty-conversation" class="vertical-stack">
+                        <div class="vertical-stack spacing-4">
+                            <div class="welcome-message">Hello, human.</div>
+                            <div class="welcome-message">
+                                It is likely that similar software programs are now assuming professional tasks that were
+                                previously your responsibility.
                             </div>
+                            <div class="welcome-message">
+                                Developers and other software programs are working to enhance my
+                                ability to assist you in the process of making sense about this, or to generate witty jokes
+                                involving robots and humans.
+                            </div>
+                        </div>
+
+                        <div class="vertical-stack" style="gap:12px;">
+                            <div class="shortcut-instruction">
+                                Press Enter to send a new message
+                            </div>
+
+                            <div class="shortcut-instruction">
+                                Hold Shift + Enter to insert a new line
+                            </div>
+                        </div>
+                    </div>
                 }
                 else
                 {
-                            <div id="message-list">
+                    <div id="message-list">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
-                                        <ChatMessage MessageViewModel="message" />
+                            <ChatMessage MessageViewModel="message" />
                         }
-                            </div>
+                    </div>
                 }
             }
         </div>
@@ -56,9 +56,9 @@
             <div id="scroll-to-end">
                 @if (!IsScrolledToEnd)
                 {
-                        <button @onclick="OnScrollToEndButtonClicked" class="material-icons scroll-to-end-button">
-                            arrow_downward
-                        </button>
+                    <button @onclick="OnScrollToEndButtonClicked" class="material-icons scroll-to-end-button">
+                        arrow_downward
+                    </button>
                 }
             </div>
         </div>
@@ -90,33 +90,33 @@
         flex: 1;
         display: flex;
         /*         display: flex;
-                                    flex-direction: column;
-                             */
+        flex-direction: column;
+        */
         overflow-y: hidden;
         scrollbar-gutter: both-edges stable;
     }
 
-    #conversation-container:hover {
-        overflow-y: scroll; /* Show the scrollbar on hover */
-    }
+        #conversation-container:hover {
+            overflow-y: scroll; /* Show the scrollbar on hover */
+        }
 
-    #conversation-container::-webkit-scrollbar {
-        width: 8px;
-    }
+        #conversation-container::-webkit-scrollbar {
+            width: 8px;
+        }
 
-     #conversation-container::-webkit-scrollbar-thumb {
-        background-color: var(--Surface);
-        border-radius: 4px;
-        border: 10px solid transparent);
-    }
+        #conversation-container::-webkit-scrollbar-thumb {
+            background-color: var(--Surface);
+            border-radius: 4px;
+            border: 10px solid transparent);
+        }
 
-    #conversation-container::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
+        #conversation-container::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
 
-    #conversation-container::-webkit-scrollbar-thumb:hover {
-        background-color: var(--Surface3);
-    }
+        #conversation-container::-webkit-scrollbar-thumb:hover {
+            background-color: var(--Surface3);
+        }
 
     #conversation-content {
     }
@@ -270,16 +270,16 @@
         await ScrollTo(ScrollDirection.End);
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     await base.OnAfterRenderAsync(firstRender);
 
-        if (_hasPendingScrollEnd)
-        {
-            await ScrollTo(ScrollDirection.End);
-            _hasPendingScrollEnd = false;
-        }
-    }
+    //     if (_hasPendingScrollEnd)
+    //     {
+    //         await ScrollTo(ScrollDirection.End);
+    //         _hasPendingScrollEnd = false;
+    //     }
+    // }
 
 
     private void OnConversationListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -393,18 +393,27 @@
 
     private async Task ScrollTo(ScrollDirection direction, bool smooth = false)
     {
-        switch (direction)
+        try
         {
-            case ScrollDirection.Top:
-                await ScrollHandler.ScrollToPageTopAsync(smooth);
-                break;
-            case ScrollDirection.End:
-                IsScrolledToEnd = true;
-                _ignoreScrollsUntilNextScrollUp = true;
-                await ScrollHandler.ScrollToPageEndAsync(smooth);
-                break;
-            default:
-                throw new InvalidOperationException();
+            switch (direction)
+            {
+                case ScrollDirection.Top:
+                    await ScrollHandler.ScrollToPageTopAsync(smooth);
+                    break;
+
+                case ScrollDirection.End:
+                    IsScrolledToEnd = true;
+                    _ignoreScrollsUntilNextScrollUp = true;
+                    await ScrollHandler.ScrollToPageEndAsync(smooth);
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+        catch (Exception ex)
+        {
+
         }
     }
 
