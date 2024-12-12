@@ -19,12 +19,14 @@
                         <div class="vertical-stack spacing-4">
                             <div class="welcome-message">Hello, human.</div>
                             <div class="welcome-message">
-                                It is likely that similar software programs are now assuming professional tasks that were
+                                It is likely that similar software programs are now assuming professional tasks that
+                                were
                                 previously your responsibility.
                             </div>
                             <div class="welcome-message">
                                 Developers and other software programs are working to enhance my
-                                ability to assist you in the process of making sense about this, or to generate witty jokes
+                                ability to assist you in the process of making sense about this, or to generate witty
+                                jokes
                                 involving robots and humans.
                             </div>
                         </div>
@@ -54,12 +56,12 @@
 
         <div id="chat-info">
             <div id="scroll-to-end">
-                @if (!IsScrolledToEnd)
-                {
-                    <button @onclick="OnScrollToEndButtonClicked" class="material-icons scroll-to-end-button">
-                        arrow_downward
-                    </button>
-                }
+                @* @if (!IsScrolledToEnd)
+                { *@
+                <button @onclick="OnScrollToEndButtonClicked" class="material-icons scroll-to-end-button">
+                    arrow_downward
+                </button>
+                @* } *@
             </div>
         </div>
     </div>
@@ -90,8 +92,8 @@
         flex: 1;
         display: flex;
         /*         display: flex;
-            flex-direction: column;
-            */
+        flex-direction: column;
+        */
         overflow-y: hidden;
         scrollbar-gutter: both-edges stable;
     }
@@ -223,6 +225,58 @@
     }
 </style>
 
+<script>
+    function initializeScrollHandler(dotNetHelper) {
+    const container = document.getElementById('conversation-container');
+    container.addEventListener('scroll', () => {
+    dotNetHelper.invokeMethodAsync('OnConversationContainerScrolled', container.scrollTop);
+    });
+    }
+
+    function getScrollHeight() {
+    const element = document.getElementById('conversation-container');
+    return element.scrollHeight;
+    };
+
+    function getConversationViewHeight() {
+        const element = document.getElementById('conversation-container');
+        return element.clientHeight;
+    };
+
+    function resizeUserInput() {
+    const element = document.getElementById('chat-box');
+
+    element.style.height = "";
+    element.style.height = element.scrollHeight + "px";
+
+    const lineHeight = 28;
+    var lineCount = element.scrollHeight / lineHeight;
+
+    // If the height exceeds max-height (200px), the scrollbar should appear.
+    if (element.scrollHeight > 200) {
+    element.style.height = "200px"; // Limit height to 200px
+    } else {
+    // Adding top and bottom margin depending on number of lines, to account for border radius of input box when showing scrollbar.
+    if (lineCount > 2) {
+    element.style.marginBottom = "16px";
+    element.style.marginTop = "16px";
+    } else if (lineCount > 1) {
+    element.style.marginTop = "8px";
+    element.style.marginBottom = "8px";
+    } else {
+    element.style.marginBottom = "0px";
+    element.style.marginTop = "0px";
+    }
+    }
+    }
+
+    function setUserInputFocus() {
+    const element = document.getElementById('chat-box');
+
+    element.focus();
+    }
+</script>
+
 @code
 {
 
@@ -269,12 +323,17 @@
         await ScrollTo(ScrollDirection.End);
     }
 
+    private DotNetObjectReference<Chat>? dotNetHelper;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
 
-        if (firstRender || _hasPendingScrollEnd)
+        if (firstRender)
         {
+            dotNetHelper = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("initializeScrollHandler", dotNetHelper);
+
             if (_hasPendingScrollEnd)
             {
                 _hasPendingScrollEnd = false;
@@ -410,15 +469,22 @@
 
     private async Task CheckIsScrolledToEnd()
     {
-        var clientHeight = await JS.InvokeAsync<double>("getViewHeight");
-        var chatContentHeight = await JS.InvokeAsync<double>("getScrollHeight");
-
-        var value = chatContentHeight - clientHeight - _scrollTop;
-        IsScrolledToEnd = Math.Abs(chatContentHeight - clientHeight - _scrollTop) < 5 || chatContentHeight <= clientHeight;
-
-        if (IsScrolledToEnd && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation!.AwaitingResponse)
+        try
         {
-            _shouldAutoScrollEnd |= true;
+            var clientHeight = await JS.InvokeAsync<double>("getConversationViewHeight");
+            var chatContentHeight = await JS.InvokeAsync<double>("getScrollHeight");
+
+            var value = chatContentHeight - clientHeight - _scrollTop;
+            IsScrolledToEnd = Math.Abs(chatContentHeight - clientHeight - _scrollTop) < 5 || chatContentHeight <= clientHeight;
+
+            if (IsScrolledToEnd && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation!.AwaitingResponse)
+            {
+                _shouldAutoScrollEnd |= true;
+            }
+        }
+        catch (Exception ex)
+        {
+
         }
     }
 
@@ -427,8 +493,14 @@
         await ScrollTo(ScrollDirection.End);
     }
 
-    public async Task OnSubmit()
+    public void OnSubmit()
     {
         ViewModel.ConversationListViewModel.CurrentConversation.Submit();
+    }
+
+    [JSInvokable]
+    public async Task OnConversationContainerScrolled(double scrollTop)
+    {
+        await CheckIsScrolledToEnd();
     }
 }

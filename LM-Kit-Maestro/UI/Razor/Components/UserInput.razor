@@ -8,16 +8,16 @@
 
 
     <button disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked"
-    class="send-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
+            class="send-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
         @if (!ViewModel.AwaitingResponse)
         {
-                <span>
+            <span>
                     <i class="fas fa-arrow-up"></i>
                 </span>
         }
         else
         {
-                <span>
+            <span>
                     <i class="fas fa-stop"></i>
                 </span>
         }
@@ -26,85 +26,85 @@
 
 <style>
     #chat-border {
-    display: flex;
-    position: relative;
-    border-radius: 32px;
-    margin: 0px;
-    max-width: 800px;
-    width: 100%;
-    padding-block: 8px;
-    background-color: var(--Surface);
-    border: 1.5px solid var(--OutlineVariant);
-    transition: border-color 0.3s;
-    color: white;
+        display: flex;
+        position: relative;
+        border-radius: 32px;
+        margin: 0px;
+        max-width: 800px;
+        width: 100%;
+        padding-block: 8px;
+        background-color: var(--Surface);
+        border: 1.5px solid var(--OutlineVariant);
+        transition: border-color 0.3s;
+        color: white;
 
     }
 
     #chat-box {
-    color: var(--OnBackground);
-    margin-block: auto;
-    background-color: transparent;
-    width: 100%;
-    max-height: 200px;
-    overflow-y: auto;
-    border: none;
-    outline: none;
-    resize: none;
-    padding-right: 46px;
-    margin-left: 25px;
-    margin-bottom: 0px;
-    overflow-y: auto;
+        color: var(--OnBackground);
+        margin-block: auto;
+        background-color: transparent;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        border: none;
+        outline: none;
+        resize: none;
+        padding-right: 46px;
+        margin-left: 25px;
+        margin-bottom: 0px;
+        overflow-y: auto;
     }
 
     .chat-box:focus-within {
-    border-color: var(--Primary);
+        border-color: var(--Primary);
     }
 
     #chat-box::-webkit-scrollbar {
-    width: 8px;
+        width: 8px;
     }
 
     #chat-box::-webkit-scrollbar-thumb {
-    background-color: var(--Surface2);
-    border-radius: 4px;
-    border: 10px solid transparent);
+        background-color: var(--Surface2);
+        border-radius: 4px;
+        border: 10px solid transparent);
     }
 
     #chat-box::-webkit-scrollbar-track {
-    background-color: transparent;
+        background-color: transparent;
     }
 
     #chat-box::-webkit-scrollbar-thumb:hover {
-    background-color: var(--Surface3);
+        background-color: var(--Surface3);
     }
 
     /* Send button */
     .send-button {
-    position: absolute; /* Set position to absolute */
+        position: absolute; /* Set position to absolute */
 
-    right: 0px; /* Align to the right */
-    bottom: 6px; /* Align to the bottom */
-    margin-top: auto;
-    margin-right: 16px;
-    margin-left: auto;
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
-    border: none;
-    border-radius: 50%;
-    background-color: var(--Surface4);
-    cursor: pointer;
-    transition: background-color 0.3s;
-    display: absolute;
+        right: 0px; /* Align to the right */
+        bottom: 6px; /* Align to the bottom */
+        margin-top: auto;
+        margin-right: 16px;
+        margin-left: auto;
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        border: none;
+        border-radius: 50%;
+        background-color: var(--Surface4);
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: absolute;
     }
 
     .disabled-button {
-    color: var(--Surface);
-    cursor: not-allowed;
+        color: var(--Surface);
+        cursor: not-allowed;
     }
 
     .enabled-button {
-    color: var(--OnSurface);
+        color: var(--OnSurface);
     }
 
     /*     .send-button:hover:not(:disabled) {
@@ -115,16 +115,19 @@
 <script>
 
     document.getElementById('chat-box').addEventListener('keydown', function (e) {
-    if (e.key == 'Enter' && !e.shiftKey) {
-    // prevent default behavior
-    e.preventDefault();
-    return false;
-    }
+        if (e.key == 'Enter' && !e.shiftKey) {
+            // prevent default behavior
+            e.preventDefault();
+            return false;
+        }
     }, false);
 
 </script>
 
 @code
+
+
+
 {
     bool _inputIsEmpty = true;
 
