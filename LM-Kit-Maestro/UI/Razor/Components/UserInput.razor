@@ -1,20 +1,29 @@
 ﻿@inject IJSRuntime JS
 
 @* <div id="container"> *@
-    <div id="chat-border">
-        @*         @onkeypress="OnKeyPress"
+<div id="chat-border">
+    @*         @onkeypress="OnKeyPress"
         @onkeydown="OnKeyDown"
         @onkeyup="OnKeyUp" *@
-        <textarea rows="1" id="chat-box" @bind="Input" @onkeydown="OnKeyDown" @bind:event="oninput"></textarea>
+    <textarea rows="1" id="chat-box" @bind="Input" @onkeydown="OnKeyDown" @bind:event="oninput"></textarea>
 
 
-        <button
-            disabled="@(InputIsEmpty)"
-            @onclick="OnSendButtonClicked"
+    <button disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked"
             class="send-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
-            <i class="fas @(ViewModel.AwaitingResponse ? "fa-stop" : "fa-arrow-up")"/>
-        </button>
-    </div>
+        @if (!ViewModel.AwaitingResponse)
+        {
+            <span>
+                <i class="fas fa-arrow-up"></i>
+            </span>
+        }
+        else
+        {
+            <span>
+                <i class="fas fa-stop"></i>
+            </span>
+        }
+    </button>
+</div>
 @* </div> *@
 
 <style>
@@ -31,13 +40,32 @@
         width: 100%;
         padding-block: 8px;
         background-color: var(--Surface);
-        border: 1px solid var(--OutlineVariant);
+        border: 1.5px solid var(--OutlineVariant);
         transition: border-color 0.3s;
         color: white;
     }
 
     .chat-border:focus-within {
         border-color: var(--Primary);
+    }
+
+    #chat-border::-webkit-scrollbar {
+        width: 8px;
+        height: 20px;
+    }
+
+    #chat-border::-webkit-scrollbar-thumb {
+        background-color: var(--Surface3);
+        border-radius: 0px;
+        border: 10px solid var(--Primary);
+    }
+
+    #chat-border::-webkit-scrollbar-track {
+        background-color: var(--Surface4);
+    }
+
+    #chat-border::-webkit-scrollbar-thumb:hover {
+        background-color: var(--Outlined);
     }
 
     #chat-box {
@@ -78,27 +106,8 @@
     }
 
     /*     .send-button:hover:not(:disabled) {
-        background-color: var(--OutlineVariant);
-        } */
-
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: var(--Surface3);
-        border-radius: 0px;
-        border: 7px solid transparent;
-    }
-
-    ::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background-color: var(--Surface4);
-    }
+            background-color: var(--OutlineVariant);
+            } */
 </style>
 
 <script>
@@ -113,6 +122,8 @@
 </script>
 
 @code
+
+
 
 {
     bool _inputIsEmpty = true;
@@ -216,5 +227,10 @@
         ViewModel.Submit();
         Input = string.Empty;
         StateHasChanged();
+    }
+
+    private static string GetButtonClasses()
+    {
+        return "ta mere la pute";
     }
 }

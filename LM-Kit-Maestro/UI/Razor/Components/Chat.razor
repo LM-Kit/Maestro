@@ -81,6 +81,8 @@
         height: 100vh;
         overflow: hidden;
         grid-template-rows: 1fr auto auto;
+        padding-inline: 8px;
+        padding-block: 8px;
         display: grid;
     }
 
@@ -90,8 +92,30 @@
         /*         display: flex;
                                     flex-direction: column;
                              */
-        overflow-y: scroll;
+        overflow-y: hidden;
         scrollbar-gutter: both-edges stable;
+    }
+
+    #conversation-container:hover {
+        overflow-y: scroll; /* Show the scrollbar on hover */
+    }
+
+    #conversation-container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+     #conversation-container::-webkit-scrollbar-thumb {
+        background-color: var(--Surface);
+        border-radius: 4px;
+        border: 10px solid transparent);
+    }
+
+    #conversation-container::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    #conversation-container::-webkit-scrollbar-thumb:hover {
+        background-color: var(--Surface4);
     }
 
     #conversation-content {
