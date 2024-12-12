@@ -1,32 +1,43 @@
 // This is a JavaScript module that is loaded on demand. It can export any number of
 // functions, and may import other JavaScript modules if required.
 
-function getScrollHeight () {
+function getScrollHeight() {
     const element = document.getElementById("message-list");
 
     return element.scrollHeight;
 };
 
-function getViewHeight () {
+function getViewHeight() {
     return window.innerHeight;
 };
 
 function resizeUserInput() {
     const element = document.getElementById("chat-box");
 
-    // this.style.height = ""; this.style.height = this.scrollHeight + "px"
     element.style.height = "";
     element.style.height = element.scrollHeight + "px";
 
+    const lineHeight = 28;
+    var lineCount = element.scrollHeight / lineHeight;
+
     // If the height exceeds max-height (200px), the scrollbar should appear.
     if (element.scrollHeight > 200) {
-        element.style.marginTop = "20px"; // Add top margin for scrollbar not to be stucked to border top.
-        element.style.marginBottom = "32px";
         element.style.height = "200px"; // Limit height to 200px
     }
     else {
-        element.style.margintop = "0px";
-        element.style.marginBottom = "0px";
+        // Adding top and bottom margin depending on number of lines, to account for border radius of input box when showing scrollbar.
+        if (lineCount > 2) {
+            element.style.marginBottom = "16px";
+            element.style.marginTop = "16px";
+        }
+        else if (lineCount > 1) {
+            element.style.marginTop = "8px";
+            element.style.marginBottom = "8px";
+        }
+        else {
+            element.style.marginBottom = "0px";
+            element.style.marginTop = "0px";
+        }
     }
 }
 
