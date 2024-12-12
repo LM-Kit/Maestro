@@ -20,7 +20,13 @@ function resizeUserInput() {
 
     // If the height exceeds max-height (200px), the scrollbar should appear.
     if (element.scrollHeight > 200) {
+        element.style.marginTop = "20px"; // Add top margin for scrollbar not to be stucked to border top.
+        element.style.marginBottom = "32px";
         element.style.height = "200px"; // Limit height to 200px
+    }
+    else {
+        element.style.margintop = "0px";
+        element.style.marginBottom = "0px";
     }
 }
 
