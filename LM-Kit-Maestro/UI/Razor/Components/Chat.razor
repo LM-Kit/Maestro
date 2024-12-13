@@ -91,7 +91,7 @@
     #conversation-container {
         display: flex;
         flex-direction: column;
-        background-color: red;
+        position: relative;
         /*         display: flex;
                 flex-direction: column;
                 */
@@ -122,17 +122,14 @@
         }
 
     #conversation-content {
-        background-color: pink;
     }
 
 
     #user-input {
-        background-color: yellow;
         overflow: hidden;
     }
 
     #bottom-space {
-        background-color: green;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -177,15 +174,16 @@
     }
 
     #chat-info {
-        background-color: blue;
         position: sticky;
         display: flex;
-        bottom: 12px;
+        bottom: 8px;
+        height: 100px;
     }
 
     .scroll-to-end-button {
         width: 32px;
         height: 32px;
+        margin-top: -32px; /* Setting negative margin to the height of the button so that it does not add height to parent containers. */
         color: var(--OnSurface);
         font-size: 14px;
         background-color: var(--Surface4);
