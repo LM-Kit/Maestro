@@ -144,32 +144,10 @@ public partial class LMKitService
         {
             string? conversationTopic = null;
 
-            if (result.Result != null && result.Result is TextGenerationResult textGenerationResult &&
-                !string.IsNullOrEmpty(textGenerationResult.Completion))
+            if (result.Result != null && result.Result is Summarizer.SummarizerResult textGenerationResult &&
+                !string.IsNullOrEmpty(textGenerationResult.Title))
             {
-                foreach (var sentence in textGenerationResult.Completion.Split('\n'))
-                {
-                    if (sentence.ToLower().StartsWith("topic"))
-                    {
-                        conversationTopic = sentence.Substring("topic".Length, sentence.Length - "topic".Length);
-                        break;
-                    }
-                    else if (sentence.ToLower().StartsWith("the topic of the sentence is"))
-                    {
-                        conversationTopic = sentence.Substring("the topic of the sentence is".Length, sentence.Length - "the topic of the sentence is".Length);
-                        break;
-                    }
-                    else if (sentence.ToLower().StartsWith("the topic of this sentence is"))
-                    {
-                        conversationTopic = sentence.Substring("the topic of this sentence is".Length, sentence.Length - "the topic of this sentence is".Length);
-                        break;
-                    }
-                }
-            }
-
-            if (conversationTopic != null)
-            {
-                conversationTopic = conversationTopic.TrimStart(' ').TrimStart(':').TrimStart(' ').TrimStart('\'').TrimEnd('.').TrimEnd('\'');
+                conversationTopic = textGenerationResult.Title;
             }
 
             var firstUserMessage = ChatHistory!.Messages.FirstOrDefault(message => message.AuthorRole == AuthorRole.User);

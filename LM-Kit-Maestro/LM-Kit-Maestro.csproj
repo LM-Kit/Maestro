@@ -71,16 +71,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="LM-Kit.NET" Version="2024.12.5" />
-		<PackageReference Include="LM-Kit.NET.Backend.Cuda12.Windows" Version="2024.12.5" />
+		<PackageReference Include="LM-Kit.NET" Version="2024.12.6" />
+		<PackageReference Include="LM-Kit.NET.Backend.Cuda12.Windows" Version="2024.12.6" />
 		<PackageReference Include="Majorsoft.Blazor.Components.Common.JsInterop" Version="1.5.0" />
 		<PackageReference Include="Markdig" Version="0.38.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.12" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.12" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="9.0.12" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.21" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.21" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="9.0.21" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.1" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="MetroLog.Maui" Version="2.1.0" />
 		<PackageReference Include="Mopups" Version="1.3.2" />
 		<PackageReference Include="SimpleToolkit.SimpleShell" Version="4.1.3" />
