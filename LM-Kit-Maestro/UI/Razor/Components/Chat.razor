@@ -56,12 +56,12 @@
 
         <div id="chat-info">
             <div id="scroll-to-end">
-                @* @if (!IsScrolledToEnd)
-                { *@
+                @if (!IsScrolledToEnd)
+                {
+                }
                 <button @onclick="OnScrollToEndButtonClicked" class="material-icons scroll-to-end-button">
                     arrow_downward
                 </button>
-                @* } *@
             </div>
         </div>
     </div>
@@ -109,7 +109,7 @@
     #conversation-container::-webkit-scrollbar-thumb {
         background-color: var(--Surface);
         border-radius: 4px;
-        border: 10px solid transparent);
+        border: 10px solid transparent;
     }
 
     #conversation-container::-webkit-scrollbar-track {
@@ -288,13 +288,6 @@
 @code
 
 {
-
-    enum ScrollDirection
-    {
-        Top,
-        End
-    }
-
     private ConversationViewModel? _previousConversationViewModel;
 
     private bool _hasPendingScrollEnd;
@@ -332,7 +325,6 @@
         await ScrollToEnd();
     }
 
-    private DotNetObjectReference<Chat>? dotNetHelper;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -340,8 +332,7 @@
 
         if (firstRender)
         {
-            dotNetHelper = DotNetObjectReference.Create(this);
-            await JS.InvokeVoidAsync("initializeScrollHandler", dotNetHelper);
+            await JS.InvokeVoidAsync("initializeScrollHandler", DotNetObjectReference.Create(this));
 
             if (_hasPendingScrollEnd)
             {
@@ -487,12 +478,44 @@
 
     public void OnSubmit()
     {
-        ViewModel.ConversationListViewModel.CurrentConversation.Submit();
+        ViewModel.ConversationListViewModel.CurrentConversation!.Submit();
     }
 
     [JSInvokable]
     public async Task OnConversationContainerScrolled(double scrollTop)
     {
-        await CheckIsScrolledToEnd();
+        _scrollTop = scrollTop;
+
+        bool shouldCheckIsScrolledToEnd = true;
+        bool? isScrollUp = null;
+
+        if (_previousScrollTop != null)
+        {
+            isScrollUp = scrollTop < _previousScrollTop;
+
+            if (isScrollUp.Value && _shouldAutoScrollEnd)
+            {
+                _shouldAutoScrollEnd = false;
+            }
+        }
+
+        if (_ignoreScrollsUntilNextScrollUp)
+        {
+            if (isScrollUp == null || !isScrollUp.Value)
+            {
+                shouldCheckIsScrolledToEnd = false;
+            }
+            else
+            {
+                _ignoreScrollsUntilNextScrollUp = false;
+            }
+        }
+
+        if (shouldCheckIsScrolledToEnd)
+        {
+            await CheckIsScrolledToEnd();
+        }
+
+        _previousScrollTop = _scrollTop;
     }
 }
