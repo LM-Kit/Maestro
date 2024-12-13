@@ -250,7 +250,7 @@ namespace LMKit.Maestro.Tests
             var conversation = testService.ConversationListViewModel.Conversations.First()!;
             var lastMessage = conversation.Messages.Last().LMKitMessage;
 
-            var response = await testService.LMKitService.RegenerateResponse(conversation.LmKitConversation, lastMessage!);
+            var response = await testService.LMKitService.RegenerateResponse(conversation.LMKitConversation, lastMessage!);
 
             MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
 

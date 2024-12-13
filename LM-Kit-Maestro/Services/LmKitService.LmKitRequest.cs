@@ -1,12 +1,10 @@
-﻿using LMKit.TextGeneration;
-using LMKit.TextGeneration.Chat;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
 
 public partial class LMKitService : INotifyPropertyChanged
 {
-    private sealed class LMKitRequest
+    private sealed partial class LMKitRequest
     {
         public ManualResetEvent CanBeExecutedSignal { get; } = new ManualResetEvent(false);
         public CancellationTokenSource CancellationTokenSource { get; }
@@ -26,53 +24,6 @@ public partial class LMKitService : INotifyPropertyChanged
         {
             CancellationTokenSource.Cancel();
             ResponseTask.Task.Wait();
-        }
-
-        public enum LMKitRequestType
-        {
-            Prompt,
-            RegenerateResponse,
-            GenerateTitle,
-            Translate
-        }
-
-        public sealed class PromptRequestParameters
-        {
-            public Conversation Conversation { get; set; }
-
-            public string Prompt { get; set; }
-
-            public PromptRequestParameters(Conversation conversation, string prompt)
-            {
-                Conversation = conversation;
-                Prompt = prompt;
-            }
-        }
-
-        public sealed class RegenerateResponseParameters
-        {
-            public Conversation Conversation { get; set; }
-
-            public ChatHistory.Message Message { get; set; }
-
-            public RegenerateResponseParameters(Conversation conversation, ChatHistory.Message message)
-            {
-                Conversation = conversation;
-                Message = message;
-            }
-        }
-
-        public sealed class TranslationRequestParameters
-        {
-            public string InputText { get; set; }
-
-            public Language Language { get; set; }
-
-            public TranslationRequestParameters(string inputText, Language language)
-            {
-                InputText = inputText;
-                Language = language;
-            }
         }
     }
 }

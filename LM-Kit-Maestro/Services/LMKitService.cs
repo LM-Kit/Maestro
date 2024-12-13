@@ -146,7 +146,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         ScheduleRequest(translationRequest);
 
-        var response = await HandleLmKitRequest(translationRequest);
+        var response = await HandleLMKitRequest(translationRequest);
 
         return (string?)response.Result;
     }
@@ -159,7 +159,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         ScheduleRequest(promptRequest);
 
-        return await HandleLmKitRequest(promptRequest);
+        return await HandleLMKitRequest(promptRequest);
     }
 
     public async Task<LMKitResult> RegenerateResponse(Conversation conversation, ChatHistory.Message message)
@@ -169,7 +169,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         ScheduleRequest(regenerateResponseRequest);
 
-        return await HandleLmKitRequest(regenerateResponseRequest);
+        return await HandleLMKitRequest(regenerateResponseRequest);
     }
 
     public async Task CancelPrompt(Conversation conversation, bool shouldAwaitTermination = false)
@@ -201,7 +201,7 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    private async Task<LMKitResult> HandleLmKitRequest(LMKitRequest request)
+    private async Task<LMKitResult> HandleLMKitRequest(LMKitRequest request)
     {
         // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this request.
         _lmKitServiceSemaphore.Wait();
