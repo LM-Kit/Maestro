@@ -1,7 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
+		<!-- Base Target Frameworks -->
 		<TargetFrameworks>net9.0;net9.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+
+		<!-- On Windows, prepend net9.0-windows10.0.19041.0 so it appears first -->
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
+			net9.0-windows10.0.19041.0;net9.0;net9.0-maccatalyst
+		</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
 
