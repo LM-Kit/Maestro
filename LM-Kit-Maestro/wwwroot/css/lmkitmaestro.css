@@ -2,7 +2,7 @@
     background-color: #12181F;
     color: white;
     font-size: 16px;
-    font-family: 'Segoe UI', serif;
+    font-family: system-ui, sans-serif;
 }
 
 @media (-webkit-device-pixel-ratio: 2), (min-resolution: 192dpi) {
