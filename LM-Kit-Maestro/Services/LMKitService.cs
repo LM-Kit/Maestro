@@ -342,21 +342,20 @@ public partial class LMKitService : INotifyPropertyChanged
 
         Task.Run(async () =>
         {
-            SingleTurnConversation singleTurnConversation = new SingleTurnConversation(_model)
+            Summarizer summarizer = new Summarizer(_model)
             {
                 MaximumContextLength = 512,
-                MaximumCompletionTokens = 50,
-                SamplingMode = new GreedyDecoding(),
-                SystemPrompt = "You receive a sentence. You are to summarize, with a single sentence containing a maximum of 10 words, the topic of this sentence. You start your answer with 'topic:'"
+                GenerateContent = false,
+                GenerateTitle = true,
+                MaxTitleWords = 10,
+                Guidance = "This content corresponds to the initial user message in a multi-turn conversation"
             };
 
             LMKitResult promptResult = new LMKitResult();
 
             try
             {
-                string titleSummaryPrompt = $"What is the topic of the following sentence: {prompt}";
-
-                promptResult.Result = await singleTurnConversation!.SubmitAsync(titleSummaryPrompt, titleGenerationRequest.CancellationTokenSource.Token);
+                promptResult.Result = await summarizer.SummarizeAsync(prompt, titleGenerationRequest.CancellationTokenSource.Token);
             }
             catch (Exception exception)
             {
