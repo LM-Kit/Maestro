@@ -7,7 +7,7 @@
     <textarea rows="1" id="chat-box" @bind="Input" @onkeydown="OnKeyDown" @bind:event="oninput"></textarea>
 
 
-    <button disabled="@(InputIsEmpty)" @onclick="OnSendButtonClicked"
+    <button disabled="@(InputIsEmpty && !ViewModel.AwaitingResponse)" @onclick="OnSendButtonClicked"
             class="send-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
         @if (!ViewModel.AwaitingResponse)
         {
@@ -161,7 +161,7 @@
 
                 if (_input != value)
                 {
-                    InputIsEmpty = string.IsNullOrEmpty(value);
+                    InputIsEmpty = string.IsNullOrWhiteSpace(value);
                     _input = value;
                     StateHasChanged();
                 }
