@@ -54,7 +54,7 @@
             }
         </div>
 
-        <div id="chat-info">
+        <div id="chat-info" class="chat-element">
             <div id="scroll-to-end">
                 @if (!IsScrolledToEnd)
                 {
@@ -122,6 +122,7 @@
     }
 
     #conversation-content {
+        height: 100%;
         background-color: pink;
     }
 
@@ -152,13 +153,13 @@
     }
 
     .top-align-container {
-        justify-content: flex-start;
-        /* align-self: center; */
+        align-items: flex-start;
     }
 
     .centered-container {
         display: flex;
-        margin-block: auto;
+        align-items: center;
+        justify-content: center;
     }
 
     #message-list {
@@ -177,17 +178,9 @@
 
     #chat-info {
         background-color: blue;
-        left: 50%;
-        transform: translate(-50%, 0);
-        position: fixed;
-        bottom: 0;
-    }
-
-    #scroll-to-end {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        background-color: transparent;
+        position: sticky;
+        display: flex;
+        bottom: 12px;
     }
 
     .scroll-to-end-button {
@@ -202,7 +195,7 @@
         align-items: center;
         cursor: pointer;
         border: none;
-        margin-block-end: 16px;
+        align-self: center;
     }
 
     .vertical-stack {
