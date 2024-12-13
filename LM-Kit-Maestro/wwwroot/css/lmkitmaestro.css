@@ -6,9 +6,39 @@
 }
 
 @media (-webkit-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    /* Targeting Mac platforms */
     html, body {
-        font-size: 24px;
+        font-size: 20px;
+    }
+}
+
+.small {
+    font-size: 12px;
+}
+
+.title {
+    font-size: 17px;
+}
+
+.subtitle {
+    font-size: 16p  x;
+}
+
+@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
+    .small {
+        font-size: 16px;
+    }
+}
+
+@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
+    .title {
+        font-size: 22px;
+    }
+}
+
+@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
+    .subtitle
+    {
+        font-size: 20px;
     }
 }
 
@@ -199,6 +229,7 @@ h1:focus {
 .primary-button:active {
     background-color: var(--PrimaryAccent);
 }
+
 
 .primary-button:hover {
     background-color: var(--Primary);
