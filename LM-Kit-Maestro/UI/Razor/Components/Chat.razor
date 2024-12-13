@@ -89,8 +89,9 @@
     }
 
     #conversation-container {
-        flex: 1;
         display: flex;
+        flex-direction: column;
+        background-color: red;
         /*         display: flex;
         flex-direction: column;
         */
@@ -121,14 +122,17 @@
     }
 
     #conversation-content {
+        background-color: pink;
     }
 
 
     #user-input {
+        background-color: yellow;
         overflow: hidden;
     }
 
     #bottom-space {
+        background-color:green;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -148,13 +152,13 @@
     }
 
     .top-align-container {
-        justify-content: start;
-        align-self: center;
+        justify-content: flex-start;
+        /* align-self: center; */
     }
 
     .centered-container {
         display: flex;
-        justify-content: center;
+        margin-block: auto;
     }
 
     #message-list {
@@ -165,14 +169,14 @@
 
     #empty-conversation {
         max-width: 568px;
-        text-align: center;
         flex-direction: column;
         font-size: 12px;
         gap: 32px;
+        display: flex;
     }
 
     #chat-info {
-        background-color: transparent;
+        background-color: blue;
         left: 50%;
         transform: translate(-50%, 0);
         position: fixed;
