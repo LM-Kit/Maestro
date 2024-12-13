@@ -47,7 +47,7 @@
                     <div id="message-list">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
-                            <ChatMessage MessageViewModel="message"/>
+                            <ChatMessage MessageViewModel="message" />
                         }
                     </div>
                 }
@@ -58,16 +58,16 @@
             <div id="scroll-to-end">
                 @if (!IsScrolledToEnd)
                 {
+                    <button @onclick="OnScrollToEndButtonClicked" class="material-icons scroll-to-end-button">
+                        arrow_downward
+                    </button>
                 }
-                <button @onclick="OnScrollToEndButtonClicked" class="material-icons scroll-to-end-button">
-                    arrow_downward
-                </button>
             </div>
         </div>
     </div>
 
     <div id="user-input" class="chat-element">
-        <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
+        <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
     </div>
 
     <div id="bottom-space" class="chat-element">
@@ -93,33 +93,33 @@
         flex-direction: column;
         background-color: red;
         /*         display: flex;
-        flex-direction: column;
-        */
+                flex-direction: column;
+                */
         overflow-y: hidden;
         scrollbar-gutter: both-edges stable;
     }
 
-    #conversation-container:hover {
-        overflow-y: scroll; /* Show the scrollbar on hover */
-    }
+        #conversation-container:hover {
+            overflow-y: scroll; /* Show the scrollbar on hover */
+        }
 
-    #conversation-container::-webkit-scrollbar {
-        width: 8px;
-    }
+        #conversation-container::-webkit-scrollbar {
+            width: 8px;
+        }
 
-    #conversation-container::-webkit-scrollbar-thumb {
-        background-color: var(--Surface);
-        border-radius: 4px;
-        border: 10px solid transparent;
-    }
+        #conversation-container::-webkit-scrollbar-thumb {
+            background-color: var(--Surface);
+            border-radius: 4px;
+            border: 10px solid transparent;
+        }
 
-    #conversation-container::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
+        #conversation-container::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
 
-    #conversation-container::-webkit-scrollbar-thumb:hover {
-        background-color: var(--Surface3);
-    }
+        #conversation-container::-webkit-scrollbar-thumb:hover {
+            background-color: var(--Surface3);
+        }
 
     #conversation-content {
         background-color: pink;
@@ -132,7 +132,7 @@
     }
 
     #bottom-space {
-        background-color:green;
+        background-color: green;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -283,7 +283,6 @@
 </script>
 
 @code
-
 {
     private ConversationViewModel? _previousConversationViewModel;
 
@@ -316,10 +315,8 @@
 
         ViewModel.ConversationListViewModel.PropertyChanged += OnConversationListViewModelPropertyChanged;
 
-        await ScrollHandler.RegisterPageScrollAsync(PageScrolled);
         await ResizeHandler.RegisterPageResizeAsync(Resized);
-
-        await ScrollToEnd();
+        await JS.InvokeVoidAsync("initializeScrollHandler", DotNetObjectReference.Create(this));
     }
 
 
@@ -327,15 +324,10 @@
     {
         await base.OnAfterRenderAsync(firstRender);
 
-        if (firstRender)
+        if (_hasPendingScrollEnd)
         {
-            await JS.InvokeVoidAsync("initializeScrollHandler", DotNetObjectReference.Create(this));
-
-            if (_hasPendingScrollEnd)
-            {
-                _hasPendingScrollEnd = false;
-                await ScrollToEnd();
-            }
+            _hasPendingScrollEnd = false;
+            await ScrollToEnd();
         }
     }
 
@@ -391,43 +383,6 @@
         }
     }
 
-    private async Task PageScrolled(Majorsoft.Blazor.Components.Common.JsInterop.Scroll.ScrollEventArgs args)
-    {
-        _scrollTop = args.Y;
-
-        bool shouldCheckIsScrolledToEnd = true;
-        bool? isScrollUp = null;
-
-        if (_previousScrollTop != null)
-        {
-            isScrollUp = args.Y < _previousScrollTop;
-
-            if (isScrollUp.Value && _shouldAutoScrollEnd)
-            {
-                _shouldAutoScrollEnd = false;
-            }
-        }
-
-        if (_ignoreScrollsUntilNextScrollUp)
-        {
-            if (isScrollUp == null || !isScrollUp.Value)
-            {
-                shouldCheckIsScrolledToEnd = false;
-            }
-            else
-            {
-                _ignoreScrollsUntilNextScrollUp = false;
-            }
-        }
-
-        if (shouldCheckIsScrolledToEnd)
-        {
-            await CheckIsScrolledToEnd();
-        }
-
-        _previousScrollTop = _scrollTop;
-    }
-
     private async Task Resized(ResizeEventArgs args)
     {
         if (IsScrolledToEnd)
@@ -450,27 +405,21 @@
 
     private async Task CheckIsScrolledToEnd()
     {
-        try
-        {
-            var clientHeight = await JS.InvokeAsync<double>("getConversationViewHeight");
-            var chatContentHeight = await JS.InvokeAsync<double>("getScrollHeight");
+        var viewHeight = await JS.InvokeAsync<double>("getConversationViewHeight");
+        var chatContentHeight = await JS.InvokeAsync<double>("getScrollHeight");
 
-            var value = chatContentHeight - clientHeight - _scrollTop;
-            IsScrolledToEnd = Math.Abs(chatContentHeight - clientHeight - _scrollTop) < 5 || chatContentHeight <= clientHeight;
+        var value = chatContentHeight - viewHeight - _scrollTop;
+        IsScrolledToEnd = Math.Abs(chatContentHeight - viewHeight - _scrollTop) < 5 || chatContentHeight <= viewHeight;
 
-            if (IsScrolledToEnd && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation!.AwaitingResponse)
-            {
-                _shouldAutoScrollEnd |= true;
-            }
-        }
-        catch (Exception ex)
+        if (IsScrolledToEnd && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation!.AwaitingResponse)
         {
+            _shouldAutoScrollEnd |= true;
         }
     }
 
     public async Task OnScrollToEndButtonClicked()
     {
-        await ScrollToEnd();
+        await ScrollToEnd(true);
     }
 
     public void OnSubmit()
