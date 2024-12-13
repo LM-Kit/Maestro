@@ -352,7 +352,9 @@
             {
                 Task.Run(async () =>
                 {
-                    await Task.Delay(100);
+                    // Note: Adding delay to sync with current UI behavior
+                    // (show latest assistant response footer for 3 sec).
+                    await Task.Delay(50);
                     await ScrollToEnd();
                 });
             }
@@ -426,10 +428,8 @@
 
     private async Task CheckIsScrolledToEnd()
     {
-        var viewHeight = await JS.InvokeAsync<double>
-            ("getConversationViewHeight");
-        var chatContentHeight = await JS.InvokeAsync<double>
-            ("getScrollHeight");
+        var viewHeight = await JS.InvokeAsync<double>("getConversationViewHeight");
+        var chatContentHeight = await JS.InvokeAsync<double>("getScrollHeight");
 
         var value = chatContentHeight - viewHeight - _scrollTop;
         IsScrolledToEnd = Math.Abs(chatContentHeight - viewHeight - _scrollTop) < 5 || chatContentHeight <= viewHeight;
