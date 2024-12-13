@@ -1,6 +1,6 @@
 ﻿@inject IJSRuntime JS
 
-<div id="chat-border">
+<div id="chat-border" class="chat-border-small">
     @*         @onkeypress="OnKeyPress"
         @onkeydown="OnKeyDown"
         @onkeyup="OnKeyUp" *@
@@ -28,7 +28,6 @@
     #chat-border {
         display: flex;
         position: relative;
-        border-radius: 32px;
         margin: 0px;
         max-width: 800px;
         width: 100%;
@@ -38,6 +37,14 @@
         transition: border-color 0.3s;
         color: white;
 
+    }
+
+    .chat-border-small {
+        border-radius : 32px;
+    }
+
+    .chat-border-large {
+        border-radius: 16px;
     }
 
     #chat-box {
@@ -50,8 +57,8 @@
         border: none;
         outline: none;
         resize: none;
-        padding-right: 46px;
-        margin-left: 25px;
+        padding-right: 40px;
+        margin-left: 16px;
         margin-bottom: 0px;
         overflow-y: auto;
     }
@@ -85,7 +92,7 @@
         right: 0px; /* Align to the right */
         bottom: 6px; /* Align to the bottom */
         margin-top: auto;
-        margin-right: 16px;
+        margin-right: 8px;
         margin-left: auto;
         width: 32px;
         height: 32px;
