@@ -7,7 +7,11 @@
              x:Name="pageBase"
              >
     <Grid RowDefinitions="auto, 1, *">
-        <Border StrokeThickness="0" BackgroundColor="{StaticResource Surface}" Stroke="Transparent" StrokeShape="RoundRectangle 0 0 0 0" ZIndex="1">
+        <Border StrokeThickness="0" 
+                BackgroundColor="{StaticResource Surface}" 
+                Stroke="Transparent" 
+                StrokeShape="RoundRectangle 0 0 0 0" 
+                ZIndex="1">
             <ContentView 
                 HeightRequest="{x:Static local:AppConstants.PageTopBarHeight}"
                 Content="{Binding Source={x:Reference pageBase}, Path=Header}"/>
