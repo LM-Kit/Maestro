@@ -352,7 +352,8 @@ public partial class LMKitService : INotifyPropertyChanged
                 GenerateContent = false,
                 GenerateTitle = true,
                 MaxTitleWords = 10,
-                Guidance = "This content corresponds to the initial user message in a multi-turn conversation"
+                Guidance = "This content corresponds to the initial user message in a multi-turn conversation",
+                OverflowStrategy = Summarizer.OverflowResolutionStrategy.Truncate
             };
 
             LMKitResult promptResult = new LMKitResult();
