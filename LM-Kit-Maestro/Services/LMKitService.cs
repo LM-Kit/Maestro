@@ -7,6 +7,10 @@ using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
 
+/// <summary>
+/// This service is intended to be used as a singleton via Dependency Injection. 
+/// Please register with <c>services.AddSingleton&lt;LMKitService&gt;()</c>.
+/// </summary>
 public partial class LMKitService : INotifyPropertyChanged
 {
     private readonly SemaphoreSlim _lmKitServiceSemaphore = new SemaphoreSlim(1);

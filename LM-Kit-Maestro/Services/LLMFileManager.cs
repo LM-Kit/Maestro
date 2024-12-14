@@ -6,6 +6,10 @@ using LMKit.Model;
 
 namespace LMKit.Maestro.Services;
 
+/// <summary>
+/// This service is intended to be used as a singleton via Dependency Injection. 
+/// Please register with <c>services.AddSingleton&lt;LLMFileManager&gt;()</c>.
+/// </summary>
 public partial class LLMFileManager : ObservableObject, ILLMFileManager
 {
 #if WINDOWS
