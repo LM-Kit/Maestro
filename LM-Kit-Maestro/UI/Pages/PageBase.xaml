@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:LMKit.Maestro"
+             xmlns:ui="clr-namespace:LMKit.Maestro.UI"
              x:Class="LMKit.Maestro.UI.PageBase"
              Title="PageBase"
              x:Name="pageBase"
@@ -13,13 +14,13 @@
                 StrokeShape="RoundRectangle 0 0 0 0" 
                 ZIndex="1">
             <ContentView 
-                HeightRequest="{x:Static local:AppConstants.PageTopBarHeight}"
-                Content="{Binding Source={x:Reference pageBase}, Path=Header}"/>
+                HeightRequest="{x:Static ui:UIConstants.PageTopBarHeight}"
+                Content="{Binding Source={x:Reference pageBase}, Path=Header, x:DataType=ui:PageBase}"/>
         </Border>
 
         <BoxView Grid.Row="1" />
         <ContentView 
             Grid.Row="2"
-            Content="{Binding Source={x:Reference pageBase}, Path=Body}"/>
+            Content="{Binding Source={x:Reference pageBase}, Path=Body, x:DataType=ui:PageBase}"/>
     </Grid>
 </ContentPage>

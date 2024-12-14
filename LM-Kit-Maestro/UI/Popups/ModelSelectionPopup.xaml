@@ -37,8 +37,8 @@
 
     <ui:PopupView.Body>
         <Grid
-            MinimumWidthRequest="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"
-            MaximumWidthRequest="{x:Static local:AppConstants.ChatWindowLayoutMinimumWidth}">
+            MinimumWidthRequest="{x:Static ui:UIConstants.ModelSelectionButtonMaxWidth}"
+            MaximumWidthRequest="{x:Static ui:UIConstants.ChatWindowLayoutMinimumWidth}">
             <!-- Empty model list view -->
             <Grid 
                 VerticalOptions="Start"

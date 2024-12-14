@@ -78,7 +78,7 @@ public partial class ChatConversationsView : ContentView
             ChatConversationActionPopupViewModel chatConversationActionPopupViewModel = new ChatConversationActionPopupViewModel()
             {
                 ConversationX = collectionView.ScrollX + conversationItem.Width,
-                ConversationY = conversationItem.Y - collectionView.ScrollY + conversationItem.Height + AppConstants.TabBarHeight + AppConstants.PageTopBarHeight,
+                ConversationY = conversationItem.Y - collectionView.ScrollY + conversationItem.Height + UIConstants.TabBarHeight + UIConstants.PageTopBarHeight,
                 ConversationItemHeight = conversationItem.Height,
                 ConversationListHeight = Height
             };

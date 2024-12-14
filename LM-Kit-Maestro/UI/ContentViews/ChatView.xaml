@@ -79,7 +79,7 @@
             Unfocused="OnEntryBorderUnfocused"
             Padding="12, 0"
             StrokeThickness="1"
-            MinimumHeightRequest="{x:Static local:AppConstants.ModelSelectionButtonHeight}"
+            MinimumHeightRequest="{x:Static ui:UIConstants.ModelSelectionButtonHeight}"
             StrokeShape="RoundRectangle 32"
             Grid.Row="1">
             <Border.Triggers>

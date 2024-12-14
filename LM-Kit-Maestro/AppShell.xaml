@@ -51,7 +51,7 @@
         <Grid BackgroundColor="{StaticResource Surface}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="{x:Static local:AppConstants.TabBarHeight}"/>
+                <RowDefinition Height="{x:Static ui:UIConstants.TabBarHeight}"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 

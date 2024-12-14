@@ -4,6 +4,7 @@ using Microsoft.UI.Windowing;
 #endif
 
 
+using LMKit.Maestro.UI;
 using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components.WebView.Maui;
 using Microsoft.Maui;
@@ -73,8 +74,8 @@ namespace LMKit.Maestro
 
             window.Destroying += OnAppWindowDestroying;
 
-            window.MinimumWidth = AppConstants.WindowMinimumWidth;
-            window.MinimumHeight = AppConstants.WindowMinimumHeight;
+            window.MinimumWidth = UIConstants.WindowMinimumWidth;
+            window.MinimumHeight = UIConstants.WindowMinimumHeight;
 
             return window;
         }
