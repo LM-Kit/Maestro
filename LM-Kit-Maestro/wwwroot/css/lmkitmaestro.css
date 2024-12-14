@@ -207,23 +207,25 @@ h1:focus {
 }
 
 
-.primary-button{
-    border-width: 0px;
-    border-radius: 4px;
-    background-color: var(--Surface4);
-    padding: 8px;
-    padding-block: 10px;
-}
-
 .primary-button {
     height: 32px;
-    vertical-align: middle;
     font-size: 16px;
     padding: 8px;
+    vertical-align: middle;
     border-width: 0;
     color: var(--OnBackground);
-    /*background-color: var(--Background);*/
-    background-color: red;
+    background-color: var(--Background);
+}
+/* Duplicating style to change button size on mac */
+@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
+    .primary-button {
+        height: 44px;
+        font-size: 22px;
+        vertical-align: middle;
+        border-width: 0;
+        color: var(--OnBackground);
+        background-color: var(--Background);
+    }
 }
 
 .primary-button:active {
