@@ -214,25 +214,42 @@ h1:focus {
 }
 
 
-.primary-button {
+.round-button {
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: black;
+    background-color: white;
+}
+
+body.mac .round-button {
+    width: 40px;    
+    height: 40px;
+
+}
+
+body.windows .round-button {
+    width: 32px;
     height: 32px;
-    font-size: 16px;
+}
+
+.primary-button {
     padding: 8px;
     vertical-align: middle;
     border-width: 0;
     color: var(--OnBackground);
     background-color: var(--Background);
 }
-/* Duplicating style to change button size on mac */
-@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
-    .primary-button {
-        height: 44px;
-        font-size: 22px;
-        vertical-align: middle;
-        border-width: 0;
-        color: var(--OnBackground);
-        background-color: var(--Background);
-    }
+
+body.mac .primary-button {
+    height: 40px;
+    font-size: 20px;
+}
+
+body.windows .primary-button {
+    height: 32px;
+    font-size: 16px;
 }
 
 .primary-button:active {

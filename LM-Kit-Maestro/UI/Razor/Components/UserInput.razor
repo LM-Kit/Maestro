@@ -8,7 +8,7 @@
 
 
     <button disabled="@(InputIsEmpty && !ViewModel.AwaitingResponse)" @onclick="OnSendButtonClicked"
-            class="send-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
+            class="send-button round-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
         @if (!ViewModel.AwaitingResponse)
         {
             <span>
@@ -92,7 +92,6 @@
         background-color: var(--Surface3);
     }
 
-    /* Send button */
     .send-button {
         position: absolute;
         right: 0;
@@ -100,13 +99,20 @@
         margin-top: auto;
         margin-right: 8px;
         margin-left: auto;
-        width: 32px;
         border: none;
-        horiz-align: center;
-        border-radius: 50%;
         background-color: var(--Surface4);
         cursor: pointer;
         transition: background-color 0.3s;
+    }
+
+    body.mac .send-button {
+        width: 40px;
+        height:  40px;
+    }
+    
+    body.windows .send-button {
+        width: 32px;
+        height:  32px;
     }
 
     .disabled-button {

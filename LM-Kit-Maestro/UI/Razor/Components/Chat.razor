@@ -58,7 +58,7 @@
             <div id="scroll-to-end">
                 @if (!IsScrolledToEnd)
                 {
-                    <button @onclick="OnScrollToEndButtonClicked" class="material-icons scroll-to-end-button">
+                    <button @onclick="OnScrollToEndButtonClicked" class="material-icons round-button scroll-to-end-button">
                         arrow_downward
                     </button>
                 }
@@ -173,7 +173,6 @@
     }
 
     #empty-conversation {
-        max-width: 568px;
         flex-direction: column;
         gap: 32px;
         display: flex;
@@ -187,18 +186,19 @@
     }
 
     .scroll-to-end-button {
-        width: 32px;
-        height: 32px;
-        margin-top: -32px; /* Setting negative margin to the height of the button so that it does not add height to parent containers. */
         color: var(--OnSurface);
         background-color: var(--Surface4);
-        border-radius: 50%;
         display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
         border: none;
         align-self: center;
+    }
+    
+    body.windows .scroll-to-end-button {
+        margin-top: -32px; /* Setting negative margin to the height of the button so that it does not add height to parent containers. */
+    }
+
+    body.mac .scroll-to-end-button {
+        margin-top: -40px; /* Setting negative margin to the height of the button so that it does not add height to parent containers. */
     }
 
     .vertical-stack {
@@ -242,14 +242,14 @@
         };
 
         function resizeUserInput() {
-            var chatBox = document.getElementById('chat-box');
-            var chatBorder = document.getElementById('chat-border');
+            const chatBox = document.getElementById('chat-box');
+            const chatBorder = document.getElementById('chat-border');
+
 
             chatBox.style.height = "";
             chatBox.style.height = chatBox.scrollHeight + "px";
-
             const lineHeight = 28;
-            var lineCount = chatBox.scrollHeight / lineHeight;
+            const lineCount = chatBox.scrollHeight / lineHeight;
 
             // If the height exceeds max-height (200px), the scrollbar should appear.
             if (chatBox.scrollHeight > 200) {
