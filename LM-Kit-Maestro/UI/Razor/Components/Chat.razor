@@ -127,18 +127,18 @@
     #user-input {
         overflow: hidden;
     }
-
+    
+    
     #bottom-space {
         display: flex;
         justify-content: center;
         align-items: center;
         text-align: center;
-        padding: 0px;
+        padding: 0;
         margin-block: 8px;
     }
 
     .chat-element {
-        max-width: 800px;
         padding-inline: 8px;
         width: 100%;
         justify-content: center;
@@ -147,6 +147,14 @@
         margin-right: auto;
     }
 
+    body.mac .chat-element {
+        max-width: 800px;
+    }
+
+    body.mac .chat-element {
+        max-width: 1000px;
+    }
+    
     .top-align-container {
         align-items: flex-start;
     }

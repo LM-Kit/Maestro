@@ -25,15 +25,23 @@
 </div>
 
 <style>
+    
+    body.mac #chat-border {
+        max-width: 1000px;
+    }
+
+    body.windows #chat-border {
+        max-width: 800px;
+    }
+    
     #chat-border {
         display: flex;
         position: relative;
-        margin: 0px;
-        max-width: 800px;
+        margin: 0;
         width: 100%;
         padding-block: 8px;
         background-color: var(--Surface);
-        border: 1.5px solid var(--OutlineVariant);
+        border: 2px solid var(--OutlineVariant);
         transition: border-color 0.3s;
         color: white;
 
@@ -59,8 +67,7 @@
         resize: none;
         padding-right: 40px;
         margin-left: 16px;
-        margin-bottom: 0px;
-        overflow-y: auto;
+        margin-bottom: 0;
     }
 
     .chat-box:focus-within {

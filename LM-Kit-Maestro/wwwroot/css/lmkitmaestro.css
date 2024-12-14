@@ -1,8 +1,15 @@
 ﻿html, body {
     background-color: #12181F;
     color: white;
-    font-size: 16px;
     font-family: system-ui, sans-serif;
+}
+
+body.mac {
+    font-size: 20px;
+}
+
+body.windows {
+    font-size: 16px;
 }
 
 @media (-webkit-device-pixel-ratio: 2), (min-resolution: 192dpi) {
