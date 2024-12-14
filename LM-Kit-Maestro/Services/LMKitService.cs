@@ -14,10 +14,10 @@ public partial class LMKitService : INotifyPropertyChanged
     private readonly RequestSchedule _titleGenerationSchedule = new RequestSchedule();
     private readonly RequestSchedule _requestSchedule = new RequestSchedule();
 
-    private Uri? _currentlyLoadingModelUri;
-    private Conversation? _lastConversationUsed = null;
-    private LLM? _model;
-    private MultiTurnConversation? _multiTurnConversation;
+    private static Uri? _currentlyLoadingModelUri;
+    private static Conversation? _lastConversationUsed = null;
+    private static LLM? _model;
+    private static MultiTurnConversation? _multiTurnConversation;
 
 
     public LMKitConfig LMKitConfig { get; } = new LMKitConfig();
