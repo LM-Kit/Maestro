@@ -2,6 +2,28 @@
 
 <div id="container" class="dark">
     <div class="card">
+
+        <div class="translation-container">
+            <div class="input-section">
+                <div class="language-select">
+                    <label for="input-language">Input Language:</label>
+                    <select id="input-language">
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <!-- Add more languages as needed -->
+                    </select>
+                </div>
+                <textarea @bind="TranslationViewModel.InputText"
+                @bind:event="oninput"
+                placeholder="Enter text here..."></textarea>
+            </div>
+            <div class="output-section">
+                <textarea @bind="TranslationViewModel.LatestResult" placeholder="Translation will appear here..." readonly></textarea>
+            </div>
+        </div>
+
         @if (TranslationViewModel.AwaitingResponse)
         {
             <div id="loaderDiv">
@@ -39,7 +61,6 @@
             }
         }
 
-        <UserInput ViewModel="TranslationViewModel" />
     </div>
 </div>
 
@@ -54,13 +75,13 @@
     }
 
     #container {
-    background-color: red;
     display: block;
     width: 100%;
     align-items: center;
     }
 
     .card {
+    background-color: var(--Surface);
     width: 100%;
     padding: 20px;
     border: 1px solid var(--Surface4);
@@ -79,10 +100,74 @@
     /*         #result:hover {
     background-color: var(--Surface3);
     } */
+
+    .translation-container {
+    display: flex;
+    width: 80%;
+    max-width: 1200px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    }
+
+    .input-section, .output-section {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    }
+
+    .input-section {
+    border-right: 1px solid #ddd;
+    }
+
+    .language-select {
+    margin-bottom: 10px;
+    }
+
+    .language-select label {
+    font-weight: bold;
+    margin-right: 10px;
+    }
+
+    textarea {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+
+    textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+    }
+
+    .output-section {
+    background-color: #f9f9f9;
+    }
+
+    .output-section textarea {
+    background-color: #e9ecef;
+    border: none;
+    color: #6c757d;
+    }
+
+    .output-section textarea:focus {
+    outline: none;
+    }
 </style>
 
 @code
 {
+    // Using a timer to automatically refresh translation result when no user input is detected for a given time span.
+    private Timer? _inputTimer;
+
     bool resultJustCopied;
     bool ResultJustCopied
     {
@@ -100,6 +185,12 @@
 
     [Parameter] public EventCallback<AssistantViewModelBase> TranslationViewModelChanged { get; set; }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _inputTimer = new Timer(OnDebounceTimerElapsed, null, 1000, Timeout.Infinite);
+    }
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
@@ -127,6 +218,18 @@
 
     private void OnTranslationViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        if (e.PropertyName == nameof(TranslationViewModel.InputText))
+        {
+            _inputTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+            _inputTimer = new Timer(OnDebounceTimerElapsed, null, 1000, Timeout.Infinite);
+        }
+
         InvokeAsync(() => StateHasChanged());
+    }
+
+    private void OnDebounceTimerElapsed(object? state)
+    {
+        _inputTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+        TranslationViewModel.Submit();
     }
 }
