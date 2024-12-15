@@ -159,8 +159,27 @@ namespace LMKit.Maestro.ViewModels
             ModelInfoViewModel modelInfoViewModel = new ModelInfoViewModel(modelInfo);
 #endif
 
-            _mainThread.BeginInvokeOnMainThread(() => _userModels.Add(modelInfoViewModel));
+            _mainThread.BeginInvokeOnMainThread(() => AddModel(modelInfoViewModel));
             TotalModelSize += modelInfoViewModel.FileSize;
+        }
+
+        private void AddModel(ModelInfoViewModel modelInfoViewModel, bool sort = true)
+        {
+            if (sort)
+            {
+                int insertIndex = 0;
+
+                while (insertIndex < UserModels.Count && string.Compare(_userModels[insertIndex].Name, modelInfoViewModel.Name) < 0)
+                {
+                    insertIndex++;
+                }
+
+                _userModels.Insert(insertIndex, modelInfoViewModel);
+            }
+            else
+            {
+                _userModels.Add(modelInfoViewModel);
+            }
         }
 
         private void RemoveExistingModel(ModelInfo modelInfo)
