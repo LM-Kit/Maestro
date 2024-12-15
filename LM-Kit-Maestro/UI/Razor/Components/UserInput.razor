@@ -1,11 +1,7 @@
 ﻿@inject IJSRuntime JS
 
 <div id="chat-border" class="chat-border-small">
-    @*         @onkeypress="OnKeyPress"
-        @onkeydown="OnKeyDown"
-        @onkeyup="OnKeyUp" *@
-    <textarea rows="1" id="chat-box" @bind="Input" @onkeydown="OnKeyDown" @bind:event="oninput"></textarea>
-
+    <textarea rows="1" id="chat-box" @bind="Input" @onkeydown="OnKeyDown" @bind:event="oninput"/>
 
     <button disabled="@(InputIsEmpty && !ViewModel.AwaitingResponse)" @onclick="OnSendButtonClicked"
             class="send-button round-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
@@ -142,9 +138,6 @@
 </script>
 
 @code
-
-
-
 {
     bool _inputIsEmpty = true;
 
@@ -225,7 +218,6 @@
     private async Task OnInputChange(ChangeEventArgs changeEventArgs)
     {
         await JS.InvokeVoidAsync("resizeUserInput", null);
-        // await JS.InvokeVoidAsync("checkOverflow");
 
         StateHasChanged();
     }
