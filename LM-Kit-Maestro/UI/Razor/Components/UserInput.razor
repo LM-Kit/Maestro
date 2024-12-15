@@ -225,7 +225,5 @@
         }
 
         CanSubmit = !string.IsNullOrWhiteSpace(ViewModel.InputText) && !ViewModel.AwaitingResponse;
-
-        InvokeAsync(() => StateHasChanged());
     }
 }
