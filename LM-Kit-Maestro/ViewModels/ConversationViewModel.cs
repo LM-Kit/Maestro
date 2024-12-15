@@ -186,7 +186,8 @@ public partial class ConversationViewModel : AssistantViewModelBase
     protected override void HandleSubmit()
     {
         string prompt = InputText;
-        OnNewlySubmittedPrompt(prompt);
+
+        OnNewlySubmittedPrompt();
 
         LMKitService.LMKitResult? promptResult = null;
 
@@ -234,7 +235,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
         AwaitingResponse = true;
     }
 
-    private void OnNewlySubmittedPrompt(string prompt)
+    private void OnNewlySubmittedPrompt()
     {
         InputText = string.Empty;
         UsedDifferentModel &= false;

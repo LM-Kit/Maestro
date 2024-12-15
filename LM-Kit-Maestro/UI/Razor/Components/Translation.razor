@@ -23,44 +23,6 @@
                 <textarea @bind="TranslationViewModel.LatestResult" placeholder="Translation will appear here..." readonly></textarea>
             </div>
         </div>
-
-        @if (TranslationViewModel.AwaitingResponse)
-        {
-            <div id="loaderDiv">
-                <div class="spinner">
-                    <div> </div>
-                    <div> </div>
-                    <div> </div>
-                    <div> </div>
-                </div>
-            </div>
-        }
-        else if (TranslationViewModel.LastTranslationIsSuccesful.HasValue)
-        {
-            if (TranslationViewModel.LastTranslationIsSuccesful.Value)
-            {
-                <div id="result">
-                    <p>
-                        @TranslationViewModel.LatestResult
-                    </p>
-
-                    <div id="actionIcons">
-                        <button @onclick="OnCopyResultButtonClicked" class="chatActionButton material-icons">
-                            @(ResultJustCopied ? "check" : "content_copy")
-                        </button>
-
-                    </div>
-                </div>
-
-            }
-            else
-            {
-                <p>
-                    error
-                </p>
-            }
-        }
-
     </div>
 </div>
 
@@ -103,10 +65,7 @@
 
     .translation-container {
     display: flex;
-    width: 80%;
-    max-width: 1200px;
-    border: 1px solid #ccc;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--Outline);
     border-radius: 8px;
     overflow: hidden;
     }
@@ -185,12 +144,6 @@
 
     [Parameter] public EventCallback<AssistantViewModelBase> TranslationViewModelChanged { get; set; }
 
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        _inputTimer = new Timer(OnDebounceTimerElapsed, null, 1000, Timeout.Infinite);
-    }
     protected override void OnParametersSet()
     {
         base.OnParametersSet();

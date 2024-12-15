@@ -34,7 +34,6 @@ namespace LMKit.Maestro.ViewModels
             {
                 AwaitingResponse = true;
                 HandleSubmit();
-                InputText = string.Empty;
             }
         }
 
