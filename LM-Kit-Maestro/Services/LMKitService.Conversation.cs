@@ -116,6 +116,14 @@ public partial class LMKitService
             }
         }
 
+        public int ContextUsedSpace
+        {
+            get
+            {
+                return _contextSize - _contextRemainingSpace;
+            }
+        }
+
         public event EventHandler? SummaryTitleGenerated;
         public event NotifyCollectionChangedEventHandler? ChatHistoryChanged;
         public event PropertyChangedEventHandler? PropertyChanged;

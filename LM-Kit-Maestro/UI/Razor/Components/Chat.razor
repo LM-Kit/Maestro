@@ -10,7 +10,7 @@
 <div id="container">
     <div id="conversation-container">
         <div id="conversation-content"
-             class="chat-element dark @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
+        class="chat-element dark @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
             @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
@@ -59,7 +59,7 @@
                 @if (!IsScrolledToEnd)
                 {
                     <button @onclick="OnScrollToEndButtonClicked"
-                            class="material-icons round-button scroll-to-end-button">
+                    class="material-icons round-button scroll-to-end-button">
                         arrow_downward
                     </button>
                 }
@@ -71,8 +71,11 @@
         <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
     </div>
 
-    <!-- note Evan: this is where last used model info UI was.-->
     <div id="bottom-space" class="chat-element">
+        @if (ViewModel!.ConversationListViewModel.CurrentConversation!.LMKitConversation.ContextSize != 0)
+        {
+            <text>Current Usage: @ViewModel!.ConversationListViewModel.CurrentConversation!.LMKitConversation.ContextUsedSpace / @ViewModel!.ConversationListViewModel.CurrentConversation!.LMKitConversation.ContextSize Tokens</text>
+        }
     </div>
 </div>
 
