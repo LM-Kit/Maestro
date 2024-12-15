@@ -31,6 +31,9 @@ public partial class MessageViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isLastAssistantMessage;
 
+    [ObservableProperty]
+    private int _responseIndex;
+
     public event EventHandler? OnRegeneratedResponse;
 
     public StopReason GetTerminationReason(int messageIndex)
