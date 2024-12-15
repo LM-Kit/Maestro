@@ -1,10 +1,10 @@
 ﻿@inject IJSRuntime JS
 
 <div id="chat-border" class="chat-border-small">
-    <textarea rows="1" id="chat-box" @bind="Input" @onkeydown="OnKeyDown" @bind:event="oninput" />
+    <textarea rows="1" id="chat-box" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput" />
 
     <button disabled="@(InputIsEmpty && !ViewModel.AwaitingResponse)" @onclick="OnSubmitButtonClicked"
-            class="send-button round-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
+    class="send-button round-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
         @if (!ViewModel.AwaitingResponse)
         {
             <span>
@@ -23,121 +23,123 @@
 <style>
 
     body.mac #chat-border {
-        max-width: 1000px;
+    max-width: 1000px;
     }
 
     body.windows #chat-border {
-        max-width: 800px;
+    max-width: 800px;
     }
 
     #chat-border {
-        display: flex;
-        position: relative;
-        margin: 0;
-        width: 100%;
-        padding-block: 8px;
-        background-color: var(--Surface);
-        border: 2px solid var(--OutlineVariant);
-        transition: border-color 0.3s;
-        color: white;
+    display: flex;
+    position: relative;
+    margin: 0;
+    width: 100%;
+    padding-block: 8px;
+    background-color: var(--Surface);
+    border: 2px solid var(--OutlineVariant);
+    transition: border-color 0.3s;
+    color: white;
     }
 
     .chat-border-small {
-        border-radius: 32px;
+    border-radius: 32px;
     }
 
     .chat-border-large {
-        border-radius: 16px;
+    border-radius: 16px;
     }
 
     #chat-box {
-        color: var(--OnBackground);
-        margin-block: auto;
-        background-color: transparent;
-        width: 100%;
-        max-height: 200px;
-        overflow-y: auto;
-        border: none;
-        outline: none;
-        resize: none;
-        padding-right: 40px;
-        margin-left: 16px;
-        margin-bottom: 0;
+    color: var(--OnBackground);
+    margin-block: auto;
+    background-color: transparent;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border: none;
+    outline: none;
+    resize: none;
+    padding-right: 40px;
+    margin-left: 16px;
+    margin-bottom: 0;
     }
 
     .chat-box:focus-within {
-        border-color: var(--Primary);
+    border-color: var(--Primary);
     }
 
     #chat-box::-webkit-scrollbar {
-        width: 8px;
+    width: 8px;
     }
 
     #chat-box::-webkit-scrollbar-thumb {
-        background-color: var(--Surface2);
-        border-radius: 4px;
-        border: 10px solid transparent;
+    background-color: var(--Surface2);
+    border-radius: 4px;
+    border: 10px solid transparent;
     }
 
     #chat-box::-webkit-scrollbar-track {
-        background-color: transparent;
+    background-color: transparent;
     }
 
     #chat-box::-webkit-scrollbar-thumb:hover {
-        background-color: var(--Surface3);
+    background-color: var(--Surface3);
     }
 
     .send-button {
-        position: absolute;
-        right: 0;
-        bottom: 6px;
-        margin-top: auto;
-        margin-right: 8px;
-        margin-left: auto;
-        border: none;
-        background-color: var(--Surface4);
-        cursor: pointer;
-        transition: background-color 0.3s;
+    position: absolute;
+    right: 0;
+    bottom: 6px;
+    margin-top: auto;
+    margin-right: 8px;
+    margin-left: auto;
+    border: none;
+    background-color: var(--Surface4);
+    cursor: pointer;
+    transition: background-color 0.3s;
     }
 
     body.mac .send-button {
-        width: 40px;
-        height: 40px;
+    width: 40px;
+    height: 40px;
     }
 
     body.windows .send-button {
-        width: 32px;
-        height: 32px;
+    width: 32px;
+    height: 32px;
     }
 
     .disabled-button {
-        color: var(--Surface);
-        cursor: not-allowed;
+    color: var(--Surface);
+    cursor: not-allowed;
     }
 
     .enabled-button {
-        color: var(--OnSurface);
+    color: var(--OnSurface);
     }
 
     /*     .send-button:hover:not(:disabled) {
-            background-color: var(--OutlineVariant);
-            } */
+    background-color: var(--OutlineVariant);
+    } */
 </style>
 
 <script>
 
     document.getElementById('chat-box').addEventListener('keydown', function (e) {
-        if (e.key == 'Enter' && !e.shiftKey) {
-            // prevent default behavior
-            e.preventDefault();
-            return false;
-        }
+    if (e.key == 'Enter' && !e.shiftKey) {
+    // prevent default behavior
+    e.preventDefault();
+    return false;
+    }
     }, false);
 
 </script>
 
 @code
 {
+    private bool _shouldResizeTextarea;
+
     bool _inputIsEmpty = true;
     private bool InputIsEmpty
     {
@@ -152,46 +154,34 @@
         }
     }
 
-    string? _input;
-    private string? Input
-    {
-        get => _input;
-        set
-        {
-
-            if (_input != value)
-            {
-                InputIsEmpty = string.IsNullOrWhiteSpace(value);
-                _input = value;
-                var _ = Task.Run(async () => { await JS.InvokeVoidAsync("resizeUserInput"); });
-                StateHasChanged();
-            }
-        }
-    }
-
     [Parameter] public EventCallback OnSubmit { get; set; }
 
     [Parameter] public required AssistantSessionViewModelBase ViewModel { get; set; }
 
     [Parameter] public EventCallback<AssistantSessionViewModelBase> ViewModelChanged { get; set; }
 
-    private bool CanSubmit => !string.IsNullOrWhiteSpace(Input) && !ViewModel.AwaitingResponse;
+    private bool CanSubmit => !string.IsNullOrWhiteSpace(ViewModel.InputText) && !ViewModel.AwaitingResponse;
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-        ViewModel.PropertyChanged += (_, _) => InvokeAsync(() => StateHasChanged());
+        ViewModel.PropertyChanged += OnViewModelPropertyChanged;
     }
 
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     if (firstRender)
-    //     {
-    // await inputTextArea.FocusAsync();
-    // await JS.InvokeVoidAsync("setUserInputFocus");
-    //     }
-    // }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // if (firstRender)
+        // {
+        //     await inputTextArea.FocusAsync();
+        //     await JS.InvokeVoidAsync("setUserInputFocus");
+        // }
+
+        if (_shouldResizeTextarea)
+        {
+            await JS.InvokeVoidAsync("resizeUserInput");
+        }
+    }
 
     private async Task OnSubmitButtonClicked()
     {
@@ -218,9 +208,23 @@
 
     private void Submit()
     {
-        ViewModel.InputText = Input!;
         ViewModel.Submit();
-        Input = string.Empty;
         StateHasChanged();
+    }
+
+    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(AssistantSessionViewModelBase.InputText))
+        {
+            OnInputChanged();
+        }
+
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    private void OnInputChanged()
+    {
+        _shouldResizeTextarea = true;
+        InputIsEmpty = string.IsNullOrWhiteSpace(ViewModel.InputText);
     }
 }
