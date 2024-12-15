@@ -93,8 +93,8 @@
 
     
     <Style x:Key="SidebarToggleButtonStyle" TargetType="Button">
-        <Setter Property="WidthRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
-        <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
+        <Setter Property="WidthRequest" Value="{x:Static ui:UIConstants.ChatPageToggleButtonWidth}"/>
+        <Setter Property="HeightRequest" Value="{x:Static ui:UIConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="FontFamily" Value="Material"/>
         <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />
@@ -133,8 +133,8 @@
         <Setter Property="CornerRadius" Value="16"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />
-        <Setter Property="WidthRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
-        <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ChatPageToggleButtonWidth}"/>
+        <Setter Property="WidthRequest" Value="{x:Static ui:UIConstants.ChatPageToggleButtonWidth}"/>
+        <Setter Property="HeightRequest" Value="{x:Static ui:UIConstants.ChatPageToggleButtonWidth}"/>
         <Setter Property="BackgroundColor" Value="{StaticResource Background}"/>
         <Setter Property="BorderColor" Value="Transparent"/>
         <Setter Property="TextColor" Value="{StaticResource Outline}" />

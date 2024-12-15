@@ -237,7 +237,7 @@
             ColumnSpacing="8">
 
             <Grid 
-                MaximumWidthRequest="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"
+                MaximumWidthRequest="{x:Static ui:UIConstants.ModelSelectionButtonMaxWidth}"
                 ColumnSpacing="12" 
                 VerticalOptions="Center"
                 

@@ -7,6 +7,10 @@ using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
 
+/// <summary>
+/// This service is intended to be used as a singleton via Dependency Injection. 
+/// Please register with <c>services.AddSingleton&lt;LMKitService&gt;()</c>.
+/// </summary>
 public partial class LMKitService : INotifyPropertyChanged
 {
     private readonly SemaphoreSlim _lmKitServiceSemaphore = new SemaphoreSlim(1);
@@ -14,10 +18,10 @@ public partial class LMKitService : INotifyPropertyChanged
     private readonly RequestSchedule _titleGenerationSchedule = new RequestSchedule();
     private readonly RequestSchedule _requestSchedule = new RequestSchedule();
 
-    private Uri? _currentlyLoadingModelUri;
-    private Conversation? _lastConversationUsed = null;
-    private LLM? _model;
-    private MultiTurnConversation? _multiTurnConversation;
+    private static Uri? _currentlyLoadingModelUri;
+    private static Conversation? _lastConversationUsed = null;
+    private static LLM? _model;
+    private static MultiTurnConversation? _multiTurnConversation;
 
 
     public LMKitConfig LMKitConfig { get; } = new LMKitConfig();
@@ -146,7 +150,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         ScheduleRequest(translationRequest);
 
-        var response = await HandleLmKitRequest(translationRequest);
+        var response = await HandleLMKitRequest(translationRequest);
 
         return (string?)response.Result;
     }
@@ -159,7 +163,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         ScheduleRequest(promptRequest);
 
-        return await HandleLmKitRequest(promptRequest);
+        return await HandleLMKitRequest(promptRequest);
     }
 
     public async Task<LMKitResult> RegenerateResponse(Conversation conversation, ChatHistory.Message message)
@@ -169,7 +173,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         ScheduleRequest(regenerateResponseRequest);
 
-        return await HandleLmKitRequest(regenerateResponseRequest);
+        return await HandleLMKitRequest(regenerateResponseRequest);
     }
 
     public async Task CancelPrompt(Conversation conversation, bool shouldAwaitTermination = false)
@@ -201,7 +205,7 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    private async Task<LMKitResult> HandleLmKitRequest(LMKitRequest request)
+    private async Task<LMKitResult> HandleLMKitRequest(LMKitRequest request)
     {
         // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this request.
         _lmKitServiceSemaphore.Wait();
@@ -348,7 +352,8 @@ public partial class LMKitService : INotifyPropertyChanged
                 GenerateContent = false,
                 GenerateTitle = true,
                 MaxTitleWords = 10,
-                Guidance = "This content corresponds to the initial user message in a multi-turn conversation"
+                Guidance = "This content corresponds to the initial user message in a multi-turn conversation",
+                OverflowStrategy = Summarizer.OverflowResolutionStrategy.Truncate
             };
 
             LMKitResult promptResult = new LMKitResult();

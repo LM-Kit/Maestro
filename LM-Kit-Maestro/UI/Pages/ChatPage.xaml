@@ -19,15 +19,15 @@
             <Style TargetType="Grid" x:Key="SidebarHeaderGrid">
                 <Setter Property="ColumnDefinitions" Value="32, *, 32"/>
                 <Setter Property="VerticalOptions" Value="Start"/>
-                <Setter Property="MinimumWidthRequest" Value="{x:Static local:AppConstants.ChatPageSideTogglesWidth}"/>
-                <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ModelSelectionButtonHeight}"/>
+                <Setter Property="MinimumWidthRequest" Value="{x:Static ui:UIConstants.ChatPageSideTogglesWidth}"/>
+                <Setter Property="HeightRequest" Value="{x:Static ui:UIConstants.ModelSelectionButtonHeight}"/>
                 <Setter Property="IsVisible" Value="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles, x:DataType=ui:ChatPage}"/>
             </Style>
 
             <Style TargetType="Grid" x:Key="TuckedSidebarUpperGridStyle">
-                <Setter Property="WidthRequest" Value="{x:Static local:AppConstants.ChatPageSideTogglesWidth}"/>
+                <Setter Property="WidthRequest" Value="{x:Static ui:UIConstants.ChatPageSideTogglesWidth}"/>
                 <Setter Property="VerticalOptions" Value="Start"/>
-                <Setter Property="HeightRequest" Value="{x:Static local:AppConstants.ModelSelectionButtonHeight}"/>
+                <Setter Property="HeightRequest" Value="{x:Static ui:UIConstants.ModelSelectionButtonHeight}"/>
             </Style>
 
             <Style TargetType="Label" x:Key="SidebarTitleStyle">
@@ -78,11 +78,11 @@
                 x:Name="modelSelectionButton"
                 VerticalOptions="Start"
                 Margin="16, 0"
-                HeightRequest="{x:Static local:AppConstants.ModelSelectionButtonHeight}"
+                HeightRequest="{x:Static ui:UIConstants.ModelSelectionButtonHeight}"
                 Grid.Column="1">
                 <ui:ModelSelectionButton.Triggers>
                     <DataTrigger TargetType="ui:ModelSelectionButton" Binding="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles, x:DataType=ui:ChatPage}" Value="True">
-                        <Setter Property="MaximumWidthRequest" Value="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"/>
+                        <Setter Property="MaximumWidthRequest" Value="{x:Static ui:UIConstants.ModelSelectionButtonMaxWidth}"/>
                     </DataTrigger>
                 </ui:ModelSelectionButton.Triggers>
             </ui:ModelSelectionButton>
@@ -129,23 +129,16 @@
                 x:Name="chatsSidebar"
                 WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}"
                 Grid.Row="1"/>
-
-            <!--<BlazorWebView
-            x:Name="blazorWebView"
-            Grid.Row="1"
-            Grid.Column="1"
-            HostPage="wwwroot/index.html">
-            <BlazorWebView.RootComponents>
-                <RootComponent Selector="#app" ComponentType="{x:Type razor:Chat}" />
-            </BlazorWebView.RootComponents>
-        </BlazorWebView>-->
-
-            <ui:ChatView
-                x:Name="chatView"
+            
+            <BlazorWebView
+                x:Name="blazorWebView"
                 Grid.RowSpan="2"
-                Margin="{x:Static ui:ChatPage.ChatViewMargin}"
-                BindingContext="{Binding ConversationListViewModel.CurrentConversation}"
-                Grid.Column="1"/>
+                Grid.Column="1"
+                HostPage="wwwroot/index.html">
+                <BlazorWebView.RootComponents>
+                    <RootComponent Selector="#app" ComponentType="{x:Type razor:Chat}" />
+                </BlazorWebView.RootComponents>
+            </BlazorWebView>
 
             <ui:ChatSettingsView
                 x:Name="settingsSidebar"

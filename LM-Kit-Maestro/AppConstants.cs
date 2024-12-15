@@ -2,7 +2,7 @@
 
 internal static class AppConstants
 {
-    public const string AppVersion = "0.1.0";
+    public const string AppVersion = "0.1.1";
     public const string AppName = "LM-Kit Maestro";
     public static string AppNameWithVersion => $"{AppName} {AppVersion}";
 
@@ -19,36 +19,6 @@ internal static class AppConstants
     public const string ChatRoute = "Chat";
 
     public const string ModelsRoute = "Models";
-
-    public const double ChatMessageMaximumWidth = 800;
-
-    public const double ChatWindowLayoutMinimumWidth = 720;
-
-    public const double WindowMinimumWidth = 568;
-
-    public const double WindowMinimumHeight = 600;
-
-    public const double PopupWidth = 536;
-
-    public const double AlertPopupWidth = 400;
-
-    public const double TabBarHeight = 48;
-
-    public const double PageTopBarHeight = 64;
-
-    public const double ModelSelectionButtonMaxWidth = 568;
-
-    public const double MinimizedHeaderButtonWidth = ChatWindowLayoutMinimumWidth - (16 * 2);
-
-    public const double ModelSelectionButtonHeight = 48;
-
-    public const double ChatPageSidebarWidth = 300;
-
-    public const double HeaderHorizontalMargin = 12;
-
-    public const double ChatPageSideTogglesWidth = (ChatPageToggleButtonWidth * 2) + 16 + 8;
-
-    public const double ChatPageToggleButtonWidth = 32;
 
 #if BETA_DOWNLOAD_MODELS
     //LM-Kit models catalog: https://huggingface.co/lm-kit

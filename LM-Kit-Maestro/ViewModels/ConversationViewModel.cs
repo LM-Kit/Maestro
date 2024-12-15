@@ -18,10 +18,13 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     private readonly IAppSettingsService _appSettingsService;
     private readonly IMaestroDatabase _database;
 
-    public LMKitService.Conversation LmKitConversation { get; private set; }
+    public LMKitService.Conversation LMKitConversation { get; private set; }
 
 
     private bool _isSynchedWithLog = true;
+
+    [ObservableProperty]
+    bool _isEmpty = true;
 
     [ObservableProperty]
     bool _usedDifferentModel;
@@ -103,10 +106,10 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         _database = database;
         _popupService = popupService;
         _title = conversationLog.Title!;
-        LmKitConversation = new LMKitService.Conversation(lmKitService, conversationLog.ChatHistoryData);
-        LmKitConversation.ChatHistoryChanged += OnLMKitChatHistoryChanged;
-        LmKitConversation.SummaryTitleGenerated += OnConversationSummaryTitleGenerated;
-        LmKitConversation.PropertyChanged += OnLMKitConversationPropertyChanged;
+        LMKitConversation = new LMKitService.Conversation(lmKitService, conversationLog.ChatHistoryData);
+        LMKitConversation.ChatHistoryChanged += OnLMKitChatHistoryChanged;
+        LMKitConversation.SummaryTitleGenerated += OnConversationSummaryTitleGenerated;
+        LMKitConversation.PropertyChanged += OnLMKitConversationPropertyChanged;
         Messages.CollectionChanged += OnMessagesCollectionChanged;
         ConversationLog = conversationLog;
         IsInitialized = conversationLog.ChatHistoryData == null;
@@ -169,7 +172,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
 
                 try
                 {
-                    result = await _lmKitService.RegenerateResponse(LmKitConversation, message.LMKitMessage!);
+                    result = await _lmKitService.RegenerateResponse(LMKitConversation, message.LMKitMessage!);
                     OnTextGenerationResult(result);
                 }
                 catch (Exception exception)
@@ -191,7 +194,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         {
             try
             {
-                promptResult = await _lmKitService.SubmitPrompt(LmKitConversation, prompt);
+                promptResult = await _lmKitService.SubmitPrompt(LMKitConversation, prompt);
                 OnTextGenerationResult(promptResult);
             }
             catch (Exception ex)
@@ -228,8 +231,6 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
 
     private void OnResponseRegenerationRequested(MessageViewModel message)
     {
-        //message.Text = string.Empty;
-        //message.MessageInProgress = true;
         AwaitingResponse = true;
     }
 
@@ -277,7 +278,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
 
     protected override async Task HandleCancel(bool shouldAwaitTermination)
     {
-        await _lmKitService.CancelPrompt(LmKitConversation, shouldAwaitTermination);
+        await _lmKitService.CancelPrompt(LMKitConversation, shouldAwaitTermination);
     }
 
     private void SaveConversation()
@@ -342,7 +343,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     {
         if (Title == "Untitled conversation")
         {
-            Title = LmKitConversation.GeneratedTitleSummary!;
+            Title = LMKitConversation.GeneratedTitleSummary!;
         }
     }
 
@@ -368,11 +369,11 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     {
         if (e.PropertyName == nameof(LMKitService.Conversation.LastUsedModelUri))
         {
-            LastUsedModel = LmKitConversation.LastUsedModelUri;
+            LastUsedModel = LMKitConversation.LastUsedModelUri;
         }
         else if (e.PropertyName == nameof(LMKitService.Conversation.LatestChatHistoryData))
         {
-            ConversationLog.ChatHistoryData = LmKitConversation.LatestChatHistoryData;
+            ConversationLog.ChatHistoryData = LMKitConversation.LatestChatHistoryData;
         }
     }
 

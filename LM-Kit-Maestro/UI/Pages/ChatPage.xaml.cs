@@ -5,7 +5,7 @@ namespace LMKit.Maestro.UI;
 public partial class ChatPage : PageBase
 {
     private const int SidebarAnimationLength = 100;
-    public static readonly Thickness ChatViewMargin = new Thickness(AppConstants.HeaderHorizontalMargin, 0, AppConstants.HeaderHorizontalMargin, 0);
+    public static readonly Thickness ChatViewMargin = new Thickness(UIConstants.HeaderHorizontalMargin, 0, UIConstants.HeaderHorizontalMargin, 0);
 
     private readonly ChatPageViewModel _chatViewModel;
 
@@ -57,7 +57,7 @@ public partial class ChatPage : PageBase
 
     private void OnPageSizeChanged(object? sender, EventArgs e)
     {
-        ShowSidebarToggles = Width >= AppConstants.ChatWindowLayoutMinimumWidth;
+        ShowSidebarToggles = Width >= UIConstants.ChatWindowLayoutMinimumWidth;
 
         if (!ShowSidebarToggles)
         {
@@ -107,11 +107,11 @@ public partial class ChatPage : PageBase
         Animation sidebarAnimation;
         if (_chatViewModel.ChatsSidebarIsToggled)
         {
-            sidebarAnimation = new Animation(v => ChatsSidebarWidth = v, 0, AppConstants.ChatPageSidebarWidth);
+            sidebarAnimation = new Animation(v => ChatsSidebarWidth = v, 0, UIConstants.ChatPageSidebarWidth);
         }
         else
         {
-            sidebarAnimation = new Animation(v => ChatsSidebarWidth = v, AppConstants.ChatPageSidebarWidth, 0);
+            sidebarAnimation = new Animation(v => ChatsSidebarWidth = v, UIConstants.ChatPageSidebarWidth, 0);
         }
 
         await MainThread.InvokeOnMainThreadAsync(() =>
@@ -129,11 +129,11 @@ public partial class ChatPage : PageBase
         {
             SettingsSidebarAnimating = true;
 
-            sidebarAnimation = new Animation(v => SettingsSidebarWidth = v, 0, AppConstants.ChatPageSidebarWidth);
+            sidebarAnimation = new Animation(v => SettingsSidebarWidth = v, 0, UIConstants.ChatPageSidebarWidth);
         }
         else
         {
-            sidebarAnimation = new Animation(v => SettingsSidebarWidth = v, AppConstants.ChatPageSidebarWidth, 0);
+            sidebarAnimation = new Animation(v => SettingsSidebarWidth = v, UIConstants.ChatPageSidebarWidth, 0);
         }
 
         await MainThread.InvokeOnMainThreadAsync(() =>

@@ -2,11 +2,11 @@
 
 public static class LMKitDefaultSettings
 {
-    public static readonly string DefaultModelsFolderPath = LMKit.Model.LLM.GetDefaultModelStoragePath();
+    public static readonly string DefaultModelsFolderPath = Model.LLM.GetDefaultModelStoragePath();
 
     public const string DefaultSystemPrompt = "You are a chatbot that always responds promptly and helpfully to user requests.";
     public const int DefaultMaximumCompletionTokens = 1024; // TODO: Evan, consider setting this to -1 to indicate no limitation. Ensure the option to configure the chat with a predefined limit remains available.
-    public const int DefaultContextSize = 2048;
+    public static readonly int DefaultContextSize = Graphics.DeviceConfiguration.GetOptimalContextSize();
     public const int DefaultRequestTimeout = 60;
     public const SamplingMode DefaultSamplingMode = SamplingMode.Random;
 

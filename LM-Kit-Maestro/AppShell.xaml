@@ -25,15 +25,15 @@
         <ShellContent Title="Home" ContentTemplate="{DataTemplate ui:HomePage}"/>
     </Tab>-->
 
-    <!--<Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage">
+    <!--<Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage" x:DataType="vm:MaestroTabViewModel">
         <ShellContent ContentTemplate="{DataTemplate ui:AssistantsPage}"/>
     </Tab>-->
 
-    <Tab BindingContext="{Binding ChatTab}" Title="{Binding ChatTab.Title}" Route="ChatPage">
+    <Tab BindingContext="{Binding ChatTab}" Title="{Binding ChatTab.Title}" Route="ChatPage" x:DataType="vm:MaestroTabViewModel">
         <ShellContent Title="AI Chat" ContentTemplate="{DataTemplate ui:ChatPage}"/>
     </Tab>
 
-    <Tab BindingContext="{Binding ModelsTab}" Title="{Binding ModelsTab.Title}" Route="ModelsPage">
+    <Tab BindingContext="{Binding ModelsTab}" Title="{Binding ModelsTab.Title}" Route="ModelsPage" x:DataType="vm:MaestroTabViewModel">
         <ShellContent Title="Models" ContentTemplate="{DataTemplate ui:ModelsPage}"/>
     </Tab>
 
@@ -50,13 +50,15 @@
     <shell:SimpleShell.Content>
         <Grid BackgroundColor="{StaticResource Surface}" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="{x:Static local:AppConstants.TabBarHeight}"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="{x:Static ui:UIConstants.TabBarHeight}"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-
-            <Grid BackgroundColor="{StaticResource Primary}"/>
-            <Border StrokeThickness="0" BackgroundColor="{StaticResource Surface}" Stroke="Transparent" StrokeShape="RoundRectangle 4 4 0 0" ZIndex="1">
+            <!-- Horizontal separator-->
+            <BoxView HeightRequest="3" />
+            
+            <Border Grid.Row="1" StrokeThickness="0" BackgroundColor="{StaticResource Surface}" Stroke="Transparent">
                 <Grid Padding="12, 0">
                     <HorizontalStackLayout
                         VerticalOptions="Center"
@@ -86,7 +88,7 @@
                 </Grid>
             </Border>
 
-            <shell:SimpleNavigationHost Grid.Row="1"/>
+            <shell:SimpleNavigationHost Grid.Row="2"/>
         </Grid>
     </shell:SimpleShell.Content>
 </shell:SimpleShell>

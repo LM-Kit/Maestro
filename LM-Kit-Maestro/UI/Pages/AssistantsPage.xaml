@@ -14,7 +14,7 @@
              x:Class="LMKit.Maestro.UI.AssistantsPage">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="{x:Static local:AppConstants.PageTopBarHeight}"/>
+            <RowDefinition Height="{x:Static ui:UIConstants.PageTopBarHeight}"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -31,8 +31,8 @@
                 BindingContext="{Binding ModelListViewModel}"
                 VerticalOptions="Start"
                 Margin="16, 0"
-                MaximumWidthRequest="{x:Static local:AppConstants.ModelSelectionButtonMaxWidth}"
-                HeightRequest="{x:Static local:AppConstants.ModelSelectionButtonHeight}"
+                MaximumWidthRequest="{x:Static ui:UIConstants.ModelSelectionButtonMaxWidth}"
+                HeightRequest="{x:Static ui:UIConstants.ModelSelectionButtonHeight}"
                 Grid.Column="1">
             </ui:ModelSelectionButton>
         </Grid>

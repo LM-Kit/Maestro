@@ -19,7 +19,7 @@
 
     <ui:PopupView.Body>
         <Border
-            WidthRequest="{x:Static local:AppConstants.AlertPopupWidth}"
+            WidthRequest="{x:Static ui:UIConstants.AlertPopupWidth}"
             Style="{StaticResource CardBorder}">
 
             <VerticalStackLayout Spacing="12">

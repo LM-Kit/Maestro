@@ -1,42 +1,52 @@
 ﻿html, body {
     background-color: #12181F;
     color: white;
+    font-family: system-ui, sans-serif;
+}
+
+body.mac {
+    font-size: 20px;
+}
+
+body.windows {
     font-size: 16px;
-    font-family: 'Segoe UI', serif;
 }
 
 @media (-webkit-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    /* Targeting Mac platforms */
     html, body {
-        font-size: 24px;
+        font-size: 20px;
     }
 }
 
-a, .btn-link {
-    color: #006bb7;
+.small {
+    font-size: 12px;
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+.title {
+    font-size: 17px;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.subtitle {
+    font-size: 16px;
 }
 
-h1:focus {
-    outline: none;
+@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
+    .small {
+        font-size: 16px;
+    }
 }
 
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
+@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
+    .title {
+        font-size: 22px;
+    }
 }
 
-
-.validation-message {
-    color: #e50000;
+@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
+    .subtitle
+    {
+        font-size: 20px;
+    }
 }
 
 #blazor-error-ui {
@@ -102,11 +112,6 @@ h1:focus {
     --OnSurface: #F0F6FC;
     --Outline: #9198A1;
     --OutlineVariant: #2E3033;
-}
-
-@font-face {
-    font-family: 'Segoe UI';
-    src: url('fonts/Segoe UI.ttf');
 }
 
 .loading-section {
@@ -176,47 +181,50 @@ h1:focus {
     }
 }
 
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+
+.round-button {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: black;
+    background-color: white;
 }
 
-::-webkit-scrollbar-thumb {
-    background-color: var(--Surface3);
-    border-radius: 4px;
-    border: 3px solid transparent;
+body.mac .round-button {
+    width: 40px;    
+    height: 40px;
+
 }
 
-::-webkit-scrollbar-track {
-    background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: var(--Surface4);
-}
-
-.primary-button{
-    border-width: 0px;
-    border-radius: 4px;
-    background-color: var(--Surface4);
-    padding: 8px;
-    padding-block: 10px;
+body.windows .round-button {
+    width: 32px;
+    height: 32px;
 }
 
 .primary-button {
-    height: 32px;
-    vertical-align: middle;
-    font-size: 16px;
     padding: 8px;
+    vertical-align: middle;
     border-width: 0;
     color: var(--OnBackground);
-    /*background-color: var(--Background);*/
-    background-color: red;
+    background-color: var(--Background);
+}
+
+body.mac .primary-button {
+    height: 40px;
+    font-size: 20px;
+}
+
+body.windows .primary-button {
+    height: 32px;
+    font-size: 16px;
 }
 
 .primary-button:active {
     background-color: var(--PrimaryAccent);
 }
+
 
 .primary-button:hover {
     background-color: var(--Primary);

@@ -35,7 +35,7 @@ public partial class ChatConversationActionPopup : PopupBase
     private void OnPopupContentSizeChanged(object sender, EventArgs e)
     {
         var popupBottom = popupContentGrid.Height + _chatConversationActionPopupViewModel.ConversationY;
-        var pageBottom = _chatConversationActionPopupViewModel.ConversationListHeight + AppConstants.PageTopBarHeight + AppConstants.TabBarHeight;
+        var pageBottom = _chatConversationActionPopupViewModel.ConversationListHeight + UIConstants.PageTopBarHeight + UIConstants.TabBarHeight;
 
         if (popupBottom > pageBottom)
         {

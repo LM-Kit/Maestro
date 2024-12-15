@@ -1,31 +1,17 @@
 // This is a JavaScript module that is loaded on demand. It can export any number of
 // functions, and may import other JavaScript modules if required.
 
-function getScrollHeight () {
-    const element = document.getElementById("message-list");
+    document.addEventListener("DOMContentLoaded", function () {
+        const platform = window.navigator.userAgent;
+        let platformClass = "";
 
-    return element.scrollHeight;
-};
+        if (platform.includes("Windows")) {
+            platformClass = "windows";
+        } else if (platform.includes("Macintosh")) {
+            platformClass = "mac";
+        }
 
-function getViewHeight () {
-    return window.innerHeight;
-};
-
-function resizeUserInput() {
-    const element = document.getElementById("chat-box");
-
-    // this.style.height = ""; this.style.height = this.scrollHeight + "px"
-    element.style.height = "";
-    element.style.height = element.scrollHeight + "px";
-
-    // If the height exceeds max-height (200px), the scrollbar should appear.
-    if (element.scrollHeight > 200) {
-        element.style.height = "200px"; // Limit height to 200px
-    }
-}
-
-function setUserInputFocus() {
-    const element = document.getElementById("chat-box");
-
-    element.focus();
-}
+        if (platformClass) {
+            document.body.classList.add(platformClass);
+        }
+    });
