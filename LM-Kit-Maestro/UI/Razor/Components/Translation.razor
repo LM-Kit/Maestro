@@ -18,21 +18,32 @@
                     </div>
                 </div>
             }
-            else if (!string.IsNullOrEmpty(ViewModel.Result))
+            else if (ViewModel.CurrentTranslation.LastTranslationIsSuccesful.HasValue)
             {
-                <div id="result">
-                    <p>
-                        @ViewModel.Result
-                    </p>
+                if (ViewModel.CurrentTranslation.LastTranslationIsSuccesful.Value)
+                {
+                    <div id="result">
+                        <p>
+                            @ViewModel.CurrentTranslation.LatestResult
+                        </p>
 
-                    <div id="actionIcons">
-                        <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
-                            @(ResultJustCopied ? "check" : "content_copy")
-                        </button>
+                        <div id="actionIcons">
+                            <button @onclick="OnCopyResultButtonClicked" class="chatActionButton material-icons">
+                                @(ResultJustCopied ? "check" : "content_copy")
+                            </button>
 
+                        </div>
                     </div>
-                </div>
+
+                }
+                else
+                {
+                    <p>
+                        error
+                    </p>
+                }
             }
+
 
             <UserInput ViewModel="ViewModel.CurrentTranslation" />
         </div>
@@ -91,8 +102,8 @@
     }
 
     /*         #result:hover {
-                background-color: var(--Surface3);
-            } */
+                        background-color: var(--Surface3);
+                    } */
 
     #actionIcons {
         display: inline
@@ -149,9 +160,9 @@
         }
     }
 
-    private async Task OnCopyMessageButtonClicked()
+    private async Task OnCopyResultButtonClicked()
     {
-        bool success = await ClipboardHandler.CopyTextToClipboardAsync(ViewModel.Result != null ? ViewModel.Result : "");
+        bool success = await ClipboardHandler.CopyTextToClipboardAsync(ViewModel.CurrentTranslation.LatestResult != null ? ViewModel.CurrentTranslation.LatestResult : "");
 
         if (success)
         {

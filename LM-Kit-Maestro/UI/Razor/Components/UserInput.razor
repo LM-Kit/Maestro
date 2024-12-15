@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime JS
 
 <div id="chat-border" class="chat-border-small">
-    <textarea rows="1" id="chat-box" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput"/>
+    <textarea rows="1" id="chat-box" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput" />
 
     <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
             class="send-button round-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
@@ -120,8 +120,8 @@
     }
 
     /*     .send-button:hover:not(:disabled) {
-        background-color: var(--OutlineVariant);
-        } */
+            background-color: var(--OutlineVariant);
+            } */
 </style>
 
 <script>
@@ -134,10 +134,49 @@
         }
     }, false);
 
+
+        function resizeUserInput() {
+            const chatBox = document.getElementById('chat-box');
+            const chatBorder = document.getElementById('chat-border');
+
+
+            chatBox.style.height = "";
+            chatBox.style.height = chatBox.scrollHeight + "px";
+
+            var style = window.getComputedStyle(chatBox);
+            var lineHeight = parseFloat(style.getPropertyValue('line-height'));
+            var lineCount = Math.round(chatBox.scrollHeight / lineHeight);
+
+            // If the height exceeds max-height (200px), the scrollbar should appear.
+            if (chatBox.scrollHeight > 200) {
+                chatBox.style.height = "200px"; // Limit height to 200px
+            } else {
+                // Adding top and bottom margin depending on number of lines, to account for border radius of input box when showing scrollbar.
+                if (lineCount > 2) {
+                    chatBox.style.marginBottom = "16px";
+                    chatBox.style.marginTop = "16px";
+                } else if (lineCount > 1) {
+                    chatBox.style.marginTop = "8px";
+                    chatBox.style.marginBottom = "8px";
+
+                } else {
+                    chatBox.style.marginBottom = "0px";
+                    chatBox.style.marginTop = "0px";
+                }
+            }
+
+
+            if (lineCount > 1) {
+                chatBorder.classList.add('chat-border-large');
+                chatBorder.classList.remove('chat-border-small');
+            } else {
+                chatBorder.classList.add('chat-border-small');
+                chatBorder.classList.remove('chat-border-large');
+            }
+        }
 </script>
 
 @code
-
 {
     private bool _shouldResizeTextarea;
 
@@ -158,9 +197,9 @@
 
     [Parameter] public EventCallback OnSubmit { get; set; }
 
-    [Parameter] public required AssistantSessionViewModelBase ViewModel { get; set; }
+    [Parameter] public required AssistantViewModelBase ViewModel { get; set; }
 
-    [Parameter] public EventCallback<AssistantSessionViewModelBase> ViewModelChanged { get; set; }
+    [Parameter] public EventCallback<AssistantViewModelBase> ViewModelChanged { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -218,7 +257,7 @@
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(AssistantSessionViewModelBase.InputText))
+        if (e.PropertyName == nameof(AssistantViewModelBase.InputText))
         {
             // Resize the textarea whenever the input text changes.
             _shouldResizeTextarea = true;

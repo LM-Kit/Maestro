@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 
 namespace LMKit.Maestro.ViewModels;
 
-public partial class ConversationViewModel : AssistantSessionViewModelBase
+public partial class ConversationViewModel : AssistantViewModelBase
 {
     private readonly IMainThread _mainThread;
     private readonly IAppSettingsService _appSettingsService;

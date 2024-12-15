@@ -10,9 +10,6 @@ namespace LMKit.Maestro.ViewModels
         [ObservableProperty]
         private TranslationViewModel _currentTranslation;
 
-        [ObservableProperty]
-        private string? _result;
-
         public ModelListViewModel ModelListViewModel { get; }
 
         public LMKitService LMKitService { get; }
@@ -21,21 +18,8 @@ namespace LMKit.Maestro.ViewModels
         {
             _currentTranslation = new TranslationViewModel(popupService, lMKitService);
 
-            _currentTranslation.TranslationCompleted += OnTranslationCompleted;   
             ModelListViewModel = modelListViewModel;
             LMKitService = lMKitService;
-        }
-
-        private void OnTranslationCompleted(object? sender, EventArgs e)
-        {
-            var args = (TranslationViewModel.TranslationCompletedEventArgs)e;
-
-            Result = args.Translation;
-
-            if (args.Exception != null)
-            {
-                // error
-            }
         }
     }
 }
