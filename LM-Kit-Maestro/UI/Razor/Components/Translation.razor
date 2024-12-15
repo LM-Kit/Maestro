@@ -1,8 +1,8 @@
 ﻿@inject IClipboardHandler ClipboardHandler
 
 <div style="width:100vw; height:100vh; margin-top: 40px;padding: 20px">
-    <div id="container" class="dark container">
-        <div id="card">
+    <div id="container" class="dark">
+        <div class="card">
             @if (TranslationViewModel.AwaitingResponse)
             {
                 <div id="loaderDiv">
@@ -68,25 +68,6 @@
         border-radius: 4px;
     }
 
-    #buttonsDiv {
-        margin-block: 8px;
-        gap: 8px;
-        margin-left: auto;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    #input {
-        padding: 8px;
-        border-radius: 4px;
-        border: 2px solid var(--Surface4);
-        background-color: transparent;
-        width: 100%;
-        resize: none;
-        color: white;
-        margin-right: 10px; /* Adds some spacing between the input and the button */
-    }
-
     #result {
         margin-block: 16px;
         background-color: var(--Surface15);
@@ -99,47 +80,6 @@
     /*         #result:hover {
                                 background-color: var(--Surface3);
                                 } */
-
-    #actionIcons {
-        display: inline
-    }
-
-    .primary-button {
-        font-size: 12px;
-        color: var(--OnBackground);
-        text-align: center;
-        padding-block: 16px;
-        padding-inline: 8px;
-        margin-right: 4px;
-        border-width: 0;
-        background-color: var(--Surface4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-        .primary-button:active {
-            background-color: var(--PrimaryAccent);
-        }
-
-        .primary-button:hover {
-            background-color: var(--Primary);
-        }
-
-    .chatActionButton {
-        height: 28px;
-        width: 28px;
-        border-radius: 50%;
-        border-width: 0;
-        font-size: 12px;
-        background-color: transparent;
-        color: var(--OnBackground);
-        color: var(--Outline);
-    }
-
-        .chatActionButton:hover {
-            background-color: var(--Surface3);
-        }
 </style>
 
 @code

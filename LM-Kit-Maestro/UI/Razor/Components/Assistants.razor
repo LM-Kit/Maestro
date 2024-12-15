@@ -1,11 +1,29 @@
 ﻿@inherits MvvmComponentBase<AssistantsPageViewModel>
 
-    <p>
-        Translation (others coming soon)
-    </p>
+<div class="container">
 
-    <Translation TranslationViewModel="@ViewModel.CurrentTranslation"/>
+    <div id="assistant-container">
+        <Translation TranslationViewModel="@ViewModel.CurrentTranslation" />
 
+    </div>
+</div>
+
+<style>
+    .container {
+        color: white;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        padding-inline: 8px;
+        padding-block: 8px;
+        display: flex;
+    }
+
+    #assistant-container {
+        background-color: red;
+        max-width: 800px;
+        align-content: center;
+    }
+</style>
 @code {
-
 }
