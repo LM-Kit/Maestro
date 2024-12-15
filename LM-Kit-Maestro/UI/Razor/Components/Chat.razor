@@ -248,7 +248,9 @@
 
             chatBox.style.height = "";
             chatBox.style.height = chatBox.scrollHeight + "px";
-            const lineHeight = 28;
+
+            var style = window.getComputedStyle(chatBox);
+            var lineHeight = style.getPropertyValue('line-height');
             const lineCount = chatBox.scrollHeight / lineHeight;
 
             // If the height exceeds max-height (200px), the scrollbar should appear.

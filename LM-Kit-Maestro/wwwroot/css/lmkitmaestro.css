@@ -215,6 +215,7 @@ h1:focus {
 
 
 .round-button {
+    display: flex;
     cursor: pointer;
     justify-content: center;
     align-items: center;
