@@ -260,7 +260,7 @@
                                 <Slider
                                     Grid.ColumnSpan="2"
                                     Grid.Row="1"
-                                    Value="{Binding ContextSize, Mode=TwoWay}" Minimum="512" Maximum="16384"/>
+                                    Value="{Binding ContextSize, Mode=TwoWay}" Minimum="512" Maximum="32768"/>
                             </Grid>
                         </VerticalStackLayout>
 
