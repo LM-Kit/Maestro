@@ -231,8 +231,6 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
 
     private void OnResponseRegenerationRequested(MessageViewModel message)
     {
-        //message.Text = string.Empty;
-        //message.MessageInProgress = true;
         AwaitingResponse = true;
     }
 

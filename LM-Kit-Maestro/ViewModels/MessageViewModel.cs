@@ -31,9 +31,6 @@ public partial class MessageViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isLastAssistantMessage;
 
-    // Loïc: We should not require introducing the MessageContentUpdated event as Content is observable
-    public event EventHandler? MessageContentUpdated;
-
     public event EventHandler? OnRegeneratedResponse;
 
     public StopReason GetTerminationReason(int messageIndex)
@@ -119,8 +116,6 @@ public partial class MessageViewModel : ViewModelBase
         else if (e.PropertyName == nameof(ChatHistory.Message.Content))
         {
             Content = LMKitMessage!.Content;
-            // Loïc: We should not require introducing the MessageContentUpdated event as Content is observable
-            MessageContentUpdated?.Invoke(this, EventArgs.Empty);
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.PreviousContent))
         {

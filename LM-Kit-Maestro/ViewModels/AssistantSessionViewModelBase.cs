@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Services;
+using System.ComponentModel;
 
 namespace LMKit.Maestro.ViewModels
 {
