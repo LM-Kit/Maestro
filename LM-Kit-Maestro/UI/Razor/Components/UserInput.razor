@@ -179,6 +179,7 @@
 
         if (_shouldResizeTextarea)
         {
+            _shouldResizeTextarea = false;
             await JS.InvokeVoidAsync("resizeUserInput");
         }
     }

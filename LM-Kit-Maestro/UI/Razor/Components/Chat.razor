@@ -47,7 +47,7 @@
                     <div id="message-list">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
-                            <ChatMessage MessageViewModel="message" />
+                            <ChatMessage MessageViewModel="message"/>
                         }
                     </div>
                 }
@@ -58,7 +58,8 @@
             <div id="scroll-to-end">
                 @if (!IsScrolledToEnd)
                 {
-                    <button @onclick="OnScrollToEndButtonClicked" class="material-icons round-button scroll-to-end-button">
+                    <button @onclick="OnScrollToEndButtonClicked"
+                            class="material-icons round-button scroll-to-end-button">
                         arrow_downward
                     </button>
                 }
@@ -67,11 +68,11 @@
     </div>
 
     <div id="user-input" class="chat-element">
-        <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
+        <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
     </div>
 
+    <!-- note Evan: this is where last used model info UI was.-->
     <div id="bottom-space" class="chat-element">
-        barambibol wakatape baboune
     </div>
 </div>
 
@@ -92,33 +93,33 @@
         flex-direction: column;
         position: relative;
         /*         display: flex;
-                flex-direction: column;
-                */
+                                flex-direction: column;
+                                */
         overflow-y: hidden;
         scrollbar-gutter: both-edges stable;
     }
 
-        #conversation-container:hover {
-            overflow-y: scroll; /* Show the scrollbar on hover */
-        }
+    #conversation-container:hover {
+        overflow-y: scroll; /* Show the scrollbar on hover */
+    }
 
-        #conversation-container::-webkit-scrollbar {
-            width: 8px;
-        }
+    #conversation-container::-webkit-scrollbar {
+        width: 8px;
+    }
 
-        #conversation-container::-webkit-scrollbar-thumb {
-            background-color: var(--Surface);
-            border-radius: 4px;
-            border: 10px solid transparent;
-        }
+    #conversation-container::-webkit-scrollbar-thumb {
+        background-color: var(--Surface);
+        border-radius: 4px;
+        border: 10px solid transparent;
+    }
 
-        #conversation-container::-webkit-scrollbar-track {
-            background-color: transparent;
-        }
+    #conversation-container::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
 
-        #conversation-container::-webkit-scrollbar-thumb:hover {
-            background-color: var(--Surface3);
-        }
+    #conversation-container::-webkit-scrollbar-thumb:hover {
+        background-color: var(--Surface3);
+    }
 
     #conversation-content {
     }
@@ -127,8 +128,8 @@
     #user-input {
         overflow: hidden;
     }
-    
-    
+
+
     #bottom-space {
         display: flex;
         justify-content: center;
@@ -154,7 +155,7 @@
     body.mac .chat-element {
         max-width: 1000px;
     }
-    
+
     .top-align-container {
         align-items: flex-start;
     }
@@ -192,7 +193,7 @@
         border: none;
         align-self: center;
     }
-    
+
     body.windows .scroll-to-end-button {
         margin-top: -32px; /* Setting negative margin to the height of the button so that it does not add height to parent containers. */
     }
@@ -224,79 +225,80 @@
 </style>
 
 <script>
-        function initializeScrollHandler(dotNetHelper) {
-            const container = document.getElementById('conversation-container');
-            container.addEventListener('scroll', () => {
-                dotNetHelper.invokeMethodAsync('OnConversationContainerScrolled', container.scrollTop);
-            });
-        }
-
-        function getScrollHeight() {
-            const element = document.getElementById('conversation-container');
-            return element.scrollHeight;
-        };
-
-        function getConversationViewHeight() {
-            const element = document.getElementById('conversation-container');
-            return element.clientHeight;
-        };
-
-        function resizeUserInput() {
-            const chatBox = document.getElementById('chat-box');
-            const chatBorder = document.getElementById('chat-border');
-
-
-            chatBox.style.height = "";
-            chatBox.style.height = chatBox.scrollHeight + "px";
-
-            var style = window.getComputedStyle(chatBox);
-            var lineHeight = style.getPropertyValue('line-height');
-            const lineCount = chatBox.scrollHeight / lineHeight;
-
-            // If the height exceeds max-height (200px), the scrollbar should appear.
-            if (chatBox.scrollHeight > 200) {
-                chatBox.style.height = "200px"; // Limit height to 200px
-            } else {
-                // Adding top and bottom margin depending on number of lines, to account for border radius of input box when showing scrollbar.
-                if (lineCount > 2) {
-                    chatBox.style.marginBottom = "16px";
-                    chatBox.style.marginTop = "16px";
-                } else if (lineCount > 1) {
-                    chatBox.style.marginTop = "8px";
-                    chatBox.style.marginBottom = "8px";
-
-                } else {
-                    chatBox.style.marginBottom = "0px";
-                    chatBox.style.marginTop = "0px";
-            }
-                }
-
-            if (lineCount > 1){
-                chatBorder.classList.add('chat-border-large');
-                chatBorder.classList.remove('chat-border-small');
-            }
-            else{
-                chatBorder.classList.add('chat-border-small');
-                chatBorder.classList.remove('chat-border-large');
-            }
+    function initializeScrollHandler(dotNetHelper) {
+        const container = document.getElementById('conversation-container');
+        container.addEventListener('scroll', () => {
+            dotNetHelper.invokeMethodAsync('OnConversationContainerScrolled', container.scrollTop);
+        });
     }
 
-        function setUserInputFocus() {
-            const element = document.getElementById('chat-box');
+    function getScrollHeight() {
+        const element = document.getElementById('conversation-container');
+        return element.scrollHeight;
+    };
 
-            element.focus();
+    function getConversationViewHeight() {
+        const element = document.getElementById('conversation-container');
+        return element.clientHeight;
+    };
+
+    function resizeUserInput() {
+        const chatBox = document.getElementById('chat-box');
+        const chatBorder = document.getElementById('chat-border');
+
+
+        chatBox.style.height = "";
+        chatBox.style.height = chatBox.scrollHeight + "px";
+
+        var style = window.getComputedStyle(chatBox);
+        var lineHeight = parseFloat(style.getPropertyValue('line-height'));
+        var lineCount = Math.round(chatBox.scrollHeight / lineHeight);
+
+        // If the height exceeds max-height (200px), the scrollbar should appear.
+        if (chatBox.scrollHeight > 200) {
+            chatBox.style.height = "200px"; // Limit height to 200px
+        } else {
+            // Adding top and bottom margin depending on number of lines, to account for border radius of input box when showing scrollbar.
+            if (lineCount > 2) {
+                chatBox.style.marginBottom = "16px";
+                chatBox.style.marginTop = "16px";
+            } else if (lineCount > 1) {
+                chatBox.style.marginTop = "8px";
+                chatBox.style.marginBottom = "8px";
+
+            } else {
+                chatBox.style.marginBottom = "0px";
+                chatBox.style.marginTop = "0px";
+            }
         }
 
-        function scrollToEnd(smooth) {
-            const container = document.getElementById('conversation-container');
-            container.scrollTo({
-                top: container.scrollHeight,
-                behavior: smooth ? 'smooth' : 'auto'
-            });
+
+        if (lineCount > 1) {
+            chatBorder.classList.add('chat-border-large');
+            chatBorder.classList.remove('chat-border-small');
+        } else {
+            chatBorder.classList.add('chat-border-small');
+            chatBorder.classList.remove('chat-border-large');
         }
+    }
+
+    function setUserInputFocus() {
+        const element = document.getElementById('chat-box');
+
+        element.focus();
+    }
+
+    function scrollToEnd(smooth) {
+        const container = document.getElementById('conversation-container');
+        container.scrollTo({
+            top: container.scrollHeight,
+            behavior: smooth ? 'smooth' : 'auto'
+        });
+    }
 </script>
 
 @code
+
 {
     private ConversationViewModel? _previousConversationViewModel;
     private MessageViewModel? _latestAssistantResponse;
