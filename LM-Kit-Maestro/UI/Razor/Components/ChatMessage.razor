@@ -3,11 +3,11 @@
 @inject IClipboardHandler ClipboardHandler
 
 <div
-class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageRootContainer" : "userMessageRootContainer")">
+    class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageRootContainer" : "userMessageRootContainer")">
     <div class="messageDiv @(MessageViewModel.Sender == MessageSender.User ? "userMessageDiv" : "assistantMessageDiv")">
         <div>
             <div
-            class="messageContent @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageContent" : "userMessageContent")">
+                class="messageContent @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageContent" : "userMessageContent")">
                 @if (MessageViewModel.Sender == MessageSender.Assistant)
                 {
                     if (MessageHtml != null)
@@ -17,7 +17,7 @@ class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "ass
                 }
                 else
                 {
-                    @MessageViewModel.GetContent(MessageViewModel.ResponseIndex)
+                    @MessageViewModel.GetContent(responseIndex)
                 }
             </div>
         </div>
@@ -27,26 +27,26 @@ class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "ass
     {
         <div class="messageFooter @(MessageJustTerminated ? "show" : "hide")">
             <div
-            class="messageFooterContent @(MessageViewModel.Sender == MessageSender.User ? "userMessageFooterContent" : "")">
+                class="messageFooterContent @(MessageViewModel.Sender == MessageSender.User ? "userMessageFooterContent" : "")">
                 @if (MessageViewModel.GetResponseCount() > 1)
                 {
                     <button title="@TooltipLabels.PreviousGeneratedResponse" @onclick="OnPreviousResponseButtonClicked"
-                    class="chatActionButton material-icons small">
+                            class="chatActionButton material-icons small">
                         chevron_left
                     </button>
 
                     <span class="messageFooterText small">
-                        @($"{MessageViewModel.ResponseIndex + 1} / {MessageViewModel.GetResponseCount()}")
+                        @($"{responseIndex + 1} / {MessageViewModel.GetResponseCount()}")
                     </span>
 
                     <button title="@TooltipLabels.NextGeneratedResponse" @onclick="OnNextResponseButtonClicked"
-                    class="chatActionButton material-icons small">
+                            class="chatActionButton material-icons small">
                         chevron_right
                     </button>
                 }
 
                 <button title="@TooltipLabels.CopyMessage" @onclick="OnCopyMessageButtonClicked"
-                class="chatActionButton small material-icons">
+                        class="chatActionButton small material-icons">
                     @(MessageJustCopied ? "check" : "content_copy")
                 </button>
 
@@ -55,15 +55,15 @@ class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "ass
                     if (MessageViewModel.IsLastAssistantMessage)
                     {
                         <button title="@TooltipLabels.RegenerateResponse" @onclick="OnRegenerateResponseButtonClicked"
-                        class="chatActionButton small material-icons">
+                                class="chatActionButton small material-icons">
                             sync
                         </button>
                     }
 
-                    @if (MessageViewModel.GetTerminationReason(MessageViewModel.ResponseIndex) != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
+                    @if (MessageViewModel.GetTerminationReason(responseIndex) != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
                     {
                         <span class="messageFooterText small">
-                            @($"{MessageViewModel.GetGeneratedTokens(MessageViewModel.ResponseIndex)} tokens • Termination reason: {MessageViewModel.GetTerminationReason(MessageViewModel.ResponseIndex)}")
+                            @($"{MessageViewModel.GetGeneratedTokens(responseIndex)} tokens • Termination reason: {MessageViewModel.GetTerminationReason(responseIndex)}")
                         </span>
                     }
                 }
@@ -74,125 +74,125 @@ class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "ass
 
 <style>
     .rootContainer {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    margin-top: 2px;
-    margin-bottom: 20px;
-    padding-inline: 8px;
-    padding-block: 16px;
-    border-radius: 0px;
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        margin-top: 2px;
+        margin-bottom: 20px;
+        padding-inline: 8px;
+        padding-block: 16px;
+        border-radius: 0px;
     }
 
     .assistantMessageRootContainer:hover {
-    background-color: var(--Surface15);
+        background-color: var(--Surface15);
     }
 
     .userMessageRootContainer:hover .userMessageContent {
-    background-color: var(--Surface15);
+        background-color: var(--Surface15);
     }
 
     .rootContainer:hover > div {
-    visibility: visible;
+        visibility: visible;
     }
 
     .userMessageDiv {
-    max-width: 75%;
-    margin-left: auto;
+        max-width: 75%;
+        margin-left: auto;
     }
 
     .userMessageDiv {
     }
 
     .messageContent {
-    padding-block: 12px;
-    padding-inline: 16px;
-    word-break: break-word; /* Ensures long words break and wrap */
-    overflow-wrap: break-word; /* Allows wrapping long words */
-    max-width: 100%; /* Prevents the div from exceeding the width of its container */
+        padding-block: 12px;
+        padding-inline: 16px;
+        word-break: break-word; /* Ensures long words break and wrap */
+        overflow-wrap: break-word; /* Allows wrapping long words */
+        max-width: 100%; /* Prevents the div from exceeding the width of its container */
     }
 
     .userMessageContent {
-    display: block;
-    background-color: var(--Surface);
-    border-radius: 32px;
+        display: block;
+        background-color: var(--Surface);
+        border-radius: 32px;
     }
 
 
     .assistantMessageContent {
-    padding: 4px;
-    margin-bottom: -16px; /* workaround: this syntax adds 16px bottom margin to the html block '(MarkupString)Markdig.Markdown.ToHtml(MessageViewModel.Content)'*/
+        padding: 4px;
+        margin-bottom: -16px; /* workaround: this syntax adds 16px bottom margin to the html block '(MarkupString)Markdig.Markdown.ToHtml(MessageViewModel.Content)'*/
     }
 
     .show {
-    visibility: visible;
+        visibility: visible;
     }
 
     .hide {
-    visibility: hidden;
+        visibility: hidden;
     }
 
     .chatActionButton {
-    align-self: center;
-    border-radius: 50%;
-    border-width: 0;
-    font-size: 12px;
-    padding: 2px;
-    min-height: 20px;
-    min-width: 20px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    color: var(--Outline);
+        align-self: center;
+        border-radius: 50%;
+        border-width: 0;
+        font-size: 12px;
+        padding: 2px;
+        min-height: 20px;
+        min-width: 20px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        color: var(--Outline);
     }
 
     .chatActionButton:hover {
-    background-color: var(--Surface3);
+        background-color: var(--Surface3);
     }
 
     .dot {
-    height: 10px;
-    width: 10px;
-    margin-left: 4px;
-    background-color: var(--OnBackground);
-    border-radius: 50%;
-    display: inline-block;
+        height: 10px;
+        width: 10px;
+        margin-left: 4px;
+        background-color: var(--OnBackground);
+        border-radius: 50%;
+        display: inline-block;
     }
 
     .align-right {
-    margin-left: auto;
+        margin-left: auto;
     }
 
     .align-left {
-    margin-right: auto;
+        margin-right: auto;
     }
 
     .messageFooter {
-    margin-top: 12px;
-    display: flex;
-    align-items: center;
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
     }
 
     .messageFooter:hover {
-    visibility: visible;
+        visibility: visible;
     }
 
     .messageFooterText {
-    line-height: 20px;
-    color: var(--Outline);
-    display: inline-block;
-    transform: translateY(-2px); /* tweaking text vertical position to align it with button icons */
-    align-self: center;
-    margin-inline: 4px;
+        line-height: 20px;
+        color: var(--Outline);
+        display: inline-block;
+        transform: translateY(-2px); /* tweaking text vertical position to align it with button icons */
+        align-self: center;
+        margin-inline: 4px;
     }
 
     .messageButtonDiv {
-    display: inline;
+        display: inline;
     }
 
     .userMessageFooterContent {
-    margin-left: auto;
+        margin-left: auto;
     }
 </style>
 
@@ -200,7 +200,20 @@ class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "ass
 
     const string ProgressIndicatorHtml = "<span class=\"dot \"></span>";
 
+    private int responseIndex;
+
+    private int ResponseIndex
+    {
+        get => responseIndex;
+        set
+        {
+            responseIndex = value;
+            MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(responseIndex), false);
+        }
+    }
+
     bool messageJustCopied;
+
     bool MessageJustCopied
     {
         get => messageJustCopied;
@@ -212,6 +225,7 @@ class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "ass
     }
 
     string? messageHtml;
+
     string? MessageHtml
     {
         get => messageHtml;
@@ -250,19 +264,18 @@ class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "ass
                 messageViewModel.PropertyChanged += OnMessageViewModelPropertyChanged;
                 messageViewModel.OnRegeneratedResponse += OnRegeneratedResponse;
 
-
                 if (MessageViewModel.GetResponseCount() > 1)
                 {
-                    MessageViewModel.ResponseIndex = MessageViewModel.GetResponseCount() - 1;
+                    responseIndex = MessageViewModel.GetResponseCount() - 1;
                 }
                 else
                 {
-                    MessageViewModel.ResponseIndex = 0;
+                    responseIndex = 0;
                 }
 
                 if (messageViewModel.Sender == MessageSender.Assistant)
                 {
-                    messageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(MessageViewModel.ResponseIndex), messageViewModel.MessageInProgress);
+                    messageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(responseIndex), messageViewModel.MessageInProgress);
                 }
 
 
@@ -274,7 +287,7 @@ class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "ass
 
     private void OnRegeneratedResponse(object? sender, EventArgs e)
     {
-        MessageViewModel.ResponseIndex = MessageViewModel.GetResponseCount() - 1;
+        ResponseIndex = MessageViewModel.GetResponseCount() - 1;
         InvokeAsync(() => StateHasChanged());
     }
 
@@ -297,10 +310,6 @@ class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "ass
                         MessageHtml = MessageHtml.Replace(ProgressIndicatorHtml, string.Empty);
                     }
                 }
-            }
-            else if (e.PropertyName == nameof(MessageViewModel.ResponseIndex))
-            {
-                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(MessageViewModel.ResponseIndex), false);
             }
         }
 
@@ -326,7 +335,7 @@ class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "ass
 
     private async Task OnCopyMessageButtonClicked()
     {
-        bool success = await ClipboardHandler.CopyTextToClipboardAsync(MessageViewModel.GetContent(MessageViewModel.ResponseIndex));
+        bool success = await ClipboardHandler.CopyTextToClipboardAsync(MessageViewModel.GetContent(responseIndex));
 
         if (success)
         {
@@ -349,17 +358,17 @@ class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "ass
 
     private void OnPreviousResponseButtonClicked()
     {
-        if (MessageViewModel.ResponseIndex > 0)
+        if (ResponseIndex > 0)
         {
-            MessageViewModel.ResponseIndex--;
+            ResponseIndex--;
         }
     }
 
     private void OnNextResponseButtonClicked()
     {
-        if (MessageViewModel.ResponseIndex < MessageViewModel.GetResponseCount() - 1)
+        if (ResponseIndex < MessageViewModel.GetResponseCount() - 1)
         {
-            MessageViewModel.ResponseIndex++;
+            ResponseIndex++;
         }
     }
 
