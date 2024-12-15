@@ -1,27 +1,27 @@
 ﻿@inject IJSRuntime JS
 
 <div id="chat-border" class="chat-border-small">
-    <textarea rows="1" id="chat-box" @bind="Input" @onkeydown="OnKeyDown" @bind:event="oninput"/>
+    <textarea rows="1" id="chat-box" @bind="Input" @onkeydown="OnKeyDown" @bind:event="oninput" />
 
-    <button disabled="@(InputIsEmpty && !ViewModel.AwaitingResponse)" @onclick="OnSendButtonClicked"
+    <button disabled="@(InputIsEmpty && !ViewModel.AwaitingResponse)" @onclick="OnSubmitButtonClicked"
             class="send-button round-button @(InputIsEmpty && !ViewModel.AwaitingResponse ? "disabled-button" : "enabled-button")">
         @if (!ViewModel.AwaitingResponse)
         {
             <span>
-                    <i class="fas fa-arrow-up"></i>
-                </span>
+                <i class="fas fa-arrow-up"></i>
+            </span>
         }
         else
         {
             <span>
-                    <i class="fas fa-stop"></i>
-                </span>
+                <i class="fas fa-stop"></i>
+            </span>
         }
     </button>
 </div>
 
 <style>
-    
+
     body.mac #chat-border {
         max-width: 1000px;
     }
@@ -29,7 +29,7 @@
     body.windows #chat-border {
         max-width: 800px;
     }
-    
+
     #chat-border {
         display: flex;
         position: relative;
@@ -40,11 +40,10 @@
         border: 2px solid var(--OutlineVariant);
         transition: border-color 0.3s;
         color: white;
-
     }
 
     .chat-border-small {
-        border-radius : 32px;
+        border-radius: 32px;
     }
 
     .chat-border-large {
@@ -91,7 +90,7 @@
     .send-button {
         position: absolute;
         right: 0;
-        bottom: 6px; 
+        bottom: 6px;
         margin-top: auto;
         margin-right: 8px;
         margin-left: auto;
@@ -103,12 +102,12 @@
 
     body.mac .send-button {
         width: 40px;
-        height:  40px;
+        height: 40px;
     }
-    
+
     body.windows .send-button {
         width: 32px;
-        height:  32px;
+        height: 32px;
     }
 
     .disabled-button {
@@ -121,8 +120,8 @@
     }
 
     /*     .send-button:hover:not(:disabled) {
-    background-color: var(--OutlineVariant);
-    } */
+            background-color: var(--OutlineVariant);
+            } */
 </style>
 
 <script>
@@ -140,7 +139,6 @@
 @code
 {
     bool _inputIsEmpty = true;
-
     private bool InputIsEmpty
     {
         get => _inputIsEmpty;
@@ -155,26 +153,18 @@
     }
 
     string? _input;
-
     private string? Input
     {
         get => _input;
         set
         {
-            // if (_ignoreNextTextChange)
-            // {
-            //     _ignoreNextTextChange = false;
-            // }
-            // else
-            {
-                var _ = Task.Run(async () => { await JS.InvokeVoidAsync("resizeUserInput"); });
 
-                if (_input != value)
-                {
-                    InputIsEmpty = string.IsNullOrWhiteSpace(value);
-                    _input = value;
-                    StateHasChanged();
-                }
+            if (_input != value)
+            {
+                InputIsEmpty = string.IsNullOrWhiteSpace(value);
+                _input = value;
+                var _ = Task.Run(async () => { await JS.InvokeVoidAsync("resizeUserInput"); });
+                StateHasChanged();
             }
         }
     }
@@ -185,7 +175,7 @@
 
     [Parameter] public EventCallback<AssistantSessionViewModelBase> ViewModelChanged { get; set; }
 
-    private bool _ignoreNextTextChange = false;
+    private bool CanSubmit => !string.IsNullOrWhiteSpace(Input) && !ViewModel.AwaitingResponse;
 
     protected override void OnParametersSet()
     {
@@ -203,9 +193,9 @@
     //     }
     // }
 
-    private async Task OnSendButtonClicked()
+    private async Task OnSubmitButtonClicked()
     {
-        if (!ViewModel.AwaitingResponse)
+        if (CanSubmit)
         {
             Submit();
         }
@@ -215,18 +205,11 @@
         }
     }
 
-    private async Task OnInputChange(ChangeEventArgs changeEventArgs)
-    {
-        await JS.InvokeVoidAsync("resizeUserInput", null);
-
-        StateHasChanged();
-    }
-
     private void OnKeyDown(KeyboardEventArgs keyboardEventArgs)
     {
         if (keyboardEventArgs.Key == "Enter")
         {
-            if (!keyboardEventArgs.ShiftKey && !string.IsNullOrEmpty(Input))
+            if (!keyboardEventArgs.ShiftKey && CanSubmit)
             {
                 Submit();
             }
@@ -235,8 +218,7 @@
 
     private void Submit()
     {
-        ViewModel.InputText = Input;
-        // _ignoreNextTextChange = true;
+        ViewModel.InputText = Input!;
         ViewModel.Submit();
         Input = string.Empty;
         StateHasChanged();
