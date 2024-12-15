@@ -27,7 +27,7 @@
     <ui:PageBase.Body>
         <BlazorWebView HostPage="wwwroot/index.html">
             <BlazorWebView.RootComponents>
-                <RootComponent Selector="#app" ComponentType="{x:Type razor:Translation}" />
+                <RootComponent Selector="#app" ComponentType="{x:Type razor:Assistants}" />
             </BlazorWebView.RootComponents>
         </BlazorWebView>
     </ui:PageBase.Body>

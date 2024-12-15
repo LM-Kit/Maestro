@@ -1,13 +1,9 @@
-﻿@inherits MvvmComponentBase<AssistantsPageViewModel>
-
-@inject IClipboardHandler ClipboardHandler
+﻿@inject IClipboardHandler ClipboardHandler
 
 <div style="width:100vw; height:100vh; margin-top: 40px;padding: 20px">
     <div id="container" class="dark container">
         <div id="card">
-            @* <textarea @bind=ViewModel.Input id="input" /> *@
-
-            @if (ViewModel.CurrentTranslation.AwaitingResponse)
+            @if (TranslationViewModel.AwaitingResponse)
             {
                 <div id="loaderDiv">
                     <div class="spinner">
@@ -18,13 +14,13 @@
                     </div>
                 </div>
             }
-            else if (ViewModel.CurrentTranslation.LastTranslationIsSuccesful.HasValue)
+            else if (TranslationViewModel.LastTranslationIsSuccesful.HasValue)
             {
-                if (ViewModel.CurrentTranslation.LastTranslationIsSuccesful.Value)
+                if (TranslationViewModel.LastTranslationIsSuccesful.Value)
                 {
                     <div id="result">
                         <p>
-                            @ViewModel.CurrentTranslation.LatestResult
+                            @TranslationViewModel.LatestResult
                         </p>
 
                         <div id="actionIcons">
@@ -44,8 +40,7 @@
                 }
             }
 
-
-            <UserInput ViewModel="ViewModel.CurrentTranslation" />
+            <UserInput ViewModel="TranslationViewModel" />
         </div>
     </div>
 </div>
@@ -102,8 +97,8 @@
     }
 
     /*         #result:hover {
-                        background-color: var(--Surface3);
-                    } */
+                                background-color: var(--Surface3);
+                                } */
 
     #actionIcons {
         display: inline
@@ -160,9 +155,24 @@
         }
     }
 
+    TranslationViewModel? translationViewModel;
+    [Parameter]
+    [EditorRequired]
+#pragma warning disable BL0007
+    public TranslationViewModel TranslationViewModel
+    {
+        get => translationViewModel!;
+        set
+        {
+            translationViewModel = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+#pragma warning restore BL0007
+
     private async Task OnCopyResultButtonClicked()
     {
-        bool success = await ClipboardHandler.CopyTextToClipboardAsync(ViewModel.CurrentTranslation.LatestResult != null ? ViewModel.CurrentTranslation.LatestResult : "");
+        bool success = await ClipboardHandler.CopyTextToClipboardAsync(TranslationViewModel.LatestResult != null ? TranslationViewModel.LatestResult : "");
 
         if (success)
         {

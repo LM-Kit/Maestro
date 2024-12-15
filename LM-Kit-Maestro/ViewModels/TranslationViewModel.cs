@@ -45,7 +45,7 @@ namespace LMKit.Maestro.ViewModels
         private void OnTranslationResult(string? result, Exception? exception = null)
         {
             LatestResult = result;
-            LastTranslationIsSuccesful = exception != null && result != null;
+            LastTranslationIsSuccesful = exception == null && result != null;
 
             if (exception != null)
             {
