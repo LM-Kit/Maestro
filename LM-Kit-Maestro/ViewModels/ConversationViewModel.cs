@@ -24,6 +24,9 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     private bool _isSynchedWithLog = true;
 
     [ObservableProperty]
+    bool _isEmpty = true;
+
+    [ObservableProperty]
     bool _usedDifferentModel;
 
     [ObservableProperty]

@@ -7,7 +7,7 @@ namespace LMKit.Maestro.ViewModels
     public abstract partial class AssistantSessionViewModelBase : ViewModelBase
     {
         [ObservableProperty]
-        bool _isEmpty = true;
+        bool _inputTextIsEmpty;
 
         [ObservableProperty]
         string _inputText = string.Empty;
@@ -51,6 +51,16 @@ namespace LMKit.Maestro.ViewModels
         {
             _popupService = popupService;
             _lmKitService = lmKitService;
+        }
+
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+
+            if (e.PropertyName == nameof(InputText))
+            {
+                InputTextIsEmpty = string.IsNullOrWhiteSpace(InputText);
+            }
         }
     }
 }
