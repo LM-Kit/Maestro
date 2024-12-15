@@ -1,85 +1,84 @@
 ﻿@inject IClipboardHandler ClipboardHandler
 
-<div style="width:100vw; height:100vh; margin-top: 40px;padding: 20px">
-    <div id="container" class="dark">
-        <div class="card">
-            @if (TranslationViewModel.AwaitingResponse)
+<div id="container" class="dark">
+    <div class="card">
+        @if (TranslationViewModel.AwaitingResponse)
+        {
+            <div id="loaderDiv">
+                <div class="spinner">
+                    <div> </div>
+                    <div> </div>
+                    <div> </div>
+                    <div> </div>
+                </div>
+            </div>
+        }
+        else if (TranslationViewModel.LastTranslationIsSuccesful.HasValue)
+        {
+            if (TranslationViewModel.LastTranslationIsSuccesful.Value)
             {
-                <div id="loaderDiv">
-                    <div class="spinner">
-                        <div> </div>
-                        <div> </div>
-                        <div> </div>
-                        <div> </div>
+                <div id="result">
+                    <p>
+                        @TranslationViewModel.LatestResult
+                    </p>
+
+                    <div id="actionIcons">
+                        <button @onclick="OnCopyResultButtonClicked" class="chatActionButton material-icons">
+                            @(ResultJustCopied ? "check" : "content_copy")
+                        </button>
+
                     </div>
                 </div>
+
             }
-            else if (TranslationViewModel.LastTranslationIsSuccesful.HasValue)
+            else
             {
-                if (TranslationViewModel.LastTranslationIsSuccesful.Value)
-                {
-                    <div id="result">
-                        <p>
-                            @TranslationViewModel.LatestResult
-                        </p>
-
-                        <div id="actionIcons">
-                            <button @onclick="OnCopyResultButtonClicked" class="chatActionButton material-icons">
-                                @(ResultJustCopied ? "check" : "content_copy")
-                            </button>
-
-                        </div>
-                    </div>
-
-                }
-                else
-                {
-                    <p>
-                        error
-                    </p>
-                }
+                <p>
+                    error
+                </p>
             }
+        }
 
-            <UserInput ViewModel="TranslationViewModel" />
-        </div>
+        <UserInput ViewModel="TranslationViewModel" />
     </div>
 </div>
 
 <style>
     #loaderDiv {
-        display: flex;
-        height: 72px;
-        background-color: transparent;
-        align-items: center;
-        align-content: center;
-        justify-content: center;
+    display: flex;
+    height: 72px;
+    background-color: transparent;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
     }
 
     #container {
-        max-width: 800px;
-        display: flex;
-        align-items: center;
+    background-color: red;
+    display: block;
+    width: 100%;
+    align-items: center;
     }
 
-    #card {
-        width: 100%;
-        padding: 20px;
-        border: 1px solid var(--Surface4);
-        border-radius: 4px;
+    .card {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid var(--Surface4);
+    border-radius: 4px;
     }
 
     #result {
-        margin-block: 16px;
-        background-color: var(--Surface15);
-        color: white;
-        min-height: 72px;
-        margin-top: 10px;
-        padding: 10px;
+    margin-block: 16px;
+    background-color: var(--Surface15);
+    color: white;
+    min-height: 72px;
+    margin-top: 10px;
+    padding: 10px;
     }
 
     /*         #result:hover {
-                                background-color: var(--Surface3);
-                                } */
+    background-color: var(--Surface3);
+    } */
 </style>
 
 @code
@@ -95,20 +94,18 @@
         }
     }
 
-    TranslationViewModel? translationViewModel;
-    [Parameter]
-    [EditorRequired]
-#pragma warning disable BL0007
-    public TranslationViewModel TranslationViewModel
+    [Parameter] public EventCallback OnSubmit { get; set; }
+
+    [Parameter] public required TranslationViewModel TranslationViewModel { get; set; }
+
+    [Parameter] public EventCallback<AssistantViewModelBase> TranslationViewModelChanged { get; set; }
+
+    protected override void OnParametersSet()
     {
-        get => translationViewModel!;
-        set
-        {
-            translationViewModel = value;
-            InvokeAsync(() => StateHasChanged());
-        }
+        base.OnParametersSet();
+
+        TranslationViewModel.PropertyChanged += OnTranslationViewModelPropertyChanged;
     }
-#pragma warning restore BL0007
 
     private async Task OnCopyResultButtonClicked()
     {
@@ -126,5 +123,10 @@
                 });
             }
         }
+    }
+
+    private void OnTranslationViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(() => StateHasChanged());
     }
 }
