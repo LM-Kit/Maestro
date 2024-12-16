@@ -50,6 +50,8 @@ namespace LMKit.Maestro
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddJsInteropExtensions();
+            builder.Services.AddBlazorBootstrap();
+
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

@@ -5,6 +5,17 @@
 
         <div id="translation-container">
             <div id="translation-header">
+
+                <Dropdown Color="DropdownColor.Primary">
+                    <DropdownToggleButton>Primary</DropdownToggleButton>
+                    <DropdownMenu>
+                        @foreach (var language in Enum.GetValues<Language>())
+                        {
+                            <DropdownItem To="#" Type="DropdownItemType.Link">@language</DropdownItem>
+                        }
+                    </DropdownMenu>
+                </Dropdown>
+
                 <div class="language-select">
                     <label for="input-language">Input Language:</label>
                     <select id="input-language" @bind="TranslationViewModel.Language" class="multi-column-dropdown">
@@ -13,6 +24,7 @@
                             <option value="@language">@language</option>
                         }
                     </select>
+
                 </div>
             </div>
 
