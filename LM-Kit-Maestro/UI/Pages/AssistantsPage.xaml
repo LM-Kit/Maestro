@@ -21,7 +21,6 @@
             MaximumWidthRequest="{x:Static ui:UIConstants.ModelSelectionButtonMaxWidth}"
             HeightRequest="{x:Static ui:UIConstants.ModelSelectionButtonHeight}">
         </ui:ModelSelectionButton>
-
     </ui:PageBase.Header>
 
     <ui:PageBase.Body>
