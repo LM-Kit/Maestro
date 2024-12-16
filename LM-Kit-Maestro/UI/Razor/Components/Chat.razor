@@ -15,41 +15,41 @@
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
                 {
-                                            <div id="empty-conversation" class="vertical-stack small">
-                                                <div class="vertical-stack spacing-4">
-                                                    <div class="welcome-message">Hello, human.</div>
-                                                    <div class="welcome-message">
-                                                        It is likely that similar software programs are now assuming professional tasks that
-                                                        were
-                                                        previously your responsibility.
-                                                    </div>
-                                                    <div class="welcome-message">
-                                                        Developers and other software programs are working to enhance my
-                                                        ability to assist you in the process of making sense about this, or to generate witty
-                                                        jokes
-                                                        involving robots and humans.
-                                                    </div>
-                                                </div>
+                                                            <div id="empty-conversation" class="vertical-stack small">
+                                                                <div class="vertical-stack spacing-4">
+                                                                    <div class="welcome-message">Hello, human.</div>
+                                                                    <div class="welcome-message">
+                                                                        It is likely that similar software programs are now assuming professional tasks that
+                                                                        were
+                                                                        previously your responsibility.
+                                                                    </div>
+                                                                    <div class="welcome-message">
+                                                                        Developers and other software programs are working to enhance my
+                                                                        ability to assist you in the process of making sense about this, or to generate witty
+                                                                        jokes
+                                                                        involving robots and humans.
+                                                                    </div>
+                                                                </div>
 
-                                                <div class="vertical-stack" style="gap:12px;">
-                                                    <div class="shortcut-instruction">
-                                                        Press Enter to send a new message
-                                                    </div>
+                                                                <div class="vertical-stack" style="gap:12px;">
+                                                                    <div class="shortcut-instruction">
+                                                                        Press Enter to send a new message
+                                                                    </div>
 
-                                                    <div class="shortcut-instruction">
-                                                        Hold Shift + Enter to insert a new line
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                                    <div class="shortcut-instruction">
+                                                                        Hold Shift + Enter to insert a new line
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                 }
                 else
                 {
-                                            <div id="message-list">
+                                                            <div id="message-list">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
-                                                                <ChatMessage MessageViewModel="message"/>
+                                                                                        <ChatMessage MessageViewModel="message"/>
                         }
-                                            </div>
+                                                            </div>
                 }
             }
         </div>
@@ -58,10 +58,10 @@
             <div id="scroll-to-end">
                 @if (!IsScrolledToEnd)
                 {
-                                <button @onclick="OnScrollToEndButtonClicked"
-                                class="material-icons round-button scroll-to-end-button">
-                                    arrow_downward
-                                </button>
+                                        <button @onclick="OnScrollToEndButtonClicked"
+                                        class="material-icons round-button scroll-to-end-button">
+                                            arrow_downward
+                                        </button>
                 }
             </div>
         </div>
@@ -71,12 +71,17 @@
         <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
     </div>
 
-    <div id="bottom-space" class="chat-element">
-        @if (ViewModel!.ConversationListViewModel.CurrentConversation!.LMKitConversation.ContextSize != 0)
+  <div id="bottom-space" class="chat-element">
+        @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
         {
-            <text>Current Usage: @ViewModel!.ConversationListViewModel.CurrentConversation!.LMKitConversation.ContextUsedSpace / @ViewModel!.ConversationListViewModel.CurrentConversation!.LMKitConversation.ContextSize Tokens</text>
+            <text>
+                    Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
+                @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
+                    (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
+                                ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+            </text>
         }
-    </div>
+</div>
 </div>
 
 <style>
@@ -504,6 +509,13 @@
     {
         ViewModel.ConversationListViewModel.CurrentConversation!.Submit();
     }
+
+    private int CalculateUsagePercentage(int used, int total)
+    {
+        if (total == 0) return 0;
+        return (int)(100 * used / total);
+    }
+
 
     [JSInvokable]
     public async Task OnConversationContainerScrolled(double scrollTop)
