@@ -10,46 +10,46 @@
 <div id="container">
     <div id="conversation-container">
         <div id="conversation-content"
-        class="chat-element dark @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
+             class="chat-element dark @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
             @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
                 {
-                                                            <div id="empty-conversation" class="vertical-stack small">
-                                                                <div class="vertical-stack spacing-4">
-                                                                    <div class="welcome-message">Hello, human.</div>
-                                                                    <div class="welcome-message">
-                                                                        It is likely that similar software programs are now assuming professional tasks that
-                                                                        were
-                                                                        previously your responsibility.
-                                                                    </div>
-                                                                    <div class="welcome-message">
-                                                                        Developers and other software programs are working to enhance my
-                                                                        ability to assist you in the process of making sense about this, or to generate witty
-                                                                        jokes
-                                                                        involving robots and humans.
-                                                                    </div>
-                                                                </div>
+                    <div id="empty-conversation" class="vertical-stack small">
+                        <div class="vertical-stack spacing-4">
+                            <div class="welcome-message">Hello, human.</div>
+                            <div class="welcome-message">
+                                It is likely that similar software programs are now assuming professional tasks that
+                                were
+                                previously your responsibility.
+                            </div>
+                            <div class="welcome-message">
+                                Developers and other software programs are working to enhance my
+                                ability to assist you in the process of making sense about this, or to generate witty
+                                jokes
+                                involving robots and humans.
+                            </div>
+                        </div>
 
-                                                                <div class="vertical-stack" style="gap:12px;">
-                                                                    <div class="shortcut-instruction">
-                                                                        Press Enter to send a new message
-                                                                    </div>
+                        <div class="vertical-stack" style="gap:12px;">
+                            <div class="shortcut-instruction">
+                                Press Enter to send a new message
+                            </div>
 
-                                                                    <div class="shortcut-instruction">
-                                                                        Hold Shift + Enter to insert a new line
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                            <div class="shortcut-instruction">
+                                Hold Shift + Enter to insert a new line
+                            </div>
+                        </div>
+                    </div>
                 }
                 else
                 {
-                                                            <div id="message-list">
+                    <div id="message-list">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
-                                                                                        <ChatMessage MessageViewModel="message"/>
+                            <ChatMessage MessageViewModel="message"/>
                         }
-                                                            </div>
+                    </div>
                 }
             }
         </div>
@@ -58,10 +58,10 @@
             <div id="scroll-to-end">
                 @if (!IsScrolledToEnd)
                 {
-                                        <button @onclick="OnScrollToEndButtonClicked"
-                                        class="material-icons round-button scroll-to-end-button">
-                                            arrow_downward
-                                        </button>
+                    <button @onclick="OnScrollToEndButtonClicked"
+                            class="material-icons round-button scroll-to-end-button">
+                        arrow_downward
+                    </button>
                 }
             </div>
         </div>
@@ -71,62 +71,62 @@
         <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
     </div>
 
-  <div id="bottom-space" class="chat-element">
+    <div id="bottom-space" class="chat-element">
         @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
         {
             <text>
-                    Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
+                Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                 @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
-                    (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                                ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
+                         ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
             </text>
         }
-</div>
+    </div>
 </div>
 
 <style>
     #container {
-    color: white;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    grid-template-rows: 1fr auto auto;
-    padding-inline: 8px;
-    padding-block: 8px;
-    display: grid;
+        color: white;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        grid-template-rows: 1fr auto auto;
+        padding-inline: 8px;
+        padding-block: 8px;
+        display: grid;
     }
 
     #conversation-container {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    /*         display: flex;
-    flex-direction: column;
-    */
-    overflow-y: hidden;
-    scrollbar-gutter: both-edges stable;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        /*         display: flex;
+        flex-direction: column;
+        */
+        overflow-y: hidden;
+        scrollbar-gutter: both-edges stable;
     }
 
     #conversation-container:hover {
-    overflow-y: scroll; /* Show the scrollbar on hover */
+        overflow-y: scroll; /* Show the scrollbar on hover */
     }
 
     #conversation-container::-webkit-scrollbar {
-    width: 8px;
+        width: 8px;
     }
 
     #conversation-container::-webkit-scrollbar-thumb {
-    background-color: var(--Surface);
-    border-radius: 4px;
-    border: 10px solid transparent;
+        background-color: var(--Surface);
+        border-radius: 4px;
+        border: 10px solid transparent;
     }
 
     #conversation-container::-webkit-scrollbar-track {
-    background-color: transparent;
+        background-color: transparent;
     }
 
     #conversation-container::-webkit-scrollbar-thumb:hover {
-    background-color: var(--Surface3);
+        background-color: var(--Surface3);
     }
 
     #conversation-content {
@@ -134,178 +134,179 @@
 
 
     #user-input {
-    overflow: hidden;
+        overflow: hidden;
     }
 
 
     #bottom-space {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0;
-    margin-block: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0;
+        margin-block: 8px;
     }
 
     .chat-element {
-    padding-inline: 8px;
-    width: 100%;
-    justify-content: center;
-    align-self: center;
-    margin-left: auto;
-    margin-right: auto;
+        padding-inline: 8px;
+        width: 100%;
+        justify-content: center;
+        align-self: center;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     body.windows .chat-element {
-    max-width: 800px;
+        max-width: 800px;
     }
 
     body.mac .chat-element {
-    max-width: 1000px;
+        max-width: 1000px;
     }
 
     .top-align-container {
-    align-items: flex-start;
+        align-items: flex-start;
     }
 
     .centered-container {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    justify-content: center;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        justify-content: center;
     }
 
     #message-list {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
     }
 
     #empty-conversation {
-    flex-direction: column;
-    gap: 32px;
-    display: flex;
+        flex-direction: column;
+        gap: 32px;
+        display: flex;
     }
 
     #chat-info {
-    position: sticky;
-    display: flex;
-    bottom: 8px;
-    height: 100px;
+        position: sticky;
+        display: flex;
+        bottom: 8px;
+        height: 100px;
     }
 
     .scroll-to-end-button {
-    color: var(--OnSurface);
-    background-color: var(--Surface4);
-    display: flex;
-    border: none;
-    align-self: center;
+        color: var(--OnSurface);
+        background-color: var(--Surface4);
+        display: flex;
+        border: none;
+        align-self: center;
     }
 
     body.windows .scroll-to-end-button {
-    margin-top: -32px; /* Setting negative margin to the height of the button so that it does not add height to parent containers. */
+        margin-top: -32px; /* Setting negative margin to the height of the button so that it does not add height to parent containers. */
     }
 
     body.mac .scroll-to-end-button {
-    margin-top: -40px; /* Setting negative margin to the height of the button so that it does not add height to parent containers. */
+        margin-top: -40px; /* Setting negative margin to the height of the button so that it does not add height to parent containers. */
     }
 
     .vertical-stack {
-    gap: 8px;
-    display: flex;
-    flex-direction: column;
+        gap: 8px;
+        display: flex;
+        flex-direction: column;
     }
 
     .welcome-message {
-    color: var(--Outline);
-    text-align: center;
+        color: var(--Outline);
+        text-align: center;
     }
 
     .shortcut-instruction {
-    padding: 12px;
-    border: 1px solid;
-    display: flex;
-    flex-direction: row;
-    border-radius: 0;
-    border-color: var(--Surface4);
-    color: var(--Outline);
+        padding: 12px;
+        border: 1px solid;
+        display: flex;
+        flex-direction: row;
+        border-radius: 0;
+        border-color: var(--Surface4);
+        color: var(--Outline);
     }
 </style>
 
 <script>
     function initializeScrollHandler(dotNetHelper) {
-    const container = document.getElementById('conversation-container');
-    container.addEventListener('scroll', () => {
-    dotNetHelper.invokeMethodAsync('OnConversationContainerScrolled', container.scrollTop);
-    });
+        const container = document.getElementById('conversation-container');
+        container.addEventListener('scroll', () => {
+            dotNetHelper.invokeMethodAsync('OnConversationContainerScrolled', container.scrollTop);
+        });
     }
 
     function getScrollHeight() {
-    const element = document.getElementById('conversation-container');
-    return element.scrollHeight;
+        const element = document.getElementById('conversation-container');
+        return element.scrollHeight;
     };
 
     function getConversationViewHeight() {
-    const element = document.getElementById('conversation-container');
-    return element.clientHeight;
+        const element = document.getElementById('conversation-container');
+        return element.clientHeight;
     };
 
     function resizeUserInput() {
-    const chatBox = document.getElementById('chat-box');
-    const chatBorder = document.getElementById('chat-border');
+        const chatBox = document.getElementById('chat-box');
+        const chatBorder = document.getElementById('chat-border');
 
 
-    chatBox.style.height = "";
-    chatBox.style.height = chatBox.scrollHeight + "px";
+        chatBox.style.height = "";
+        chatBox.style.height = chatBox.scrollHeight + "px";
 
-    var style = window.getComputedStyle(chatBox);
-    var lineHeight = parseFloat(style.getPropertyValue('line-height'));
-    var lineCount = Math.round(chatBox.scrollHeight / lineHeight);
+        var style = window.getComputedStyle(chatBox);
+        var lineHeight = parseFloat(style.getPropertyValue('line-height'));
+        var lineCount = Math.round(chatBox.scrollHeight / lineHeight);
 
-    // If the height exceeds max-height (200px), the scrollbar should appear.
-    if (chatBox.scrollHeight > 200) {
-    chatBox.style.height = "200px"; // Limit height to 200px
-    } else {
-    // Adding top and bottom margin depending on number of lines, to account for border radius of input box when showing scrollbar.
-    if (lineCount > 2) {
-    chatBox.style.marginBottom = "16px";
-    chatBox.style.marginTop = "16px";
-    } else if (lineCount > 1) {
-    chatBox.style.marginTop = "8px";
-    chatBox.style.marginBottom = "8px";
+        // If the height exceeds max-height (200px), the scrollbar should appear.
+        if (chatBox.scrollHeight > 200) {
+            chatBox.style.height = "200px"; // Limit height to 200px
+        } else {
+            // Adding top and bottom margin depending on number of lines, to account for border radius of input box when showing scrollbar.
+            if (lineCount > 2) {
+                chatBox.style.marginBottom = "16px";
+                chatBox.style.marginTop = "16px";
+            } else if (lineCount > 1) {
+                chatBox.style.marginTop = "8px";
+                chatBox.style.marginBottom = "8px";
 
-    } else {
-    chatBox.style.marginBottom = "0px";
-    chatBox.style.marginTop = "0px";
-    }
-    }
+            } else {
+                chatBox.style.marginBottom = "0px";
+                chatBox.style.marginTop = "0px";
+            }
+        }
 
 
-    if (lineCount > 1) {
-    chatBorder.classList.add('chat-border-large');
-    chatBorder.classList.remove('chat-border-small');
-    } else {
-    chatBorder.classList.add('chat-border-small');
-    chatBorder.classList.remove('chat-border-large');
-    }
+        if (lineCount > 1) {
+            chatBorder.classList.add('chat-border-large');
+            chatBorder.classList.remove('chat-border-small');
+        } else {
+            chatBorder.classList.add('chat-border-small');
+            chatBorder.classList.remove('chat-border-large');
+        }
     }
 
     function setUserInputFocus() {
-    const element = document.getElementById('chat-box');
+        const element = document.getElementById('chat-box');
 
-    element.focus();
+        element.focus();
     }
 
     function scrollToEnd(smooth) {
-    const container = document.getElementById('conversation-container');
-    container.scrollTo({
-    top: container.scrollHeight,
-    behavior: smooth ? 'smooth' : 'auto'
-    });
+        const container = document.getElementById('conversation-container');
+        container.scrollTo({
+            top: container.scrollHeight,
+            behavior: smooth ? 'smooth' : 'auto'
+        });
     }
 </script>
 
 @code
+
 {
     private const int UIUpdateDelayMilliseconds = 50;
 
