@@ -37,6 +37,7 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
+
         public ObservableCollection<ConversationViewModel> Conversations { get; } = new ObservableCollection<ConversationViewModel>();
 
         public ConversationListViewModel(IMainThread mainThread, IPopupService popupService, ILogger<ConversationListViewModel> logger, IMaestroDatabase database, LMKitService lmKitService, IAppSettingsService appSettingsService)

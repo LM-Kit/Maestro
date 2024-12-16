@@ -116,6 +116,14 @@ public partial class LMKitService
             }
         }
 
+        public int ContextUsedSpace
+        {
+            get
+            {
+                return _contextSize - _contextRemainingSpace;
+            }
+        }
+
         public event EventHandler? SummaryTitleGenerated;
         public event NotifyCollectionChangedEventHandler? ChatHistoryChanged;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -133,6 +141,9 @@ public partial class LMKitService
                 // Making sure that the chat history is re-built with the next loaded model information.
                 ChatHistory = null;
             }
+
+            ContextSize = 0;
+            ContextRemainingSpace = 0;
         }
 
         private void OnChatHistoryMessageCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
