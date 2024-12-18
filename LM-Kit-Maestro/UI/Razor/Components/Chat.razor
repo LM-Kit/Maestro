@@ -1,4 +1,6 @@
-﻿@inject LMKitService LMKitService
+﻿    @page "/chat"
+
+@inject LMKitService LMKitService
 @inject HttpClient Http
 @inject IJSRuntime JS
 @inject IScrollHandler ScrollHandler
@@ -47,7 +49,7 @@
                     <div id="message-list">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
-                            <ChatMessage MessageViewModel="message"/>
+                            <ChatMessage MessageViewModel="message" />
                         }
                     </div>
                 }
@@ -68,7 +70,7 @@
     </div>
 
     <div id="user-input" class="chat-element">
-        <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
+        <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
     </div>
 
     <div id="bottom-space" class="chat-element">
@@ -78,7 +80,7 @@
                 Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                 @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
                 (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                         ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                        ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
             </text>
         }
     </div>
@@ -101,33 +103,33 @@
         flex-direction: column;
         position: relative;
         /*         display: flex;
-                                flex-direction: column;
-                                */
+                                    flex-direction: column;
+                                    */
         overflow-y: hidden;
         scrollbar-gutter: both-edges stable;
     }
 
-    #conversation-container:hover {
-        overflow-y: scroll; /* Show the scrollbar on hover */
-    }
+        #conversation-container:hover {
+            overflow-y: scroll; /* Show the scrollbar on hover */
+        }
 
-    #conversation-container::-webkit-scrollbar {
-        width: 8px;
-    }
+        #conversation-container::-webkit-scrollbar {
+            width: 8px;
+        }
 
-    #conversation-container::-webkit-scrollbar-thumb {
-        background-color: var(--Surface);
-        border-radius: 4px;
-        border: 10px solid transparent;
-    }
+        #conversation-container::-webkit-scrollbar-thumb {
+            background-color: var(--Surface);
+            border-radius: 4px;
+            border: 10px solid transparent;
+        }
 
-    #conversation-container::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
+        #conversation-container::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
 
-    #conversation-container::-webkit-scrollbar-thumb:hover {
-        background-color: var(--Surface3);
-    }
+        #conversation-container::-webkit-scrollbar-thumb:hover {
+            background-color: var(--Surface3);
+        }
 
     #conversation-content {
     }
@@ -256,9 +258,6 @@
 </script>
 
 @code
-
-
-
 {
     private const int UIUpdateDelayMilliseconds = 50;
 

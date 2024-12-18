@@ -24,9 +24,9 @@
     </ui:PageBase.Header>
 
     <ui:PageBase.Body>
-        <BlazorWebView HostPage="wwwroot/index.html">
+        <BlazorWebView HostPage="wwwroot/index.html" StartPath="/assistants">
             <BlazorWebView.RootComponents>
-                <RootComponent Selector="#app" ComponentType="{x:Type razor:Assistants}" />
+                <RootComponent Selector="#app" ComponentType="{x:Type razor:Routes}" />
             </BlazorWebView.RootComponents>
         </BlazorWebView>
     </ui:PageBase.Body>
