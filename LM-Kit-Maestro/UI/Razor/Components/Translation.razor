@@ -59,6 +59,8 @@
                 <InputBox @bind-InputText="TranslationViewModel.InputText" />
             </div>
 
+            <div class="vertical-separator"></div>
+
             <div id="translation-output">
                 <InputBox @bind-InputText="TranslationViewModel.LatestResult" Readonly="true" />
             </div>
@@ -109,10 +111,15 @@
     }
 
     #translation-body {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr auto 1fr;
         display: grid;
     }
 
+    .vertical-separator {
+        width: 1px;
+        background-color: var(--OutlineVariant);
+        height: 100%;
+    }
 </style>
 
 @code
