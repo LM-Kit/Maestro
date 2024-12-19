@@ -56,11 +56,11 @@
 
         <div id="translation-body">
             <div id="translation-input">
-                <InputBox ViewModel="TranslationViewModel" />
+                <InputBox @bind-InputText="TranslationViewModel.InputText" />
             </div>
 
             <div id="translation-output">
-                <InputBox ViewModel="TranslationViewModel" Readonly="true" />
+                <InputBox InputText="TranslationViewModel.LatestResult" Readonly="true" />
             </div>
         </div>
 

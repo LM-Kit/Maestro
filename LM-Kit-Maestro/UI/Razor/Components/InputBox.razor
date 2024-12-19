@@ -1,25 +1,26 @@
 ﻿@inject IJSRuntime JS
 
 <div id="inputbox-container">
-    <textarea 
-        id="input-box"  
-        readonly=@Readonly
-        @bind="ViewModel.InputText"
-        @bind:event="oninput"
-        placeholder="Enter text here..."></textarea>
+    <textarea id="input-box"
+    readonly=@Readonly
+    @bind="InputText"
+    @bind:event="oninput"
+    @onchange="OnInputChange"
+    placeholder="Enter text here..."></textarea>
 </div>
 
 <style>
-    #input-box{
-        overflow: hidden;
+    #input-box {
+    overflow: hidden;
     }
 </style>
+
 <script>
     function resizeUserInput() {
-        const inputbox = document.getElementById('input-box');
+    const inputbox = document.getElementById('input-box');
     inputbox.style.height = "";
     inputbox.style.height = inputbox.scrollHeight + "px";
-}
+    }
 </script>
 
 @code {
@@ -29,25 +30,12 @@
 
     [Parameter] public EventCallback<bool> ReadonlyChanged { get; set; }
 
-    [Parameter] public required TranslationViewModel ViewModel { get; set; }
+    [Parameter] public required string InputText { get; set; }
 
-    [Parameter] public EventCallback<TranslationViewModel> ViewModelChanged { get; set; }
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-
-        ViewModel.PropertyChanged += OnViewModelPropertyChanged;
-    }
+    [Parameter] public EventCallback<string> InputTextChanged { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // if (firstRender)
-        // {
-        //     await inputTextArea.FocusAsync();
-        //     await JS.InvokeVoidAsync("setUserInputFocus");
-        // }
-
         if (_shouldResizeTextarea)
         {
             _shouldResizeTextarea = false;
@@ -55,12 +43,22 @@
         }
     }
 
-    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private async Task OnInputTextChanged(string newValue)
     {
-        if (e.PropertyName == nameof(AssistantViewModelBase.InputText))
-        {
-            // Resize the textarea whenever the input text changes.
-            _shouldResizeTextarea = true;
-        }
+        InputText = newValue;
+
+        // Notify parent about the change
+        await InputTextChanged.InvokeAsync(InputText);
+
+        // Resize the textarea
+        _shouldResizeTextarea = true;
+
+        // Trigger re-render to resize the textarea after text update
+        StateHasChanged();
+    }
+
+    private void OnInputChange(ChangeEventArgs changeEventArgs)
+    {
+        _shouldResizeTextarea = true;
     }
 }
