@@ -5,7 +5,6 @@
     readonly=@Readonly
     @bind="InputText"
     @bind:event="oninput"
-    @onchange="OnInputChange"
     placeholder="Enter text here..."></textarea>
 </div>
 
@@ -30,9 +29,24 @@
 
     [Parameter] public EventCallback<bool> ReadonlyChanged { get; set; }
 
-    [Parameter] public required string InputText { get; set; }
-
     [Parameter] public EventCallback<string> InputTextChanged { get; set; }
+
+    private string _inputText;
+
+    [Parameter]
+    public string InputText
+    {
+        get => _inputText;
+        set
+        {
+            if (_inputText != value)
+            {
+                _shouldResizeTextarea = true;
+                _inputText = value;
+                InputTextChanged.InvokeAsync(value);
+            }
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -41,24 +55,5 @@
             _shouldResizeTextarea = false;
             await JS.InvokeVoidAsync("resizeUserInput");
         }
-    }
-
-    private async Task OnInputTextChanged(string newValue)
-    {
-        InputText = newValue;
-
-        // Notify parent about the change
-        await InputTextChanged.InvokeAsync(InputText);
-
-        // Resize the textarea
-        _shouldResizeTextarea = true;
-
-        // Trigger re-render to resize the textarea after text update
-        StateHasChanged();
-    }
-
-    private void OnInputChange(ChangeEventArgs changeEventArgs)
-    {
-        _shouldResizeTextarea = true;
     }
 }
