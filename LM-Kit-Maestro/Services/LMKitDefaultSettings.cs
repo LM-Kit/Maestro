@@ -2,7 +2,7 @@
 
 public static class LMKitDefaultSettings
 {
-    public static readonly string DefaultModelsFolderPath = Model.LLM.GetDefaultModelStoragePath();
+    public static readonly string DefaulModelStorageDirectory = LMKit.Global.Configuration.ModelStorageDirectory;
 
     public const string DefaultSystemPrompt = "You are a chatbot that always responds promptly and helpfully to user requests.";
     public const int DefaultMaximumCompletionTokens = 2048; // TODO: Evan, consider setting this to -1 to indicate no limitation. Ensure the option to configure the chat with a predefined limit remains available.

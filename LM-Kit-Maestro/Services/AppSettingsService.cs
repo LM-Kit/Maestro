@@ -27,15 +27,15 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         }
     }
 
-    public string ModelsFolderPath
+    public string ModelStorageDirectory
     {
         get
         {
-            return Settings.Get(nameof(ModelsFolderPath), LMKitDefaultSettings.DefaultModelsFolderPath);
+            return Settings.Get(nameof(ModelStorageDirectory), LMKitDefaultSettings.DefaulModelStorageDirectory);
         }
         set
         {
-            Settings.Set(nameof(ModelsFolderPath), value);
+            Settings.Set(nameof(ModelStorageDirectory), value);
             OnPropertyChanged();
         }
     }

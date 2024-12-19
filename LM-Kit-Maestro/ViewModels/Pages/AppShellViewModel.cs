@@ -100,7 +100,7 @@ public partial class AppShellViewModel : ViewModelBase
     {
         if (FileHelpers.TryCreateFileUri(_appSettingsService.LastLoadedModel!, out Uri? fileUri) &&
             File.Exists(_appSettingsService.LastLoadedModel)/* &&
-            FileHelpers.GetModelInfoFromFileUri(fileUri!, _appSettingsService.ModelsFolderPath,
+            FileHelpers.GetModelInfoFromFileUri(fileUri!, _appSettingsService.ModelStorageDirectory,
             out string publisher, out string repository, out string fileName)*/)
         {
             _lmKitService.LoadModel(fileUri!);
@@ -117,7 +117,7 @@ public partial class AppShellViewModel : ViewModelBase
 
         if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
         {
-            _appSettingsService.ModelsFolderPath = LMKitDefaultSettings.DefaultModelsFolderPath;
+            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaulModelStorageDirectory;
 
             if (Microsoft.Maui.ApplicationModel.MainThread.IsMainThread)
             {

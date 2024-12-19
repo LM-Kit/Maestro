@@ -32,19 +32,19 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     [ObservableProperty]
     private bool _fileCollectingInProgress;
 
-    private string _folderPath = string.Empty;
-    public string ModelsFolderPath
+    private string _modelStorageDirectory = string.Empty;
+    public string ModelStorageDirectory
     {
-        get => _folderPath;
+        get => _modelStorageDirectory;
         set
         {
-            if (string.CompareOrdinal(_folderPath, value) != 0)
+            if (string.CompareOrdinal(_modelStorageDirectory, value) != 0)
             {
-                _folderPath = value;
+                _modelStorageDirectory = value;
 #if WINDOWS
                 _fileSystemWatcher.Path = value;
 #endif
-                OnModelsFolderPathChanged();
+                OnModelStorageDirectoryChanged();
             }
         }
     }
@@ -81,7 +81,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             // todo
         }
 
-        ModelsFolderPath = _appSettingsService.ModelsFolderPath;
+        ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
 
 #if WINDOWS
         _fileSystemWatcher.Changed += OnFileChanged;
@@ -97,7 +97,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 #if BETA_DOWNLOAD_MODELS
     public void DownloadModel(ModelInfo modelInfo)
     {
-        var filePath = Path.Combine(ModelsFolderPath, modelInfo.Publisher, modelInfo.Repository, modelInfo.FileName);
+        var filePath = Path.Combine(ModelStorageDirectory, modelInfo.Publisher, modelInfo.Repository, modelInfo.FileName);
 
         if (!_fileDownloads.ContainsKey(modelInfo.Metadata.DownloadUrl!))
         {
@@ -191,18 +191,18 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void EnsureModelDirectoryExists()
     {
-        if (!Directory.Exists(_appSettingsService.ModelsFolderPath))
+        if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
         {
-            _appSettingsService.ModelsFolderPath = LMKitDefaultSettings.DefaultModelsFolderPath;
+            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaulModelStorageDirectory;
 
-            if (!Directory.Exists(_appSettingsService.ModelsFolderPath))
+            if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
             {
-                if (File.Exists(_appSettingsService.ModelsFolderPath))
+                if (File.Exists(_appSettingsService.ModelStorageDirectory))
                 {
-                    File.Delete(_appSettingsService.ModelsFolderPath);
+                    File.Delete(_appSettingsService.ModelStorageDirectory);
                 }
 
-                Directory.CreateDirectory(_appSettingsService.ModelsFolderPath);
+                Directory.CreateDirectory(_appSettingsService.ModelStorageDirectory);
             }
         }
     }
@@ -266,7 +266,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void CollectModelFiles()
     {
-        var files = Directory.GetFileSystemEntries(ModelsFolderPath, "*", SearchOption.AllDirectories);
+        var files = Directory.GetFileSystemEntries(ModelStorageDirectory, "*", SearchOption.AllDirectories);
 
         foreach (var filePath in files)
         {
@@ -294,7 +294,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void HandleFile(string filePath, bool collectAll = true)
     {
-        bool isModelFile = TryValidateModelFile(filePath, ModelsFolderPath, out ModelInfo? modelInfo);
+        bool isModelFile = TryValidateModelFile(filePath, ModelStorageDirectory, out ModelInfo? modelInfo);
 
         void tryCollectModel(ModelInfo modelInfo)
         {
@@ -350,14 +350,14 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     #region Event handlers
 
-    private async void OnModelsFolderPathChanged()
+    private async void OnModelStorageDirectoryChanged()
     {
         if (FileCollectingInProgress)
         {
             _cancellationTokenSource?.Cancel();
         }
 
-        _fileSystemEntryRecorder.Init(_folderPath);
+        _fileSystemEntryRecorder.Init(_modelStorageDirectory);
 
         UnsortedModels.Clear();
         UserModels.Clear();
@@ -367,9 +367,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void OnAppSettingsServicePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(IAppSettingsService.ModelsFolderPath))
+        if (e.PropertyName == nameof(IAppSettingsService.ModelStorageDirectory))
         {
-            ModelsFolderPath = _appSettingsService.ModelsFolderPath;
+            ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
         }
     }
 
@@ -505,7 +505,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             UnsortedModels[index] = fileRecordPathChangedEventArgs.NewPath;
         }
         else if (ModelListContainsFileUri(UserModels, fileRecordPathChangedEventArgs.OldPath, out index) &&
-                FileHelpers.GetModelInfoFromFileUri(fileRecordPathChangedEventArgs.NewPath, ModelsFolderPath,
+                FileHelpers.GetModelInfoFromFileUri(fileRecordPathChangedEventArgs.NewPath, ModelStorageDirectory,
                 out string publisher, out string repository, out string fileName))
         {
             UserModels[index] = new ModelInfo(publisher, repository, fileName, fileRecordPathChangedEventArgs.NewPath, UserModels[index].FileSize);

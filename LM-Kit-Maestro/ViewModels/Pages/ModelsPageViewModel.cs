@@ -48,7 +48,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
     {
         modelInfoViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
         modelInfoViewModel.ModelInfo.Metadata.FileUri =
- FileHelpers.GetModelFileUri(modelInfoViewModel.ModelInfo, AppSettingsService.ModelsFolderPath);
+ FileHelpers.GetModelFileUri(modelInfoViewModel.ModelInfo, AppSettingsService.ModelStorageDirectory);
 
         FileManager.DownloadModel(modelInfoViewModel.ModelInfo);
     }
@@ -98,7 +98,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
 #if MACCATALYST  || WINDOWS
         _mainThread.BeginInvokeOnMainThread(async () =>
         {
-            var result = await _folderPicker.PickAsync(AppSettingsService.ModelsFolderPath);
+            var result = await _folderPicker.PickAsync(AppSettingsService.ModelStorageDirectory);
 
             if (result.IsSuccessful)
             {
@@ -107,7 +107,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
                     _lmKitService.UnloadModel();
                 }
 
-                AppSettingsService.ModelsFolderPath = result.Folder.Path!;
+                AppSettingsService.ModelStorageDirectory = result.Folder.Path!;
             }
         });
 #endif
@@ -118,7 +118,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
     {
         try
         {
-            await _launcher.OpenAsync(new Uri($"file://{AppSettingsService.ModelsFolderPath}"));
+            await _launcher.OpenAsync(new Uri($"file://{AppSettingsService.ModelStorageDirectory}"));
         }
         catch (Exception)
         {
