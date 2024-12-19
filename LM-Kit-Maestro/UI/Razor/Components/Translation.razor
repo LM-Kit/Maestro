@@ -68,60 +68,6 @@
     </div>
 </div>
 
-<style>
-    #loaderDiv {
-        display: flex;
-        height: 72px;
-        background-color: transparent;
-        align-items: center;
-        align-content: center;
-        justify-content: center;
-    }
-
-    #container {
-        width: 100%;
-        padding-inline: 8px;
-        padding-block: 8px;
-        overflow-y: auto;
-    }
-
-    /*         #result:hover {
-            background-color: var(--Surface3);
-            } */
-
-    #translation-container {
-        display: flex;
-        border: 1px solid var(--OutlineVariant);
-        border-radius: 8px;
-        overflow: hidden;
-        display: grid;
-        grid-template-rows: 40px auto;
-    }
-
-    #translation-input, #translation-output {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    #translation-header {
-        display: flex;
-        border-bottom: 1px solid var(--OutlineVariant);
-        justify-content: space-between;
-    }
-
-    #translation-body {
-        grid-template-columns: 1fr auto 1fr;
-        display: grid;
-    }
-
-    .vertical-separator {
-        width: 1px;
-        background-color: var(--OutlineVariant);
-        height: 100%;
-    }
-</style>
-
 @code
 {
     // Using a timer to automatically refresh translation result when no user input is detected for a given time span.
