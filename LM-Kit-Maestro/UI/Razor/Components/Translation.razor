@@ -56,9 +56,7 @@
 
         <div id="translation-body">
             <div id="translation-input">
-                <textarea @bind="TranslationViewModel.InputText"
-                          @bind:event="oninput"
-                          placeholder="Enter text here..."></textarea>
+                <InputBox ViewModel="TranslationViewModel" />
             </div>
 
             <div id="translation-output">

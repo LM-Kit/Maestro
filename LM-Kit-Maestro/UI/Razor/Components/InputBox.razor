@@ -1,0 +1,55 @@
+﻿@inject IJSRuntime JS
+
+<div id="inputbox-container">
+    <textarea id="input-box"  @bind="ViewModel.InputText"
+              @bind:event="oninput"
+              placeholder="Enter text here..."></textarea>
+</div>
+
+<script>
+            function resizeUserInput() {
+                const inputbox = document.getElementById('input-box');
+            inputbox.style.height = "";
+            inputbox.style.height = inputbox.scrollHeight + "px";
+        }
+</script>
+
+@code {
+    private bool _shouldResizeTextarea;
+
+    [Parameter] public required TranslationViewModel ViewModel { get; set; }
+
+    [Parameter] public EventCallback<TranslationViewModel> ViewModelChanged { get; set; }
+
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // if (firstRender)
+        // {
+        //     await inputTextArea.FocusAsync();
+        //     await JS.InvokeVoidAsync("setUserInputFocus");
+        // }
+
+        if (_shouldResizeTextarea)
+        {
+            _shouldResizeTextarea = false;
+            await JS.InvokeVoidAsync("resizeUserInput");
+        }
+    }
+
+    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(AssistantViewModelBase.InputText))
+        {
+            // Resize the textarea whenever the input text changes.
+            _shouldResizeTextarea = true;
+        }
+    }
+}
