@@ -9,8 +9,14 @@
                     <MudSelect @bind-Value="TranslationViewModel.InputLanguage">
                         @foreach (var language in GetAvailableLanguages(true))
                         {
-                            <MudSelectItem Value="@language">@language</MudSelectItem>
-
+                            if (language == Language.Undefined)
+                            {
+                                <MudSelectItem Value="Language.Undefined">Automatically detect</MudSelectItem>
+                            }
+                            else
+                            {
+                                <MudSelectItem Value="@language">@language</MudSelectItem>
+                            }
                         }
                     </MudSelect>
                 </div>
@@ -53,8 +59,8 @@
             <div id="translation-body">
                 <div id="translation-input">
                     <textarea @bind="TranslationViewModel.InputText"
-                              @bind:event="oninput"
-                              placeholder="Enter text here..."></textarea>
+                    @bind:event="oninput"
+                    placeholder="Enter text here..."></textarea>
                 </div>
 
                 <div id="translation-output">
@@ -70,113 +76,113 @@
 
 <style>
     #loaderDiv {
-        display: flex;
-        height: 72px;
-        background-color: transparent;
-        align-items: center;
-        align-content: center;
-        justify-content: center;
+    display: flex;
+    height: 72px;
+    background-color: transparent;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
     }
 
     #container {
-        width: 100%;
-        padding-inline: 8px;
-        padding-block: 8px;
+    width: 100%;
+    padding-inline: 8px;
+    padding-block: 8px;
     }
 
     .card {
-        background-color: var(--Surface);
-        width: 100%;
-        padding: 20px;
-        border: 1px solid var(--Surface4);
-        border-radius: 4px;
+    background-color: var(--Surface);
+    width: 100%;
+    padding: 20px;
+    border: 1px solid var(--Surface4);
+    border-radius: 4px;
     }
 
     #result {
-        margin-block: 16px;
-        background-color: var(--Surface15);
-        color: white;
-        min-height: 72px;
-        margin-top: 10px;
-        padding: 10px;
+    margin-block: 16px;
+    background-color: var(--Surface15);
+    color: white;
+    min-height: 72px;
+    margin-top: 10px;
+    padding: 10px;
     }
 
     /*         #result:hover {
-        background-color: var(--Surface3);
-        } */
+    background-color: var(--Surface3);
+    } */
 
     #translation-container {
-        display: flex;
-        border: 1px solid var(--Outline);
-        border-radius: 8px;
-        overflow: hidden;
-        display: grid;
-        grid-template-rows: 40px auto auto;
+    display: flex;
+    border: 1px solid var(--Outline);
+    border-radius: 8px;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 40px auto auto;
     }
 
     #translation-input, #translation-output {
-        flex: 1;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
     }
 
     #translation-header {
-        display: flex;
-        justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
     }
 
     #translation-body {
-        grid-template-columns: 1fr 1fr;
-        display: grid;
-        padding: 40px;
+    grid-template-columns: 1fr 1fr;
+    display: grid;
+    padding: 40px;
     }
 
     #translation-input {
-        border-right: 1px solid #ddd;
+    border-right: 1px solid #ddd;
     }
 
     #translation-output {
-        background-color: #f9f9f9;
+    background-color: #f9f9f9;
     }
 
-        #translation-output textarea {
-            border: none;
-            color: white;
-        }
+    #translation-output textarea {
+    border: none;
+    color: white;
+    }
 
-            #translation-output textarea:focus {
-                outline: none;
-            }
+    #translation-output textarea:focus {
+    outline: none;
+    }
 
     /*     .language-select {
-        margin-bottom: 10px;
-        }
-
-        .language-select label {
-        font-weight: bold;
-        margin-right: 10px;
-        } */
-
-    textarea {
-        width: 100%;
-        height: 100%;
-        resize: none;
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-sizing: border-box;
+    margin-bottom: 10px;
     }
 
-        textarea:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
-        }
+    .language-select label {
+    font-weight: bold;
+    margin-right: 10px;
+    } */
+
+    textarea {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+
+    textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+    }
 
     .language-select {
-        width: 180px;
+    width: 180px;
     }
 </style>
 

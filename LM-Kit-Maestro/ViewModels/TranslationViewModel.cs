@@ -7,13 +7,10 @@ namespace LMKit.Maestro.ViewModels
     public partial class TranslationViewModel : AssistantViewModelBase
     {
         [ObservableProperty]
-        Language _outputLanguage;
+        Language _outputLanguage = Language.English;
 
         [ObservableProperty]
-        Language _inputLanguage;
-
-        [ObservableProperty]
-        bool _autoDetectLanguage;
+        Language _inputLanguage = Language.Undefined;
 
         [ObservableProperty]
         string? _latestResult;
