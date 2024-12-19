@@ -1,26 +1,37 @@
 ﻿@inject IJSRuntime JS
 
 <div id="inputbox-container">
-    <textarea id="input-box"  @bind="ViewModel.InputText"
-              @bind:event="oninput"
-              placeholder="Enter text here..."></textarea>
+    <textarea 
+        id="input-box"  
+        readonly=@Readonly
+        @bind="ViewModel.InputText"
+        @bind:event="oninput"
+        placeholder="Enter text here..."></textarea>
 </div>
 
+<style>
+    #input-box{
+        overflow: hidden;
+    }
+</style>
 <script>
-            function resizeUserInput() {
-                const inputbox = document.getElementById('input-box');
-            inputbox.style.height = "";
-            inputbox.style.height = inputbox.scrollHeight + "px";
-        }
+    function resizeUserInput() {
+        const inputbox = document.getElementById('input-box');
+    inputbox.style.height = "";
+    inputbox.style.height = inputbox.scrollHeight + "px";
+}
 </script>
 
 @code {
     private bool _shouldResizeTextarea;
 
+    [Parameter] public required bool Readonly { get; set; }
+
+    [Parameter] public EventCallback<bool> ReadonlyChanged { get; set; }
+
     [Parameter] public required TranslationViewModel ViewModel { get; set; }
 
     [Parameter] public EventCallback<TranslationViewModel> ViewModelChanged { get; set; }
-
 
     protected override void OnParametersSet()
     {
