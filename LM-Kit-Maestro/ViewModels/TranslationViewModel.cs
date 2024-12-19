@@ -7,7 +7,13 @@ namespace LMKit.Maestro.ViewModels
     public partial class TranslationViewModel : AssistantViewModelBase
     {
         [ObservableProperty]
-        Language _language;
+        Language _outputLanguage;
+
+        [ObservableProperty]
+        Language _inputLanguage;
+
+        [ObservableProperty]
+        bool _autoDetectLanguage;
 
         [ObservableProperty]
         string? _latestResult;
@@ -30,7 +36,7 @@ namespace LMKit.Maestro.ViewModels
             {
                 try
                 {
-                    var result = await _lmKitService.SubmitTranslation(input, Language);
+                    var result = await _lmKitService.SubmitTranslation(input, OutputLanguage);
                     OnTranslationResult(result);
                 }
                 catch (Exception ex)

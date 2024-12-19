@@ -5,17 +5,39 @@
 
         <div id="translation-container">
             <div id="translation-header">
-
-                <Dropdown Color="DropdownColor.Primary">
-                    <DropdownToggleButton>Primary</DropdownToggleButton>
-                    <DropdownMenu>
-                        @foreach (var language in Enum.GetValues<Language>())
+                <div class="language-select">
+                    <MudSelect @bind-Value="TranslationViewModel.InputLanguage">
+                        @foreach (var language in GetAvailableLanguages(true))
                         {
-                            <DropdownItem To="#" Type="DropdownItemType.Link">@language</DropdownItem>
-                        }
-                    </DropdownMenu>
-                </Dropdown>
+                            <MudSelectItem Value="@language">@language</MudSelectItem>
 
+                        }
+                    </MudSelect>
+                </div>
+
+                <button class="chatActionButton material-icons small">
+                    swap_horiz
+                </button>
+
+                <div>
+                    <MudSelect class="language-select" @bind-Value="TranslationViewModel.OutputLanguage">
+                        @foreach (var language in GetAvailableLanguages(false))
+                        {
+                            <MudSelectItem Value="@language">@language</MudSelectItem>
+
+                        }
+                    </MudSelect>
+                </div>
+
+                @*                 <MudSelect class="language-select" @bind-Value="TranslationViewModel.Language">
+                    @foreach (var language in Enum.GetValues<Language>())
+                    {
+                        <MudSelectItem Value="@language">@language</MudSelectItem>
+
+                    }
+                </MudSelect> *@
+
+                @* 
                 <div class="language-select">
                     <label for="input-language">Input Language:</label>
                     <select id="input-language" @bind="TranslationViewModel.Language" class="multi-column-dropdown">
@@ -25,7 +47,7 @@
                         }
                     </select>
 
-                </div>
+                </div> *@
             </div>
 
             <div id="translation-body">
@@ -80,8 +102,8 @@
     }
 
     /*         #result:hover {
-                    background-color: var(--Surface3);
-                    } */
+        background-color: var(--Surface3);
+        } */
 
     #translation-container {
         display: flex;
@@ -99,8 +121,12 @@
         flex-direction: column;
     }
 
+    #translation-header {
+        display: flex;
+        justify-content: space-between;
+    }
+
     #translation-body {
-        background-color: pink;
         grid-template-columns: 1fr 1fr;
         display: grid;
         padding: 40px;
@@ -123,14 +149,14 @@
                 outline: none;
             }
 
-    .language-select {
+    /*     .language-select {
         margin-bottom: 10px;
-    }
+        }
 
         .language-select label {
-            font-weight: bold;
-            margin-right: 10px;
-        }
+        font-weight: bold;
+        margin-right: 10px;
+        } */
 
     textarea {
         width: 100%;
@@ -149,23 +175,14 @@
             box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
         }
 
-    .multi-column-dropdown {
-        column-count: 3;
-        column-gap: 10px;
-        height: auto;
-        overflow: hidden;
+    .language-select {
+        width: 180px;
     }
-
-        .multi-column-dropdown option {
-            display: block;
-            padding: 5px;
-            white-space: nowrap;
-        }
-
 </style>
 
 @code
 {
+
     // Using a timer to automatically refresh translation result when no user input is detected for a given time span.
     private Timer? _inputTimer;
 
@@ -227,4 +244,19 @@
         _inputTimer?.Change(Timeout.Infinite, Timeout.Infinite);
         TranslationViewModel.Submit();
     }
+
+    private static List<Language> GetAvailableLanguages(bool inputLanguage)
+    {
+        var values = Enum.GetValues<Language>().Skip(1).ToList();
+
+        values.Sort();
+
+        if (inputLanguage)
+        {
+            values.Insert(0, Language.Undefined);
+        }
+
+        return values;
+    }
+
 }
