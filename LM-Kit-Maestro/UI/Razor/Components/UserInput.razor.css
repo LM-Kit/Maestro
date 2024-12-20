@@ -95,6 +95,10 @@ body.windows .send-button {
     color: var(--OnSurface);
 }
 
-/*     .send-button:hover:not(:disabled) {
+     .send-button:hover:not(:disabled) {
         background-color: var(--OutlineVariant);
-        } */
+        } 
+
+body.windows {
+    font-size: 16px;
+}
