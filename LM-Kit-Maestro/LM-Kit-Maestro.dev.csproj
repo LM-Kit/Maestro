@@ -72,6 +72,27 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Include="..\..\redist\runtimes\osx-64\LM-Kit.ggml.backend.blas.dylib" Link="LM-Kit.ggml.backend.blas.dylib">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\redist\runtimes\osx-64\LM-Kit.ggml.backend.dylib" Link="LM-Kit.ggml.backend.dylib">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\redist\runtimes\osx-64\LM-Kit.ggml.backend.metal.dylib" Link="LM-Kit.ggml.backend.metal.dylib">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\redist\runtimes\osx-64\LM-Kit.ggml.base.dylib" Link="LM-Kit.ggml.base.dylib">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\redist\runtimes\osx-64\LM-Kit.ggml.dylib" Link="LM-Kit.ggml.dylib">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\redist\runtimes\osx-64\LM-Kit.llama.dylib" Link="LM-Kit.llama.dylib">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Include="wwwroot\css\bootstrap.min.css" />
 	</ItemGroup>
 
