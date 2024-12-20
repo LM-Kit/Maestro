@@ -93,7 +93,6 @@ function scrollToEnd(smooth) {
 }
 
 
-
 /*
     UserInput 
 */

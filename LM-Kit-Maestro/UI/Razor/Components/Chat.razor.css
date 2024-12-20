@@ -2,12 +2,13 @@
     color: white;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow-y: auto;
     display: grid;
     grid-template-rows: 1fr auto;
     padding-inline: 8px;
     padding-block: 8px;
     position: fixed;
+    scrollbar-gutter: both-edges stable;
 }
 
 #conversation-container {
@@ -15,20 +16,18 @@
     flex-direction: column;
     position: relative;
     overflow-y: auto;
-    scrollbar-gutter: both-edges stable;
 }
 
     #conversation-container:hover {
-        overflow-y: scroll;
     }
 
     #conversation-container::-webkit-scrollbar {
-        width: 8px;
+        width: 10px;
     }
 
     #conversation-container::-webkit-scrollbar-thumb {
-        background-color: var(--Surface);
-        border-radius: 4px;
+        background-color: var(--OutlineVariant);
+        border-radius: 0;
         border: 10px solid transparent;
     }
 
@@ -37,7 +36,7 @@
     }
 
     #conversation-container::-webkit-scrollbar-thumb:hover {
-        background-color: var(--Surface3);
+        background-color: var(--Outline);
     }
 
 #user-input {
