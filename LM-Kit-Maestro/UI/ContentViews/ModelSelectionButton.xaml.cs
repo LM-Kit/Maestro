@@ -41,6 +41,7 @@ public partial class ModelSelectionButton : ContentView
 
         if (BindingContext is ModelListViewModel modelListViewModel)
         {
+            modelListViewModel.LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
             modelListViewModel.LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
             modelListViewModel.LMKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
             _modelListViewModel = modelListViewModel;
@@ -55,19 +56,45 @@ public partial class ModelSelectionButton : ContentView
         {
             if (modelLoadingProgressedEventArgs.Progress == 1)
             {
-                LoadingText = "Finishing up..."; // had to set this text directly in code-behind because DataTrigger with MultiBinding did not work.
+                LoadingText = TooltipLabels.FinishingUp; // had to set this text directly in code-behind because DataTrigger with MultiBinding did not work.
             }
             else
             {
-                LoadingText = "Loading model...";
+                LoadingText = TooltipLabels.LoadingModel;
             }
         }
+    }
+
+    private void OnModelDownloadingProgressed(object? sender, EventArgs e)
+    {
+        var modelDownloadingProgressedEventArgs = (LMKitService.ModelDownloadingProgressedEventArgs)e;
+
+        if (modelDownloadingProgressedEventArgs != null)
+        {
+            string caption = TooltipLabels.DownloadingModel;
+            
+            if(modelDownloadingProgressedEventArgs.ContentLength != null)
+            {
+                caption += $" {ToMB(modelDownloadingProgressedEventArgs.BytesRead)} / {ToMB(modelDownloadingProgressedEventArgs.ContentLength.Value)} MB";
+            }
+            else
+            {
+                caption += $" {modelDownloadingProgressedEventArgs.BytesRead} MB";
+            }
+
+            LoadingText = caption;
+        }
+    }
+
+    private long ToMB(long size)
+    {
+        return (long)Math.Round((double)size /1024 / 1024);
     }
 
     private void OnModelLoadingCompleted(object? sender, LMKitService.NotifyModelStateChangedEventArgs notifyModelStateChangedEventArgs)
     {
         // Resetting default loading label.
-        LoadingText = "Loading model...";
+        LoadingText = TooltipLabels.LoadingModel;
     }
 
     private void OnEjectModelButtonClicked(object sender, EventArgs e)

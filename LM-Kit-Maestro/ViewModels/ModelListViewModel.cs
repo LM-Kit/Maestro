@@ -162,7 +162,10 @@ namespace LMKit.Maestro.ViewModels
 #endif
 
             _mainThread.BeginInvokeOnMainThread(() => AddModel(modelCardViewModel));
-            TotalModelSize += modelCardViewModel.FileSize;
+            if (modelCard.IsLocallyAvailable)
+            {
+                TotalModelSize += modelCardViewModel.FileSize;
+            }
         }
 
         private void AddModel(ModelInfoViewModel modelCardViewModel, bool sort = true)
@@ -244,9 +247,12 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnModelDownloadingProgressed(object? sender, EventArgs e)
         {
-            var loadingEventArgs = (LMKitService.ModelDownloadingProgressedEventArgs)e;
+            var downloadingEventArgs = (LMKitService.ModelDownloadingProgressedEventArgs)e;
 
-            //todo: continue implementation here
+            if (downloadingEventArgs.ContentLength != null)
+            {
+                LoadingProgress = (float)downloadingEventArgs.BytesRead / downloadingEventArgs.ContentLength.Value;
+            }
         }
 
         private void OnModelLoadingFailed(object? sender, EventArgs e)

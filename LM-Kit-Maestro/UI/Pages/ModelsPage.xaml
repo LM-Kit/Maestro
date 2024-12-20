@@ -193,7 +193,7 @@
                                 <MultiBinding StringFormat="{} {0}  •  {1}  •  {2}">
                                     <Binding Path="ModelInfo.Publisher"/>
                                     <Binding Path="ModelInfo.Repository"/>
-                                    <Binding Path="ModelInfo.FileName"/>
+                                    <Binding Path="ModelInfo.ModelName"/>
                                 </MultiBinding>
                             </Label.Text>
                         </Label>
