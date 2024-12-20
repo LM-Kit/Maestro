@@ -1,6 +1,4 @@
-﻿<style >
-
-body.mac #chat-border {
+﻿body.mac #chat-border {
     max-width: 1000px;
 }
 
@@ -100,4 +98,3 @@ body.windows .send-button {
 /*     .send-button:hover:not(:disabled) {
         background-color: var(--OutlineVariant);
         } */
-</style >
