@@ -38,11 +38,19 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
     {
         get
         {
-            return Settings.Get(nameof(ModelStorageDirectory), LMKitDefaultSettings.DefaulModelStorageDirectory);
+            string directory = Settings.Get(nameof(ModelStorageDirectory), LMKitDefaultSettings.DefaultModelStorageDirectory);
+
+            if(directory != LMKit.Global.Configuration.ModelStorageDirectory)
+            {
+                LMKit.Global.Configuration.ModelStorageDirectory = directory;
+            }
+
+            return directory;
         }
         set
         {
             Settings.Set(nameof(ModelStorageDirectory), value);
+            LMKit.Global.Configuration.ModelStorageDirectory = value;
             OnPropertyChanged();
         }
     }

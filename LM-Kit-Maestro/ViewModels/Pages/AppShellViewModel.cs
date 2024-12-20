@@ -110,7 +110,7 @@ public partial class AppShellViewModel : ViewModelBase
 
         if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
         {
-            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaulModelStorageDirectory;
+            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
 
             if (Microsoft.Maui.ApplicationModel.MainThread.IsMainThread)
             {

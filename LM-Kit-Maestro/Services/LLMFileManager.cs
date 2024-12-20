@@ -198,7 +198,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
         {
-            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaulModelStorageDirectory;
+            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
 
             if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
             {
