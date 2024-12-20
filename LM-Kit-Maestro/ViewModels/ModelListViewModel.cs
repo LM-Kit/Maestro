@@ -62,6 +62,7 @@ namespace LMKit.Maestro.ViewModels
             _fileManager.UserModels.CollectionChanged += OnUserModelsCollectionChanged;
             UserModels = new ReadOnlyObservableCollection<ModelInfoViewModel>(_userModels);
 
+            LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
             LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
             LMKitService.ModelLoadingFailed += OnModelLoadingFailed;
             LMKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
@@ -239,6 +240,13 @@ namespace LMKit.Maestro.ViewModels
 
             LoadingProgress = loadingEventArgs.Progress;
             ModelLoadingIsFinishingUp = LoadingProgress == 1;
+        }
+
+        private void OnModelDownloadingProgressed(object? sender, EventArgs e)
+        {
+            var loadingEventArgs = (LMKitService.ModelDownloadingProgressedEventArgs)e;
+
+            //todo: continue implementation here
         }
 
         private void OnModelLoadingFailed(object? sender, EventArgs e)
