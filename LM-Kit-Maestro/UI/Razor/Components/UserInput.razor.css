@@ -1,9 +1,4 @@
-﻿body.font-size {
-    font-size: 16px;
-    color: red;
-}
-
-body.mac #chat-border {
+﻿body.mac #chat-border {
     max-width: 1000px;
 }
 
