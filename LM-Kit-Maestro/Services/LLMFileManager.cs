@@ -342,10 +342,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
             if (collectAll)
             {
-                modelCard = new ModelCard()
+                modelCard = new ModelCard(new Uri(filePath))
                 {
-                    ModelUri = new Uri(filePath),
-                    ModelName = Path.GetFileName(filePath),
                     Publisher = "unknown publisher",
                     Repository = "unknown repository"
                 };
@@ -535,11 +533,10 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 FileHelpers.GetModelInfoFromFileUri(fileRecordPathChangedEventArgs.NewPath, ModelStorageDirectory,
                 out string publisher, out string repository, out string fileName))
         {
-            UserModels[index] = new ModelCard()
+            UserModels[index] = new ModelCard(fileRecordPathChangedEventArgs.NewPath)
             {
                 Publisher = publisher,
                 Repository = repository,
-                ModelUri = fileRecordPathChangedEventArgs.NewPath
             };
         }
     }

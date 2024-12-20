@@ -49,12 +49,7 @@ namespace LMKit.Maestro.Helpers
 
             //Loïc: we have an architecture defect. We can reach this stage, especially at startup, while modelCardViewModels is not completely loaded.
             //todo Evan: fix.
-            return new ModelInfoViewModel(new ModelCard()
-            {
-                Publisher = publisher,
-                Repository = repository,
-                ModelUri = modelFileUri
-            });
+            return new ModelInfoViewModel(new ModelCard(modelFileUri));
         }
     }
 }
