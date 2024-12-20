@@ -1,12 +1,13 @@
 ﻿#container {
     color: white;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     grid-template-rows: 1fr auto auto;
     padding-inline: 8px;
     padding-block: 8px;
     display: grid;
+    position: fixed;
 }
 
 #conversation-container {
