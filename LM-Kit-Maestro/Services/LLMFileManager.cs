@@ -18,6 +18,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly FileSystemEntryRecorder _fileSystemEntryRecorder = new FileSystemEntryRecorder();
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
+    private bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
+    private bool _enableCustomModels = true;  //todo: Implement this as a configurable option in the configuration panel 
 
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = new Dictionary<Uri, FileDownloader>();
 
@@ -210,7 +212,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
-    private async Task CollectModelFilesAsync()
+    private async Task CollectModelsAsync()
     {
         FileCollectingInProgress = true;
 
@@ -227,7 +229,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         try
         {
-            await (_collectModelFilesTask = Task.Run(new Action(CollectModelFiles)));
+            await (_collectModelFilesTask = Task.Run(() => CollectModels()));
         }
         catch (OperationCanceledException)
         {
@@ -267,18 +269,31 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         _collectModelFilesTask = null;
     }
 
-    private void CollectModelFiles()
+    private void CollectModels()
     {
-        var files = Directory.GetFileSystemEntries(ModelStorageDirectory, "*", SearchOption.AllDirectories);
-
-        foreach (var filePath in files)
+        if (_enablePredefinedModels)
         {
-            if (ShouldCheckFile(filePath))
+            foreach (var modelCard in ModelCard.GetPredefinedModelCards())
             {
-                HandleFile(filePath);
-            }
+                TryRegisterChatModel(modelCard);
 
-            _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
+                _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
+            }
+        }
+
+        if (_enableCustomModels)
+        {
+            var files = Directory.GetFileSystemEntries(ModelStorageDirectory, "*", SearchOption.AllDirectories);
+
+            foreach (var filePath in files)
+            {
+                if (ShouldCheckFile(filePath))
+                {
+                    HandleFile(filePath);
+                }
+
+                _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
+            }
         }
     }
 
@@ -304,6 +319,25 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         return false;
     }
 
+    private bool TryRegisterChatModel(ModelCard? modelCard)
+    {
+        if (modelCard != null)
+        {
+            if (!modelCard.Capabilities.HasFlag(ModelCapabilities.Chat))
+            {
+                return false;
+            }
+
+            if (!HasModel(modelCard))
+            {
+                UserModels.Add(modelCard);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void HandleFile(string filePath, bool collectAll = true)
     {
         if (!TryValidateModelFile(filePath, ModelStorageDirectory, out ModelCard? modelCard, out bool isSorted))
@@ -311,25 +345,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             return;
         }
 
-        if (modelCard == null || !modelCard.Capabilities.HasFlag(ModelCapabilities.Chat))
-        {
-            return;
-        }
-
-        void tryCollectModel(ModelCard? modelCard)
-        {
-            if (modelCard != null)
-            {
-                if (!HasModel(modelCard))
-                {
-                    UserModels.Add(modelCard);
-                }
-            }
-        }
-
         if (isSorted)
         {
-            tryCollectModel(modelCard);
+            TryRegisterChatModel(modelCard);
         }
         else
         {
@@ -348,7 +366,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                     Repository = "unknown repository"
                 };
 
-                tryCollectModel(modelCard);
+                TryRegisterChatModel(modelCard);
             }
         }
     }
@@ -387,7 +405,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         UnsortedModels.Clear();
         UserModels.Clear();
 
-        await CollectModelFilesAsync();
+        await CollectModelsAsync();
     }
 
     private void OnAppSettingsServicePropertyChanged(object? sender, PropertyChangedEventArgs e)
