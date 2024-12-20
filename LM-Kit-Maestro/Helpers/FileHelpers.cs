@@ -1,4 +1,5 @@
 ﻿using LMKit.Maestro.Services;
+using LMKit.Model;
 using System.Web;
 
 namespace LMKit.Maestro.Helpers;
@@ -108,14 +109,14 @@ public static class FileHelpers
         return Uri.UnescapeDataString(uriSegment);
     }
 
-    public static Uri GetModelFileUri(ModelInfo modelInfo, string modelsFolderPath)
+    public static Uri GetModelFileUri(ModelCard modelCard, string modelsFolderPath)
     {
-        return new Uri(GetModelFilePath(modelInfo, modelsFolderPath));
+        return new Uri(GetModelFilePath(modelCard, modelsFolderPath));
     }
 
-    public static string GetModelFilePath(ModelInfo modelInfo, string modelsFolderPath)
+    public static string GetModelFilePath(ModelCard modelCard, string modelsFolderPath)
     {
-        return Path.Combine(modelsFolderPath, modelInfo.Publisher, modelInfo.Repository, modelInfo.FileName);
+        return Path.Combine(modelsFolderPath, modelCard.Publisher, modelCard.Repository, modelCard.FileName);
     }
 
     public static string? GetModelFilePathFromUrl(Uri modelUrl, string modelsFolderPath)
@@ -176,9 +177,9 @@ public static class FileHelpers
         return new FileInfo(path).Length;
     }
 
-    public static string GetModelFileRelativeName(ModelInfo modelInfo)
+    public static string GetModelFileRelativeName(ModelCard modelCard)
     {
-        return Path.Combine(modelInfo.Publisher, modelInfo.Repository, modelInfo.FileName);
+        return Path.Combine(modelCard.Publisher, modelCard.Repository, modelCard.FileName);
     }
 
     public static string GetModelFileRelativePath(string filePath, string modelsFolderPath)

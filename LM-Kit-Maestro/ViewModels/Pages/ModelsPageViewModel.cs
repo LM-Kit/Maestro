@@ -44,46 +44,46 @@ public partial class ModelsPageViewModel : PageViewModelBase
 
 #if MODEL_DOWNLOAD
     [RelayCommand]
-    public void DownloadModel(ModelInfoViewModel modelInfoViewModel)
+    public void DownloadModel(ModelInfoViewModel modelCardViewModel)
     {
-        modelInfoViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
-        modelInfoViewModel.ModelInfo.Metadata.FileUri =
- FileHelpers.GetModelFileUri(modelInfoViewModel.ModelInfo, AppSettingsService.ModelStorageDirectory);
+        modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
+        modelCardViewModel.ModelInfo.Metadata.FileUri =
+ FileHelpers.GetModelFileUri(modelCardViewModel.ModelInfo, AppSettingsService.ModelStorageDirectory);
 
-        FileManager.DownloadModel(modelInfoViewModel.ModelInfo);
+        FileManager.DownloadModel(modelCardViewModel.ModelInfo);
     }
 
     [RelayCommand]
-    public void CancelDownload(ModelInfoViewModel modelInfoViewModel)
+    public void CancelDownload(ModelInfoViewModel modelCardViewModel)
     {
-        modelInfoViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
+        modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
 
-        FileManager.CancelModelDownload(modelInfoViewModel.ModelInfo);
+        FileManager.CancelModelDownload(modelCardViewModel.ModelInfo);
     }
 
     [RelayCommand]
-    public void PauseDownload(ModelInfoViewModel modelInfoViewModel)
+    public void PauseDownload(ModelInfoViewModel modelCardViewModel)
     {
-        modelInfoViewModel.DownloadInfo.Status = DownloadStatus.DownloadPaused;
+        modelCardViewModel.DownloadInfo.Status = DownloadStatus.DownloadPaused;
 
-        FileManager.PauseModelDownload(modelInfoViewModel.ModelInfo);
+        FileManager.PauseModelDownload(modelCardViewModel.ModelInfo);
     }
 
     [RelayCommand]
-    public void ResumeDownload(ModelInfoViewModel modelInfoViewModel)
+    public void ResumeDownload(ModelInfoViewModel modelCardViewModel)
     {
-        modelInfoViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
+        modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
 
-        FileManager.ResumeModelDownload(modelInfoViewModel.ModelInfo);
+        FileManager.ResumeModelDownload(modelCardViewModel.ModelInfo);
     }
 #endif
 
     [RelayCommand]
-    public void DeleteModel(ModelInfoViewModel modelInfoViewModel)
+    public void DeleteModel(ModelInfoViewModel modelCardViewModel)
     {
         try
         {
-            FileManager.DeleteModel(modelInfoViewModel.ModelInfo);
+            FileManager.DeleteModel(modelCardViewModel.ModelInfo);
         }
         catch (Exception ex)
         {
