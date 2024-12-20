@@ -1,4 +1,9 @@
-﻿body.mac #chat-border {
+﻿body.font-size {
+    font-size: 16px;
+    color: red;
+}
+
+body.mac #chat-border {
     max-width: 1000px;
 }
 
@@ -7,6 +12,8 @@ body.windows #chat-border {
 }
 
 #chat-border {
+    color: red;
+    font-size: 40px;
     display: flex;
     position: relative;
     margin: 0;
@@ -15,7 +22,6 @@ body.windows #chat-border {
     background-color: var(--Surface);
     border: 2px solid var(--OutlineVariant);
     transition: border-color 0.3s;
-    color: white;
 }
 
 .chat-border-small {
@@ -27,7 +33,6 @@ body.windows #chat-border {
 }
 
 #chat-box {
-    color: var(--OnBackground);
     margin-block: auto;
     background-color: transparent;
     width: 100%;
@@ -36,9 +41,20 @@ body.windows #chat-border {
     border: none;
     outline: none;
     resize: none;
-    padding-right: 40px;
-    margin-left: 16px;
     margin-bottom: 0;
+    font-family: system-ui, sans-serif;
+    color: white;
+    padding-right: 40px;
+}
+
+body.windows #chat-box {
+    font-size: 16px;
+    margin-left: 16px;
+}
+
+body.mac #chat-box {
+    font-size: 20px;
+    margin-left: 20px;
 }
 
 .chat-box:focus-within {

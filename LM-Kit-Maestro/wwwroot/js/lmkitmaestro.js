@@ -97,10 +97,10 @@ function scrollToEnd(smooth) {
 /*
     UserInput 
 */
-document.getElementById('chat-box').addEventListener('keydown', function (e) {
-    if (e.key == 'Enter' && !e.shiftKey) {
-        // prevent default behavior
-        e.preventDefault();
-        return false;
-    }
-}, false);
+//document.getElementById('chat-box').addEventListener('keydown', function (e) {
+//    if (e.key == 'Enter' && !e.shiftKey) {
+//        // prevent default behavior
+//        e.preventDefault();
+//        return false;
+//    }
+//}, false);
