@@ -2,7 +2,7 @@ using LMKit.Maestro.ViewModels;
 
 namespace LMKit.Maestro.UI;
 
-public partial class AssistantsPage : ContentPage
+public partial class AssistantsPage : PageBase
 {
     private readonly AssistantsPageViewModel _assistantsPageViewModel;
 

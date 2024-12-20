@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ui:PageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:local="clr-namespace:LMKit.Maestro"
@@ -12,38 +12,23 @@
              xmlns:services="clr-namespace:LMKit.Maestro.Services"
              x:DataType="vm:AssistantsPageViewModel"
              x:Class="LMKit.Maestro.UI.AssistantsPage">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{x:Static ui:UIConstants.PageTopBarHeight}"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Grid 
-            Margin="0, -8, 0, 0"
-            BackgroundColor="{StaticResource Surface}"
-            VerticalOptions="Start"
-            Grid.ColumnSpan="3" 
-            ColumnDefinitions="auto, *, auto">
+    <ui:PageBase.Header>
+        <ui:ModelSelectionButton
+            BindingContext="{Binding ModelListViewModel}"
+            x:Name="modelSelectionButton"
+            Margin="16, 0"
+            MaximumWidthRequest="{x:Static ui:UIConstants.ModelSelectionButtonMaxWidth}"
+            HeightRequest="{x:Static ui:UIConstants.ModelSelectionButtonHeight}">
+        </ui:ModelSelectionButton>
+    </ui:PageBase.Header>
 
-            <ui:ModelSelectionButton 
-                x:Name="modelSelectionButton"
-                BindingContext="{Binding ModelListViewModel}"
-                VerticalOptions="Start"
-                Margin="16, 0"
-                MaximumWidthRequest="{x:Static ui:UIConstants.ModelSelectionButtonMaxWidth}"
-                HeightRequest="{x:Static ui:UIConstants.ModelSelectionButtonHeight}"
-                Grid.Column="1">
-            </ui:ModelSelectionButton>
-        </Grid>
-
-        <BlazorWebView 
-            x:Name="blazorWebView" 
-            Grid.Row="1" 
-            HostPage="wwwroot/index.html">
+    <ui:PageBase.Body>
+        <BlazorWebView HostPage="wwwroot/index.html" StartPath="/assistants">
             <BlazorWebView.RootComponents>
-                <RootComponent Selector="#app" ComponentType="{x:Type razor:Translation}" />
+                <RootComponent Selector="#app" ComponentType="{x:Type razor:Routes}" />
             </BlazorWebView.RootComponents>
         </BlazorWebView>
-    </Grid>
-</ContentPage>
+    </ui:PageBase.Body>
+
+</ui:PageBase>
