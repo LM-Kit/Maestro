@@ -65,7 +65,7 @@ namespace LMKit.Maestro.Tests
             LMKitService.ModelLoadingCompleted += LMKitService_ModelLoadingCompleted;
             LMKitService.ModelLoadingFailed += LMKitService_ModelLoadingFailed;
 
-            string? localFilePath = FileHelpers.GetModelFilePathFromUrl(modelUri, LMKitDefaultSettings.DefaultModelsFolderPath);
+            string? localFilePath = FileHelpers.GetModelFilePathFromUrl(modelUri, LMKitDefaultSettings.DefaultModelStorageDirectory);
 
             if (localFilePath == null)
             {
