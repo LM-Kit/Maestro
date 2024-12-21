@@ -18,7 +18,7 @@
     CloseWhenBackgroundIsClicked="False"
     x:Class="LMKit.Maestro.UI.ModelSelectionPopup"
     x:DataType="vm:ModelSelectionPopupViewModel">
-    
+
     <ui:PopupView.BodyMargin>
         <OnPlatform x:TypeArguments="Thickness">
             <On Platform="Windows" Value="16, 72, 16, 16" />
@@ -30,7 +30,7 @@
         <Style x:Key="ModelInfoBadge" TargetType="Border">
             <Setter Property="Padding" Value="8, 4"/>
             <Setter Property="Stroke" Value="{StaticResource Surface4}"/>
-            <Setter Property="StrokeThickness" Value="0.25"/>
+            <Setter Property="StrokeThickness" Value="0"/>
             <Setter Property="StrokeShape" Value="RoundRectangle 4"/>
         </Style>
     </ui:PopupView.Resources>
@@ -98,15 +98,27 @@
                                 </VisualStateGroupList>
                             </VisualStateManager.VisualStateGroups>
 
-                            <Grid ColumnSpacing="8" ColumnDefinitions="*, auto, auto">
+                            <Grid ColumnSpacing="8">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4.5*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="1.5*" />
+                                </Grid.ColumnDefinitions>
+
                                 <Label VerticalOptions="Center" Text="{Binding Name}"/>
 
                                 <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="1">
-                                    <Label VerticalOptions="Center" TextColor="{StaticResource Outline}" Text="{Binding ModelInfo.Publisher}"/>
+                                    <Label VerticalOptions="Center" HorizontalOptions="End" TextColor="{StaticResource Outline}" Text="{Binding ModelInfo.Publisher}"/>
                                 </Border>
 
                                 <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="2">
-                                    <Label VerticalOptions="Center" TextColor="{StaticResource Outline}"  Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
+                                    <Label VerticalOptions="Center" HorizontalOptions="End" TextColor="{StaticResource Outline}" Text="{Binding Precision}"/>
+                                </Border>
+
+                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="3">
+                                    <Label VerticalOptions="Center" HorizontalOptions="End" TextColor="{StaticResource Outline}"  Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
                                 </Border>
                             </Grid>
                         </Border>

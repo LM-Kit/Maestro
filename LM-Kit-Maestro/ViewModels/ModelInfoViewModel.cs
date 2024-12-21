@@ -26,6 +26,9 @@ namespace LMKit.Maestro.ViewModels
         string _name;
 
         [ObservableProperty]
+        string _precision;
+
+        [ObservableProperty]
         DownloadInfo _downloadInfo = new DownloadInfo();
 
         public ModelInfoViewModel(ModelCard modelCard)
@@ -33,6 +36,7 @@ namespace LMKit.Maestro.ViewModels
             _modelCard = modelCard;
             Name = modelCard.ModelName;
             FileSize = modelCard.FileSize;
+            Precision = modelCard.QuantizationPrecision.ToString() + (modelCard.QuantizationPrecision > 1 ? "-bits" : "1-bit");
         }
     }
 
