@@ -1,16 +1,17 @@
 ﻿using LMKit.Maestro.Services;
+using LMKit.Model;
 using System.Collections.ObjectModel;
 
 namespace LMKit.Maestro.Tests.Services;
 
 internal class DummyLLmFileManager : ILLMFileManager
 {
-    public ObservableCollection<ModelInfo> UserModels { get; } = new ObservableCollection<ModelInfo>();
+    public ObservableCollection<ModelCard> UserModels { get; } = new ObservableCollection<ModelCard>();
 
     public ObservableCollection<Uri> UnsortedModels { get; } = new ObservableCollection<Uri>();
 
     public bool FileCollectingInProgress { get; private set; }
-    public string ModelsFolderPath
+    public string ModelStorageDirectory
     {
         get
         {
@@ -26,7 +27,7 @@ internal class DummyLLmFileManager : ILLMFileManager
     public event EventHandler? FileCollectingCompleted;
 #pragma warning restore 67
 
-    public void DeleteModel(ModelInfo modelInfo)
+    public void DeleteModel(ModelCard modelInfo)
     {
         UserModels.Remove(modelInfo);
     }
