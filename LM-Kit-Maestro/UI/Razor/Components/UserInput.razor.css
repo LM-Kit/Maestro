@@ -7,8 +7,6 @@ body.windows #chat-border {
 }
 
 #chat-border {
-    color: red;
-    font-size: 40px;
     display: flex;
     position: relative;
     margin: 0;
@@ -109,7 +107,3 @@ body.windows .send-button {
      .send-button:hover:not(:disabled) {
         background-color: var(--OutlineVariant);
         } 
-
-body.windows {
-    font-size: 16px;
-}
