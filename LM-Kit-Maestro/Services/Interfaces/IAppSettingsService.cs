@@ -2,8 +2,8 @@
 
 public interface IAppSettingsService
 {
-    public string? LastLoadedModel { get; set; }
-    public string ModelsFolderPath { get; set; }
+    public Uri? LastLoadedModelUri { get; set; }
+    public string ModelStorageDirectory { get; set; }
     public string SystemPrompt { get; set; }
     public int MaximumCompletionTokens { get; set; }
     public int RequestTimeout { get; set; }

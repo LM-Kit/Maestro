@@ -3,7 +3,6 @@ using System.Text.Json;
 
 namespace LMKit.Maestro.Services;
 
-
 public partial class AppSettingsService : ObservableObject, IAppSettingsService
 {
     protected IPreferences Settings { get; }
@@ -13,29 +12,45 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         Settings = settings;
     }
 
-
-    public string? LastLoadedModel
+    public Uri? LastLoadedModelUri
     {
         get
         {
-            return Settings.Get(nameof(LastLoadedModel), default(string?));
+            string? uriString = Settings.Get(nameof(LastLoadedModelUri), default(string?));
+
+            if (!string.IsNullOrWhiteSpace(uriString))
+            {
+                return new Uri(uriString);
+            }
+            else
+            {
+                return null;
+            }
         }
         set
         {
-            Settings.Set(nameof(LastLoadedModel), value);
+            Settings.Set(nameof(LastLoadedModelUri), value?.ToString());
             OnPropertyChanged();
         }
     }
 
-    public string ModelsFolderPath
+    public string ModelStorageDirectory
     {
         get
         {
-            return Settings.Get(nameof(ModelsFolderPath), LMKitDefaultSettings.DefaultModelsFolderPath);
+            string directory = Settings.Get(nameof(ModelStorageDirectory), LMKitDefaultSettings.DefaultModelStorageDirectory);
+
+            if(directory != LMKit.Global.Configuration.ModelStorageDirectory)
+            {
+                LMKit.Global.Configuration.ModelStorageDirectory = directory;
+            }
+
+            return directory;
         }
         set
         {
-            Settings.Set(nameof(ModelsFolderPath), value);
+            Settings.Set(nameof(ModelStorageDirectory), value);
+            LMKit.Global.Configuration.ModelStorageDirectory = value;
             OnPropertyChanged();
         }
     }
