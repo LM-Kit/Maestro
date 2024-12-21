@@ -84,6 +84,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
         try
         {
             FileManager.DeleteModel(modelCardViewModel.ModelInfo);
+            modelCardViewModel.OnLocalModelRemoved();
         }
         catch (Exception ex)
         {
