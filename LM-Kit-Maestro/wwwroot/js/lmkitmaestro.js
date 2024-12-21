@@ -64,32 +64,3 @@ function scrollToEnd(smooth) {
 //    }
 //}, false);
 
-function resizeUserInput() {
-    const chatBox = document.getElementById('input-text');
-    const chatBorder = document.getElementById('input-border');
-
-
-    chatBox.style.height = "";
-    chatBox.style.height = chatBox.scrollHeight + "px";
-
-    var style = window.getComputedStyle(chatBox);
-    var lineHeight = parseFloat(style.getPropertyValue('line-height'));
-    var lineCount = Math.round(chatBox.scrollHeight / lineHeight);
-
-    // If the height exceeds max-height (200px), the scrollbar should appear.
-    if (chatBox.scrollHeight > 200) {
-        chatBox.style.height = "200px"; // Limit height to 200px
-    }
-
-    if (lineCount > 1) {
-        chatBox.classList.add('input-text-large');
-        chatBorder.classList.add('input-border-large');
-        chatBox.classList.remove('input-text-small');
-        chatBorder.classList.remove('input-border-small');
-    } else {
-        chatBox.classList.add('input-text-small');
-        chatBorder.classList.add('input-border-small');
-        chatBox.classList.remove('input-text-large');
-        chatBorder.classList.remove('input-border-large');
-    }
-}

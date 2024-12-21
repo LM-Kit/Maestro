@@ -1,33 +1,79 @@
 ﻿@inject IJSRuntime JS
 
 <div id="input-border" class="input-border-small">
-    <textarea rows="1" id="input-text" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput"/>
+    <textarea rows="1" id="input-text" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput" />
 
     <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
             class="send-button round-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
         @if (!ViewModel.AwaitingResponse)
         {
-                <span>
-                    <i class="fas fa-arrow-up"></i>
-                </span>
+            <span>
+                <i class="fas fa-arrow-up"></i>
+            </span>
         }
         else
         {
-                <span>
-                    <i class="fas fa-stop"></i>
-                </span>
+            <span>
+                <i class="fas fa-stop"></i>
+            </span>
         }
     </button>
 </div>
 
 <script>
-document.getElementById('input-text').addEventListener('keydown', function (e) {
-    if (e.key == 'Enter' && !e.shiftKey) {
-        // prevent default behavior
-        e.preventDefault();
-        return false;
-    }
-}, false);
+
+            function resizeUserInput() {
+            const inputText = document.getElementById('input-text');
+            const inputBorder = document.getElementById('input-border');
+
+            // inputText.style.height = "";
+            // inputText.style.height = inputText.scrollHeight + "px";
+             inputText.style.height = inputText.scrollHeight + "px";
+
+            var style = window.getComputedStyle(inputText);
+            var lineHeight = style.getPropertyValue('line-height');
+
+
+            if (lineHeight === 'normal') {
+                // Estimate line height based on font size (1.2x is a common approximation for "normal")
+                var fontSize = parseFloat(style.getPropertyValue('font-size'));
+                lineHeight = fontSize * 1.2;
+            } else {
+                lineHeight = parseFloat(lineHeight);
+            }
+            var lineCount = Math.round(inputText.scrollHeight / lineHeight);
+
+            console.error("---------------");
+            console.error("line height: " + lineHeight);
+            console.error("scroll height: " + inputText.scrollHeight);
+            console.error("line count: " + lineCount);
+            console.error("margin-bottom: " + style.marginBottom);
+            console.error("input height: " + style.height);
+
+            // If the height exceeds max-height (200px), the scrollbar should appear.
+            if (inputText.scrollHeight > 200) {
+                inputText.style.height = "200px"; // Limit height to 200px
+            }
+
+            if (lineCount > 1) {
+                inputText.classList.add('input-text-large');
+                inputBorder.classList.add('input-border-large');
+                inputText.classList.remove('input-text-small');
+                inputBorder.classList.remove('input-border-small');
+            } else {
+                inputText.classList.add('input-text-small');
+                inputBorder.classList.add('input-border-small');
+                inputText.classList.remove('input-text-large');
+                inputBorder.classList.remove('input-border-large');
+            }
+        }
+    document.getElementById('input-text').addEventListener('keydown', function (e) {
+        if (e.key == 'Enter' && !e.shiftKey) {
+            // prevent default behavior
+            e.preventDefault();
+            return false;
+        }
+    }, false);
 </script>
 @code
 {

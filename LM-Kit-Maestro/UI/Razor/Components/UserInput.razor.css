@@ -11,25 +11,22 @@ body.windows #input-border {
     position: relative;
     margin: 0;
     width: 100%;
-    padding-block: 8px;
-    background-color: var(--Surface);
     border: 2px solid var(--OutlineVariant);
     transition: border-color 0.3s;
 }
 
 .input-border-small {
-    padding-block: 0px;
+    background-color: chocolate;
     border-radius: 32px;
 }
 
 .input-border-large {
-    padding-block: 32px;
     border-radius: 16px;
+    background-color: darkcyan;
 }
 
+
 #input-text {
-    /*margin-block: auto;*/
-    background-color: transparent;
     width: 100%;
     max-height: 200px;
     overflow-y: auto;
@@ -39,17 +36,17 @@ body.windows #input-border {
     font-family: system-ui, sans-serif;
     color: white;
     padding-right: 40px;
-    line-height: 40px;
 }
 
-.input-text-large {
-    margin-top: 32px;
-    margin-bottom: 32px;
+.input-border-large #input-text {
+    margin-top: 8px;
+    margin-bottom: 28px;
+    background-color: red;
 }
 
-.input-text-small {
-    margin-top: 0;
-    margin-bottom: 0;
+.input-border-small #input-text {
+    background-color: yellow;
+    margin-block: auto;
 }
 
 body.windows #input-text {
@@ -67,12 +64,12 @@ body.mac #input-text {
 }
 
 #input-text::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 #input-text::-webkit-scrollbar-thumb {
-    background-color: var(--Surface2);
-    border-radius: 4px;
+    background-color: var(--OutlineVariant);
+    border-radius: 0;
     border: 10px solid transparent;
 }
 
@@ -81,20 +78,28 @@ body.mac #input-text {
 }
 
 #input-text::-webkit-scrollbar-thumb:hover {
-    background-color: var(--Surface3);
+    background-color: var(--Outline);
 }
 
 .send-button {
     position: absolute;
     right: 0;
-    bottom: 6px;
-    margin-top: auto;
     margin-right: 8px;
     margin-left: auto;
     border: none;
     background-color: var(--Surface4);
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+.input-border-large .send-button {
+    position: absolute;
+    bottom: 6px;
+}
+
+.input-border-small .send-button {
+    padding-block: 8px;
+    position: relative;
 }
 
 body.mac .send-button {
