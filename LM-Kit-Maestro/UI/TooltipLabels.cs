@@ -13,5 +13,8 @@
         public const string EjectModel = "Eject model";
         public const string SelectAnotherFolder = "Select another folder";
         public const string OpenInFileExplorer = "Open in File Explorer";
+        public const string DownloadingModel = "Downloading model...";
+        public const string LoadingModel = "Loading model...";
+        public const string FinishingUp = "Finishing up...";
     }
 }

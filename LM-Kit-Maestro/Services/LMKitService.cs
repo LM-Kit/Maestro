@@ -27,6 +27,7 @@ public partial class LMKitService : INotifyPropertyChanged
     public LMKitConfig LMKitConfig { get; } = new LMKitConfig();
 
     public event NotifyModelStateChangedEventHandler? ModelLoadingProgressed;
+    public event NotifyModelStateChangedEventHandler? ModelDownloadingProgressed;
     public event NotifyModelStateChangedEventHandler? ModelLoadingCompleted;
     public event NotifyModelStateChangedEventHandler? ModelLoadingFailed;
     public event NotifyModelStateChangedEventHandler? ModelUnloaded;
@@ -62,7 +63,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                _model = new LLM(fileUri, fileUri.IsFile ? fileUri.LocalPath : localFilePath, loadingProgress: OnModelLoadingProgressed);
+                _model = new LLM(fileUri, downloadingProgress: OnModelDownloadingProgressed, loadingProgress: OnModelLoadingProgressed);
 
                 modelLoadingSuccess = true;
             }
@@ -433,6 +434,13 @@ public partial class LMKitService : INotifyPropertyChanged
     private bool OnModelLoadingProgressed(float progress)
     {
         ModelLoadingProgressed?.Invoke(this, new ModelLoadingProgressedEventArgs(_currentlyLoadingModelUri!, progress));
+
+        return true;
+    }
+
+    private bool OnModelDownloadingProgressed(string path, long? contentLength, long bytesRead)
+    {
+        ModelDownloadingProgressed?.Invoke(this, new ModelDownloadingProgressedEventArgs(_currentlyLoadingModelUri!, path, contentLength, bytesRead));
 
         return true;
     }

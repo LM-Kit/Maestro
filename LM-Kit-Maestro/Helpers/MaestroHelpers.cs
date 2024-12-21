@@ -1,54 +1,55 @@
 ﻿using LMKit.Maestro.Services;
 using LMKit.Maestro.ViewModels;
+using LMKit.Model;
 
 namespace LMKit.Maestro.Helpers
 {
     internal static class MaestroHelpers
     {
-        public static ModelInfoViewModel? TryGetExistingModelInfoViewModel(ICollection<ModelInfoViewModel> modelInfoViewModels, ModelInfo modelInfo)
+        public static ModelInfoViewModel? TryGetExistingModelInfoViewModel(ICollection<ModelInfoViewModel> modelCardViewModels, ModelCard modelCard)
         {
-            foreach (var modelInfoViewModel in modelInfoViewModels)
-            {
-                if (string.CompareOrdinal(modelInfoViewModel.ModelInfo.FileName, modelInfo.FileName) == 0 &&
-                    string.CompareOrdinal(modelInfoViewModel.ModelInfo.Repository, modelInfo.Repository) == 0 &&
-                    string.CompareOrdinal(modelInfoViewModel.ModelInfo.Publisher, modelInfo.Publisher) == 0)
+            foreach (var modelCardViewModel in modelCardViewModels)
+            {//todo: use sha instead
+                if (string.CompareOrdinal(modelCardViewModel.ModelInfo.FileName, modelCard.FileName) == 0 &&
+                    string.CompareOrdinal(modelCardViewModel.ModelInfo.Repository, modelCard.Repository) == 0 &&
+                    string.CompareOrdinal(modelCardViewModel.ModelInfo.Publisher, modelCard.Publisher) == 0)
                 {
-                    return modelInfoViewModel;
+                    return modelCardViewModel;
                 }
             }
 
             return null;
         }
 
-        public static ModelInfoViewModel? TryGetExistingModelInfoViewModel(string modelsFolderPath, ICollection<ModelInfoViewModel> modelInfoViewModels, Uri modelFileUri)
+        public static ModelInfoViewModel? TryGetExistingModelInfoViewModel(string modelsFolderPath, ICollection<ModelInfoViewModel> modelCardViewModels, Uri modelFileUri)
         {
             if (FileHelpers.GetModelInfoFromPath(modelFileUri.LocalPath, modelsFolderPath, out string publisher, out string repository, out string fileName))
             {
-                foreach (var modelInfoViewModel in modelInfoViewModels)
+                foreach (var modelCardViewModel in modelCardViewModels)
                 {
-                    if (string.CompareOrdinal(modelInfoViewModel.ModelInfo.FileName, fileName) == 0 &&
-                        string.CompareOrdinal(modelInfoViewModel.ModelInfo.Repository, repository) == 0 &&
-                        string.CompareOrdinal(modelInfoViewModel.ModelInfo.Publisher, publisher) == 0)
+                    if (string.CompareOrdinal(modelCardViewModel.ModelInfo.FileName, fileName) == 0 &&
+                        string.CompareOrdinal(modelCardViewModel.ModelInfo.Repository, repository) == 0 &&
+                        string.CompareOrdinal(modelCardViewModel.ModelInfo.Publisher, publisher) == 0)
                     {
-                        return modelInfoViewModel;
+                        return modelCardViewModel;
                     }
                 }
             }
             else
             {
                 //handling unsorted models.
-                foreach (var modelInfoViewModel in modelInfoViewModels)
+                foreach (var modelCardViewModel in modelCardViewModels)
                 {
-                    if (modelInfoViewModel.ModelInfo.FileUri == modelFileUri)
+                    if (modelCardViewModel.ModelInfo.ModelUri == modelFileUri)
                     {
-                        return modelInfoViewModel;
+                        return modelCardViewModel;
                     }
                 }
             }
 
-            //Loïc: we have an architecture defect. We can reach this stage, especially at startup, while modelInfoViewModels is not completely loaded.
+            //Loïc: we have an architecture defect. We can reach this stage, especially at startup, while modelCardViewModels is not completely loaded.
             //todo Evan: fix.
-            return new ModelInfoViewModel(new ModelInfo(publisher, repository, fileName, modelFileUri));
+            return new ModelInfoViewModel(new ModelCard(modelFileUri));
         }
     }
 }

@@ -80,7 +80,7 @@ public partial class AppShellViewModel : ViewModelBase
 
         _lmKitService.ModelLoadingFailed += OnModelLoadingFailed;
 
-        if (_appSettingsService.LastLoadedModel != null)
+        if (_appSettingsService.LastLoadedModelUri != null)
         {
             _ = Task.Run(TryLoadLastUsedModel); //Loading model in the background to avoid blocking UI initialization.
         }
@@ -93,16 +93,9 @@ public partial class AppShellViewModel : ViewModelBase
 
     private void TryLoadLastUsedModel()
     {
-        if (FileHelpers.TryCreateFileUri(_appSettingsService.LastLoadedModel!, out Uri? fileUri) &&
-            File.Exists(_appSettingsService.LastLoadedModel)/* &&
-            FileHelpers.GetModelInfoFromFileUri(fileUri!, _appSettingsService.ModelsFolderPath,
-            out string publisher, out string repository, out string fileName)*/)
+        if (_appSettingsService.LastLoadedModelUri != null)
         {
-            _lmKitService.LoadModel(fileUri!);
-        }
-        else
-        {
-            _appSettingsService.LastLoadedModel = null;
+            _lmKitService.LoadModel(_appSettingsService.LastLoadedModelUri);
         }
     }
 
@@ -112,7 +105,7 @@ public partial class AppShellViewModel : ViewModelBase
 
         if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
         {
-            _appSettingsService.ModelsFolderPath = LMKitDefaultSettings.DefaultModelsFolderPath;
+            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
 
             if (Microsoft.Maui.ApplicationModel.MainThread.IsMainThread)
             {

@@ -36,7 +36,7 @@ public partial class ModelsPage : PageBase
     public async Task ShowUnsortedModelFilesPopup()
     {
         var fileNames = _modelsPageViewModel.FileManager.UnsortedModels.Select(uri => FileHelpers.GetModelFileRelativePath(uri.LocalPath,
-            _modelsPageViewModel.AppSettingsService.ModelsFolderPath)).ToList();
+            _modelsPageViewModel.AppSettingsService.ModelStorageDirectory)).ToList();
 
         UnsortedModelFilesPopup popup = new UnsortedModelFilesPopup(_modelsPageViewModel.PopupNavigation, new UnsortedModelFilesPopupViewModel()
         {
