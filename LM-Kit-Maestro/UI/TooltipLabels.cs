@@ -22,5 +22,6 @@
         public const string ContextSize = "Context size";
         public const string SamplingConfiguration = "Sampling configuration";
         public const string SamplingMode = "Sampling mode";
+        public const string ModelFileNotAvailableLocally = "The model file is not available locally";
     }
 }

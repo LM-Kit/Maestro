@@ -326,8 +326,8 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="You have "/>
-                                        <Span Text="{Binding ModelListViewModel.UserModels.Count}" FontAttributes="Bold"/>
-                                        <Span Text=" installed model(s) taking a total of "/>
+                                        <Span Text="{Binding ModelListViewModel.DownloadedCount}" FontAttributes="Bold"/>
+                                        <Span Text=" downloaded model(s) taking a total of "/>
                                         <Span Text="{Binding ModelListViewModel.TotalModelSize, Converter={converters:FileSizeConverter}}" FontAttributes="Bold"/>
                                     </FormattedString>
                                 </Label.FormattedText>

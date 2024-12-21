@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using LMKit.Model;
+using LMKit.Maestro.UI;
 
 namespace LMKit.Maestro.Services;
 
@@ -190,7 +191,11 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         if (modelCard.IsLocallyAvailable)
         {
-            File.Delete(modelCard.ModelUri.LocalPath);
+            File.Delete(modelCard.LocalPath);
+        }
+        else
+        {
+            throw new Exception(TooltipLabels.ModelFileNotAvailableLocally);
         }
     }
 

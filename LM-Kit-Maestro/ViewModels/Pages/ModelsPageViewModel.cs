@@ -88,7 +88,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
         catch (Exception ex)
         {
             _popupService.DisplayAlert("Failure to delete model file",
-                $"The model file could not be deleted:\n {ex.Message}", "OK");
+                $"{ex.Message}", "OK");
         }
     }
 

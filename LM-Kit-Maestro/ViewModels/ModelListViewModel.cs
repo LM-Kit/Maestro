@@ -20,6 +20,24 @@ namespace LMKit.Maestro.ViewModels
 
         private ObservableCollection<ModelInfoViewModel> _userModels = new ObservableCollection<ModelInfoViewModel>();
 
+        public int DownloadedCount
+        {
+            get
+            {
+                int count = 0;
+
+                foreach (var model in _userModels)
+                {
+                    if (model.ModelInfo.IsLocallyAvailable)
+                    {
+                        count++;
+                    }
+                }
+
+                return count;
+            }
+        }
+
         [ObservableProperty]
         long _totalModelSize;
 
