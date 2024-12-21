@@ -247,7 +247,7 @@
                                 <Slider
                                         Grid.ColumnSpan="2"
                                         Grid.Row="1"
-                                        Value="{Binding RequestTimeout, Mode=TwoWay}" Minimum="10" Maximum="120"/>
+                                        Value="{Binding RequestTimeout, Mode=TwoWay}" Minimum="10" Maximum="240"/>
                             </Grid>
 
                             <Grid StyleClass="SettingGrid">
