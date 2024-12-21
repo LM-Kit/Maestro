@@ -206,6 +206,13 @@
                             CommandParameter="{Binding}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand, x:DataType=vm:ModelsPageViewModel}"
                             Text="{StaticResource Delete}">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding ModelInfo.IsLocallyAvailable}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Opacity" Value="0.3" />
+                                    <Setter Property="TextColor" Value="{StaticResource DisabledTextColor}" />
+                                </DataTrigger>
+                            </Button.Triggers>
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroupList>
                                     <VisualStateGroup x:Name="CommonStates">

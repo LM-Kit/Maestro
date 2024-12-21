@@ -162,6 +162,8 @@ namespace LMKit.Maestro.ViewModels
                     index++;
                 }
             }
+
+            OnPropertyChanged(nameof(DownloadedCount));
         }
 
         private void AddNewModel(ModelCard modelCard)
