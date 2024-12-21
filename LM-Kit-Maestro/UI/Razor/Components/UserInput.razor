@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime JS
 
-<div id="chat-border" class="chat-border-small">
-    <textarea rows="1" id="chat-box" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput"/>
+<div id="input-border" class="input-border-small">
+    <textarea rows="1" id="input-text" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput"/>
 
     <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
             class="send-button round-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
@@ -21,7 +21,7 @@
 </div>
 
 <script>
-document.getElementById('chat-box').addEventListener('keydown', function (e) {
+document.getElementById('input-text').addEventListener('keydown', function (e) {
     if (e.key == 'Enter' && !e.shiftKey) {
         // prevent default behavior
         e.preventDefault();

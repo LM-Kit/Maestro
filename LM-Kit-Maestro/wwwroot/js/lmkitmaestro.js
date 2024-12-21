@@ -38,48 +38,8 @@ function getConversationViewHeight() {
     return element.clientHeight;
 };
 
-function resizeUserInput() {
-    const chatBox = document.getElementById('chat-box');
-    const chatBorder = document.getElementById('chat-border');
-
-
-    chatBox.style.height = "";
-    chatBox.style.height = chatBox.scrollHeight + "px";
-
-    var style = window.getComputedStyle(chatBox);
-    var lineHeight = parseFloat(style.getPropertyValue('line-height'));
-    var lineCount = Math.round(chatBox.scrollHeight / lineHeight);
-
-    // If the height exceeds max-height (200px), the scrollbar should appear.
-    if (chatBox.scrollHeight > 200) {
-        chatBox.style.height = "200px"; // Limit height to 200px
-    } else {
-        // Adding top and bottom margin depending on number of lines, to account for border radius of input box when showing scrollbar.
-        if (lineCount > 2) {
-            chatBox.style.marginBottom = "16px";
-            chatBox.style.marginTop = "16px";
-        } else if (lineCount > 1) {
-            chatBox.style.marginTop = "8px";
-            chatBox.style.marginBottom = "8px";
-
-        } else {
-            chatBox.style.marginBottom = "0px";
-            chatBox.style.marginTop = "0px";
-        }
-    }
-
-
-    if (lineCount > 1) {
-        chatBorder.classList.add('chat-border-large');
-        chatBorder.classList.remove('chat-border-small');
-    } else {
-        chatBorder.classList.add('chat-border-small');
-        chatBorder.classList.remove('chat-border-large');
-    }
-}
-
 function setUserInputFocus() {
-    const element = document.getElementById('chat-box');
+    const element = document.getElementById('input-text');
 
     element.focus();
 }
@@ -96,10 +56,40 @@ function scrollToEnd(smooth) {
 /*
     UserInput 
 */
-//document.getElementById('chat-box').addEventListener('keydown', function (e) {
+//document.getElementById('input-text').addEventListener('keydown', function (e) {
 //    if (e.key == 'Enter' && !e.shiftKey) {
 //        // prevent default behavior
 //        e.preventDefault();
 //        return false;
 //    }
 //}, false);
+
+function resizeUserInput() {
+    const chatBox = document.getElementById('input-text');
+    const chatBorder = document.getElementById('input-border');
+
+
+    chatBox.style.height = "";
+    chatBox.style.height = chatBox.scrollHeight + "px";
+
+    var style = window.getComputedStyle(chatBox);
+    var lineHeight = parseFloat(style.getPropertyValue('line-height'));
+    var lineCount = Math.round(chatBox.scrollHeight / lineHeight);
+
+    // If the height exceeds max-height (200px), the scrollbar should appear.
+    if (chatBox.scrollHeight > 200) {
+        chatBox.style.height = "200px"; // Limit height to 200px
+    }
+
+    if (lineCount > 1) {
+        chatBox.classList.add('input-text-large');
+        chatBorder.classList.add('input-border-large');
+        chatBox.classList.remove('input-text-small');
+        chatBorder.classList.remove('input-border-small');
+    } else {
+        chatBox.classList.add('input-text-small');
+        chatBorder.classList.add('input-border-small');
+        chatBox.classList.remove('input-text-large');
+        chatBorder.classList.remove('input-border-large');
+    }
+}
