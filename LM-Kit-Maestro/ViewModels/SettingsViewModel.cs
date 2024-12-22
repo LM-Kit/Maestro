@@ -127,7 +127,7 @@ namespace LMKit.Maestro.ViewModels
 
         public void Save()
         {
-            _appSettingsService.LastLoadedModel = _config.LoadedModelUri?.LocalPath;
+            _appSettingsService.LastLoadedModelUri = _config.LoadedModelUri;
             _appSettingsService.SystemPrompt = _config.SystemPrompt;
             _appSettingsService.MaximumCompletionTokens = _config.MaximumCompletionTokens;
             _appSettingsService.RequestTimeout = _config.RequestTimeout;

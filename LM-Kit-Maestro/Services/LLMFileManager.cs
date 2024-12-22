@@ -1,10 +1,13 @@
-﻿using LMKit.Maestro.Helpers;
-using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using LMKit.Maestro.Helpers;
+using LMKit.Maestro.UI;
 using LMKit.Model;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
+
 
 /// <summary>
 /// This service is intended to be used as a singleton via Dependency Injection. 
@@ -15,36 +18,54 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 #if WINDOWS
     private readonly FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
 #endif
+
+#if DEBUG
+    private static int InstanceCount = 0;
+#endif
+
     private readonly FileSystemEntryRecorder _fileSystemEntryRecorder = new FileSystemEntryRecorder();
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
+    private bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
+    private bool _enableCustomModels = true;  //todo: Implement this as a configurable option in the configuration panel 
 
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = new Dictionary<Uri, FileDownloader>();
 
     private delegate bool ModelDownloadingProgressCallback(string path, long? contentLength, long bytesRead);
+    public virtual event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
 
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _collectModelFilesTask;
 
-    public ObservableCollection<ModelInfo> UserModels { get; } = new ObservableCollection<ModelInfo>();
-    public ObservableCollection<Uri> UnsortedModels { get; } = new ObservableCollection<Uri>();
+    public ReadOnlyObservableCollection<ModelCard> SortedModels { get; }
+    public ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
+
+
+    private ObservableCollection<ModelCard> _sortedModels { get; } = new ObservableCollection<ModelCard>();
+    private ObservableCollection<ModelCard> _unsortedModels { get; } = new ObservableCollection<ModelCard>();
+
+    [ObservableProperty]
+    private long _totalModelSize;
+
+    [ObservableProperty]
+    private int _downloadedCount;
 
     [ObservableProperty]
     private bool _fileCollectingInProgress;
 
-    private string _folderPath = string.Empty;
-    public string ModelsFolderPath
+    private string _modelStorageDirectory = string.Empty;
+    public string ModelStorageDirectory
     {
-        get => _folderPath;
+        get => _modelStorageDirectory;
         set
         {
-            if (string.CompareOrdinal(_folderPath, value) != 0)
+            if (string.CompareOrdinal(_modelStorageDirectory, value) != 0)
             {
-                _folderPath = value;
+                _modelStorageDirectory = value;
 #if WINDOWS
                 _fileSystemWatcher.Path = value;
 #endif
-                OnModelsFolderPathChanged();
+                OnModelStorageDirectoryChanged();
             }
         }
     }
@@ -57,11 +78,21 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     public LLMFileManager(IAppSettingsService appSettingsService, HttpClient httpClient)
     {
+#if DEBUG
+        if (InstanceCount > 0)
+        {
+            throw new InvalidProgramException("Invalid operation: Only one instance of this class should be created, and it must be instantiated through dependency injection.");
+        }
+        InstanceCount++;
+#endif
+
+        SortedModels = new ReadOnlyObservableCollection<ModelCard>(_sortedModels);
+        UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
         _appSettingsService = appSettingsService;
         _httpClient = httpClient;
 
-        UserModels.CollectionChanged += OnUserModelsCollectionChanged;
-        UnsortedModels.CollectionChanged += OnUnsortedModelsCollectionChanged;
+        _sortedModels.CollectionChanged += OnSortedModelsCollectionChanged;
+        _unsortedModels.CollectionChanged += OnUnsortedModelsCollectionChanged;
 
         if (_appSettingsService is INotifyPropertyChanged notifyPropertyChanged)
         {
@@ -81,7 +112,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             // todo
         }
 
-        ModelsFolderPath = _appSettingsService.ModelsFolderPath;
+        ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
 
 #if WINDOWS
         _fileSystemWatcher.Changed += OnFileChanged;
@@ -95,19 +126,19 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 
 #if BETA_DOWNLOAD_MODELS
-    public void DownloadModel(ModelInfo modelInfo)
+    public void DownloadModel(ModelCard modelCard)
     {
-        var filePath = Path.Combine(ModelsFolderPath, modelInfo.Publisher, modelInfo.Repository, modelInfo.FileName);
+        var filePath = Path.Combine(ModelStorageDirectory, modelCard.Publisher, modelCard.Repository, modelCard.FileName);
 
-        if (!_fileDownloads.ContainsKey(modelInfo.Metadata.DownloadUrl!))
+        if (!_fileDownloads.ContainsKey(modelCard.Metadata.DownloadUrl!))
         {
-            FileDownloader fileDownloader = new FileDownloader(_httpClient, modelInfo.Metadata.DownloadUrl!, filePath);
+            FileDownloader fileDownloader = new FileDownloader(_httpClient, modelCard.Metadata.DownloadUrl!, filePath);
 
             fileDownloader.ErrorEventHandler += OnDownloadExceptionThrown;
             fileDownloader.DownloadProgressedEventHandler += OnDownloadProgressed;
             fileDownloader.DownloadCompletedEventHandler += OnDownloadCompleted;
 
-            if (_fileDownloads.TryAdd(modelInfo.Metadata.DownloadUrl!, fileDownloader))
+            if (_fileDownloads.TryAdd(modelCard.Metadata.DownloadUrl!, fileDownloader))
             {
                 fileDownloader.Start();
             }
@@ -159,55 +190,97 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         ModelDownloadingCompleted?.Invoke(this, new DownloadOperationStateChangedEventArgs(downloadUrl, DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed));
     }
 
-    public void CancelModelDownload(ModelInfo modelInfo)
+    public void CancelModelDownload(ModelCard modelCard)
     {
-        if (_fileDownloads.TryGetValue(modelInfo.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
+        if (_fileDownloads.TryGetValue(modelCard.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
         {
             fileDownloader!.Stop();
         }
     }
 
-    public void PauseModelDownload(ModelInfo modelInfo)
+    public void PauseModelDownload(ModelCard modelCard)
     {
-        if (_fileDownloads.TryGetValue(modelInfo.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
+        if (_fileDownloads.TryGetValue(modelCard.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
         {
             fileDownloader!.Pause();
         }
     }
 
-    public void ResumeModelDownload(ModelInfo modelInfo)
+    public void ResumeModelDownload(ModelCard modelCard)
     {
-        if (_fileDownloads.TryGetValue(modelInfo.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
+        if (_fileDownloads.TryGetValue(modelCard.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
         {
             fileDownloader!.Resume();
         }
     }
 #endif
 
-    public void DeleteModel(ModelInfo modelInfo)
+    internal void OnModelDownloaded(ModelCard modelCard)
     {
-        File.Delete(modelInfo.FileUri!.LocalPath);
+        TotalModelSize += modelCard.FileSize;
+        DownloadedCount++;
+    }
+
+    public void DeleteModel(ModelCard modelCard)
+    {
+        if (modelCard.IsLocallyAvailable)
+        {
+            File.Delete(modelCard.LocalPath);
+            DownloadedCount--;
+            TotalModelSize -= modelCard.FileSize;
+
+#if !WINDOWS
+            if (_unsortedModels.Contains(modelCard))
+            {
+                _unsortedModels.Remove(modelCard);
+            }
+            else if (_sortedModels.Contains(modelCard))
+            {
+                _sortedModels.Remove(modelCard);
+            }
+#endif
+        }
+        else
+        {
+            throw new Exception(TooltipLabels.ModelFileNotAvailableLocally);
+        }
+    }
+
+    public bool IsPredefinedModel(ModelCard modelCard)
+    {
+        if (_enablePredefinedModels)
+        {
+            foreach (var predefinedModel in ModelCard.GetPredefinedModelCards())
+            {
+                if (modelCard.ModelUri == predefinedModel.ModelUri)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void EnsureModelDirectoryExists()
     {
-        if (!Directory.Exists(_appSettingsService.ModelsFolderPath))
+        if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
         {
-            _appSettingsService.ModelsFolderPath = LMKitDefaultSettings.DefaultModelsFolderPath;
+            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
 
-            if (!Directory.Exists(_appSettingsService.ModelsFolderPath))
+            if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
             {
-                if (File.Exists(_appSettingsService.ModelsFolderPath))
+                if (File.Exists(_appSettingsService.ModelStorageDirectory))
                 {
-                    File.Delete(_appSettingsService.ModelsFolderPath);
+                    File.Delete(_appSettingsService.ModelStorageDirectory);
                 }
 
-                Directory.CreateDirectory(_appSettingsService.ModelsFolderPath);
+                Directory.CreateDirectory(_appSettingsService.ModelStorageDirectory);
             }
         }
     }
 
-    private async Task CollectModelFilesAsync()
+    private async Task CollectModelsAsync()
     {
         FileCollectingInProgress = true;
 
@@ -224,7 +297,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         try
         {
-            await (_collectModelFilesTask = Task.Run(new Action(CollectModelFiles)));
+            await (_collectModelFilesTask = Task.Run(() => CollectModels()));
         }
         catch (OperationCanceledException)
         {
@@ -264,68 +337,72 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         _collectModelFilesTask = null;
     }
 
-    private void CollectModelFiles()
+    private void CollectModels()
     {
-        var files = Directory.GetFileSystemEntries(ModelsFolderPath, "*", SearchOption.AllDirectories);
-
-        foreach (var filePath in files)
+        if (_enablePredefinedModels)
         {
-            if (ShouldCheckFile(filePath))
+            foreach (var modelCard in ModelCard.GetPredefinedModelCards())
             {
-                HandleFile(filePath);
-            }
+                TryRegisterChatModel(modelCard, isSorted: true);
 
-            _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
+                _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
+            }
+        }
+
+        if (_enableCustomModels)
+        {
+            var files = Directory.GetFileSystemEntries(ModelStorageDirectory, "*", SearchOption.AllDirectories);
+
+            foreach (var filePath in files)
+            {
+                if (ShouldCheckFile(filePath))
+                {
+                    HandleFile(filePath);
+                }
+
+                _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
+            }
         }
     }
 
-    private bool HasModel(ModelInfo modelInfo)
+    private bool TryRegisterChatModel(ModelCard? modelCard, bool isSorted)
     {
-        foreach (var model in UserModels)
+        if (modelCard != null)
         {
-            if (model.Equals(modelInfo))
+            if (!modelCard.Capabilities.HasFlag(ModelCapabilities.Chat))
             {
-                return true;
+                return false;
+            }
+
+            if (isSorted)
+            {
+                if (!ContainsModel(_sortedModels, modelCard, out _))
+                {
+                    _sortedModels.Add(modelCard);
+                    return true;
+                }
+            }
+            else
+            {
+                if (!ContainsModel(_unsortedModels, modelCard, out _))
+                {
+                    _unsortedModels.Add(modelCard);
+                    return true;
+                }
             }
         }
 
         return false;
     }
 
-    private void HandleFile(string filePath, bool collectAll = true)
+    private void HandleFile(string filePath)
     {
-        bool isModelFile = TryValidateModelFile(filePath, ModelsFolderPath, out ModelInfo? modelInfo);
-
-        void tryCollectModel(ModelInfo modelInfo)
+        if (!TryValidateModelFile(filePath, ModelStorageDirectory, out ModelCard? modelCard, out bool isSorted))
         {
-            if (!HasModel(modelInfo))
-            {
-                UserModels.Add(modelInfo);
-            }
+            return;
         }
 
-        if (isModelFile)
-        {
-            if (modelInfo != null)
-            {
-                tryCollectModel(modelInfo);
-            }
-            else
-            {
-                Uri fileUri = new Uri(filePath);
-
-                if (!UnsortedModels.Contains(fileUri))
-                {
-                    UnsortedModels.Add(fileUri);
-                }
-
-                if (collectAll)
-                {
-                    modelInfo = new ModelInfo("unknown publisher", "unknown repository", Path.GetFileName(filePath), fileUri, FileHelpers.GetFileSize(filePath));
-                    tryCollectModel(modelInfo);
-                }
-            }
-        }
+        TryRegisterChatModel(modelCard, isSorted);
     }
 
     private void HandleFileRecording(Uri fileUri)
@@ -350,26 +427,26 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     #region Event handlers
 
-    private async void OnModelsFolderPathChanged()
+    private async void OnModelStorageDirectoryChanged()
     {
         if (FileCollectingInProgress)
         {
             _cancellationTokenSource?.Cancel();
         }
 
-        _fileSystemEntryRecorder.Init(_folderPath);
+        _fileSystemEntryRecorder.Init(_modelStorageDirectory);
 
-        UnsortedModels.Clear();
-        UserModels.Clear();
+        _unsortedModels.Clear();
+        _sortedModels.Clear();
 
-        await CollectModelFilesAsync();
+        await CollectModelsAsync();
     }
 
     private void OnAppSettingsServicePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(IAppSettingsService.ModelsFolderPath))
+        if (e.PropertyName == nameof(IAppSettingsService.ModelStorageDirectory))
         {
-            ModelsFolderPath = _appSettingsService.ModelsFolderPath;
+            ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
         }
     }
 
@@ -378,13 +455,16 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         Uri fileUri = new Uri(e.FullPath);
 
-        if (UnsortedModels.Contains(fileUri))
+        if (ContainsModel(_unsortedModels, fileUri, out int index))
         {
-            UnsortedModels.Remove(fileUri);
+            _unsortedModels.RemoveAt(index);
         }
-        else if (ModelListContainsFileUri(UserModels, fileUri, out int index))
+        else if (ContainsModel(_sortedModels, fileUri, out index))
         {
-            UserModels.RemoveAt(index);
+            if (!IsPredefinedModel(_sortedModels[index]))
+            {
+                _sortedModels.RemoveAt(index);
+            }
         }
     }
 
@@ -458,38 +538,61 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 #endif
 
-    private void OnUserModelsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private void OnSortedModelsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+        if (e.Action == NotifyCollectionChangedAction.Add)
         {
             foreach (var item in e.NewItems!)
             {
-                HandleFileRecording(((ModelInfo)item).FileUri!);
+                var card = ((ModelCard)item);
+
+                if (card.IsLocallyAvailable)
+                {
+                    TotalModelSize += card.FileSize;
+                    DownloadedCount++;
+                }
+
+                HandleFileRecording(card.ModelUri!);
             }
         }
-        else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
         {
             foreach (var item in e.OldItems!)
             {
-                HandleFileRecordDeletion(((ModelInfo)item).FileUri!);
+                var card = ((ModelCard)item);
+
+                if (card.IsLocallyAvailable)
+                {
+                    TotalModelSize -= card.FileSize;
+                    DownloadedCount--;
+                }
+
+                HandleFileRecordDeletion(card.ModelUri!);
             }
         }
+        else if (e.Action == NotifyCollectionChangedAction.Reset)
+        {
+            TotalModelSize = 0;
+            DownloadedCount = 0;
+        }
+
+        SortedModelCollectionChanged?.Invoke(sender, e);
     }
 
-    private void OnUnsortedModelsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private void OnUnsortedModelsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+        if (e.Action == NotifyCollectionChangedAction.Add)
         {
             foreach (var item in e.NewItems!)
             {
-                HandleFileRecording((Uri)item);
+                HandleFileRecording(((ModelCard)item).ModelUri!);
             }
         }
-        else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
         {
             foreach (var item in e.OldItems!)
             {
-                HandleFileRecordDeletion((Uri)item);
+                HandleFileRecordDeletion(((ModelCard)item).ModelUri!);
             }
         }
     }
@@ -498,85 +601,131 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         var fileRecordPathChangedEventArgs = (FileSystemEntryRecorder.FileRecordPathChangedEventArgs)e;
 
-        int index = UnsortedModels.IndexOf(fileRecordPathChangedEventArgs.OldPath);
-
-        if (index != -1)
+        if (ContainsModel(_unsortedModels, fileRecordPathChangedEventArgs.OldPath, out int index))
         {
-            UnsortedModels[index] = fileRecordPathChangedEventArgs.NewPath;
+            _unsortedModels[index] = new ModelCard(fileRecordPathChangedEventArgs.NewPath)
+            {
+                Publisher = _unsortedModels[index].Publisher,
+                Repository = _unsortedModels[index].Repository
+            };
         }
-        else if (ModelListContainsFileUri(UserModels, fileRecordPathChangedEventArgs.OldPath, out index) &&
-                FileHelpers.GetModelInfoFromFileUri(fileRecordPathChangedEventArgs.NewPath, ModelsFolderPath,
+        else if (ContainsModel(_sortedModels, fileRecordPathChangedEventArgs.OldPath, out index) &&
+                FileHelpers.GetModelInfoFromFileUri(fileRecordPathChangedEventArgs.NewPath, ModelStorageDirectory,
                 out string publisher, out string repository, out string fileName))
         {
-            UserModels[index] = new ModelInfo(publisher, repository, fileName, fileRecordPathChangedEventArgs.NewPath, UserModels[index].FileSize);
+            _sortedModels[index] = new ModelCard(fileRecordPathChangedEventArgs.NewPath)
+            {
+                Publisher = publisher,
+                Repository = repository,
+            };
         }
     }
     #endregion
 
     #region Static methods
 
-    private static bool IsTextCompletionModel(string filePath)
+    private static bool ContainsModel(IList<ModelCard> models, ModelCard modelCard, out int index)
     {
-        try
+        index = 0;
+
+        foreach (var model in models)
         {
-            using (var model = new LLM(filePath, loadingOptions: new LLM.LoadingOptions() { LoadTensors = false }))
+            /*if (model.SHA256 == modelCard.SHA256) //Loïc: commented. This is too slow.
             {
-                return !model.IsEmbeddingModel;
+                return true;
+            }*/
+
+            if (model.ModelUri == modelCard.ModelUri ||
+                model.FileName == modelCard.FileName && model.FileSize == modelCard.FileSize)
+            {
+                return true;
             }
+
+            index++;
         }
-        catch (Exceptions.ModelNotLoadedException)
-        {
-            //todo: eventually log error.
-            return false;
-        }
+
+        index = -1;
+
+        return false;
     }
 
-    private static bool TryValidateModelFile(string filePath, string modelFolderPath, out ModelInfo? modelInfo)
+    private static bool ContainsModel(IList<ModelCard> models, Uri uri, out int index)
     {
-        if (LLM.ValidateFormat(filePath) &&
-            IsTextCompletionModel(filePath))
+        index = 0;
+
+        foreach (var model in models)
         {
+            if (model.ModelUri == uri)
+            {
+                return true;
+            }
+
+            index++;
+        }
+
+        index = -1;
+
+        return false;
+    }
+
+    private static bool TryValidateModelFile(string filePath, string modelFolderPath, out ModelCard? modelCard, out bool isSorted)
+    {
+        isSorted = false;
+        modelCard = null;
+
+        if (LLM.ValidateFormat(filePath))
+        {
+            try
+            {
+                modelCard = ModelCard.CreateFromFile(filePath);
+            }
+            catch
+            {
+                return false;
+            }
+
             if (FileHelpers.GetModelInfoFromPath(filePath, modelFolderPath,
                 out string publisher, out string repository, out string fileName))
             {
+                isSorted = true;
 #if BETA_DOWNLOAD_MODELS
-                modelInfo = TryGetExistingModelInfo(fileName, repository, publisher);
-                if (modelInfo == null)
+                modelCard = TryGetExistingModelInfo(fileName, repository, publisher);
+                if (modelCard == null)
                 {
-                    modelInfo = new ModelInfo(publisher, repository, fileName);
-                    modelInfo.Metadata.FileSize = FileHelpers.GetFileSize(filePath);
+                    modelCard = new ModelInfo(publisher, repository, fileName);
+                    modelCard.Metadata.FileSize = FileHelpers.GetFileSize(filePath);
                 }
 
-                modelInfo.Metadata.FileUri = new Uri(filePath);
+                modelCard.Metadata.FileUri = new Uri(filePath);
 
 #else
-                modelInfo = new ModelInfo(publisher, repository, fileName, new Uri(filePath), FileHelpers.GetFileSize(filePath));
+                modelCard.Publisher = publisher;
+                modelCard.Repository = repository;
+
 #endif
             }
             else
             {
-                modelInfo = null;
+                modelCard.Publisher = "unknown publisher";
+                modelCard.Repository = "unknown repository";
             }
 
             return true;
         }
-        else
-        {
-            modelInfo = null;
-            return false;
-        }
+
+        return false;
     }
 
 #if BETA_DOWNLOAD_MODELS
     private static ModelInfo? TryGetExistingModelInfo(string fileName, string repository, string publisher)
     {
-        foreach (var modelInfo in AppConstants.AvailableModels)
+        foreach (var modelCard in AppConstants.AvailableModels)
         {
-            if (string.CompareOrdinal(modelInfo.FileName, fileName) == 0 &&
-                string.CompareOrdinal(modelInfo.Repository, repository) == 0 &&
-                string.CompareOrdinal(modelInfo.Publisher, publisher) == 0)
+            if (string.CompareOrdinal(modelCard.FileName, fileName) == 0 &&
+                string.CompareOrdinal(modelCard.Repository, repository) == 0 &&
+                string.CompareOrdinal(modelCard.Publisher, publisher) == 0)
             {
-                return modelInfo;
+                return modelCard;
             }
         }
 
@@ -619,115 +768,5 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         return false;
     }
 
-    private static bool ModelListContainsFileUri(IList<ModelInfo> models, Uri fileUri, out int matchIndex)
-    {
-        for (int index = 0; index < models.Count; index++)
-        {
-            ModelInfo modelInfo = models[index];
-
-            if (modelInfo.FileUri! == fileUri)
-            {
-                matchIndex = index;
-                return true;
-            }
-        }
-
-        matchIndex = -1;
-        return false;
-    }
     #endregion
-
-    public class ModelDownloadingProgressedEventArgs : EventArgs
-    {
-        public string ModelFilePath { get; }
-
-        public long BytesRead { get; }
-
-        public long? ContentLength { get; }
-
-        public double Progress { get; }
-
-        public ModelDownloadingProgressedEventArgs(string modelFilePath, long bytesRead, long? contentLength, double progress)
-        {
-            ModelFilePath = modelFilePath;
-            BytesRead = bytesRead;
-            ContentLength = contentLength;
-            Progress = progress;
-        }
-    }
-
-    public class ModelDownloadingErrorEventArgs : EventArgs
-    {
-        public Exception? Exception { get; }
-
-        public ModelDownloadingErrorEventArgs(Exception? exception)
-        {
-            Exception = exception;
-        }
-    }
-
-    public class FileCollectingCompletedEventArgs : EventArgs
-    {
-        public bool Success { get; }
-
-        public Exception? Exception { get; }
-
-        public FileCollectingCompletedEventArgs(bool success, Exception? exception)
-        {
-            Success = success;
-            Exception = exception;
-        }
-    }
-
-    public class DownloadOperationStateChangedEventArgs : EventArgs
-    {
-        public Uri DownloadUrl { get; }
-
-        public DownloadOperationStateChangedType Type { get; }
-
-        public long BytesRead { get; }
-
-        public long? ContentLength { get; }
-
-        public double Progress { get; }
-
-        public Exception? Exception { get; }
-
-        public enum DownloadOperationStateChangedType
-        {
-            Started,
-            Paused,
-            Canceled,
-            Resumed,
-            Progressed,
-            Completed
-        }
-
-        public DownloadOperationStateChangedEventArgs(Uri downloadUrl, DownloadOperationStateChangedType type)
-        {
-            DownloadUrl = downloadUrl;
-            Type = type;
-        }
-
-        public DownloadOperationStateChangedEventArgs(Uri downloadUrl, DownloadOperationStateChangedType type, long bytesRead, long? contentLength, double progress, Exception? exception) : this(downloadUrl, type)
-        {
-            BytesRead = bytesRead;
-            ContentLength = contentLength;
-            Progress = progress;
-            Exception = exception;
-        }
-
-        public DownloadOperationStateChangedEventArgs(Uri downloadUrl, long bytesRead, long? contentLength, double progress) : this(downloadUrl, DownloadOperationStateChangedType.Progressed)
-        {
-            Type = DownloadOperationStateChangedType.Progressed;
-            BytesRead = bytesRead;
-            ContentLength = contentLength;
-            Progress = progress;
-        }
-
-        public DownloadOperationStateChangedEventArgs(Uri downloadUrl, Exception? exception) : this(downloadUrl, DownloadOperationStateChangedType.Completed)
-        {
-            Exception = exception;
-        }
-    }
 }

@@ -18,7 +18,7 @@
     CloseWhenBackgroundIsClicked="False"
     x:Class="LMKit.Maestro.UI.ModelSelectionPopup"
     x:DataType="vm:ModelSelectionPopupViewModel">
-    
+
     <ui:PopupView.BodyMargin>
         <OnPlatform x:TypeArguments="Thickness">
             <On Platform="Windows" Value="16, 72, 16, 16" />
@@ -30,7 +30,7 @@
         <Style x:Key="ModelInfoBadge" TargetType="Border">
             <Setter Property="Padding" Value="8, 4"/>
             <Setter Property="Stroke" Value="{StaticResource Surface4}"/>
-            <Setter Property="StrokeThickness" Value="0.25"/>
+            <Setter Property="StrokeThickness" Value="0"/>
             <Setter Property="StrokeShape" Value="RoundRectangle 4"/>
         </Style>
     </ui:PopupView.Resources>
@@ -45,7 +45,7 @@
                 RowDefinitions="*,*" 
                 RowSpacing="20"
                 Margin="0, 0, 0, 8"
-                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:EqualToZeroConverter}}">
+                IsVisible="{Binding ModelListViewModel.SortedModels.Count, Converter={converters:EqualToZeroConverter}}">
 
                 <Label 
                     TextColor="{StaticResource OutlineVariant}" 
@@ -67,8 +67,8 @@
                 Margin="0"
                 Spacing="8"
                 Grid.Row="1"
-                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:GreaterThanZeroConverter}}"
-                ItemsSource="{Binding ModelListViewModel.UserModels}"
+                IsVisible="{Binding ModelListViewModel.SortedModels.Count, Converter={converters:GreaterThanZeroConverter}}"
+                ItemsSource="{Binding ModelListViewModel.SortedModels}"
                 SelectedItem="{Binding ModelListViewModel.SelectedModel, Mode=TwoWay}">
 
                 <controls:CustomCollectionView.ItemTemplate>
@@ -98,15 +98,38 @@
                                 </VisualStateGroupList>
                             </VisualStateManager.VisualStateGroups>
 
-                            <Grid ColumnSpacing="8" ColumnDefinitions="*, auto, auto">
+                            <Grid ColumnSpacing="8">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4.0*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="1.5*" />
+                                    <ColumnDefinition Width="0.5*" />
+                                </Grid.ColumnDefinitions>
+
                                 <Label VerticalOptions="Center" Text="{Binding Name}"/>
 
                                 <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="1">
-                                    <Label VerticalOptions="Center" TextColor="{StaticResource Outline}" Text="{Binding ModelInfo.Publisher}"/>
+                                    <Label VerticalOptions="Center" HorizontalOptions="End" TextColor="{StaticResource Outline}" Text="{Binding ModelInfo.Publisher}"/>
                                 </Border>
 
                                 <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="2">
-                                    <Label VerticalOptions="Center" TextColor="{StaticResource Outline}"  Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
+                                    <Label VerticalOptions="Center" HorizontalOptions="End" TextColor="{StaticResource Outline}" Text="{Binding Precision}"/>
+                                </Border>
+
+                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="3">
+                                    <Label VerticalOptions="Center" HorizontalOptions="End" TextColor="{StaticResource Outline}"  Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
+                                </Border>
+
+                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="4">
+                                    <Label VerticalOptions="Center" HorizontalOptions="End" FontFamily="Material" TextColor="{StaticResource Outline}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsLocallyAvailable}" Value="false">
+                                                <Setter Property="Text" Value="{StaticResource Cloud}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
                                 </Border>
                             </Grid>
                         </Border>

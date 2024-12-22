@@ -1,16 +1,27 @@
 ﻿using LMKit.Maestro.Services;
+using LMKit.Model;
 using System.Collections.ObjectModel;
 
 namespace LMKit.Maestro.Tests.Services;
 
 internal class DummyLLmFileManager : ILLMFileManager
 {
-    public ObservableCollection<ModelInfo> UserModels { get; } = new ObservableCollection<ModelInfo>();
+    private ObservableCollection<ModelCard> _sortedModels = new ObservableCollection<ModelCard>();
+    private ObservableCollection<ModelCard> _unsortedModels = new ObservableCollection<ModelCard>();
 
-    public ObservableCollection<Uri> UnsortedModels { get; } = new ObservableCollection<Uri>();
+    public ReadOnlyObservableCollection<ModelCard> SortedModels { get; }
+
+    public ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
+
+
+    public DummyLLmFileManager()
+    {
+        SortedModels = new ReadOnlyObservableCollection<ModelCard>(_sortedModels);
+        UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
+    }
 
     public bool FileCollectingInProgress { get; private set; }
-    public string ModelsFolderPath
+    public string ModelStorageDirectory
     {
         get
         {
@@ -22,16 +33,22 @@ internal class DummyLLmFileManager : ILLMFileManager
         }
     }
 
+
 #pragma warning disable 67
     public event EventHandler? FileCollectingCompleted;
 #pragma warning restore 67
 
-    public void DeleteModel(ModelInfo modelInfo)
+    public void DeleteModel(ModelCard modelInfo)
     {
-        UserModels.Remove(modelInfo);
+        _sortedModels.Remove(modelInfo);
     }
 
     public void Initialize()
     {
+    }
+
+    public bool IsPredefinedModel(ModelCard modelCard)
+    {
+        throw new NotImplementedException();
     }
 }

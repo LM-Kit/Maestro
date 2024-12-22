@@ -1,20 +1,28 @@
-﻿using LMKit.Maestro.Services;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using LMKit.Model;
 
 namespace LMKit.Maestro.ViewModels
 {
     public partial class ModelInfoViewModel : ViewModelBase
     {
-        private ModelInfo _modelInfo;
-        public ModelInfo ModelInfo
+        private ModelCard _modelCard;
+        public ModelCard ModelInfo
         {
-            get => _modelInfo;
+            get => _modelCard;
             set
             {
-                _modelInfo = value;
-                Name = _modelInfo.FileName;
-                FileSize = _modelInfo.FileSize ?? 0;
+                _modelCard = value;
+                Name = _modelCard.ModelName;
+                FileSize = _modelCard.FileSize;
                 OnPropertyChanged();
+            }
+        }
+
+        public bool IsLocallyAvailable
+        {
+            get
+            {
+                return _modelCard.IsLocallyAvailable;
             }
         }
 
@@ -25,13 +33,27 @@ namespace LMKit.Maestro.ViewModels
         string _name;
 
         [ObservableProperty]
+        string _precision;
+
+        [ObservableProperty]
         DownloadInfo _downloadInfo = new DownloadInfo();
 
-        public ModelInfoViewModel(ModelInfo modelInfo)
+        internal void OnLocalModelRemoved()
         {
-            _modelInfo = modelInfo;
-            Name = modelInfo.FileName;
-            FileSize = modelInfo.FileSize ?? 0;
+            OnPropertyChanged(nameof(IsLocallyAvailable));
+        }
+
+        internal void OnLocalModelCreated()
+        {
+            OnPropertyChanged(nameof(IsLocallyAvailable));
+        }
+
+        public ModelInfoViewModel(ModelCard modelCard)
+        {
+            _modelCard = modelCard;
+            Name = modelCard.ModelName;
+            FileSize = modelCard.FileSize;
+            Precision = modelCard.QuantizationPrecision.ToString() + (modelCard.QuantizationPrecision > 1 ? "-bits" : "1-bit");
         }
     }
 
