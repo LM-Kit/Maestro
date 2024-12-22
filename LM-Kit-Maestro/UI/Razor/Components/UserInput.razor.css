@@ -16,13 +16,11 @@ body.windows #input-border {
 }
 
 .input-border-small {
-    background-color: chocolate;
     border-radius: 32px;
 }
 
 .input-border-large {
     border-radius: 16px;
-    background-color: darkcyan;
 }
 
 
@@ -45,7 +43,6 @@ body.windows #input-border {
 }
 
 .input-border-small #input-text {
-    background-color: yellow;
     margin-block: auto;
 }
 

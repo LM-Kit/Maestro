@@ -26,34 +26,28 @@
             const inputText = document.getElementById('input-text');
             const inputBorder = document.getElementById('input-border');
 
-            inputText.style.height = "auto";
+            var lineCount = countLines(inputText);
 
-            const style = window.getComputedStyle(inputText);
-            let lineHeight = style.getPropertyValue('line-height');
-            // inputText.style.height = "";
-            // inputText.style.height = inputText.scrollHeight + "px";
+            // inputText.style.height = "auto";
+            // const style = window.getComputedStyle(inputText);
+            // let lineHeight = style.getPropertyValue('line-height');
+            // if (lineHeight === 'normal') {
+            //     // Estimate line height based on font size (1.2x is a common approximation for "normal")
+            //     const fontSize = parseFloat(style.getPropertyValue('font-size'));
+            //     lineHeight = fontSize * 1.2;
+            // } else {
+            //     lineHeight = parseFloat(lineHeight);
+            // }
 
-            if (lineHeight === 'normal') {
-                // Estimate line height based on font size (1.2x is a common approximation for "normal")
-                const fontSize = parseFloat(style.getPropertyValue('font-size'));
-                lineHeight = fontSize * 1.2;
-            } else {
-                lineHeight = parseFloat(lineHeight);
-            }
 
-            // Calculate line count based on content height and line height
-            const contentHeight = inputText.scrollHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
-            const lineCount = Math.ceil(contentHeight / lineHeight);
-            const newHeight = Math.min(inputText.scrollHeight, 200);
+            inputText.style.height = "";
+            inputText.style.height = inputText.scrollHeight + "px"
 
-            inputText.style.height = `${newHeight}px`;
+            // inputText.style.height = `${newHeight}px`;
 
             console.error("---------------");
-            console.error("line height: " + lineHeight);
-            console.error("scroll height: " + inputText.scrollHeight);
+            console.error("scroll height: " + inputText.scrollHeight)
             console.error("line count: " + lineCount);
-            console.error("margin-bottom: " + style.marginBottom);
-            console.error("input height: " + style.height);
 
             if (lineCount > 1) {
                 inputBorder.classList.add('input-border-large');
