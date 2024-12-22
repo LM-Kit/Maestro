@@ -37,7 +37,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _collectModelFilesTask;
 
-    public ReadOnlyObservableCollection<ModelCard> SortedModels { get; } 
+    public ReadOnlyObservableCollection<ModelCard> SortedModels { get; }
     public ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
 
 
@@ -343,7 +343,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             foreach (var modelCard in ModelCard.GetPredefinedModelCards())
             {
-                TryRegisterChatModel(modelCard);
+                TryRegisterChatModel(modelCard, isSorted: true);
 
                 _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
             }
@@ -365,29 +365,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
-    private bool HasModel(ModelCard? modelCard)
-    {
-        if (modelCard != null)
-        {
-            foreach (var model in _sortedModels)
-            {
-                /*if (model.SHA256 == modelCard.SHA256) //Loïc: commented. This is too slow.
-                {
-                    return true;
-                }*/
-
-                if (model.ModelUri == modelCard.ModelUri ||
-                    model.FileName == modelCard.FileName && model.FileSize == modelCard.FileSize)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private bool TryRegisterChatModel(ModelCard? modelCard)
+    private bool TryRegisterChatModel(ModelCard? modelCard, bool isSorted)
     {
         if (modelCard != null)
         {
@@ -396,47 +374,35 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 return false;
             }
 
-            if (!HasModel(modelCard))
+            if (isSorted)
             {
-                _sortedModels.Add(modelCard);
-                return true;
+                if (!ContainsModel(_sortedModels, modelCard, out _))
+                {
+                    _sortedModels.Add(modelCard);
+                    return true;
+                }
+            }
+            else
+            {
+                if (!ContainsModel(_unsortedModels, modelCard, out _))
+                {
+                    _unsortedModels.Add(modelCard);
+                    return true;
+                }
             }
         }
 
         return false;
     }
 
-    private void HandleFile(string filePath, bool collectAll = true)
+    private void HandleFile(string filePath)
     {
         if (!TryValidateModelFile(filePath, ModelStorageDirectory, out ModelCard? modelCard, out bool isSorted))
         {
             return;
         }
 
-        if (isSorted)
-        {
-            TryRegisterChatModel(modelCard);
-        }
-        else
-        {
-            Uri fileUri = new Uri(filePath);
-
-            modelCard = new ModelCard(new Uri(filePath))
-            {
-                Publisher = "unknown publisher",
-                Repository = "unknown repository"
-            };
-
-            if (!ModelListContainsFileUri(_unsortedModels, fileUri, out _))
-            {
-                _unsortedModels.Add(modelCard);
-            }
-
-            if (collectAll)
-            {
-                TryRegisterChatModel(modelCard);
-            }
-        }
+        TryRegisterChatModel(modelCard, isSorted);
     }
 
     private void HandleFileRecording(Uri fileUri)
@@ -489,11 +455,11 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         Uri fileUri = new Uri(e.FullPath);
 
-        if (ModelListContainsFileUri(_unsortedModels, fileUri, out int index))
+        if (ContainsModel(_unsortedModels, fileUri, out int index))
         {
             _unsortedModels.RemoveAt(index);
         }
-        else if (ModelListContainsFileUri(_sortedModels, fileUri, out index))
+        else if (ContainsModel(_sortedModels, fileUri, out index))
         {
             if (!IsPredefinedModel(_sortedModels[index]))
             {
@@ -635,7 +601,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         var fileRecordPathChangedEventArgs = (FileSystemEntryRecorder.FileRecordPathChangedEventArgs)e;
 
-        if (ModelListContainsFileUri(_unsortedModels, fileRecordPathChangedEventArgs.OldPath, out int index))
+        if (ContainsModel(_unsortedModels, fileRecordPathChangedEventArgs.OldPath, out int index))
         {
             _unsortedModels[index] = new ModelCard(fileRecordPathChangedEventArgs.NewPath)
             {
@@ -643,7 +609,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 Repository = _unsortedModels[index].Repository
             };
         }
-        else if (ModelListContainsFileUri(_sortedModels, fileRecordPathChangedEventArgs.OldPath, out index) &&
+        else if (ContainsModel(_sortedModels, fileRecordPathChangedEventArgs.OldPath, out index) &&
                 FileHelpers.GetModelInfoFromFileUri(fileRecordPathChangedEventArgs.NewPath, ModelStorageDirectory,
                 out string publisher, out string repository, out string fileName))
         {
@@ -658,6 +624,49 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     #region Static methods
 
+    private static bool ContainsModel(IList<ModelCard> models, ModelCard modelCard, out int index)
+    {
+        index = 0;
+
+        foreach (var model in models)
+        {
+            /*if (model.SHA256 == modelCard.SHA256) //Loïc: commented. This is too slow.
+            {
+                return true;
+            }*/
+
+            if (model.ModelUri == modelCard.ModelUri ||
+                model.FileName == modelCard.FileName && model.FileSize == modelCard.FileSize)
+            {
+                return true;
+            }
+
+            index++;
+        }
+
+        index = -1;
+
+        return false;
+    }
+
+    private static bool ContainsModel(IList<ModelCard> models, Uri uri, out int index)
+    {
+        index = 0;
+
+        foreach (var model in models)
+        {
+            if (model.ModelUri == uri)
+            {
+                return true;
+            }
+
+            index++;
+        }
+
+        index = -1;
+
+        return false;
+    }
 
     private static bool TryValidateModelFile(string filePath, string modelFolderPath, out ModelCard? modelCard, out bool isSorted)
     {
@@ -694,6 +703,11 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 modelCard.Repository = repository;
 
 #endif
+            }
+            else
+            {
+                modelCard.Publisher = "unknown publisher";
+                modelCard.Repository = "unknown repository";
             }
 
             return true;
@@ -751,23 +765,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             }
         }
 
-        return false;
-    }
-
-    private static bool ModelListContainsFileUri(IList<ModelCard> models, Uri fileUri, out int matchIndex)
-    {
-        for (int index = 0; index < models.Count; index++)
-        {
-            ModelCard modelCard = models[index];
-
-            if (modelCard.ModelUri! == fileUri)
-            {
-                matchIndex = index;
-                return true;
-            }
-        }
-
-        matchIndex = -1;
         return false;
     }
 
