@@ -43,6 +43,11 @@ namespace LMKit.Maestro.ViewModels
             OnPropertyChanged(nameof(IsLocallyAvailable));
         }
 
+        internal void OnLocalModelCreated()
+        {
+            OnPropertyChanged(nameof(IsLocallyAvailable));
+        }
+
         public ModelInfoViewModel(ModelCard modelCard)
         {
             _modelCard = modelCard;

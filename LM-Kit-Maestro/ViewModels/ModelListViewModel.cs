@@ -47,6 +47,9 @@ namespace LMKit.Maestro.ViewModels
         [ObservableProperty]
         private bool _modelLoadingIsFinishingUp;
 
+        [ObservableProperty]
+        private bool _modelIsDownloading;
+
         private ModelInfoViewModel? _selectedModel;
         public ModelInfoViewModel? SelectedModel
         {
@@ -182,6 +185,7 @@ namespace LMKit.Maestro.ViewModels
 #endif
 
             _mainThread.BeginInvokeOnMainThread(() => AddModel(modelCardViewModel));
+         
             if (modelCard.IsLocallyAvailable)
             {
                 TotalModelSize += modelCardViewModel.FileSize;
@@ -261,12 +265,31 @@ namespace LMKit.Maestro.ViewModels
         {
             var loadingEventArgs = (LMKitService.ModelLoadingProgressedEventArgs)e;
 
+            if (ModelIsDownloading)
+            {
+                var modeUri = loadingEventArgs.FileUri;
+
+                foreach (var userModel in _userModels)
+                {
+                    if (userModel.ModelInfo.ModelUri == modeUri)
+                    {
+                        userModel.OnLocalModelCreated();
+                        TotalModelSize += userModel.ModelInfo.FileSize;
+                        OnPropertyChanged(nameof(DownloadedCount));
+                        break;
+                    }
+                }
+
+                ModelIsDownloading = false;
+            }
             LoadingProgress = loadingEventArgs.Progress;
             ModelLoadingIsFinishingUp = LoadingProgress == 1;
         }
 
         private void OnModelDownloadingProgressed(object? sender, EventArgs e)
         {
+            ModelIsDownloading = true;
+
             var downloadingEventArgs = (LMKitService.ModelDownloadingProgressedEventArgs)e;
 
             if (downloadingEventArgs.ContentLength != null)
