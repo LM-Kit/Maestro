@@ -26,20 +26,23 @@ body.windows #input-border {
 
 #input-text {
     width: 100%;
-    max-height: 200px;
     box-sizing: border-box;
     line-height: 1.5;
     overflow-y: auto;
     border: none;
     outline: none;
     resize: none;
+    height: auto;
     font-family: system-ui, sans-serif;
     color: white;
     background-color: red;
+/*    white-space: pre-wrap;
+    word-wrap: break-word;*/
     /*background-color: transparent;*/
 }
 
 .input-border-large #input-text {
+    max-height: 200px;
 /*    margin-top: 8px;
     margin-bottom: 28px;
 */}
@@ -65,13 +68,13 @@ body.mac #input-text {
 }
 
 #input-text::-webkit-scrollbar {
-    width: 80px;
+    width: 200px;
 }
 
 #input-text::-webkit-scrollbar-thumb {
     background-color: var(--OutlineVariant);
     border-radius: 0;
-    border: 10px solid transparent;
+    border: 200px solid transparent;
 }
 
 #input-text::-webkit-scrollbar-track {

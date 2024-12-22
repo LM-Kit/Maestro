@@ -1,8 +1,9 @@
 ﻿@inject IJSRuntime JS
 
+<div id="input-border" class="input-border-small">
     <textarea rows="1" id="input-text" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput" />
 
-@*     <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
+    @*     <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
             class="send-button round-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
         @if (!ViewModel.AwaitingResponse)
         {
@@ -17,43 +18,36 @@
             </span>
         }
     </button> *@
-@* <div id="input-border" class="input-border-small">
-</div> *@
+</div>
 
 <script>
 
             function resizeUserInput() {
-             const inputText = document.getElementById('input-text');
+            const inputText = document.getElementById('input-text');
+            const inputBorder = document.getElementById('input-border');
 
-            // Create a clone to calculate height
-            const clone = inputText.cloneNode(true);
-            clone.style.height = 'auto';
-            clone.style.position = 'absolute';
-            clone.style.visibility = 'hidden';
-            clone.style.whiteSpace = 'pre-wrap'; // Ensure line breaks are calculated
-            clone.style.wordWrap = 'break-word'; // Respect word wrapping
-            document.body.appendChild(clone);
+            // Reset height to auto to shrink it when needed
+            inputText.style.height = "auto";
 
-            inputText.style.height = "";
-            inputText.style.height = clone.scrollHeight + "px";
+            // Set the height based on scrollHeight
+            const height = inputText.scrollHeight;
+            inputText.style.height = `${height}px`;
 
-            // Clean up
-            document.body.removeChild(clone);
-
+            // document.body.removeChild(clone);
 
             var lineCount = countLines(inputText);
+
             console.error("---------------");
             console.error("set height:" + inputText.style.height);
-            console.error("scroll height: " + inputText.scrollHeight)
             console.error("line count: " + lineCount);
 
-            // if (lineCount > 1) {
-            //     inputBorder.classList.add('input-border-large');
-            //     inputBorder.classList.remove('input-border-small');
-            // } else {
-            //     inputBorder.classList.add('input-border-small');
-            //     inputBorder.classList.remove('input-border-large');
-            // }
+            if (lineCount > 1) {
+                inputBorder.classList.add('input-border-large');
+                inputBorder.classList.remove('input-border-small');
+            } else {
+                inputBorder.classList.add('input-border-small');
+                inputBorder.classList.remove('input-border-large');
+            }
         }
 
     document.getElementById('input-text').addEventListener('keydown', function (e) {
