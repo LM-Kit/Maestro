@@ -11,12 +11,13 @@ body.windows #input-border {
     position: relative;
     margin: 0;
     width: 100%;
-    border: 2px solid var(--OutlineVariant);
+    border: 2px solid transparent;
     transition: border-color 0.1s;
+    background-color: var(--Surface15);
 }
 
     #input-border:focus-within {
-        border-color: var(--Outline);
+        border-color: var(--OutlineVariant);
     }
 
 .input-border-small {
@@ -102,7 +103,7 @@ body.mac #input-text {
     /*margin-left: auto;*/
     border: none;
     cursor: pointer;
-    color: var(--Background);
+    color: var(--Surface15);
     transition: background-color 0.1s;
 }
 
