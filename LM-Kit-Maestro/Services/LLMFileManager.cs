@@ -4,8 +4,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using LMKit.Model;
 using LMKit.Maestro.UI;
+using System.Collections.Specialized;
 
 namespace LMKit.Maestro.Services;
+
 
 /// <summary>
 /// This service is intended to be used as a singleton via Dependency Injection. 
@@ -25,35 +27,23 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = new Dictionary<Uri, FileDownloader>();
 
     private delegate bool ModelDownloadingProgressCallback(string path, long? contentLength, long bytesRead);
+    public virtual event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
 
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _collectModelFilesTask;
 
-    public ObservableCollection<ModelCard> UserModels { get; } = new ObservableCollection<ModelCard>();
-    public ObservableCollection<ModelCard> UnsortedModels { get; } = new ObservableCollection<ModelCard>();
+    public ReadOnlyObservableCollection<ModelCard> UserModels { get; } //todo: rename to SortedModels
+    public ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
 
-    public long TotalModelSize
-    {
-        get
-        {
-            long totalSize = 0;
 
-            foreach (var model in UserModels)
-            {
-                if (model.IsLocallyAvailable)
-                {
-                    totalSize += model.FileSize;
-                }
-            }
+    private ObservableCollection<ModelCard> _sortedModels { get; } = new ObservableCollection<ModelCard>();
+    private ObservableCollection<ModelCard> _unsortedModels { get; } = new ObservableCollection<ModelCard>();
 
-            foreach (var unsortedModel in UnsortedModels)
-            {
-                totalSize += FileHelpers.GetFileSize(unsortedModel.LocalPath);
-            }
+    [ObservableProperty]
+    private long _totalModelSize;
 
-            return totalSize;
-        }
-    }
+    [ObservableProperty]
+    private int _downloadedCount;
 
     [ObservableProperty]
     private bool _fileCollectingInProgress;
@@ -83,11 +73,13 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     public LLMFileManager(IAppSettingsService appSettingsService, HttpClient httpClient)
     {
+        UserModels = new ReadOnlyObservableCollection<ModelCard>(_sortedModels);
+        UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
         _appSettingsService = appSettingsService;
         _httpClient = httpClient;
 
-        UserModels.CollectionChanged += OnUserModelsCollectionChanged;
-        UnsortedModels.CollectionChanged += OnUnsortedModelsCollectionChanged;
+        _sortedModels.CollectionChanged += OnUserModelsCollectionChanged;
+        _unsortedModels.CollectionChanged += OnUnsortedModelsCollectionChanged;
 
         if (_appSettingsService is INotifyPropertyChanged notifyPropertyChanged)
         {
@@ -345,7 +337,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         if (modelCard != null)
         {
-            foreach (var model in UserModels)
+            foreach (var model in _sortedModels)
             {
                 /*if (model.SHA256 == modelCard.SHA256) //Loïc: commented. This is too slow.
                 {
@@ -374,7 +366,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
             if (!HasModel(modelCard))
             {
-                UserModels.Add(modelCard);
+                _sortedModels.Add(modelCard);
                 return true;
             }
         }
@@ -403,9 +395,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 Repository = "unknown repository"
             };
 
-            if (!ModelListContainsFileUri(UnsortedModels, fileUri, out _))
+            if (!ModelListContainsFileUri(_unsortedModels, fileUri, out _))
             {
-                UnsortedModels.Add(modelCard);
+                _unsortedModels.Add(modelCard);
             }
 
             if (collectAll)
@@ -446,8 +438,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         _fileSystemEntryRecorder.Init(_modelStorageDirectory);
 
-        UnsortedModels.Clear();
-        UserModels.Clear();
+        _unsortedModels.Clear();
+        _sortedModels.Clear();
 
         await CollectModelsAsync();
     }
@@ -465,13 +457,13 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         Uri fileUri = new Uri(e.FullPath);
 
-        if (ModelListContainsFileUri(UnsortedModels, fileUri, out int index))
+        if (ModelListContainsFileUri(_unsortedModels, fileUri, out int index))
         {
-            UnsortedModels.RemoveAt(index);
+            _unsortedModels.RemoveAt(index);
         }
-        else if (ModelListContainsFileUri(UserModels, fileUri, out index))
+        else if (ModelListContainsFileUri(_sortedModels, fileUri, out index))
         {
-            UserModels.RemoveAt(index);
+            _sortedModels.RemoveAt(index);
         }
     }
 
@@ -545,34 +537,57 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 #endif
 
-    private void OnUserModelsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private void OnUserModelsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+        if (e.Action == NotifyCollectionChangedAction.Add)
         {
             foreach (var item in e.NewItems!)
             {
-                HandleFileRecording(((ModelCard)item).ModelUri!);
+                var card = ((ModelCard)item);
+
+                if (card.IsLocallyAvailable)
+                {
+                    TotalModelSize += card.FileSize;
+                    DownloadedCount++;
+                }
+
+                HandleFileRecording(card.ModelUri!);
             }
         }
-        else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
         {
             foreach (var item in e.OldItems!)
             {
-                HandleFileRecordDeletion(((ModelCard)item).ModelUri!);
+                var card = ((ModelCard)item);
+
+                if (card.IsLocallyAvailable)
+                {
+                    TotalModelSize -= card.FileSize;
+                    DownloadedCount--;
+                }
+
+                HandleFileRecordDeletion(card.ModelUri!);
             }
         }
+        else if (e.Action == NotifyCollectionChangedAction.Reset)
+        {
+            TotalModelSize = 0;
+            DownloadedCount = 0;
+        }
+
+        SortedModelCollectionChanged?.Invoke(sender, e);
     }
 
-    private void OnUnsortedModelsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private void OnUnsortedModelsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+        if (e.Action == NotifyCollectionChangedAction.Add)
         {
             foreach (var item in e.NewItems!)
             {
                 HandleFileRecording(((ModelCard)item).ModelUri!);
             }
         }
-        else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
         {
             foreach (var item in e.OldItems!)
             {
@@ -585,19 +600,19 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         var fileRecordPathChangedEventArgs = (FileSystemEntryRecorder.FileRecordPathChangedEventArgs)e;
 
-        if (ModelListContainsFileUri(UnsortedModels, fileRecordPathChangedEventArgs.OldPath, out int index))
+        if (ModelListContainsFileUri(_unsortedModels, fileRecordPathChangedEventArgs.OldPath, out int index))
         {
-            UnsortedModels[index] = new ModelCard(fileRecordPathChangedEventArgs.NewPath)
+            _unsortedModels[index] = new ModelCard(fileRecordPathChangedEventArgs.NewPath)
             {
-                Publisher = UnsortedModels[index].Publisher,
-                Repository = UnsortedModels[index].Repository
+                Publisher = _unsortedModels[index].Publisher,
+                Repository = _unsortedModels[index].Repository
             };
         }
-        else if (ModelListContainsFileUri(UserModels, fileRecordPathChangedEventArgs.OldPath, out index) &&
+        else if (ModelListContainsFileUri(_sortedModels, fileRecordPathChangedEventArgs.OldPath, out index) &&
                 FileHelpers.GetModelInfoFromFileUri(fileRecordPathChangedEventArgs.NewPath, ModelStorageDirectory,
                 out string publisher, out string repository, out string fileName))
         {
-            UserModels[index] = new ModelCard(fileRecordPathChangedEventArgs.NewPath)
+            _sortedModels[index] = new ModelCard(fileRecordPathChangedEventArgs.NewPath)
             {
                 Publisher = publisher,
                 Repository = repository,

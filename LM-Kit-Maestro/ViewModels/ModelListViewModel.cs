@@ -11,7 +11,7 @@ namespace LMKit.Maestro.ViewModels
     public partial class ModelListViewModel : ViewModelBase
     {
         private readonly IMainThread _mainThread;
-        private readonly ILLMFileManager _fileManager;
+        private readonly LLMFileManager _fileManager;
         private readonly IPopupService _popupService;
 
         public IPopupNavigation PopupNavigation { get; }
@@ -20,28 +20,12 @@ namespace LMKit.Maestro.ViewModels
 
         private ObservableCollection<ModelInfoViewModel> _userModels = new ObservableCollection<ModelInfoViewModel>();
 
-        //TODO: remove this property which should be handled by fileManager
-        public int DownloadedCount
-        {
-            get
-            {
-                int count = 0;
-
-                foreach (var model in _userModels)
-                {
-                    if (model.ModelInfo.IsLocallyAvailable)
-                    {
-                        count++;
-                    }
-                }
-
-                return count;
-            }
-        }
-
-        //TODO: remove this property which should be handled by fileManager
         [ObservableProperty]
-        long _totalModelSize;
+        private long _totalModelSize;
+
+        [ObservableProperty]
+        private long _downloadedCount;
+
 
         [ObservableProperty]
         private double _loadingProgress;
@@ -73,7 +57,7 @@ namespace LMKit.Maestro.ViewModels
 
         public ReadOnlyObservableCollection<ModelInfoViewModel> UserModels { get; }
 
-        public ModelListViewModel(IMainThread mainThread, ILLMFileManager fileManager, LMKitService lmKitService, IPopupService popupService,
+        public ModelListViewModel(IMainThread mainThread, LLMFileManager fileManager, LMKitService lmKitService, IPopupService popupService,
             INavigationService navigationService, IPopupNavigation popupNavigation)
         {
             _mainThread = mainThread;
@@ -82,13 +66,25 @@ namespace LMKit.Maestro.ViewModels
             _popupService = popupService;
             NavigationService = navigationService;
             PopupNavigation = popupNavigation;
-            _fileManager.UserModels.CollectionChanged += OnUserModelsCollectionChanged;
+            _fileManager.SortedModelCollectionChanged += OnUserModelsCollectionChanged;
             UserModels = new ReadOnlyObservableCollection<ModelInfoViewModel>(_userModels);
 
             LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
             LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
             LMKitService.ModelLoadingFailed += OnModelLoadingFailed;
             LMKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
+
+            fileManager.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(fileManager.TotalModelSize))
+                {
+                    TotalModelSize = fileManager.TotalModelSize;
+                }
+                else if (e.PropertyName == nameof(fileManager.DownloadedCount))
+                {
+                    DownloadedCount = fileManager.DownloadedCount;
+                }
+            };
         }
 
         public void Initialize()
@@ -135,17 +131,6 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        internal void OnLocalModelRemoved(ModelCard modelCard)
-        {
-            if (_fileManager.IsPredefinedModel(modelCard))
-            {
-                // Note: 'Predefined' models are not removed from the model collection, which requires us to handle property changes in this way.
-                // TODO: Refactor the architecture to eliminate this complexity, as it reduces maintainability in the long run.
-                TotalModelSize -= modelCard.FileSize;
-                OnPropertyChanged(nameof(DownloadedCount));
-            }
-        }
-
         private void OnUserModelsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -178,8 +163,6 @@ namespace LMKit.Maestro.ViewModels
                     index++;
                 }
             }
-
-            OnPropertyChanged(nameof(DownloadedCount));
         }
 
         private void AddNewModel(ModelCard modelCard)
@@ -198,11 +181,6 @@ namespace LMKit.Maestro.ViewModels
 #endif
 
             _mainThread.BeginInvokeOnMainThread(() => AddModel(modelCardViewModel));
-
-            if (modelCard.IsLocallyAvailable)
-            {
-                TotalModelSize += modelCardViewModel.FileSize;
-            }
         }
 
         private void AddModel(ModelInfoViewModel modelCardViewModel, bool sort = true)
@@ -233,8 +211,6 @@ namespace LMKit.Maestro.ViewModels
                 modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
                 _mainThread.BeginInvokeOnMainThread(() => _userModels.Remove(modelCardViewModel));
 
-                TotalModelSize -= modelCardViewModel.FileSize;
-
                 if (LMKitService.LMKitConfig.LoadedModelUri == modelCardViewModel.ModelInfo.ModelUri)
                 {
                     LMKitService.UnloadModel();
@@ -251,7 +227,6 @@ namespace LMKit.Maestro.ViewModels
 
         private void ClearUserModelList()
         {
-            TotalModelSize = 0;
             _userModels.Clear();
 
 #if BETA_DOWNLOAD_MODELS
@@ -287,8 +262,6 @@ namespace LMKit.Maestro.ViewModels
                     if (userModel.ModelInfo.ModelUri == modeUri)
                     {
                         userModel.OnLocalModelCreated();
-                        TotalModelSize += userModel.ModelInfo.FileSize;
-                        OnPropertyChanged(nameof(DownloadedCount));
                         break;
                     }
                 }

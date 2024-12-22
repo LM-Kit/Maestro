@@ -7,9 +7,9 @@ namespace LMKit.Maestro.ViewModels;
 public partial class UnsortedModelFilesPopupViewModel : ViewModelBase
 {
     [ObservableProperty]
-    ObservableCollection<ModelCard> _unsortedModelFiles = new ObservableCollection<ModelCard>();
+    ReadOnlyObservableCollection<ModelCard> _unsortedModelFiles;
 
-    public void Load(ObservableCollection<ModelCard> unsortedModels)
+    public void Load(ReadOnlyObservableCollection<ModelCard> unsortedModels)
     {
         UnsortedModelFiles = unsortedModels;
     }
