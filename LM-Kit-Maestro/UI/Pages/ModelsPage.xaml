@@ -187,21 +187,44 @@
         <DataTemplate x:Key="SortedModelsTemplate" x:DataType="vm:ModelInfoViewModel">
             <Grid>
                 <Border Style="{StaticResource ModelBorderStyle}">
-                    <Grid RowDefinitions="*" ColumnSpacing="16" ColumnDefinitions="*, auto, auto">
-                        <Label VerticalOptions="Center">
-                            <Label.Text>
-                                <MultiBinding StringFormat="{} {0}  •  {1}  •  {2}">
-                                    <Binding Path="ModelInfo.Publisher"/>
-                                    <Binding Path="ModelInfo.Repository"/>
-                                    <Binding Path="ModelInfo.ModelName"/>
-                                </MultiBinding>
-                            </Label.Text>
+                    <Grid RowDefinitions="*" ColumnSpacing="16">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.*" />
+                            <ColumnDefinition Width="3.*" />
+                            <ColumnDefinition Width="3.5*" />
+                            <ColumnDefinition Width="0.7*" />
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.7*" />
+                            <ColumnDefinition Width="0.2*" />
+
+                        </Grid.ColumnDefinitions>
+
+
+                        <Label VerticalOptions="Center" Grid.Column="0" Text="{Binding ModelInfo.Publisher}">
                         </Label>
 
-                        <Label VerticalOptions="Center" Grid.Column="1" Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
+                        <Label VerticalOptions="Center" Grid.Column="1" Text="{Binding ModelInfo.Repository}">
+                        </Label>
+
+                        <Label VerticalOptions="Center" Grid.Column="2" Text="{Binding ModelInfo.ModelName}">
+                        </Label>
+
+                        <Label VerticalOptions="Center" Grid.Column="3" Text="{Binding ModelInfo.Architecture}">
+                        </Label>
+
+                        <Label VerticalOptions="Center" Grid.Column="4" Text="{Binding ModelSize}">
+                        </Label>
+
+                        <Label VerticalOptions="Center" Grid.Column="5" Text="{Binding Precision}">
+                        </Label>
+
+                        <Label VerticalOptions="Center" Grid.Column="6" HorizontalOptions="End" Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
                         <Button
-                            Grid.Column="2"
+                            Grid.Column="7"
                             Style="{StaticResource SecondaryActionButtonStyle}"
+                            HorizontalOptions="End"
                             BackgroundColor="Transparent"
                             CommandParameter="{Binding}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand, x:DataType=vm:ModelsPageViewModel}"

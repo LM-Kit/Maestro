@@ -36,6 +36,9 @@ namespace LMKit.Maestro.ViewModels
         string _precision;
 
         [ObservableProperty]
+        string _modelSize;
+
+        [ObservableProperty]
         DownloadInfo _downloadInfo = new DownloadInfo();
 
         internal void OnLocalModelRemoved()
@@ -54,6 +57,7 @@ namespace LMKit.Maestro.ViewModels
             Name = modelCard.ModelName;
             FileSize = modelCard.FileSize;
             Precision = modelCard.QuantizationPrecision.ToString() + (modelCard.QuantizationPrecision > 1 ? "-bits" : "-bit");
+            ModelSize = Math.Round((double)modelCard.ParameterCount / 1000000000, 1).ToString() + "B";
         }
     }
 
