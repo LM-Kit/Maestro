@@ -1,10 +1,10 @@
-﻿using LMKit.Maestro.Helpers;
-using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using LMKit.Model;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using LMKit.Maestro.Helpers;
 using LMKit.Maestro.UI;
+using LMKit.Model;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
 
@@ -18,6 +18,11 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 #if WINDOWS
     private readonly FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
 #endif
+
+#if DEBUG
+    private static int InstanceCount = 0;
+#endif
+
     private readonly FileSystemEntryRecorder _fileSystemEntryRecorder = new FileSystemEntryRecorder();
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
@@ -73,12 +78,20 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     public LLMFileManager(IAppSettingsService appSettingsService, HttpClient httpClient)
     {
+#if DEBUG
+        if (InstanceCount > 0)
+        {
+            throw new InvalidProgramException("Invalid operation: Only one instance of this class should be created, and it must be instantiated through dependency injection.");
+        }
+        InstanceCount++;
+#endif
+
         UserModels = new ReadOnlyObservableCollection<ModelCard>(_sortedModels);
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
         _appSettingsService = appSettingsService;
         _httpClient = httpClient;
 
-        _sortedModels.CollectionChanged += OnUserModelsCollectionChanged;
+        _sortedModels.CollectionChanged += OnSortedModelsCollectionChanged;
         _unsortedModels.CollectionChanged += OnUnsortedModelsCollectionChanged;
 
         if (_appSettingsService is INotifyPropertyChanged notifyPropertyChanged)
@@ -207,6 +220,19 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         if (modelCard.IsLocallyAvailable)
         {
             File.Delete(modelCard.LocalPath);
+            DownloadedCount--;
+            TotalModelSize -= modelCard.FileSize;
+
+#if !WINDOWS
+            if (_unsortedModels.Contains(modelCard))
+            {
+                _unsortedModels.Remove(modelCard);
+            }
+            else if (_sortedModels.Contains(modelCard))
+            {
+                _sortedModels.Remove(modelCard);
+            }
+#endif
         }
         else
         {
@@ -463,7 +489,10 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
         else if (ModelListContainsFileUri(_sortedModels, fileUri, out index))
         {
-            _sortedModels.RemoveAt(index);
+            if (!IsPredefinedModel(_sortedModels[index]))
+            {
+                _sortedModels.RemoveAt(index);
+            }
         }
     }
 
@@ -537,7 +566,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 #endif
 
-    private void OnUserModelsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void OnSortedModelsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Add)
         {

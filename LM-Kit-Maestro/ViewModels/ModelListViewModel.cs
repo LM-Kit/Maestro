@@ -57,11 +57,11 @@ namespace LMKit.Maestro.ViewModels
 
         public ReadOnlyObservableCollection<ModelInfoViewModel> UserModels { get; }
 
-        public ModelListViewModel(IMainThread mainThread, LLMFileManager fileManager, LMKitService lmKitService, IPopupService popupService,
+        public ModelListViewModel(IMainThread mainThread, ILLMFileManager fileManager, LMKitService lmKitService, IPopupService popupService,
             INavigationService navigationService, IPopupNavigation popupNavigation)
         {
             _mainThread = mainThread;
-            _fileManager = fileManager;
+            _fileManager = fileManager as LLMFileManager;
             LMKitService = lmKitService;
             _popupService = popupService;
             NavigationService = navigationService;
@@ -74,15 +74,15 @@ namespace LMKit.Maestro.ViewModels
             LMKitService.ModelLoadingFailed += OnModelLoadingFailed;
             LMKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
 
-            fileManager.PropertyChanged += (s, e) =>
+            _fileManager.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == nameof(fileManager.TotalModelSize))
+                if (e.PropertyName == nameof(_fileManager.TotalModelSize))
                 {
-                    TotalModelSize = fileManager.TotalModelSize;
+                    TotalModelSize = _fileManager.TotalModelSize;
                 }
-                else if (e.PropertyName == nameof(fileManager.DownloadedCount))
+                else if (e.PropertyName == nameof(_fileManager.DownloadedCount))
                 {
-                    DownloadedCount = fileManager.DownloadedCount;
+                    DownloadedCount = _fileManager.DownloadedCount;
                 }
             };
         }
