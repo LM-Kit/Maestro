@@ -191,38 +191,32 @@
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1.*" />
-                            <ColumnDefinition Width="3.*" />
-                            <ColumnDefinition Width="3.5*" />
+                            <ColumnDefinition Width="5.0*" />
                             <ColumnDefinition Width="0.7*" />
                             <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.5*" />
-                            <ColumnDefinition Width="0.7*" />
+                            <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.2*" />
-
                         </Grid.ColumnDefinitions>
-
 
                         <Label VerticalOptions="Center" Grid.Column="0" Text="{Binding ModelInfo.Publisher}">
                         </Label>
 
-                        <Label VerticalOptions="Center" Grid.Column="1" Text="{Binding ModelInfo.Repository}">
+                        <Label VerticalOptions="Center" Grid.Column="1" Text="{Binding ModelInfo.ModelName}">
                         </Label>
 
-                        <Label VerticalOptions="Center" Grid.Column="2" Text="{Binding ModelInfo.ModelName}">
+                        <Label VerticalOptions="Center" Grid.Column="2" Text="{Binding ModelInfo.Architecture}">
                         </Label>
 
-                        <Label VerticalOptions="Center" Grid.Column="3" Text="{Binding ModelInfo.Architecture}">
+                        <Label VerticalOptions="Center" Grid.Column="3" Text="{Binding ModelSize}">
                         </Label>
 
-                        <Label VerticalOptions="Center" Grid.Column="4" Text="{Binding ModelSize}">
+                        <Label VerticalOptions="Center" Grid.Column="4" Text="{Binding Precision}">
                         </Label>
 
-                        <Label VerticalOptions="Center" Grid.Column="5" Text="{Binding Precision}">
-                        </Label>
-
-                        <Label VerticalOptions="Center" Grid.Column="6" HorizontalOptions="End" Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
+                        <Label VerticalOptions="Center" Grid.Column="5" HorizontalOptions="End" Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
                         <Button
-                            Grid.Column="7"
+                            Grid.Column="6"
                             Style="{StaticResource SecondaryActionButtonStyle}"
                             HorizontalOptions="End"
                             BackgroundColor="Transparent"
