@@ -6,17 +6,17 @@ namespace LMKit.Maestro.Tests.Services;
 
 internal class DummyLLmFileManager : ILLMFileManager
 {
-    private ObservableCollection<ModelCard> _sortedModels = new ObservableCollection<ModelCard>();
+    private ObservableCollection<ModelCard> _models = new ObservableCollection<ModelCard>();
     private ObservableCollection<ModelCard> _unsortedModels = new ObservableCollection<ModelCard>();
 
-    public ReadOnlyObservableCollection<ModelCard> SortedModels { get; }
+    public ReadOnlyObservableCollection<ModelCard> Models { get; }
 
     public ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
 
 
     public DummyLLmFileManager()
     {
-        SortedModels = new ReadOnlyObservableCollection<ModelCard>(_sortedModels);
+        Models = new ReadOnlyObservableCollection<ModelCard>(_models);
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
     }
 
@@ -40,7 +40,7 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     public void DeleteModel(ModelCard modelInfo)
     {
-        _sortedModels.Remove(modelInfo);
+        _models.Remove(modelInfo);
     }
 
     public void Initialize()
