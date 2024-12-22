@@ -56,13 +56,35 @@ function scrollToEnd(smooth) {
 /*
     UserInput 
 */
-//document.getElementById('input-text').addEventListener('keydown', function (e) {
-//    if (e.key == 'Enter' && !e.shiftKey) {
-//        // prevent default behavior
-//        e.preventDefault();
-//        return false;
-//    }
-//}, false);
+document.getElementById('input-text').addEventListener('keydown', function (e) {
+    if (e.key == 'Enter' && !e.shiftKey) {
+        // prevent default behavior
+        e.preventDefault();
+        return false;
+    }
+}, false);
+
+function resizeUserInput() {
+    const inputText = document.getElementById('input-text');
+    const inputBorder = document.getElementById('input-border');
+
+    inputText.style.height = "auto";
+    inputText.style.height = `${inputText.scrollHeight}px`;
+
+    var lineCount = countLines(inputText);
+
+    console.error("---------------");
+    console.error("set height:" + inputText.style.height);
+    console.error("line count: " + lineCount);
+
+    if (lineCount > 1) {
+        inputBorder.classList.add('input-border-large');
+        inputBorder.classList.remove('input-border-small');
+    } else {
+        inputBorder.classList.add('input-border-small');
+        inputBorder.classList.remove('input-border-large');
+    }
+}
 
 /** @type {HTMLTextAreaElement} */
 var _buffer;
