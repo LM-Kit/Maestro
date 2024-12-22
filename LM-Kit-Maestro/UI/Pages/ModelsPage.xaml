@@ -210,7 +210,6 @@
                                 <DataTrigger TargetType="Button" Binding="{Binding IsLocallyAvailable}" Value="False">
                                     <Setter Property="IsEnabled" Value="False" />
                                     <Setter Property="Text" Value="{StaticResource Cloud}" />
-                                    <Setter Property="TextColor" Value="{StaticResource DisabledTextColor}" />
                                 </DataTrigger>
                             </Button.Triggers>
                             <VisualStateManager.VisualStateGroups>
