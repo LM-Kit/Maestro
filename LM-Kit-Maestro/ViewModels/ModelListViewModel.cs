@@ -262,6 +262,7 @@ namespace LMKit.Maestro.ViewModels
                     if (userModel.ModelInfo.ModelUri == modeUri)
                     {
                         userModel.OnLocalModelCreated();
+                        _fileManager.OnModelDownloaded(userModel.ModelInfo);
                         break;
                     }
                 }

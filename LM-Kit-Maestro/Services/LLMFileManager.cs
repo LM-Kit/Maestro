@@ -215,6 +215,12 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 #endif
 
+    internal void OnModelDownloaded(ModelCard modelCard)
+    {
+        TotalModelSize += modelCard.FileSize;
+        DownloadedCount++;
+    }
+
     public void DeleteModel(ModelCard modelCard)
     {
         if (modelCard.IsLocallyAvailable)
