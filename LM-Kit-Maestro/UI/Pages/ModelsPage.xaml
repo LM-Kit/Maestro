@@ -329,7 +329,7 @@
                             <Label 
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center"
-                                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:GreaterThanZeroConverter}}">
+                                IsVisible="{Binding ModelListViewModel.SortedModels.Count, Converter={converters:GreaterThanZeroConverter}}">
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="You have "/>
@@ -357,12 +357,12 @@
                         </CollectionView.ItemsLayout>
 
                         <CollectionView.Triggers>
-                            <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding ModelListViewModel.UserModels.Count, Converter={converters:EqualToZeroConverter}}">
+                            <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding ModelListViewModel.SortedModels.Count, Converter={converters:EqualToZeroConverter}}">
                                 <Setter Property="VerticalOptions" Value="Center"/>
                             </DataTrigger>
 
                             <DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, x:DataType=ui:ModelsPage}" Value="{x:Static ui:ModelsPageTab.UserModels}">
-                                <Setter Property="ItemsSource" Value="{Binding ModelListViewModel.UserModels}"/>
+                                <Setter Property="ItemsSource" Value="{Binding ModelListViewModel.SortedModels}"/>
                                 <Setter Property="ItemTemplate" Value="{StaticResource UserModelsTemplate}"/>
                                 <Setter Property="EmptyView">
                                     <Setter.Value>
