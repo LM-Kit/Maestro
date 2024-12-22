@@ -422,6 +422,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         if (!TryValidateModelFile(filePath, ModelStorageDirectory, out ModelCard? modelCard, out bool isSorted))
         {
+            //todo: Add feedback to indicate that a model of a supported format could not be loaded
             return;
         }
 
