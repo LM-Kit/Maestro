@@ -3,7 +3,7 @@
 <div id="input-border" class="input-border-small">
     <textarea rows="1" id="input-text" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput" />
 
-    @*     <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
+        <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
             class="send-button round-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
         @if (!ViewModel.AwaitingResponse)
         {
@@ -17,7 +17,7 @@
                 <i class="fas fa-stop"></i>
             </span>
         }
-    </button> *@
+    </button>
 </div>
 
 <script>

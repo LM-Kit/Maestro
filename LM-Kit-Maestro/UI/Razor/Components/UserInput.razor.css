@@ -11,11 +11,12 @@ body.windows #input-border {
     position: relative;
     margin: 0;
     width: 100%;
-    border: 40px solid var(--OutlineVariant);
+    border: 2px solid var(--OutlineVariant);
     transition: border-color 0.3s;
 }
 
 .input-border-small {
+    padding-block: 8px;
     border-radius: 32px;
 }
 
@@ -56,6 +57,7 @@ body.windows #input-border {
 
 body.windows #input-text {
     font-size: 16px;
+    margin-right: 28px;
 /*    padding-left: 16px;
     padding-right: 40px;
 */}
@@ -71,13 +73,13 @@ body.mac #input-text {
 }
 
 #input-text::-webkit-scrollbar {
-    width: 200px;
+    width: 10px;
 }
 
 #input-text::-webkit-scrollbar-thumb {
     background-color: var(--OutlineVariant);
     border-radius: 0;
-    border: 200px solid transparent;
+    border: 10px solid transparent;
 }
 
 #input-text::-webkit-scrollbar-track {
@@ -89,9 +91,11 @@ body.mac #input-text {
 }
 
 .send-button {
+    top: 50%; /* Align the button vertically */
+    transform: translateY(-50%); /* Center it precisely */
     position: absolute;
     right: 0;
-    /*margin-right: 8px;*/
+    margin-right: 8px;
     /*margin-left: auto;*/
     border: none;
     background-color: var(--Surface4);
