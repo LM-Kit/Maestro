@@ -2,6 +2,6 @@
 
 public enum ModelsPageTab
 {
-    UserModels,
+    SortedModels,
     LMKitModels
 }

@@ -65,7 +65,7 @@
                             <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="x:Uri">
+                            <DataTemplate x:DataType="x:Object">
                                 <Grid Padding="0, 0" RowSpacing="8" BackgroundColor="Transparent"  RowDefinitions="*, auto">
                                     <Label TextColor="{StaticResource OnSurface}" Text="{Binding ., Converter={converters:FileNameConverter}}"/>
                                     <BoxView Grid.Row="1" StyleClass="Separator"/>

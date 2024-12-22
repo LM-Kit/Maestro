@@ -16,5 +16,12 @@
         public const string DownloadingModel = "Downloading model...";
         public const string LoadingModel = "Loading model...";
         public const string FinishingUp = "Finishing up...";
+        public const string ChatbotPurpose = "Chatbot purpose";
+        public const string MaxCompletionTokens = "Maximum completion tokens";
+        public const string RequestTimeout = "Request timeout";
+        public const string ContextSize = "Context size";
+        public const string SamplingConfiguration = "Sampling configuration";
+        public const string SamplingMode = "Sampling mode";
+        public const string ModelFileNotAvailableLocally = "The model file is not available locally";
     }
 }

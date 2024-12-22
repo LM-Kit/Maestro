@@ -45,7 +45,7 @@
                 RowDefinitions="*,*" 
                 RowSpacing="20"
                 Margin="0, 0, 0, 8"
-                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:EqualToZeroConverter}}">
+                IsVisible="{Binding ModelListViewModel.SortedModels.Count, Converter={converters:EqualToZeroConverter}}">
 
                 <Label 
                     TextColor="{StaticResource OutlineVariant}" 
@@ -67,8 +67,8 @@
                 Margin="0"
                 Spacing="8"
                 Grid.Row="1"
-                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:GreaterThanZeroConverter}}"
-                ItemsSource="{Binding ModelListViewModel.UserModels}"
+                IsVisible="{Binding ModelListViewModel.SortedModels.Count, Converter={converters:GreaterThanZeroConverter}}"
+                ItemsSource="{Binding ModelListViewModel.SortedModels}"
                 SelectedItem="{Binding ModelListViewModel.SelectedModel, Mode=TwoWay}">
 
                 <controls:CustomCollectionView.ItemTemplate>
@@ -101,10 +101,11 @@
                             <Grid ColumnSpacing="8">
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="4.5*" />
+                                    <ColumnDefinition Width="4.0*" />
                                     <ColumnDefinition Width="2*" />
                                     <ColumnDefinition Width="2*" />
                                     <ColumnDefinition Width="1.5*" />
+                                    <ColumnDefinition Width="0.5*" />
                                 </Grid.ColumnDefinitions>
 
                                 <Label VerticalOptions="Center" Text="{Binding Name}"/>
@@ -119,6 +120,16 @@
 
                                 <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="3">
                                     <Label VerticalOptions="Center" HorizontalOptions="End" TextColor="{StaticResource Outline}"  Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
+                                </Border>
+
+                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="4">
+                                    <Label VerticalOptions="Center" HorizontalOptions="End" FontFamily="Material" TextColor="{StaticResource Outline}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsLocallyAvailable}" Value="false">
+                                                <Setter Property="Text" Value="{StaticResource Cloud}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
                                 </Border>
                             </Grid>
                         </Border>
