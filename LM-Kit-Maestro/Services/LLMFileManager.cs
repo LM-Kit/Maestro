@@ -30,7 +30,30 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private Task? _collectModelFilesTask;
 
     public ObservableCollection<ModelCard> UserModels { get; } = new ObservableCollection<ModelCard>();
-    public ObservableCollection<Uri> UnsortedModels { get; } = new ObservableCollection<Uri>();
+    public ObservableCollection<ModelCard> UnsortedModels { get; } = new ObservableCollection<ModelCard>();
+
+    public long TotalModelSize
+    {
+        get
+        {
+            long totalSize = 0;
+
+            foreach (var model in UserModels)
+            {
+                if (model.IsLocallyAvailable)
+                {
+                    totalSize += model.FileSize;
+                }
+            }
+
+            foreach (var unsortedModel in UnsortedModels)
+            {
+                totalSize += FileHelpers.GetFileSize(unsortedModel.LocalPath);
+            }
+
+            return totalSize;
+        }
+    }
 
     [ObservableProperty]
     private bool _fileCollectingInProgress;
@@ -374,19 +397,19 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             Uri fileUri = new Uri(filePath);
 
-            if (!UnsortedModels.Contains(fileUri))
+            modelCard = new ModelCard(new Uri(filePath))
             {
-                UnsortedModels.Add(fileUri);
+                Publisher = "unknown publisher",
+                Repository = "unknown repository"
+            };
+
+            if (!ModelListContainsFileUri(UnsortedModels, fileUri, out _))
+            {
+                UnsortedModels.Add(modelCard);
             }
 
             if (collectAll)
             {
-                modelCard = new ModelCard(new Uri(filePath))
-                {
-                    Publisher = "unknown publisher",
-                    Repository = "unknown repository"
-                };
-
                 TryRegisterChatModel(modelCard);
             }
         }
@@ -442,11 +465,11 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         Uri fileUri = new Uri(e.FullPath);
 
-        if (UnsortedModels.Contains(fileUri))
+        if (ModelListContainsFileUri(UnsortedModels, fileUri, out int index))
         {
-            UnsortedModels.Remove(fileUri);
+            UnsortedModels.RemoveAt(index);
         }
-        else if (ModelListContainsFileUri(UserModels, fileUri, out int index))
+        else if (ModelListContainsFileUri(UserModels, fileUri, out index))
         {
             UserModels.RemoveAt(index);
         }
@@ -546,14 +569,14 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             foreach (var item in e.NewItems!)
             {
-                HandleFileRecording((Uri)item);
+                HandleFileRecording(((ModelCard)item).ModelUri!);
             }
         }
         else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
         {
             foreach (var item in e.OldItems!)
             {
-                HandleFileRecordDeletion((Uri)item);
+                HandleFileRecordDeletion(((ModelCard)item).ModelUri!);
             }
         }
     }
@@ -562,11 +585,13 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         var fileRecordPathChangedEventArgs = (FileSystemEntryRecorder.FileRecordPathChangedEventArgs)e;
 
-        int index = UnsortedModels.IndexOf(fileRecordPathChangedEventArgs.OldPath);
-
-        if (index != -1)
+        if (ModelListContainsFileUri(UnsortedModels, fileRecordPathChangedEventArgs.OldPath, out int index))
         {
-            UnsortedModels[index] = fileRecordPathChangedEventArgs.NewPath;
+            UnsortedModels[index] = new ModelCard(fileRecordPathChangedEventArgs.NewPath)
+            {
+                Publisher = UnsortedModels[index].Publisher,
+                Repository = UnsortedModels[index].Repository
+            };
         }
         else if (ModelListContainsFileUri(UserModels, fileRecordPathChangedEventArgs.OldPath, out index) &&
                 FileHelpers.GetModelInfoFromFileUri(fileRecordPathChangedEventArgs.NewPath, ModelStorageDirectory,

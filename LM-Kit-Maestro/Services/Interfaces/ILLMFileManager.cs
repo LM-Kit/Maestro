@@ -6,7 +6,7 @@ namespace LMKit.Maestro.Services;
 public interface ILLMFileManager
 {
     ObservableCollection<ModelCard> UserModels { get; }
-    ObservableCollection<Uri> UnsortedModels { get; }
+    ObservableCollection<ModelCard> UnsortedModels { get; }
     bool FileCollectingInProgress { get; }
     string ModelStorageDirectory { get; set; }
     event EventHandler? FileCollectingCompleted;
