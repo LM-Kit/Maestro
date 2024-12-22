@@ -1,9 +1,8 @@
 ﻿@inject IJSRuntime JS
 
-<div id="input-border" class="input-border-small">
     <textarea rows="1" id="input-text" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput" />
 
-    <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
+@*     <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
             class="send-button round-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
         @if (!ViewModel.AwaitingResponse)
         {
@@ -17,8 +16,9 @@
                 <i class="fas fa-stop"></i>
             </span>
         }
-    </button>
-</div>
+    </button> *@
+@* <div id="input-border" class="input-border-small">
+</div> *@
 
 <script>
 
@@ -26,36 +26,21 @@
             const inputText = document.getElementById('input-text');
             const inputBorder = document.getElementById('input-border');
 
-            var lineCount = countLines(inputText);
-
-            // inputText.style.height = "auto";
-            // const style = window.getComputedStyle(inputText);
-            // let lineHeight = style.getPropertyValue('line-height');
-            // if (lineHeight === 'normal') {
-            //     // Estimate line height based on font size (1.2x is a common approximation for "normal")
-            //     const fontSize = parseFloat(style.getPropertyValue('font-size'));
-            //     lineHeight = fontSize * 1.2;
-            // } else {
-            //     lineHeight = parseFloat(lineHeight);
-            // }
-
-
             inputText.style.height = "";
-            inputText.style.height = inputText.scrollHeight + "px"
-
-            // inputText.style.height = `${newHeight}px`;
+            inputText.style.height = inputText.scrollHeight + "px";
+            var lineCount = countLines(inputText);
 
             console.error("---------------");
             console.error("scroll height: " + inputText.scrollHeight)
             console.error("line count: " + lineCount);
 
-            if (lineCount > 1) {
-                inputBorder.classList.add('input-border-large');
-                inputBorder.classList.remove('input-border-small');
-            } else {
-                inputBorder.classList.add('input-border-small');
-                inputBorder.classList.remove('input-border-large');
-            }
+            // if (lineCount > 1) {
+            //     inputBorder.classList.add('input-border-large');
+            //     inputBorder.classList.remove('input-border-small');
+            // } else {
+            //     inputBorder.classList.add('input-border-small');
+            //     inputBorder.classList.remove('input-border-large');
+            // }
         }
 
     document.getElementById('input-text').addEventListener('keydown', function (e) {

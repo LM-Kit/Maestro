@@ -27,41 +27,45 @@ body.windows #input-border {
 #input-text {
     width: 100%;
     max-height: 200px;
+    box-sizing: border-box;
+    line-height: 1.5;
     overflow-y: auto;
     border: none;
     outline: none;
     resize: none;
     font-family: system-ui, sans-serif;
     color: white;
-    padding-right: 40px;
-    background-color: transparent;
+    background-color: red;
+    /*background-color: transparent;*/
 }
 
 .input-border-large #input-text {
-    margin-top: 8px;
+/*    margin-top: 8px;
     margin-bottom: 28px;
-}
+*/}
 
 .input-border-small #input-text {
-    margin-block: auto;
+    /*margin-block: auto;*/
 }
 
 body.windows #input-text {
-    font-size: 16px;
-    margin-left: 16px;
-}
+    font-size: 40px;
+/*    padding-left: 16px;
+    padding-right: 40px;
+*/}
 
 body.mac #input-text {
     font-size: 20px;
-    margin-left: 20px;
-}
+/*    padding-left: 20px;
+    padding-right: 48px;
+*/}
 
 .input-text:focus-within {
     border-color: var(--Primary);
 }
 
 #input-text::-webkit-scrollbar {
-    width: 10px;
+    width: 80px;
 }
 
 #input-text::-webkit-scrollbar-thumb {
@@ -81,8 +85,8 @@ body.mac #input-text {
 .send-button {
     position: absolute;
     right: 0;
-    margin-right: 8px;
-    margin-left: auto;
+    /*margin-right: 8px;*/
+    /*margin-left: auto;*/
     border: none;
     background-color: var(--Surface4);
     cursor: pointer;
@@ -90,13 +94,13 @@ body.mac #input-text {
 }
 
 .input-border-large .send-button {
-    position: absolute;
-    bottom: 6px;
+    /*position: absolute;*/
+    /*bottom: 6px;*/
+    /*position: absolute;*/
 }
 
 .input-border-small .send-button {
-    padding-block: 8px;
-    position: relative;
+    /*position: absolute;*/
 }
 
 body.mac .send-button {
