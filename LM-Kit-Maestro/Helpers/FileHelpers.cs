@@ -63,39 +63,6 @@ public static class FileHelpers
         return false;
     }
 
-    public static bool TryCreateFileUri(string filePath, out Uri? uri)
-    {
-        try
-        {
-            uri = new Uri(filePath);
-            return true;
-        }
-        catch
-        {
-            uri = null;
-            return false;
-        }
-    }
-
-    public static bool GetModelPublisherAndRepositoryFromFolderPath(string folderPath, string modelsRootFolder, out string publisher, out string repository)
-    {
-        Uri modelsRootFolderUri = new Uri(modelsRootFolder);
-        Uri folderPathUri = new Uri(folderPath);
-
-        if (modelsRootFolderUri.IsBaseOf(folderPathUri) && folderPathUri.Segments.Length - modelsRootFolderUri.Segments.Length == 2)
-        {
-            publisher = SanitizeUriSegment(modelsRootFolderUri.Segments[folderPathUri.Segments.Length - 2]);
-            repository = SanitizeUriSegment(modelsRootFolderUri.Segments[folderPathUri.Segments.Length - 1]);
-
-            return true;
-        }
-
-        repository = string.Empty;
-        publisher = string.Empty;
-
-        return false;
-    }
-
     public static string SanitizeUriSegment(string uriSegment)
     {
         if (uriSegment.EndsWith('/'))
@@ -147,28 +114,6 @@ public static class FileHelpers
         builder.Path = string.Join('/', uriSegments);
 
         return builder.Uri;
-    }
-
-    public static async Task<long?> GetFileSizeFromUri(Uri uri)
-    {
-        try
-        {
-            if (uri.IsFile)
-            {
-                return GetFileSize(uri.LocalPath);
-            }
-            else
-            {
-                using HttpClient httpClient = new HttpClient();
-                using HttpResponseMessage httpResponse = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
-
-                return httpResponse.Content.Headers.ContentLength;
-            }
-        }
-        catch
-        {
-            return null;
-        }
     }
 
     public static long GetFileSize(string path)
