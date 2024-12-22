@@ -23,14 +23,27 @@
 <script>
 
             function resizeUserInput() {
-            const inputText = document.getElementById('input-text');
-            const inputBorder = document.getElementById('input-border');
+             const inputText = document.getElementById('input-text');
+
+            // Create a clone to calculate height
+            const clone = inputText.cloneNode(true);
+            clone.style.height = 'auto';
+            clone.style.position = 'absolute';
+            clone.style.visibility = 'hidden';
+            clone.style.whiteSpace = 'pre-wrap'; // Ensure line breaks are calculated
+            clone.style.wordWrap = 'break-word'; // Respect word wrapping
+            document.body.appendChild(clone);
 
             inputText.style.height = "";
-            inputText.style.height = inputText.scrollHeight + "px";
-            var lineCount = countLines(inputText);
+            inputText.style.height = clone.scrollHeight + "px";
 
+            // Clean up
+            document.body.removeChild(clone);
+
+
+            var lineCount = countLines(inputText);
             console.error("---------------");
+            console.error("set height:" + inputText.style.height);
             console.error("scroll height: " + inputText.scrollHeight)
             console.error("line count: " + lineCount);
 
