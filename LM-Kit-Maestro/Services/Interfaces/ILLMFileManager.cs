@@ -12,4 +12,5 @@ public interface ILLMFileManager
     event EventHandler? FileCollectingCompleted;
     void Initialize();
     void DeleteModel(ModelCard modelCard);
+    bool IsPredefinedModel(ModelCard modelCard);
 }

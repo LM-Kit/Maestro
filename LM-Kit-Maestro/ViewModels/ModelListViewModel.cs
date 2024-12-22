@@ -1,10 +1,10 @@
-﻿using LMKit.Maestro.Services;
-using LMKit.Maestro.Helpers;
-using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Mopups.Interfaces;
+using LMKit.Maestro.Helpers;
+using LMKit.Maestro.Services;
 using LMKit.Model;
+using Mopups.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace LMKit.Maestro.ViewModels
 {
@@ -20,6 +20,7 @@ namespace LMKit.Maestro.ViewModels
 
         private ObservableCollection<ModelInfoViewModel> _userModels = new ObservableCollection<ModelInfoViewModel>();
 
+        //TODO: remove this property which should be handled by fileManager
         public int DownloadedCount
         {
             get
@@ -38,6 +39,7 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
+        //TODO: remove this property which should be handled by fileManager
         [ObservableProperty]
         long _totalModelSize;
 
@@ -133,6 +135,17 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
+        internal void OnLocalModelRemoved(ModelCard modelCard)
+        {
+            if (_fileManager.IsPredefinedModel(modelCard))
+            {
+                // Note: 'Predefined' models are not removed from the model collection, which requires us to handle property changes in this way.
+                // TODO: Refactor the architecture to eliminate this complexity, as it reduces maintainability in the long run.
+                TotalModelSize -= modelCard.FileSize;
+                OnPropertyChanged(nameof(DownloadedCount));
+            }
+        }
+
         private void OnUserModelsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -185,7 +198,7 @@ namespace LMKit.Maestro.ViewModels
 #endif
 
             _mainThread.BeginInvokeOnMainThread(() => AddModel(modelCardViewModel));
-         
+
             if (modelCard.IsLocallyAvailable)
             {
                 TotalModelSize += modelCardViewModel.FileSize;

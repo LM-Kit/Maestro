@@ -85,7 +85,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
         {
             FileManager.DeleteModel(modelCardViewModel.ModelInfo);
             modelCardViewModel.OnLocalModelRemoved();
-            //ModelListViewModel.
+            ModelListViewModel.OnLocalModelRemoved(modelCardViewModel.ModelInfo);
         }
         catch (Exception ex)
         {

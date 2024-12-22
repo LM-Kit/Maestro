@@ -199,6 +199,22 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
+    public bool IsPredefinedModel(ModelCard modelCard)
+    {
+        if (_enablePredefinedModels)
+        {
+            foreach (var predefinedModel in ModelCard.GetPredefinedModelCards())
+            {
+                if (modelCard.ModelUri == predefinedModel.ModelUri)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private void EnsureModelDirectoryExists()
     {
         if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
