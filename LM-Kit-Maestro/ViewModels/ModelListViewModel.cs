@@ -90,7 +90,7 @@ namespace LMKit.Maestro.ViewModels
         {
             if (LMKitService.LMKitConfig.LoadedModelUri != null)
             {
-                SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(_fileManager.ModelStorageDirectory, SortedModels, LMKitService.LMKitConfig.LoadedModelUri);
+                SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(SortedModels, LMKitService.LMKitConfig.LoadedModelUri);
             }
         }
 
@@ -243,7 +243,7 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnModelLoadingCompleted(object? sender, EventArgs e)
         {
-            SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(_fileManager.ModelStorageDirectory, SortedModels, LMKitService.LMKitConfig.LoadedModelUri!);
+            SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(SortedModels, LMKitService.LMKitConfig.LoadedModelUri!);
             LoadingProgress = 0;
             ModelLoadingIsFinishingUp = false;
         }
