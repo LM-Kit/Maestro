@@ -18,7 +18,7 @@ namespace LMKit.Maestro.ViewModels
         public INavigationService NavigationService { get; }
         public LMKitService LMKitService { get; }
 
-        private ObservableCollection<ModelInfoViewModel> _userModels = new ObservableCollection<ModelInfoViewModel>();
+        private ObservableCollection<ModelInfoViewModel> _sortedModels = new ObservableCollection<ModelInfoViewModel>();
 
         [ObservableProperty]
         private long _totalModelSize;
@@ -67,7 +67,7 @@ namespace LMKit.Maestro.ViewModels
             NavigationService = navigationService;
             PopupNavigation = popupNavigation;
             _fileManager.SortedModelCollectionChanged += OnUserModelsCollectionChanged;
-            UserModels = new ReadOnlyObservableCollection<ModelInfoViewModel>(_userModels);
+            UserModels = new ReadOnlyObservableCollection<ModelInfoViewModel>(_sortedModels);
 
             LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
             LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
@@ -91,7 +91,7 @@ namespace LMKit.Maestro.ViewModels
         {
             if (LMKitService.LMKitConfig.LoadedModelUri != null)
             {
-                SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(_fileManager.ModelStorageDirectory, UserModels, LMKitService.LMKitConfig.LoadedModelUri);
+                SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(_fileManager.ModelStorageDirectory, _sortedModels, LMKitService.LMKitConfig.LoadedModelUri);
             }
         }
 
@@ -189,27 +189,27 @@ namespace LMKit.Maestro.ViewModels
             {
                 int insertIndex = 0;
 
-                while (insertIndex < UserModels.Count && string.Compare(_userModels[insertIndex].Name, modelCardViewModel.Name) < 0)
+                while (insertIndex < _sortedModels.Count && string.Compare(_sortedModels[insertIndex].Name, modelCardViewModel.Name) < 0)
                 {
                     insertIndex++;
                 }
 
-                _userModels.Insert(insertIndex, modelCardViewModel);
+                _sortedModels.Insert(insertIndex, modelCardViewModel);
             }
             else
             {
-                _userModels.Add(modelCardViewModel);
+                _sortedModels.Add(modelCardViewModel);
             }
         }
 
         private void RemoveExistingModel(ModelCard modelCard)
         {
-            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(UserModels, modelCard);
+            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(_sortedModels, modelCard);
 
             if (modelCardViewModel != null)
             {
                 modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-                _mainThread.BeginInvokeOnMainThread(() => _userModels.Remove(modelCardViewModel));
+                _mainThread.BeginInvokeOnMainThread(() => _sortedModels.Remove(modelCardViewModel));
 
                 if (LMKitService.LMKitConfig.LoadedModelUri == modelCardViewModel.ModelInfo.ModelUri)
                 {
@@ -220,14 +220,14 @@ namespace LMKit.Maestro.ViewModels
 
         private void ReplaceExistingModel(ModelCard modelCard, int index)
         {
-            ModelInfoViewModel modelCardViewModel = UserModels[index];
+            ModelInfoViewModel modelCardViewModel = _sortedModels[index];
 
             modelCardViewModel.ModelInfo = modelCard;
         }
 
         private void ClearUserModelList()
         {
-            _userModels.Clear();
+            _sortedModels.Clear();
 
 #if BETA_DOWNLOAD_MODELS
             foreach (var model in AvailableModels)
@@ -244,7 +244,7 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnModelLoadingCompleted(object? sender, EventArgs e)
         {
-            SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(_fileManager.ModelStorageDirectory, UserModels, LMKitService.LMKitConfig.LoadedModelUri!);
+            SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(_fileManager.ModelStorageDirectory, _sortedModels, LMKitService.LMKitConfig.LoadedModelUri!);
             LoadingProgress = 0;
             ModelLoadingIsFinishingUp = false;
         }
@@ -257,7 +257,7 @@ namespace LMKit.Maestro.ViewModels
             {
                 var modeUri = loadingEventArgs.FileUri;
 
-                foreach (var userModel in _userModels)
+                foreach (var userModel in _sortedModels)
                 {
                     if (userModel.ModelInfo.ModelUri == modeUri)
                     {
