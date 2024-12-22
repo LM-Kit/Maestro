@@ -209,7 +209,7 @@
                             <Button.Triggers>
                                 <DataTrigger TargetType="Button" Binding="{Binding IsLocallyAvailable}" Value="False">
                                     <Setter Property="IsEnabled" Value="False" />
-                                    <Setter Property="Opacity" Value="0.3" />
+                                    <Setter Property="Text" Value="{StaticResource Cloud}" />
                                     <Setter Property="TextColor" Value="{StaticResource DisabledTextColor}" />
                                 </DataTrigger>
                             </Button.Triggers>
