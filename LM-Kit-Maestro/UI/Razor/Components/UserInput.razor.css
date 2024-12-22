@@ -36,6 +36,7 @@ body.windows #input-border {
     font-family: system-ui, sans-serif;
     color: white;
     background-color: red;
+    scrollbar-gutter: stable;
 /*    white-space: pre-wrap;
     word-wrap: break-word;*/
     /*background-color: transparent;*/
