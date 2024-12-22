@@ -37,7 +37,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _collectModelFilesTask;
 
-    public ReadOnlyObservableCollection<ModelCard> UserModels { get; } //todo: rename to SortedModels
+    public ReadOnlyObservableCollection<ModelCard> SortedModels { get; } 
     public ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
 
 
@@ -86,7 +86,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         InstanceCount++;
 #endif
 
-        UserModels = new ReadOnlyObservableCollection<ModelCard>(_sortedModels);
+        SortedModels = new ReadOnlyObservableCollection<ModelCard>(_sortedModels);
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
         _appSettingsService = appSettingsService;
         _httpClient = httpClient;

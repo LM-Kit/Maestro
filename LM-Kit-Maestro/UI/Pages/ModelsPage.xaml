@@ -184,7 +184,7 @@
             </Grid>
         </DataTemplate>-->
 
-        <DataTemplate x:Key="UserModelsTemplate" x:DataType="vm:ModelInfoViewModel">
+        <DataTemplate x:Key="SortedModelsTemplate" x:DataType="vm:ModelInfoViewModel">
             <Grid>
                 <Border Style="{StaticResource ModelBorderStyle}">
                     <Grid RowDefinitions="*" ColumnSpacing="16" ColumnDefinitions="*, auto, auto">
@@ -306,7 +306,7 @@
                     <VerticalStackLayout
                         Spacing="16"
                         Margin="0, 16, 0, 0"
-                        IsVisible="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static ui:ModelsPageTab.UserModels}, x:DataType=ui:ModelsPage}">
+                        IsVisible="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static ui:ModelsPageTab.SortedModels}, x:DataType=ui:ModelsPage}">
                         <HorizontalStackLayout Spacing="12" VerticalOptions="Center" HorizontalOptions="Center">
                             <HorizontalStackLayout.Triggers>
                                 <DataTrigger TargetType="HorizontalStackLayout" Binding="{Binding FileManager.FileCollectingInProgress}" Value="True">
@@ -360,9 +360,9 @@
                                 <Setter Property="VerticalOptions" Value="Center"/>
                             </DataTrigger>
 
-                            <DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, x:DataType=ui:ModelsPage}" Value="{x:Static ui:ModelsPageTab.UserModels}">
+                            <DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, x:DataType=ui:ModelsPage}" Value="{x:Static ui:ModelsPageTab.SortedModels}">
                                 <Setter Property="ItemsSource" Value="{Binding ModelListViewModel.SortedModels}"/>
-                                <Setter Property="ItemTemplate" Value="{StaticResource UserModelsTemplate}"/>
+                                <Setter Property="ItemTemplate" Value="{StaticResource SortedModelsTemplate}"/>
                                 <Setter Property="EmptyView">
                                     <Setter.Value>
                                         <VerticalStackLayout VerticalOptions="End" HorizontalOptions="Center" Spacing="8">
@@ -384,10 +384,10 @@
                     <!--<Grid RowDefinitions="1, *" Margin="0, 0" Grid.Row="2">
                     <BoxView  Margin="16,0"/>
                     <Grid Padding="16" VerticalOptions="Center" Grid.Row="1" ColumnDefinitions="*, auto, *">
-                        <controls:StatefulContentView Grid.Row="1" Tapped="UserModelsTabTapped">
+                        <controls:StatefulContentView Grid.Row="1" Tapped="SortedModelsTabTapped">
                             <Label TextColor="{StaticResource Outline}" HorizontalOptions="Center" Text="My models">
                                 <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.UserModels}">
+                                    <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.SortedModels}">
                                         <Setter Property="TextColor" Value="{StaticResource OnSurface}"/>
                                     </DataTrigger>
                                 </Label.Triggers>

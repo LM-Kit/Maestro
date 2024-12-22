@@ -22,9 +22,9 @@ public partial class ModelsPage : PageBase
         _modelsPageViewModel = modelsPageViewModel;
     }
 
-    private void UserModelsTabTapped(object sender, EventArgs e)
+    private void SortedModelsTabTapped(object sender, EventArgs e)
     {
-        SelectedTab = ModelsPageTab.UserModels;
+        SelectedTab = ModelsPageTab.SortedModels;
     }
 
     private void LMKitModelsTabTapped(object sender, EventArgs e)

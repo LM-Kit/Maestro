@@ -65,7 +65,7 @@ namespace LMKit.Maestro.ViewModels
             _popupService = popupService;
             NavigationService = navigationService;
             PopupNavigation = popupNavigation;
-            _fileManager.SortedModelCollectionChanged += OnUserModelsCollectionChanged;
+            _fileManager.SortedModelCollectionChanged += OnSortedModelsCollectionChanged;
             SortedModels = new ObservableCollection<ModelInfoViewModel>();
 
             LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
@@ -130,7 +130,7 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        private void OnUserModelsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void OnSortedModelsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
