@@ -34,12 +34,12 @@ body.windows #input-border {
     font-family: system-ui, sans-serif;
     color: white;
     padding-right: 40px;
+    background-color: transparent;
 }
 
 .input-border-large #input-text {
     margin-top: 8px;
     margin-bottom: 28px;
-    background-color: red;
 }
 
 .input-border-small #input-text {
