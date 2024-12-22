@@ -57,7 +57,7 @@ body.windows #input-border {
 
 body.windows #input-text {
     font-size: 16px;
-    margin-right: 28px;
+    padding-right: 28px;
 /*    padding-left: 16px;
     padding-right: 40px;
 */}
