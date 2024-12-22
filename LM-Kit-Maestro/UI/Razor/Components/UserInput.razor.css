@@ -11,7 +11,7 @@ body.windows #input-border {
     position: relative;
     margin: 0;
     width: 100%;
-    border: 2px solid var(--OutlineVariant);
+    border: 40px solid var(--OutlineVariant);
     transition: border-color 0.3s;
 }
 
@@ -21,6 +21,8 @@ body.windows #input-border {
 
 .input-border-large {
     border-radius: 16px;
+    padding-bottom: 32px;
+    padding-top: 12px;
 }
 
 
@@ -35,7 +37,7 @@ body.windows #input-border {
     height: auto;
     font-family: system-ui, sans-serif;
     color: white;
-    background-color: red;
+    background-color: transparent;
     scrollbar-gutter: stable;
 /*    white-space: pre-wrap;
     word-wrap: break-word;*/
@@ -53,7 +55,7 @@ body.windows #input-border {
 }
 
 body.windows #input-text {
-    font-size: 40px;
+    font-size: 16px;
 /*    padding-left: 16px;
     padding-right: 40px;
 */}

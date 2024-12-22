@@ -26,14 +26,8 @@
             const inputText = document.getElementById('input-text');
             const inputBorder = document.getElementById('input-border');
 
-            // Reset height to auto to shrink it when needed
             inputText.style.height = "auto";
-
-            // Set the height based on scrollHeight
-            const height = inputText.scrollHeight;
-            inputText.style.height = `${height}px`;
-
-            // document.body.removeChild(clone);
+            inputText.style.height = `${inputText.scrollHeight}px`;
 
             var lineCount = countLines(inputText);
 
