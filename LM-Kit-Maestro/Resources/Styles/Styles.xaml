@@ -297,7 +297,6 @@
     </Style>
 
     <Style TargetType="ui:LinkView" Class="Subtitle">
-        <Setter Property="FontFamily" Value="SegoeLight"/>
         <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />
     </Style>
 
@@ -306,12 +305,7 @@
     </Style>
 
     <Style TargetType="Label" Class="Subtitle">
-        <Setter Property="FontFamily" Value="SegoeLight"/>
         <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />
-    </Style>
-
-    <Style TargetType="Label" Class="ChatActionText">
-        <Setter Property="FontFamily" Value="SegoeLight"/>
     </Style>
 
     <Style TargetType="ListView">

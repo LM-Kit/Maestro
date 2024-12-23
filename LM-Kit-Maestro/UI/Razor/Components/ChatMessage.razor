@@ -25,22 +25,22 @@
                 @if (MessageViewModel.GetResponseCount() > 1)
                 {
                     <button title="@TooltipLabels.PreviousGeneratedResponse" @onclick="OnPreviousResponseButtonClicked"
-                            class="chat-action-button material-icons small">
+                            class="chat-action-button material-icons small-text">
                         chevron_left
                     </button>
 
-                    <span class="message-footer-text small">
+                    <span class="message-footer-text small-text">
                         @($"{responseIndex + 1} / {MessageViewModel.GetResponseCount()}")
                     </span>
 
                     <button title="@TooltipLabels.NextGeneratedResponse" @onclick="OnNextResponseButtonClicked"
-                            class="chat-action-button material-icons small">
+                            class="chat-action-button material-icons small-text">
                         chevron_right
                     </button>
                 }
 
                 <button title="@TooltipLabels.CopyMessage" @onclick="OnCopyMessageButtonClicked"
-                        class="chat-action-button small material-icons">
+                        class="chat-action-button small-text material-icons">
                     @(MessageJustCopied ? "check" : "content_copy")
                 </button>
 
@@ -49,14 +49,14 @@
                     if (MessageViewModel.IsLastAssistantMessage)
                     {
                         <button title="@TooltipLabels.RegenerateResponse" @onclick="OnRegenerateResponseButtonClicked"
-                                class="chat-action-button small material-icons">
+                                class="chat-action-button small-text material-icons">
                             sync
                         </button>
                     }
 
                     @if (MessageViewModel.GetTerminationReason(responseIndex) != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
                     {
-                        <span class="message-footer-text small">
+                        <span class="message-footer-text small-text">
                             @($"{MessageViewModel.GetGeneratedTokens(responseIndex)} tokens • Termination reason: {MessageViewModel.GetTerminationReason(responseIndex)}")
                         </span>
                     }

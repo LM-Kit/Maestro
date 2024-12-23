@@ -36,7 +36,6 @@
     padding-block: 16px;
 }
 
-
 .assistant-message-content {
 }
 
@@ -66,14 +65,6 @@
     .chat-action-button:hover {
         background-color: var(--Surface3);
     }
-
-.align-right {
-    margin-left: auto;
-}
-
-.align-left {
-    margin-right: auto;
-}
 
 .message-footer {
     margin: 8px;

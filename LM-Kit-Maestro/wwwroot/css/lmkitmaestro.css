@@ -4,33 +4,29 @@
     font-family: system-ui, sans-serif;
 }
 
-body.mac {
-    font-size: 20px;
-}
+    body.mac {
+        font-size: 20px;
+    }
 
-body.windows {
-    font-size: 16px;
-}
+    body.windows {
+        font-size: 16px;
+    }
 
-@media (-webkit-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+/*@media (-webkit-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     html, body {
         font-size: 20px;
     }
-}
+}*/
 
-.small {
+body.windows .small-text {
     font-size: 12px;
 }
 
-.title {
-    font-size: 17px;
+body.mac .small-text {
+    font-size: 14px;
 }
 
-.subtitle {
-    font-size: 16px;
-}
-
-@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
+/*@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
     .small {
         font-size: 16px;
     }
@@ -47,7 +43,7 @@ body.windows {
     {
         font-size: 20px;
     }
-}
+}*/
 
 #blazor-error-ui {
     background: lightyellow;
@@ -140,30 +136,30 @@ body.windows {
     animation: spinner-o824ag 0.8s infinite linear;
 }
 
-.spinner div {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: var(--Primary);
-    border-radius: 50%;
-    animation: spinner-vse6n7 1s infinite ease;
-}
+    .spinner div {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: var(--Primary);
+        border-radius: 50%;
+        animation: spinner-vse6n7 1s infinite ease;
+    }
 
-.spinner div:nth-child(1) {
-    --rotation: 90;
-}
+        .spinner div:nth-child(1) {
+            --rotation: 90;
+        }
 
-.spinner div:nth-child(2) {
-    --rotation: 180;
-}
+        .spinner div:nth-child(2) {
+            --rotation: 180;
+        }
 
-.spinner div:nth-child(3) {
-    --rotation: 270;
-}
+        .spinner div:nth-child(3) {
+            --rotation: 270;
+        }
 
-.spinner div:nth-child(4) {
-    --rotation: 360;
-}
+        .spinner div:nth-child(4) {
+            --rotation: 360;
+        }
 
 @keyframes spinner-vse6n7 {
     0%, 100% {
@@ -193,9 +189,8 @@ body.windows {
 }
 
 body.mac .round-button {
-    width: 40px;    
+    width: 40px;
     height: 40px;
-
 }
 
 body.windows .round-button {
