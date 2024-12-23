@@ -224,6 +224,7 @@
                                BackgroundColor="Transparent"
                                VerticalOptions="Center" 
                                ToolTipProperties.Text="{x:Static ui:TooltipLabels.ChatModelOptimized}"
+                               FontSize="16"    
                                FontFamily = "Material" />
 
                             <!-- Code Icon -->
@@ -232,6 +233,16 @@
                                VerticalOptions="Center" 
                                BackgroundColor="Transparent"    
                                ToolTipProperties.Text="{x:Static ui:TooltipLabels.CodeCompletionModelOptimized}"
+                               FontSize="16"
+                               FontFamily = "Material" />
+
+                            <!-- Math Icon -->
+                            <Label Text="{StaticResource Functions}" 
+                               IsVisible="{Binding IsMathModel}" 
+                               VerticalOptions="Center" 
+                               BackgroundColor="Transparent"    
+                               ToolTipProperties.Text="{x:Static ui:TooltipLabels.MathModelOptimized}"
+                               FontSize="16"
                                FontFamily = "Material" />
                         </StackLayout>
 
@@ -253,6 +264,7 @@
                             HorizontalOptions="End"
                             BackgroundColor="Transparent"
                             CommandParameter="{Binding}"
+                            ToolTipProperties.Text = "{x:Static ui:TooltipLabels.DeleteLocalModel}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand, x:DataType=vm:ModelsPageViewModel}"
                             Text="{StaticResource Delete}">
                             <Button.Triggers>

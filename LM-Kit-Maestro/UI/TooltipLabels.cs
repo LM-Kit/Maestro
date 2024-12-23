@@ -25,5 +25,7 @@
         public const string ModelFileNotAvailableLocally = "The model file is not available locally";
         public const string CodeCompletionModelOptimized = "This model is optimized for code completion";
         public const string ChatModelOptimized = "This model is optimized for conversational tasks";
+        public const string MathModelOptimized = "This model is optimized for solving mathematical problems";
+        public const string DeleteLocalModel = "Delete the model file from local storage";
     }
 }

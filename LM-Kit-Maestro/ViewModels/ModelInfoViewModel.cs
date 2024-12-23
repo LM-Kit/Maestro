@@ -45,6 +45,9 @@ namespace LMKit.Maestro.ViewModels
         bool _isCodeModel;
 
         [ObservableProperty]
+        bool _isMathModel;
+
+        [ObservableProperty]
         string _modelSize;
 
         [ObservableProperty]
@@ -69,6 +72,7 @@ namespace LMKit.Maestro.ViewModels
             ModelSize = Math.Round((double)modelCard.ParameterCount / 1000000000, 1).ToString().Replace(",", ".") + "B";
             IsChatModel = modelCard.Capabilities.HasFlag(ModelCapabilities.Chat);
             IsCodeModel = modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion);
+            IsMathModel = modelCard.Capabilities.HasFlag(ModelCapabilities.Math);
             ModelPath = modelCard.IsLocallyAvailable ? modelCard.LocalPath : modelCard.ModelUri.ToString();
         }
     }

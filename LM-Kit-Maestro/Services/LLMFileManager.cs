@@ -396,7 +396,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         if (modelCard != null)
         {
             if (!modelCard.Capabilities.HasFlag(ModelCapabilities.Chat) &&
-                !modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion))
+                !modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion) &&
+                !modelCard.Capabilities.HasFlag(ModelCapabilities.Math))
             {
                 return false;
             }
