@@ -1,6 +1,8 @@
 ﻿using LMKit.Maestro.Services;
 using LMKit.Model;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace LMKit.Maestro.Tests.Services;
 
@@ -21,21 +23,16 @@ internal class DummyLLmFileManager : ILLMFileManager
     }
 
     public bool FileCollectingInProgress { get; private set; }
-    public string ModelStorageDirectory
-    {
-        get
-        {
-            return "";
-        }
-        set
-        {
-
-        }
-    }
+    
+    public string ModelStorageDirectory { get; set; }
+    public long TotalModelSize { get; set; }
+    public int DownloadedCount { get; set; }
 
 
 #pragma warning disable 67
     public event EventHandler? FileCollectingCompleted;
+    public event PropertyChangedEventHandler PropertyChanged;
+    public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
 #pragma warning restore 67
 
     public void DeleteModel(ModelCard modelInfo)
@@ -49,6 +46,10 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     public bool IsPredefinedModel(ModelCard modelCard)
     {
-        throw new NotImplementedException();
+        return false;
+    }
+
+    public void OnModelDownloaded(ModelCard modelInfo)
+    {
     }
 }
