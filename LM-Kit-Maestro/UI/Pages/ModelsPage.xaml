@@ -237,7 +237,7 @@
                                FontFamily = "Material" />
 
                             <!-- Math Icon -->
-                            <Label Text="{StaticResource Functions}" 
+                            <Label Text="{StaticResource Calculate}" 
                                IsVisible="{Binding IsMathModel}" 
                                VerticalOptions="Center" 
                                BackgroundColor="Transparent"    
