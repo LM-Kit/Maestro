@@ -229,3 +229,12 @@ body.windows .primary-button {
 .primary-button:hover {
     background-color: var(--Primary);
 }
+
+.dot {
+    height: 10px;
+    width: 10px;
+    margin-left: 4px;
+    background-color: var(--OnBackground);
+    border-radius: 50%;
+    display: inline-block;
+}
