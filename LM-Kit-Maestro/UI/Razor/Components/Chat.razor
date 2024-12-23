@@ -60,9 +60,10 @@
             <div id="scroll-to-end">
                 @if (!IsScrolledToEnd)
                 {
-                    <button @onclick="OnScrollToEndButtonClicked"
-                            class="material-icons round-button scroll-to-end-button">
-                        arrow_downward
+                    <button @onclick="OnScrollToEndButtonClicked" class="round-button scroll-to-end-button">
+                        <span>
+                            <i class="fas fa-arrow-down"></i>
+                        </span>
                     </button>
                 }
             </div>
