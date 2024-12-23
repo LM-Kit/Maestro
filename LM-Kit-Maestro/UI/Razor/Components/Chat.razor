@@ -107,6 +107,14 @@
         set
         {
             _isScrolledToEnd = value;
+
+            if (_isScrolledToEnd && 
+                ViewModel.ConversationListViewModel.CurrentConversation != null &&
+                ViewModel.ConversationListViewModel.CurrentConversation!.AwaitingResponse)
+            {
+                // Assistant is currently generating a response, enforce auto-scroll.
+                _shouldAutoScrollEnd |= true;
+            }
             UpdateUIAsync();
         }
     }
@@ -244,7 +252,7 @@
     {
         if (_shouldAutoScrollEnd)
         {
-            await ScrollToEnd();
+                await ScrollToEnd();
         }
     }
 
@@ -275,11 +283,6 @@
 
         var value = chatContentHeight - viewHeight - _scrollTop;
         IsScrolledToEnd = Math.Abs(chatContentHeight - viewHeight - _scrollTop) < 5 || chatContentHeight <= viewHeight;
-
-        if (IsScrolledToEnd && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation!.AwaitingResponse)
-        {
-            _shouldAutoScrollEnd |= true;
-        }
     }
 
     public async Task OnScrollToEndButtonClicked()
