@@ -3,6 +3,7 @@
     position: relative;
     flex-direction: column;
     margin-block: 20px;
+    margin-inline: 10px;
     background-color: cadetblue;
 }
 
@@ -16,7 +17,7 @@
 
 .user-message-container {
     max-width: 75%;
-    margin-left: auto;
+    align-self: flex-end;
 }
 .user-message-container:hover .user-message-content {
     background-color: red;
