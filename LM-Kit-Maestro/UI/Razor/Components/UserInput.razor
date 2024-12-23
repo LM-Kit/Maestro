@@ -7,18 +7,28 @@
             class="send-button round-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
         @if (!ViewModel.AwaitingResponse)
         {
-            <span>
-                <i class="fas fa-arrow-up"></i>
-            </span>
+                <span>
+                    <i class="fas fa-arrow-up"></i>
+                </span>
         }
         else
         {
-            <span>
-                <i class="fas fa-stop"></i>
-            </span>
+                <span>
+                    <i class="fas fa-stop"></i>
+                </span>
         }
     </button>
 </div>
+
+<script>
+    document.getElementById('input-text').addEventListener('keydown', function (e) {
+    if (e.key == 'Enter' && !e.shiftKey) {
+        // prevent default behavior
+        e.preventDefault();
+        return false;
+    }
+}, false);
+</script>
 
 @code
 {

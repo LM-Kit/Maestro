@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
 /* 
     Chat 
 */
@@ -56,14 +55,6 @@ function scrollToEnd(smooth) {
 /*
     UserInput 
 */
-document.getElementById('input-text').addEventListener('keydown', function (e) {
-    if (e.key == 'Enter' && !e.shiftKey) {
-        // prevent default behavior
-        e.preventDefault();
-        return false;
-    }
-}, false);
-
 function resizeUserInput() {
     const inputText = document.getElementById('input-text');
     const inputBorder = document.getElementById('input-border');
