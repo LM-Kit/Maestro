@@ -102,9 +102,9 @@
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.5*" />
-                                    <ColumnDefinition Width="4.5*" />
+                                    <ColumnDefinition Width="4*" />
                                     <ColumnDefinition Width="2*" />
-                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="1.5*" />
                                     <ColumnDefinition Width="1.5*" />
                                     <ColumnDefinition Width="0.5*" />
                                 </Grid.ColumnDefinitions>
