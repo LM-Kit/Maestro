@@ -3,8 +3,6 @@
     position: relative;
     flex-direction: column;
     margin-block: 20px;
-    padding-inline: 8px;
-    padding-block: 16px;
     background-color: cadetblue;
 }
 
