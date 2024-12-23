@@ -23,5 +23,7 @@
         public const string SamplingConfiguration = "Sampling configuration";
         public const string SamplingMode = "Sampling mode";
         public const string ModelFileNotAvailableLocally = "The model file is not available locally";
+        public const string CodeCompletionModelOptimized = "This model is optimized for code completion";
+        public const string ChatModelOptimized = "This model is optimized for conversational tasks";
     }
 }

@@ -33,7 +33,16 @@ namespace LMKit.Maestro.ViewModels
         string _name;
 
         [ObservableProperty]
+        string _modelPath;
+
+        [ObservableProperty]
         string _precision;
+
+        [ObservableProperty]
+        bool _isChatModel;
+
+        [ObservableProperty]
+        bool _isCodeModel;
 
         [ObservableProperty]
         string _modelSize;
@@ -57,7 +66,10 @@ namespace LMKit.Maestro.ViewModels
             Name = modelCard.ModelName;
             FileSize = modelCard.FileSize;
             Precision = modelCard.QuantizationPrecision.ToString() + (modelCard.QuantizationPrecision > 1 ? "-bits" : "-bit");
-            ModelSize = Math.Round((double)modelCard.ParameterCount / 1000000000, 1).ToString() + "B";
+            ModelSize = Math.Round((double)modelCard.ParameterCount / 1000000000, 1).ToString().Replace(",", ".") + "B";
+            IsChatModel = modelCard.Capabilities.HasFlag(ModelCapabilities.Chat);
+            IsCodeModel = modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion);
+            ModelPath = modelCard.IsLocallyAvailable ? modelCard.LocalPath : modelCard.ModelUri.ToString();
         }
     }
 

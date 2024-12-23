@@ -196,27 +196,49 @@
                             <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.2*" />
                         </Grid.ColumnDefinitions>
 
                         <Label VerticalOptions="Center" Grid.Column="0" Text="{Binding ModelInfo.Publisher}">
                         </Label>
 
-                        <Label VerticalOptions="Center" Grid.Column="1" Text="{Binding ModelInfo.ModelName}">
+                        <Label VerticalOptions="Center" 
+                               Grid.Column="1" 
+                               Text="{Binding ModelInfo.ModelName}"
+                               ToolTipProperties.Text="{Binding ModelPath}">
                         </Label>
 
                         <Label VerticalOptions="Center" Grid.Column="2" Text="{Binding ModelInfo.Architecture}">
                         </Label>
 
-                        <Label VerticalOptions="Center" Grid.Column="3" Text="{Binding ModelSize}">
+                        <StackLayout Orientation="Horizontal"  Grid.Column="3" Spacing="8" HorizontalOptions="Start">
+                            <!-- Chat Icon -->
+                            <Label Text="{StaticResource Chat}" 
+                               IsVisible="{Binding IsChatModel}" 
+                               BackgroundColor="Transparent"
+                               VerticalOptions="Center" 
+                               ToolTipProperties.Text="{x:Static ui:TooltipLabels.ChatModelOptimized}"
+                               FontFamily = "Material" />
+
+                            <!-- Code Icon -->
+                            <Label Text="{StaticResource Code}" 
+                               IsVisible="{Binding IsCodeModel}" 
+                               VerticalOptions="Center" 
+                               BackgroundColor="Transparent"    
+                               ToolTipProperties.Text="{x:Static ui:TooltipLabels.CodeCompletionModelOptimized}"
+                               FontFamily = "Material" />
+                        </StackLayout>
+
+                        <Label VerticalOptions="Center" Grid.Column="4" Text="{Binding ModelSize}">
                         </Label>
 
-                        <Label VerticalOptions="Center" Grid.Column="4" Text="{Binding Precision}">
+                        <Label VerticalOptions="Center" Grid.Column="5" Text="{Binding Precision}">
                         </Label>
 
-                        <Label VerticalOptions="Center" Grid.Column="5" HorizontalOptions="End" Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
+                        <Label VerticalOptions="Center" Grid.Column="6" HorizontalOptions="End" Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
                         <Button
-                            Grid.Column="6"
+                            Grid.Column="7"
                             Style="{StaticResource SecondaryActionButtonStyle}"
                             HorizontalOptions="End"
                             BackgroundColor="Transparent"
