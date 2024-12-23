@@ -7,7 +7,6 @@
     /*padding-inline: 8px;*/
     /*padding-block: 8px;*/
     /*position: fixed;*/
-    background-color: red;
     /*    width: auto;
     left: 0;
     right: 0;*/
@@ -19,7 +18,6 @@
     flex-direction: column;
     position: relative;
     overflow-y: auto;
-    background-color: yellow;
     scrollbar-gutter: both-edges stable;
 }
 

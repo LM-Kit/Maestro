@@ -4,7 +4,6 @@
     flex-direction: column;
     margin-block: 20px;
     margin-inline: 10px;
-    background-color: cadetblue;
 }
 
     #message-container:hover > div {
@@ -20,13 +19,11 @@
     align-self: flex-end;
 }
 .user-message-container:hover .user-message-content {
-    background-color: red;
 }
 
 
 .message-content {
     padding-inline: 16px;
-    background-color: aqua;
     word-break: break-word; /* Ensures long words break and wrap */
     overflow-wrap: break-word; /* Allows wrapping long words */
     max-width: 100%; /* Prevents the div from exceeding the width of its container */
@@ -34,7 +31,7 @@
 
 .user-message-content {
     display: block;
-    background-color: var(--Surface);
+    background-color: var(--Surface15);
     border-radius: 32px;
     padding-block: 16px;
 }
@@ -79,8 +76,7 @@
 }
 
 .message-footer {
-    background-color: yellowgreen;
-    margin-top: 12px;
+    margin: 8px;
     display: flex;
     align-items: center;
 }

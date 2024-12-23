@@ -29,7 +29,7 @@
                         chevron_left
                     </button>
 
-                    <span class="message-footerText small">
+                    <span class="message-footer-text small">
                         @($"{responseIndex + 1} / {MessageViewModel.GetResponseCount()}")
                     </span>
 
@@ -56,7 +56,7 @@
 
                     @if (MessageViewModel.GetTerminationReason(responseIndex) != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
                     {
-                        <span class="message-footerText small">
+                        <span class="message-footer-text small">
                             @($"{MessageViewModel.GetGeneratedTokens(responseIndex)} tokens • Termination reason: {MessageViewModel.GetTerminationReason(responseIndex)}")
                         </span>
                     }
