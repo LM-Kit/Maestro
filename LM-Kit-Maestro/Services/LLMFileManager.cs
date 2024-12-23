@@ -230,14 +230,17 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             TotalModelSize -= modelCard.FileSize;
 
 #if !WINDOWS
-            if (_unsortedModels.Contains(modelCard))
+            if (!IsPredefinedModel(modelCard))
             {
-                _unsortedModels.Remove(modelCard);
-            }
+                if (_unsortedModels.Contains(modelCard))
+                {
+                    _unsortedModels.Remove(modelCard);
+                }
 
-            if (_models.Contains(modelCard))
-            {
-                _models.Remove(modelCard);
+                if (_models.Contains(modelCard))
+                {
+                    _models.Remove(modelCard);
+                }                
             }
 #endif
         }
