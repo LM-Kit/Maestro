@@ -1,5 +1,4 @@
-﻿using LMKit.Maestro.Services;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LMKit.Model;
 
 namespace LMKit.Maestro.ViewModels
@@ -19,6 +18,14 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
+        public bool IsLocallyAvailable
+        {
+            get
+            {
+                return _modelCard.IsLocallyAvailable;
+            }
+        }
+
         [ObservableProperty]
         long _fileSize;
 
@@ -30,6 +37,16 @@ namespace LMKit.Maestro.ViewModels
 
         [ObservableProperty]
         DownloadInfo _downloadInfo = new DownloadInfo();
+
+        internal void OnLocalModelRemoved()
+        {
+            OnPropertyChanged(nameof(IsLocallyAvailable));
+        }
+
+        internal void OnLocalModelCreated()
+        {
+            OnPropertyChanged(nameof(IsLocallyAvailable));
+        }
 
         public ModelInfoViewModel(ModelCard modelCard)
         {

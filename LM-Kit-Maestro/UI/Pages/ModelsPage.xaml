@@ -184,7 +184,7 @@
             </Grid>
         </DataTemplate>-->
 
-        <DataTemplate x:Key="UserModelsTemplate" x:DataType="vm:ModelInfoViewModel">
+        <DataTemplate x:Key="SortedModelsTemplate" x:DataType="vm:ModelInfoViewModel">
             <Grid>
                 <Border Style="{StaticResource ModelBorderStyle}">
                     <Grid RowDefinitions="*" ColumnSpacing="16" ColumnDefinitions="*, auto, auto">
@@ -206,6 +206,12 @@
                             CommandParameter="{Binding}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand, x:DataType=vm:ModelsPageViewModel}"
                             Text="{StaticResource Delete}">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding IsLocallyAvailable}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Text" Value="{StaticResource Cloud}" />
+                                </DataTrigger>
+                            </Button.Triggers>
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroupList>
                                     <VisualStateGroup x:Name="CommonStates">
@@ -300,7 +306,7 @@
                     <VerticalStackLayout
                         Spacing="16"
                         Margin="0, 16, 0, 0"
-                        IsVisible="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static ui:ModelsPageTab.UserModels}, x:DataType=ui:ModelsPage}">
+                        IsVisible="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, Converter={mct:IsEqualConverter}, ConverterParameter={x:Static ui:ModelsPageTab.SortedModels}, x:DataType=ui:ModelsPage}">
                         <HorizontalStackLayout Spacing="12" VerticalOptions="Center" HorizontalOptions="Center">
                             <HorizontalStackLayout.Triggers>
                                 <DataTrigger TargetType="HorizontalStackLayout" Binding="{Binding FileManager.FileCollectingInProgress}" Value="True">
@@ -322,12 +328,12 @@
                             <Label 
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center"
-                                IsVisible="{Binding ModelListViewModel.UserModels.Count, Converter={converters:GreaterThanZeroConverter}}">
+                                IsVisible="{Binding ModelListViewModel.Models.Count, Converter={converters:GreaterThanZeroConverter}}">
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="You have "/>
-                                        <Span Text="{Binding ModelListViewModel.UserModels.Count}" FontAttributes="Bold"/>
-                                        <Span Text=" installed model(s) taking a total of "/>
+                                        <Span Text="{Binding ModelListViewModel.DownloadedCount}" FontAttributes="Bold"/>
+                                        <Span Text=" downloaded model(s) taking a total of "/>
                                         <Span Text="{Binding ModelListViewModel.TotalModelSize, Converter={converters:FileSizeConverter}}" FontAttributes="Bold"/>
                                     </FormattedString>
                                 </Label.FormattedText>
@@ -350,13 +356,13 @@
                         </CollectionView.ItemsLayout>
 
                         <CollectionView.Triggers>
-                            <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding ModelListViewModel.UserModels.Count, Converter={converters:EqualToZeroConverter}}">
+                            <DataTrigger TargetType="CollectionView" Value="True" Binding="{Binding ModelListViewModel.Models.Count, Converter={converters:EqualToZeroConverter}}">
                                 <Setter Property="VerticalOptions" Value="Center"/>
                             </DataTrigger>
 
-                            <DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, x:DataType=ui:ModelsPage}" Value="{x:Static ui:ModelsPageTab.UserModels}">
-                                <Setter Property="ItemsSource" Value="{Binding ModelListViewModel.UserModels}"/>
-                                <Setter Property="ItemTemplate" Value="{StaticResource UserModelsTemplate}"/>
+                            <DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab, x:DataType=ui:ModelsPage}" Value="{x:Static ui:ModelsPageTab.SortedModels}">
+                                <Setter Property="ItemsSource" Value="{Binding ModelListViewModel.Models}"/>
+                                <Setter Property="ItemTemplate" Value="{StaticResource SortedModelsTemplate}"/>
                                 <Setter Property="EmptyView">
                                     <Setter.Value>
                                         <VerticalStackLayout VerticalOptions="End" HorizontalOptions="Center" Spacing="8">
@@ -378,10 +384,10 @@
                     <!--<Grid RowDefinitions="1, *" Margin="0, 0" Grid.Row="2">
                     <BoxView  Margin="16,0"/>
                     <Grid Padding="16" VerticalOptions="Center" Grid.Row="1" ColumnDefinitions="*, auto, *">
-                        <controls:StatefulContentView Grid.Row="1" Tapped="UserModelsTabTapped">
+                        <controls:StatefulContentView Grid.Row="1" Tapped="SortedModelsTabTapped">
                             <Label TextColor="{StaticResource Outline}" HorizontalOptions="Center" Text="My models">
                                 <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.UserModels}">
+                                    <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.SortedModels}">
                                         <Setter Property="TextColor" Value="{StaticResource OnSurface}"/>
                                     </DataTrigger>
                                 </Label.Triggers>

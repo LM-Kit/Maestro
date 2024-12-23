@@ -1,5 +1,4 @@
-﻿using LMKit.Maestro.Services;
-using LMKit.Maestro.ViewModels;
+﻿using LMKit.Maestro.ViewModels;
 using LMKit.Model;
 
 namespace LMKit.Maestro.Helpers
@@ -9,10 +8,8 @@ namespace LMKit.Maestro.Helpers
         public static ModelInfoViewModel? TryGetExistingModelInfoViewModel(ICollection<ModelInfoViewModel> modelCardViewModels, ModelCard modelCard)
         {
             foreach (var modelCardViewModel in modelCardViewModels)
-            {//todo: use sha instead
-                if (string.CompareOrdinal(modelCardViewModel.ModelInfo.FileName, modelCard.FileName) == 0 &&
-                    string.CompareOrdinal(modelCardViewModel.ModelInfo.Repository, modelCard.Repository) == 0 &&
-                    string.CompareOrdinal(modelCardViewModel.ModelInfo.Publisher, modelCard.Publisher) == 0)
+            {
+                if (modelCardViewModel.ModelInfo == modelCard)
                 {
                     return modelCardViewModel;
                 }
@@ -21,29 +18,13 @@ namespace LMKit.Maestro.Helpers
             return null;
         }
 
-        public static ModelInfoViewModel? TryGetExistingModelInfoViewModel(string modelsFolderPath, ICollection<ModelInfoViewModel> modelCardViewModels, Uri modelFileUri)
+        public static ModelInfoViewModel? TryGetExistingModelInfoViewModel(ICollection<ModelInfoViewModel> modelCardViewModels, Uri modelFileUri)
         {
-            if (FileHelpers.GetModelInfoFromPath(modelFileUri.LocalPath, modelsFolderPath, out string publisher, out string repository, out string fileName))
+            foreach (var modelCardViewModel in modelCardViewModels)
             {
-                foreach (var modelCardViewModel in modelCardViewModels)
+                if (modelCardViewModel.ModelInfo.ModelUri == modelFileUri)
                 {
-                    if (string.CompareOrdinal(modelCardViewModel.ModelInfo.FileName, fileName) == 0 &&
-                        string.CompareOrdinal(modelCardViewModel.ModelInfo.Repository, repository) == 0 &&
-                        string.CompareOrdinal(modelCardViewModel.ModelInfo.Publisher, publisher) == 0)
-                    {
-                        return modelCardViewModel;
-                    }
-                }
-            }
-            else
-            {
-                //handling unsorted models.
-                foreach (var modelCardViewModel in modelCardViewModels)
-                {
-                    if (modelCardViewModel.ModelInfo.ModelUri == modelFileUri)
-                    {
-                        return modelCardViewModel;
-                    }
+                    return modelCardViewModel;
                 }
             }
 

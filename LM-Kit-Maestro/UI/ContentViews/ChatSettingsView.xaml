@@ -186,7 +186,7 @@
                         <VerticalStackLayout
                             BackgroundColor="{StaticResource Surface2}">
                             <Grid StyleClass="SettingGrid">
-                                <Label VerticalOptions="Center" Text="System prompt"/>
+                                <Label VerticalOptions="Center" Text="{x:Static ui:TooltipLabels.ChatbotPurpose}"/>
                                 <Border  
                                     x:Name="systemPromptBorder"
                                     StrokeThickness="0.25"
@@ -213,7 +213,7 @@
                             </Grid>
 
                             <Grid StyleClass="SettingGrid" ColumnDefinitions="3*, *">
-                                <Label VerticalOptions="Center" Text="Maximum completion tokens"/>
+                                <Label VerticalOptions="Center" Text="{x:Static ui:TooltipLabels.MaxCompletionTokens}"/>
                                 <Border 
                                     StrokeThickness="0.25"
                                     StrokeShape="RoundRectangle 4" 
@@ -237,7 +237,7 @@
                             </Grid>
 
                             <Grid StyleClass="SettingGrid">
-                                <Label Text="Request timeout"/>
+                                <Label Text="{x:Static ui:TooltipLabels.RequestTimeout}"/>
                                 <HorizontalStackLayout HorizontalOptions="End" Spacing="4" Grid.Column="1">
                                     <Label 
                                         StyleClass="SettingValueLabel"
@@ -247,11 +247,11 @@
                                 <Slider
                                         Grid.ColumnSpan="2"
                                         Grid.Row="1"
-                                        Value="{Binding RequestTimeout, Mode=TwoWay}" Minimum="10" Maximum="120"/>
+                                        Value="{Binding RequestTimeout, Mode=TwoWay}" Minimum="10" Maximum="240"/>
                             </Grid>
 
                             <Grid StyleClass="SettingGrid">
-                                <Label Text="Context size"/>
+                                <Label Text="{x:Static ui:TooltipLabels.ContextSize}"/>
                                 <HorizontalStackLayout HorizontalOptions="End" Spacing="4" Grid.Column="1">
                                     <Label 
                                         StyleClass="SettingValueLabel"
@@ -274,7 +274,7 @@
                     <mct:Expander.Header>
                         <Grid RowDefinitions="*, auto">
                             <HorizontalStackLayout Padding="16" Spacing="8">
-                                <Label Text="Sampling configuration"/>
+                                <Label Text="{x:Static ui:TooltipLabels.SamplingConfiguration}"/>
                                 <Label 
                                     VerticalOptions="Center" 
                                     StyleClass="IconSmall">
@@ -297,7 +297,7 @@
                         <VerticalStackLayout
                             BackgroundColor="{StaticResource Surface2}">
                             <Grid StyleClass="SettingGrid">
-                                <Label VerticalOptions="Center" Text="Sampling mode"/>
+                                <Label VerticalOptions="Center" Text="{x:Static ui:TooltipLabels.SamplingMode}"/>
                                 <Picker
                                     HorizontalOptions="End"
                                     Grid.Column="1"

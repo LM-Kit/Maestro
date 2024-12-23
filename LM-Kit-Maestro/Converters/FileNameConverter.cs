@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using LMKit.Model;
+using System.Globalization;
 
 namespace LMKit.Maestro.Converters;
 
@@ -11,6 +12,10 @@ internal sealed class FileNameConverter : IValueConverter
             if (value is Uri uri && uri.IsFile)
             {
                 return Path.GetFileName(uri.LocalPath);
+            }
+            else if (value is ModelCard modelCard)
+            {
+                return Path.GetFileName(modelCard.LocalPath);
             }
         }
 

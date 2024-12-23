@@ -84,11 +84,12 @@ public partial class ModelsPageViewModel : PageViewModelBase
         try
         {
             FileManager.DeleteModel(modelCardViewModel.ModelInfo);
+            modelCardViewModel.OnLocalModelRemoved();
         }
         catch (Exception ex)
         {
             _popupService.DisplayAlert("Failure to delete model file",
-                $"The model file could not be deleted:\n {ex.Message}", "OK");
+                $"{ex.Message}", "OK");
         }
     }
 
