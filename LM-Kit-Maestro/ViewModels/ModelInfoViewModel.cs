@@ -51,6 +51,9 @@ namespace LMKit.Maestro.ViewModels
         string _modelSize;
 
         [ObservableProperty]
+        float _compatibilityLevel;
+
+        [ObservableProperty]
         DownloadInfo _downloadInfo = new DownloadInfo();
 
         internal void OnLocalModelRemoved()
@@ -74,29 +77,7 @@ namespace LMKit.Maestro.ViewModels
             IsCodeModel = modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion);
             IsMathModel = modelCard.Capabilities.HasFlag(ModelCapabilities.Math);
             ModelPath = modelCard.IsLocallyAvailable ? modelCard.LocalPath : modelCard.ModelUri.ToString();
+            CompatibilityLevel = LMKit.Graphics.DeviceConfiguration.GetPerformanceScore(modelCard);
         }
-    }
-
-    public partial class DownloadInfo : ObservableObject
-    {
-        [ObservableProperty]
-        long _bytesRead;
-
-        [ObservableProperty]
-        long? _contentLength;
-
-        [ObservableProperty]
-        double _progress;
-
-        [ObservableProperty]
-        DownloadStatus _status;
-    }
-
-    public enum DownloadStatus
-    {
-        NotDownloaded,
-        Downloaded,
-        Downloading,
-        DownloadPaused,
     }
 }
