@@ -13,7 +13,7 @@ body.windows #input-border {
     width: 100%;
     border: 2px solid transparent;
     transition: border-color 0.1s;
-    background-color: var(--Surface15);
+    background-color: red;
 }
 
     #input-border:focus-within {
