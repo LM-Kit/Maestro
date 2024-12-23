@@ -26,7 +26,7 @@
                     </p>
 
                     <div id="actionIcons">
-                        <button @onclick="OnCopyMessageButtonClicked" class="chatActionButton material-icons">
+                        <button @onclick="OnCopyMessageButtonClicked" class="chat-action-button material-icons">
                             @(ResultJustCopied ? "check" : "content_copy")
                         </button>
 
@@ -120,7 +120,7 @@
             background-color: var(--Primary);
         }
 
-    .chatActionButton {
+    .chat-action-button {
         height: 28px;
         width: 28px;
         border-radius: 50%;
@@ -131,7 +131,7 @@
         color: var(--Outline);
     }
 
-        .chatActionButton:hover {
+        .chat-action-button:hover {
             background-color: var(--Surface3);
         }
 </style>

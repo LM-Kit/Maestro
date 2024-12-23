@@ -129,14 +129,15 @@
                 x:Name="chatsSidebar"
                 WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}"
                 Grid.Row="1"/>
-            
+
             <BlazorWebView
                 x:Name="blazorWebView"
                 Grid.RowSpan="2"
                 Grid.Column="1"
-                HostPage="wwwroot/index.html">
+                HostPage="wwwroot/index.html"
+                StartPath="/chat">
                 <BlazorWebView.RootComponents>
-                    <RootComponent Selector="#app" ComponentType="{x:Type razor:Chat}" />
+                    <RootComponent Selector="#app" ComponentType="{x:Type razor:Routes}" />
                 </BlazorWebView.RootComponents>
             </BlazorWebView>
 

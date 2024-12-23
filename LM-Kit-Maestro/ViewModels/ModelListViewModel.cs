@@ -11,7 +11,7 @@ namespace LMKit.Maestro.ViewModels
     public partial class ModelListViewModel : ViewModelBase
     {
         private readonly IMainThread _mainThread;
-        private readonly LLMFileManager _fileManager;
+        private readonly ILLMFileManager _fileManager;
         private readonly IPopupService _popupService;
 
         public IPopupNavigation PopupNavigation { get; }
@@ -60,7 +60,7 @@ namespace LMKit.Maestro.ViewModels
             INavigationService navigationService, IPopupNavigation popupNavigation)
         {
             _mainThread = mainThread;
-            _fileManager = fileManager as LLMFileManager;
+            _fileManager = fileManager;
             LMKitService = lmKitService;
             _popupService = popupService;
             NavigationService = navigationService;

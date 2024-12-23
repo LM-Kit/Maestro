@@ -1,0 +1,88 @@
+﻿#message-container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    margin-block: 20px;
+    margin-inline: 10px;
+}
+
+    #message-container:hover > div {
+        visibility: visible;
+    }
+
+.assistant-message-container:hover {
+    background-color: var(--Surface15);
+}
+
+.user-message-container {
+    max-width: 75%;
+    align-self: flex-end;
+}
+.user-message-container:hover .user-message-content {
+}
+
+
+.message-content {
+    padding-inline: 16px;
+    word-break: break-word; /* Ensures long words break and wrap */
+    overflow-wrap: break-word; /* Allows wrapping long words */
+    max-width: 100%; /* Prevents the div from exceeding the width of its container */
+}
+
+.user-message-content {
+    display: block;
+    background-color: var(--Surface15);
+    border-radius: 32px;
+    padding-block: 16px;
+}
+
+.assistant-message-content {
+}
+
+.show {
+    visibility: visible;
+}
+
+.hide {
+    visibility: hidden;
+}
+
+.chat-action-button {
+    align-self: center;
+    border-radius: 50%;
+    border-width: 0;
+    font-size: 12px;
+    padding: 2px;
+    min-height: 20px;
+    min-width: 20px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    color: var(--Outline);
+}
+
+    .chat-action-button:hover {
+        background-color: var(--Surface3);
+    }
+
+.message-footer {
+    margin: 8px;
+    display: flex;
+    align-items: center;
+}
+
+
+.message-footer-text {
+    line-height: 20px;
+    color: var(--Outline);
+    display: inline-block;
+    transform: translateY(-2px); /* tweaking text vertical position to align it with button icons */
+    align-self: center;
+    margin-inline: 4px;
+}
+
+
+.user-message-footer-content {
+    margin-left: auto;
+}
