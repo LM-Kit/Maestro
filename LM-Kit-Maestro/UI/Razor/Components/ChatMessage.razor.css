@@ -2,11 +2,10 @@
     display: flex;
     position: relative;
     flex-direction: column;
-    margin-top: 2px;
-    margin-bottom: 20px;
+    margin-block: 20px;
     padding-inline: 8px;
     padding-block: 16px;
-    border-radius: 0px;
+    background-color: cadetblue;
 }
 
 .assistantMessageRootContainer:hover {
@@ -32,6 +31,7 @@
 .messageContent {
     padding-block: 12px;
     padding-inline: 16px;
+    background-color: aqua;
     word-break: break-word; /* Ensures long words break and wrap */
     overflow-wrap: break-word; /* Allows wrapping long words */
     max-width: 100%; /* Prevents the div from exceeding the width of its container */
@@ -46,7 +46,6 @@
 
 .assistantMessageContent {
     padding: 4px;
-    margin-bottom: -16px; /* workaround: this syntax adds 16px bottom margin to the html block '(MarkupString)Markdig.Markdown.ToHtml(MessageViewModel.Content)'*/
 }
 
 .show {

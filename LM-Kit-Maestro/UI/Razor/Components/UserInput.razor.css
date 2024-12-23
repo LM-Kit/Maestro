@@ -13,13 +13,13 @@ body.windows #input-border {
     width: 100%;
     border: 2px solid transparent;
     transition: border-color 0.1s;
-    background-color: red;
+    background-color: purple;
 }
 
     #input-border:focus-within {
         border-color: var(--OutlineVariant);
     }
-
+     
 .input-border-small {
     padding-block: 8px;
     border-radius: 32px;

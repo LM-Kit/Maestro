@@ -8,7 +8,7 @@
     /*padding-block: 8px;*/
     /*position: fixed;*/
     background-color: red;
-/*    width: auto;
+    /*    width: auto;
     left: 0;
     right: 0;*/
 }
@@ -19,12 +19,9 @@
     flex-direction: column;
     position: relative;
     overflow-y: auto;
-    scrollbar-gutter: both-edges stable;
     background-color: yellow;
+    scrollbar-gutter: both-edges stable;
 }
-
-    #conversation-container:hover {
-    }
 
     #conversation-container::-webkit-scrollbar {
         width: 10px;
@@ -59,12 +56,12 @@
 }
 
 .chat-element {
-    padding-inline: 8px;
     width: 100%;
     justify-content: center;
     align-self: center;
     margin-left: auto;
     margin-right: auto;
+    scrollbar-gutter: both-edges stable;
 }
 
 body.windows .chat-element {
