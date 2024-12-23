@@ -64,10 +64,6 @@ function resizeUserInput() {
 
     var lineCount = countLines(inputText);
 
-    console.error("---------------");
-    console.error("set height:" + inputText.style.height);
-    console.error("line count: " + lineCount);
-
     if (lineCount > 1) {
         inputBorder.classList.add('input-border-large');
         inputBorder.classList.remove('input-border-small');
