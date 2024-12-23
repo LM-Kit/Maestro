@@ -1,40 +1,38 @@
 ﻿@inject IClipboardHandler ClipboardHandler
 
-<div id="container" class="dark">
-    <div id="translation-container">
-        <div id="translation-header">
-            <div class="language-select">
-                <label for="input-language">Input Language:</label>
-                <select id="input-language" @bind="TranslationViewModel.InputLanguage">
-                    @foreach (var language in Enum.GetValues<Language>())
+<div id="translation-container">
+    <div id="translation-header">
+        <div class="language-select">
+            <label for="input-language">Input Language:</label>
+            <select id="input-language" @bind="TranslationViewModel.InputLanguage">
+                @foreach (var language in Enum.GetValues<Language>())
+                {
+                    if (language == Language.Undefined)
                     {
-                        if (language == Language.Undefined)
-                        {
-                            <option value="@language">Automatically detect</option>
-                        }
-                        else
-                        {
-                            <option value="@language">@language</option>
-                        }
+                        <option value="@language">Automatically detect</option>
                     }
-                </select>
-            </div>
-
-            <button class="chatActionButton material-icons small">
-                swap_horiz
-            </button>
+                    else
+                    {
+                        <option value="@language">@language</option>
+                    }
+                }
+            </select>
         </div>
 
-        <div id="translation-body">
-            <div id="translation-input">
-                <InputBox @bind-InputText="TranslationViewModel.InputText" />
-            </div>
+        <button class="chatActionButton material-icons small">
+            swap_horiz
+        </button>
+    </div>
 
-            <div class="vertical-separator"></div>
+    <div id="translation-body">
+        <div id="translation-input">
+            <InputBox @bind-InputText="TranslationViewModel.InputText" />
+        </div>
 
-            <div id="translation-output">
-                <InputBox @bind-InputText="TranslationViewModel.LatestResult" Readonly="true" />
-            </div>
+        <div class="vertical-separator"></div>
+
+        <div id="translation-output">
+            <InputBox @bind-InputText="TranslationViewModel.LatestResult" Readonly="true" />
         </div>
     </div>
 </div>

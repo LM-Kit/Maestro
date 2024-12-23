@@ -7,13 +7,6 @@
     justify-content: center;
 }
 
-#container {
-    width: 100%;
-    padding-inline: 8px;
-    padding-block: 8px;
-    overflow-y: auto;
-}
-
 /*         #result:hover {
                 background-color: var(--Surface3);
                 } */
