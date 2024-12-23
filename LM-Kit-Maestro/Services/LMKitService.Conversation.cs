@@ -116,6 +116,22 @@ public partial class LMKitService
             }
         }
 
+        private bool _inTextCompletion;
+
+        public bool InTextCompletion
+        {
+            get => _inTextCompletion;
+            set
+            {
+                if (_inTextCompletion != value)
+                {
+                    _inTextCompletion = value;
+
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InTextCompletion)));
+                }
+            }
+        }
+
         public int ContextUsedSpace
         {
             get
@@ -170,6 +186,7 @@ public partial class LMKitService
         {
             ContextSize = e.ContextSize;
             ContextRemainingSpace = e.ContextRemainingSpace;
+            InTextCompletion = true;
         }
     }
 }
