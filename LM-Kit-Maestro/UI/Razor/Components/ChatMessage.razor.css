@@ -1,4 +1,4 @@
-﻿.rootContainer {
+﻿#message-container {
     display: flex;
     position: relative;
     flex-direction: column;
@@ -8,24 +8,21 @@
     background-color: cadetblue;
 }
 
-.assistantMessageRootContainer:hover {
+    #message-container:hover > div {
+        visibility: visible;
+    }
+
+.assistant-message-container:hover {
     background-color: var(--Surface15);
 }
 
-.userMessageRootContainer:hover .userMessageContent {
+.user-message-container:hover .userMessageContent {
     background-color: var(--Surface15);
-}
-
-.rootContainer:hover > div {
-    visibility: visible;
 }
 
 .userMessageDiv {
     max-width: 75%;
     margin-left: auto;
-}
-
-.userMessageDiv {
 }
 
 .messageContent {

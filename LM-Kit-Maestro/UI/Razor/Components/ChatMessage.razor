@@ -3,7 +3,8 @@
 @inject IClipboardHandler ClipboardHandler
 
 <div
-    class="rootContainer @(MessageViewModel.Sender == MessageSender.Assistant ? "assistantMessageRootContainer" : "userMessageRootContainer")">
+    id="message-container"
+    class="@(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-container" : "user-message-container")">
     <div class="messageDiv @(MessageViewModel.Sender == MessageSender.User ? "userMessageDiv" : "assistantMessageDiv")">
         <div>
             <div
