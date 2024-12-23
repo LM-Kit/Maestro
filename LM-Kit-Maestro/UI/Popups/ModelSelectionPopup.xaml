@@ -101,28 +101,42 @@
                             <Grid ColumnSpacing="8">
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="4.0*" />
+                                    <ColumnDefinition Width="0.5*" />
+                                    <ColumnDefinition Width="4.5*" />
                                     <ColumnDefinition Width="2*" />
                                     <ColumnDefinition Width="2*" />
                                     <ColumnDefinition Width="1.5*" />
                                     <ColumnDefinition Width="0.5*" />
                                 </Grid.ColumnDefinitions>
 
-                                <Label VerticalOptions="Center" Text="{Binding Name}"/>
+                                <BoxView
+                                    Grid.Column="0"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    WidthRequest="13"
+                                    HeightRequest="13"
+                                    CornerRadius="7"
+                                    Color="{Binding CompatibilityLevel,  Converter={converters:LevelToColorConverter}}"
+                                    ToolTipProperties.Text="{Binding CompatibilityLevel, StringFormat='The performance level of this model on this machine is estimated at {0:P0}'}" />
 
-                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="1">
+                                <Label 
+                                    VerticalOptions="Center" 
+                                    Text="{Binding Name}" 
+                                    Grid.Column="1"/>
+
+                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="2">
                                     <Label VerticalOptions="Center" HorizontalOptions="End" TextColor="{StaticResource Outline}" Text="{Binding ModelInfo.Publisher}"/>
                                 </Border>
 
-                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="2">
+                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="3">
                                     <Label VerticalOptions="Center" HorizontalOptions="End" TextColor="{StaticResource Outline}" Text="{Binding Precision}"/>
                                 </Border>
 
-                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="3">
+                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="4">
                                     <Label VerticalOptions="Center" HorizontalOptions="End" TextColor="{StaticResource Outline}"  Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
                                 </Border>
 
-                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="4">
+                                <Border Style="{StaticResource ModelInfoBadge}" Grid.Column="5">
                                     <Label VerticalOptions="Center" HorizontalOptions="End" FontFamily="Material" TextColor="{StaticResource Outline}">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding IsLocallyAvailable}" Value="false">

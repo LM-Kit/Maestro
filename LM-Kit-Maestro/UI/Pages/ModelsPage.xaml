@@ -187,23 +187,99 @@
         <DataTemplate x:Key="SortedModelsTemplate" x:DataType="vm:ModelInfoViewModel">
             <Grid>
                 <Border Style="{StaticResource ModelBorderStyle}">
-                    <Grid RowDefinitions="*" ColumnSpacing="16" ColumnDefinitions="*, auto, auto">
-                        <Label VerticalOptions="Center">
-                            <Label.Text>
-                                <MultiBinding StringFormat="{} {0}  •  {1}  •  {2}">
-                                    <Binding Path="ModelInfo.Publisher"/>
-                                    <Binding Path="ModelInfo.Repository"/>
-                                    <Binding Path="ModelInfo.ModelName"/>
-                                </MultiBinding>
-                            </Label.Text>
-                        </Label>
+                    <Grid RowDefinitions="*" ColumnSpacing="16">
 
-                        <Label VerticalOptions="Center" Grid.Column="1" Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.2*" />
+                            <ColumnDefinition Width="1.*" />
+                            <ColumnDefinition Width="5.0*" />
+                            <ColumnDefinition Width="0.7*" />
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.2*" />
+                        </Grid.ColumnDefinitions>
+
+                        <BoxView
+                               Grid.Column="0"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               WidthRequest="13"
+                               HeightRequest="13"
+                               CornerRadius="7"
+                               Color="{Binding CompatibilityLevel,  Converter={converters:LevelToColorConverter}}"
+                               ToolTipProperties.Text="{Binding CompatibilityLevel, StringFormat='The performance level of this model on this machine is estimated at {0:P0}'}" />
+
+                        <Label VerticalOptions="Center" 
+                               Grid.Column="1" 
+                               Text="{Binding ModelInfo.Publisher}"
+                               ToolTipProperties.Text="{Binding ModelPath}"/>
+
+
+                        <Label VerticalOptions="Center" 
+                               Grid.Column="2" 
+                               Text="{Binding ModelInfo.ModelName}"
+                               ToolTipProperties.Text="{Binding ModelInfo.Description}"/>
+
+
+                        <Label VerticalOptions="Center" 
+                               Grid.Column="3" 
+                               Text="{Binding ModelInfo.Architecture}"
+                               ToolTipProperties.Text="{Binding ModelInfo.Architecture, StringFormat='The architecture of this model is {0}'}" />
+
+                        <StackLayout Orientation="Horizontal"  Grid.Column="4" Spacing="8" HorizontalOptions="Start">
+                            <!-- Chat Icon -->
+                            <Label Text="{StaticResource Chat}" 
+                               IsVisible="{Binding IsChatModel}" 
+                               BackgroundColor="Transparent"
+                               VerticalOptions="Center" 
+                               ToolTipProperties.Text="{x:Static ui:TooltipLabels.ChatModelOptimized}"
+                               FontSize="16"    
+                               FontFamily = "Material" />
+
+                            <!-- Code Icon -->
+                            <Label Text="{StaticResource Code}" 
+                               IsVisible="{Binding IsCodeModel}" 
+                               VerticalOptions="Center" 
+                               BackgroundColor="Transparent"    
+                               ToolTipProperties.Text="{x:Static ui:TooltipLabels.CodeCompletionModelOptimized}"
+                               FontSize="16"
+                               FontFamily = "Material" />
+
+                            <!-- Math Icon -->
+                            <Label Text="{StaticResource Calculate}" 
+                               IsVisible="{Binding IsMathModel}" 
+                               VerticalOptions="Center" 
+                               BackgroundColor="Transparent"    
+                               ToolTipProperties.Text="{x:Static ui:TooltipLabels.MathModelOptimized}"
+                               FontSize="16"
+                               FontFamily = "Material" />
+                        </StackLayout>
+
+                        <Label VerticalOptions="Center" 
+                               Grid.Column="5" 
+                               Text="{Binding ModelSize}" 
+                               ToolTipProperties.Text="{Binding ModelInfo.ParameterCount, StringFormat='This model has {0:N0} parameters'}" />
+
+                        <Label VerticalOptions="Center" 
+                               Grid.Column="6" 
+                               ToolTipProperties.Text="{Binding Precision, StringFormat='This model uses {0}-bit precision, which indicates the number of bits used for numerical representation'}" 
+                               Text="{Binding Precision}" />
+
+
+                        <Label VerticalOptions="Center" 
+                               Grid.Column="7" 
+                               HorizontalOptions="End" 
+                               Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
+                        
                         <Button
-                            Grid.Column="2"
+                            Grid.Column="8"
                             Style="{StaticResource SecondaryActionButtonStyle}"
+                            HorizontalOptions="End"
                             BackgroundColor="Transparent"
                             CommandParameter="{Binding}"
+                            ToolTipProperties.Text = "{x:Static ui:TooltipLabels.DeleteLocalModel}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ModelsPageViewModel}}, Path=DeleteModelCommand, x:DataType=vm:ModelsPageViewModel}"
                             Text="{StaticResource Delete}">
                             <Button.Triggers>

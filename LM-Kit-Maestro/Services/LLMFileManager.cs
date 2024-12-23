@@ -230,14 +230,17 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             TotalModelSize -= modelCard.FileSize;
 
 #if !WINDOWS
-            if (_unsortedModels.Contains(modelCard))
+            if (!IsPredefinedModel(modelCard))
             {
-                _unsortedModels.Remove(modelCard);
-            }
+                if (_unsortedModels.Contains(modelCard))
+                {
+                    _unsortedModels.Remove(modelCard);
+                }
 
-            if (_models.Contains(modelCard))
-            {
-                _models.Remove(modelCard);
+                if (_models.Contains(modelCard))
+                {
+                    _models.Remove(modelCard);
+                }                
             }
 #endif
         }
@@ -393,7 +396,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         if (modelCard != null)
         {
             if (!modelCard.Capabilities.HasFlag(ModelCapabilities.Chat) &&
-                !modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion))
+                !modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion) &&
+                !modelCard.Capabilities.HasFlag(ModelCapabilities.Math))
             {
                 return false;
             }
@@ -422,6 +426,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         if (!TryValidateModelFile(filePath, ModelStorageDirectory, out ModelCard? modelCard, out bool isSorted))
         {
+            //todo: Add feedback to indicate that a model of a supported format could not be loaded
             return;
         }
 

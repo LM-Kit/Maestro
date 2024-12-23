@@ -33,7 +33,25 @@ namespace LMKit.Maestro.ViewModels
         string _name;
 
         [ObservableProperty]
+        string _modelPath;
+
+        [ObservableProperty]
         string _precision;
+
+        [ObservableProperty]
+        bool _isChatModel;
+
+        [ObservableProperty]
+        bool _isCodeModel;
+
+        [ObservableProperty]
+        bool _isMathModel;
+
+        [ObservableProperty]
+        string _modelSize;
+
+        [ObservableProperty]
+        float _compatibilityLevel;
 
         [ObservableProperty]
         DownloadInfo _downloadInfo = new DownloadInfo();
@@ -53,30 +71,13 @@ namespace LMKit.Maestro.ViewModels
             _modelCard = modelCard;
             Name = modelCard.ModelName;
             FileSize = modelCard.FileSize;
-            Precision = modelCard.QuantizationPrecision.ToString() + (modelCard.QuantizationPrecision > 1 ? "-bits" : "1-bit");
+            Precision = modelCard.QuantizationPrecision.ToString() + (modelCard.QuantizationPrecision > 1 ? "-bits" : "-bit");
+            ModelSize = Math.Round((double)modelCard.ParameterCount / 1000000000, 1).ToString().Replace(",", ".") + "B";
+            IsChatModel = modelCard.Capabilities.HasFlag(ModelCapabilities.Chat);
+            IsCodeModel = modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion);
+            IsMathModel = modelCard.Capabilities.HasFlag(ModelCapabilities.Math);
+            ModelPath = modelCard.IsLocallyAvailable ? modelCard.LocalPath : modelCard.ModelUri.ToString();
+            CompatibilityLevel = LMKit.Graphics.DeviceConfiguration.GetPerformanceScore(modelCard);
         }
-    }
-
-    public partial class DownloadInfo : ObservableObject
-    {
-        [ObservableProperty]
-        long _bytesRead;
-
-        [ObservableProperty]
-        long? _contentLength;
-
-        [ObservableProperty]
-        double _progress;
-
-        [ObservableProperty]
-        DownloadStatus _status;
-    }
-
-    public enum DownloadStatus
-    {
-        NotDownloaded,
-        Downloaded,
-        Downloading,
-        DownloadPaused,
     }
 }
