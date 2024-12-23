@@ -235,8 +235,21 @@ public partial class LMKitService : INotifyPropertyChanged
 
             _lmKitServiceSemaphore.Release();
 
+            try
+            {
+                result = await SubmitRequest(request);
+            }
+            finally
+            {
+                if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
+                {
+                    var conversation = request.RequestType == LMKitRequest.LMKitRequestType.Prompt ?
+                        ((LMKitRequest.PromptRequestParameters)request.Parameters!).Conversation :
+                        ((LMKitRequest.RegenerateResponseParameters)request.Parameters!).Conversation;
 
-            result = await SubmitRequest(request);
+                    AfterSubmittingPrompt(conversation);
+                }
+            }
         }
 
         if (_requestSchedule.Contains(request))
@@ -414,6 +427,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 };
             }
             _multiTurnConversation.AfterTokenSampling += conversation.AfterTokenSampling;
+
             conversation.ChatHistory = _multiTurnConversation.ChatHistory;
             conversation.LastUsedModelUri = LMKitConfig.LoadedModelUri;
             _lastConversationUsed = conversation;
@@ -429,6 +443,13 @@ public partial class LMKitService : INotifyPropertyChanged
                 //todo: implement context size update.
             }
         }
+
+        conversation.InTextCompletion = true;
+    }
+
+    private void AfterSubmittingPrompt(Conversation conversation)
+    {
+        conversation.InTextCompletion = false;
     }
 
     private bool OnModelLoadingProgressed(float progress)
