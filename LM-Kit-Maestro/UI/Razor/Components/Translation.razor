@@ -3,7 +3,7 @@
 <div id="translation-container">
     <div id="translation-header">
         <div class="language-select">
-            <label for="input-language">Input Language:</label>
+            <label for="input-language">Input language:</label>
             <select id="input-language" @bind="TranslationViewModel.InputLanguage">
                 @foreach (var language in Enum.GetValues<Language>())
                 {
@@ -19,9 +19,19 @@
             </select>
         </div>
 
-        <button class="chatActionButton material-icons small">
+        <button class="material-icons action-button">
             swap_horiz
         </button>
+
+        <div class="language-select">
+            <label for="output-language">Output language:</label>
+            <select id="output-language" @bind="TranslationViewModel.OutputLanguage">
+                @foreach (var language in Enum.GetValues<Language>().Skip(1))
+                {
+                    <option value="@language">@language</option>
+                }
+            </select>
+        </div>
     </div>
 
     <div id="translation-body">
