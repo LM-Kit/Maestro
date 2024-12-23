@@ -16,16 +16,16 @@
     background-color: var(--Surface15);
 }
 
-.user-message-container:hover .userMessageContent {
+.user-message-container:hover .user-message-content {
     background-color: var(--Surface15);
 }
 
-.userMessageDiv {
+.user-message-div {
     max-width: 75%;
     margin-left: auto;
 }
 
-.messageContent {
+.message-content {
     padding-block: 12px;
     padding-inline: 16px;
     background-color: aqua;
@@ -34,14 +34,14 @@
     max-width: 100%; /* Prevents the div from exceeding the width of its container */
 }
 
-.userMessageContent {
+.user-message-content {
     display: block;
     background-color: var(--Surface);
     border-radius: 32px;
 }
 
 
-.assistantMessageContent {
+.assistant-message-content {
     padding: 4px;
 }
 
@@ -53,7 +53,7 @@
     visibility: hidden;
 }
 
-.chatActionButton {
+.chat-action-button {
     align-self: center;
     border-radius: 50%;
     border-width: 0;
@@ -68,7 +68,7 @@
     color: var(--Outline);
 }
 
-    .chatActionButton:hover {
+    .chat-action-button:hover {
         background-color: var(--Surface3);
     }
 
@@ -80,17 +80,17 @@
     margin-right: auto;
 }
 
-.messageFooter {
+.message-footer {
     margin-top: 12px;
     display: flex;
     align-items: center;
 }
 
-    .messageFooter:hover {
+    .message-footer:hover {
         visibility: visible;
     }
 
-.messageFooterText {
+.message-footer-text {
     line-height: 20px;
     color: var(--Outline);
     display: inline-block;
@@ -99,10 +99,7 @@
     margin-inline: 4px;
 }
 
-.messageButtonDiv {
-    display: inline;
-}
 
-.userMessageFooterContent {
+.user-message-foote-content {
     margin-left: auto;
 }
