@@ -4,20 +4,18 @@
 
 <div id="message-container"
      class="@(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-container" : "user-message-container")">
-    <div class="@(MessageViewModel.Sender == MessageSender.User ? "user-message-div" : "assistant-message-div")">
-        <div class="message-content @(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-content" : "user-message-content")">
-            @if (MessageViewModel.Sender == MessageSender.Assistant)
+    <div class="message-content @(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-content" : "user-message-content")">
+        @if (MessageViewModel.Sender == MessageSender.Assistant)
+        {
+            if (MessageHtml != null)
             {
-                if (MessageHtml != null)
-                {
-                    @((MarkupString)MessageHtml)
-                }
+                @((MarkupString)MessageHtml)
             }
-            else
-            {
-                @MessageViewModel.GetContent(responseIndex)
-            }
-        </div>
+        }
+        else
+        {
+            @MessageViewModel.GetContent(responseIndex)
+        }
     </div>
 
     @if (MessageViewModel.Sender == MessageSender.User || (MessageViewModel.Sender == MessageSender.Assistant && !MessageViewModel.MessageInProgress))

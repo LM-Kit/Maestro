@@ -16,17 +16,16 @@
     background-color: var(--Surface15);
 }
 
-.user-message-container:hover .user-message-content {
-    background-color: var(--Surface15);
-}
-
-.user-message-div {
+.user-message-container {
     max-width: 75%;
     margin-left: auto;
 }
+.user-message-container:hover .user-message-content {
+    background-color: red;
+}
+
 
 .message-content {
-    padding-block: 12px;
     padding-inline: 16px;
     background-color: aqua;
     word-break: break-word; /* Ensures long words break and wrap */
@@ -38,11 +37,11 @@
     display: block;
     background-color: var(--Surface);
     border-radius: 32px;
+    padding-block: 16px;
 }
 
 
 .assistant-message-content {
-    padding: 4px;
 }
 
 .show {
@@ -81,14 +80,12 @@
 }
 
 .message-footer {
+    background-color: yellowgreen;
     margin-top: 12px;
     display: flex;
     align-items: center;
 }
 
-    .message-footer:hover {
-        visibility: visible;
-    }
 
 .message-footer-text {
     line-height: 20px;
@@ -100,6 +97,6 @@
 }
 
 
-.user-message-foote-content {
+.user-message-footer-content {
     margin-left: auto;
 }
