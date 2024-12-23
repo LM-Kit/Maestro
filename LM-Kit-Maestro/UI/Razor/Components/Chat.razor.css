@@ -101,14 +101,18 @@ body.mac .chat-element {
 }
 
 .scroll-to-end-button {
-    color: var(--OnSurface);
-    background-color: var(--Surface4);
+    color: var(--Outline);
+    background-color: var(--Surface3);
     display: flex;
     border: none;
     align-self: center;
 }
 
-body.windows .scroll-to-end-button {
+    .scroll-to-end-button:hover {
+        color: var(--OnSurface);
+    }
+
+body .windows .scroll-to-end-button {
     margin-top: -32px; /* Setting negative margin to the height of the button so that it does not add height to parent containers. */
 }
 
