@@ -4,7 +4,7 @@
     <div id="translation-container">
         <div id="translation-header">
             <div>
-                <MudSelect Underline="false" class="language-select" @bind-Value="TranslationViewModel.InputLanguage">
+@*                 <MudSelect Underline="false" class="language-select" @bind-Value="TranslationViewModel.InputLanguage">
                     @foreach (var language in GetAvailableLanguages(true))
                     {
                         if (language == Language.Undefined)
@@ -16,7 +16,7 @@
                                     <MudSelectItem Value="@language">@language</MudSelectItem>
                         }
                     }
-                </MudSelect>
+                </MudSelect> *@
             </div>
 
             <button class="chatActionButton material-icons small">
@@ -24,13 +24,13 @@
             </button>
 
             <div>
-                <MudSelect Underline="false" class="language-select" @bind-Value="TranslationViewModel.OutputLanguage">
+@*                 <MudSelect Underline="false" class="language-select" @bind-Value="TranslationViewModel.OutputLanguage">
                     @foreach (var language in GetAvailableLanguages(false))
                     {
                             <MudSelectItem Value="@language">@language</MudSelectItem>
 
                     }
-                </MudSelect>
+                </MudSelect> *@
             </div>
 
             @*                 <MudSelect class="language-select" @bind-Value="TranslationViewModel.Language">

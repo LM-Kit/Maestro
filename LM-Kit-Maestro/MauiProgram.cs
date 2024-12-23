@@ -12,7 +12,6 @@ using Majorsoft.Blazor.Components.Common.JsInterop;
 using Mopups.Hosting;
 using Mopups.Services;
 using CommunityToolkit.Maui.Storage;
-using MudBlazor.Services;
 
 namespace LMKit.Maestro
 {
@@ -49,7 +48,6 @@ namespace LMKit.Maestro
                 })
                 .ConfigureMauiHandlers(handlers => { handlers.AddCustomHandlers(); });
 
-            builder.Services.AddMudServices();
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddJsInteropExtensions();
 
