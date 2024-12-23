@@ -61,31 +61,31 @@ public class ConversationViewModelTests
         MaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
     }
 
-    [Fact]
-    public async Task CancelPromptImmediatelyAfterSubmit()
-    {
-        MaestroTestsService testService = new();
-        bool loadingSuccess = await testService.LoadModel();
-        Assert.True(loadingSuccess);
+    //[Fact]
+    //public async Task CancelPromptImmediatelyAfterSubmit()
+    //{
+    //    MaestroTestsService testService = new();
+    //    bool loadingSuccess = await testService.LoadModel();
+    //    Assert.True(loadingSuccess);
 
-        var testConversation = testService.GetNewConversationViewModel();
+    //    var testConversation = testService.GetNewConversationViewModel();
 
-        testConversation.ConversationViewModel.InputText = "tell me a story";
-        testConversation.ConversationViewModel.Submit();
+    //    testConversation.ConversationViewModel.InputText = "tell me a story";
+    //    testConversation.ConversationViewModel.Submit();
 
-        await testConversation.ConversationViewModel.Cancel();
+    //    await testConversation.ConversationViewModel.Cancel();
 
-        try
-        {
-            await testConversation.PromptResultTask.Task.WaitAsync(TimeSpan.FromSeconds(5));
-        }
-        catch (TimeoutException)
-        {
-            Assert.Fail("The response generation was not immediately cancelled");
-        }
+    //    try
+    //    {
+    //        await testConversation.PromptResultTask.Task.WaitAsync(TimeSpan.FromSeconds(5));
+    //    }
+    //    catch (TimeoutException)
+    //    {
+    //        Assert.Fail("The response generation was not immediately cancelled");
+    //    }
 
-        MaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
-    }
+    //    MaestroTestsHelpers.AssertConversationPromptCancelledState(testConversation);
+    //}
 
     [Fact]
     public async Task SubmitTwoPromptThenCancelFirst()

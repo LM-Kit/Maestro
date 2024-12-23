@@ -32,7 +32,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = new Dictionary<Uri, FileDownloader>();
 
     private delegate bool ModelDownloadingProgressCallback(string path, long? contentLength, long bytesRead);
-    public virtual event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
+    public  event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
 
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _collectModelFilesTask;
@@ -215,7 +215,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 #endif
 
-    internal void OnModelDownloaded(ModelCard modelCard)
+    public void OnModelDownloaded(ModelCard modelCard)
     {
         TotalModelSize += modelCard.FileSize;
         DownloadedCount++;

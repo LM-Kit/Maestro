@@ -129,7 +129,7 @@
                 x:Name="chatsSidebar"
                 WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}"
                 Grid.Row="1"/>
-            
+
             <BlazorWebView
                 x:Name="blazorWebView"
                 Grid.RowSpan="2"

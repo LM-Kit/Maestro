@@ -1,81 +1,33 @@
 ﻿@inject IJSRuntime JS
 
-<div id="chat-border" class="chat-border-small">
-    <textarea 
-        rows="1" 
-        id="chat-box" 
-        @bind="ViewModel.InputText" 
-        @onkeydown="OnKeyDown" 
-        @bind:event="oninput"/>
+<div id="input-border" class="input-border-small">
+    <textarea rows="1" id="input-text" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput" />
 
-    <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
+        <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
             class="send-button round-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
         @if (!ViewModel.AwaitingResponse)
         {
-            <span>
-                <i class="fas fa-arrow-up"></i>
-            </span>
+                <span>
+                    <i class="fas fa-arrow-up"></i>
+                </span>
         }
         else
         {
-            <span>
-                <i class="fas fa-stop"></i>
-            </span>
+                <span>
+                    <i class="fas fa-stop"></i>
+                </span>
         }
     </button>
 </div>
 
-
 <script>
-
-    document.getElementById('chat-box').addEventListener('keydown', function (e) {
-        if (e.key == 'Enter' && !e.shiftKey) {
-            // prevent default behavior
-            e.preventDefault();
-            return false;
-        }
-    }, false);
-
-
-        function resizeUserInput() {
-            const chatBox = document.getElementById('chat-box');
-            const chatBorder = document.getElementById('chat-border');
-
-
-            chatBox.style.height = "";
-            chatBox.style.height = chatBox.scrollHeight + "px";
-
-            var style = window.getComputedStyle(chatBox);
-            var lineHeight = parseFloat(style.getPropertyValue('line-height'));
-            var lineCount = Math.round(chatBox.scrollHeight / lineHeight);
-
-            // If the height exceeds max-height (200px), the scrollbar should appear.
-            if (chatBox.scrollHeight > 200) {
-                chatBox.style.height = "200px"; // Limit height to 200px
-            } else {
-                // Adding top and bottom margin depending on number of lines, to account for border radius of input box when showing scrollbar.
-                if (lineCount > 2) {
-                    chatBox.style.marginBottom = "16px";
-                    chatBox.style.marginTop = "16px";
-                } else if (lineCount > 1) {
-                    chatBox.style.marginTop = "8px";
-                    chatBox.style.marginBottom = "8px";
-
-                } else {
-                    chatBox.style.marginBottom = "0px";
-                    chatBox.style.marginTop = "0px";
-                }
-            }
-
-
-            if (lineCount > 1) {
-                chatBorder.classList.add('chat-border-large');
-                chatBorder.classList.remove('chat-border-small');
-            } else {
-                chatBorder.classList.add('chat-border-small');
-                chatBorder.classList.remove('chat-border-large');
-            }
-        }
+    document.getElementById('input-text').addEventListener('keydown', function (e) {
+    if (e.key == 'Enter' && !e.shiftKey) {
+        // prevent default behavior
+        e.preventDefault();
+        return false;
+    }
+}, false);
 </script>
 
 @code
@@ -99,9 +51,9 @@
 
     [Parameter] public EventCallback OnSubmit { get; set; }
 
-    [Parameter] public required AssistantViewModelBase ViewModel { get; set; }
+    [Parameter] public required AssistantSessionViewModelBase ViewModel { get; set; }
 
-    [Parameter] public EventCallback<AssistantViewModelBase> ViewModelChanged { get; set; }
+    [Parameter] public EventCallback<AssistantSessionViewModelBase> ViewModelChanged { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -159,7 +111,7 @@
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(AssistantViewModelBase.InputText))
+        if (e.PropertyName == nameof(AssistantSessionViewModelBase.InputText))
         {
             // Resize the textarea whenever the input text changes.
             _shouldResizeTextarea = true;

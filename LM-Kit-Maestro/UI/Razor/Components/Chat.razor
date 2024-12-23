@@ -9,7 +9,7 @@
 
 @inherits MvvmComponentBase<ChatPageViewModel>
 
-<div id="container">
+<div id="chat-container">
     <div id="conversation-container">
         <div id="conversation-content"
              class="chat-element dark @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
@@ -17,7 +17,7 @@
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
                 {
-                    <div id="empty-conversation" class="vertical-stack small">
+                    <div id="empty-conversation" class="vertical-stack small-text">
                         <div class="vertical-stack spacing-4">
                             <div class="welcome-message">Hello, human.</div>
                             <div class="welcome-message">
@@ -60,9 +60,10 @@
             <div id="scroll-to-end">
                 @if (!IsScrolledToEnd)
                 {
-                    <button @onclick="OnScrollToEndButtonClicked"
-                            class="material-icons round-button scroll-to-end-button">
-                        arrow_downward
+                    <button @onclick="OnScrollToEndButtonClicked" class="round-button scroll-to-end-button">
+                        <span>
+                            <i class="fas fa-arrow-down"></i>
+                        </span>
                     </button>
                 }
             </div>
@@ -73,7 +74,7 @@
         <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
     </div>
 
-    <div id="bottom-space" class="chat-element">
+@*     <div id="bottom-space" class="chat-element">
         @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
         {
             <text>
@@ -83,42 +84,8 @@
                         ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
             </text>
         }
-    </div>
+    </div> *@
 </div>
-
-<script>
-    function initializeScrollHandler(dotNetHelper) {
-        const container = document.getElementById('conversation-container');
-        container.addEventListener('scroll', () => {
-            dotNetHelper.invokeMethodAsync('OnConversationContainerScrolled', container.scrollTop);
-        });
-    }
-
-    function getScrollHeight() {
-        const element = document.getElementById('conversation-container');
-        return element.scrollHeight;
-    };
-
-    function getConversationViewHeight() {
-        const element = document.getElementById('conversation-container');
-        return element.clientHeight;
-    };
-
-
-    function setUserInputFocus() {
-        const element = document.getElementById('chat-box');
-
-        element.focus();
-    }
-
-    function scrollToEnd(smooth) {
-        const container = document.getElementById('conversation-container');
-        container.scrollTo({
-            top: container.scrollHeight,
-            behavior: smooth ? 'smooth' : 'auto'
-        });
-    }
-</script>
 
 @code
 {
@@ -140,6 +107,14 @@
         set
         {
             _isScrolledToEnd = value;
+
+            if (_isScrolledToEnd &&
+                ViewModel.ConversationListViewModel.CurrentConversation != null &&
+                ViewModel.ConversationListViewModel.CurrentConversation!.AwaitingResponse)
+            {
+                // Assistant is currently generating a response, enforce auto-scroll.
+                _shouldAutoScrollEnd |= true;
+            }
             UpdateUIAsync();
         }
     }
@@ -154,6 +129,8 @@
         }
 
         ViewModel.ConversationListViewModel.PropertyChanged += OnConversationListViewModelPropertyChanged;
+
+        ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.PropertyChanged += OnLMKitConversationPropertyChanged;
 
         await ResizeHandler.RegisterPageResizeAsync(Resized);
         await JS.InvokeVoidAsync("initializeScrollHandler", DotNetObjectReference.Create(this));
@@ -275,7 +252,7 @@
     {
         if (_shouldAutoScrollEnd)
         {
-            await ScrollToEnd();
+                await ScrollToEnd();
         }
     }
 
@@ -306,11 +283,6 @@
 
         var value = chatContentHeight - viewHeight - _scrollTop;
         IsScrolledToEnd = Math.Abs(chatContentHeight - viewHeight - _scrollTop) < 5 || chatContentHeight <= viewHeight;
-
-        if (IsScrolledToEnd && ViewModel.ConversationListViewModel.CurrentConversation != null && ViewModel.ConversationListViewModel.CurrentConversation!.AwaitingResponse)
-        {
-            _shouldAutoScrollEnd |= true;
-        }
     }
 
     public async Task OnScrollToEndButtonClicked()
