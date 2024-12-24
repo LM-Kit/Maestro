@@ -77,7 +77,6 @@
     line-height: 20px;
     color: var(--Outline);
     display: inline-block;
-    transform: translateY(-2px); /* tweaking text vertical position to align it with button icons */
     align-self: center;
     margin-inline: 4px;
 }
