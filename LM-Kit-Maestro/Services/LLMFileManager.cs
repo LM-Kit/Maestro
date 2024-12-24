@@ -26,13 +26,14 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly FileSystemEntryRecorder _fileSystemEntryRecorder = new FileSystemEntryRecorder();
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
+    private bool _enableSlowModels = false; //todo: Implement this as a configurable option in the configuration panel
     private bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
     private bool _enableCustomModels = true;  //todo: Implement this as a configurable option in the configuration panel 
 
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = new Dictionary<Uri, FileDownloader>();
 
     private delegate bool ModelDownloadingProgressCallback(string path, long? contentLength, long bytesRead);
-    public  event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
+    public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
 
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _collectModelFilesTask;
@@ -351,7 +352,12 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
             foreach (var modelCard in predefinedModelCards)
             {
-                TryRegisterChatModel(modelCard, isSorted: true);
+                if (!_enableSlowModels && Graphics.DeviceConfiguration.GetPerformanceScore(modelCard) < 0.5)
+                {
+                    continue;
+                }
+
+                TryRegisterChatModel(modelCard, isSorted: true, rejectSlowModels: !_enableSlowModels);
 
                 _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
             }
@@ -391,13 +397,18 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
-    private bool TryRegisterChatModel(ModelCard? modelCard, bool isSorted)
+    private bool TryRegisterChatModel(ModelCard? modelCard, bool isSorted, bool rejectSlowModels)
     {
         if (modelCard != null)
         {
             if (!modelCard.Capabilities.HasFlag(ModelCapabilities.Chat) &&
                 !modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion) &&
                 !modelCard.Capabilities.HasFlag(ModelCapabilities.Math))
+            {
+                return false;
+            }
+
+            if (rejectSlowModels && Graphics.DeviceConfiguration.GetPerformanceScore(modelCard) < 0.5)
             {
                 return false;
             }
@@ -430,7 +441,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             return;
         }
 
-        TryRegisterChatModel(modelCard, isSorted);
+        TryRegisterChatModel(modelCard, isSorted, rejectSlowModels: false);
     }
 
     private void HandleFileRecording(Uri fileUri)
