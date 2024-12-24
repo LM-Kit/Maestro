@@ -352,11 +352,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
             foreach (var modelCard in predefinedModelCards)
             {
-                if (!_enableSlowModels && Graphics.DeviceConfiguration.GetPerformanceScore(modelCard) < 0.5)
-                {
-                    continue;
-                }
-
                 TryRegisterChatModel(modelCard, isSorted: true, rejectSlowModels: !_enableSlowModels);
 
                 _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
@@ -408,7 +403,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 return false;
             }
 
-            if (rejectSlowModels && Graphics.DeviceConfiguration.GetPerformanceScore(modelCard) < 0.5)
+            if (rejectSlowModels && Graphics.DeviceConfiguration.GetPerformanceScore(modelCard) < 0.3)
             {
                 return false;
             }
