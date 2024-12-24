@@ -198,6 +198,7 @@
                             <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.2*" />
                         </Grid.ColumnDefinitions>
 
@@ -215,7 +216,6 @@
                                Grid.Column="1" 
                                Text="{Binding ModelInfo.Publisher}"
                                ToolTipProperties.Text="{Binding ModelPath}"/>
-
 
                         <Label VerticalOptions="Center" 
                                Grid.Column="2" 
@@ -264,17 +264,21 @@
 
                         <Label VerticalOptions="Center" 
                                Grid.Column="6" 
-                               ToolTipProperties.Text="{Binding Precision, StringFormat='This model uses {0}-bit precision, which indicates the number of bits used for numerical representation'}" 
-                               Text="{Binding Precision}" />
-
+                               Text="{Binding MaxContextLengthKB, StringFormat='{}{0:N0}k'}" 
+                               ToolTipProperties.Text="{Binding ModelInfo.ContextLength, StringFormat='This model supports a maximum context length of {0:N0} tokens'}" />
 
                         <Label VerticalOptions="Center" 
                                Grid.Column="7" 
+                               ToolTipProperties.Text="{Binding Precision, StringFormat='This model uses {0}-bit precision, which indicates the number of bits used for numerical representation'}" 
+                               Text="{Binding Precision}" />
+
+                        <Label VerticalOptions="Center" 
+                               Grid.Column="8" 
                                HorizontalOptions="End" 
                                Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
-                        
+
                         <Button
-                            Grid.Column="8"
+                            Grid.Column="9"
                             Style="{StaticResource SecondaryActionButtonStyle}"
                             HorizontalOptions="End"
                             BackgroundColor="Transparent"
@@ -305,7 +309,6 @@
                                     </VisualStateGroup>
                                 </VisualStateGroupList>
                             </VisualStateManager.VisualStateGroups>
-
                         </Button>
                     </Grid>
                 </Border>

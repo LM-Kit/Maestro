@@ -54,6 +54,9 @@ namespace LMKit.Maestro.ViewModels
         float _compatibilityLevel;
 
         [ObservableProperty]
+        int _maxContextLengthKB;
+
+        [ObservableProperty]
         DownloadInfo _downloadInfo = new DownloadInfo();
 
         internal void OnLocalModelRemoved()
@@ -78,6 +81,7 @@ namespace LMKit.Maestro.ViewModels
             IsMathModel = modelCard.Capabilities.HasFlag(ModelCapabilities.Math);
             ModelPath = modelCard.IsLocallyAvailable ? modelCard.LocalPath : modelCard.ModelUri.ToString();
             CompatibilityLevel = LMKit.Graphics.DeviceConfiguration.GetPerformanceScore(modelCard);
+            MaxContextLengthKB = modelCard.ContextLength / 1024;
         }
     }
 }
