@@ -438,7 +438,7 @@
                                 VerticalOptions="Center"
                                 HorizontalOptions="Start" />
                             <Label 
-                                Text="Display slow-performing models"
+                                Text="{x:Static ui:TooltipLabels.DisplaySlowPerformingModels}"
                                 VerticalOptions="Center"
                                 HorizontalOptions="Start"
                                 Margin="0,0,0,0" />
@@ -463,8 +463,10 @@
                                 <Setter Property="EmptyView">
                                     <Setter.Value>
                                         <VerticalStackLayout VerticalOptions="End" HorizontalOptions="Center" Spacing="8">
-                                            <Label HorizontalTextAlignment="Center" Text="It looks like you don't have any model yet."/>
-                                            <Label HorizontalTextAlignment="Center" Text="Model files added to your model folder will appear here."/>
+                                            <Label HorizontalTextAlignment="Center"
+                                                   Text="{x:Static ui:TooltipLabels.NoModelYetAvailable}"/>
+                                            <Label HorizontalTextAlignment="Center" 
+                                                   Text="{x:Static ui:TooltipLabels.ModelFilesWillAppearHere}"/>
                                         </VerticalStackLayout>
 
                                     </Setter.Value>
