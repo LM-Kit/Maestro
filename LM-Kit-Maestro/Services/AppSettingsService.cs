@@ -55,15 +55,15 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         }
     }
 
-    public bool EnableSlowModels
+    public bool EnableLowPerformanceModels
     {
         get
         {
-            return Settings.Get(nameof(EnableSlowModels), LMKitDefaultSettings.DefaultEnableSlowModels);
+            return Settings.Get(nameof(EnableLowPerformanceModels), LMKitDefaultSettings.DefaultEnableLowPerformanceModels);
         }
         set
         {
-            Settings.Set(nameof(EnableSlowModels), value);
+            Settings.Set(nameof(EnableLowPerformanceModels), value);
             OnPropertyChanged();
         }
     }

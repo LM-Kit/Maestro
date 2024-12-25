@@ -27,7 +27,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
     private bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
-    private bool _enableCustomModels = true;  //todo: Implement this as a configurable option in the configuration panel 
+    private bool _enableCustomModels = true;
     private bool _isLoaded = false;
 
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = new Dictionary<Uri, FileDownloader>();
@@ -54,10 +54,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private bool _fileCollectingInProgress;
 
     [ObservableProperty]
-    private bool _enableSlowModels;
-
-
-    private List<ModelCard> _predefinedModelCards = ModelCard.GetPredefinedModelCards();
+    private bool _enableLowPerformanceModels;
 
 
     private string _modelStorageDirectory = string.Empty;
@@ -96,7 +93,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         Models = new ReadOnlyObservableCollection<ModelCard>(_models);
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
         _appSettingsService = appSettingsService;
-        _enableSlowModels = _appSettingsService.EnableSlowModels;
+        _enableLowPerformanceModels = _appSettingsService.EnableLowPerformanceModels;
         _httpClient = httpClient;
         _models.CollectionChanged += OnModelCollectionChanged;
         _unsortedModels.CollectionChanged += OnUnsortedModelCollectionChanged;
@@ -240,7 +237,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             TotalModelSize -= modelCard.FileSize;
 
 #if !WINDOWS
-            if (!IsPredefinedModel(modelCard))
+            if (!modelCard.IsPredefined)
             {
                 if (_unsortedModels.Contains(modelCard))
                 {
@@ -260,21 +257,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
-    public bool IsPredefinedModel(ModelCard modelCard)
-    {
-        if (_enablePredefinedModels)
-        {
-            foreach (var predefinedModel in ModelCard.GetPredefinedModelCards())
-            {
-                if (modelCard.ModelUri == predefinedModel.ModelUri)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
 
     private void EnsureModelDirectoryExists()
     {
@@ -353,10 +335,23 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void CollectModels()
     {
-
         if (_enablePredefinedModels)
         {
-            foreach (var modelCard in _predefinedModelCards)
+            var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !EnableLowPerformanceModels);
+
+            if (_models.Count > 0)
+            {
+                for (int index = 0; index < _models.Count; index++)
+                {
+                    if (_models[index].IsPredefined && !predefinedModels.Contains(_models[index]))
+                    {
+                        _models.RemoveAt(index);
+                        index--;
+                    }
+                }
+            }
+
+            foreach (var modelCard in ModelCard.GetPredefinedModelCards(dropSmallerModels: !EnableLowPerformanceModels))
             {
                 TryRegisterChatModel(modelCard, isSorted: true);
 
@@ -372,7 +367,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             {
                 bool processed = false;
 
-                foreach (var predefinedModel in _predefinedModelCards)
+                foreach (var predefinedModel in ModelCard.GetPredefinedModelCards(dropSmallerModels: false))
                 {
                     if (predefinedModel.LocalPath == filePath)
                     {//Skip this model because it has already been processed
@@ -411,7 +406,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
             if (!ContainsModel(_models, modelCard, out _))
             {
-                if (isSlowModel && !EnableSlowModels)
+                if (isSlowModel && !EnableLowPerformanceModels)
                 {
                     return false;
                 }
@@ -425,7 +420,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
                 return true;
             }
-            else if (isSlowModel && !EnableSlowModels)
+            else if (isSlowModel && !EnableLowPerformanceModels)
             {
                 _models.Remove(modelCard);
             }
@@ -500,7 +495,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         if (ContainsModel(_models, fileUri, out int index))
         {
-            if (!IsPredefinedModel(_models[index]))
+            if (!_models[index].IsPredefined)
             {
                 var model = _models[index];
                 _models.Remove(model);
@@ -583,9 +578,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 #endif
 
-    partial void OnEnableSlowModelsChanged(bool value)
+    partial void OnEnableLowPerformanceModelsChanged(bool value)
     {
-        _appSettingsService.EnableSlowModels = value;
+        _appSettingsService.EnableLowPerformanceModels = value;
         _ = CollectModelsAsync();
     }
 

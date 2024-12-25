@@ -28,7 +28,7 @@
         public const string ChatModelOptimized = "This model is optimized for conversational tasks";
         public const string MathModelOptimized = "This model is optimized for solving mathematical problems";
         public const string DeleteLocalModel = "Delete the model file from local storage";
-        public const string DisplaySlowPerformingModels = "Display slow-performing models";
+        public const string DisplayLowPerformingModels = "Show All Models (Including Low Performance)";
         public const string NoModelYetAvailable = "It looks like you don't have any model yet.";
         public const string ModelFilesWillAppearHere = "Model files added to your model folder will appear here.";
     }
