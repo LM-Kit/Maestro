@@ -211,35 +211,20 @@ public partial class LMKitService : INotifyPropertyChanged
         // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this request.
         _lmKitServiceSemaphore.Wait();
 
-        LMKitResult result;
-
-        if (request.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
+        try
         {
-            result = new LMKitResult()
-            {
-                Status = LMKitTextGenerationStatus.Cancelled
-            };
+            LMKitResult result;
 
-            _lmKitServiceSemaphore.Release();
-        }
-        else
-        {
-            if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
+            if (request.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
             {
-                var conversation = request.RequestType == LMKitRequest.LMKitRequestType.Prompt ?
-                    ((LMKitRequest.PromptRequestParameters)request.Parameters!).Conversation :
-                    ((LMKitRequest.RegenerateResponseParameters)request.Parameters!).Conversation;
+                result = new LMKitResult()
+                {
+                    Status = LMKitTextGenerationStatus.Cancelled
+                };
 
-                BeforeSubmittingPrompt(conversation);
+                _lmKitServiceSemaphore.Release();
             }
-
-            _lmKitServiceSemaphore.Release();
-
-            try
-            {
-                result = await SubmitRequest(request);
-            }
-            finally
+            else
             {
                 if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
                 {
@@ -247,20 +232,39 @@ public partial class LMKitService : INotifyPropertyChanged
                         ((LMKitRequest.PromptRequestParameters)request.Parameters!).Conversation :
                         ((LMKitRequest.RegenerateResponseParameters)request.Parameters!).Conversation;
 
-                    AfterSubmittingPrompt(conversation);
+                    BeforeSubmittingPrompt(conversation);
+                }
+
+                _lmKitServiceSemaphore.Release();
+
+                try
+                {
+                    result = await SubmitRequest(request);
+                }
+                finally
+                {
+                    if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
+                    {
+                        var conversation = request.RequestType == LMKitRequest.LMKitRequestType.Prompt ?
+                            ((LMKitRequest.PromptRequestParameters)request.Parameters!).Conversation :
+                            ((LMKitRequest.RegenerateResponseParameters)request.Parameters!).Conversation;
+
+                        AfterSubmittingPrompt(conversation);
+                    }
                 }
             }
-        }
 
-        if (_requestSchedule.Contains(request))
+            request.ResponseTask.TrySetResult(result);
+
+            return result;
+        }
+        finally
         {
-            _requestSchedule.Remove(request);
+            if (_requestSchedule.Contains(request))
+            {
+                _requestSchedule.Remove(request);
+            }
         }
-
-        request.ResponseTask.TrySetResult(result);
-
-        return result;
-
     }
 
     private async Task<LMKitResult> SubmitRequest(LMKitRequest request)

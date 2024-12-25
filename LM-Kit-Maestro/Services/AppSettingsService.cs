@@ -40,7 +40,7 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         {
             string directory = Settings.Get(nameof(ModelStorageDirectory), LMKitDefaultSettings.DefaultModelStorageDirectory);
 
-            if(directory != LMKit.Global.Configuration.ModelStorageDirectory)
+            if (directory != LMKit.Global.Configuration.ModelStorageDirectory)
             {
                 LMKit.Global.Configuration.ModelStorageDirectory = directory;
             }
@@ -51,6 +51,19 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         {
             Settings.Set(nameof(ModelStorageDirectory), value);
             LMKit.Global.Configuration.ModelStorageDirectory = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool EnableSlowModels
+    {
+        get
+        {
+            return Settings.Get(nameof(EnableSlowModels), LMKitDefaultSettings.DefaultEnableSlowModels);
+        }
+        set
+        {
+            Settings.Set(nameof(EnableSlowModels), value);
             OnPropertyChanged();
         }
     }

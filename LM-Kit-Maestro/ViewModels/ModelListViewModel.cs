@@ -20,12 +20,6 @@ namespace LMKit.Maestro.ViewModels
 
         public ObservableCollection<ModelInfoViewModel> Models { get; }
 
-        [ObservableProperty]
-        private long _totalModelSize;
-
-        [ObservableProperty]
-        private long _downloadedCount;
-
 
         [ObservableProperty]
         private double _loadingProgress;
@@ -35,6 +29,7 @@ namespace LMKit.Maestro.ViewModels
 
         [ObservableProperty]
         private bool _modelIsDownloading;
+
 
         private ModelInfoViewModel? _selectedModel;
         public ModelInfoViewModel? SelectedModel
@@ -55,7 +50,6 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-
         public ModelListViewModel(IMainThread mainThread, ILLMFileManager fileManager, LMKitService lmKitService, IPopupService popupService,
             INavigationService navigationService, IPopupNavigation popupNavigation)
         {
@@ -72,18 +66,6 @@ namespace LMKit.Maestro.ViewModels
             LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
             LMKitService.ModelLoadingFailed += OnModelLoadingFailed;
             LMKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
-
-            _fileManager.PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(_fileManager.TotalModelSize))
-                {
-                    TotalModelSize = _fileManager.TotalModelSize;
-                }
-                else if (e.PropertyName == nameof(_fileManager.DownloadedCount))
-                {
-                    DownloadedCount = _fileManager.DownloadedCount;
-                }
-            };
         }
 
         public void Initialize()

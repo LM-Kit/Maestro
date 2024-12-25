@@ -198,6 +198,7 @@
                             <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.9*" />
                             <ColumnDefinition Width="0.2*" />
                         </Grid.ColumnDefinitions>
 
@@ -215,7 +216,6 @@
                                Grid.Column="1" 
                                Text="{Binding ModelInfo.Publisher}"
                                ToolTipProperties.Text="{Binding ModelPath}"/>
-
 
                         <Label VerticalOptions="Center" 
                                Grid.Column="2" 
@@ -264,17 +264,21 @@
 
                         <Label VerticalOptions="Center" 
                                Grid.Column="6" 
-                               ToolTipProperties.Text="{Binding Precision, StringFormat='This model uses {0}-bit precision, which indicates the number of bits used for numerical representation'}" 
-                               Text="{Binding Precision}" />
-
+                               Text="{Binding MaxContextLengthKB, StringFormat='{}{0:N0}k'}" 
+                               ToolTipProperties.Text="{Binding ModelInfo.ContextLength, StringFormat='This model supports a maximum context length of {0:N0} tokens'}" />
 
                         <Label VerticalOptions="Center" 
                                Grid.Column="7" 
+                               ToolTipProperties.Text="{Binding Precision, StringFormat='This model uses {0}-bit precision, which indicates the number of bits used for numerical representation'}" 
+                               Text="{Binding Precision}" />
+
+                        <Label VerticalOptions="Center" 
+                               Grid.Column="8" 
                                HorizontalOptions="End" 
                                Text="{Binding FileSize, Converter={converters:FileSizeConverter}}"/>
-                        
+
                         <Button
-                            Grid.Column="8"
+                            Grid.Column="9"
                             Style="{StaticResource SecondaryActionButtonStyle}"
                             HorizontalOptions="End"
                             BackgroundColor="Transparent"
@@ -305,7 +309,6 @@
                                     </VisualStateGroup>
                                 </VisualStateGroupList>
                             </VisualStateManager.VisualStateGroups>
-
                         </Button>
                     </Grid>
                 </Border>
@@ -314,6 +317,8 @@
     </ui:PageBase.Resources>
 
     <ui:PageBase.Header>
+
+       
         <Grid 
             Padding="20, 0"
             ColumnSpacing="8">
@@ -408,9 +413,9 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="You have "/>
-                                        <Span Text="{Binding ModelListViewModel.DownloadedCount}" FontAttributes="Bold"/>
+                                        <Span Text="{Binding FileManager.DownloadedCount}" FontAttributes="Bold"/>
                                         <Span Text=" downloaded model(s) taking a total of "/>
-                                        <Span Text="{Binding ModelListViewModel.TotalModelSize, Converter={converters:FileSizeConverter}}" FontAttributes="Bold"/>
+                                        <Span Text="{Binding FileManager.TotalModelSize, Converter={converters:FileSizeConverter}}" FontAttributes="Bold"/>
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -424,9 +429,25 @@
                             Command="{Binding Source={x:Reference modelsPage}, Path=ShowUnsortedModelFilesPopupCommand, x:DataType=ui:ModelsPage}"
                             IsVisible="{Binding FileManager.UnsortedModels.Count, Converter={converters:GreaterThanZeroConverter}}"/>
                         </Grid>
+
+                        <HorizontalStackLayout Margin="15,0" VerticalOptions="EndAndExpand" HorizontalOptions="Start">
+                            <CheckBox        
+                                Color="{StaticResource Primary}"
+                                BackgroundColor="Transparent"   
+                                IsChecked="{Binding Path=FileManager.EnableSlowModels, Mode=TwoWay}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Start" />
+                            <Label 
+                                Text="{x:Static ui:TooltipLabels.DisplaySlowPerformingModels}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Start"
+                                Margin="0,0,0,0" />
+                        </HorizontalStackLayout>
+
                     </VerticalStackLayout>
 
-                    <CollectionView Margin="0, 16, 0, 0" x:Name="modelsCollectionView" Grid.Row="1">
+
+                    <CollectionView Margin="0, 5, 0, 0" x:Name="modelsCollectionView" Grid.Row="1">
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout ItemSpacing="8" Orientation="Vertical"/>
                         </CollectionView.ItemsLayout>
@@ -442,8 +463,10 @@
                                 <Setter Property="EmptyView">
                                     <Setter.Value>
                                         <VerticalStackLayout VerticalOptions="End" HorizontalOptions="Center" Spacing="8">
-                                            <Label HorizontalTextAlignment="Center" Text="It looks like you don't have any model yet."/>
-                                            <Label HorizontalTextAlignment="Center" Text="Model files added to your model folder will appear here."/>
+                                            <Label HorizontalTextAlignment="Center"
+                                                   Text="{x:Static ui:TooltipLabels.NoModelYetAvailable}"/>
+                                            <Label HorizontalTextAlignment="Center" 
+                                                   Text="{x:Static ui:TooltipLabels.ModelFilesWillAppearHere}"/>
                                         </VerticalStackLayout>
 
                                     </Setter.Value>
