@@ -15,6 +15,11 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     public ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
 
+    public bool FileCollectingInProgress { get; private set; }
+
+    public string ModelStorageDirectory { get; set; }
+    public long TotalModelSize { get; set; }
+    public int DownloadedCount { get; set; }
 
     public DummyLLmFileManager()
     {
@@ -22,11 +27,51 @@ internal class DummyLLmFileManager : ILLMFileManager
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
     }
 
+    event PropertyChangedEventHandler ILLMFileManager.PropertyChanged
+    {
+        add
+        {
+            throw new NotImplementedException();
+        }
+
+        remove
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    event NotifyCollectionChangedEventHandler? ILLMFileManager.SortedModelCollectionChanged
+    {
+        add
+        {
+            throw new NotImplementedException();
+        }
+
+        remove
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public bool FileCollectingInProgress { get; private set; }
-    
+
     public string ModelStorageDirectory { get; set; }
     public long TotalModelSize { get; set; }
     public int DownloadedCount { get; set; }
+
+    ReadOnlyObservableCollection<ModelCard> ILLMFileManager.Models => throw new NotImplementedException();
+
+    ReadOnlyObservableCollection<ModelCard> ILLMFileManager.UnsortedModels => throw new NotImplementedException();
+
+    bool ILLMFileManager.FileCollectingInProgress => throw new NotImplementedException();
+
+    string ILLMFileManager.ModelStorageDirectory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    long ILLMFileManager.TotalModelSize => throw new NotImplementedException();
+
+    int ILLMFileManager.DownloadedCount => throw new NotImplementedException();
+
+    bool ILLMFileManager.EnableSlowModels { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
 
 #pragma warning disable 67

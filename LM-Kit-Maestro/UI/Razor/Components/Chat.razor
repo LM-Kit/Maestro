@@ -74,7 +74,7 @@
         <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
     </div>
 
-@*     <div id="bottom-space" class="chat-element">
+    <div id="bottom-space" style="margin-top: 0px; padding-top: 0px; position: relative; top: -30px;font-size: 15px;">
         @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
         {
             <text>
@@ -84,7 +84,7 @@
                         ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
             </text>
         }
-    </div> *@
+    </div>
 </div>
 
 @code
@@ -115,6 +115,7 @@
                 // Assistant is currently generating a response, enforce auto-scroll.
                 _shouldAutoScrollEnd |= true;
             }
+
             UpdateUIAsync();
         }
     }
@@ -188,6 +189,10 @@
         {
             UpdateUIAsync();
         }
+        else if (e.PropertyName == nameof(LMKitService.Conversation.InTextCompletion))
+        {
+            UpdateUIAsync(forceRedraw: true);
+        }
     }
 
     private void OnLatestAssistantMessagePropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -252,7 +257,7 @@
     {
         if (_shouldAutoScrollEnd)
         {
-                await ScrollToEnd();
+            await ScrollToEnd();
         }
     }
 

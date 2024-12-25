@@ -9,6 +9,7 @@ public static class LMKitDefaultSettings
     public static readonly int DefaultContextSize = Graphics.DeviceConfiguration.GetOptimalContextSize();
     public const int DefaultRequestTimeout = 120;
     public const SamplingMode DefaultSamplingMode = SamplingMode.Random;
+    public const bool DefaultEnableSlowModels = false;
 
     public static SamplingMode[] AvailableSamplingModes { get; } = (SamplingMode[])Enum.GetValues(typeof(SamplingMode));
 

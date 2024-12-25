@@ -211,43 +211,60 @@ public partial class LMKitService : INotifyPropertyChanged
         // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this request.
         _lmKitServiceSemaphore.Wait();
 
-        LMKitResult result;
-
-        if (request.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
+        try
         {
-            result = new LMKitResult()
-            {
-                Status = LMKitTextGenerationStatus.Cancelled
-            };
+            LMKitResult result;
 
-            _lmKitServiceSemaphore.Release();
-        }
-        else
-        {
-            if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
+            if (request.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
             {
-                var conversation = request.RequestType == LMKitRequest.LMKitRequestType.Prompt ?
-                    ((LMKitRequest.PromptRequestParameters)request.Parameters!).Conversation :
-                    ((LMKitRequest.RegenerateResponseParameters)request.Parameters!).Conversation;
+                result = new LMKitResult()
+                {
+                    Status = LMKitTextGenerationStatus.Cancelled
+                };
 
-                BeforeSubmittingPrompt(conversation);
+                _lmKitServiceSemaphore.Release();
+            }
+            else
+            {
+                if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
+                {
+                    var conversation = request.RequestType == LMKitRequest.LMKitRequestType.Prompt ?
+                        ((LMKitRequest.PromptRequestParameters)request.Parameters!).Conversation :
+                        ((LMKitRequest.RegenerateResponseParameters)request.Parameters!).Conversation;
+
+                    BeforeSubmittingPrompt(conversation);
+                }
+
+                _lmKitServiceSemaphore.Release();
+
+                try
+                {
+                    result = await SubmitRequest(request);
+                }
+                finally
+                {
+                    if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt || request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
+                    {
+                        var conversation = request.RequestType == LMKitRequest.LMKitRequestType.Prompt ?
+                            ((LMKitRequest.PromptRequestParameters)request.Parameters!).Conversation :
+                            ((LMKitRequest.RegenerateResponseParameters)request.Parameters!).Conversation;
+
+                        AfterSubmittingPrompt(conversation);
+                    }
+                }
             }
 
-            _lmKitServiceSemaphore.Release();
+            request.ResponseTask.TrySetResult(result);
 
-
-            result = await SubmitRequest(request);
+            return result;
         }
-
-        if (_requestSchedule.Contains(request))
+        finally
         {
-            _requestSchedule.Remove(request);
+            if (_requestSchedule.Contains(request))
+            {
+                _requestSchedule.Remove(request);
+            }
         }
-
-        request.ResponseTask.TrySetResult(result);
-
-        return result;
-
     }
 
     private async Task<LMKitResult> SubmitRequest(LMKitRequest request)
@@ -414,6 +431,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 };
             }
             _multiTurnConversation.AfterTokenSampling += conversation.AfterTokenSampling;
+
             conversation.ChatHistory = _multiTurnConversation.ChatHistory;
             conversation.LastUsedModelUri = LMKitConfig.LoadedModelUri;
             _lastConversationUsed = conversation;
@@ -429,6 +447,13 @@ public partial class LMKitService : INotifyPropertyChanged
                 //todo: implement context size update.
             }
         }
+
+        conversation.InTextCompletion = true;
+    }
+
+    private void AfterSubmittingPrompt(Conversation conversation)
+    {
+        conversation.InTextCompletion = false;
     }
 
     private bool OnModelLoadingProgressed(float progress)

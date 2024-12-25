@@ -1,7 +1,8 @@
 ﻿namespace LMKit.Maestro.UI
 {
-    internal static class TooltipLabels
+    internal static class TooltipLabels //todo: rename to Locales.
     {
+        //todo: Implement support for multiple languages, including translation management and locale detection.
         public const string RegenerateResponse = "Regenerate response";
         public const string PreviousGeneratedResponse = "Previous generated response";
         public const string NextGeneratedResponse = "Next generated response";
@@ -23,5 +24,12 @@
         public const string SamplingConfiguration = "Sampling configuration";
         public const string SamplingMode = "Sampling mode";
         public const string ModelFileNotAvailableLocally = "The model file is not available locally";
+        public const string CodeCompletionModelOptimized = "This model is optimized for code completion";
+        public const string ChatModelOptimized = "This model is optimized for conversational tasks";
+        public const string MathModelOptimized = "This model is optimized for solving mathematical problems";
+        public const string DeleteLocalModel = "Delete the model file from local storage";
+        public const string DisplaySlowPerformingModels = "Display slow-performing models";
+        public const string NoModelYetAvailable = "It looks like you don't have any model yet.";
+        public const string ModelFilesWillAppearHere = "Model files added to your model folder will appear here.";
     }
 }
