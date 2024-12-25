@@ -25,9 +25,9 @@
         <ShellContent Title="Home" ContentTemplate="{DataTemplate ui:HomePage}"/>
     </Tab>-->
 
-    <Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage" x:DataType="vm:MaestroTabViewModel">
+    <!--<Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage" x:DataType="vm:MaestroTabViewModel">
         <ShellContent ContentTemplate="{DataTemplate ui:AssistantsPage}"/>
-    </Tab>
+    </Tab>-->
 
     <Tab BindingContext="{Binding ChatTab}" Title="{Binding ChatTab.Title}" Route="ChatPage" x:DataType="vm:MaestroTabViewModel">
         <ShellContent Title="AI Chat" ContentTemplate="{DataTemplate ui:ChatPage}"/>
