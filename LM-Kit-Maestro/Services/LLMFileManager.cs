@@ -26,7 +26,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly FileSystemEntryRecorder _fileSystemEntryRecorder = new FileSystemEntryRecorder();
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
-    private bool _enableSlowModels = false; //todo: Implement this as a configurable option in the configuration panel
     private bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
     private bool _enableCustomModels = true;  //todo: Implement this as a configurable option in the configuration panel 
 
@@ -41,7 +40,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     public ReadOnlyObservableCollection<ModelCard> Models { get; }
     public ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
 
-
     private ObservableCollection<ModelCard> _models { get; } = new ObservableCollection<ModelCard>();
     private ObservableCollection<ModelCard> _unsortedModels { get; } = new ObservableCollection<ModelCard>();
 
@@ -53,6 +51,13 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     [ObservableProperty]
     private bool _fileCollectingInProgress;
+
+    [ObservableProperty]
+    private bool _enableSlowModels = false;
+
+
+    private List<ModelCard> _predefinedModelCards = ModelCard.GetPredefinedModelCards();
+
 
     private string _modelStorageDirectory = string.Empty;
     public string ModelStorageDirectory
@@ -344,15 +349,12 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void CollectModels()
     {
-        List<ModelCard>? predefinedModelCards = null;
 
         if (_enablePredefinedModels)
         {
-            predefinedModelCards = ModelCard.GetPredefinedModelCards();
-
-            foreach (var modelCard in predefinedModelCards)
+            foreach (var modelCard in _predefinedModelCards)
             {
-                TryRegisterChatModel(modelCard, isSorted: true, rejectSlowModels: !_enableSlowModels);
+                TryRegisterChatModel(modelCard, isSorted: true);
 
                 _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
             }
@@ -364,22 +366,19 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
             foreach (var filePath in files)
             {
-                if (predefinedModelCards != null)
+                bool processed = false;
+                foreach (var predefinedModel in _predefinedModelCards)
                 {
-                    bool processed = false;
-                    foreach (var predefinedModel in predefinedModelCards)
-                    {
-                        if (predefinedModel.LocalPath == filePath)
-                        {//Skip this model because it has already been processed
-                            processed = true;
-                            break;
-                        }
+                    if (predefinedModel.LocalPath == filePath)
+                    {//Skip this model because it has already been processed
+                        processed = true;
+                        break;
                     }
+                }
 
-                    if (processed)
-                    {
-                        continue;
-                    }
+                if (processed)
+                {
+                    continue;
                 }
 
                 if (ShouldCheckFile(filePath))
@@ -392,7 +391,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
-    private bool TryRegisterChatModel(ModelCard? modelCard, bool isSorted, bool rejectSlowModels)
+    private bool TryRegisterChatModel(ModelCard? modelCard, bool isSorted)
     {
         if (modelCard != null)
         {
@@ -403,13 +402,15 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 return false;
             }
 
-            if (rejectSlowModels && Graphics.DeviceConfiguration.GetPerformanceScore(modelCard) < 0.3)
-            {
-                return false;
-            }
+            bool isSlowModel = Graphics.DeviceConfiguration.GetPerformanceScore(modelCard) < 0.3;
 
             if (!ContainsModel(_models, modelCard, out _))
             {
+                if (isSlowModel && !EnableSlowModels)
+                {
+                    return false;
+                }
+
                 _models.Add(modelCard);
 
                 if (!isSorted)
@@ -419,9 +420,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
                 return true;
             }
-            else
+            else if (isSlowModel && !EnableSlowModels)
             {
-                //todo: Add feedback to indicate that a duplicate model has been identified
+                _models.Remove(modelCard);
             }
         }
 
@@ -436,7 +437,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             return;
         }
 
-        TryRegisterChatModel(modelCard, isSorted, rejectSlowModels: false);
+        TryRegisterChatModel(modelCard, isSorted);
     }
 
     private void HandleFileRecording(Uri fileUri)
@@ -573,6 +574,11 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 #endif
+
+    partial void OnEnableSlowModelsChanged(bool value)
+    {
+        _ = CollectModelsAsync();
+    }
 
     private void OnModelCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {

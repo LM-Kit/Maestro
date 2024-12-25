@@ -11,10 +11,9 @@ public interface ILLMFileManager
     ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
     bool FileCollectingInProgress { get; }
     string ModelStorageDirectory { get; set; }
-
     long TotalModelSize { get; }
     int DownloadedCount { get; }
-
+    public bool EnableSlowModels { get; set; }
     event EventHandler? FileCollectingCompleted;
     void Initialize();
     void DeleteModel(ModelCard modelCard);

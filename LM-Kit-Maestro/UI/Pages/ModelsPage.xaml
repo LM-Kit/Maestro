@@ -317,6 +317,8 @@
     </ui:PageBase.Resources>
 
     <ui:PageBase.Header>
+
+       
         <Grid 
             Padding="20, 0"
             ColumnSpacing="8">
@@ -411,9 +413,9 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="You have "/>
-                                        <Span Text="{Binding ModelListViewModel.DownloadedCount}" FontAttributes="Bold"/>
+                                        <Span Text="{Binding FileManager.DownloadedCount}" FontAttributes="Bold"/>
                                         <Span Text=" downloaded model(s) taking a total of "/>
-                                        <Span Text="{Binding ModelListViewModel.TotalModelSize, Converter={converters:FileSizeConverter}}" FontAttributes="Bold"/>
+                                        <Span Text="{Binding FileManager.TotalModelSize, Converter={converters:FileSizeConverter}}" FontAttributes="Bold"/>
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -427,9 +429,25 @@
                             Command="{Binding Source={x:Reference modelsPage}, Path=ShowUnsortedModelFilesPopupCommand, x:DataType=ui:ModelsPage}"
                             IsVisible="{Binding FileManager.UnsortedModels.Count, Converter={converters:GreaterThanZeroConverter}}"/>
                         </Grid>
+
+                        <HorizontalStackLayout Margin="15,0" VerticalOptions="EndAndExpand" HorizontalOptions="Start">
+                            <CheckBox        
+                                Color="{StaticResource Primary}"
+                                BackgroundColor="Transparent"   
+                                IsChecked="{Binding Path=FileManager.EnableSlowModels, Mode=TwoWay}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Start" />
+                            <Label 
+                                Text="Display slow-performing models"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Start"
+                                Margin="0,0,0,0" />
+                        </HorizontalStackLayout>
+
                     </VerticalStackLayout>
 
-                    <CollectionView Margin="0, 16, 0, 0" x:Name="modelsCollectionView" Grid.Row="1">
+
+                    <CollectionView Margin="0, 5, 0, 0" x:Name="modelsCollectionView" Grid.Row="1">
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout ItemSpacing="8" Orientation="Vertical"/>
                         </CollectionView.ItemsLayout>
