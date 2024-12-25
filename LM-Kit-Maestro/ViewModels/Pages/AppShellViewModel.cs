@@ -24,16 +24,13 @@ public partial class AppShellViewModel : ViewModelBase
     List<MaestroTabViewModel> _tabs = new List<MaestroTabViewModel>();
 
     [ObservableProperty]
-    MaestroTabViewModel _homeTab = new MaestroTabViewModel("Home", "HomePage");
-
-    [ObservableProperty]
     MaestroTabViewModel _chatTab = new MaestroTabViewModel("Chat", "ChatPage");
 
     [ObservableProperty]
     MaestroTabViewModel _modelsTab = new MaestroTabViewModel("Models", "ModelsPage");
 
-    [ObservableProperty]
-    MaestroTabViewModel _assistantsTab = new MaestroTabViewModel("Assistants", "AssistantsPage");
+    //[ObservableProperty]
+    //MaestroTabViewModel _assistantsTab = new MaestroTabViewModel("Assistants", "AssistantsPage");
 
     private MaestroTabViewModel? _currentTab;
     public MaestroTabViewModel CurrentTab
@@ -65,13 +62,11 @@ public partial class AppShellViewModel : ViewModelBase
         _llmFileManager = llmFileManager;
         _appSettingsService = appSettingsService;
 
-#if BETA_TRANSLATION
-        Tabs.Add(AssistantsTab);
-#endif
+        //Tabs.Add(AssistantsTab);
         Tabs.Add(ChatTab);
         Tabs.Add(ModelsTab);
 
-        CurrentTab = HomeTab;
+        CurrentTab = ChatTab;
     }
 
     public async Task Init()

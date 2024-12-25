@@ -4,10 +4,19 @@ using LMKit.TextGeneration;
 
 namespace LMKit.Maestro.ViewModels
 {
-    public partial class TranslationViewModel : AssistantSessionViewModelBase
+    public partial class TranslationViewModel : AssistantViewModelBase
     {
         [ObservableProperty]
-        Language _language;
+        Language _outputLanguage = Language.English;
+
+        [ObservableProperty]
+        Language _inputLanguage = Language.Undefined;
+
+        [ObservableProperty]
+        string? _latestResult;
+
+        [ObservableProperty]
+        bool? _lastTranslationIsSuccessful;
 
         public EventHandler? TranslationCompleted;
         public EventHandler? TranslationFailed;
@@ -19,13 +28,12 @@ namespace LMKit.Maestro.ViewModels
         protected override void HandleSubmit()
         {
             string input = InputText;
-            //OnNewlySubmittedPrompt(prompt);
 
             Task.Run(async () =>
             {
                 try
                 {
-                    var result = await _lmKitService.SubmitTranslation(input, Language);
+                    var result = await _lmKitService.SubmitTranslation(input, OutputLanguage);
                     OnTranslationResult(result);
                 }
                 catch (Exception ex)
@@ -39,6 +47,9 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnTranslationResult(string? result, Exception? exception = null)
         {
+            LatestResult = result;
+            LastTranslationIsSuccesful = exception == null && result != null;
+
             if (exception != null)
             {
                 TranslationFailed?.Invoke(this, new TranslationCompletedEventArgs(null, exception));
