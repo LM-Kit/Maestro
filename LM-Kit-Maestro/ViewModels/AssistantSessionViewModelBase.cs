@@ -5,10 +5,7 @@ using System.ComponentModel;
 
 namespace LMKit.Maestro.ViewModels
 {
-    /// <summary>
-    /// Represents a base class for view models that interact with LmKitService.
-    /// </summary>
-    public abstract partial class AssistantViewModelBase : ViewModelBase
+    public abstract partial class AssistantSessionViewModelBase : ViewModelBase
     {
         [ObservableProperty]
         bool _inputTextIsEmpty;
@@ -34,6 +31,7 @@ namespace LMKit.Maestro.ViewModels
             {
                 AwaitingResponse = true;
                 HandleSubmit();
+                InputText = string.Empty;
             }
         }
 
@@ -50,7 +48,7 @@ namespace LMKit.Maestro.ViewModels
 
         protected abstract Task HandleCancel(bool shouldAwait);
 
-        protected AssistantViewModelBase(IPopupService popupService, LMKitService lmKitService)
+        protected AssistantSessionViewModelBase(IPopupService popupService, LMKitService lmKitService)
         {
             _popupService = popupService;
             _lmKitService = lmKitService;

@@ -10,7 +10,7 @@ namespace LMKit.Maestro.Services;
 
 
 /// <summary>
-/// This service is intended to be used as a singleton via Dependency Injection.
+/// This service is intended to be used as a singleton via Dependency Injection. 
 /// Please register with <c>services.AddSingleton&lt;LLMFileManager&gt;()</c>.
 /// </summary>
 public partial class LLMFileManager : ObservableObject, ILLMFileManager
@@ -26,14 +26,14 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly FileSystemEntryRecorder _fileSystemEntryRecorder;
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
-    private bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel
-    private bool _enableCustomModels = true;  //todo: Implement this as a configurable option in the configuration panel
+    private bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
+    private bool _enableCustomModels = true;  //todo: Implement this as a configurable option in the configuration panel 
     private bool _isLoaded = false;
 
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = new Dictionary<Uri, FileDownloader>();
 
     private delegate bool ModelDownloadingProgressCallback(string path, long? contentLength, long bytesRead);
-    public  event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
+    public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
 
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _collectModelFilesTask;
@@ -250,7 +250,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 if (_models.Contains(modelCard))
                 {
                     _models.Remove(modelCard);
-                }
+                }                
             }
 #endif
         }

@@ -12,27 +12,19 @@
         font-size: 16px;
     }
 
-        /*@media (-webkit-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+/*@media (-webkit-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     html, body {
         font-size: 20px;
     }
 }*/
 
-        body.windows .small-text {
-            font-size: 12px;
-        }
+body.windows .small-text {
+    font-size: 12px;
+}
 
-    body.mac .small-text {
-        font-size: 14px;
-    }
-
-    body.windows .small-icon {
-        font-size: 10px;
-    }
-
-    body.mac .small-icon {
-        font-size: 12px;
-    }
+body.mac .small-text {
+    font-size: 14px;
+}
 
 /*@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
     .small {

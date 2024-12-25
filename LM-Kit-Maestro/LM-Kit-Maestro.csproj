@@ -67,6 +67,11 @@
 	</ItemGroup>-->
 
 	<ItemGroup>
+		<MauiCss Include="wwwroot\css\font-awesome.css" />
+		<MauiCss Include="wwwroot\css\font-awesome.min.css" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Include="wwwroot\css\bootstrap.min.css" />
 	</ItemGroup>
 

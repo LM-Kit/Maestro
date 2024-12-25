@@ -57,7 +57,7 @@
 
             <!-- Horizontal separator-->
             <BoxView HeightRequest="3" />
-
+            
             <Border Grid.Row="1" StrokeThickness="0" BackgroundColor="{StaticResource Surface}" Stroke="Transparent">
                 <Grid Padding="12, 0">
                     <HorizontalStackLayout

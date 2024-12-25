@@ -30,4 +30,5 @@
             </BlazorWebView.RootComponents>
         </BlazorWebView>
     </ui:PageBase.Body>
+
 </ui:PageBase>

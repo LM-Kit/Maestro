@@ -1,12 +1,7 @@
 ﻿@inject IJSRuntime JS
 
 <div id="input-border" class="input-border-small">
-    <textarea
-        rows="1"
-        id="input-text"
-        @bind="ViewModel.InputText"
-        @onkeydown="OnKeyDown"
-        @bind:event="oninput"/>
+    <textarea rows="1" id="input-text" @bind="ViewModel.InputText" @onkeydown="OnKeyDown" @bind:event="oninput" />
 
         <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
             class="send-button round-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
@@ -56,9 +51,9 @@
 
     [Parameter] public EventCallback OnSubmit { get; set; }
 
-    [Parameter] public required AssistantViewModelBase ViewModel { get; set; }
+    [Parameter] public required AssistantSessionViewModelBase ViewModel { get; set; }
 
-    [Parameter] public EventCallback<AssistantViewModelBase> ViewModelChanged { get; set; }
+    [Parameter] public EventCallback<AssistantSessionViewModelBase> ViewModelChanged { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -116,7 +111,7 @@
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(AssistantViewModelBase.InputText))
+        if (e.PropertyName == nameof(AssistantSessionViewModelBase.InputText))
         {
             // Resize the textarea whenever the input text changes.
             _shouldResizeTextarea = true;
