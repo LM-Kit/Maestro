@@ -31,12 +31,10 @@ internal class DummyLLmFileManager : ILLMFileManager
     {
         add
         {
-            throw new NotImplementedException();
         }
 
         remove
         {
-            throw new NotImplementedException();
         }
     }
 
@@ -44,28 +42,25 @@ internal class DummyLLmFileManager : ILLMFileManager
     {
         add
         {
-            throw new NotImplementedException();
         }
-
         remove
         {
-            throw new NotImplementedException();
         }
     }
 
-    ReadOnlyObservableCollection<ModelCard> ILLMFileManager.Models => throw new NotImplementedException();
+    ReadOnlyObservableCollection<ModelCard> ILLMFileManager.Models { get; }
 
-    ReadOnlyObservableCollection<ModelCard> ILLMFileManager.UnsortedModels => throw new NotImplementedException();
+    ReadOnlyObservableCollection<ModelCard> ILLMFileManager.UnsortedModels { get; }
 
-    bool ILLMFileManager.FileCollectingInProgress => throw new NotImplementedException();
+    bool ILLMFileManager.FileCollectingInProgress { get; }
 
-    string ILLMFileManager.ModelStorageDirectory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    string ILLMFileManager.ModelStorageDirectory { get; set ; }
 
-    long ILLMFileManager.TotalModelSize => throw new NotImplementedException();
+    long ILLMFileManager.TotalModelSize { get; }
 
-    int ILLMFileManager.DownloadedCount => throw new NotImplementedException();
+    int ILLMFileManager.DownloadedCount { get; }
 
-    bool ILLMFileManager.EnableSlowModels { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    bool ILLMFileManager.EnableSlowModels { get; set; }
 
 
 #pragma warning disable 67
