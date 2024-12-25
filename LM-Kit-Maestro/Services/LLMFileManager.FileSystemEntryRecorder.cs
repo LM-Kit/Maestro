@@ -8,17 +8,27 @@ public partial class LLMFileManager
     private sealed partial class FileSystemEntryRecorder
     {
         private DirectoryRecord? _rootDirectoryRecord;
-        private Uri? _rootDirectoryUri;
+        private Uri _rootDirectoryUri;
 
-        public void Init(string rootDirectoryPath)
+        public FileSystemEntryRecorder(Uri rootDirectoryUri)
         {
+            Update(rootDirectoryUri);
+        }
+
+        public void Update(Uri rootDirectoryUri)
+        {
+            if ((rootDirectoryUri == _rootDirectoryUri))
+            {
+                return;
+            }
+
             if (_rootDirectoryRecord != null)
             {
                 Clear();
             }
 
-            _rootDirectoryUri = new Uri(rootDirectoryPath);
-            _rootDirectoryRecord = new DirectoryRecord(rootDirectoryPath, null);
+            _rootDirectoryUri = rootDirectoryUri;
+            _rootDirectoryRecord = new DirectoryRecord(rootDirectoryUri.LocalPath, null);
         }
 
         public void Clear()

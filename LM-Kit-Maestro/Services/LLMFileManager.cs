@@ -23,11 +23,12 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private static int InstanceCount = 0;
 #endif
 
-    private readonly FileSystemEntryRecorder _fileSystemEntryRecorder = new FileSystemEntryRecorder();
+    private readonly FileSystemEntryRecorder _fileSystemEntryRecorder;
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
     private bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
     private bool _enableCustomModels = true;  //todo: Implement this as a configurable option in the configuration panel 
+    private bool _isLoaded = false;
 
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = new Dictionary<Uri, FileDownloader>();
 
@@ -89,13 +90,13 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             throw new InvalidProgramException("Invalid operation: Only one instance of this class should be created, and it must be instantiated through dependency injection.");
         }
+
         InstanceCount++;
 #endif
-
         Models = new ReadOnlyObservableCollection<ModelCard>(_models);
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
         _appSettingsService = appSettingsService;
-
+        _enableSlowModels = _appSettingsService.EnableSlowModels;
         _httpClient = httpClient;
         _models.CollectionChanged += OnModelCollectionChanged;
         _unsortedModels.CollectionChanged += OnUnsortedModelCollectionChanged;
@@ -104,22 +105,23 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             notifyPropertyChanged.PropertyChanged += OnAppSettingsServicePropertyChanged;
         }
-    }
 
-    public void Initialize()
-    {
         try
         {
             EnsureModelDirectoryExists();
-
         }
         catch (Exception)
         {
             // todo
         }
 
-        _enableSlowModels = _appSettingsService.EnableSlowModels;
         ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
+        _fileSystemEntryRecorder = new FileSystemEntryRecorder(new Uri(ModelStorageDirectory));
+        _isLoaded = true;
+    }
+
+    public void Initialize()
+    {
 #if WINDOWS
         _fileSystemWatcher.Changed += OnFileChanged;
         _fileSystemWatcher.Deleted += OnFileDeleted;
@@ -129,6 +131,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         _fileSystemWatcher.IncludeSubdirectories = true;
         _fileSystemWatcher.EnableRaisingEvents = true;
 #endif
+
+        _ = CollectModelsAsync();
     }
 
 #if BETA_DOWNLOAD_MODELS
@@ -469,12 +473,15 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             _cancellationTokenSource?.Cancel();
         }
 
-        _fileSystemEntryRecorder.Init(_modelStorageDirectory);
+        if (_isLoaded)
+        {
+            _fileSystemEntryRecorder.Update(new Uri(_modelStorageDirectory));
 
-        _unsortedModels.Clear();
-        _models.Clear();
+            _unsortedModels.Clear();
+            _models.Clear();
 
-        await CollectModelsAsync();
+            await CollectModelsAsync();
+        }
     }
 
     private void OnAppSettingsServicePropertyChanged(object? sender, PropertyChangedEventArgs e)
