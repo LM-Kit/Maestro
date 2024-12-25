@@ -9,24 +9,24 @@
                 {
                     if (language == Language.Undefined)
                     {
-                                           <option value="@language">Automatically detect</option>
+                        <option value="@language">Automatically detect</option>
                     }
                     else
                     {
-                                     <option value="@language">@language</option>
+                        <option value="@language">@language</option>
                     }
                 }
             </select>
         </div>
 
-        <IconButton Icon="fa-arrow-right-arrow-left" OnClick="OnCopyResultButtonClicked" />
+        <IconButton Style="IconButton.IconButtonStyle.Square" Icon="fa-arrow-right-arrow-left" OnClick="OnCopyResultButtonClicked" />
 
         <div class="language-select">
             <label for="output-language">Output language:</label>
             <select id="output-language" @bind="TranslationViewModel.OutputLanguage">
                 @foreach (var language in Enum.GetValues<Language>().Skip(1))
                 {
-                                <option value="@language">@language</option>
+                    <option value="@language">@language</option>
                 }
             </select>
         </div>
