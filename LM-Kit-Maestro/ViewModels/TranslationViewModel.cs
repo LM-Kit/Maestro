@@ -16,7 +16,7 @@ namespace LMKit.Maestro.ViewModels
         string? _latestResult;
 
         [ObservableProperty]
-        bool? _lastTranslationIsSuccesful;
+        bool? _lastTranslationIsSuccessful;
 
         public EventHandler? TranslationCompleted;
         public EventHandler? TranslationFailed;
