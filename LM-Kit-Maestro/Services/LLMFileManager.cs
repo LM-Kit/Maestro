@@ -697,6 +697,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 }
                 else if (model.SHA256 == modelCard.SHA256)
                 {
+                    //todo: propagate feedback indicating that a duplicate file exists.
                     return true;
                 }
             }
