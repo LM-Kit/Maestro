@@ -27,6 +27,10 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
     private bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
+    //todo: make this user-configurable is some way.
+    private List<ModelCapabilities> _filteredCapabilities = new List<ModelCapabilities>() { ModelCapabilities.Chat,
+                                                                                            ModelCapabilities.Math,
+                                                                                            ModelCapabilities.CodeCompletion };
     private bool _enableCustomModels = true;
     private bool _isLoaded = false;
 
@@ -395,16 +399,25 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         if (modelCard != null)
         {
-            if (!modelCard.Capabilities.HasFlag(ModelCapabilities.Chat) &&
-                !modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion) &&
-                !modelCard.Capabilities.HasFlag(ModelCapabilities.Math))
+            bool hasAnyFilteredCap = false;
+
+            foreach (var cap in _filteredCapabilities)
+            {
+                if (modelCard.Capabilities.HasFlag(cap))
+                {
+                    hasAnyFilteredCap = true;
+                    break;
+                }
+            }
+
+            if (!hasAnyFilteredCap)
             {
                 return false;
             }
 
             bool isSlowModel = Graphics.DeviceConfiguration.GetPerformanceScore(modelCard) < 0.3;
 
-            if (!ContainsModel(_models, modelCard, out _))
+            if (!ContainsModel(_models, modelCard))
             {
                 if (isSlowModel && !EnableLowPerformanceModels)
                 {
@@ -672,10 +685,14 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     #region Static methods
 
-    private static bool ContainsModel(IList<ModelCard> models, ModelCard modelCard, out int index)
+    private static bool ContainsModel(IList<ModelCard> models, ModelCard modelCard)
     {
-        index = 0;
+        if (models.Contains(modelCard))
+        {
+            return true;
+        }
 
+        //In this scope, we are essentially searching for duplicate model files..
         foreach (var model in models)
         {
             /*if (model.SHA256 == modelCard.SHA256) //Loïc: commented. This is too slow.
@@ -696,11 +713,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                     return true;
                 }
             }
-
-            index++;
         }
-
-        index = -1;
 
         return false;
     }
