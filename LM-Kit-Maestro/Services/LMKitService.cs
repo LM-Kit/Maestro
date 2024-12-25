@@ -323,7 +323,7 @@ public partial class LMKitService : INotifyPropertyChanged
                     result.Status == LMKitTextGenerationStatus.Undefined &&
                     !string.IsNullOrEmpty(((TextGenerationResult)result.Result!).Completion))
                 {
-                    GenerateConversationSummaryTitle(conversation, promptParameters!.Prompt);
+                    GenerateConversationSummaryTitle(conversation);
                 }
             }
 
@@ -348,10 +348,11 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
-    private void GenerateConversationSummaryTitle(Conversation conversation, string prompt)
+    private void GenerateConversationSummaryTitle(Conversation conversation)
     {
+        string firstMessage = conversation.ChatHistory.Messages.First(message => message.AuthorRole == AuthorRole.User).Content;
         LMKitRequest titleGenerationRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.GenerateTitle,
-            new LMKitRequest.PromptRequestParameters(conversation, prompt), 60);
+            new LMKitRequest.PromptRequestParameters(conversation, firstMessage), 60);
 
         _titleGenerationSchedule.Schedule(titleGenerationRequest);
 
@@ -378,7 +379,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                promptResult.Result = await summarizer.SummarizeAsync(prompt, titleGenerationRequest.CancellationTokenSource.Token);
+                promptResult.Result = await summarizer.SummarizeAsync(firstMessage, titleGenerationRequest.CancellationTokenSource.Token);
             }
             catch (Exception exception)
             {
