@@ -170,7 +170,16 @@ namespace LMKit.Maestro.ViewModels
             {
                 int insertIndex = 0;
 
-                while (insertIndex < Models.Count && string.Compare(Models[insertIndex].Name, modelCardViewModel.Name) < 0)
+                //First sorting pass: Sort by short name in ascending order.
+                while (insertIndex < Models.Count && string.Compare(Models[insertIndex].ShortName, modelCardViewModel.ShortName) < 0)
+                {
+                    insertIndex++;
+                }
+
+                //Second sorting pass: by model size
+                while (insertIndex < Models.Count &&
+                       string.Compare(Models[insertIndex].ShortName, modelCardViewModel.ShortName) == 0 &&
+                       Models[insertIndex].FileSize < modelCardViewModel.FileSize)
                 {
                     insertIndex++;
                 }

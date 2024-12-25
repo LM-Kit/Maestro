@@ -219,7 +219,7 @@
 
                         <Label VerticalOptions="Center" 
                                Grid.Column="2" 
-                               Text="{Binding ModelInfo.ModelName}"
+                               Text="{Binding ModelInfo.ShortModelName}"
                                ToolTipProperties.Text="{Binding ModelInfo.Description}"/>
 
 

@@ -33,6 +33,9 @@ namespace LMKit.Maestro.ViewModels
         string _name;
 
         [ObservableProperty]
+        string _shortName;
+
+        [ObservableProperty]
         string _modelPath;
 
         [ObservableProperty]
@@ -73,6 +76,7 @@ namespace LMKit.Maestro.ViewModels
         {
             _modelCard = modelCard;
             Name = modelCard.ModelName;
+            ShortName = modelCard.ShortModelName;
             FileSize = modelCard.FileSize;
             Precision = modelCard.QuantizationPrecision.ToString() + (modelCard.QuantizationPrecision > 1 ? "-bits" : "-bit");
             ModelSize = Math.Round((double)modelCard.ParameterCount / 1000000000, 1).ToString().Replace(",", ".") + "B";

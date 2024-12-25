@@ -371,6 +371,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             foreach (var filePath in files)
             {
                 bool processed = false;
+
                 foreach (var predefinedModel in _predefinedModelCards)
                 {
                     if (predefinedModel.LocalPath == filePath)
