@@ -53,12 +53,6 @@ internal class DummyLLmFileManager : ILLMFileManager
         }
     }
 
-    public bool FileCollectingInProgress { get; private set; }
-
-    public string ModelStorageDirectory { get; set; }
-    public long TotalModelSize { get; set; }
-    public int DownloadedCount { get; set; }
-
     ReadOnlyObservableCollection<ModelCard> ILLMFileManager.Models => throw new NotImplementedException();
 
     ReadOnlyObservableCollection<ModelCard> ILLMFileManager.UnsortedModels => throw new NotImplementedException();
