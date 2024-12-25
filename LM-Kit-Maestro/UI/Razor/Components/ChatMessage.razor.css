@@ -51,10 +51,7 @@
     align-self: center;
     border-radius: 50%;
     border-width: 0;
-    font-size: 12px;
-    padding: 2px;
-    min-height: 20px;
-    min-width: 20px;
+    padding: 6px;
     display: inline-flex;
     justify-content: center;
     align-items: center;

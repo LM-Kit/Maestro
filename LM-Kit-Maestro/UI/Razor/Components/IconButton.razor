@@ -1,0 +1,19 @@
+﻿<button onclick="OnButtonClicked">
+    <span class="fas @Icon" />
+</button>
+
+@code {
+    [Parameter]
+    public string? Icon { get; set; }
+
+    /// <summary>
+    /// Occurs when this button has been clicked.
+    /// </summary>
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    private void OnButtonClicked()
+    {
+        OnClick.InvokeAsync();
+    }
+}
