@@ -53,7 +53,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private bool _fileCollectingInProgress;
 
     [ObservableProperty]
-    private bool _enableSlowModels = false;
+    private bool _enableSlowModels;
 
 
     private List<ModelCard> _predefinedModelCards = ModelCard.GetPredefinedModelCards();
@@ -95,8 +95,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         Models = new ReadOnlyObservableCollection<ModelCard>(_models);
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
         _appSettingsService = appSettingsService;
-        _httpClient = httpClient;
 
+        _httpClient = httpClient;
         _models.CollectionChanged += OnModelCollectionChanged;
         _unsortedModels.CollectionChanged += OnUnsortedModelCollectionChanged;
 
@@ -118,8 +118,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             // todo
         }
 
+        _enableSlowModels = _appSettingsService.EnableSlowModels;
         ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
-
 #if WINDOWS
         _fileSystemWatcher.Changed += OnFileChanged;
         _fileSystemWatcher.Deleted += OnFileDeleted;
@@ -577,6 +577,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     partial void OnEnableSlowModelsChanged(bool value)
     {
+        _appSettingsService.EnableSlowModels = value;
         _ = CollectModelsAsync();
     }
 
