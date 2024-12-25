@@ -1,144 +1,57 @@
-﻿@inherits MvvmComponentBase<AssistantsPageViewModel>
+﻿@inject IClipboardHandler ClipboardHandler
 
-@inject IClipboardHandler ClipboardHandler
+<div id="translation-container">
+    <div id="translation-header">
+        <div class="language-select">
+            <label for="input-language">Input language:</label>
+            <select id="input-language" @bind="TranslationViewModel.InputLanguage">
+                @foreach (var language in Enum.GetValues<Language>())
+                {
+                    if (language == Language.Undefined)
+                    {
+                        <option value="@language">Automatically detect</option>
+                    }
+                    else
+                    {
+                        <option value="@language">@language</option>
+                    }
+                }
+            </select>
+        </div>
 
-<div style="width:100vw; height:100vh; margin-top: 40px;padding: 20px">
-    <div id="container" class="dark container">
-        <div id="card">
-            @* <textarea @bind=ViewModel.Input id="input" /> *@
+        <IconButton Style="IconButton.IconButtonStyle.Square" Icon="fa-arrow-right-arrow-left" OnClick="OnCopyResultButtonClicked" />
 
-            @if (ViewModel.CurrentTranslation.AwaitingResponse)
-            {
-                <div id="loaderDiv">
-                    <div class="spinner">
-                        <div> </div>
-                        <div> </div>
-                        <div> </div>
-                        <div> </div>
-                    </div>
-                </div>
-            }
-            else if (!string.IsNullOrEmpty(ViewModel.Result))
-            {
-                <div id="result">
-                    <p>
-                        @ViewModel.Result
-                    </p>
+        <div class="language-select">
+            <label for="output-language">Output language:</label>
+            <select id="output-language" @bind="TranslationViewModel.OutputLanguage">
+                @foreach (var language in Enum.GetValues<Language>().Skip(1))
+                {
+                    <option value="@language">@language</option>
+                }
+            </select>
+        </div>
+    </div>
 
-                    <div id="actionIcons">
-                        <button @onclick="OnCopyMessageButtonClicked" class="chat-action-button material-icons">
-                            @(ResultJustCopied ? "check" : "content_copy")
-                        </button>
+    <div id="translation-body">
+        <div id="translation-input">
+            <InputBox @bind-InputText="TranslationViewModel.InputText" />
+        </div>
 
-                    </div>
-                </div>
-            }
+        <div class="vertical-separator"></div>
 
-            <UserInput ViewModel="ViewModel.CurrentTranslation" />
+        <div id="translation-output">
+            <InputBox @bind-InputText="TranslationViewModel.LatestResult" Readonly="true" />
         </div>
     </div>
 </div>
 
-<style>
-    #loaderDiv {
-        display: flex;
-        height: 72px;
-        background-color: transparent;
-        align-items: center;
-        align-content: center;
-        justify-content: center;
-    }
-
-    #container {
-        max-width: 800px;
-        display: flex;
-        align-items: center;
-    }
-
-    #card {
-        width: 100%;
-        padding: 20px;
-        border: 1px solid var(--Surface4);
-        border-radius: 4px;
-    }
-
-    #buttonsDiv {
-        margin-block: 8px;
-        gap: 8px;
-        margin-left: auto;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    #input {
-        padding: 8px;
-        border-radius: 4px;
-        border: 2px solid var(--Surface4);
-        background-color: transparent;
-        width: 100%;
-        resize: none;
-        color: white;
-        margin-right: 10px; /* Adds some spacing between the input and the button */
-    }
-
-    #result {
-        margin-block: 16px;
-        background-color: var(--Surface15);
-        color: white;
-        min-height: 72px;
-        margin-top: 10px;
-        padding: 10px;
-    }
-
-    /*         #result:hover {
-                background-color: var(--Surface3);
-            } */
-
-    #actionIcons {
-        display: inline
-    }
-
-    .primary-button {
-        font-size: 12px;
-        color: var(--OnBackground);
-        text-align: center;
-        padding-block: 16px;
-        padding-inline: 8px;
-        margin-right: 4px;
-        border-width: 0;
-        background-color: var(--Surface4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-        .primary-button:active {
-            background-color: var(--PrimaryAccent);
-        }
-
-        .primary-button:hover {
-            background-color: var(--Primary);
-        }
-
-    .chat-action-button {
-        height: 28px;
-        width: 28px;
-        border-radius: 50%;
-        border-width: 0;
-        font-size: 12px;
-        background-color: transparent;
-        color: var(--OnBackground);
-        color: var(--Outline);
-    }
-
-        .chat-action-button:hover {
-            background-color: var(--Surface3);
-        }
-</style>
-
 @code
 {
+    // Using a timer to automatically refresh translation result when no user input is detected for a given time span.
+    private Timer? _inputTimer;
+
     bool resultJustCopied;
+
     bool ResultJustCopied
     {
         get => resultJustCopied;
@@ -149,9 +62,22 @@
         }
     }
 
-    private async Task OnCopyMessageButtonClicked()
+    [Parameter] public EventCallback OnSubmit { get; set; }
+
+    [Parameter] public required TranslationViewModel TranslationViewModel { get; set; }
+
+    [Parameter] public EventCallback<AssistantViewModelBase> TranslationViewModelChanged { get; set; }
+
+    protected override void OnParametersSet()
     {
-        bool success = await ClipboardHandler.CopyTextToClipboardAsync(ViewModel.Result != null ? ViewModel.Result : "");
+        base.OnParametersSet();
+
+        TranslationViewModel.PropertyChanged += OnTranslationViewModelPropertyChanged;
+    }
+
+    private async Task OnCopyResultButtonClicked()
+    {
+        bool success = await ClipboardHandler.CopyTextToClipboardAsync(TranslationViewModel.LatestResult != null ? TranslationViewModel.LatestResult : "");
 
         if (success)
         {
@@ -165,5 +91,41 @@
                 });
             }
         }
+    }
+
+    private void OnTranslationViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(TranslationViewModel.InputText))
+        {
+            _inputTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+            _inputTimer = new Timer(OnDebounceTimerElapsed, null, 1000, Timeout.Infinite);
+        }
+
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    private void OnDebounceTimerElapsed(object? state)
+    {
+        _inputTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+        TranslationViewModel.Submit();
+    }
+
+    private static List<Language> GetAvailableLanguages(bool inputLanguage)
+    {
+        var values = Enum.GetValues<Language>().Skip(1).ToList();
+
+        values.Sort();
+
+        if (inputLanguage)
+        {
+            values.Insert(0, Language.Undefined);
+        }
+
+        return values;
+    }
+
+    private void OnSwapButtonClicked()
+    {
+
     }
 }

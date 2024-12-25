@@ -25,8 +25,8 @@
                 @if (MessageViewModel.GetResponseCount() > 1)
                 {
                     <button title="@TooltipLabels.PreviousGeneratedResponse" @onclick="OnPreviousResponseButtonClicked"
-                            class="chat-action-button material-icons ">
-                        chevron_left
+                            class="chat-action-button ">
+                        <i class="small-icon fas fa-chevron-left"/>
                     </button>
 
                     <span class="message-footer-text">
@@ -34,14 +34,14 @@
                     </span>
 
                     <button title="@TooltipLabels.NextGeneratedResponse" @onclick="OnNextResponseButtonClicked"
-                            class="chat-action-button material-icons">
-                        chevron_right
+                            class="chat-action-button">
+                        <i class="small-icon fas fa-chevron-right" />
                     </button>
                 }
 
                 <button title="@TooltipLabels.CopyMessage" @onclick="OnCopyMessageButtonClicked"
-                        class="chat-action-button  material-icons">
-                    @(MessageJustCopied ? "check" : "content_copy")
+                        class="chat-action-button">
+                    <i class="small-icon fas @(MessageJustCopied ? "fa-check" : "fa-copy")" />
                 </button>
 
                 @if (MessageViewModel.Sender == MessageSender.Assistant)
@@ -49,8 +49,8 @@
                     if (MessageViewModel.IsLastAssistantMessage)
                     {
                         <button title="@TooltipLabels.RegenerateResponse" @onclick="OnRegenerateResponseButtonClicked"
-                                class="chat-action-button material-icons">
-                            sync
+                                class="chat-action-button">
+                            <i class="small-icon fas fa-rotate" />
                         </button>
                     }
 
