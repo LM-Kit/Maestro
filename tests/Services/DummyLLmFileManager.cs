@@ -60,7 +60,7 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     int ILLMFileManager.DownloadedCount { get; }
 
-    bool ILLMFileManager.EnableSlowModels { get; set; }
+    bool ILLMFileManager.EnableLowPerformanceModels { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
 
 #pragma warning disable 67
