@@ -19,11 +19,11 @@
 }*/
 
         body.windows .small-text {
-            font-size: 12px;
+            font-size: 14px;
         }
 
     body.mac .small-text {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     body.windows .small-icon {
