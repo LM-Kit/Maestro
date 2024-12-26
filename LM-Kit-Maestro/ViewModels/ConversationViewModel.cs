@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 
 namespace LMKit.Maestro.ViewModels;
 
-public partial class ConversationViewModel : AssistantSessionViewModelBase
+public partial class ConversationViewModel : AssistantViewModelBase
 {
     private readonly IMainThread _mainThread;
     private readonly IAppSettingsService _appSettingsService;
@@ -186,7 +186,8 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
     protected override void HandleSubmit()
     {
         string prompt = InputText;
-        OnNewlySubmittedPrompt(prompt);
+
+        OnNewlySubmittedPrompt();
 
         LMKitService.LMKitResult? promptResult = null;
 
@@ -234,7 +235,7 @@ public partial class ConversationViewModel : AssistantSessionViewModelBase
         AwaitingResponse = true;
     }
 
-    private void OnNewlySubmittedPrompt(string prompt)
+    private void OnNewlySubmittedPrompt()
     {
         InputText = string.Empty;
         UsedDifferentModel &= false;

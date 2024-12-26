@@ -15,6 +15,11 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     public ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
 
+    public bool FileCollectingInProgress { get; private set; }
+
+    public string ModelStorageDirectory { get; set; }
+    public long TotalModelSize { get; set; }
+    public int DownloadedCount { get; set; }
 
     public DummyLLmFileManager()
     {
@@ -22,29 +27,14 @@ internal class DummyLLmFileManager : ILLMFileManager
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
     }
 
-    event EventHandler? ILLMFileManager.FileCollectingCompleted
-    {
-        add
-        {
-            throw new NotImplementedException();
-        }
-
-        remove
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     event PropertyChangedEventHandler ILLMFileManager.PropertyChanged
     {
         add
         {
-            throw new NotImplementedException();
         }
 
         remove
         {
-            throw new NotImplementedException();
         }
     }
 
@@ -52,34 +42,25 @@ internal class DummyLLmFileManager : ILLMFileManager
     {
         add
         {
-            throw new NotImplementedException();
         }
-
         remove
         {
-            throw new NotImplementedException();
         }
     }
 
-    public bool FileCollectingInProgress { get; private set; }
-    
-    public string ModelStorageDirectory { get; set; }
-    public long TotalModelSize { get; set; }
-    public int DownloadedCount { get; set; }
+    ReadOnlyObservableCollection<ModelCard> ILLMFileManager.Models { get; }
 
-    ReadOnlyObservableCollection<ModelCard> ILLMFileManager.Models => throw new NotImplementedException();
+    ReadOnlyObservableCollection<ModelCard> ILLMFileManager.UnsortedModels { get; }
 
-    ReadOnlyObservableCollection<ModelCard> ILLMFileManager.UnsortedModels => throw new NotImplementedException();
+    bool ILLMFileManager.FileCollectingInProgress { get; }
 
-    bool ILLMFileManager.FileCollectingInProgress => throw new NotImplementedException();
+    string ILLMFileManager.ModelStorageDirectory { get; set ; }
 
-    string ILLMFileManager.ModelStorageDirectory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    long ILLMFileManager.TotalModelSize { get; }
 
-    long ILLMFileManager.TotalModelSize => throw new NotImplementedException();
+    int ILLMFileManager.DownloadedCount { get; }
 
-    int ILLMFileManager.DownloadedCount => throw new NotImplementedException();
-
-    bool ILLMFileManager.EnableSlowModels { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    bool ILLMFileManager.EnableSlowModels { get; set; }
 
 
 #pragma warning disable 67
@@ -104,25 +85,5 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     public void OnModelDownloaded(ModelCard modelInfo)
     {
-    }
-
-    void ILLMFileManager.Initialize()
-    {
-        throw new NotImplementedException();
-    }
-
-    void ILLMFileManager.DeleteModel(ModelCard modelCard)
-    {
-        throw new NotImplementedException();
-    }
-
-    bool ILLMFileManager.IsPredefinedModel(ModelCard modelCard)
-    {
-        throw new NotImplementedException();
-    }
-
-    void ILLMFileManager.OnModelDownloaded(ModelCard modelInfo)
-    {
-        throw new NotImplementedException();
     }
 }
