@@ -18,9 +18,9 @@
     }
 }*/
 
-        body.windows .small-text {
-            font-size: 12px;
-        }
+    body.windows .small-text {
+        font-size: 12px;
+    }
 
     body.mac .small-text {
         font-size: 14px;

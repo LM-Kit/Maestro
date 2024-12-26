@@ -8,7 +8,7 @@ namespace LMKit.Maestro.Converters
         {
             if (value is float floatValue)
             {
-                int h = (int)(120 * Math.Pow(floatValue, 3.5));
+                int h = (int)(120 * Math.Pow(floatValue, 2));
                 int s = 100;
                 int v = 100;
 
