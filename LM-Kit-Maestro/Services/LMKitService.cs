@@ -20,7 +20,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
     private static Uri? _currentlyLoadingModelUri;
     private static Conversation? _lastConversationUsed = null;
-    private static LLM? _model;
+    private static LM? _model;
     private static MultiTurnConversation? _multiTurnConversation;
 
 
@@ -63,7 +63,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                _model = new LLM(fileUri, downloadingProgress: OnModelDownloadingProgressed, loadingProgress: OnModelLoadingProgressed);
+                _model = new LM(fileUri, downloadingProgress: OnModelDownloadingProgressed, loadingProgress: OnModelLoadingProgressed);
 
                 modelLoadingSuccess = true;
             }

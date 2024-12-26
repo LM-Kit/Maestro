@@ -742,7 +742,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         isSorted = false;
         modelCard = null;
 
-        if (LLM.ValidateFormat(filePath))
+        if (LM.ValidateFormat(filePath))
         {
             try
             {
