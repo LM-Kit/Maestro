@@ -36,7 +36,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
     bool _isInitialized;
 
     [ObservableProperty]
-    public LMKitTextGenerationStatus _latestPromptStatus;
+    public LMKitRequestStatus _latestPromptStatus;
 
     [ObservableProperty]
     bool _isSelected;
@@ -87,8 +87,9 @@ public partial class ConversationViewModel : AssistantViewModelBase
         }
     }
 
-    public EventHandler? TextGenerationCompleted;
-    public EventHandler? TextGenerationFailed;
+    public delegate void TextGenerationCompletedEventHandler(object sender, TextGenerationCompletedEventArgs e);
+
+    public TextGenerationCompletedEventHandler? TextGenerationCompleted;
     public EventHandler? DatabaseSaveOperationCompleted;
     public EventHandler? DatabaseSaveOperationFailed;
 
@@ -239,7 +240,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
     {
         InputText = string.Empty;
         UsedDifferentModel &= false;
-        LatestPromptStatus = LMKitTextGenerationStatus.Undefined;
+        LatestPromptStatus = LMKitRequestStatus.OK;
         AwaitingResponse = true;
     }
 
@@ -249,26 +250,15 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
         if (Messages.Count >= 2)
         {
-            // An error may occur before messages consecutive from a prompt have been added to the list, add count check.  
-            Messages.Last().Status = result != null ? result.Status : exception is OperationCanceledException ? LMKitTextGenerationStatus.Cancelled : LMKitTextGenerationStatus.GenericError;
+            // Setting error status for the last assistant message if the response generation failed.
+            Messages.Last().Status = result != null ? result.Status : exception is OperationCanceledException ? LMKitRequestStatus.Cancelled : LMKitRequestStatus.GenericError;
         }
 
-        if (exception != null || result?.Exception != null)
-        {
-            // todo: provide more error info with event args.
-            OnTextGenerationFailure();
-        }
-        else if (result != null)
-        {
-            if (result.Status == LMKitTextGenerationStatus.Undefined && result.Result is TextGenerationResult textGenerationResult)
-            {
-                OnTextGenerationSuccess(textGenerationResult);
-            }
-            else
-            {
-                OnTextGenerationFailure();
-            }
-        }
+        var textGenerationResult = result?.Result is TextGenerationResult ? (TextGenerationResult)result.Result : null;
+
+        TextGenerationCompleted?.Invoke(this, 
+            new TextGenerationCompletedEventArgs(result?.Result is TextGenerationResult ? (TextGenerationResult)result.Result : null,
+            exception ?? (result?.Exception), result?.Status));
 
         if (!_isSynchedWithLog)
         {
@@ -297,17 +287,6 @@ public partial class ConversationViewModel : AssistantViewModelBase
                 DatabaseSaveOperationFailed?.Invoke(this, EventArgs.Empty);
             }
         });
-    }
-
-
-    private void OnTextGenerationSuccess(TextGenerationResult result)
-    {
-        TextGenerationCompleted?.Invoke(this, new TextGenerationCompletedEventArgs(result.TerminationReason));
-    }
-
-    private void OnTextGenerationFailure()
-    {
-        TextGenerationFailed?.Invoke(this, EventArgs.Empty);
     }
 
     private void OnLMKitChatHistoryChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -380,11 +359,17 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
     public sealed class TextGenerationCompletedEventArgs : EventArgs
     {
-        public TextGenerationResult.StopReason StopReason { get; }
+        public Exception? Exception { get; }
 
-        public TextGenerationCompletedEventArgs(TextGenerationResult.StopReason stopReason)
+        public LMKitRequestStatus? Status { get; }
+
+        public TextGenerationResult? Result { get; }
+
+        public TextGenerationCompletedEventArgs(TextGenerationResult? result = null, Exception? exception = null, LMKitRequestStatus? status = null)
         {
-            StopReason = stopReason;
+            Result = result;
+            Exception = exception;
+            Status = status;
         }
     }
 }

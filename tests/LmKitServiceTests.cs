@@ -89,7 +89,7 @@ public class LMKitServiceTests
         var response = await testService.LMKitService.SubmitPrompt(conversation, "tell me a story");
 
         Assert.NotNull(response);
-        Assert.Equal(LMKitTextGenerationStatus.Cancelled, response.Status);
+        Assert.Equal(LMKitRequestStatus.Cancelled, response.Status);
         Assert.True(response.Exception is OperationCanceledException operationCancelled);
     }
 
@@ -167,7 +167,7 @@ public class LMKitServiceTests
 
         var firstPromptResult = await firstResponseTask;
 
-        Assert.True(firstPromptResult.Status == LMKitTextGenerationStatus.Cancelled || firstPromptResult.Status == LMKitTextGenerationStatus.GenericError);
+        Assert.True(firstPromptResult.Status == LMKitRequestStatus.Cancelled || firstPromptResult.Status == LMKitRequestStatus.GenericError);
 
         loadingSuccess = await secondModelLoadingTask;
         Assert.True(loadingSuccess);
@@ -193,10 +193,10 @@ public class LMKitServiceTests
         Assert.True(unloadingSuccess);
 
         var result = await conversation1.PromptResultTask.Task;
-        Assert.True(result != null && result.Status == LMKitTextGenerationStatus.Cancelled);
+        Assert.True(result != null && result.Status == LMKitRequestStatus.Cancelled);
 
         result = await conversation2.PromptResultTask.Task;
-        Assert.True(result != null && result.Status == LMKitTextGenerationStatus.Cancelled);
+        Assert.True(result != null && result.Status == LMKitRequestStatus.Cancelled);
     }
 
     [Fact]
@@ -214,7 +214,7 @@ public class LMKitServiceTests
         Assert.True(unloadingSuccess);
 
         var result = await conversation1.PromptResultTask.Task;
-        Assert.True(result != null && result.Status == LMKitTextGenerationStatus.Cancelled);
+        Assert.True(result != null && result.Status == LMKitRequestStatus.Cancelled);
     }
 
     [Fact]

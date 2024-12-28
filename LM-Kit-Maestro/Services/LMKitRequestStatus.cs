@@ -1,8 +1,8 @@
 ﻿namespace LMKit.Maestro.Services;
 
-public enum LMKitTextGenerationStatus
+public enum LMKitRequestStatus
 {
-    Undefined,
+    OK,
     Cancelled,
     GenericError
 }

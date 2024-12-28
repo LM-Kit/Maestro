@@ -6,28 +6,28 @@
 @inject IScrollHandler ScrollHandler
 @inject IResizeHandler ResizeHandler
 @inject ILogger<Chat> Logger
-
+@inject ISnackbar Snackbar
 @inherits MvvmComponentBase<ChatPageViewModel>
 
 <div id="chat-container">
     <div id="conversation-container">
         <div id="conversation-content"
-             class="chat-element dark @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
+        class="chat-element dark @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
             @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
                 {
                     <div id="empty-conversation" class="vertical-stack">
                         <div class="vertical-stack spacing-4">
-                                                    <div class="welcome-message"><b>Maestro</b> at your service—let’s orchestrate something amazing!</div>
-                                    <div class="welcome-message">
-                                                Feel free to ask questions, explore ideas, or engage in meaningful conversations. 
+                            <div class="welcome-message"><b>Maestro</b> at your service—let’s orchestrate something amazing!</div>
+                            <div class="welcome-message">
+                                Feel free to ask questions, explore ideas, or engage in meaningful conversations.
 
-                                    </div>
-                                               <div class="welcome-message">
-                                                Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to help.
+                            </div>
+                            <div class="welcome-message">
+                                Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to help.
 
-                                    </div>
+                            </div>
 
                         </div>
 
@@ -79,7 +79,7 @@
                 Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                 @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
                 (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                        ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                                        ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
             </text>
         }
     </div>
@@ -128,7 +128,6 @@
         }
 
         ViewModel.ConversationListViewModel.PropertyChanged += OnConversationListViewModelPropertyChanged;
-
         ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.PropertyChanged += OnLMKitConversationPropertyChanged;
 
         await ResizeHandler.RegisterPageResizeAsync(Resized);
@@ -219,6 +218,7 @@
         if (_previousConversationViewModel != null)
         {
             _previousConversationViewModel.Messages.CollectionChanged -= OnConversationMessagesCollectionChanged;
+            _previousConversationViewModel.TextGenerationCompleted -= OnTextGenerationCompleted;
         }
 
         _previousConversationViewModel = ViewModel.ConversationListViewModel.CurrentConversation;
@@ -226,6 +226,8 @@
         if (ViewModel.ConversationListViewModel.CurrentConversation != null)
         {
             ViewModel.ConversationListViewModel.CurrentConversation.Messages.CollectionChanged += OnConversationMessagesCollectionChanged;
+            ViewModel.ConversationListViewModel.CurrentConversation.TextGenerationCompleted += OnTextGenerationCompleted;
+
             _previousScrollTop = null;
             _ignoreScrollsUntilNextScrollUp = true;
             IsScrolledToEnd = true;
@@ -249,6 +251,18 @@
             _shouldAutoScrollEnd = true;
             latestMessage.PropertyChanged += OnLatestAssistantMessagePropertyChanged;
         }
+    }
+
+    private void OnTextGenerationCompleted(object? sender, ConversationViewModel.TextGenerationCompletedEventArgs e)
+    {
+        if (e.Exception != null)
+        {
+            Snackbar.Clear();
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+            Snackbar.Add($"Text generation failed unexpectedly:\n{e.Exception.Message}", Severity.Error);
+        }
+
+        UpdateUIAsync();
     }
 
     private async void OnLatestAssistantResponseProgressed()
