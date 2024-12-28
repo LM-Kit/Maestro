@@ -102,6 +102,7 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="MetroLog.Maui" Version="2.1.0" />
 		<PackageReference Include="Mopups" Version="1.3.2" />
+		<PackageReference Include="MudBlazor" Version="7.15.0" />
 		<PackageReference Include="SimpleToolkit.SimpleShell" Version="5.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="System.Text.Json" Version="9.0.0" />
