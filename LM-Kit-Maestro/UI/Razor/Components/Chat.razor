@@ -79,7 +79,7 @@
                 Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                 @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
                 (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                                ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                                        ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
             </text>
         }
     </div>
@@ -128,7 +128,6 @@
         }
 
         ViewModel.ConversationListViewModel.PropertyChanged += OnConversationListViewModelPropertyChanged;
-
         ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.PropertyChanged += OnLMKitConversationPropertyChanged;
 
         await ResizeHandler.RegisterPageResizeAsync(Resized);
@@ -260,6 +259,8 @@
         {
             Snackbar.Add($"Text generation failed unexpectedly:\n{e.Exception.Message}", Severity.Error);
         }
+
+        UpdateUIAsync();
     }
 
     private async void OnLatestAssistantResponseProgressed()
