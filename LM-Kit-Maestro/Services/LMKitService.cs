@@ -221,8 +221,6 @@ public partial class LMKitService : INotifyPropertyChanged
                 {
                     Status = LMKitRequestStatus.Cancelled
                 };
-
-                _lmKitServiceSemaphore.Release();
             }
             else
             {
@@ -266,6 +264,8 @@ public partial class LMKitService : INotifyPropertyChanged
         }
         finally
         {
+            _lmKitServiceSemaphore.Release();
+
             if (_requestSchedule.Contains(request))
             {
                 _requestSchedule.Remove(request);
