@@ -87,8 +87,9 @@ public partial class ConversationViewModel : AssistantViewModelBase
         }
     }
 
-    public EventHandler? TextGenerationCompleted;
-    public EventHandler? TextGenerationFailed;
+    public delegate void TextGenerationCompletedEventHandler(object sender, TextGenerationCompletedEventArgs e);
+
+    public TextGenerationCompletedEventHandler? TextGenerationCompleted;
     public EventHandler? DatabaseSaveOperationCompleted;
     public EventHandler? DatabaseSaveOperationFailed;
 

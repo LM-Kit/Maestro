@@ -14,7 +14,6 @@ internal sealed class ConversationViewModelWrapper
     {
         ConversationViewModel = conversationViewModel;
         ConversationViewModel.TextGenerationCompleted += OnTextGenerationCompleted;
-        ConversationViewModel.TextGenerationFailed += OnTextGenerationFailed;
         ConversationViewModel.DatabaseSaveOperationCompleted += OnDatabaseSynchronizationCompleted;
         ConversationViewModel.PropertyChanged += ConversationViewModel_PropertyChanged;
     }
@@ -27,18 +26,18 @@ internal sealed class ConversationViewModelWrapper
         }
     }
 
-    private void OnTextGenerationCompleted(object? sender, EventArgs e)
+    private void OnTextGenerationCompleted(object? sender, ConversationViewModel.TextGenerationCompletedEventArgs e)
     {
         var conversationViewModel = (ConversationViewModel)sender!;
 
-        PromptResultTask.SetResult(true);
-    }
-
-    private void OnTextGenerationFailed(object? sender, EventArgs e)
-    {
-        var conversationViewModel = (ConversationViewModel)sender!;
-
-        PromptResultTask.SetResult(false);
+        if (e.Exception != null || e.Status != Maestro.Services.LMKitRequestStatus.OK)
+        {
+            PromptResultTask.SetResult(false);
+        }
+        else
+        {
+            PromptResultTask.SetResult(true);
+        }
     }
 
     private void OnDatabaseSynchronizationCompleted(object? sender, EventArgs e)

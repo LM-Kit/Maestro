@@ -9,7 +9,7 @@ namespace LMKit.Maestro.Tests
     {
         public static void AssertPromptResponseIsSuccessful(LMKitService.LMKitResult promptResult)
         {
-            Assert.Equal(LMKitTextGenerationStatus.Undefined, promptResult.Status);
+            Assert.Equal(LMKitRequestStatus.OK, promptResult.Status);
             Assert.Null(promptResult.Exception);
             Assert.NotNull(promptResult.Result);
         }
@@ -18,8 +18,8 @@ namespace LMKit.Maestro.Tests
         {
             Assert.True(testConversation.PromptResultTask.Task.Result);
             Assert.True(testConversation.ConversationViewModel.Messages.Count == expectedMessageCount);
-            Assert.Equal(LMKitTextGenerationStatus.Undefined, testConversation.ConversationViewModel.Messages[0].Status);
-            Assert.Equal(LMKitTextGenerationStatus.Undefined, testConversation.ConversationViewModel.Messages[1].Status);
+            Assert.Equal(LMKitRequestStatus.OK, testConversation.ConversationViewModel.Messages[0].Status);
+            Assert.Equal(LMKitRequestStatus.OK, testConversation.ConversationViewModel.Messages[1].Status);
             Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[0].Content));
             Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[1].Content));
             Assert.False(testConversation.ConversationViewModel.AwaitingResponse);
@@ -32,7 +32,7 @@ namespace LMKit.Maestro.Tests
 
             if (testConversation.ConversationViewModel.Messages.Count == 2)
             {
-                Assert.Equal(LMKitTextGenerationStatus.Cancelled, testConversation.ConversationViewModel.Messages[1].Status);
+                Assert.Equal(LMKitRequestStatus.Cancelled, testConversation.ConversationViewModel.Messages[1].Status);
                 Assert.False(string.IsNullOrEmpty(testConversation.ConversationViewModel.Messages[0].Content));
 
             }
