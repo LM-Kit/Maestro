@@ -12,8 +12,3 @@ extend-exclude = [
 	"LM-Kit-Maestro/Resources/*"
 ]
 
-[words]
-# Add "Invokable" to the whitelist of words
-extend-allow = [
-    "Invokable"
-]
