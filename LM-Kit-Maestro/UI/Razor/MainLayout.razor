@@ -5,7 +5,7 @@
 </div>
 
 
-<MudThemeProvider Theme="@CurrentTheme" />
+<MudThemeProvider IsDarkMode="true" DefaultScrollbar="false" Theme="@CurrentTheme" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -13,64 +13,57 @@
 @code {
     private static readonly MudTheme MaestroTheme = new MudTheme()
         {
-            PaletteDark = MaestroPalette,
+            PaletteDark = new()
+            {
+                Primary = "#512BD4",
+                Surface = "#06080A",
+                Background = "#12181F",
+                TextPrimary = "#F0F6FC",
+                BackgroundGray = "#FF0000",
+                AppbarText = "#FF0000",
+                AppbarBackground = "#FF0000",
+                DrawerBackground = "#FF0000",
+                ActionDefault = "#FF0000",
+                ActionDisabled = "#FF0000",
+                ActionDisabledBackground = "#FF0000",
+                TextSecondary = "#FF0000",
+                TextDisabled = "#FF0000",
+                DrawerIcon = "#FF0000",
+                DrawerText = "#FF0000",
+                GrayLight = "#FF0000",
+                GrayLighter = "#FF0000",
+                Info = "#FF0000",
+                Success = "#FF0000",
+                Warning = "#FF0000",
+                Error = "#FF0000",
+                LinesDefault = "#FF0000",
+                TableLines = "#FF0000",
+                Divider = "#FF0000",
+                OverlayLight = "#FF0000",
+                // BackgroundGray = "#151521",
+                // AppbarText = "#92929f",
+                // AppbarBackground = "rgba(26,26,39,0.8)",
+                // DrawerBackground = "#1a1a27",
+                // ActionDefault = "#74718e",
+                // ActionDisabled = "#9999994d",
+                // ActionDisabledBackground = "#605f6d4d",
+                // TextSecondary = "#92929f",
+                // TextDisabled = "#ffffff33",
+                // DrawerIcon = "#92929f",
+                // DrawerText = "#92929f",
+                // GrayLight = "#2a2833",
+                // GrayLighter = "#06080A",
+                // Info = "#4a86ff",
+                // Success = "#3dcb6c",
+                // Warning = "#ffb545",
+                // Error = "#ff3f5f",
+                // LinesDefault = "#33323e",
+                // TableLines = "#33323e",
+                // Divider = "#292838",
+                // OverlayLight = "#12181F",
+            }
         };
 
-    private static readonly PaletteDark MaestroPalette = new()
-        {
-            Primary = "#FF0000",
-            Surface = "#FF0000",
-            Background = "#FF0000",
-            TextPrimary = "#FF0000",
-
-            // Primary = "#512BD4",
-            // Surface = "#06080A",
-            // Background = "#12181F",
-            // TextPrimary = "#F0F6FC",
-
-            BackgroundGray = "#FF0000",
-            AppbarText = "#FF0000",
-            AppbarBackground = "#FF0000",
-            DrawerBackground = "#FF0000",
-            ActionDefault = "#FF0000",
-            ActionDisabled = "#FF0000",
-            ActionDisabledBackground = "#FF0000",
-            TextSecondary = "#FF0000",
-            TextDisabled = "#FF0000",
-            DrawerIcon = "#FF0000",
-            DrawerText = "#FF0000",
-            GrayLight = "#FF0000",
-            GrayLighter = "#FF0000",
-            Info = "#FF0000",
-            Success = "#FF0000",
-            Warning = "#FF0000",
-            Error = "#FF0000",
-            LinesDefault = "#FF0000",
-            TableLines = "#FF0000",
-            Divider = "#FF0000",
-            OverlayLight = "#FF0000",
-            // BackgroundGray = "#151521",
-            // AppbarText = "#92929f",
-            // AppbarBackground = "rgba(26,26,39,0.8)",
-            // DrawerBackground = "#1a1a27",
-            // ActionDefault = "#74718e",
-            // ActionDisabled = "#9999994d",
-            // ActionDisabledBackground = "#605f6d4d",
-            // TextSecondary = "#92929f",
-            // TextDisabled = "#ffffff33",
-            // DrawerIcon = "#92929f",
-            // DrawerText = "#92929f",
-            // GrayLight = "#2a2833",
-            // GrayLighter = "#06080A",
-            // Info = "#4a86ff",
-            // Success = "#3dcb6c",
-            // Warning = "#ffb545",
-            // Error = "#ff3f5f",
-            // LinesDefault = "#33323e",
-            // TableLines = "#33323e",
-            // Divider = "#292838",
-            // OverlayLight = "#12181F",
-        };
 
     public MudTheme CurrentTheme { get;  private set;} = MaestroTheme;
 }
