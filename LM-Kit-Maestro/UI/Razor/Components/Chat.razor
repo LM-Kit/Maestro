@@ -257,6 +257,8 @@
     {
         if (e.Exception != null)
         {
+            Snackbar.Clear();
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
             Snackbar.Add($"Text generation failed unexpectedly:\n{e.Exception.Message}", Severity.Error);
         }
 
