@@ -17,7 +17,7 @@
     border-radius: 8px;
     overflow: hidden;
     display: grid;
-    grid-template-rows: 40px auto;
+    grid-template-rows: auto auto;
 }
 
 #translation-input, #translation-output {
@@ -30,6 +30,9 @@
     display: flex;
     border-bottom: 1px solid var(--OutlineVariant);
     justify-content: space-between;
+    align-items: center;
+    padding-block: 20px;
+    padding-inline: 10px;
 }
 
 #translation-body {
