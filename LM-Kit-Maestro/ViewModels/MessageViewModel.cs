@@ -23,7 +23,7 @@ public partial class MessageViewModel : ViewModelBase
     private bool _messageInProgress;
 
     [ObservableProperty]
-    private LMKitTextGenerationStatus _status;
+    private LMKitRequestStatus _status;
 
     [ObservableProperty]
     private bool _isHovered;

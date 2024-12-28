@@ -6,7 +6,7 @@ public partial class LMKitService
     {
         public Exception? Exception { get; set; }
 
-        public LMKitTextGenerationStatus Status { get; set; }
+        public LMKitRequestStatus Status { get; set; }
 
         public object? Result { get; set; }
     }

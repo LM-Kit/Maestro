@@ -211,15 +211,15 @@ public partial class LMKitService : INotifyPropertyChanged
         // Ensuring we don't touch anything until Lm-Kit objects' state has been set to handle this request.
         _lmKitServiceSemaphore.Wait();
 
+        LMKitResult result;
+
         try
         {
-            LMKitResult result;
-
             if (request.CancellationTokenSource.IsCancellationRequested || ModelLoadingState == LMKitModelLoadingState.Unloaded)
             {
                 result = new LMKitResult()
                 {
-                    Status = LMKitTextGenerationStatus.Cancelled
+                    Status = LMKitRequestStatus.Cancelled
                 };
 
                 _lmKitServiceSemaphore.Release();
@@ -255,8 +255,14 @@ public partial class LMKitService : INotifyPropertyChanged
             }
 
             request.ResponseTask.TrySetResult(result);
-
-            return result;
+        }
+        catch (Exception exception)
+        {
+            result = new LMKitResult()
+            {
+                Exception = exception,
+                Status = LMKitRequestStatus.GenericError
+            };
         }
         finally
         {
@@ -265,6 +271,8 @@ public partial class LMKitService : INotifyPropertyChanged
                 _requestSchedule.Remove(request);
             }
         }
+
+        return result;
     }
 
     private async Task<LMKitResult> SubmitRequest(LMKitRequest request)
@@ -300,11 +308,11 @@ public partial class LMKitService : INotifyPropertyChanged
 
                 if (result.Exception is OperationCanceledException)
                 {
-                    result.Status = LMKitTextGenerationStatus.Cancelled;
+                    result.Status = LMKitRequestStatus.Cancelled;
                 }
                 else
                 {
-                    result.Status = LMKitTextGenerationStatus.GenericError;
+                    result.Status = LMKitRequestStatus.GenericError;
                 }
             }
 
@@ -320,7 +328,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
                 if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt &&
                     conversation.GeneratedTitleSummary == null &&
-                    result.Status == LMKitTextGenerationStatus.Undefined &&
+                    result.Status == LMKitRequestStatus.OK &&
                     !string.IsNullOrEmpty(((TextGenerationResult)result.Result!).Completion))
                 {
                     GenerateConversationSummaryTitle(conversation);
@@ -329,7 +337,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             if (result.Exception != null && request.CancellationTokenSource.IsCancellationRequested)
             {
-                result.Status = LMKitTextGenerationStatus.Cancelled;
+                result.Status = LMKitRequestStatus.Cancelled;
             }
 
             return result;
@@ -339,7 +347,7 @@ public partial class LMKitService : INotifyPropertyChanged
             return new LMKitResult()
             {
                 Exception = exception,
-                Status = LMKitTextGenerationStatus.GenericError
+                Status = LMKitRequestStatus.GenericError
             };
         }
         finally
