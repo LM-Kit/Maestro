@@ -173,7 +173,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
                 try
                 {
-                    result = await _lmKitService.RegenerateResponse(LMKitConversation, message.LMKitMessage!);
+                    result = await _lmKitService.Chat.RegenerateResponse(LMKitConversation, message.LMKitMessage!);
                     OnTextGenerationResult(result);
                 }
                 catch (Exception exception)
@@ -196,7 +196,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
         {
             try
             {
-                promptResult = await _lmKitService.SubmitPrompt(LMKitConversation, prompt);
+                promptResult = await _lmKitService.Chat.SubmitPrompt(LMKitConversation, prompt);
                 OnTextGenerationResult(promptResult);
             }
             catch (Exception ex)
@@ -269,7 +269,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
     protected override async Task HandleCancel(bool shouldAwaitTermination)
     {
-        await _lmKitService.CancelPrompt(LMKitConversation, shouldAwaitTermination);
+        await _lmKitService.Chat.CancelPrompt(LMKitConversation, shouldAwaitTermination);
     }
 
     private void SaveConversation()

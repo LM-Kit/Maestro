@@ -21,7 +21,7 @@ namespace LMKit.Maestro.Tests.Services
             {
                 try
                 {
-                    promptResult = await lmKitService.SubmitPrompt(Conversation, prompt);
+                    promptResult = await lmKitService.Chat.SubmitPrompt(Conversation, prompt);
                     PromptResultTask.SetResult(promptResult);
                 }
                 catch (Exception)

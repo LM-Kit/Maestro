@@ -54,7 +54,7 @@ public class LMKitServiceTests
 
         var conversation = testService.GetNewLMKitConversation();
 
-        var response = await testService.LMKitService.SubmitPrompt(conversation, "1+1");
+        var response = await testService.LMKitService.Chat.SubmitPrompt(conversation, "1+1");
         MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
     }
 
@@ -68,7 +68,7 @@ public class LMKitServiceTests
         Assert.True(loadingSuccess);
 
         var conversation = testService.GetNewLMKitConversation();
-        var response = await testService.LMKitService.SubmitPrompt(conversation, "1+1");
+        var response = await testService.LMKitService.Chat.SubmitPrompt(conversation, "1+1");
 
         MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
 
@@ -86,7 +86,7 @@ public class LMKitServiceTests
         Assert.True(loadingSuccess);
 
         var conversation = testService.GetNewLMKitConversation();
-        var response = await testService.LMKitService.SubmitPrompt(conversation, "tell me a story");
+        var response = await testService.LMKitService.Chat.SubmitPrompt(conversation, "tell me a story");
 
         Assert.NotNull(response);
         Assert.Equal(LMKitRequestStatus.Cancelled, response.Status);
@@ -103,10 +103,10 @@ public class LMKitServiceTests
         var conversation1 = testService.GetNewLMKitConversation();
         var conversation2 = testService.GetNewLMKitConversation();
 
-        var response1 = await testService.LMKitService.SubmitPrompt(conversation1, "1+1");
+        var response1 = await testService.LMKitService.Chat.SubmitPrompt(conversation1, "1+1");
         MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response1);
 
-        var response2 = await testService.LMKitService.SubmitPrompt(conversation2, "2+2");
+        var response2 = await testService.LMKitService.Chat.SubmitPrompt(conversation2, "2+2");
         MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response2);
     }
 
@@ -120,13 +120,13 @@ public class LMKitServiceTests
         var conversation1 = testService.GetNewLMKitConversation();
         var conversation2 = testService.GetNewLMKitConversation();
 
-        var response = await testService.LMKitService.SubmitPrompt(conversation1, "1+1");
+        var response = await testService.LMKitService.Chat.SubmitPrompt(conversation1, "1+1");
         MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
 
-        response = await testService.LMKitService.SubmitPrompt(conversation2, "2+2");
+        response = await testService.LMKitService.Chat.SubmitPrompt(conversation2, "2+2");
         MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
 
-        response = await testService.LMKitService.SubmitPrompt(conversation1, "3+3");
+        response = await testService.LMKitService.Chat.SubmitPrompt(conversation1, "3+3");
         MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
     }
 
@@ -139,13 +139,13 @@ public class LMKitServiceTests
 
         var conversation = testService.GetNewLMKitConversation();
 
-        var response = await testService.LMKitService.SubmitPrompt(conversation, "2+2");
+        var response = await testService.LMKitService.Chat.SubmitPrompt(conversation, "2+2");
         MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
 
         loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
         Assert.True(loadingSuccess);
 
-        response = await testService.LMKitService.SubmitPrompt(conversation, "1+1");
+        response = await testService.LMKitService.Chat.SubmitPrompt(conversation, "1+1");
         MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
     }
 
@@ -161,7 +161,7 @@ public class LMKitServiceTests
 
         var conversation = testService.GetNewLMKitConversation();
 
-        var firstResponseTask = testService.LMKitService.SubmitPrompt(conversation, "tell me a story");
+        var firstResponseTask = testService.LMKitService.Chat.SubmitPrompt(conversation, "tell me a story");
 
         var secondModelLoadingTask = testService.LoadModel(MaestroTestsService.Model2);
 
@@ -172,7 +172,7 @@ public class LMKitServiceTests
         loadingSuccess = await secondModelLoadingTask;
         Assert.True(loadingSuccess);
 
-        var secondResponse = await testService.LMKitService.SubmitPrompt(conversation, "1+1");
+        var secondResponse = await testService.LMKitService.Chat.SubmitPrompt(conversation, "1+1");
         MaestroTestsHelpers.AssertPromptResponseIsSuccessful(secondResponse);
     }
 
@@ -224,7 +224,7 @@ public class LMKitServiceTests
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
-        var result = await testService.LMKitService.SubmitTranslation("est-ce que ça marche cette merde ?", LMKit.TextGeneration.Language.French);
+        var result = await testService.LMKitService.Translation.Translate("est-ce que ça marche cette merde ?", LMKit.TextGeneration.Language.French);
 
         Assert.False(string.IsNullOrEmpty(result));
     }
@@ -250,7 +250,7 @@ public class LMKitServiceTests
         var conversation = testService.ConversationListViewModel.Conversations.First()!;
         var lastMessage = conversation.Messages.Last().LMKitMessage;
 
-        var response = await testService.LMKitService.RegenerateResponse(conversation.LMKitConversation, lastMessage!);
+        var response = await testService.LMKitService.Chat.RegenerateResponse(conversation.LMKitConversation, lastMessage!);
 
         MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
 
