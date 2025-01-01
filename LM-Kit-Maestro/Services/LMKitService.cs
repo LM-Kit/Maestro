@@ -110,24 +110,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         var unloadedModelUri = LMKitConfig.LoadedModelUri!;
 
-        //if (_requestSchedule.RunningPromptRequest != null && !_requestSchedule.RunningPromptRequest.CancellationTokenSource.IsCancellationRequested)
-        //{
-        //    _requestSchedule.RunningPromptRequest.CancelAndAwaitTermination();
-        //}
-        //else if (_requestSchedule.Count > 1)
-        //{
-        //    // A prompt is scheduled, but it is not running.
-        //    _requestSchedule.Next!.CancelAndAwaitTermination();
-        //}
-
-        //if (_titleGenerationSchedule.RunningPromptRequest != null && !_titleGenerationSchedule.RunningPromptRequest.CancellationTokenSource.IsCancellationRequested)
-        //{
-        //    _titleGenerationSchedule.RunningPromptRequest.CancelAndAwaitTermination();
-        //}
-        //else if (_requestSchedule.Count > 1)
-        //{
-        //    _titleGenerationSchedule.Next!.CancelAndAwaitTermination();
-        //}
+        Chat.CancelAllPrompts();
 
         if (_multiTurnConversation != null)
         {
@@ -149,6 +132,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         ModelUnloaded?.Invoke(this, new NotifyModelStateChangedEventArgs(unloadedModelUri));
     }
+
 
 
     private bool OnModelLoadingProgressed(float progress)

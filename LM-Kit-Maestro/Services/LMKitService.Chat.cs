@@ -35,6 +35,28 @@ public partial class LMKitService : INotifyPropertyChanged
             return await HandlePrompt(promptRequest);
         }
 
+        public void CancelAllPrompts()
+        {
+            if (_requestSchedule.RunningPromptRequest != null && !_requestSchedule.RunningPromptRequest.CancellationTokenSource.IsCancellationRequested)
+            {
+                _requestSchedule.RunningPromptRequest.CancelAndAwaitTermination();
+            }
+            else if (_requestSchedule.Count > 1)
+            {
+                // A prompt is scheduled, but it is not running.
+                _requestSchedule.Next!.CancelAndAwaitTermination();
+            }
+
+            if (_titleGenerationSchedule.RunningPromptRequest != null && !_titleGenerationSchedule.RunningPromptRequest.CancellationTokenSource.IsCancellationRequested)
+            {
+                _titleGenerationSchedule.RunningPromptRequest.CancelAndAwaitTermination();
+            }
+            else if (_requestSchedule.Count > 1)
+            {
+                _titleGenerationSchedule.Next!.CancelAndAwaitTermination();
+            }
+        }
+
         public async Task CancelPrompt(Conversation conversation, bool shouldAwaitTermination = false)
         {
             var conversationPrompt = _requestSchedule.Unschedule(conversation);
