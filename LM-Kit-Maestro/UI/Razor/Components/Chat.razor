@@ -12,7 +12,7 @@
 <div id="chat-container">
     <div id="conversation-container">
         <div id="conversation-content"
-        class="chat-element dark @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
+             class="chat-element dark @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
             @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
@@ -79,7 +79,7 @@
                 Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                 @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
                 (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                                        ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                        ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
             </text>
         }
     </div>
@@ -255,7 +255,8 @@
 
     private void OnTextGenerationCompleted(object? sender, ConversationViewModel.TextGenerationCompletedEventArgs e)
     {
-        if (e.Exception != null)
+        if (e.Exception != null &&
+            e.Status == LMKitRequestStatus.GenericError)
         {
             Snackbar.Clear();
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
