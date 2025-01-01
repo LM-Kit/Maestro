@@ -14,8 +14,6 @@ public partial class LMKitService : INotifyPropertyChanged
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private readonly LMKitService _lmkitService;
-
         private readonly LMKitConfig _config;
 
         public LMKitChat(LMKitConfig config)
@@ -27,7 +25,10 @@ public partial class LMKitService : INotifyPropertyChanged
         {
             var promptRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.Prompt,
                 new LMKitRequest.PromptRequestParameters(conversation, prompt),
-                _lmkitService.LMKitConfig.RequestTimeout);
+                _config.RequestTimeout)
+            {
+                Conversation = conversation
+            };
 
             ScheduleRequest(promptRequest);
 
