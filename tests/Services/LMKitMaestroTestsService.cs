@@ -130,9 +130,8 @@ namespace LMKit.Maestro.Tests
         {
             var popupService = new Mock<IPopupService>().Object;
             var mainThread = new Mock<IMainThread>().Object;
-            var appSettingsService = new Mock<IAppSettingsService>().Object;
 
-            return new ConversationViewModel(mainThread, popupService, appSettingsService, lmKitService, database);
+            return new ConversationViewModel(popupService, lmKitService, database);
         }
 
         private static SettingsViewModel GetNewSettingsViewModel(LMKitService lmKitService)

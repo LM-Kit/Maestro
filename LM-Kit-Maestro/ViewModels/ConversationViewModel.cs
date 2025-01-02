@@ -7,15 +7,11 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using LMKit.Maestro.Data;
 using LMKit.Maestro.Services;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace LMKit.Maestro.ViewModels;
 
 public partial class ConversationViewModel : AssistantViewModelBase
 {
-    private readonly IMainThread _mainThread;
-    private readonly IAppSettingsService _appSettingsService;
     private readonly IMaestroDatabase _database;
 
     public LMKitService.Conversation LMKitConversation { get; private set; }
@@ -93,14 +89,12 @@ public partial class ConversationViewModel : AssistantViewModelBase
     public EventHandler? DatabaseSaveOperationCompleted;
     public EventHandler? DatabaseSaveOperationFailed;
 
-    public ConversationViewModel(IMainThread mainThread, IPopupService popupService, IAppSettingsService appSettingsService, LMKitService lmKitService, IMaestroDatabase database) : this(mainThread, popupService, appSettingsService, lmKitService, database, new ConversationLog("Untitled conversation"))
+    public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database) : this(popupService, lmKitService, database, new ConversationLog("Untitled conversation"))
     {
     }
 
-    public ConversationViewModel(IMainThread mainThread, IPopupService popupService, IAppSettingsService appSettingsService, LMKitService lmKitService, IMaestroDatabase database, ConversationLog conversationLog) : base(popupService, lmKitService)
+    public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database, ConversationLog conversationLog) : base(popupService, lmKitService)
     {
-        _mainThread = mainThread;
-        _appSettingsService = appSettingsService;
         _lmKitService = lmKitService;
         _lmKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
         _lmKitService.ModelUnloaded += OnModelUnloaded;
