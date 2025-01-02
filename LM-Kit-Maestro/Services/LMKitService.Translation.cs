@@ -11,16 +11,22 @@ public partial class LMKitService : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private readonly LMKitConfig _config;
 
-        public LMKitTranslation(LMKitConfig config)
+        private readonly LMKitServiceState _state;
+
+
+        public LMKitTranslation(LMKitServiceState state)
         {
-            _config = config;
+            _state = state;
         }
 
         public async Task<string?> Translate(string translation, Language outputLanguage)
         {
-            return null;
+            var textTranslation = new TextTranslation(_state.Model!);
+
+            var result = await textTranslation.TranslateAsync(translation, outputLanguage);
+
+            return result;
         }
     }
 }

@@ -62,7 +62,7 @@ namespace Maestro.Tests
             _modelLoadingTask = new TaskCompletionSource<bool>();
             ProgressEventWasRaided = false;
             LMKitService.ModelLoadingProgressed += LMKitService_ModelLoadingProgressed;
-            LMKitService.ModelLoadingCompleted += LMKitService_ModelLoadingCompleted;
+            LMKitService.ModelLoaded += LMKitService_ModelLoadingCompleted;
             LMKitService.ModelLoadingFailed += LMKitService_ModelLoadingFailed;
 
             string? localFilePath = FileHelpers.GetModelFilePathFromUrl(modelUri, LMKitDefaultSettings.DefaultModelStorageDirectory);

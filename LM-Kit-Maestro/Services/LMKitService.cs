@@ -20,7 +20,9 @@ public partial class LMKitService : INotifyPropertyChanged
     private static LM? _model;
     private static MultiTurnConversation? _multiTurnConversation;
 
-    public LMKitConfig LMKitConfig { get; } = new LMKitConfig();
+    private LMKitServiceState _state;
+
+    public LMKitConfig LMKitConfig => _state.Config;
 
     public LMKitTranslation Translation { get; }
 
@@ -28,7 +30,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public event NotifyModelStateChangedEventHandler? ModelLoadingProgressed;
     public event NotifyModelStateChangedEventHandler? ModelDownloadingProgressed;
-    public event NotifyModelStateChangedEventHandler? ModelLoadingCompleted;
+    public event NotifyModelStateChangedEventHandler? ModelLoaded;
     public event NotifyModelStateChangedEventHandler? ModelLoadingFailed;
     public event NotifyModelStateChangedEventHandler? ModelUnloaded;
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -48,8 +50,9 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public LMKitService()
     {
-        Chat = new LMKitChat(LMKitConfig, _lmKitServiceSemaphore);
-        Translation = new LMKitTranslation(LMKitConfig);
+        _state = new LMKitServiceState();
+        Chat = new LMKitChat(_state);
+        Translation = new LMKitTranslation(_state);
     }
 
     public void LoadModel(Uri fileUri, string? localFilePath = null)
@@ -88,7 +91,7 @@ public partial class LMKitService : INotifyPropertyChanged
             {
                 LMKitConfig.LoadedModelUri = fileUri!;
 
-                ModelLoadingCompleted?.Invoke(this, new NotifyModelStateChangedEventArgs(LMKitConfig.LoadedModelUri));
+                ModelLoaded?.Invoke(this, new NotifyModelStateChangedEventArgs(LMKitConfig.LoadedModelUri));
                 ModelLoadingState = LMKitModelLoadingState.Loaded;
             }
             else
@@ -126,7 +129,6 @@ public partial class LMKitService : INotifyPropertyChanged
 
         _lmKitServiceSemaphore.Release();
 
-        _lastConversationUsed = null;
         ModelLoadingState = LMKitModelLoadingState.Unloaded;
         LMKitConfig.LoadedModelUri = null;
 

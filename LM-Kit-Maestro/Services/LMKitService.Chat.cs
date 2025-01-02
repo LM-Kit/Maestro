@@ -1,4 +1,5 @@
-﻿using LMKit.TextGeneration;
+﻿using LMKit.Model;
+using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
 using LMKit.Translation;
 using System.ComponentModel;
@@ -16,17 +17,16 @@ public partial class LMKitService : INotifyPropertyChanged
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private readonly LMKitConfig _config;
+        private readonly LMKitServiceState _state;
 
-        public LMKitChat(LMKitConfig config, SemaphoreSlim lmKitServiceSemaphore)
+        public LMKitChat(LMKitServiceState state)
         {
-            _config = config;
-            _lmKitServiceSemaphore = lmKitServiceSemaphore;
+            _state = state;
         }
 
         public async Task<LMKitResult> SubmitPrompt(Conversation conversation, string prompt)
         {
-            var promptRequest = new LMKitRequest(conversation, LMKitRequest.LMKitRequestType.Prompt, prompt, _config.RequestTimeout)
+            var promptRequest = new LMKitRequest(conversation, LMKitRequest.LMKitRequestType.Prompt, prompt, _state.Config.RequestTimeout)
             {
                 Conversation = conversation
             };
@@ -85,7 +85,7 @@ public partial class LMKitService : INotifyPropertyChanged
         {
             var regenerateResponseRequest = new LMKitRequest(conversation,
                 LMKitRequest.LMKitRequestType.RegenerateResponse,
-                message, _config.RequestTimeout)
+                message, _state.Config.RequestTimeout)
             {
                 Conversation = conversation
             };
@@ -276,7 +276,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
 
                 // Latest chat history of this conversation was generated with a different model
-                bool lastUsedDifferentModel = _config.LoadedModelUri != conversation.LastUsedModelUri;
+                bool lastUsedDifferentModel = _state.Config.LoadedModelUri != conversation.LastUsedModelUri;
                 bool shouldUseCurrentChatHistory = !lastUsedDifferentModel && conversation.ChatHistory != null;
                 bool shouldDeserializeChatHistoryData = (lastUsedDifferentModel && conversation.LatestChatHistoryData != null) || (!lastUsedDifferentModel && conversation.ChatHistory == null);
 
@@ -284,34 +284,34 @@ public partial class LMKitService : INotifyPropertyChanged
                 {
                     ChatHistory? chatHistory = shouldUseCurrentChatHistory ? conversation.ChatHistory : ChatHistory.Deserialize(conversation.LatestChatHistoryData, _model);
 
-                    _multiTurnConversation = new MultiTurnConversation(_model, chatHistory, _config.ContextSize)
+                    _multiTurnConversation = new MultiTurnConversation(_model, chatHistory, _state.Config.ContextSize)
                     {
-                        SamplingMode = GetTokenSampling(_config),
-                        MaximumCompletionTokens = _config.MaximumCompletionTokens,
+                        SamplingMode = GetTokenSampling(_state.Config),
+                        MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
                     };
                 }
                 else
                 {
-                    _multiTurnConversation = new MultiTurnConversation(_model, _config.ContextSize)
+                    _multiTurnConversation = new MultiTurnConversation(_model, _state.Config.ContextSize)
                     {
-                        SamplingMode = GetTokenSampling(_config),
-                        MaximumCompletionTokens = _config.MaximumCompletionTokens,
-                        SystemPrompt = _config.SystemPrompt
+                        SamplingMode = GetTokenSampling(_state.Config),
+                        MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
+                        SystemPrompt = _state.Config.SystemPrompt
                     };
                 }
                 _multiTurnConversation.AfterTokenSampling += conversation.AfterTokenSampling;
 
                 conversation.ChatHistory = _multiTurnConversation.ChatHistory;
-                conversation.LastUsedModelUri = _config.LoadedModelUri;
+                conversation.LastUsedModelUri = _state.Config.LoadedModelUri;
                 _lastConversationUsed = conversation;
             }
             else //updating sampling options, if any.
             {
                 //todo: Implement a mechanism to determine whether SamplingMode and MaximumCompletionTokens need to be updated.
-                _multiTurnConversation!.SamplingMode = GetTokenSampling(_config);
-                _multiTurnConversation.MaximumCompletionTokens = _config.MaximumCompletionTokens;
+                _multiTurnConversation!.SamplingMode = GetTokenSampling(_state.Config);
+                _multiTurnConversation.MaximumCompletionTokens = _state.Config.MaximumCompletionTokens;
 
-                if (_config.ContextSize != _multiTurnConversation.ContextSize)
+                if (_state.Config.ContextSize != _multiTurnConversation.ContextSize)
                 {
                     //todo: implement context size update.
                 }

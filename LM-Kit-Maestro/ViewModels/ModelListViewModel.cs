@@ -65,7 +65,7 @@ namespace LMKit.Maestro.ViewModels
             LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
             LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
             LMKitService.ModelLoadingFailed += OnModelLoadingFailed;
-            LMKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
+            LMKitService.ModelLoaded += OnModelLoadingCompleted;
         }
 
         public void Initialize()
