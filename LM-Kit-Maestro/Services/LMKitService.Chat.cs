@@ -51,7 +51,7 @@ public partial class LMKitService : INotifyPropertyChanged
             {
                 _titleGenerationSchedule.RunningPromptRequest.CancelAndAwaitTermination();
             }
-            else if (_requestSchedule.Count > 1)
+            else if (_titleGenerationSchedule.Count > 1)
             {
                 _titleGenerationSchedule.Next!.CancelAndAwaitTermination();
             }
@@ -63,10 +63,10 @@ public partial class LMKitService : INotifyPropertyChanged
 
             if (conversationPrompt != null)
             {
-                //_lmKitServiceSemaphore.Wait();
+                _lmKitServiceSemaphore.Wait();
                 conversationPrompt.CancellationTokenSource.Cancel();
                 conversationPrompt.ResponseTask.TrySetCanceled();
-                //_lmKitServiceSemaphore.Release();
+                _lmKitServiceSemaphore.Release();
 
                 if (shouldAwaitTermination)
                 {
