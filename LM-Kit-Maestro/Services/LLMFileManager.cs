@@ -257,7 +257,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
         else
         {
-            throw new Exception(TooltipLabels.ModelFileNotAvailableLocally);
+            throw new Exception(Locales.ModelFileNotAvailableLocally);
         }
     }
 

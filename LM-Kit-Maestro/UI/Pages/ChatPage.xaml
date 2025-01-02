@@ -54,7 +54,7 @@
                     Style="{StaticResource SidebarToggleButtonStyle}"
                     Text="{StaticResource Forum}"
                     Command="{Binding ToggleChatsSidebarCommand}"
-                    ToolTipProperties.Text="{x:Static ui:TooltipLabels.DisplayChats}"
+                    ToolTipProperties.Text="{x:Static ui:Locales.DisplayChats}"
                     HorizontalOptions="Start"/>
 
                 <Label
@@ -65,7 +65,7 @@
 
                 <Button
                     HorizontalOptions="End"
-                    ToolTipProperties.Text="{x:Static ui:TooltipLabels.StartNewChat}"
+                    ToolTipProperties.Text="{x:Static ui:Locales.StartNewChat}"
                     Style="{StaticResource SecondaryActionButtonStyle}"
                     Grid.Column="2"
                     FontFamily="Material"
@@ -96,7 +96,7 @@
                 <Button
                     IsVisible="{Binding SettingsSidebarIsToggled}"
                     HorizontalOptions="Start"
-                    ToolTipProperties.Text="{x:Static ui:TooltipLabels.ResetDefaultSettings}"
+                    ToolTipProperties.Text="{x:Static ui:Locales.ResetDefaultSettings}"
                     Style="{StaticResource SecondaryActionButtonStyle}"
                     Text="{StaticResource Rotate_right}"
                     Command="{Binding SettingsViewModel.ResetDefaultValuesCommand}" />
@@ -111,7 +111,7 @@
                     Grid.Column="2"
                     Style="{StaticResource SidebarToggleButtonStyle}"
                     Text="{StaticResource Tune}"
-                    ToolTipProperties.Text="{x:Static ui:TooltipLabels.DisplaySettings}"
+                    ToolTipProperties.Text="{x:Static ui:Locales.DisplaySettings}"
                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ToggleSettingsSidebarCommand}"/>
             </Grid>
         </Grid>

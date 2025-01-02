@@ -1,7 +1,7 @@
 ﻿using LMKit.Maestro.Data;
 using LMKit.Maestro.Models;
 
-namespace LMKit.Maestro.Tests.Services;
+namespace Maestro.Tests.Services;
 
 internal class DummyMaestroDatabase : IMaestroDatabase
 {

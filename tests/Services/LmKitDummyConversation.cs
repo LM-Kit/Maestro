@@ -1,6 +1,6 @@
 ﻿using LMKit.Maestro.Services;
 
-namespace LMKit.Maestro.Tests.Services
+namespace Maestro.Tests.Services
 {
     internal class LMKitDummyConversation
     {
@@ -13,15 +13,15 @@ namespace LMKit.Maestro.Tests.Services
             Conversation = new LMKitService.Conversation(lmKitService);
         }
 
-        public void SubmitPrompt(LMKitService lmKitService, string prompt)
+        public async Task SubmitPrompt(LMKitService lmKitService, string prompt)
         {
             LMKitService.LMKitResult? promptResult = null;
 
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 try
                 {
-                    promptResult = await lmKitService.SubmitPrompt(Conversation, prompt);
+                    promptResult = await lmKitService.Chat.SubmitPrompt(Conversation, prompt);
                     PromptResultTask.SetResult(promptResult);
                 }
                 catch (Exception)
@@ -29,6 +29,8 @@ namespace LMKit.Maestro.Tests.Services
                     PromptResultTask.SetResult(null);
                 }
             });
+
+            await Task.Delay(50);
         }
     }
 }

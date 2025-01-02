@@ -9,7 +9,6 @@ public partial class LMKitService
             Prompt,
             RegenerateResponse,
             GenerateTitle,
-            Translate
         }
     }
 }

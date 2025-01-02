@@ -1,14 +1,14 @@
 ﻿using LMKit.Maestro.Data;
 using LMKit.Maestro.Helpers;
 using LMKit.Maestro.Services;
-using LMKit.Maestro.Tests.Services;
+using Maestro.Tests.Services;
 using LMKit.Maestro.ViewModels;
 using Microsoft.Extensions.Logging;
 using Mopups.Interfaces;
 using Moq;
 using System.Diagnostics;
 
-namespace LMKit.Maestro.Tests
+namespace Maestro.Tests
 {
     internal class MaestroTestsService
     {
@@ -130,9 +130,8 @@ namespace LMKit.Maestro.Tests
         {
             var popupService = new Mock<IPopupService>().Object;
             var mainThread = new Mock<IMainThread>().Object;
-            var appSettingsService = new Mock<IAppSettingsService>().Object;
 
-            return new ConversationViewModel(mainThread, popupService, appSettingsService, lmKitService, database);
+            return new ConversationViewModel(popupService, lmKitService, database);
         }
 
         private static SettingsViewModel GetNewSettingsViewModel(LMKitService lmKitService)

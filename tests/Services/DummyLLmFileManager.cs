@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace LMKit.Maestro.Tests.Services;
+namespace Maestro.Tests.Services;
 
 internal class DummyLLmFileManager : ILLMFileManager
 {

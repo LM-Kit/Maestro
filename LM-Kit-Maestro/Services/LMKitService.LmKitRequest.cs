@@ -10,11 +10,13 @@ public partial class LMKitService : INotifyPropertyChanged
         public CancellationTokenSource CancellationTokenSource { get; }
         public TaskCompletionSource<LMKitResult> ResponseTask { get; } = new TaskCompletionSource<LMKitResult>();
         public object? Parameters { get; }
+        public Conversation Conversation { get; set; }
 
         public LMKitRequestType RequestType { get; }
 
-        public LMKitRequest(LMKitRequestType requestType, object? parameter, int requestTimeout)
+        public LMKitRequest(Conversation conversation, LMKitRequestType requestType, object? parameter, int requestTimeout)
         {
+            Conversation = conversation;
             RequestType = requestType;
             Parameters = parameter;
             CancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(requestTimeout));

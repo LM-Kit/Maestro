@@ -8,7 +8,6 @@ namespace LMKit.Maestro.UI;
 
 public static class UIConstants
 {
-
     public const double ChatWindowLayoutMinimumWidth = 720;
 
     public const double WindowMinimumWidth = 568;

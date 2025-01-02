@@ -11,7 +11,21 @@ public partial class MessageViewModel : ViewModelBase
 {
     public ConversationViewModel ParentConversation { get; }
 
-    public ChatHistory.Message? LMKitMessage { get; }
+    private ChatHistory.Message _lmKitMessage;
+
+    public ChatHistory.Message LMKitMessage
+    {
+        get => _lmKitMessage;
+        set
+        {
+            if (_lmKitMessage != value)
+            {
+                _lmKitMessage = value;
+                _lmKitMessage.PropertyChanged += OnMessagePropertyChanged;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     [ObservableProperty]
     private MessageSender _sender;
@@ -94,7 +108,14 @@ public partial class MessageViewModel : ViewModelBase
         MessageInProgress = !LMKitMessage.IsProcessed;
         Sender = AuthorRoleToMessageSender(LMKitMessage.AuthorRole);
         Content = LMKitMessage.Content;
-        LMKitMessage.PropertyChanged += OnMessagePropertyChanged;
+    }
+
+    public MessageViewModel(ConversationViewModel parentConversation, MessageSender sender, string content = "")
+    {
+        ParentConversation = parentConversation;
+        Sender = sender;
+        Content = content;
+        LMKitMessage = new ChatHistory.Message(sender == MessageSender.User ? AuthorRole.User : AuthorRole.Assistant, content);
     }
 
     [RelayCommand]

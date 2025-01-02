@@ -33,7 +33,7 @@ namespace LMKit.Maestro.ViewModels
             {
                 try
                 {
-                    var result = await _lmKitService.SubmitTranslation(input, OutputLanguage);
+                    var result = await _lmKitService.Translation.Translate(input, OutputLanguage);
                     OnTranslationResult(result);
                 }
                 catch (Exception ex)
