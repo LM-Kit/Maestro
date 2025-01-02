@@ -28,17 +28,4 @@ public partial class LMKitService : INotifyPropertyChanged
             ResponseTask.Task.Wait();
         }
     }
-
-    private sealed partial class PromptRequest
-    {
-        public ManualResetEvent CanBeExecutedSignal { get; } = new ManualResetEvent(false);
-        
-        public CancellationTokenSource CancellationTokenSource { get; }
-        
-        public TaskCompletionSource<LMKitResult> ResponseTask { get; } = new TaskCompletionSource<LMKitResult>();
-
-        public string Prompt { get; }
-
-        public Conversation Conversation { get;  }
-    }
 }

@@ -9,6 +9,7 @@ public partial class LMKitService : INotifyPropertyChanged
 {
     public partial class LMKitChat : INotifyPropertyChanged
     {
+        private readonly SemaphoreSlim _lmKitServiceSemaphore = new SemaphoreSlim(1);
         private readonly RequestSchedule _titleGenerationSchedule = new RequestSchedule();
         private readonly RequestSchedule _requestSchedule = new RequestSchedule();
 
@@ -16,9 +17,10 @@ public partial class LMKitService : INotifyPropertyChanged
 
         private readonly LMKitConfig _config;
 
-        public LMKitChat(LMKitConfig config)
+        public LMKitChat(LMKitConfig config, SemaphoreSlim lmKitServiceSemaphore)
         {
             _config = config;
+            _lmKitServiceSemaphore = lmKitServiceSemaphore;
         }
 
         public async Task<LMKitResult> SubmitPrompt(Conversation conversation, string prompt)
@@ -104,6 +106,8 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
+                _lmKitServiceSemaphore.Wait();
+
                 if (request.CancellationTokenSource.IsCancellationRequested)
                 {
                     result = new LMKitResult()
@@ -137,7 +141,7 @@ public partial class LMKitService : INotifyPropertyChanged
             }
             finally
             {
-                //_lmKitServiceSemaphore.Release();
+                _lmKitServiceSemaphore.Release();
 
                 if (_requestSchedule.Contains(request))
                 {
@@ -153,6 +157,7 @@ public partial class LMKitService : INotifyPropertyChanged
             try
             {
                 _requestSchedule.RunningPromptRequest = request;
+                _lmKitServiceSemaphore.Release();
 
                 var result = new LMKitResult();
 

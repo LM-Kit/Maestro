@@ -211,6 +211,8 @@ public class LMKitServiceTests
 
         conversation1.SubmitPrompt(testService.LMKitService, "bonjour");
 
+        await Task.Delay(50);
+
         bool unloadingSuccess = await testService.UnloadModel();
         Assert.True(unloadingSuccess);
 

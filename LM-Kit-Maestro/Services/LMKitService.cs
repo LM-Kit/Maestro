@@ -48,7 +48,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public LMKitService()
     {
-        Chat = new LMKitChat(LMKitConfig);
+        Chat = new LMKitChat(LMKitConfig, _lmKitServiceSemaphore);
         Translation = new LMKitTranslation(LMKitConfig);
     }
 
