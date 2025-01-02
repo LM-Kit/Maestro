@@ -1,7 +1,7 @@
 ﻿@inject IClipboardHandler ClipboardHandler
 
 <div id="translation-container">
-    <div id="translation-header">
+    <div id="translation-header" class="translation-grid">
 
         <div class="language-select">
             <MudSelect Label="Input language" @bind-Value="TranslationViewModel.InputLanguage">
@@ -37,6 +37,7 @@
         </div> *@
 
         @* <IconButton Style="IconButton.IconButtonStyle.Square" Icon="fa-arrow-right-arrow-left" OnClick="OnCopyResultButtonClicked" /> *@
+        <div class="vertical-separator"></div>
 
         <div class="language-select">
             <MudSelect Label="Output language" @bind-Value="TranslationViewModel.OutputLanguage">
@@ -48,7 +49,9 @@
         </div>
     </div>
 
-    <div id="translation-body">
+    <div class="horizontal-separator"/>
+
+    <div id="translation-body" class="translation-grid">
         <div id="translation-input">
             <InputBox @bind-InputText="TranslationViewModel.InputText" />
         </div>
