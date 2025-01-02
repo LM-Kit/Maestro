@@ -13,11 +13,11 @@ namespace LMKit.Maestro.Tests.Services
             Conversation = new LMKitService.Conversation(lmKitService);
         }
 
-        public void SubmitPrompt(LMKitService lmKitService, string prompt)
+        public async Task SubmitPrompt(LMKitService lmKitService, string prompt)
         {
             LMKitService.LMKitResult? promptResult = null;
 
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 try
                 {
@@ -29,6 +29,8 @@ namespace LMKit.Maestro.Tests.Services
                     PromptResultTask.SetResult(null);
                 }
             });
+
+            await Task.Delay(50);
         }
     }
 }

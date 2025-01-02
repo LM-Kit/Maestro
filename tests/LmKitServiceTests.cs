@@ -64,7 +64,7 @@ public class LMKitServiceTests
     {
         MaestroTestsService testService = new();
 
-        testService.LMKitService.LMKitConfig.SystemPrompt = "You are a very angry chatbot and starts all your replies with 'ARGH'";
+        testService.LMKitService.LMKitConfig.SystemPrompt = "you are a nice bot";
         bool loadingSuccess = await testService.LoadModel();
         Assert.True(loadingSuccess);
 
@@ -187,10 +187,9 @@ public class LMKitServiceTests
         LMKitDummyConversation conversation1 = new(testService.LMKitService);
         LMKitDummyConversation conversation2 = new(testService.LMKitService);
 
-        conversation1.SubmitPrompt(testService.LMKitService, "bonjour");
-        conversation2.SubmitPrompt(testService.LMKitService, "chaleureuses salutations");
+        await conversation1.SubmitPrompt(testService.LMKitService, "bonjour");
+        await conversation2.SubmitPrompt(testService.LMKitService, "chaleureuses salutations");
 
-        await Task.Delay(50);
         bool unloadingSuccess = await testService.UnloadModel();
         Assert.True(unloadingSuccess);
 
@@ -210,8 +209,7 @@ public class LMKitServiceTests
 
         LMKitDummyConversation conversation1 = new(testService.LMKitService);
 
-        conversation1.SubmitPrompt(testService.LMKitService, "bonjour");
-
+        await conversation1.SubmitPrompt(testService.LMKitService, "bonjour");
 
         bool unloadingSuccess = await testService.UnloadModel();
         Assert.True(unloadingSuccess);

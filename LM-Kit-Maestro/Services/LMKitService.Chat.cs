@@ -38,7 +38,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         public void CancelAllPrompts()
         {
-            if (_requestSchedule.Count > 1)
+            if (_requestSchedule.Count > 0)
             {
                 if (_requestSchedule.RunningPromptRequest != null)
                 {
