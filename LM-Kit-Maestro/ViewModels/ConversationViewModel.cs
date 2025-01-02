@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using LMKit.Maestro.Data;
 using LMKit.Maestro.Services;
+using Microsoft.UI.Xaml.Controls;
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -16,7 +17,8 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
     public LMKitService.Conversation LMKitConversation { get; private set; }
 
-
+    private MessageViewModel? _pendingPrompt;
+    private MessageViewModel? _pendingResponse;
     private bool _isSynchedWithLog = true;
 
     [ObservableProperty]
@@ -232,10 +234,16 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
     private void OnNewlySubmittedPrompt()
     {
+        _pendingPrompt = new MessageViewModel(this, MessageSender.User, InputText);
+        _pendingResponse = new MessageViewModel(this, MessageSender.Assistant) { MessageInProgress = true };
+        Messages.Add(_pendingPrompt);
+        Messages.Add(_pendingResponse);
+
         InputText = string.Empty;
         UsedDifferentModel &= false;
         LatestPromptStatus = LMKitRequestStatus.OK;
         AwaitingResponse = true;
+
     }
 
     private void OnTextGenerationResult(LMKitService.LMKitResult? result, Exception? exception = null)
@@ -250,7 +258,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
         var textGenerationResult = result?.Result is TextGenerationResult ? (TextGenerationResult)result.Result : null;
 
-        TextGenerationCompleted?.Invoke(this, 
+        TextGenerationCompleted?.Invoke(this,
             new TextGenerationCompletedEventArgs(result?.Result is TextGenerationResult ? (TextGenerationResult)result.Result : null,
             exception ?? (result?.Exception), result?.Status));
 
@@ -263,6 +271,14 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
     protected override async Task HandleCancel(bool shouldAwaitTermination)
     {
+        if (_pendingResponse != null)
+        {
+            _pendingResponse.MessageInProgress = false;
+            _pendingResponse.Status = LMKitRequestStatus.Cancelled;
+            _pendingPrompt = null;
+            _pendingPrompt = null;
+        }
+
         await _lmKitService.Chat.CancelPrompt(LMKitConversation, shouldAwaitTermination);
     }
 
@@ -291,7 +307,22 @@ public partial class ConversationViewModel : AssistantViewModelBase
         {
             foreach (var item in e.NewItems!)
             {
-                Messages.Add(new MessageViewModel(this, (ChatHistory.Message)item));
+                var message = (ChatHistory.Message)item;
+
+                if (message.AuthorRole == AuthorRole.User && _pendingPrompt != null)
+                {
+                    _pendingPrompt.LMKitMessage = message;
+                    _pendingPrompt = null;
+                }
+                else if (message.AuthorRole == AuthorRole.Assistant && _pendingResponse != null)
+                {
+                    _pendingResponse.LMKitMessage = message;
+                    _pendingResponse = null;
+                }
+                else
+                {
+                    Messages.Add(new MessageViewModel(this, message));
+                }
             }
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
