@@ -2,6 +2,7 @@
 using Maestro.Tests.Services;
 using LMKit.TextGeneration.Chat;
 using LMKit.Maestro.Models;
+using Microsoft.Maui.Media;
 
 namespace Maestro.Tests;
 
@@ -183,7 +184,7 @@ public class ChatTests
         TestsHelpers.AssertConversationPromptSuccessState(testConversation);
 
         var title = await testConversation.TitleGenerationTask.Task;
-        Assert.False(string.IsNullOrEmpty(title));
+        Assert.False(string.IsNullOrEmpty(title) || title == LMKit.Maestro.UI.Locales.UntitledChat);
     }
 
     [Fact]

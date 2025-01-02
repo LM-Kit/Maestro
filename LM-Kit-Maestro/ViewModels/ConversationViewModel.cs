@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using LMKit.Maestro.Data;
 using LMKit.Maestro.Services;
+using LMKit.Maestro.UI;
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -90,7 +91,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
     public EventHandler? DatabaseSaveOperationCompleted;
     public EventHandler? DatabaseSaveOperationFailed;
 
-    public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database) : this(popupService, lmKitService, database, new ConversationLog("Untitled conversation"))
+    public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database) : this(popupService, lmKitService, database, new ConversationLog(Locales.UntitledChat))
     {
     }
 
@@ -345,7 +346,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
     private void OnConversationSummaryTitleGenerated(object? sender, EventArgs e)
     {
-        if (Title == "Untitled conversation")
+        if (Title == Locales.UntitledChat)
         {
             Title = LMKitConversation.GeneratedTitleSummary!;
         }
