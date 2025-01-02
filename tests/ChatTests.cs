@@ -1,5 +1,5 @@
-﻿using LMKit.Maestro.Tests;
-using LMKit.Maestro.Tests.Services;
+﻿using Maestro.Tests;
+using Maestro.Tests.Services;
 using LMKit.TextGeneration.Chat;
 using LMKit.Maestro.Models;
 
@@ -30,7 +30,7 @@ public class ChatTests
         var conversationLog = savedConversations[0];
         Assert.NotNull(conversationLog.ChatHistoryData);
         var chatHistory = ChatHistory.Deserialize(conversationLog.ChatHistoryData);
-        Assert.Equal(2, CountUserAndAssistantMessages(chatHistory));
+        Assert.Equal(2, TestsHelpers.CountUserAndAssistantMessages(chatHistory));
     }
 
     [Fact]
@@ -47,8 +47,8 @@ public class ChatTests
 
         // Adding a delay before requesting model unload:
         // If we are unloading the model right after sending the request, we don't expect the conversation log to be saved in the database:
-        // If the prompt request was cancelled before arriving until Lm-Kit library, the ChatHistory instance is not touched
-        // -> in such scenario we simply update the UI to show the message was cancelled but its content is never restored in between sessions.
+        // If the prompt request was cancelled before reaching LM-Kit, the ChatHistory instance is not touched
+        // -> in such scenario we simply update the UI to show the message was cancelled but its content is not saved in the db.
         await Task.Delay(500);
         bool unloadingSuccess = await testService.UnloadModel();
         Assert.True(unloadingSuccess);
@@ -64,7 +64,7 @@ public class ChatTests
         var conversationLog = savedConversations[0];
         Assert.NotNull(conversationLog.ChatHistoryData);
         var chatHistory = ChatHistory.Deserialize(conversationLog.ChatHistoryData);
-        Assert.Equal(2, CountUserAndAssistantMessages(chatHistory));
+        Assert.Equal(2, TestsHelpers.CountUserAndAssistantMessages(chatHistory));
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public class ChatTests
         var conversationLog = savedConversations[0];
         Assert.NotNull(conversationLog.ChatHistoryData);
         var chatHistory = ChatHistory.Deserialize(conversationLog.ChatHistoryData);
-        Assert.Equal(4, CountUserAndAssistantMessages(chatHistory));
+        Assert.Equal(4, TestsHelpers.CountUserAndAssistantMessages(chatHistory));
 
         var lastMessage = chatHistory.Messages.Last();
         Assert.Equal(AuthorRole.Assistant, lastMessage.AuthorRole);
@@ -255,20 +255,5 @@ public class ChatTests
         testConversation.ConversationViewModel.RegenerateResponseCommand.Execute(lastMessageViewModel);
         await testConversation.PromptResultTask.Task;
         TestsHelpers.AssertConversationPromptSuccessState(testConversation);
-    }
-
-    private static int CountUserAndAssistantMessages(ChatHistory chatHistory)
-    {
-        int count = 0;
-
-        foreach (var message in chatHistory.Messages)
-        {
-            if (message.AuthorRole == AuthorRole.Assistant || message.AuthorRole == AuthorRole.User)
-            {
-                count++;
-            }
-        }
-
-        return count;
     }
 }

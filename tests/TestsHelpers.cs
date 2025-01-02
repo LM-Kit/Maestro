@@ -1,9 +1,10 @@
 ﻿using LMKit.Maestro.Services;
-using LMKit.Maestro.Tests.Services;
+using Maestro.Tests.Services;
+using LMKit.TextGeneration.Chat;
 using System.Reflection;
 using System.Text;
 
-namespace LMKit.Maestro.Tests;
+namespace Maestro.Tests;
 
 internal static class TestsHelpers
 {
@@ -40,11 +41,26 @@ internal static class TestsHelpers
         Assert.False(testConversation.ConversationViewModel.AwaitingResponse);
     }
 
+    public static int CountUserAndAssistantMessages(ChatHistory chatHistory)
+    {
+        int count = 0;
+
+        foreach (var message in chatHistory.Messages)
+        {
+            if (message.AuthorRole == AuthorRole.Assistant || message.AuthorRole == AuthorRole.User)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
     public static byte[] GetTestChatHistoryData()
     {
         var assembly = Assembly.GetExecutingAssembly();
 
-        using (Stream chatHistoryStream = assembly!.GetManifestResourceStream("Maestro.Tests.ChatHistorySerialized.txt")!)
+        using (Stream chatHistoryStream = assembly!.GetManifestResourceStream("Maestro.Tests.Resources.chat-history.txt")!)
         using (StreamReader reader = new(chatHistoryStream))
         {
             string result = reader.ReadToEnd();

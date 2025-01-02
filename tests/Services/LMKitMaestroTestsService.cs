@@ -1,14 +1,14 @@
 ﻿using LMKit.Maestro.Data;
 using LMKit.Maestro.Helpers;
 using LMKit.Maestro.Services;
-using LMKit.Maestro.Tests.Services;
+using Maestro.Tests.Services;
 using LMKit.Maestro.ViewModels;
 using Microsoft.Extensions.Logging;
 using Mopups.Interfaces;
 using Moq;
 using System.Diagnostics;
 
-namespace LMKit.Maestro.Tests
+namespace Maestro.Tests
 {
     internal class MaestroTestsService
     {

@@ -1,6 +1,6 @@
-﻿using LMKit.Maestro.Tests.Services;
+﻿using Maestro.Tests.Services;
 
-namespace LMKit.Maestro.Tests;
+namespace Maestro.Tests;
 
 [Collection("Maestro Tests")]
 public class ChatPageViewModelTests

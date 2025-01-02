@@ -1,6 +1,6 @@
 ﻿using LMKit.Maestro.Services;
 
-namespace LMKit.Maestro.Tests.Services
+namespace Maestro.Tests.Services
 {
     internal class LMKitDummyConversation
     {

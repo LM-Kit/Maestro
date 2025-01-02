@@ -1,6 +1,7 @@
-﻿using LMKit.Maestro.ViewModels;
+﻿using LMKit.Maestro.Services;
+using LMKit.Maestro.ViewModels;
 
-namespace LMKit.Maestro.Tests.Services;
+namespace Maestro.Tests.Services;
 
 internal sealed class ConversationViewModelWrapper
 {
@@ -30,7 +31,7 @@ internal sealed class ConversationViewModelWrapper
     {
         var conversationViewModel = (ConversationViewModel)sender!;
 
-        if (e.Exception != null || e.Status != Maestro.Services.LMKitRequestStatus.OK)
+        if (e.Exception != null || e.Status != LMKitRequestStatus.OK)
         {
             PromptResultTask.SetResult(false);
         }

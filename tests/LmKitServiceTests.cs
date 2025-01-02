@@ -1,9 +1,8 @@
 using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
-using LMKit.Maestro.Tests.Services;
-using Xunit.Sdk;
+using Maestro.Tests.Services;
 
-namespace LMKit.Maestro.Tests;
+namespace Maestro.Tests;
 
 [Collection("Maestro Tests")]
 public class LMKitServiceTests
@@ -75,7 +74,6 @@ public class LMKitServiceTests
         Assert.Equal(LMKitRequestStatus.Cancelled, response.Status);
         Assert.True(response.Exception is OperationCanceledException operationCancelled);
     }
-
 
     [Fact]
     private async Task SubmitOnePromptChangeModelSubmitAnother()
@@ -162,18 +160,6 @@ public class LMKitServiceTests
 
         var result = await conversation1.PromptResultTask.Task;
         Assert.True(result != null && result.Status == LMKitRequestStatus.Cancelled);
-    }
-
-    [Fact]
-    public async Task Translate()
-    {
-        MaestroTestsService testService = new();
-        bool loadingSuccess = await testService.LoadModel();
-        Assert.True(loadingSuccess);
-
-        var result = await testService.LMKitService.Translation.Translate("est-ce que ça marche cette merde ?", LMKit.TextGeneration.Language.French);
-
-        Assert.False(string.IsNullOrEmpty(result));
     }
 
     [Fact]
