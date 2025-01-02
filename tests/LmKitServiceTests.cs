@@ -42,7 +42,7 @@ public class LMKitServiceTests
 
 
     [Fact]
-    private async Task Submit1Unload()
+    private async Task UnloadDuringResponse()
     {
         MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
@@ -57,6 +57,29 @@ public class LMKitServiceTests
 
         var result = await conversation1.PromptResultTask.Task;
         Assert.True(result != null && result.Status == LMKitRequestStatus.Cancelled);
+    }
+
+    [Fact]
+    public async Task UnloadDuringTitleGeneration()
+    {
+        MaestroTestsService testService = new();
+        bool loadingSuccess = await testService.LoadModel();
+        Assert.True(loadingSuccess);
+
+        var conversation = testService.GetNewConversationViewModel();
+        conversation.ConversationViewModel.InputText = "1+1";
+        conversation.ConversationViewModel.Submit();
+
+        await conversation.PromptResultTask.Task;
+        TestsHelpers.AssertConversationPromptSuccessState(conversation);
+
+        // Delay the call to Unload so that it happens while the title is being generated.
+        await Task.Delay(500);
+        bool modelUnloaded = await testService.UnloadModel();
+        Assert.True(modelUnloaded);
+
+        var title1 = await conversation.TitleGenerationTask.Task;
+        Assert.False(string.IsNullOrEmpty(title1));
     }
 
     [Fact]

@@ -9,7 +9,7 @@ namespace Maestro.Tests;
 public class ChatTests
 {
     [Fact]
-    public async Task SubmittedPromptAndResponseArePersisted()
+    public async Task MessagesArePersisted()
     {
         MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
@@ -34,7 +34,7 @@ public class ChatTests
     }
 
     [Fact]
-    public async Task MessageCorrectlyPersistedWhenUnloadingModelDuringGeneration()
+    public async Task MessagePersistedOnModelUnload()
     {
         MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
@@ -68,7 +68,7 @@ public class ChatTests
     }
 
     [Fact]
-    public async Task ChatHistoryIsRestored()
+    public async Task MessagesArePersistedAndRestored()
     {
         MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
@@ -213,28 +213,7 @@ public class ChatTests
         Assert.False(string.IsNullOrEmpty(title2));
     }
 
-    [Fact]
-    public async Task UnloadDuringTitleGeneration()
-    {
-        MaestroTestsService testService = new();
-        bool loadingSuccess = await testService.LoadModel();
-        Assert.True(loadingSuccess);
 
-        var conversation = testService.GetNewConversationViewModel();
-        conversation.ConversationViewModel.InputText = "1+1";
-        conversation.ConversationViewModel.Submit();
-
-        await conversation.PromptResultTask.Task;
-        TestsHelpers.AssertConversationPromptSuccessState(conversation);
-
-        // Delay the call to Unload so that it happens while the title is being generated.
-        await Task.Delay(500);
-        bool modelUnloaded = await testService.UnloadModel();
-        Assert.True(modelUnloaded);
-
-        var title1 = await conversation.TitleGenerationTask.Task;
-        Assert.False(string.IsNullOrEmpty(title1));
-    }
 
     [Fact]
     public async Task RegeneratesResponse()
