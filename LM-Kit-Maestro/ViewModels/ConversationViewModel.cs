@@ -128,12 +128,12 @@ public partial class ConversationViewModel : AssistantViewModelBase
                     }
                 }
 
+                SetLastAssistantMessage();
+
                 if (ConversationLog.LastUsedModel != null)
                 {
                     LastUsedModel = new Uri(ConversationLog.LastUsedModel);
                 }
-
-                SetLastAssistantMessage();
             }
         }
         catch (Exception)
@@ -204,26 +204,18 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
     private void SetLastAssistantMessage()
     {
-        try
+        var lastAssistantMessages = Messages.Where(message => message.Sender == MessageSender.Assistant).ToList();
+
+        lastAssistantMessages = lastAssistantMessages.Skip(Math.Max(lastAssistantMessages.Count - 2, 0)).ToList();
+
+        if (lastAssistantMessages.Count > 0)
         {
-            var lastAssistantMessages = Messages.Where(message => message.Sender == MessageSender.Assistant).ToList();
+            lastAssistantMessages[lastAssistantMessages.Count - 1].IsLastAssistantMessage = true;
 
-            lastAssistantMessages = lastAssistantMessages.Skip(Math.Max(lastAssistantMessages.Count - 2, 0)).ToList();
-
-            if (lastAssistantMessages.Count > 0)
+            if (lastAssistantMessages.Count == 2)
             {
-                lastAssistantMessages[lastAssistantMessages.Count - 1].IsLastAssistantMessage = true;
-
-                if (lastAssistantMessages.Count == 2)
-                {
-                    lastAssistantMessages[0].IsLastAssistantMessage = false;
-                }
-
+                lastAssistantMessages[0].IsLastAssistantMessage = false;
             }
-        }
-        catch (Exception)
-        {
-
         }
     }
 
