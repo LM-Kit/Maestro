@@ -72,6 +72,6 @@ public class ChatPageViewModelTests
             Assert.Fail("The response generation was not cancelled within less than 1 sec");
         }
 
-        MaestroTestsHelpers.AssertConversationPromptCancelledState(conversation);
+        TestsHelpers.AssertConversationPromptCancelledState(conversation);
     }
 }
