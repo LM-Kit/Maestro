@@ -2,7 +2,24 @@
 
 <div id="translation-container">
     <div id="translation-header">
+
         <div class="language-select">
+            <MudSelect Label="Input language" @bind-Value="TranslationViewModel.InputLanguage">
+                @foreach (var language in Enum.GetValues<Language>())
+                {
+                    if (language == Language.Undefined)
+                    {
+                        <MudSelectItem Value="@language">Automatically detect</MudSelectItem>
+                    }
+                    else
+                    {
+                        <MudSelectItem Value="@language">@language</MudSelectItem>
+                    }
+                }
+            </MudSelect>
+        </div>
+
+        @*         <div class="language-select">
             <label for="input-language">Input language:</label>
             <select id="input-language" @bind="TranslationViewModel.InputLanguage">
                 @foreach (var language in Enum.GetValues<Language>())
@@ -17,18 +34,17 @@
                     }
                 }
             </select>
-        </div>
+        </div> *@
 
         @* <IconButton Style="IconButton.IconButtonStyle.Square" Icon="fa-arrow-right-arrow-left" OnClick="OnCopyResultButtonClicked" /> *@
 
         <div class="language-select">
-            <label for="output-language">Output language:</label>
-            <select id="output-language" @bind="TranslationViewModel.OutputLanguage">
+            <MudSelect Label="Output language" @bind-Value="TranslationViewModel.OutputLanguage">
                 @foreach (var language in Enum.GetValues<Language>().Skip(1))
                 {
-                    <option value="@language">@language</option>
+                    <MudSelectItem Value="@language">@language</MudSelectItem>
                 }
-            </select>
+            </MudSelect>
         </div>
     </div>
 

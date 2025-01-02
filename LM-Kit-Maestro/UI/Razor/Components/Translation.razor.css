@@ -27,12 +27,11 @@
 }
 
 #translation-header {
-    display: flex;
-    border-bottom: 1px solid var(--OutlineVariant);
-    justify-content: space-between;
+    display: inline-grid;
     align-items: center;
     padding-block: 20px;
     padding-inline: 10px;
+    grid-template-columns: 1fr 1fr;
 }
 
 #translation-body {
@@ -44,4 +43,10 @@
     width: 1px;
     background-color: var(--OutlineVariant);
     height: 100%;
+}
+
+.language-select {
+    margin-inline: 8px;
+    min-width: 180px;
+    display: inline-block;
 }
