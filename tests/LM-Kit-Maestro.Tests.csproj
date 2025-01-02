@@ -31,7 +31,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="ChatHistorySerialized.txt" />
+		<EmbeddedResource Include="Resources\chat-history.txt" />
 	</ItemGroup>
 
 	<ItemGroup>

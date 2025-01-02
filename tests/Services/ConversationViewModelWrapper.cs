@@ -1,6 +1,8 @@
-﻿using LMKit.Maestro.ViewModels;
+﻿using LMKit.Maestro.Services;
+using LMKit.Maestro.ViewModels;
+using System.Diagnostics;
 
-namespace LMKit.Maestro.Tests.Services;
+namespace Maestro.Tests.Services;
 
 internal sealed class ConversationViewModelWrapper
 {
@@ -30,12 +32,14 @@ internal sealed class ConversationViewModelWrapper
     {
         var conversationViewModel = (ConversationViewModel)sender!;
 
-        if (e.Exception != null || e.Status != Maestro.Services.LMKitRequestStatus.OK)
+        if (e.Exception != null || e.Status != LMKitRequestStatus.OK)
         {
+            Trace.Write("Text generation failed: " + e.Exception?.Message);
             PromptResultTask.SetResult(false);
         }
         else
         {
+            Trace.Write("Text generation completed successfully");
             PromptResultTask.SetResult(true);
         }
     }

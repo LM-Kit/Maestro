@@ -24,7 +24,7 @@
             <div class="message-footerContent small-text @(MessageViewModel.Sender == MessageSender.User ? "user-message-footer-content" : "")">
                 @if (MessageViewModel.GetResponseCount() > 1)
                 {
-                    <button title="@TooltipLabels.PreviousGeneratedResponse" @onclick="OnPreviousResponseButtonClicked"
+                    <button title="@Locales.PreviousGeneratedResponse" @onclick="OnPreviousResponseButtonClicked"
                             class="chat-action-button ">
                         <i class="small-icon fas fa-chevron-left"/>
                     </button>
@@ -33,13 +33,13 @@
                         @($"{responseIndex + 1} / {MessageViewModel.GetResponseCount()}")
                     </span>
 
-                    <button title="@TooltipLabels.NextGeneratedResponse" @onclick="OnNextResponseButtonClicked"
+                    <button title="@Locales.NextGeneratedResponse" @onclick="OnNextResponseButtonClicked"
                             class="chat-action-button">
                         <i class="small-icon fas fa-chevron-right" />
                     </button>
                 }
 
-                <button title="@TooltipLabels.CopyMessage" @onclick="OnCopyMessageButtonClicked"
+                <button title="@Locales.CopyMessage" @onclick="OnCopyMessageButtonClicked"
                         class="chat-action-button">
                     <i class="small-icon fas @(MessageJustCopied ? "fa-check" : "fa-copy")" />
                 </button>
@@ -48,7 +48,7 @@
                 {
                     if (MessageViewModel.IsLastAssistantMessage)
                     {
-                        <button title="@TooltipLabels.RegenerateResponse" @onclick="OnRegenerateResponseButtonClicked"
+                        <button title="@Locales.RegenerateResponse" @onclick="OnRegenerateResponseButtonClicked"
                                 class="chat-action-button">
                             <i class="small-icon fas fa-rotate" />
                         </button>

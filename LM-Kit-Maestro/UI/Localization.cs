@@ -1,8 +1,9 @@
 ﻿namespace LMKit.Maestro.UI
 {
-    internal static class TooltipLabels //todo: rename to Locales.
+    public static class Locales
     {
         //todo: Implement support for multiple languages, including translation management and locale detection.
+        public const string UntitledChat = "Untitled chat";
         public const string RegenerateResponse = "Regenerate response";
         public const string PreviousGeneratedResponse = "Previous generated response";
         public const string NextGeneratedResponse = "Next generated response";

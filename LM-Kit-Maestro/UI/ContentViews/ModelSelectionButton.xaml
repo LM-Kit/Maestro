@@ -23,7 +23,7 @@
                 <Setter Property="HorizontalOptions" Value="Center"/>
                 <Setter Property="CornerRadius" Value="12"/>
                 <Setter Property="Padding" Value="0"/>
-                <Setter Property="ToolTipProperties.Text" Value="{x:Static ui:TooltipLabels.EjectModel}"/>
+                <Setter Property="ToolTipProperties.Text" Value="{x:Static ui:Locales.EjectModel}"/>
                 <Setter Property="TextColor" Value="{StaticResource Primary}"/>
                 <Setter Property="FontFamily" Value="Material"/>
                 <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />

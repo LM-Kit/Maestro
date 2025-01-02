@@ -56,11 +56,11 @@ public partial class ModelSelectionButton : ContentView
         {
             if (modelLoadingProgressedEventArgs.Progress == 1)
             {
-                LoadingText = TooltipLabels.FinishingUp; // had to set this text directly in code-behind because DataTrigger with MultiBinding did not work.
+                LoadingText = Locales.FinishingUp; // had to set this text directly in code-behind because DataTrigger with MultiBinding did not work.
             }
             else
             {
-                LoadingText = TooltipLabels.LoadingModel;
+                LoadingText = Locales.LoadingModel;
             }
         }
     }
@@ -71,7 +71,7 @@ public partial class ModelSelectionButton : ContentView
 
         if (modelDownloadingProgressedEventArgs != null)
         {
-            string caption = TooltipLabels.DownloadingModel;
+            string caption = Locales.DownloadingModel;
             
             if(modelDownloadingProgressedEventArgs.ContentLength != null)
             {
@@ -94,7 +94,7 @@ public partial class ModelSelectionButton : ContentView
     private void OnModelLoadingCompleted(object? sender, LMKitService.NotifyModelStateChangedEventArgs notifyModelStateChangedEventArgs)
     {
         // Resetting default loading label.
-        LoadingText = TooltipLabels.LoadingModel;
+        LoadingText = Locales.LoadingModel;
     }
 
     private void OnEjectModelButtonClicked(object sender, EventArgs e)

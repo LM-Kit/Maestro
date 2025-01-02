@@ -67,7 +67,7 @@ namespace LMKit.Maestro.ViewModels
 
             foreach (var conversation in conversations)
             {
-                ConversationViewModel conversationViewModel = new ConversationViewModel(_mainThread, _popupService, _appSettingsService, _lmKitService, _database, conversation);
+                ConversationViewModel conversationViewModel = new ConversationViewModel(_popupService, _lmKitService, _database, conversation);
 
                 if (conversation.ChatHistoryData != null)
                 {
@@ -83,7 +83,7 @@ namespace LMKit.Maestro.ViewModels
 
             if (Conversations.Count == 0)
             {
-                Conversations.Add(new ConversationViewModel(_mainThread, _popupService, _appSettingsService, _lmKitService, _database));
+                Conversations.Add(new ConversationViewModel(_popupService, _lmKitService, _database));
             }
 
             CurrentConversation = Conversations.First();
@@ -91,7 +91,7 @@ namespace LMKit.Maestro.ViewModels
 
         public void AddNewConversation()
         {
-            var newConversation = new ConversationViewModel(_mainThread, _popupService, _appSettingsService, _lmKitService, _database);
+            var newConversation = new ConversationViewModel(_popupService, _lmKitService, _database);
             Conversations.Insert(0, newConversation);
             CurrentConversation = newConversation;
         }
