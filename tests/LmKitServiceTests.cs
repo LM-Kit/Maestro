@@ -1,6 +1,7 @@
 using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
 using LMKit.Maestro.Tests.Services;
+using Xunit.Sdk;
 
 namespace LMKit.Maestro.Tests;
 
@@ -227,6 +228,24 @@ public class LMKitServiceTests
         var result = await testService.LMKitService.Translation.Translate("est-ce que ça marche cette merde ?", LMKit.TextGeneration.Language.French);
 
         Assert.False(string.IsNullOrEmpty(result));
+    }
+
+    [Fact]
+    private async Task RegenerateResponse()
+    {
+        MaestroTestsService testService = new();
+        bool loadingSuccess = await testService.LoadModel();
+        Assert.True(loadingSuccess);
+
+        var conversation = testService.GetNewLMKitConversation();
+
+        var response = await testService.LMKitService.Chat.SubmitPrompt(conversation, "1+1");
+        MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
+
+        var lastMessage = conversation.ChatHistory!.Messages.Last();
+        response = await testService.LMKitService.Chat.RegenerateResponse(conversation, lastMessage!);
+
+        MaestroTestsHelpers.AssertPromptResponseIsSuccessful(response);
     }
 
     [Fact]

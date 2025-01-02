@@ -7,7 +7,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using LMKit.Maestro.Data;
 using LMKit.Maestro.Services;
-using Microsoft.UI.Xaml.Controls;
 
 namespace LMKit.Maestro.ViewModels;
 

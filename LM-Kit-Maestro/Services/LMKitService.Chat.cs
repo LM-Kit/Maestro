@@ -23,9 +23,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         public async Task<LMKitResult> SubmitPrompt(Conversation conversation, string prompt)
         {
-            var promptRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.Prompt,
-                new LMKitRequest.PromptRequestParameters(conversation, prompt),
-                _config.RequestTimeout)
+            var promptRequest = new LMKitRequest(conversation, LMKitRequest.LMKitRequestType.Prompt, prompt, _config.RequestTimeout)
             {
                 Conversation = conversation
             };
@@ -78,8 +76,12 @@ public partial class LMKitService : INotifyPropertyChanged
 
         public async Task<LMKitResult> RegenerateResponse(Conversation conversation, ChatHistory.Message message)
         {
-            var regenerateResponseRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.RegenerateResponse,
-                new LMKitRequest.RegenerateResponseParameters(conversation, message), _config.RequestTimeout);
+            var regenerateResponseRequest = new LMKitRequest(conversation,
+                LMKitRequest.LMKitRequestType.RegenerateResponse,
+                message, _config.RequestTimeout)
+            {
+                Conversation = conversation
+            };
 
             ScheduleRequest(regenerateResponseRequest);
 
@@ -156,8 +158,14 @@ public partial class LMKitService : INotifyPropertyChanged
 
                 try
                 {
-                    result.Result = await _multiTurnConversation!.SubmitAsync(((LMKitRequest.PromptRequestParameters)request.Parameters!).Prompt,
-                        request.CancellationTokenSource.Token);
+                    if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt)
+                    {
+                        result.Result = await _multiTurnConversation!.SubmitAsync((string)request.Parameters!, request.CancellationTokenSource.Token);
+                    }
+                    else if (request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
+                    {
+                        result.Result = await _multiTurnConversation!.RegenerateResponseAsync(request.CancellationTokenSource.Token);
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -173,8 +181,7 @@ public partial class LMKitService : INotifyPropertyChanged
                     }
                 }
 
-                request.Conversation.ChatHistory = _multiTurnConversation.ChatHistory;
-
+                request.Conversation.ChatHistory = _multiTurnConversation!.ChatHistory;
                 request.Conversation.LatestChatHistoryData = _multiTurnConversation.ChatHistory.Serialize();
 
                 if (request.Conversation.GeneratedTitleSummary == null &&
@@ -202,9 +209,8 @@ public partial class LMKitService : INotifyPropertyChanged
 
         private void GenerateConversationSummaryTitle(Conversation conversation)
         {
-            string firstMessage = conversation.ChatHistory.Messages.First(message => message.AuthorRole == AuthorRole.User).Content;
-            LMKitRequest titleGenerationRequest = new LMKitRequest(LMKitRequest.LMKitRequestType.GenerateTitle,
-                new LMKitRequest.PromptRequestParameters(conversation, firstMessage), 60);
+            string firstMessage = conversation.ChatHistory!.Messages.First(message => message.AuthorRole == AuthorRole.User).Content;
+            LMKitRequest titleGenerationRequest = new LMKitRequest(conversation, LMKitRequest.LMKitRequestType.GenerateTitle, firstMessage, 60);
 
             _titleGenerationSchedule.Schedule(titleGenerationRequest);
 
