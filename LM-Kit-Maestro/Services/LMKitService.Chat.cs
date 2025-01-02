@@ -2,6 +2,7 @@
 using LMKit.TextGeneration.Chat;
 using LMKit.Translation;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace LMKit.Maestro.Services;
 
@@ -37,15 +38,19 @@ public partial class LMKitService : INotifyPropertyChanged
 
         public void CancelAllPrompts()
         {
-            if (_requestSchedule.RunningPromptRequest != null && !_requestSchedule.RunningPromptRequest.CancellationTokenSource.IsCancellationRequested)
+            if (_requestSchedule.Count > 1)
             {
-                _requestSchedule.RunningPromptRequest.CancelAndAwaitTermination();
+                if (_requestSchedule.RunningPromptRequest != null)
+                {
+                    _requestSchedule.RunningPromptRequest.CancelAndAwaitTermination();
+                }
+
+                while (_requestSchedule.Next != null)
+                {
+                    _requestSchedule.Next!.CancelAndAwaitTermination();
+                }
             }
-            else if (_requestSchedule.Count > 1)
-            {
-                // A prompt is scheduled, but it is not running.
-                _requestSchedule.Next!.CancelAndAwaitTermination();
-            }
+          
 
             if (_titleGenerationSchedule.RunningPromptRequest != null && !_titleGenerationSchedule.RunningPromptRequest.CancellationTokenSource.IsCancellationRequested)
             {
