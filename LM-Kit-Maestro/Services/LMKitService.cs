@@ -13,14 +13,7 @@ namespace LMKit.Maestro.Services;
 /// </summary>
 public partial class LMKitService : INotifyPropertyChanged
 {
-    private readonly SemaphoreSlim _lmKitServiceSemaphore = new SemaphoreSlim(1);
-
-    private static Uri? _currentlyLoadingModelUri;
-    private static Conversation? _lastConversationUsed = null;
-    private static LM? _model;
-    private static MultiTurnConversation? _multiTurnConversation;
-
-    private LMKitServiceState _state;
+    private readonly LMKitServiceState _state;
 
     public LMKitConfig LMKitConfig => _state.Config;
 
@@ -37,16 +30,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public delegate void NotifyModelStateChangedEventHandler(object? sender, NotifyModelStateChangedEventArgs notifyModelStateChangedEventArgs);
 
-    private LMKitModelLoadingState _modelLoadingState;
-    public LMKitModelLoadingState ModelLoadingState
-    {
-        get => _modelLoadingState;
-        set
-        {
-            _modelLoadingState = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ModelLoadingState)));
-        }
-    }
+    public LMKitModelLoadingState ModelLoadingState => _state.ModelLoadingState;
 
     public LMKitService()
     {
@@ -57,14 +41,14 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public void LoadModel(Uri fileUri, string? localFilePath = null)
     {
-        if (_model != null)
+        if (_state.Model != null)
         {
             UnloadModel();
         }
 
-        _lmKitServiceSemaphore.Wait();
-        _currentlyLoadingModelUri = fileUri;
-        ModelLoadingState = LMKitModelLoadingState.Loading;
+        _state.Semaphore.Wait();
+        _state.ModelUri = fileUri;
+        _state.ModelLoadingState = LMKitModelLoadingState.Loading;
 
         var modelLoadingTask = new Task(() =>
         {
@@ -72,7 +56,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                _model = new LM(fileUri, downloadingProgress: OnModelDownloadingProgressed, loadingProgress: OnModelLoadingProgressed);
+                _state.Model = new LM(fileUri, downloadingProgress: OnModelDownloadingProgressed, loadingProgress: OnModelLoadingProgressed);
 
                 modelLoadingSuccess = true;
             }
@@ -83,8 +67,8 @@ public partial class LMKitService : INotifyPropertyChanged
             }
             finally
             {
-                _currentlyLoadingModelUri = null;
-                _lmKitServiceSemaphore.Release();
+                _state.ModelUri = null;
+                _state.Semaphore.Release();
             }
 
             if (modelLoadingSuccess)
@@ -92,11 +76,11 @@ public partial class LMKitService : INotifyPropertyChanged
                 LMKitConfig.LoadedModelUri = fileUri!;
 
                 ModelLoaded?.Invoke(this, new NotifyModelStateChangedEventArgs(LMKitConfig.LoadedModelUri));
-                ModelLoadingState = LMKitModelLoadingState.Loaded;
+                _state.ModelLoadingState = LMKitModelLoadingState.Loaded;
             }
             else
             {
-                ModelLoadingState = LMKitModelLoadingState.Unloaded;
+                _state.ModelLoadingState = LMKitModelLoadingState.Unloaded;
             }
 
         });
@@ -109,27 +93,27 @@ public partial class LMKitService : INotifyPropertyChanged
         // Ensuring we don't clean things up while a model is already being loaded,
         // or while the currently loaded model instance should not be touched
         // (while we are getting Lm-Kit objects ready to process a newly submitted prompt for instance).
-        _lmKitServiceSemaphore.Wait();
+        _state.Semaphore.Wait();
 
         var unloadedModelUri = LMKitConfig.LoadedModelUri!;
 
         Chat.CancelAllPrompts();
 
-        if (_multiTurnConversation != null)
+        //if (_multiTurnConversation != null)
+        //{
+        //    _multiTurnConversation.Dispose();
+        //    _multiTurnConversation = null;
+        //}
+
+        if (_state.Model != null)
         {
-            _multiTurnConversation.Dispose();
-            _multiTurnConversation = null;
+            _state.Model.Dispose();
+            _state.Model = null;
         }
 
-        if (_model != null)
-        {
-            _model.Dispose();
-            _model = null;
-        }
+        _state.Semaphore.Release();
 
-        _lmKitServiceSemaphore.Release();
-
-        ModelLoadingState = LMKitModelLoadingState.Unloaded;
+        _state.ModelLoadingState = LMKitModelLoadingState.Unloaded;
         LMKitConfig.LoadedModelUri = null;
 
         ModelUnloaded?.Invoke(this, new NotifyModelStateChangedEventArgs(unloadedModelUri));
@@ -139,14 +123,14 @@ public partial class LMKitService : INotifyPropertyChanged
 
     private bool OnModelLoadingProgressed(float progress)
     {
-        ModelLoadingProgressed?.Invoke(this, new ModelLoadingProgressedEventArgs(_currentlyLoadingModelUri!, progress));
+        ModelLoadingProgressed?.Invoke(this, new ModelLoadingProgressedEventArgs(_state.ModelUri!, progress));
 
         return true;
     }
 
     private bool OnModelDownloadingProgressed(string path, long? contentLength, long bytesRead)
     {
-        ModelDownloadingProgressed?.Invoke(this, new ModelDownloadingProgressedEventArgs(_currentlyLoadingModelUri!, path, contentLength, bytesRead));
+        ModelDownloadingProgressed?.Invoke(this, new ModelDownloadingProgressedEventArgs(_state.ModelUri!, path, contentLength, bytesRead));
 
         return true;
     }

@@ -19,6 +19,9 @@ public partial class LMKitService : INotifyPropertyChanged
 
         private readonly LMKitServiceState _state;
 
+        private MultiTurnConversation? _multiTurnConversation;
+        private Conversation? _lastConversationUsed;
+
         public LMKitChat(LMKitServiceState state)
         {
             _state = state;
@@ -233,7 +236,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             Task.Run(async () =>
             {
-                Summarizer summarizer = new Summarizer(_model)
+                Summarizer summarizer = new Summarizer(_state.Model)
                 {
                     MaximumContextLength = 512,
                     GenerateContent = false,
@@ -282,9 +285,9 @@ public partial class LMKitService : INotifyPropertyChanged
 
                 if (shouldUseCurrentChatHistory || shouldDeserializeChatHistoryData)
                 {
-                    ChatHistory? chatHistory = shouldUseCurrentChatHistory ? conversation.ChatHistory : ChatHistory.Deserialize(conversation.LatestChatHistoryData, _model);
+                    ChatHistory? chatHistory = shouldUseCurrentChatHistory ? conversation.ChatHistory : ChatHistory.Deserialize(conversation.LatestChatHistoryData, _state.Model);
 
-                    _multiTurnConversation = new MultiTurnConversation(_model, chatHistory, _state.Config.ContextSize)
+                    _multiTurnConversation = new MultiTurnConversation(_state.Model, chatHistory, _state.Config.ContextSize)
                     {
                         SamplingMode = GetTokenSampling(_state.Config),
                         MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
@@ -292,7 +295,7 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
                 else
                 {
-                    _multiTurnConversation = new MultiTurnConversation(_model, _state.Config.ContextSize)
+                    _multiTurnConversation = new MultiTurnConversation(_state.Model, _state.Config.ContextSize)
                     {
                         SamplingMode = GetTokenSampling(_state.Config),
                         MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
