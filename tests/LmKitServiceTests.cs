@@ -16,7 +16,7 @@ public class LMKitServiceTests
     }
 
     [Fact]
-    public async Task LoadUnloadLoadAnother()
+    public async Task LoadUnload()
     {
         MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model1);
@@ -30,7 +30,7 @@ public class LMKitServiceTests
     }
 
     [Fact]
-    public async Task LoadThenLoadAnother()
+    public async Task Load2Models()
     {
         MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model1);
@@ -38,6 +38,25 @@ public class LMKitServiceTests
 
         loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
         Assert.True(loadingSuccess);
+    }
+
+
+    [Fact]
+    private async Task Submit1Unload()
+    {
+        MaestroTestsService testService = new();
+        bool loadingSuccess = await testService.LoadModel();
+        Assert.True(loadingSuccess);
+
+        LMKitDummyConversation conversation1 = new(testService.LMKitService);
+
+        await conversation1.SubmitPrompt(testService.LMKitService, "bonjour");
+
+        bool unloadingSuccess = await testService.UnloadModel();
+        Assert.True(unloadingSuccess);
+
+        var result = await conversation1.PromptResultTask.Task;
+        Assert.True(result != null && result.Status == LMKitRequestStatus.Cancelled);
     }
 
     [Fact]
@@ -76,7 +95,7 @@ public class LMKitServiceTests
     }
 
     [Fact]
-    private async Task SubmitOnePromptChangeModelSubmitAnother()
+    private async Task Submit1ChangeModelSubmit1()
     {
         MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model1);
@@ -97,7 +116,7 @@ public class LMKitServiceTests
     // This test does not wait for the first submitted prompt's result to be obtained.
     // The first prompt operation should be cancelled right after the model change request is received.
     [Fact]
-    private async Task SubmitOnePromptChangeModelSubmitAnother2()
+    private async Task Submit1ChangeModelSubmit1_NoAwaiting()
     {
         MaestroTestsService testService = new();
         testService.LMKitService.LMKitConfig.RequestTimeout = 30;
@@ -122,7 +141,7 @@ public class LMKitServiceTests
     }
 
     [Fact]
-    private async Task Submit2PromptsFromDistinctConversationsThenUnloadModel()
+    private async Task Submit2From2ChatsUnload()
     {
         MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
@@ -145,25 +164,7 @@ public class LMKitServiceTests
     }
 
     [Fact]
-    private async Task SubmitOnePromptThenUnloadModel()
-    {
-        MaestroTestsService testService = new();
-        bool loadingSuccess = await testService.LoadModel();
-        Assert.True(loadingSuccess);
-
-        LMKitDummyConversation conversation1 = new(testService.LMKitService);
-
-        await conversation1.SubmitPrompt(testService.LMKitService, "bonjour");
-
-        bool unloadingSuccess = await testService.UnloadModel();
-        Assert.True(unloadingSuccess);
-
-        var result = await conversation1.PromptResultTask.Task;
-        Assert.True(result != null && result.Status == LMKitRequestStatus.Cancelled);
-    }
-
-    [Fact]
-    private async Task RegenerateResponse()
+    private async Task RegenerateSubmittedPrompt()
     {
         MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
@@ -181,7 +182,7 @@ public class LMKitServiceTests
     }
 
     [Fact]
-    public async Task RegenerateResponseRestoredChatHistory()
+    public async Task RegeneratRestoredPrompt()
     {
         MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();

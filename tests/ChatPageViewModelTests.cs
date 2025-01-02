@@ -6,7 +6,7 @@ namespace Maestro.Tests;
 public class ChatPageViewModelTests
 {
     [Fact]
-    public void AddNewConversation()
+    public void StartNewConversation()
     {
         var testService = new MaestroTestsService();
         var chatPageViewModel = testService.ChatPageViewModel;
@@ -39,11 +39,10 @@ public class ChatPageViewModelTests
     }
 
     [Fact]
-    public async Task DeleteConversationWhileGeneratingResponse()
+    public async Task DeleteConversationDuringResponse()
     {
         var testService = new MaestroTestsService();
 
-        testService.LMKitService.LMKitConfig.RequestTimeout = 60;
         var chatPageViewModel = testService.ChatPageViewModel;
 
         bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
