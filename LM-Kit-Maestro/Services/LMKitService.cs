@@ -40,13 +40,13 @@ public partial class LMKitService
 
     public void LoadModel(Uri fileUri, string? localFilePath = null)
     {
-        if (_state.Model != null)
+        if (_state.LoadedModel != null)
         {
             UnloadModel();
         }
 
         _state.Semaphore.Wait();
-        _state.ModelUri = fileUri;
+        _state.LoadedModelUri = fileUri;
         _state.ModelLoadingState = LMKitModelLoadingState.Loading;
 
         var modelLoadingTask = new Task(() =>
@@ -55,7 +55,7 @@ public partial class LMKitService
 
             try
             {
-                _state.Model = new LM(fileUri, downloadingProgress: OnModelDownloadingProgressed, loadingProgress: OnModelLoadingProgressed);
+                _state.LoadedModel = new LM(fileUri, downloadingProgress: OnModelDownloadingProgressed, loadingProgress: OnModelLoadingProgressed);
 
                 modelLoadingSuccess = true;
             }
@@ -66,7 +66,7 @@ public partial class LMKitService
             }
             finally
             {
-                _state.ModelUri = null;
+                _state.LoadedModelUri = null;
                 _state.Semaphore.Release();
             }
 
@@ -96,18 +96,12 @@ public partial class LMKitService
 
         var unloadedModelUri = LMKitConfig.LoadedModelUri!;
 
-        Chat.CancelAllPrompts();
+        Chat.TerminateChatService();
 
-        //if (_multiTurnConversation != null)
-        //{
-        //    _multiTurnConversation.Dispose();
-        //    _multiTurnConversation = null;
-        //}
-
-        if (_state.Model != null)
+        if (_state.LoadedModel != null)
         {
-            _state.Model.Dispose();
-            _state.Model = null;
+            _state.LoadedModel.Dispose();
+            _state.LoadedModel = null;
         }
 
         _state.Semaphore.Release();
@@ -122,14 +116,14 @@ public partial class LMKitService
 
     private bool OnModelLoadingProgressed(float progress)
     {
-        ModelLoadingProgressed?.Invoke(this, new ModelLoadingProgressedEventArgs(_state.ModelUri!, progress));
+        ModelLoadingProgressed?.Invoke(this, new ModelLoadingProgressedEventArgs(_state.LoadedModelUri!, progress));
 
         return true;
     }
 
     private bool OnModelDownloadingProgressed(string path, long? contentLength, long bytesRead)
     {
-        ModelDownloadingProgressed?.Invoke(this, new ModelDownloadingProgressedEventArgs(_state.ModelUri!, path, contentLength, bytesRead));
+        ModelDownloadingProgressed?.Invoke(this, new ModelDownloadingProgressedEventArgs(_state.LoadedModelUri!, path, contentLength, bytesRead));
 
         return true;
     }

@@ -11,9 +11,9 @@ public partial class LMKitService
         
         public SemaphoreSlim Semaphore { get; } = new SemaphoreSlim(1);
         
-        public LM? Model { get; set; }
+        public LM? LoadedModel { get; internal set; }
         
-        public Uri? ModelUri { get; set; }
+        public Uri? LoadedModelUri { get; internal set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -21,7 +21,7 @@ public partial class LMKitService
         public LMKitModelLoadingState ModelLoadingState
         {
             get => _modelLoadingState;
-            set
+            internal set
             {
                 _modelLoadingState = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ModelLoadingState)));

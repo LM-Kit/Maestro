@@ -1,9 +1,6 @@
-﻿using LMKit.Model;
-using LMKit.TextGeneration;
+﻿using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
-using LMKit.Translation;
 using System.ComponentModel;
-using System.Diagnostics;
 
 namespace LMKit.Maestro.Services;
 
@@ -37,7 +34,7 @@ public partial class LMKitService
             return await HandlePrompt(promptRequest);
         }
 
-        public void CancelAllPrompts()
+        public void TerminateChatService()
         {
             if (_requestSchedule.Count > 0)
             {
@@ -52,7 +49,6 @@ public partial class LMKitService
                 }
             }
 
-
             if (_titleGenerationSchedule.RunningPromptRequest != null && !_titleGenerationSchedule.RunningPromptRequest.CancellationTokenSource.IsCancellationRequested)
             {
                 _titleGenerationSchedule.RunningPromptRequest.CancelAndAwaitTermination();
@@ -60,6 +56,12 @@ public partial class LMKitService
             else if (_titleGenerationSchedule.Count > 1)
             {
                 _titleGenerationSchedule.Next!.CancelAndAwaitTermination();
+            }
+
+            if (_multiTurnConversation != null)
+            {
+                _multiTurnConversation.Dispose();
+                _multiTurnConversation = null;
             }
         }
 
@@ -231,7 +233,7 @@ public partial class LMKitService
 
             Task.Run(async () =>
             {
-                Summarizer summarizer = new Summarizer(_state.Model)
+                Summarizer summarizer = new Summarizer(_state.LoadedModel)
                 {
                     MaximumContextLength = 512,
                     GenerateContent = false,
@@ -280,9 +282,9 @@ public partial class LMKitService
 
                 if (shouldUseCurrentChatHistory || shouldDeserializeChatHistoryData)
                 {
-                    ChatHistory? chatHistory = shouldUseCurrentChatHistory ? conversation.ChatHistory : ChatHistory.Deserialize(conversation.LatestChatHistoryData, _state.Model);
+                    ChatHistory? chatHistory = shouldUseCurrentChatHistory ? conversation.ChatHistory : ChatHistory.Deserialize(conversation.LatestChatHistoryData, _state.LoadedModel);
 
-                    _multiTurnConversation = new MultiTurnConversation(_state.Model, chatHistory, _state.Config.ContextSize)
+                    _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, chatHistory, _state.Config.ContextSize)
                     {
                         SamplingMode = GetTokenSampling(_state.Config),
                         MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
@@ -290,7 +292,7 @@ public partial class LMKitService
                 }
                 else
                 {
-                    _multiTurnConversation = new MultiTurnConversation(_state.Model, _state.Config.ContextSize)
+                    _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, _state.Config.ContextSize)
                     {
                         SamplingMode = GetTokenSampling(_state.Config),
                         MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
