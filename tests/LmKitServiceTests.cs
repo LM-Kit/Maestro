@@ -205,7 +205,7 @@ public class LMKitServiceTests
     }
 
     [Fact]
-    public async Task RegeneratRestoredPrompt()
+    public async Task RegenerateRestoredPrompt()
     {
         MaestroTestsService testService = new();
         bool loadingSuccess = await testService.LoadModel();
