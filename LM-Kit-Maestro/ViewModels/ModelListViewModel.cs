@@ -20,12 +20,14 @@ namespace LMKit.Maestro.ViewModels
 
         public ObservableCollection<ModelInfoViewModel> Models { get; }
 
-
         [ObservableProperty]
-        private double _loadingProgress;
+        private double? _loadingProgress;
 
         [ObservableProperty]
         private bool _modelLoadingIsFinishingUp;
+
+        [ObservableProperty]
+        private bool _modelIsLoading;
 
         [ObservableProperty]
         private bool _modelIsDownloading;
@@ -259,6 +261,9 @@ namespace LMKit.Maestro.ViewModels
 
                 ModelIsDownloading = false;
             }
+
+
+            ModelIsLoading = LoadingProgress !=  1;
             LoadingProgress = loadingEventArgs.Progress;
             ModelLoadingIsFinishingUp = LoadingProgress == 1;
         }
@@ -277,6 +282,8 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnModelLoadingFailed(object? sender, EventArgs e)
         {
+            ModelIsLoading = false;
+            LoadingProgress = null;
             SelectedModel = null;
         }
     }

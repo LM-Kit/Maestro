@@ -15,9 +15,6 @@
         public const string EjectModel = "Eject model";
         public const string SelectAnotherFolder = "Select another folder";
         public const string OpenInFileExplorer = "Open in File Explorer";
-        public const string DownloadingModel = "Downloading model...";
-        public const string LoadingModel = "Loading model...";
-        public const string FinishingUp = "Finishing up...";
         public const string ChatbotPurpose = "Chatbot purpose";
         public const string MaxCompletionTokens = "Maximum completion tokens";
         public const string RequestTimeout = "Request timeout";
@@ -32,5 +29,10 @@
         public const string DisplayLowPerformingModels = "Show All Models (Including Low Performance)";
         public const string NoModelYetAvailable = "It looks like you don't have any model yet.";
         public const string ModelFilesWillAppearHere = "Model files added to your model folder will appear here.";
+
+        public const string SelectModel = "Select a model to load";
+        public const string DownloadingModel = "Downloading model";
+        public const string LoadingModel = "Loading model";
+        public const string FinishingUp = "Finishing up";
     }
 }

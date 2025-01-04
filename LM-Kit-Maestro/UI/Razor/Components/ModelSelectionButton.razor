@@ -1,0 +1,52 @@
+﻿@inject LMKitService LMKitService
+
+<div>
+    <MudText Typo="Typo.subtitle1">@Text</MudText>
+
+    @if (ModelListViewModel.ModelIsLoading && ModelListViewModel.LoadingProgress != null)
+    {
+        <MudProgressLinear Color="Color.Primary" Value="@ModelListViewModel.LoadingProgress.Value" Class="my-7" />
+    })
+</div>
+
+@code {
+    [Parameter] 
+    public ModelListViewModel ModelListViewModel{ get; set; }
+
+
+    private string _text = Locales.SelectModel;
+
+
+    private string Text
+    {
+        get => _text;
+        set
+        {
+            if (_text != value)
+            {
+                _text = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        ModelListViewModel.PropertyChanged += OnModelListViewModelPropertyChanged;
+    }
+
+    private void OnModelListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ModelListViewModel.LMKitService.ModelLoadingState))
+        {
+            Text = ModelListViewModel.SelectedModel?.Name;
+        }
+    }
+
+    private void OnModelSelectionButtonHovered(MouseEventArgs e) { /* Handle hover */ }
+    private void OnModelSelectionButtonHoveredExited(MouseEventArgs e) { /* Handle hover exit */ }
+    private void OnModelSelectionButtonClicked(MouseEventArgs e) { /* Handle click */ }
+    private void OnEjectModelButtonClicked(MouseEventArgs e) { /* Handle eject button click */ }
+}

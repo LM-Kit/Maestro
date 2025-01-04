@@ -11,7 +11,7 @@ namespace LMKit.Maestro.Services;
 /// This service is intended to be used as a singleton via Dependency Injection. 
 /// Please register with <c>services.AddSingleton&lt;LMKitService&gt;()</c>.
 /// </summary>
-public partial class LMKitService
+public partial class LMKitService : INotifyPropertyChanged
 {
     private readonly LMKitServiceState _state;
 
@@ -21,15 +21,39 @@ public partial class LMKitService
 
     public LMKitChat Chat { get; }
 
+    public LMKitModelLoadingState ModelLoadingState
+    {
+        get => _state.ModelLoadingState;
+        set
+        {
+            _state.ModelLoadingState = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ModelLoadingState)));
+        }
+    }
+
+    public Uri? LoadedModelUri
+    {
+        get => _state.LoadedModelUri;
+        set
+        {
+            if (_state.LoadedModelUri != value)
+            {
+                _state.LoadedModelUri = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LoadedModelUri)));
+            }
+        }
+    }
+
     public event NotifyModelStateChangedEventHandler? ModelLoadingProgressed;
     public event NotifyModelStateChangedEventHandler? ModelDownloadingProgressed;
     public event NotifyModelStateChangedEventHandler? ModelLoaded;
     public event NotifyModelStateChangedEventHandler? ModelLoadingFailed;
     public event NotifyModelStateChangedEventHandler? ModelUnloaded;
 
+    public event PropertyChangedEventHandler? PropertyChanged;
+
     public delegate void NotifyModelStateChangedEventHandler(object? sender, NotifyModelStateChangedEventArgs notifyModelStateChangedEventArgs);
 
-    public LMKitModelLoadingState ModelLoadingState => _state.ModelLoadingState;
 
     public LMKitService()
     {

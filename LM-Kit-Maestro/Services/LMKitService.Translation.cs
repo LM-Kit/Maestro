@@ -7,13 +7,9 @@ namespace LMKit.Maestro.Services;
 
 public partial class LMKitService
 {
-    public partial class LMKitTranslation : INotifyPropertyChanged
+    public partial class LMKitTranslation
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-
         private readonly LMKitServiceState _state;
-
 
         public LMKitTranslation(LMKitServiceState state)
         {
