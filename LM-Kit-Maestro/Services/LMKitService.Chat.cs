@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace LMKit.Maestro.Services;
 
-public partial class LMKitService : INotifyPropertyChanged
+public partial class LMKitService
 {
     public partial class LMKitChat : INotifyPropertyChanged
     {

@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
 
-public partial class LMKitService : INotifyPropertyChanged
+public partial class LMKitService
 {
     public partial class LMKitServiceState : INotifyPropertyChanged
     {

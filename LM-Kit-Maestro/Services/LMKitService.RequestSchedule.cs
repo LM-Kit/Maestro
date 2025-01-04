@@ -2,7 +2,7 @@
 
 namespace LMKit.Maestro.Services;
 
-public partial class LMKitService : INotifyPropertyChanged
+public partial class LMKitService
 {
     private sealed class RequestSchedule
     {
