@@ -8,7 +8,7 @@ namespace LMKit.Maestro.ViewModels
     public partial class AssistantsPageViewModel : PageViewModelBase
     {
         [ObservableProperty]
-        private TranslationViewModel _currentTranslation;
+        private TranslationViewModel _translationViewModel;
 
         public ModelListViewModel ModelListViewModel { get; }
 
@@ -16,8 +16,7 @@ namespace LMKit.Maestro.ViewModels
 
         public AssistantsPageViewModel(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation, ModelListViewModel modelListViewModel, LMKitService lMKitService) : base(navigationService, popupService, popupNavigation)
         {
-            _currentTranslation = new TranslationViewModel(popupService, lMKitService);
-
+            TranslationViewModel = new TranslationViewModel(popupService, lMKitService);
             ModelListViewModel = modelListViewModel;
             LMKitService = lMKitService;
         }
