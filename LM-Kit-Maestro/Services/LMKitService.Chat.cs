@@ -29,10 +29,8 @@ public partial class LMKitService
 
         public async Task<LMKitResult> SubmitPrompt(Conversation conversation, string prompt)
         {
-            var promptRequest = new LMKitRequest(conversation, LMKitRequest.LMKitRequestType.Prompt, prompt, _state.Config.RequestTimeout)
-            {
-                Conversation = conversation
-            };
+            var promptRequest = new ChatRequest(conversation, ChatRequest.ChatRequestType.Prompt,
+                prompt, _state.Config.RequestTimeout);
 
             ScheduleRequest(promptRequest);
 
@@ -53,7 +51,7 @@ public partial class LMKitService
                     _requestSchedule.Next!.CancelAndAwaitTermination();
                 }
             }
-          
+
 
             if (_titleGenerationSchedule.RunningPromptRequest != null && !_titleGenerationSchedule.RunningPromptRequest.CancellationTokenSource.IsCancellationRequested)
             {
@@ -86,19 +84,16 @@ public partial class LMKitService
 
         public async Task<LMKitResult> RegenerateResponse(Conversation conversation, ChatHistory.Message message)
         {
-            var regenerateResponseRequest = new LMKitRequest(conversation,
-                LMKitRequest.LMKitRequestType.RegenerateResponse,
-                message, _state.Config.RequestTimeout)
-            {
-                Conversation = conversation
-            };
+            var regenerateResponseRequest = new ChatRequest(conversation,
+                ChatRequest.ChatRequestType.RegenerateResponse,
+                message, _state.Config.RequestTimeout);
 
             ScheduleRequest(regenerateResponseRequest);
 
             return await HandlePrompt(regenerateResponseRequest);
         }
 
-        private void ScheduleRequest(LMKitRequest request)
+        private void ScheduleRequest(ChatRequest request)
         {
             _requestSchedule.Schedule(request);
 
@@ -108,7 +103,7 @@ public partial class LMKitService
             }
         }
 
-        private async Task<LMKitResult> HandlePrompt(LMKitRequest request)
+        private async Task<LMKitResult> HandlePrompt(ChatRequest request)
         {
             LMKitResult result;
 
@@ -160,7 +155,7 @@ public partial class LMKitService
             return result;
         }
 
-        private async Task<LMKitResult> SubmitPrompt(LMKitRequest request)
+        private async Task<LMKitResult> SubmitPrompt(ChatRequest request)
         {
             try
             {
@@ -171,11 +166,11 @@ public partial class LMKitService
 
                 try
                 {
-                    if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt)
+                    if (request.RequestType == ChatRequest.ChatRequestType.Prompt)
                     {
                         result.Result = await _multiTurnConversation!.SubmitAsync((string)request.Parameters!, request.CancellationTokenSource.Token);
                     }
-                    else if (request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
+                    else if (request.RequestType == ChatRequest.ChatRequestType.RegenerateResponse)
                     {
                         result.Result = await _multiTurnConversation!.RegenerateResponseAsync(request.CancellationTokenSource.Token);
                     }
@@ -223,7 +218,7 @@ public partial class LMKitService
         private void GenerateConversationSummaryTitle(Conversation conversation)
         {
             string firstMessage = conversation.ChatHistory!.Messages.First(message => message.AuthorRole == AuthorRole.User).Content;
-            LMKitRequest titleGenerationRequest = new LMKitRequest(conversation, LMKitRequest.LMKitRequestType.GenerateTitle, firstMessage, 60);
+            ChatRequest titleGenerationRequest = new ChatRequest(conversation, ChatRequest.ChatRequestType.GenerateTitle, firstMessage, 60);
 
             _titleGenerationSchedule.Schedule(titleGenerationRequest);
 
