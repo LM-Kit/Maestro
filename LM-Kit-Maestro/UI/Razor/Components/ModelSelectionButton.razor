@@ -3,15 +3,15 @@
 <div>
     <MudText Typo="Typo.subtitle1">@Text</MudText>
 
-    @if (ModelListViewModel.ModelIsLoading && ModelListViewModel.LoadingProgress != null)
+    @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading && ModelListViewModel.LoadingProgress != null)
     {
         <MudProgressLinear Color="Color.Primary" Value="@ModelListViewModel.LoadingProgress.Value" Class="my-7" />
     })
 </div>
 
 @code {
-    [Parameter] 
-    public ModelListViewModel ModelListViewModel{ get; set; }
+    [Parameter]
+    public ModelListViewModel ModelListViewModel { get; set; }
 
 
     private string _text = Locales.SelectModel;
@@ -34,19 +34,37 @@
     {
         base.OnParametersSet();
 
+        Text = GetModelStateText(ModelListViewModel);
         ModelListViewModel.PropertyChanged += OnModelListViewModelPropertyChanged;
     }
 
     private void OnModelListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ModelListViewModel.LMKitService.ModelLoadingState))
+        if (e.PropertyName == nameof(ModelListViewModel.ModelLoadingState))
         {
-            Text = ModelListViewModel.SelectedModel?.Name;
+            Text = GetModelStateText(ModelListViewModel);
         }
     }
 
-    private void OnModelSelectionButtonHovered(MouseEventArgs e) { /* Handle hover */ }
-    private void OnModelSelectionButtonHoveredExited(MouseEventArgs e) { /* Handle hover exit */ }
-    private void OnModelSelectionButtonClicked(MouseEventArgs e) { /* Handle click */ }
-    private void OnEjectModelButtonClicked(MouseEventArgs e) { /* Handle eject button click */ }
+    private static string GetModelStateText(ModelListViewModel modelListViewModel)
+    {
+        switch (modelListViewModel.LoadingState)
+        {
+            default:
+            case ModelListViewModel.ModelLoadingState.NotLoaded:
+                return Locales.SelectModel;
+
+            case ModelListViewModel.ModelLoadingState.Loaded:
+                return modelListViewModel.SelectedModel!.Name;
+
+            case ModelListViewModel.ModelLoadingState.Loading:
+                return Locales.LoadingModel;
+
+            case ModelListViewModel.ModelLoadingState.FinishinUp:
+                return Locales.FinishingUp;
+
+            case ModelListViewModel.ModelLoadingState.Downloading:
+                return Locales.DownloadingModel;
+        }
+    }
 }

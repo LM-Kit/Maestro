@@ -21,17 +21,10 @@ namespace LMKit.Maestro.ViewModels
         public ObservableCollection<ModelInfoViewModel> Models { get; }
 
         [ObservableProperty]
+        public ModelLoadingState _loadingState;
+
+        [ObservableProperty]
         private double? _loadingProgress;
-
-        [ObservableProperty]
-        private bool _modelLoadingIsFinishingUp;
-
-        [ObservableProperty]
-        private bool _modelIsLoading;
-
-        [ObservableProperty]
-        private bool _modelIsDownloading;
-
 
         private ModelInfoViewModel? _selectedModel;
         public ModelInfoViewModel? SelectedModel
@@ -238,14 +231,14 @@ namespace LMKit.Maestro.ViewModels
         {
             SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri!);
             LoadingProgress = 0;
-            ModelLoadingIsFinishingUp = false;
+            LoadingState = ModelLoadingState.FinishinUp;
         }
 
         private void OnModelLoadingProgressed(object? sender, EventArgs e)
         {
             var loadingEventArgs = (LMKitService.ModelLoadingProgressedEventArgs)e;
 
-            if (ModelIsDownloading)
+            if (LoadingState == ModelLoadingState.Downloading)
             {
                 var modeUri = loadingEventArgs.FileUri;
 
@@ -258,19 +251,15 @@ namespace LMKit.Maestro.ViewModels
                         break;
                     }
                 }
-
-                ModelIsDownloading = false;
             }
 
-
-            ModelIsLoading = LoadingProgress !=  1;
+            LoadingState = LoadingProgress == 1 ? ModelLoadingState.FinishinUp : ModelLoadingState.Loading;
             LoadingProgress = loadingEventArgs.Progress;
-            ModelLoadingIsFinishingUp = LoadingProgress == 1;
         }
 
         private void OnModelDownloadingProgressed(object? sender, EventArgs e)
         {
-            ModelIsDownloading = true;
+            LoadingState = ModelLoadingState.Downloading;
 
             var downloadingEventArgs = (LMKitService.ModelDownloadingProgressedEventArgs)e;
 
@@ -282,7 +271,7 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnModelLoadingFailed(object? sender, EventArgs e)
         {
-            ModelIsLoading = false;
+            LoadingState = ModelLoadingState.NotLoaded;
             LoadingProgress = null;
             SelectedModel = null;
         }

@@ -30,7 +30,7 @@
         public const string NoModelYetAvailable = "It looks like you don't have any model yet.";
         public const string ModelFilesWillAppearHere = "Model files added to your model folder will appear here.";
 
-        public const string SelectModel = "Select a model to load";
+        public const string SelectModel = "Load a model to start";
         public const string DownloadingModel = "Downloading model";
         public const string LoadingModel = "Loading model";
         public const string FinishingUp = "Finishing up";
