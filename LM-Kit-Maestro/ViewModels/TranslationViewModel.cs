@@ -18,6 +18,9 @@ namespace LMKit.Maestro.ViewModels
         [ObservableProperty]
         bool? _lastTranslationIsSuccessful;
 
+        [ObservableProperty]
+        Language? _detectedLanguage;
+
         public EventHandler? TranslationCompleted;
         public EventHandler? TranslationFailed;
 
@@ -25,15 +28,34 @@ namespace LMKit.Maestro.ViewModels
         {
         }
 
-        protected override void HandleSubmit()
+        public void DetectLanguage()
         {
-            string input = InputText;
+            var input = InputText;
 
             Task.Run(async () =>
             {
                 try
                 {
-                    var result = await _lmKitService.Translation.Translate(input, OutputLanguage);
+                    DetectedLanguage = await _lmKitService.Translation.DetectLanguage(input);
+                }
+                catch
+                {
+                    DetectedLanguage = null;
+                }
+            });
+        }
+
+        protected override void HandleSubmit()
+        {
+            var input = InputText;
+            var outputLanguage = OutputLanguage;
+
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var result = await _lmKitService.Translation.Translate(input, outputLanguage);
+
                     OnTranslationResult(result);
                 }
                 catch (Exception ex)
@@ -43,6 +65,11 @@ namespace LMKit.Maestro.ViewModels
 
                 AwaitingResponse = false;
             });
+        }
+
+        public async Task<Language> DetectLanguage(string text)
+        {
+            return await _lmKitService.Translation.DetectLanguage(text);
         }
 
         private void OnTranslationResult(string? result, Exception? exception = null)
@@ -62,8 +89,7 @@ namespace LMKit.Maestro.ViewModels
 
         protected override async Task HandleCancel(bool shouldAwait)
         {
-            //todo
-            await Task.FromException(new NotImplementedException());
+
         }
 
         public sealed class TranslationCompletedEventArgs : EventArgs

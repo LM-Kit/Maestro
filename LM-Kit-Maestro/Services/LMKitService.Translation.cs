@@ -24,9 +24,14 @@ public partial class LMKitService : INotifyPropertyChanged
         {
             var textTranslation = new TextTranslation(_state.Model!);
 
-            var result = await textTranslation.TranslateAsync(translation, outputLanguage);
+           return await textTranslation.TranslateAsync(translation, outputLanguage);
+        }
 
-            return result;
+        public async Task<Language>DetectLanguage(string text)
+        {
+            var textTranslation = new TextTranslation(_state.Model!);
+
+            return await textTranslation.DetectLanguageAsync(text);
         }
     }
 }

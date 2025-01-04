@@ -1,13 +1,4 @@
-﻿#loaderDiv {
-    display: flex;
-    height: 72px;
-    background-color: transparent;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-}
-
-/*         #result:hover {
+﻿/*         #result:hover {
                 background-color: var(--Surface3);
                 } */
 
@@ -61,4 +52,8 @@
 
 .language-select:hover{
     background-color: var(--Surface2);
+}
+
+.loading-content{
+    background-color: red;
 }

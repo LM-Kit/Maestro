@@ -9,7 +9,14 @@
                 {
                     if (language == Language.Undefined)
                     {
-                        <MudSelectItem Value="@language">Automatically detect</MudSelectItem>
+                        if (TranslationViewModel.InputLanguage == Language.Undefined && TranslationViewModel.DetectedLanguage != null)
+                        {
+                            <MudSelectItem Value="@language">@(TranslationViewModel.DetectedLanguage) (detected)</MudSelectItem>
+                        }
+                        else
+                        {
+                            <MudSelectItem Value="@language">Automatically detect</MudSelectItem>
+                        }
                     }
                     else
                     {
@@ -49,7 +56,7 @@
         </div>
     </div>
 
-    <div class="horizontal-separator"/>
+    <div class="horizontal-separator" />
 
     <div id="translation-body" class="translation-grid">
         <div id="translation-input">
@@ -59,6 +66,9 @@
         <div class="vertical-separator"></div>
 
         <div id="translation-output">
+            <div class="loading-content @(!TranslationViewModel.AwaitingResponse ? "hidden" :  "")">
+            </div>
+
             <InputBox @bind-InputText="TranslationViewModel.LatestResult" Readonly="true" />
         </div>
     </div>
@@ -117,7 +127,7 @@
         if (e.PropertyName == nameof(TranslationViewModel.InputText))
         {
             _inputTimer?.Change(Timeout.Infinite, Timeout.Infinite);
-            _inputTimer = new Timer(OnDebounceTimerElapsed, null, 1000, Timeout.Infinite);
+            _inputTimer = new Timer(OnDebounceTimerElapsed, null, 250, Timeout.Infinite);
         }
 
         InvokeAsync(() => StateHasChanged());
@@ -126,6 +136,8 @@
     private void OnDebounceTimerElapsed(object? state)
     {
         _inputTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+
+        TranslationViewModel.DetectLanguage();
         TranslationViewModel.Submit();
     }
 
