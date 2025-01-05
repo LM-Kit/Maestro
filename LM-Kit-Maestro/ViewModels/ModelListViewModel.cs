@@ -56,11 +56,12 @@ namespace LMKit.Maestro.ViewModels
             PopupNavigation = popupNavigation;
             _fileManager.SortedModelCollectionChanged += OnModelCollectionChanged;
             Models = new ObservableCollection<ModelInfoViewModel>();
-
+            
             LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
             LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
             LMKitService.ModelLoadingFailed += OnModelLoadingFailed;
             LMKitService.ModelLoaded += OnModelLoadingCompleted;
+            LMKitService.PropertyChanged += OnLmKitServicePropertyChanged;
         }
 
         public void Initialize()
@@ -274,6 +275,25 @@ namespace LMKit.Maestro.ViewModels
             LoadingState = ModelLoadingState.NotLoaded;
             LoadingProgress = null;
             SelectedModel = null;
+        }
+
+        private void OnLmKitServicePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(LMKitService.ModelLoadingState))
+            {
+                switch (LMKitService.ModelLoadingState)
+                {
+                    case LMKitModelLoadingState.Unloaded:
+                        LoadingState = ModelLoadingState.Loading;
+                        break;
+                    case LMKitModelLoadingState.Loading:
+                        LoadingState = ModelLoadingState.Loading;
+                        break;
+                    case LMKitModelLoadingState.Loaded:
+                        LoadingState = ModelLoadingState.Loaded;
+                        break;
+                }
+            }
         }
     }
 }

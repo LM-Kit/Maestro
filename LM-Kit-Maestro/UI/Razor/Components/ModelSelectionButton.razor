@@ -5,7 +5,9 @@
 
     @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading && ModelListViewModel.LoadingProgress != null)
     {
-        <MudProgressLinear Color="Color.Primary" Value="@ModelListViewModel.LoadingProgress.Value" Class="my-7" />
+        <div>
+            <MudProgressLinear Color="Color.Primary" Value="@ModelListViewModel.LoadingProgress.Value" Class="my-7" />
+        </div>
     }
 </div>
 
@@ -40,7 +42,7 @@
 
     private void OnModelListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ModelListViewModel.ModelLoadingState))
+        if (e.PropertyName == nameof(ModelListViewModel.LoadingState))
         {
             Text = GetModelStateText(ModelListViewModel);
         }

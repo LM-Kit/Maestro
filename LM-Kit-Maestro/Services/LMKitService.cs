@@ -26,8 +26,11 @@ public partial class LMKitService : INotifyPropertyChanged
         get => _state.ModelLoadingState;
         set
         {
-            _state.ModelLoadingState = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ModelLoadingState)));
+            if (_state.ModelLoadingState != value)
+            {
+                _state.ModelLoadingState = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ModelLoadingState)));
+            }
         }
     }
 
@@ -70,8 +73,8 @@ public partial class LMKitService : INotifyPropertyChanged
         }
 
         _state.Semaphore.Wait();
-        _state.LoadedModelUri = fileUri;
-        _state.ModelLoadingState = LMKitModelLoadingState.Loading;
+        LoadedModelUri = fileUri;
+        ModelLoadingState = LMKitModelLoadingState.Loading;
 
         var modelLoadingTask = new Task(() =>
         {
@@ -90,7 +93,7 @@ public partial class LMKitService : INotifyPropertyChanged
             }
             finally
             {
-                _state.LoadedModelUri = null;
+                LoadedModelUri = null;
                 _state.Semaphore.Release();
             }
 
@@ -99,11 +102,11 @@ public partial class LMKitService : INotifyPropertyChanged
                 LMKitConfig.LoadedModelUri = fileUri!;
 
                 ModelLoaded?.Invoke(this, new NotifyModelStateChangedEventArgs(LMKitConfig.LoadedModelUri));
-                _state.ModelLoadingState = LMKitModelLoadingState.Loaded;
+                ModelLoadingState = LMKitModelLoadingState.Loaded;
             }
             else
             {
-                _state.ModelLoadingState = LMKitModelLoadingState.Unloaded;
+                ModelLoadingState = LMKitModelLoadingState.Unloaded;
             }
 
         });
@@ -130,7 +133,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
         _state.Semaphore.Release();
 
-        _state.ModelLoadingState = LMKitModelLoadingState.Unloaded;
+        ModelLoadingState = LMKitModelLoadingState.Unloaded;
         LMKitConfig.LoadedModelUri = null;
 
         ModelUnloaded?.Invoke(this, new NotifyModelStateChangedEventArgs(unloadedModelUri));
