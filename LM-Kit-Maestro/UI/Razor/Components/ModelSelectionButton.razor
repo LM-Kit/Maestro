@@ -1,12 +1,11 @@
 ﻿@inject LMKitService LMKitService
 
 <div class="root-container">
-    <div id="eject-button">
-        <MudIconButton Class="small-icon" Icon="fas fa-eject" Size="Size.Small" Color="Color.Primary" />
-    </div>
-
-    <div id="button-text">
+    <div id="button-body">
+        <MudIconButton Class="eject-button" Icon="fas fa-eject" Size="Size.Small" Color="Color.Primary" />
         <MudText Align="Align.Center" Typo="Typo.caption">@Text</MudText>
+        <MudIconButton Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark" />
+
     </div>
 
     @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading && ModelListViewModel.LoadingProgress != null)
@@ -28,11 +27,20 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        background-color: var(--Surface15);
+        transition: background-color 0.3s;
+        background-color: var(--Surface2);
     }
+
+        .root-container:hover  {
+            background-color: var(--Surface);
+            cursor: pointer;
+        }
 
     #button-body {
         display: flex;
+        width: 100%;
+        margin-inline: 8px;
+        justify-content: space-between;
     }
 
     #button-text {
@@ -51,9 +59,6 @@
 
 
     #eject-button {
-        display: flex;
-        left: 0;
-        margin-left: 20px;
     }
 
     .mud-progress-linear-bar {
@@ -61,7 +66,19 @@
     }
 
     .mud-icon-size-small {
-        font-size: 10px;
+        font-size: 10px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .eject-button {
+        display: flex;
+        align-items: center;
+        background-color: var(--Outline) !important;
+    }
+
+    .eject-button:hover {
     }
 </style>
 
