@@ -4,7 +4,7 @@
     <div id="button-body">
         <MudIconButton Class="eject-button" Icon="fas fa-eject" Size="Size.Small" Color="Color.Primary" />
         <MudText Align="Align.Center" Typo="Typo.caption">@Text</MudText>
-        <MudIconButton Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark" />
+        <MudIconButton id="chevron-icon" Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark" />
 
     </div>
 
@@ -70,15 +70,27 @@
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        padding: 8px !important;
     }
 
     .eject-button {
         display: flex;
         align-items: center;
-        background-color: var(--Outline) !important;
+        background-color: var(--Surface2) !important;
     }
 
     .eject-button:hover {
+            color: var(--Surface) !important;
+            background-color: var(--Surface2) !important;
+        }
+
+        #chevron-icon{
+            color: var(--Outline) !important;
+            background-color: transparent !important;
+        }
+    .root-container:hover #chevron-icon {
+        color: var(--Outline) !important;
+        background-color: transparent !important;
     }
 </style>
 
