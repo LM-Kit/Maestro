@@ -1,31 +1,43 @@
 ﻿@inject LMKitService LMKitService
 
 <div class="root-container">
+    <div id="eject-button">
+        <MudIconButton Class="small-icon" Icon="fas fa-eject" Size="Size.Small" Color="Color.Primary" />
+    </div>
+
     <div id="button-text">
-        <MudText Align="Align.Center" Typo="Typo.subtitle1">@Text</MudText>
+        <MudText Align="Align.Center" Typo="Typo.caption">@Text</MudText>
     </div>
 
     @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading && ModelListViewModel.LoadingProgress != null)
     {
     }
-    <div id="progress-bar">
-        <MudProgressLinear Color="Color.Primary" Value="@ModelListViewModel.LoadingProgress.Value" Class="my-7" />
-    </div>
+    @* ModelListViewModel.LoadingProgress.Value *@
+    @*     <div id="progress-bar">
+        <MudProgressLinear Value="50" />
+    </div> *@
 </div>
 
 <style>
     .root-container {
         width: 100%;
         max-width: 568px;
-        border: 2px solid var(--Primary);
+        border: 1px solid var(--Primary);
         border-radius: 4px;
         height: 48px;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
+        background-color: var(--Surface15);
+    }
+
+    #button-body {
+        display: flex;
     }
 
     #button-text {
         display: flex;
+        position: relative;
         justify-content: center;
         align-items: center;
         width: 100%;
@@ -33,11 +45,23 @@
     }
 
     #progress-bar {
-        position: absolute;
         bottom: 0;
         width: 100%;
-        height: 2px;
-        background-color: var(--Outline);
+    }
+
+
+    #eject-button {
+        display: flex;
+        left: 0;
+        margin-left: 20px;
+    }
+
+    .mud-progress-linear-bar {
+        background-color: var(--Primary) !important;
+    }
+
+    .mud-icon-size-small {
+        font-size: 10px;
     }
 </style>
 
