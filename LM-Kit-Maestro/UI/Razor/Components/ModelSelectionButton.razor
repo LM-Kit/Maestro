@@ -1,15 +1,45 @@
 ﻿@inject LMKitService LMKitService
 
-<div>
-    <MudText Typo="Typo.subtitle1">@Text</MudText>
+<div class="root-container">
+    <div id="button-text">
+        <MudText Align="Align.Center" Typo="Typo.subtitle1">@Text</MudText>
+    </div>
 
     @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading && ModelListViewModel.LoadingProgress != null)
     {
-        <div>
-            <MudProgressLinear Color="Color.Primary" Value="@ModelListViewModel.LoadingProgress.Value" Class="my-7" />
-        </div>
     }
+    <div id="progress-bar">
+        <MudProgressLinear Color="Color.Primary" Value="@ModelListViewModel.LoadingProgress.Value" Class="my-7" />
+    </div>
 </div>
+
+<style>
+    .root-container {
+        width: 100%;
+        max-width: 568px;
+        border: 2px solid var(--Primary);
+        border-radius: 4px;
+        height: 48px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #button-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    #progress-bar {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--Outline);
+    }
+</style>
 
 @code {
     [Parameter]
