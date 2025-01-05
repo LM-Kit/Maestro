@@ -8,7 +8,7 @@
              xmlns:converters="clr-namespace:LMKit.Maestro.Converters"
              xmlns:models="clr-namespace:LMKit.Maestro.Models"
              xmlns:vm="clr-namespace:LMKit.Maestro.ViewModels"
-             xmlns:razor="clr-namespace:LMKit.Maestro.UI.Razor.Components"
+             xmlns:razor="clr-namespace:LMKit.Maestro.UI.Razor"
              xmlns:services="clr-namespace:LMKit.Maestro.Services"
              x:Class="LMKit.Maestro.UI.ChatPage"
              x:DataType="vm:ChatPageViewModel"

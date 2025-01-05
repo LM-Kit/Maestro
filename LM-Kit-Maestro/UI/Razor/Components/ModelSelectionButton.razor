@@ -6,7 +6,7 @@
     @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading && ModelListViewModel.LoadingProgress != null)
     {
         <MudProgressLinear Color="Color.Primary" Value="@ModelListViewModel.LoadingProgress.Value" Class="my-7" />
-    })
+    }
 </div>
 
 @code {
