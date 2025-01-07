@@ -1,155 +1,17 @@
 ﻿@inject LMKitService LMKitService
 
-<div class="root-container">
+<div class="root-container" @onclick="() => OnButtonClicked()">
     <div id="button-body">
-        <MudIconButton Class="eject-button" Icon="fas fa-eject" Size="Size.Small" Color="Color.Primary" />
+        <MudIconButton @onclick="() => OnEjectButtonClicked()" Class="eject-button" Icon="fas fa-eject" Size="Size.Small" Color="Color.Primary"/>
         <MudText Align="Align.Center" Typo="Typo.caption">@Text</MudText>
-        <MudIconButton id="chevron-icon" Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark" />
+        <MudIconButton id="chevron-icon" Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark"/>
 
     </div>
 
     @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading && ModelListViewModel.LoadingProgress != null)
     {
+        <div id="progress-bar">
+            <MudProgressLinear Value="ModelListViewModel.LoadingProgress.Value"/>
+        </div>
     }
-    @* ModelListViewModel.LoadingProgress.Value *@
-    @*     <div id="progress-bar">
-        <MudProgressLinear Value="50" />
-    </div> *@
 </div>
-
-<style>
-    .root-container {
-        width: 100%;
-        max-width: 568px;
-        border: 1px solid var(--Primary);
-        border-radius: 4px;
-        height: 48px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        transition: background-color 0.3s;
-        background-color: var(--Surface2);
-    }
-
-        .root-container:hover  {
-            background-color: var(--Surface);
-            cursor: pointer;
-        }
-
-    #button-body {
-        display: flex;
-        width: 100%;
-        margin-inline: 8px;
-        justify-content: space-between;
-    }
-
-    #button-text {
-        display: flex;
-        position: relative;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-    }
-
-    #progress-bar {
-        bottom: 0;
-        width: 100%;
-    }
-
-
-    #eject-button {
-    }
-
-    .mud-progress-linear-bar {
-        background-color: var(--Primary) !important;
-    }
-
-    .mud-icon-size-small {
-        font-size: 10px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        padding: 8px !important;
-    }
-
-    .eject-button {
-        display: flex;
-        align-items: center;
-        background-color: var(--Surface2) !important;
-    }
-
-    .eject-button:hover {
-            color: var(--Surface) !important;
-            background-color: var(--Surface2) !important;
-        }
-
-        #chevron-icon{
-            color: var(--Outline) !important;
-            background-color: transparent !important;
-        }
-    .root-container:hover #chevron-icon {
-        color: var(--Outline) !important;
-        background-color: transparent !important;
-    }
-</style>
-
-@code {
-    [Parameter]
-    public ModelListViewModel ModelListViewModel { get; set; }
-
-
-    private string _text = Locales.SelectModel;
-
-
-    private string Text
-    {
-        get => _text;
-        set
-        {
-            if (_text != value)
-            {
-                _text = value;
-                InvokeAsync(() => StateHasChanged());
-            }
-        }
-    }
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-
-        Text = GetModelStateText(ModelListViewModel);
-        ModelListViewModel.PropertyChanged += OnModelListViewModelPropertyChanged;
-    }
-
-    private void OnModelListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(ModelListViewModel.LoadingState))
-        {
-            Text = GetModelStateText(ModelListViewModel);
-        }
-    }
-
-    private static string GetModelStateText(ModelListViewModel modelListViewModel)
-    {
-        switch (modelListViewModel.LoadingState)
-        {
-            default:
-            case ModelListViewModel.ModelLoadingState.NotLoaded:
-                return Locales.SelectModel;
-
-            case ModelListViewModel.ModelLoadingState.Loaded:
-                return modelListViewModel.SelectedModel!.Name;
-
-            case ModelListViewModel.ModelLoadingState.Loading:
-                return Locales.LoadingModel;
-
-            case ModelListViewModel.ModelLoadingState.FinishinUp:
-                return Locales.FinishingUp;
-
-            case ModelListViewModel.ModelLoadingState.Downloading:
-                return Locales.DownloadingModel;
-        }
-    }
-}
