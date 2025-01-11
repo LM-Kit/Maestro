@@ -1,15 +1,7 @@
 ﻿#chat-container {
     height: 100%;
     width: 100%;
-    display: grid;
-    grid-template-columns: auto, 1fr, auto;
-    /*padding-inline: 8px;*/
-    /*padding-block: 8px;*/
-    /*position: fixed;*/
-    /*    width: auto;
-    left: 0;
-    right: 0;*/
-
+    display: flex
 }
 
 #chat-content {
@@ -139,8 +131,9 @@ body.mac .chat-element {
     visibility: hidden;
 }
 
-.sidebar-show{
-    background-color:var(--Surface);
+.sidebar-show {
+    overflow-y: auto;
+    background-color: var(--Surface);
     visibility: visible;
     width: 300px;
     height: 100%;
