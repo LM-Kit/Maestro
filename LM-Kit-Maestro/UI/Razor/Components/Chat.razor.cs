@@ -241,16 +241,7 @@ public partial class Chat
         }
     }
 
-
-    private void OnConversationItemShowMoreClicked(ConversationViewModel conversationViewModel)
-    {
-        if (conversationViewModel != ViewModel.ConversationListViewModel.CurrentConversation)
-        {
-            ViewModel.ConversationListViewModel.CurrentConversation = conversationViewModel;
-        }
-    }
-
-    private async Task OnShowMoreClicked(ConversationViewModel conversationViewModel)
+    private void OnShowMoreClicked(ConversationViewModel conversationViewModel)
     {
         if (_isShowingActionPopup)
         {
@@ -278,30 +269,32 @@ public partial class Chat
             }
         };
 
-        conversationViewModel!.IsShowingActionPopup = true;
-        await ViewModel.PopupNavigation.PushAsync(popup);
-
-        var result = await popup.PopupTask;
-
-        if (result != null && result.Value is ChatConversationAction chatConversationAction)
+        Task.Run(async () =>
         {
-            switch (chatConversationAction)
+            conversationViewModel!.IsShowingActionPopup = true;
+            await ViewModel.PopupNavigation.PushAsync(popup);
+
+            var result = await popup.PopupTask;
+
+            if (result != null && result.Value is ChatConversationAction chatConversationAction)
             {
-                case ChatConversationAction.Select:
-                    ViewModel.ConversationListViewModel.CurrentConversation = conversationViewModel!;
-                    break;
+                switch (chatConversationAction)
+                {
+                    case ChatConversationAction.Select:
+                        ViewModel.ConversationListViewModel.CurrentConversation = conversationViewModel!;
+                        break;
 
-                case ChatConversationAction.Rename:
-                    conversationViewModel!.IsRenaming = true;
-                    break;
+                    case ChatConversationAction.Rename:
+                        conversationViewModel!.IsRenaming = true;
+                        break;
 
-                case ChatConversationAction.Delete:
-                    await ViewModel.ConversationListViewModel.DeleteConversation(conversationViewModel!);
-                    break;
+                    case ChatConversationAction.Delete:
+                        await ViewModel.ConversationListViewModel.DeleteConversation(conversationViewModel!);
+                        break;
+                }
             }
-        }
-
-        conversationViewModel!.IsShowingActionPopup = false;
+            conversationViewModel!.IsShowingActionPopup = false;
+        });
     }
 
     private int CalculateUsagePercentage(int used, int total)
