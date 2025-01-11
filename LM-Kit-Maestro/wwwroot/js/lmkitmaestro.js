@@ -21,24 +21,24 @@ document.addEventListener("DOMContentLoaded", function () {
     Chat 
 */
 function initializeScrollHandler(dotNetHelper) {
-    const container = document.getElementById('chat-content');
+    const container = document.getElementById('chat-messages');
     container.addEventListener('scroll', () => {
         dotNetHelper.invokeMethodAsync('OnChatScrolled', container.scrollTop);
     });
 }
 
 function getScrollHeight() {
-    const element = document.getElementById('chat-content');
+    const element = document.getElementById('chat-messages');
     return element.scrollHeight;
 };
 
 function getConversationViewHeight() {
-    const element = document.getElementById('chat-content');
+    const element = document.getElementById('chat-messages');
     return element.clientHeight;
 };
 
 function setUserInputFocus() {
-    const element = document.getElementById('input-text');
+    const element = document.getElementById('chat-messages');
 
     element.focus();
 }
