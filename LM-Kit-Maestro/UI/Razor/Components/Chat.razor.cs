@@ -243,58 +243,58 @@ public partial class Chat
 
     private void OnConversationItemShowMoreClicked(ConversationViewModel conversationViewModel)
     {
-        if (_isShowingActionPopup)
-        {
-            return;
-        }
+        //if (_isShowingActionPopup)
+        //{
+        //    return;
+        //}
 
-        _isShowingActionPopup = true;
+        //_isShowingActionPopup = true;
 
-        ChatConversationActionPopupViewModel chatConversationActionPopupViewModel = new ChatConversationActionPopupViewModel()
-        {
-            ConversationX = 400,
-            //ConversationY = conversationItem.Y - collectionView.ScrollY + conversationItem.Height + UIConstants.TabBarHeight + UIConstants.PageTopBarHeight,
-            //ConversationItemHeight = conversationItem.Height,
-            //ConversationListHeight = Height
-        };
+        //ChatConversationActionPopupViewModel chatConversationActionPopupViewModel = new ChatConversationActionPopupViewModel()
+        //{
+        //    ConversationX = 400,
+        //    //ConversationY = conversationItem.Y - collectionView.ScrollY + conversationItem.Height + UIConstants.TabBarHeight + UIConstants.PageTopBarHeight,
+        //    //ConversationItemHeight = conversationItem.Height,
+        //    //ConversationListHeight = Height
+        //};
 
-        var popup = new ChatConversationActionPopup(ViewModel.PopupNavigation, chatConversationActionPopupViewModel)
-        {
-            Animation = new Mopups.Animations.FadeAnimation()
-            {
-                DurationIn = 1,
-                DurationOut = 1,
-                EasingIn = Easing.Linear,
-                EasingOut = Easing.Linear
-            }
-        };
+        //var popup = new ChatConversationActionPopup(ViewModel.PopupNavigation, chatConversationActionPopupViewModel)
+        //{
+        //    Animation = new Mopups.Animations.FadeAnimation()
+        //    {
+        //        DurationIn = 1,
+        //        DurationOut = 1,
+        //        EasingIn = Easing.Linear,
+        //        EasingOut = Easing.Linear
+        //    }
+        //};
 
-        Task.Run(async () =>
-        {
-            conversationViewModel!.IsShowingActionPopup = true;
-            await ViewModel.PopupNavigation.PushAsync(popup);
+        //Task.Run(async () =>
+        //{
+        //    conversationViewModel!.IsShowingActionPopup = true;
+        //    await ViewModel.PopupNavigation.PushAsync(popup);
 
-            var result = await popup.PopupTask;
+        //    var result = await popup.PopupTask;
 
-            if (result != null && result.Value is ChatConversationAction chatConversationAction)
-            {
-                switch (chatConversationAction)
-                {
-                    case ChatConversationAction.Select:
-                        ViewModel.ConversationListViewModel.CurrentConversation = conversationViewModel!;
-                        break;
+        //    if (result != null && result.Value is ChatConversationAction chatConversationAction)
+        //    {
+        //        switch (chatConversationAction)
+        //        {
+        //            case ChatConversationAction.Select:
+        //                ViewModel.ConversationListViewModel.CurrentConversation = conversationViewModel!;
+        //                break;
 
-                    case ChatConversationAction.Rename:
-                        conversationViewModel!.IsRenaming = true;
-                        break;
+        //            case ChatConversationAction.Rename:
+        //                conversationViewModel!.IsRenaming = true;
+        //                break;
 
-                    case ChatConversationAction.Delete:
-                        await ViewModel.ConversationListViewModel.DeleteConversation(conversationViewModel!);
-                        break;
-                }
-            }
-            conversationViewModel!.IsShowingActionPopup = false;
-        });
+        //            case ChatConversationAction.Delete:
+        //                await ViewModel.ConversationListViewModel.DeleteConversation(conversationViewModel!);
+        //                break;
+        //        }
+        //    }
+        //    conversationViewModel!.IsShowingActionPopup = false;
+        //});
     }
 
     private int CalculateUsagePercentage(int used, int total)

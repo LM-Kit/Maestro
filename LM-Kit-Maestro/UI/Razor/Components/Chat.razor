@@ -19,6 +19,14 @@
                 OnShowMore="OnConversationItemShowMoreClicked"
                 IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
                 ViewModel="conversation" />
+
+            <MudPopover Open="@conversation.IsShowingActionPopup" Fixed="true" Class="px-4 pt-4">
+                <div class="d-flex flex-column">
+                    <MudButton Class="ml-auto mr-n3 mb-1" Color="Color.Error">Close</MudButton>
+                    <MudButton Class="ml-auto mr-n3 mb-1" Color="Color.Error">Close</MudButton>
+                    <MudButton Class="ml-auto mr-n3 mb-1" Color="Color.Error">Close</MudButton>
+                </div>
+            </MudPopover>
         }
     </div>
 

@@ -5,8 +5,11 @@
         @ViewModel.Title
     </MudText>
 
-    <div id="show-more-button" @onclick="() => OnShowMore.InvokeAsync(ViewModel)" class="@(IsSelected ? "show" :"hide")">
-        <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Size="Size.Small" Color="Color.Dark" />
+    <div id="show-more-button" class="@(IsSelected ? "show" : "hide")">
+        <MudIconButton @onclick="() => ViewModel.IsShowingActionPopup = true"
+                       Icon="@Icons.Material.Filled.MoreHoriz"
+                       Size="Size.Small"
+                       Color="Color.Dark" />
     </div>
 </div>
 
