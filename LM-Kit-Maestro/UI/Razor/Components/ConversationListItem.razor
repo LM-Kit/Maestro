@@ -13,14 +13,6 @@
     </div>
 </div>
 
-<MudPopover Open="@ViewModel.IsShowingActionPopup" Fixed="true" Class="px-4 pt-4">
-    <div class="d-flex flex-column">
-        <MudButton @onclick="OnRenameClicked" Class="ml-auto mr-n3 mb-1" Color="Color.Primary">Rename</MudButton>
-        <MudButton @onclick="OnSelected" Class="ml-auto mr-n3 mb-1" Color="Color.Primary">Select</MudButton>
-        <MudButton @onclick="OnRenameClicked" Class="ml-auto mr-n3 mb-1" Color="Color.Error">Delete</MudButton>
-    </div>
-</MudPopover>
-
 @code
 {
     [Parameter] public EventCallback<ConversationViewModel> OnSelect { get; set; }
