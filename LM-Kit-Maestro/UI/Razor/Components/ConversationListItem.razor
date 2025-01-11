@@ -1,11 +1,13 @@
 ﻿@inherits ComponentBase
 
 <div @onclick="() => OnClicked()" id="item-container" class="@(IsSelected ? "item-selected" : "")">
-    <MudText Typo="Typo.subtitle1" Inline=true >
+    <MudText Typo="Typo.subtitle1" Inline=true>
         @ViewModel.Title
     </MudText>
 
-    <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Size="Size.Small" Color="Color.Dark" />
+    <div id="show-more-button">
+        <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Size="Size.Small" Color="Color.Dark" />
+    </div>
 </div>
 
 @code
