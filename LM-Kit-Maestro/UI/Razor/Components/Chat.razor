@@ -72,15 +72,15 @@
         <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
     </div>
 
-    <div id="bottom-space" style="margin-top: 0px; padding-top: 0px; position: relative; top: -30px;font-size: 15px;">
+    <div id="bottom-space">
         @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
         {
-            <text>
+            <MudText Align="Align.Center" Typo="Typo.caption">
                 Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                 @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
                 (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
                         ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
-            </text>
+            </MudText>
         }
     </div>
 </div>
