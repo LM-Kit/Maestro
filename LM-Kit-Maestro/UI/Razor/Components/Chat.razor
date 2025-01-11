@@ -10,7 +10,8 @@
 @inherits MvvmComponentBase<ChatPageViewModel>
 
 <div id="chat-container">
-    <div id="chats-sidebar" class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
+    <div id="chats-sidebar"
+         class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
         @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
         {
             <ConversationListItem IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
@@ -92,7 +93,9 @@
         </div>
     </div>
 
-    <div id="settings-sidebar" class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
+    <div id="settings-sidebar"
+         class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
+        <ChatSettings />
     </div>
 </div>
 
