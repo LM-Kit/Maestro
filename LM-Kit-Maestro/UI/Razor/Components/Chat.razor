@@ -11,12 +11,11 @@
 
 <div id="chat-container">
     <div id="chats-sidebar">
-
     </div>
 
-    <div id="conversation-container">
-        <div id="conversation-content"
-             class="chat-element dark @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
+    <div id="chat-content">
+        <div id="chat-messages"
+             class="chat-element @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
             @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
@@ -56,40 +55,39 @@
                     </div>
                 }
             }
+
+            <div id="chat-info" class="chat-element">
+                <div id="scroll-to-end">
+                    @if (!IsScrolledToEnd)
+                    {
+                        <button @onclick="OnScrollToEndButtonClicked" class="round-button scroll-to-end-button">
+                            <span>
+                                <i class="fas fa-arrow-down"></i>
+                            </span>
+                        </button>
+                    }
+                </div>
+            </div>
         </div>
 
-        <div id="chat-info" class="chat-element">
-            <div id="scroll-to-end">
-                @if (!IsScrolledToEnd)
-                {
-                    <button @onclick="OnScrollToEndButtonClicked" class="round-button scroll-to-end-button">
-                        <span>
-                            <i class="fas fa-arrow-down"></i>
-                        </span>
-                    </button>
-                }
-            </div>
+        <div id="user-input" class="chat-element">
+            <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
+        </div>
+
+        <div id="bottom-space">
+            @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
+            {
+                <MudText Align="Align.Center" Typo="Typo.caption">
+                    Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
+                    @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
+                    (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
+                            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                </MudText>
+            }
         </div>
     </div>
 
     <div id="settings-sidebar">
-
-    </div>
-
-    <div id="user-input" class="chat-element">
-        <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
-    </div>
-
-    <div id="bottom-space">
-        @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
-        {
-            <MudText Align="Align.Center" Typo="Typo.caption">
-                Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
-                @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
-                (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                        ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
-            </MudText>
-        }
     </div>
 </div>
 
@@ -329,7 +327,7 @@
 
 
     [JSInvokable]
-    public async Task OnConversationContainerScrolled(double scrollTop)
+    public async Task OnChatScrolled(double scrollTop)
     {
         _scrollTop = scrollTop;
 

@@ -21,19 +21,19 @@ document.addEventListener("DOMContentLoaded", function () {
     Chat 
 */
 function initializeScrollHandler(dotNetHelper) {
-    const container = document.getElementById('conversation-container');
+    const container = document.getElementById('chat-content');
     container.addEventListener('scroll', () => {
-        dotNetHelper.invokeMethodAsync('OnConversationContainerScrolled', container.scrollTop);
+        dotNetHelper.invokeMethodAsync('OnChatScrolled', container.scrollTop);
     });
 }
 
 function getScrollHeight() {
-    const element = document.getElementById('conversation-container');
+    const element = document.getElementById('chat-content');
     return element.scrollHeight;
 };
 
 function getConversationViewHeight() {
-    const element = document.getElementById('conversation-container');
+    const element = document.getElementById('chat-content');
     return element.clientHeight;
 };
 
@@ -44,7 +44,7 @@ function setUserInputFocus() {
 }
 
 function scrollToEnd(smooth) {
-    const container = document.getElementById('conversation-container');
+    const container = document.getElementById('chat-content');
     container.scrollTo({
         top: container.scrollHeight,
         behavior: smooth ? 'smooth' : 'auto'

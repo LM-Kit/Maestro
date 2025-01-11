@@ -8,36 +8,38 @@
     /*    width: auto;
     left: 0;
     right: 0;*/
-
 }
 
-#conversation-container {
-    background-color: transparent;
-    display: flex;
+#chat-content {
+    display: grid;
+    grid-template-rows: 1fr, auto, auto;
     flex-direction: column;
     position: relative;
     overflow-y: auto;
     scrollbar-gutter: both-edges stable;
-    grid-template-rows: 1fr auto;
 }
 
-    #conversation-container::-webkit-scrollbar {
-        width: 10px;
-    }
+#chat-messages {
+    
+}
 
-    #conversation-container::-webkit-scrollbar-thumb {
-        background-color: var(--OutlineVariant);
-        border-radius: 0;
-        border: 10px solid transparent;
-    }
+#chat-content::-webkit-scrollbar {
+    width: 10px;
+}
 
-    #conversation-container::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
+#chat-content::-webkit-scrollbar-thumb {
+    background-color: var(--OutlineVariant);
+    border-radius: 0;
+    border: 10px solid transparent;
+}
 
-    #conversation-container::-webkit-scrollbar-thumb:hover {
-        background-color: var(--Outline);
-    }
+#chat-content::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+#chat-content::-webkit-scrollbar-thumb:hover {
+    background-color: var(--Outline);
+}
 
 #bottom-space {
     display: flex;
