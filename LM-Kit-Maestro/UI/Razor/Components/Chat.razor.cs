@@ -241,7 +241,7 @@ public partial class Chat
         }
     }
 
-    private void OnShowMoreClicked(ConversationViewModel conversationViewModel)
+    private void OnConversationItemShowMoreClicked(ConversationViewModel conversationViewModel)
     {
         if (_isShowingActionPopup)
         {

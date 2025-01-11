@@ -18,18 +18,16 @@
             visibility: visible;
         }
 
-#show-more-button:hover {
-    visibility: visible;
+.mud-icon-button {
+    color: red !important;
 }
 
-/*
-.mud-icon-size-small {
-    font-size: 10px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 8px !important;
-}*/
+#show-more-button:hover {
+    color: red !important;
+}
+
+
+
 .item-selected {
     background-color: var(--Surface2);
 }

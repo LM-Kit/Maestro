@@ -1,11 +1,11 @@
 ﻿@inherits ComponentBase
 
-<div @onclick="() => OnSelect.InvokeAsync()" id="item-container" class="@(IsSelected ? "item-selected" : "")">
+<div @onclick="() => OnSelect.InvokeAsync(ViewModel)" id="item-container" class="@(IsSelected ? "item-selected" : "")">
     <MudText Typo="Typo.subtitle1" Inline=true>
         @ViewModel.Title
     </MudText>
 
-    <div id="show-more-button" @onclick="() => OnShowMore.InvokeAsync()" class="@(IsSelected ? "show" :"hide")">
+    <div id="show-more-button" @onclick="() => OnShowMore.InvokeAsync(ViewModel)" class="@(IsSelected ? "show" :"hide")">
         <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Size="Size.Small" Color="Color.Dark" />
     </div>
 </div>
