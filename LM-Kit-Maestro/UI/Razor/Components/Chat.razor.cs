@@ -232,11 +232,6 @@ public partial class Chat
         await ScrollToEnd(true);
     }
 
-    private void OnSubmit()
-    {
-        ViewModel.ConversationListViewModel.CurrentConversation!.Submit();
-    }
-
     private void OnConversationItemSelected(ConversationViewModel conversationViewModel)
     {
         if (conversationViewModel != ViewModel.ConversationListViewModel.CurrentConversation)
