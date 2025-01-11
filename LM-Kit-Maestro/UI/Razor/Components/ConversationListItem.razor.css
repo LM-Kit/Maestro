@@ -3,18 +3,29 @@
     margin-block: 8px;
     border-radius: 4px;
     border: 0 solid transparent;
-    display:flex;
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding-block: 12px;
     padding-inline: 8px;
 }
 
-#item-container:hover
-{
-    background-color: var(--Surface2);
+    #item-container:hover {
+        background-color: var(--Surface2);
+        visibility: hidden;
+    }
+
+        #item-container:has(:hover) #show-more-button {
+            visibility: visible;
+        }
+
+#show-more-button:hover {
+    visibility: visible;
 }
 
+#show-more-button {
+    visibility: hidden;
+}
 /*
 .mud-icon-size-small {
     font-size: 10px !important;
@@ -23,7 +34,6 @@
     justify-content: center !important;
     padding: 8px !important;
 }*/
-
 .item-selected {
     background-color: var(--Surface2);
 }
