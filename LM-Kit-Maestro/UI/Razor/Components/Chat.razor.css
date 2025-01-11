@@ -38,13 +38,10 @@
         background-color: var(--Outline);
     }
 
-#user-input {
-    margin-bottom: 40px;
-    overflow: hidden;
-}
-
 #bottom-space {
     display: flex;
+    min-height: 40px;
+    color: var(--Outline) !important;
     justify-content: center;
     align-items: center;
     text-align: center;
