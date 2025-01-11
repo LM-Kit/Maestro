@@ -95,9 +95,9 @@ body.mac .chat-element {
 #chat-info {
     position: sticky;
     display: flex;
-    bottom: 8px;
-    height: 100px;
-    margin-top: -100px;
+    height: 48px;
+    bottom: 0;
+    margin-top: -48px;
 }
 
 .scroll-to-end-button {
