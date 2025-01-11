@@ -10,6 +10,10 @@
 @inherits MvvmComponentBase<ChatPageViewModel>
 
 <div id="chat-container">
+    <div id="chats-sidebar">
+
+    </div>
+
     <div id="conversation-container">
         <div id="conversation-content"
              class="chat-element dark @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
@@ -66,6 +70,10 @@
                 }
             </div>
         </div>
+    </div>
+
+    <div id="settings-sidebar">
+
     </div>
 
     <div id="user-input" class="chat-element">
