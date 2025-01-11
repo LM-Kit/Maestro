@@ -128,7 +128,7 @@ body.mac .chat-element {
 }
 
 .sidebar-hide{
-    visibility: hidden;
+    visibility: collapse;
 }
 
 .sidebar-show {
