@@ -1,7 +1,7 @@
 ﻿#chat-container {
     height: 100%;
     width: 100%;
-    display: grid;
+    display: block;
     /*padding-inline: 8px;*/
     /*padding-block: 8px;*/
     /*position: fixed;*/
@@ -11,35 +11,38 @@
 }
 
 #chat-content {
-    display: grid;
-    grid-template-rows: 1fr, auto, auto;
+    display: flex;
     flex-direction: column;
-    position: relative;
-    overflow-y: auto;
-    scrollbar-gutter: both-edges stable;
+    height: 100%;
+    background-color: pink;
+    padding-block: 20px;
 }
 
 #chat-messages {
-    
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+    scrollbar-gutter: both-edges stable;
+    background-color: red;
 }
 
-#chat-content::-webkit-scrollbar {
-    width: 10px;
-}
+    #chat-messages::-webkit-scrollbar {
+        width: 10px;
+    }
 
-#chat-content::-webkit-scrollbar-thumb {
-    background-color: var(--OutlineVariant);
-    border-radius: 0;
-    border: 10px solid transparent;
-}
+    #chat-messages::-webkit-scrollbar-thumb {
+        background-color: var(--OutlineVariant);
+        border-radius: 0;
+        border: 10px solid transparent;
+    }
 
-#chat-content::-webkit-scrollbar-track {
-    background-color: transparent;
-}
+    #chat-messages::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
 
-#chat-content::-webkit-scrollbar-thumb:hover {
-    background-color: var(--Outline);
-}
+    #chat-messages::-webkit-scrollbar-thumb:hover {
+        background-color: var(--Outline);
+    }
 
 #bottom-space {
     display: flex;

@@ -15,12 +15,12 @@
 
     <div id="chat-content">
         <div id="chat-messages"
-             class="chat-element @(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
+             class="@(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
             @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
                 {
-                    <div id="empty-conversation" class="vertical-stack">
+                    <div id="empty-conversation" class="chat-element vertical-stack">
                         <div class="vertical-stack spacing-4">
                             <div class="welcome-message"><b>Maestro</b> at your service—let’s orchestrate something amazing!</div>
                             <div class="welcome-message">
@@ -47,7 +47,7 @@
                 }
                 else
                 {
-                    <div id="message-list">
+                    <div id="message-list" class="chat-element">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
                             <ChatMessage MessageViewModel="message" />
