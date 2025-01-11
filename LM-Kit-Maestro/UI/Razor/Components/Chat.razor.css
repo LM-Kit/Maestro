@@ -14,8 +14,6 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: pink;
-    padding-block: 20px;
 }
 
 #chat-messages {
@@ -23,7 +21,6 @@
     height: 100%;
     width: 100%;
     scrollbar-gutter: both-edges stable;
-    background-color: red;
 }
 
     #chat-messages::-webkit-scrollbar {
