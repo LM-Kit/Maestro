@@ -44,7 +44,7 @@ function setUserInputFocus() {
 }
 
 function scrollToEnd(smooth) {
-    const container = document.getElementById('chat-content');
+    const container = document.getElementById('chat-messages');
     container.scrollTo({
         top: container.scrollHeight,
         behavior: smooth ? 'smooth' : 'auto'
