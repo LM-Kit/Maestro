@@ -132,3 +132,14 @@ body.mac .chat-element {
     border-color: var(--Surface4);
     color: var(--Outline);
 }
+
+.sidebar-hide{
+    visibility: hidden;
+}
+
+.sidebar-show{
+    background-color:var(--Surface);
+    visibility: visible;
+    width: 300px;
+    height: 100%;
+}
