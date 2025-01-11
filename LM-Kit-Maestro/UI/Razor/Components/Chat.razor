@@ -11,9 +11,10 @@
 
 <div id="chat-container">
     <div id="chats-sidebar" class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
-        @foreach(var conversation in ViewModel.ConversationListViewModel.Conversations)
+        @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
         {
-            <ConversationListItem ViewModel="conversation" />
+            <ConversationListItem IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
+                                  ViewModel="conversation" />
         }
     </div>
 

@@ -1,13 +1,15 @@
 ﻿#chat-container {
     height: 100%;
     width: 100%;
-    display: block;
+    display: grid;
+    grid-template-columns: auto, 1fr, auto;
     /*padding-inline: 8px;*/
     /*padding-block: 8px;*/
     /*position: fixed;*/
     /*    width: auto;
     left: 0;
     right: 0;*/
+
 }
 
 #chat-content {

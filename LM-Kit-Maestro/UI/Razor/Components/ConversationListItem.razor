@@ -1,22 +1,16 @@
 ﻿@inherits ComponentBase
 
-<div id="item-container">
-    <div class="stateful-content-view">
-        <div class="grid">
-            <MudText>
-                ViewModel.Title
-            </MudText>
-            <label class="label" id="titleLabel">
-                <!-- Title text binding -->
-            </label>
-            <input type="text" class="custom-entry" id="conversationTitle" readonly>
-            <button class="regular-action-button" id="showMoreButton">&#8942;</button>
-        </div>
-    </div>
+<div id="item-container" class="@(IsSelected ? "item-selected" : "")">
+    <MudText Typo="Typo.subtitle1" Inline=true >
+        @ViewModel.Title
+    </MudText>
+
+    <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Size="Size.Small" Color="Color.Dark" />
 </div>
 
 @code
 {
     [Parameter] public EventCallback OnSubmit { get; set; }
     [Parameter] public required ConversationViewModel ViewModel { get; set; }
+    [Parameter] public bool IsSelected { get; set; }
 }   
