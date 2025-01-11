@@ -241,3 +241,7 @@ body.windows .primary-button {
     border-radius: 50%;
     display: inline-block;
 }
+
+.hidden {
+    visibility: hidden;
+}

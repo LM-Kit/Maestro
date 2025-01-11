@@ -1,13 +1,4 @@
-﻿#loaderDiv {
-    display: flex;
-    height: 72px;
-    background-color: transparent;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-}
-
-/*         #result:hover {
+﻿/*         #result:hover {
                 background-color: var(--Surface3);
                 } */
 
@@ -17,7 +8,7 @@
     border-radius: 8px;
     overflow: hidden;
     display: grid;
-    grid-template-rows: 40px auto;
+    grid-template-rows: auto auto auto;
 }
 
 #translation-input, #translation-output {
@@ -27,12 +18,15 @@
 }
 
 #translation-header {
-    display: flex;
-    border-bottom: 1px solid var(--OutlineVariant);
-    justify-content: space-between;
+    display: inline-grid;
+    align-items: center;
 }
 
 #translation-body {
+    grid-template-columns: 1fr auto 1fr;
+}
+
+.translation-grid {
     grid-template-columns: 1fr auto 1fr;
     display: grid;
 }
@@ -41,4 +35,25 @@
     width: 1px;
     background-color: var(--OutlineVariant);
     height: 100%;
+}
+
+.horizontal-separator {
+    height: 1px;
+    background-color: var(--OutlineVariant);
+    width: 100%;
+}
+
+.language-select {
+    margin-block: 8px;
+    margin-inline: 20px;
+    max-width: 200px;
+    display: inline-block;
+}
+
+.language-select:hover{
+    background-color: var(--Surface2);
+}
+
+.loading-content{
+    background-color: red;
 }

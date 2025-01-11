@@ -98,7 +98,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
     public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database, ConversationLog conversationLog) : base(popupService, lmKitService)
     {
         _lmKitService = lmKitService;
-        _lmKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
+        _lmKitService.ModelLoaded += OnModelLoadingCompleted;
         _lmKitService.ModelUnloaded += OnModelUnloaded;
         _database = database;
         _popupService = popupService;

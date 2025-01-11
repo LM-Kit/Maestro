@@ -17,17 +17,9 @@
     >
     <!-- WinUI TitleBar issue: https://stackoverflow.com/questions/78200704/net-maui-flyout-menu-is-overlapping-the-windows-title-bar-->
 
-    <!--<FlyoutItem Route="HomePage" Title="Home">
-        <ShellContent ContentTemplate="{DataTemplate ui:HomePage}"/>
-    </FlyoutItem>-->
-
-    <!--<Tab BindingContext="{Binding HomeTab}" Title="{Binding HomeTab.Title}" Route="HomePage">
-        <ShellContent Title="Home" ContentTemplate="{DataTemplate ui:HomePage}"/>
-    </Tab>-->
-
-    <!--<Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage" x:DataType="vm:MaestroTabViewModel">
-        <ShellContent ContentTemplate="{DataTemplate ui:AssistantsPage}"/>
-    </Tab>-->
+    <!-- <Tab BindingContext="{Binding AssistantsTab}" Title="{Binding AssistantsTab.Title}" Route="AssistantsPage" x:DataType="vm:MaestroTabViewModel"> -->
+    <!--     <ShellContent ContentTemplate="{DataTemplate ui:AssistantsPage}"/> -->
+    <!-- </Tab> -->
 
     <Tab BindingContext="{Binding ChatTab}" Title="{Binding ChatTab.Title}" Route="ChatPage" x:DataType="vm:MaestroTabViewModel">
         <ShellContent Title="AI Chat" ContentTemplate="{DataTemplate ui:ChatPage}"/>
@@ -37,12 +29,8 @@
         <ShellContent Title="Models" ContentTemplate="{DataTemplate ui:ModelsPage}"/>
     </Tab>
 
-    <!--<FlyoutItem Route="ModelsPage"  Title="Models">
-        <ShellContent ContentTemplate="{DataTemplate ui:ModelsPage}"/>
-    </FlyoutItem>-->
-
     <shell:SimpleShell.RootPageContainer>
-        <Grid x:Name="rootPageContainer">
+        <Grid>
             <shell:SimpleNavigationHost/>
         </Grid>
     </shell:SimpleShell.RootPageContainer>

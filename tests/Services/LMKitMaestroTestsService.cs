@@ -14,7 +14,7 @@ namespace Maestro.Tests
     {
         public static readonly Uri Model1 = new(@"https://huggingface.co/lm-kit/llama-3.2-1b-instruct.gguf/resolve/main/Llama-3.2-1B-Instruct-Q4_K_M.gguf?download=true");
         public static readonly Uri Model2 = new(@"https://huggingface.co/lm-kit/qwen-2.5-0.5b-instruct-gguf/resolve/main/Qwen-2.5-0.5B-Instruct-Q4_K_M.gguf?download=true");
-
+        public static readonly Uri TranslationModel = new Uri(@"https://huggingface.co/lm-kit/falcon-3-10.3b-instruct-gguf/resolve/main/Falcon3-10B-Instruct-q4_k_m.gguf?download=true");
         private Exception? _errorLoadingException;
         TaskCompletionSource<bool>? _modelLoadingTask;
         TaskCompletionSource<bool>? _modelUnloadedTask;
@@ -62,7 +62,7 @@ namespace Maestro.Tests
             _modelLoadingTask = new TaskCompletionSource<bool>();
             ProgressEventWasRaided = false;
             LMKitService.ModelLoadingProgressed += LMKitService_ModelLoadingProgressed;
-            LMKitService.ModelLoadingCompleted += LMKitService_ModelLoadingCompleted;
+            LMKitService.ModelLoaded += LMKitService_ModelLoadingCompleted;
             LMKitService.ModelLoadingFailed += LMKitService_ModelLoadingFailed;
 
             string? localFilePath = FileHelpers.GetModelFilePathFromUrl(modelUri, LMKitDefaultSettings.DefaultModelStorageDirectory);

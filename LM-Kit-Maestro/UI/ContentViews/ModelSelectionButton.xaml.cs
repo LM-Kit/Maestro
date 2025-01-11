@@ -43,7 +43,7 @@ public partial class ModelSelectionButton : ContentView
         {
             modelListViewModel.LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
             modelListViewModel.LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
-            modelListViewModel.LMKitService.ModelLoadingCompleted += OnModelLoadingCompleted;
+            modelListViewModel.LMKitService.ModelLoaded += OnModelLoadingCompleted;
             _modelListViewModel = modelListViewModel;
         }
     }

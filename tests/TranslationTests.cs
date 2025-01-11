@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LMKit.TextGeneration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,12 +14,23 @@ public class TranslationTests
     public async Task TranslateText()
     {
         var testService = new MaestroTestsService();
-        var chatPageViewModel = testService.ChatPageViewModel;
         testService.LMKitService.LMKitConfig.RequestTimeout = 60;
         bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
         Assert.True(loadingSuccess);
 
         var result = await testService.LMKitService.Translation.Translate("moitié route sur mon défunt père ???", LMKit.TextGeneration.Language.French);
         Assert.False(string.IsNullOrEmpty(result));
+    }
+
+    [Fact]
+    public async Task DetectLanguage()
+    {
+        var testService = new MaestroTestsService();
+        testService.LMKitService.LMKitConfig.RequestTimeout = 60;
+        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.TranslationModel);
+        Assert.True(loadingSuccess);
+
+        var result = await testService.LMKitService.Translation.DetectLanguage("l'existence du véhicule précède l'essence, qu'en est-il donc du pédoncule dans la question du sens de cette phrase ?");
+        Assert.Equal(Language.French, result);
     }
 }

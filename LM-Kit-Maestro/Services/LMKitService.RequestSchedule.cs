@@ -2,13 +2,13 @@
 
 namespace LMKit.Maestro.Services;
 
-public partial class LMKitService : INotifyPropertyChanged
+public partial class LMKitService
 {
     private sealed class RequestSchedule
     {
         private readonly object _locker = new object();
 
-        private List<LMKitRequest> _scheduledPrompts = new List<LMKitRequest>();
+        private List<ChatRequest> _scheduledPrompts = new List<ChatRequest>();
 
         public int Count
         {
@@ -21,7 +21,7 @@ public partial class LMKitService : INotifyPropertyChanged
             }
         }
 
-        public LMKitRequest? Next
+        public ChatRequest? Next
         {
             get
             {
@@ -39,9 +39,9 @@ public partial class LMKitService : INotifyPropertyChanged
             }
         }
 
-        public LMKitRequest? RunningPromptRequest { get; set; }
+        public ChatRequest? RunningPromptRequest { get; set; }
 
-        public void Schedule(LMKitRequest promptRequest)
+        public void Schedule(ChatRequest promptRequest)
         {
             lock (_locker)
             {
@@ -54,7 +54,7 @@ public partial class LMKitService : INotifyPropertyChanged
             }
         }
 
-        public bool Contains(LMKitRequest scheduledPrompt)
+        public bool Contains(ChatRequest scheduledPrompt)
         {
             lock (_locker)
             {
@@ -62,7 +62,7 @@ public partial class LMKitService : INotifyPropertyChanged
             }
         }
 
-        public void Remove(LMKitRequest scheduledPrompt)
+        public void Remove(ChatRequest scheduledPrompt)
         {
             lock (_locker)
             {
@@ -70,9 +70,9 @@ public partial class LMKitService : INotifyPropertyChanged
             }
         }
 
-        public LMKitRequest? Unschedule(Conversation conversation)
+        public ChatRequest? Unschedule(Conversation conversation)
         {
-            LMKitRequest? prompt = null;
+            ChatRequest? prompt = null;
 
             lock (_locker)
             {
@@ -94,7 +94,7 @@ public partial class LMKitService : INotifyPropertyChanged
             return prompt;
         }
 
-        private void HandleScheduledPromptRemoval(LMKitRequest scheduledPrompt)
+        private void HandleScheduledPromptRemoval(ChatRequest scheduledPrompt)
         {
             bool wasFirstInLine = scheduledPrompt == _scheduledPrompts[0];
 

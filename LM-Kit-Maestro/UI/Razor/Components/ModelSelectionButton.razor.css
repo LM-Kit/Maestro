@@ -1,0 +1,75 @@
+.root-container {
+    width: 100%;
+    max-width: 568px;
+    border: 1px solid var(--Primary);
+    border-radius: 4px;
+    height: 48px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    transition: background-color 0.3s;
+    background-color: var(--Surface2);
+}
+
+.root-container:hover {
+    background-color: var(--Surface);
+    cursor: pointer;
+}
+
+#button-body {
+    display: flex;
+    width: 100%;
+    margin-inline: 8px;
+    justify-content: space-between;
+}
+
+#button-text {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+#progress-bar {
+    bottom: 0;
+    width: 100%;
+}
+
+
+#eject-button {
+}
+
+.mud-progress-linear-bar {
+    background-color: var(--Primary) !important;
+}
+
+.mud-icon-size-small {
+    font-size: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 8px !important;
+}
+
+.eject-button {
+    display: flex;
+    align-items: center;
+    background-color: var(--Surface2) !important;
+}
+
+.eject-button:hover {
+    color: var(--Surface) !important;
+    background-color: var(--Surface2) !important;
+}
+
+#chevron-icon {
+    color: var(--Outline) !important;
+    background-color: transparent !important;
+}
+
+.root-container:hover #chevron-icon {
+    color: var(--Outline) !important;
+    background-color: transparent !important;
+}

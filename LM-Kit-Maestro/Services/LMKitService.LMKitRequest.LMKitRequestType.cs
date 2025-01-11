@@ -2,9 +2,9 @@
 
 public partial class LMKitService
 {
-    private sealed partial class LMKitRequest
+    private sealed partial class ChatRequest
     {
-        public enum LMKitRequestType
+        public enum ChatRequestType
         {
             Prompt,
             RegenerateResponse,

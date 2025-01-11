@@ -1,8 +1,32 @@
 ﻿@inject IClipboardHandler ClipboardHandler
 
 <div id="translation-container">
-    <div id="translation-header">
+    <div id="translation-header" class="translation-grid">
+
         <div class="language-select">
+            <MudSelect Label="Input language" @bind-Value="TranslationViewModel.InputLanguage">
+                @foreach (var language in Enum.GetValues<Language>())
+                {
+                    if (language == Language.Undefined)
+                    {
+                        if (TranslationViewModel.InputLanguage == Language.Undefined && TranslationViewModel.DetectedLanguage != null)
+                        {
+                            <MudSelectItem Value="@language">@(TranslationViewModel.DetectedLanguage) (detected)</MudSelectItem>
+                        }
+                        else
+                        {
+                            <MudSelectItem Value="@language">Automatically detect</MudSelectItem>
+                        }
+                    }
+                    else
+                    {
+                        <MudSelectItem Value="@language">@language</MudSelectItem>
+                    }
+                }
+            </MudSelect>
+        </div>
+
+        @*         <div class="language-select">
             <label for="input-language">Input language:</label>
             <select id="input-language" @bind="TranslationViewModel.InputLanguage">
                 @foreach (var language in Enum.GetValues<Language>())
@@ -17,22 +41,24 @@
                     }
                 }
             </select>
-        </div>
+        </div> *@
 
-        <IconButton Style="IconButton.IconButtonStyle.Square" Icon="fa-arrow-right-arrow-left" OnClick="OnCopyResultButtonClicked" />
+        @* <IconButton Style="IconButton.IconButtonStyle.Square" Icon="fa-arrow-right-arrow-left" OnClick="OnCopyResultButtonClicked" /> *@
+        <div class="vertical-separator"></div>
 
         <div class="language-select">
-            <label for="output-language">Output language:</label>
-            <select id="output-language" @bind="TranslationViewModel.OutputLanguage">
+            <MudSelect Label="Output language" @bind-Value="TranslationViewModel.OutputLanguage">
                 @foreach (var language in Enum.GetValues<Language>().Skip(1))
                 {
-                    <option value="@language">@language</option>
+                    <MudSelectItem Value="@language">@language</MudSelectItem>
                 }
-            </select>
+            </MudSelect>
         </div>
     </div>
 
-    <div id="translation-body">
+    <div class="horizontal-separator" />
+
+    <div id="translation-body" class="translation-grid">
         <div id="translation-input">
             <InputBox @bind-InputText="TranslationViewModel.InputText" />
         </div>
@@ -40,6 +66,9 @@
         <div class="vertical-separator"></div>
 
         <div id="translation-output">
+            <div class="loading-content @(!TranslationViewModel.AwaitingResponse ? "hidden" :  "")">
+            </div>
+
             <InputBox @bind-InputText="TranslationViewModel.LatestResult" Readonly="true" />
         </div>
     </div>
@@ -98,7 +127,7 @@
         if (e.PropertyName == nameof(TranslationViewModel.InputText))
         {
             _inputTimer?.Change(Timeout.Infinite, Timeout.Infinite);
-            _inputTimer = new Timer(OnDebounceTimerElapsed, null, 1000, Timeout.Infinite);
+            _inputTimer = new Timer(OnDebounceTimerElapsed, null, 250, Timeout.Infinite);
         }
 
         InvokeAsync(() => StateHasChanged());
@@ -107,6 +136,8 @@
     private void OnDebounceTimerElapsed(object? state)
     {
         _inputTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+
+        TranslationViewModel.DetectLanguage();
         TranslationViewModel.Submit();
     }
 

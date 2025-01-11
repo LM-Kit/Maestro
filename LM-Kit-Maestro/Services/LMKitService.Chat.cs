@@ -1,12 +1,10 @@
 ﻿using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
-using LMKit.Translation;
 using System.ComponentModel;
-using System.Diagnostics;
 
 namespace LMKit.Maestro.Services;
 
-public partial class LMKitService : INotifyPropertyChanged
+public partial class LMKitService
 {
     public partial class LMKitChat : INotifyPropertyChanged
     {
@@ -16,27 +14,27 @@ public partial class LMKitService : INotifyPropertyChanged
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private readonly LMKitConfig _config;
+        private readonly LMKitServiceState _state;
 
-        public LMKitChat(LMKitConfig config, SemaphoreSlim lmKitServiceSemaphore)
+        private MultiTurnConversation? _multiTurnConversation;
+        private Conversation? _lastConversationUsed;
+
+        public LMKitChat(LMKitServiceState state)
         {
-            _config = config;
-            _lmKitServiceSemaphore = lmKitServiceSemaphore;
+            _state = state;
         }
 
         public async Task<LMKitResult> SubmitPrompt(Conversation conversation, string prompt)
         {
-            var promptRequest = new LMKitRequest(conversation, LMKitRequest.LMKitRequestType.Prompt, prompt, _config.RequestTimeout)
-            {
-                Conversation = conversation
-            };
+            var promptRequest = new ChatRequest(conversation, ChatRequest.ChatRequestType.Prompt,
+                prompt, _state.Config.RequestTimeout);
 
             ScheduleRequest(promptRequest);
 
             return await HandlePrompt(promptRequest);
         }
 
-        public void CancelAllPrompts()
+        public void TerminateChatService()
         {
             if (_requestSchedule.Count > 0)
             {
@@ -50,7 +48,6 @@ public partial class LMKitService : INotifyPropertyChanged
                     _requestSchedule.Next!.CancelAndAwaitTermination();
                 }
             }
-          
 
             if (_titleGenerationSchedule.RunningPromptRequest != null && !_titleGenerationSchedule.RunningPromptRequest.CancellationTokenSource.IsCancellationRequested)
             {
@@ -59,6 +56,12 @@ public partial class LMKitService : INotifyPropertyChanged
             else if (_titleGenerationSchedule.Count > 1)
             {
                 _titleGenerationSchedule.Next!.CancelAndAwaitTermination();
+            }
+
+            if (_multiTurnConversation != null)
+            {
+                _multiTurnConversation.Dispose();
+                _multiTurnConversation = null;
             }
         }
 
@@ -83,19 +86,16 @@ public partial class LMKitService : INotifyPropertyChanged
 
         public async Task<LMKitResult> RegenerateResponse(Conversation conversation, ChatHistory.Message message)
         {
-            var regenerateResponseRequest = new LMKitRequest(conversation,
-                LMKitRequest.LMKitRequestType.RegenerateResponse,
-                message, _config.RequestTimeout)
-            {
-                Conversation = conversation
-            };
+            var regenerateResponseRequest = new ChatRequest(conversation,
+                ChatRequest.ChatRequestType.RegenerateResponse,
+                message, _state.Config.RequestTimeout);
 
             ScheduleRequest(regenerateResponseRequest);
 
             return await HandlePrompt(regenerateResponseRequest);
         }
 
-        private void ScheduleRequest(LMKitRequest request)
+        private void ScheduleRequest(ChatRequest request)
         {
             _requestSchedule.Schedule(request);
 
@@ -105,7 +105,7 @@ public partial class LMKitService : INotifyPropertyChanged
             }
         }
 
-        private async Task<LMKitResult> HandlePrompt(LMKitRequest request)
+        private async Task<LMKitResult> HandlePrompt(ChatRequest request)
         {
             LMKitResult result;
 
@@ -157,7 +157,7 @@ public partial class LMKitService : INotifyPropertyChanged
             return result;
         }
 
-        private async Task<LMKitResult> SubmitPrompt(LMKitRequest request)
+        private async Task<LMKitResult> SubmitPrompt(ChatRequest request)
         {
             try
             {
@@ -168,11 +168,11 @@ public partial class LMKitService : INotifyPropertyChanged
 
                 try
                 {
-                    if (request.RequestType == LMKitRequest.LMKitRequestType.Prompt)
+                    if (request.RequestType == ChatRequest.ChatRequestType.Prompt)
                     {
                         result.Result = await _multiTurnConversation!.SubmitAsync((string)request.Parameters!, request.CancellationTokenSource.Token);
                     }
-                    else if (request.RequestType == LMKitRequest.LMKitRequestType.RegenerateResponse)
+                    else if (request.RequestType == ChatRequest.ChatRequestType.RegenerateResponse)
                     {
                         result.Result = await _multiTurnConversation!.RegenerateResponseAsync(request.CancellationTokenSource.Token);
                     }
@@ -220,7 +220,7 @@ public partial class LMKitService : INotifyPropertyChanged
         private void GenerateConversationSummaryTitle(Conversation conversation)
         {
             string firstMessage = conversation.ChatHistory!.Messages.First(message => message.AuthorRole == AuthorRole.User).Content;
-            LMKitRequest titleGenerationRequest = new LMKitRequest(conversation, LMKitRequest.LMKitRequestType.GenerateTitle, firstMessage, 60);
+            ChatRequest titleGenerationRequest = new ChatRequest(conversation, ChatRequest.ChatRequestType.GenerateTitle, firstMessage, 60);
 
             _titleGenerationSchedule.Schedule(titleGenerationRequest);
 
@@ -233,7 +233,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             Task.Run(async () =>
             {
-                Summarizer summarizer = new Summarizer(_model)
+                Summarizer summarizer = new Summarizer(_state.LoadedModel)
                 {
                     MaximumContextLength = 512,
                     GenerateContent = false,
@@ -276,42 +276,42 @@ public partial class LMKitService : INotifyPropertyChanged
                 }
 
                 // Latest chat history of this conversation was generated with a different model
-                bool lastUsedDifferentModel = _config.LoadedModelUri != conversation.LastUsedModelUri;
+                bool lastUsedDifferentModel = _state.Config.LoadedModelUri != conversation.LastUsedModelUri;
                 bool shouldUseCurrentChatHistory = !lastUsedDifferentModel && conversation.ChatHistory != null;
                 bool shouldDeserializeChatHistoryData = (lastUsedDifferentModel && conversation.LatestChatHistoryData != null) || (!lastUsedDifferentModel && conversation.ChatHistory == null);
 
                 if (shouldUseCurrentChatHistory || shouldDeserializeChatHistoryData)
                 {
-                    ChatHistory? chatHistory = shouldUseCurrentChatHistory ? conversation.ChatHistory : ChatHistory.Deserialize(conversation.LatestChatHistoryData, _model);
+                    ChatHistory? chatHistory = shouldUseCurrentChatHistory ? conversation.ChatHistory : ChatHistory.Deserialize(conversation.LatestChatHistoryData, _state.LoadedModel);
 
-                    _multiTurnConversation = new MultiTurnConversation(_model, chatHistory, _config.ContextSize)
+                    _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, chatHistory, _state.Config.ContextSize)
                     {
-                        SamplingMode = GetTokenSampling(_config),
-                        MaximumCompletionTokens = _config.MaximumCompletionTokens,
+                        SamplingMode = GetTokenSampling(_state.Config),
+                        MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
                     };
                 }
                 else
                 {
-                    _multiTurnConversation = new MultiTurnConversation(_model, _config.ContextSize)
+                    _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, _state.Config.ContextSize)
                     {
-                        SamplingMode = GetTokenSampling(_config),
-                        MaximumCompletionTokens = _config.MaximumCompletionTokens,
-                        SystemPrompt = _config.SystemPrompt
+                        SamplingMode = GetTokenSampling(_state.Config),
+                        MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
+                        SystemPrompt = _state.Config.SystemPrompt
                     };
                 }
                 _multiTurnConversation.AfterTokenSampling += conversation.AfterTokenSampling;
 
                 conversation.ChatHistory = _multiTurnConversation.ChatHistory;
-                conversation.LastUsedModelUri = _config.LoadedModelUri;
+                conversation.LastUsedModelUri = _state.Config.LoadedModelUri;
                 _lastConversationUsed = conversation;
             }
             else //updating sampling options, if any.
             {
                 //todo: Implement a mechanism to determine whether SamplingMode and MaximumCompletionTokens need to be updated.
-                _multiTurnConversation!.SamplingMode = GetTokenSampling(_config);
-                _multiTurnConversation.MaximumCompletionTokens = _config.MaximumCompletionTokens;
+                _multiTurnConversation!.SamplingMode = GetTokenSampling(_state.Config);
+                _multiTurnConversation.MaximumCompletionTokens = _state.Config.MaximumCompletionTokens;
 
-                if (_config.ContextSize != _multiTurnConversation.ContextSize)
+                if (_state.Config.ContextSize != _multiTurnConversation.ContextSize)
                 {
                     //todo: implement context size update.
                 }
