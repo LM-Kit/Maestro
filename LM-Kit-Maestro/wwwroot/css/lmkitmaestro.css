@@ -242,6 +242,10 @@ body.windows .primary-button {
     display: inline-block;
 }
 
-.hidden {
+.hide {
     visibility: hidden;
+}
+
+.show{
+
 }

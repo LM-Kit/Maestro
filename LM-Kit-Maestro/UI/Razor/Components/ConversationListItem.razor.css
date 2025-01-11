@@ -12,10 +12,9 @@
 
     #item-container:hover {
         background-color: var(--Surface2);
-        visibility: hidden;
     }
 
-        #item-container:has(:hover) #show-more-button {
+        #item-container:hover #show-more-button {
             visibility: visible;
         }
 
@@ -23,9 +22,6 @@
     visibility: visible;
 }
 
-#show-more-button {
-    visibility: hidden;
-}
 /*
 .mud-icon-size-small {
     font-size: 10px !important;

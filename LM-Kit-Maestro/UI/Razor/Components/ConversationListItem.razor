@@ -1,11 +1,11 @@
 ﻿@inherits ComponentBase
 
-<div @onclick="() => OnClicked()" id="item-container" class="@(IsSelected ? "item-selected" : "")">
+<div @onclick="() => OnSelect.InvokeAsync()" id="item-container" class="@(IsSelected ? "item-selected" : "")">
     <MudText Typo="Typo.subtitle1" Inline=true>
         @ViewModel.Title
     </MudText>
 
-    <div id="show-more-button">
+    <div id="show-more-button" @onclick="() => OnShowMore.InvokeAsync()" class="@(IsSelected ? "show" :"hide")">
         <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Size="Size.Small" Color="Color.Dark" />
     </div>
 </div>
@@ -16,9 +16,4 @@
     [Parameter] public EventCallback<ConversationViewModel> OnShowMore { get; set; }
     [Parameter] public required ConversationViewModel ViewModel { get; set; }
     [Parameter] public bool IsSelected { get; set; }
-
-    private void OnClicked()
-    {
-        OnSelect.InvokeAsync(ViewModel);
-    }
-}   
+}
