@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Data;
 using Microsoft.Extensions.Logging;
@@ -23,7 +24,10 @@ public partial class ChatPageViewModel : PageViewModelBase
     [ObservableProperty]
     private SettingsViewModel _settingsViewModel;
 
-    public LMKitService LMKitService { get; }
+    [ObservableProperty]
+    private ConversationViewModel _conversationShowingMore;
+    
+    public LMKitService LmKitService { get; }
     public ConversationListViewModel ConversationListViewModel { get; }
     public ModelListViewModel ModelListViewModel { get; }
 
@@ -37,10 +41,11 @@ public partial class ChatPageViewModel : PageViewModelBase
         ModelListViewModel = modelListViewModel;
         _database = database;
         _llmFileManager = llmFileManager;
-        LMKitService = lmKitService;
+        LmKitService = lmKitService;
         SettingsViewModel = settingsViewModel;
 
         ConversationListViewModel.Conversations.CollectionChanged += OnConversationListChanged;
+        ConversationListViewModel.ConversationPropertyChanged += OnConversationPropertyChanged;
     }
 
     [RelayCommand]
@@ -89,6 +94,24 @@ public partial class ChatPageViewModel : PageViewModelBase
         if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add && ConversationListViewModel.Conversations.Count == 1)
         {
             ConversationListViewModel.CurrentConversation = ConversationListViewModel.Conversations[0];
+        }
+    }
+
+    private void OnConversationPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        var conversationViewModel = (ConversationViewModel)sender!;
+
+        if (e.PropertyName == nameof(ConversationViewModel.IsShowingActionPopup))
+        {
+            if (conversationViewModel.IsShowingActionPopup)
+            {
+                if (ConversationShowingMore == conversationViewModel)
+                {
+                    ConversationShowingMore.IsShowingActionPopup = false;
+                }
+            }
+            
+            ConversationShowingMore = conversationViewModel;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿    @page "/chat"
+﻿@page "/chat"
 
 @inject LMKitService LMKitService
 @inject HttpClient Http
@@ -14,19 +14,27 @@
          class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
         @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
         {
-            <ConversationListItem  
-                OnSelect="OnConversationItemSelected"
-                OnShowMore="OnConversationItemShowMoreClicked"
-                IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
-                ViewModel="conversation" />
-
-            <MudPopover Open="@conversation.IsShowingActionPopup" Fixed="true" Class="px-4 pt-4">
-                <div class="d-flex flex-column">
-                    <MudButton @onclick="() => OnConversationItemRenameClicked(conversation)" Class="ml-auto mr-n3 mb-1" Color="Color.Primary">Rename</MudButton>
-                    <MudButton @onclick="() => OnConversationItemSelected(conversation)" Class="ml-auto mr-n3 mb-1" Color="Color.Primary">Select</MudButton>
-                    <MudButton @onclick="() => OnConversationItemDeleteClicked(conversation)" Class="ml-auto mr-n3 mb-1" Color="Color.Error">Delete</MudButton>
-                </div>
-            </MudPopover>
+            <div>
+                <ConversationListItem
+                    OnSelect="OnConversationItemSelected"
+                    OnShowMore="OnConversationItemShowMoreClicked"
+                    IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
+                    ViewModel="conversation"/>
+                
+                <MudPopover Open="@conversation.IsShowingActionPopup" Fixed="true" Class="px-4 pt-4">
+                    <div class="d-flex flex-column">
+                        <MudButton @onclick="() => OnConversationItemRenameClicked(conversation)"
+                                   Class="ml-auto mr-n3 mb-1" Color="Color.Primary">Rename
+                        </MudButton>
+                        <MudButton @onclick="() => OnConversationItemSelected(conversation)" Class="ml-auto mr-n3 mb-1"
+                                   Color="Color.Primary">Select
+                        </MudButton>
+                        <MudButton @onclick="() => OnConversationItemDeleteClicked(conversation)"
+                                   Class="ml-auto mr-n3 mb-1" Color="Color.Error">Delete
+                        </MudButton>
+                    </div>
+                </MudPopover>
+            </div>
         }
     </div>
 
@@ -39,13 +47,16 @@
                 {
                     <div id="empty-conversation" class="chat-element vertical-stack">
                         <div class="vertical-stack spacing-4">
-                            <div class="welcome-message"><b>Maestro</b> at your service—let’s orchestrate something amazing!</div>
+                            <div class="welcome-message"><b>Maestro</b> at your service—let’s orchestrate something
+                                amazing!
+                            </div>
                             <div class="welcome-message">
                                 Feel free to ask questions, explore ideas, or engage in meaningful conversations.
 
                             </div>
                             <div class="welcome-message">
-                                Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to help.
+                                Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to
+                                help.
 
                             </div>
 
@@ -67,7 +78,7 @@
                     <div id="message-list" class="chat-element">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
-                            <ChatMessage MessageViewModel="message" />
+                            <ChatMessage MessageViewModel="message"/>
                         }
                     </div>
                 }
@@ -88,7 +99,7 @@
         </div>
 
         <div id="user-input" class="chat-element">
-            <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
+            <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
         </div>
 
         <div id="bottom-space">
@@ -98,7 +109,7 @@
                     Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                     @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
                     (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                             ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
                 </MudText>
             }
         </div>
@@ -106,6 +117,6 @@
 
     <div id="settings-sidebar"
          class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
-        <ChatSettings />
+        <ChatSettings/>
     </div>
 </div>

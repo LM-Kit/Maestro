@@ -23,7 +23,6 @@ public partial class Chat
     private double _scrollTop;
 
     private bool _isScrolledToEnd = false;
-    private bool _isShowingActionPopup;
 
     public bool IsScrolledToEnd
     {
@@ -52,9 +51,9 @@ public partial class Chat
         {
             OnConversationSet();
         }
-
+        
+        ViewModel.ConversationListViewModel.ConversationPropertyChanged += OnConversationPropertyChanged;
         ViewModel.ConversationListViewModel.PropertyChanged += OnConversationListViewModelPropertyChanged;
-        ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.PropertyChanged += OnLMKitConversationPropertyChanged;
 
         await ResizeHandler.RegisterPageResizeAsync(Resized);
         await JS.InvokeVoidAsync("initializeScrollHandler", DotNetObjectReference.Create(this));
@@ -106,7 +105,14 @@ public partial class Chat
         }
     }
 
-    private void OnLMKitConversationPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnConversationPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ConversationViewModel.IsShowingActionPopup))
+        {
+            UpdateUIAsync();
+        }
+    }
+    private void OnCurrentLMKitConversationPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(LMKitService.Conversation.ContextRemainingSpace))
         {
@@ -153,6 +159,7 @@ public partial class Chat
         {
             ViewModel.ConversationListViewModel.CurrentConversation.Messages.CollectionChanged += OnConversationMessagesCollectionChanged;
             ViewModel.ConversationListViewModel.CurrentConversation.TextGenerationCompleted += OnTextGenerationCompleted;
+            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.PropertyChanged += OnCurrentLMKitConversationPropertyChanged;
 
             _previousScrollTop = null;
             _ignoreScrollsUntilNextScrollUp = true;

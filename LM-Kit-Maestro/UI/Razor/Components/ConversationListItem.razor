@@ -1,12 +1,16 @@
 ﻿@inherits ComponentBase
 
 <div @onclick="OnSelected" id="item-container" class="@(IsSelected ? "item-selected" : "")">
-    <MudText Typo="Typo.subtitle1" Inline=true>
+    <MudText Typo="Typo.subtitle1" Inline="true">
         @ViewModel.Title
     </MudText>
 
+    <t>
+        @ViewModel.IsShowingActionPopup
+    </t>
+    
     <div id="show-more-button" class="@(IsSelected ? "show" : "hide")">
-        <MudIconButton @onclick="() => ViewModel.IsShowingActionPopup = true"
+        <MudIconButton @onclick="() => OnShowMore.InvokeAsync(ViewModel)"
         Icon="@Icons.Material.Filled.MoreHoriz"
         Size="Size.Small"
         Color="Color.Dark" />
