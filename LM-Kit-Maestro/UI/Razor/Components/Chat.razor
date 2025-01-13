@@ -17,23 +17,10 @@
             <div>
                 <ConversationListItem
                     OnSelect="OnConversationItemSelected"
+                    OnDelete="OnConversationItemDeleteClicked"
                     OnShowMore="OnConversationItemShowMoreClicked"
                     IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
                     ViewModel="conversation"/>
-                
-                <MudPopover Open="@conversation.IsShowingActionPopup" Fixed="true" Class="px-4 pt-4">
-                    <div class="d-flex flex-column">
-                        <MudButton @onclick="() => OnConversationItemRenameClicked(conversation)"
-                                   Class="ml-auto mr-n3 mb-1" Color="Color.Primary">Rename
-                        </MudButton>
-                        <MudButton @onclick="() => OnConversationItemSelected(conversation)" Class="ml-auto mr-n3 mb-1"
-                                   Color="Color.Primary">Select
-                        </MudButton>
-                        <MudButton @onclick="() => OnConversationItemDeleteClicked(conversation)"
-                                   Class="ml-auto mr-n3 mb-1" Color="Color.Error">Delete
-                        </MudButton>
-                    </div>
-                </MudPopover>
             </div>
         }
     </div>

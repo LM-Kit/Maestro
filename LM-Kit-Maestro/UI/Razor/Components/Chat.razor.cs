@@ -16,14 +16,16 @@ public partial class Chat
     private ConversationViewModel? _previousConversationViewModel;
     private ConversationViewModel? _conversationShowingMore;
     private MessageViewModel? _latestAssistantResponse;
-    private bool _hasPendingScrollEnd;
+
+    private bool _autoScrolling;
+    private bool _hasPendingScrollToEnd;
     private bool _ignoreScrollsUntilNextScrollUp;
     private double? _previousScrollTop;
-    private bool _shouldAutoScrollEnd;
     private double _scrollTop;
 
-    private bool _isScrolledToEnd = false;
+    private bool _refreshScheduled;
 
+    private bool _isScrolledToEnd;
     public bool IsScrolledToEnd
     {
         get => _isScrolledToEnd;
@@ -36,7 +38,7 @@ public partial class Chat
                 ViewModel.ConversationListViewModel.CurrentConversation!.AwaitingResponse)
             {
                 // Assistant is currently generating a response, enforce auto-scroll.
-                _shouldAutoScrollEnd |= true;
+                _autoScrolling |= true;
             }
 
             UpdateUIAsync();
@@ -64,14 +66,13 @@ public partial class Chat
     {
         await base.OnAfterRenderAsync(firstRender);
 
-        if (_hasPendingScrollEnd)
+        if (_hasPendingScrollToEnd)
         {
-            _hasPendingScrollEnd = false;
+            _hasPendingScrollToEnd = false;
             await ScrollToEnd();
         }
     }
 
-    private bool _refreshScheduled = false;
 
     private Task UpdateUIAsync(bool forceRedraw = false)
     {
@@ -132,7 +133,7 @@ public partial class Chat
         }
         else if (e.PropertyName == nameof(MessageViewModel.MessageInProgress))
         {
-            if (sender == _latestAssistantResponse && !_latestAssistantResponse!.MessageInProgress && _shouldAutoScrollEnd)
+            if (sender == _latestAssistantResponse && !_latestAssistantResponse!.MessageInProgress && _autoScrolling)
             {
                 Task.Run(async () =>
                 {
@@ -166,7 +167,7 @@ public partial class Chat
             IsScrolledToEnd = true;
 
             // Awaiting for the component to be rendered before scrolling to bottom.
-            _hasPendingScrollEnd = true;
+            _hasPendingScrollToEnd = true;
         }
     }
 
@@ -181,7 +182,7 @@ public partial class Chat
         if (latestMessage != null && latestMessage.Sender == MessageSender.Assistant && latestMessage.MessageInProgress)
         {
             _latestAssistantResponse = latestMessage;
-            _shouldAutoScrollEnd = true;
+            _autoScrolling = true;
             latestMessage.PropertyChanged += OnLatestAssistantMessagePropertyChanged;
         }
     }
@@ -201,7 +202,7 @@ public partial class Chat
 
     private async void OnLatestAssistantResponseProgressed()
     {
-        if (_shouldAutoScrollEnd)
+        if (_autoScrolling)
         {
             await ScrollToEnd();
         }
@@ -261,9 +262,9 @@ public partial class Chat
         {
             isScrollUp = scrollTop < _previousScrollTop;
 
-            if (isScrollUp.Value && _shouldAutoScrollEnd)
+            if (isScrollUp.Value && _autoScrolling)
             {
-                _shouldAutoScrollEnd = false;
+                _autoScrolling = false;
             }
         }
 
@@ -313,16 +314,6 @@ public partial class Chat
         _conversationShowingMore.IsShowingActionPopup = true;
     }
 
-    private void OnConversationItemRenameClicked(ConversationViewModel conversationViewModel)
-    {
-        if (_conversationShowingMore != null)
-        {
-            _conversationShowingMore.IsShowingActionPopup = false;
-            _conversationShowingMore = null;
-        }
-
-        conversationViewModel.IsRenaming = true;
-    }
 
     private void OnConversationItemDeleteClicked(ConversationViewModel conversationViewModel)
     {
