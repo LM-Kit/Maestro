@@ -10,12 +10,12 @@
 
     <div>
         <div id="show-more-button" class="@(IsSelected ? "show" : "hide")">
-            <MudIconButton @onclick="() => OnShowMore.InvokeAsync(ViewModel)"
+            <MudIconButton @onclick="OnShowMoreClicked"
                             Icon="@Icons.Material.Filled.MoreHoriz"
                             Size="Size.Small"/>
         </div>
 
-        <MudPopover  Open="@ViewModel.IsShowingActionPopup" Fixed="true">
+        <MudPopover Open="@ViewModel.IsShowingActionPopup" Fixed="true">
             <div class="d-flex flex-column">
                 <MudButton @onclick="OnRenameClicked">
                     Rename
@@ -31,5 +31,7 @@
                 </MudButton>
             </div>
         </MudPopover>
+
+        <MudOverlay @bind-Visible="ViewModel.IsShowingActionPopup" @onclick="OnClickOutsideShowMore" DarkBackground AutoClose="true" />
     </div>
 </div>

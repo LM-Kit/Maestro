@@ -7,23 +7,32 @@ namespace LMKit.Maestro.UI.Razor.Components;
 public partial class ConversationListItem : ComponentBase
 {
     [Parameter] public EventCallback<ConversationViewModel> OnSelect { get; set; }
-    [Parameter] public EventCallback<ConversationViewModel> OnShowMore { get; set; }
     [Parameter] public EventCallback<ConversationViewModel> OnDelete { get; set; }
     [Parameter] public required ConversationViewModel ViewModel { get; set; }
     [Parameter] public bool IsSelected { get; set; }
 
-    [Parameter] public MudBlazor.MudTextField<string> ItemTitleRef { get; set; }
+    private MudBlazor.MudTextField<string>?  ItemTitleRef;
 
     private string? _lastTitle;
+
+    private void OnShowMoreClicked()
+    {
+        ViewModel.IsShowingActionPopup = true;
+    }
+
+    private void OnClickOutsideShowMore()
+    {
+        ViewModel.IsShowingActionPopup = false;
+    }
 
     private async void OnRenameClicked()
     {
         ViewModel.IsShowingActionPopup = false;
         ViewModel.IsRenaming = true;
         _lastTitle = ViewModel.Title;
-        await Task.Delay(50);
-        await ItemTitleRef.FocusAsync();
 
+        //await Task.Delay(50);
+        await ItemTitleRef!.FocusAsync();
     }
 
     private void OnSelected()

@@ -14,7 +14,6 @@ public partial class Chat
     private const int UIUpdateDelayMilliseconds = 50;
 
     private ConversationViewModel? _previousConversationViewModel;
-    private ConversationViewModel? _conversationShowingMore;
     private MessageViewModel? _latestAssistantResponse;
 
     private bool _autoScrolling;
@@ -294,24 +293,6 @@ public partial class Chat
         {
             ViewModel.ConversationListViewModel.CurrentConversation = conversationViewModel;
         }
-
-        if (_conversationShowingMore != null)
-        {
-            _conversationShowingMore.IsShowingActionPopup = false;
-            _conversationShowingMore = null;
-        }
-    }
-
-    private void OnConversationItemShowMoreClicked(ConversationViewModel conversationViewModel)
-    {
-        if (_conversationShowingMore != null)
-        {
-            _conversationShowingMore.IsShowingActionPopup = false;
-            _conversationShowingMore = null;
-        }
-
-        _conversationShowingMore = conversationViewModel;
-        _conversationShowingMore.IsShowingActionPopup = true;
     }
 
 

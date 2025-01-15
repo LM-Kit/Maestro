@@ -24,9 +24,6 @@ public partial class ChatPageViewModel : PageViewModelBase
     [ObservableProperty]
     private SettingsViewModel _settingsViewModel;
 
-    [ObservableProperty]
-    private ConversationViewModel _conversationShowingMore;
-    
     public LMKitService LmKitService { get; }
     public ConversationListViewModel ConversationListViewModel { get; }
     public ModelListViewModel ModelListViewModel { get; }
@@ -45,7 +42,6 @@ public partial class ChatPageViewModel : PageViewModelBase
         SettingsViewModel = settingsViewModel;
 
         ConversationListViewModel.Conversations.CollectionChanged += OnConversationListChanged;
-        ConversationListViewModel.ConversationPropertyChanged += OnConversationPropertyChanged;
     }
 
     [RelayCommand]
@@ -80,38 +76,11 @@ public partial class ChatPageViewModel : PageViewModelBase
             ConversationListViewModel.CurrentConversation = ConversationListViewModel.Conversations.First();
         }
     }
-
-    private void InitializeCurrentConversation()
-    {
-        if (ConversationListViewModel.Conversations.Count == 0)
-        {
-            StartNewConversation();
-        }
-    }
-
     private void OnConversationListChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add && ConversationListViewModel.Conversations.Count == 1)
         {
             ConversationListViewModel.CurrentConversation = ConversationListViewModel.Conversations[0];
-        }
-    }
-
-    private void OnConversationPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        var conversationViewModel = (ConversationViewModel)sender!;
-
-        if (e.PropertyName == nameof(ConversationViewModel.IsShowingActionPopup))
-        {
-            if (conversationViewModel.IsShowingActionPopup)
-            {
-                if (ConversationShowingMore == conversationViewModel)
-                {
-                    ConversationShowingMore.IsShowingActionPopup = false;
-                }
-            }
-            
-            ConversationShowingMore = conversationViewModel;
         }
     }
 }
