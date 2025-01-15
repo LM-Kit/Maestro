@@ -16,11 +16,15 @@ public partial class ConversationListItem : ComponentBase
 
     public string Title { get; private set; } = "";
 
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-        Title = ViewModel.Title;
+        if (!ViewModel.IsRenaming)
+        {
+            Title = ViewModel.Title;
+        }
     }
 
     private void OnShowMoreClicked()
@@ -53,22 +57,32 @@ public partial class ConversationListItem : ComponentBase
         OnDelete.InvokeAsync(ViewModel);
     }
 
+    private void OnTitleFocusOut(Microsoft.AspNetCore.Components.Web.FocusEventArgs e)
+    {
+        ValidateTitle();
+    }
+
     private void OnKeyPressed(KeyboardEventArgs e)
     {
         Trace.WriteLine(Title);
 
         if (e.Key == "Enter")
         {
-            if (!string.IsNullOrWhiteSpace(Title))
-            {
-                ViewModel!.Title = Title.TrimStart().TrimEnd();
-            }
-            else
-            {
-                Title = ViewModel.Title;
-            }
-
-            ViewModel!.IsRenaming = false;
+            ValidateTitle();
         }
+    }
+
+    private void ValidateTitle()
+    {
+        if (!string.IsNullOrWhiteSpace(Title))
+        {
+            ViewModel!.Title = Title.TrimStart().TrimEnd();
+        }
+        else
+        {
+            Title = ViewModel.Title;
+        }
+
+        ViewModel!.IsRenaming = false;
     }
 }

@@ -18,14 +18,28 @@
             visibility: visible;
         }
 
-.mud-icon-button {
+        /* Unable to override mud css. todo: find a way to do so. */
+/*#show-more-button .mud-icon-button {
+    margin-left: 12px;
+    color: var(--Outline) !important;
 }
 
-#show-more-button:hover {
+#show-more-button{
+    background-color: pink !important;
 }
 
+.mud-icon-button:hover {
+    background-color: red !important;
+}
 
+#show-more-button:hover .mud-icon-button {
+    color: var(--OnSurface) !important;
+}
 
 .item-selected {
     background-color: var(--Surface2);
 }
+*/
+/*.mud-icon-button-label {
+    color: red !important;
+}*/
