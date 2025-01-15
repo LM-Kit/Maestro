@@ -16,6 +16,9 @@
     height: 100%;
     width: 100%;
     scrollbar-gutter: both-edges stable;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
 }
 
     #chat-messages::-webkit-scrollbar {
@@ -79,16 +82,17 @@ body.mac .chat-element {
     justify-content: center;
 }
 
-#message-list {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-}
-
 #empty-conversation {
-    flex-direction: column;
-    gap: 32px;
+    height: 100%;
+/*    gap: 32px;
     display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+    background-color: red;
+    margin-inline: 0 auto;
+    width: 100%;
+    text-align: center;*/
 }
 
 #chat-info {
@@ -133,13 +137,12 @@ body.mac .chat-element {
 }
 
 .sidebar-hide {
-    visibility: collapse;
+    display: none;
 }
 
 .sidebar-show {
     overflow-y: auto;
     background-color: var(--Surface);
-    visibility: visible;
     width: 300px;
     min-width: 300px;
     max-width: 300px;

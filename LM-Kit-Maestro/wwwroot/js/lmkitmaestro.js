@@ -44,11 +44,14 @@ function setUserInputFocus() {
 }
 
 function scrollToEnd(smooth) {
-    const container = document.getElementById('chat-messages');
-    container.scrollTo({
-        top: container.scrollHeight,
-        behavior: smooth ? 'smooth' : 'auto'
-    });
+    const element = document.getElementById('chat-messages');
+
+    if (element != null) {
+        element.scrollTo({
+            top: element.scrollHeight,
+            behavior: smooth ? 'smooth' : 'auto'
+        });
+    }
 }
 
 

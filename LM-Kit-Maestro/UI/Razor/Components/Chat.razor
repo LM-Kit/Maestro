@@ -10,7 +10,7 @@
 @inherits MvvmComponentBase<ChatPageViewModel>
 
 <div id="chat-container">
-    <div id="chats-sidebar"class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
+    <div id="chats-sidebar" class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
 
         <div id="conversation-list">
 
@@ -26,64 +26,62 @@
     </div>
 
     <div id="chat-content">
-        <div id="chat-messages"
-             class="@(ViewModel.ConversationListViewModel.CurrentConversation is { IsEmpty: true } ? "centered-container" : "top-align-container")">
-            @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
+        @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
+        {
+            if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
             {
-                if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
-                {
-                    <div id="empty-conversation" class="chat-element vertical-stack">
-                        <div class="vertical-stack spacing-4">
-                            <div class="welcome-message"><b>Maestro</b> at your service—let’s orchestrate something
-                                amazing!
-                            </div>
-                            <div class="welcome-message">
-                                Feel free to ask questions, explore ideas, or engage in meaningful conversations.
+                <div id="empty-conversation" class="chat-element vertical-stack">
+                    <div class="vertical-stack spacing-4">
+                        <div class="welcome-message"><b>Maestro</b> at your service—let’s orchestrate something
+                            amazing!
+                        </div>
+                        <div class="welcome-message">
+                            Feel free to ask questions, explore ideas, or engage in meaningful conversations.
 
-                            </div>
-                            <div class="welcome-message">
-                                Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to
-                                help.
-
-                            </div>
+                        </div>
+                        <div class="welcome-message">
+                            Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to
+                            help.
 
                         </div>
 
-                        <div class="vertical-stack" style="gap:12px;">
-                            <div class="shortcut-instruction">
-                                Press Enter to send a new message
-                            </div>
+                    </div>
 
-                            <div class="shortcut-instruction">
-                                Hold Shift + Enter to insert a new line
-                            </div>
+                    <div class="vertical-stack" style="gap:12px;">
+                        <div class="shortcut-instruction">
+                            Press Enter to send a new message
+                        </div>
+
+                        <div class="shortcut-instruction">
+                            Hold Shift + Enter to insert a new line
                         </div>
                     </div>
-                }
-                else
-                {
-                    <div id="message-list" class="chat-element">
-                        @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
-                        {
-                            <ChatMessage MessageViewModel="message"/>
-                        }
-                    </div>
-                }
-            }
-
-            <div id="chat-info" class="chat-element">
-                <div id="scroll-to-end">
-                    @if (!IsScrolledToEnd)
-                    {
-                        <button @onclick="OnScrollToEndButtonClicked" class="round-button scroll-to-end-button">
-                            <span>
-                                <i class="fas fa-arrow-down"></i>
-                            </span>
-                        </button>
-                    }
                 </div>
-            </div>
-        </div>
+            }
+            else
+            {
+                <div id="chat-messages" class="chat-element">
+                    @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
+                    {
+                        <ChatMessage MessageViewModel="message"/>
+                    }
+
+                    <div id="chat-info" class="chat-element">
+                        <div id="scroll-to-end">
+                            @if (!IsScrolledToEnd)
+                            {
+                                <button @onclick="OnScrollToEndButtonClicked" class="round-button scroll-to-end-button">
+                                <span>
+                                    <i class="fas fa-arrow-down"></i>
+                                </span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
 
         <div id="user-input" class="chat-element">
             <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
@@ -92,17 +90,17 @@
         <div id="bottom-space">
             @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
             {
-                    <MudText Align="Align.Center" Typo="Typo.caption">
-                        Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
-                        @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
-                        (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
-                    </MudText>
+                <MudText Align="Align.Center" Typo="Typo.caption">
+                    Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
+                    @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
+                    (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
+                             ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                </MudText>
             }
         </div>
     </div>
 
-@*     <div id="settings-sidebar"
+    @*     <div id="settings-sidebar"
          class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
         <ChatSettings/>
     </div> *@
