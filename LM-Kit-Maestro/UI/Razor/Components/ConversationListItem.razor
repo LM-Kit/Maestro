@@ -4,8 +4,10 @@
 
     <MudTextField Underline=false 
         @ref="ItemTitleRef" 
-        @bind-Value="ViewModel.Title" 
+        @bind-Value="Title" 
         OnKeyDown="OnKeyPressed"
+        Immediate="true"
+        TextUpdateSuppression="false"
         ReadOnly="@(!ViewModel.IsRenaming)"/>
 
     <div>
@@ -15,7 +17,7 @@
                             Size="Size.Small"/>
         </div>
 
-        <MudPopover Open="@ViewModel.IsShowingActionPopup" Fixed="true">
+        <MudPopover  Open="@ViewModel.IsShowingActionPopup" Fixed="true">
             <div class="d-flex flex-column">
                 <MudButton @onclick="OnRenameClicked">
                     Rename

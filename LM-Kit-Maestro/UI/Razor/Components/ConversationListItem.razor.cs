@@ -1,6 +1,7 @@
 ﻿using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System.Diagnostics;
 
 namespace LMKit.Maestro.UI.Razor.Components;
 
@@ -11,9 +12,20 @@ public partial class ConversationListItem : ComponentBase
     [Parameter] public required ConversationViewModel ViewModel { get; set; }
     [Parameter] public bool IsSelected { get; set; }
 
-    private MudBlazor.MudTextField<string>?  ItemTitleRef;
+    private MudBlazor.MudTextField<string>? ItemTitleRef;
 
-    private string? _lastTitle;
+    public string Title { get; private set; } = "";
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            Trace.WriteLine("Title set");
+            Title = ViewModel.Title;
+        }
+    }
 
     private void OnShowMoreClicked()
     {
@@ -29,7 +41,6 @@ public partial class ConversationListItem : ComponentBase
     {
         ViewModel.IsShowingActionPopup = false;
         ViewModel.IsRenaming = true;
-        _lastTitle = ViewModel.Title;
 
         //await Task.Delay(50);
         await ItemTitleRef!.FocusAsync();
@@ -49,15 +60,17 @@ public partial class ConversationListItem : ComponentBase
 
     private void OnKeyPressed(KeyboardEventArgs e)
     {
+        Trace.WriteLine(Title);
+
         if (e.Key == "Enter")
         {
-            if (!string.IsNullOrWhiteSpace(ItemTitleRef.Value))
+            if (!string.IsNullOrWhiteSpace(Title))
             {
-                ViewModel!.Title = ItemTitleRef.Value.TrimStart().TrimEnd();
+                ViewModel!.Title = Title.TrimStart().TrimEnd();
             }
             else
             {
-                ViewModel.Title = _lastTitle!;
+                Title = ViewModel.Title;
             }
 
             ViewModel!.IsRenaming = false;
