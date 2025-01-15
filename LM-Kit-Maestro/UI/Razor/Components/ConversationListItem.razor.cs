@@ -24,6 +24,7 @@ public partial class ConversationListItem : ComponentBase
         if (!ViewModel.IsRenaming)
         {
             Title = ViewModel.Title;
+            IsSelected = ViewModel.IsSelected;
         }
     }
 

@@ -11,14 +11,22 @@
 }
 
     #item-container:hover {
+        background-color: var(--Surface15);
+    }
+
+    #item-container.item-selected:hover {
         background-color: var(--Surface2);
     }
 
-        #item-container:hover #show-more-button {
-            visibility: visible;
-        }
+    #item-container:hover #show-more-button {
+        visibility: visible;
+    }
 
-        /* Unable to override mud css. todo: find a way to do so. */
+    #item-container.item-selected{
+        background-color: var(--Surface2);
+    }
+
+/* Unable to override mud css. todo: find a way to do so. */
 /*#show-more-button .mud-icon-button {
     margin-left: 12px;
     color: var(--Outline) !important;
@@ -36,9 +44,6 @@
     color: var(--OnSurface) !important;
 }
 
-.item-selected {
-    background-color: var(--Surface2);
-}
 */
 /*.mud-icon-button-label {
     color: red !important;
