@@ -10,18 +10,19 @@
 @inherits MvvmComponentBase<ChatPageViewModel>
 
 <div id="chat-container">
-    <div id="chats-sidebar"
-         class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
-        @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
-        {
-            <div>
-                <ConversationListItem
-                    OnSelect="OnConversationItemSelected"
-                    OnDelete="OnConversationItemDeleteClicked"
-                    IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
-                    ViewModel="conversation"/>
-            </div>
-        }
+    <div id="chats-sidebar"class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
+
+        <div id="conversation-list">
+
+            @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
+            {
+                            <ConversationListItem
+                                OnSelect="OnConversationItemSelected"
+                                OnDelete="OnConversationItemDeleteClicked"
+                                IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
+                                ViewModel="conversation"/>
+            }
+        </div>
     </div>
 
     <div id="chat-content">
@@ -91,12 +92,12 @@
         <div id="bottom-space">
             @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
             {
-                <MudText Align="Align.Center" Typo="Typo.caption">
-                    Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
-                    @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
-                    (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                             ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
-                </MudText>
+                    <MudText Align="Align.Center" Typo="Typo.caption">
+                        Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
+                        @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
+                        (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
+                            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                    </MudText>
             }
         </div>
     </div>

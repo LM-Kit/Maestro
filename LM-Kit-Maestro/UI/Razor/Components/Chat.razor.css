@@ -47,6 +47,10 @@
     margin-block: 8px;
 }
 
+#conversation-list {
+    padding-inline: 12px;
+}
+
 .chat-element {
     width: 100%;
     justify-content: center;
@@ -128,7 +132,7 @@ body.mac .chat-element {
     color: var(--Outline);
 }
 
-.sidebar-hide{
+.sidebar-hide {
     visibility: collapse;
 }
 

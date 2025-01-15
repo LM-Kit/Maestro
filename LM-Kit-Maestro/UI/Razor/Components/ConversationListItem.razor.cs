@@ -16,15 +16,11 @@ public partial class ConversationListItem : ComponentBase
 
     public string Title { get; private set; } = "";
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override void OnParametersSet()
     {
-        base.OnAfterRender(firstRender);
+        base.OnParametersSet();
 
-        if (firstRender)
-        {
-            Trace.WriteLine("Title set");
-            Title = ViewModel.Title;
-        }
+        Title = ViewModel.Title;
     }
 
     private void OnShowMoreClicked()
@@ -42,7 +38,6 @@ public partial class ConversationListItem : ComponentBase
         ViewModel.IsShowingActionPopup = false;
         ViewModel.IsRenaming = true;
 
-        //await Task.Delay(50);
         await ItemTitleRef!.FocusAsync();
     }
 
