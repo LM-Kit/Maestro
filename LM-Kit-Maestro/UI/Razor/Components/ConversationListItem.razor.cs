@@ -1,5 +1,6 @@
 ﻿using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace LMKit.Maestro.UI.Razor.Components;
 
@@ -11,10 +12,18 @@ public partial class ConversationListItem : ComponentBase
     [Parameter] public required ConversationViewModel ViewModel { get; set; }
     [Parameter] public bool IsSelected { get; set; }
 
-    private void OnRenameClicked()
+    [Parameter] public MudBlazor.MudTextField<string> ItemTitleRef { get; set; }
+
+    private string? _lastTitle;
+
+    private async void OnRenameClicked()
     {
         ViewModel.IsShowingActionPopup = false;
         ViewModel.IsRenaming = true;
+        _lastTitle = ViewModel.Title;
+        await Task.Delay(50);
+        await ItemTitleRef.FocusAsync();
+
     }
 
     private void OnSelected()
@@ -27,5 +36,22 @@ public partial class ConversationListItem : ComponentBase
     {
         ViewModel.IsShowingActionPopup = false;
         OnDelete.InvokeAsync(ViewModel);
+    }
+
+    private void OnKeyPressed(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            if (!string.IsNullOrWhiteSpace(ItemTitleRef.Value))
+            {
+                ViewModel!.Title = ItemTitleRef.Value.TrimStart().TrimEnd();
+            }
+            else
+            {
+                ViewModel.Title = _lastTitle!;
+            }
+
+            ViewModel!.IsRenaming = false;
+        }
     }
 }

@@ -1,35 +1,35 @@
 ﻿@inherits ComponentBase
 
-<div>
-    <div @onclick="OnSelected" id="item-container" class="@(IsSelected ? "item-selected" : "")">
-        <MudText Typo="Typo.subtitle2" Inline="true">
-            @ViewModel.Title
-        </MudText>
+<div @onclick="OnSelected" id="item-container" class="@(IsSelected ? "item-selected" : "")">
 
-        <t>
-            @ViewModel.IsShowingActionPopup
-        </t>
+    <MudTextField Underline=false 
+        @ref="ItemTitleRef" 
+        @bind-Value="ViewModel.Title" 
+        OnKeyDown="OnKeyPressed"
+        ReadOnly="@(!ViewModel.IsRenaming)"/>
 
+    <div>
         <div id="show-more-button" class="@(IsSelected ? "show" : "hide")">
             <MudIconButton @onclick="() => OnShowMore.InvokeAsync(ViewModel)"
-                           Icon="@Icons.Material.Filled.MoreHoriz"
-                           Size="Size.Small"
-                           Color="Color.Dark" />
+                            Icon="@Icons.Material.Filled.MoreHoriz"
+                            Size="Size.Small"/>
         </div>
-    </div>
 
-    <MudPopover Open="@ViewModel.IsShowingActionPopup" Fixed="true">
-        <div class="d-flex flex-column">
-            <MudButton @onclick="OnRenameClicked">
-                Rename
-            </MudButton>
-            <MudButton @onclick="OnSelected">
-                Select
-            </MudButton>
-            <MudButton @onclick="OnDeleteClicked"
-                       Color="Color.Error">
-                Delete
-            </MudButton>
-        </div>
-    </MudPopover>
+        <MudPopover  Open="@ViewModel.IsShowingActionPopup" Fixed="true">
+            <div class="d-flex flex-column">
+                <MudButton @onclick="OnRenameClicked">
+                    Rename
+                </MudButton>
+
+                <MudButton @onclick="OnSelected">
+                    Select
+                </MudButton>
+
+                <MudButton @onclick="OnDeleteClicked"
+                            Color="Color.Error">
+                    Delete
+                </MudButton>
+            </div>
+        </MudPopover>
+    </div>
 </div>

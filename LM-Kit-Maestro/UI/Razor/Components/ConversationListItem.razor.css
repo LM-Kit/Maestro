@@ -1,5 +1,4 @@
 #item-container {
-    margin-inline: 12px;
     margin-block: 8px;
     border-radius: 4px;
     border: 0 solid transparent;
@@ -9,6 +8,7 @@
     padding-block: 12px;
     padding-inline: 8px;
     cursor: pointer;
+    width: 100%;
 }
 
     #item-container:hover {
@@ -20,11 +20,9 @@
         }
 
 .mud-icon-button {
-    color: red !important;
 }
 
 #show-more-button:hover {
-    color: red !important;
 }
 
 
