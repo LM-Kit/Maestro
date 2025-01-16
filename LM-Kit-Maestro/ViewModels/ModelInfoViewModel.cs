@@ -45,6 +45,9 @@ namespace LMKit.Maestro.ViewModels
         bool _isChatModel;
 
         [ObservableProperty]
+        bool _hasVisionCapability;
+
+        [ObservableProperty]
         bool _isCodeModel;
 
         [ObservableProperty]
@@ -81,6 +84,7 @@ namespace LMKit.Maestro.ViewModels
             Precision = modelCard.QuantizationPrecision.ToString() + (modelCard.QuantizationPrecision > 1 ? "-bits" : "-bit");
             ModelSize = Math.Round((double)modelCard.ParameterCount / 1000000000, 1).ToString().Replace(",", ".") + "B";
             IsChatModel = modelCard.Capabilities.HasFlag(ModelCapabilities.Chat);
+            HasVisionCapability = modelCard.Capabilities.HasFlag(ModelCapabilities.Vision);
             IsCodeModel = modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion);
             IsMathModel = modelCard.Capabilities.HasFlag(ModelCapabilities.Math);
             ModelPath = modelCard.IsLocallyAvailable ? modelCard.LocalPath : modelCard.ModelUri.ToString();
