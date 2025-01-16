@@ -192,9 +192,9 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.2*" />
                             <ColumnDefinition Width="1.*" />
-                            <ColumnDefinition Width="5.0*" />
+                            <ColumnDefinition Width="4.7*" />
                             <ColumnDefinition Width="0.7*" />
-                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.8*" />
                             <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="0.5*" />
@@ -235,8 +235,20 @@
                                BackgroundColor="Transparent"
                                VerticalOptions="Center" 
                                ToolTipProperties.Text="{x:Static ui:Locales.ChatModelOptimized}"
-                               FontSize="16"    
+                               FontSize="22"    
+                               TextColor="#ffcccc"
                                FontFamily = "Material" />
+
+                            <!-- Vision Icon -->
+                            <Label Text="{StaticResource  Image}" 
+                               IsVisible="{Binding HasVisionCapability}" 
+                               BackgroundColor="Transparent"
+                               VerticalOptions="Center" 
+                               ToolTipProperties.Text="{x:Static ui:Locales.VisionModelOptimized}"
+                               FontSize="22"    
+                               TextColor="#00a8ff"
+                               FontFamily = "Material" />
+
 
                             <!-- Code Icon -->
                             <Label Text="{StaticResource Code}" 
@@ -244,7 +256,8 @@
                                VerticalOptions="Center" 
                                BackgroundColor="Transparent"    
                                ToolTipProperties.Text="{x:Static ui:Locales.CodeCompletionModelOptimized}"
-                               FontSize="16"
+                               FontSize="22"
+                               TextColor="#7d5fff"
                                FontFamily = "Material" />
 
                             <!-- Math Icon -->
@@ -253,7 +266,8 @@
                                VerticalOptions="Center" 
                                BackgroundColor="Transparent"    
                                ToolTipProperties.Text="{x:Static ui:Locales.MathModelOptimized}"
-                               FontSize="16"
+                               FontSize="22"
+                               TextColor="#3ae374" 
                                FontFamily = "Material" />
                         </StackLayout>
 
@@ -290,6 +304,7 @@
                                 <DataTrigger TargetType="Button" Binding="{Binding IsLocallyAvailable}" Value="False">
                                     <Setter Property="IsEnabled" Value="False" />
                                     <Setter Property="Text" Value="{StaticResource Cloud}" />
+                                    <Setter Property="TextColor" Value="#18dcff" />
                                 </DataTrigger>
                             </Button.Triggers>
                             <VisualStateManager.VisualStateGroups>
