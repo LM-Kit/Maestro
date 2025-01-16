@@ -52,7 +52,6 @@
     align-items: center;
     text-align: center;
     padding: 0;
-    margin-block: 8px;
 }
 
 #conversation-list {
@@ -152,4 +151,8 @@ body.mac .chat-element {
     min-width: 300px;
     max-width: 300px;
     height: 100%;
+}
+
+#user-input{
+    padding-inline: 10px;
 }
