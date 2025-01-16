@@ -21,30 +21,30 @@ document.addEventListener("DOMContentLoaded", function () {
     Chat 
 */
 function initializeScrollHandler(dotNetHelper) {
-    const container = document.getElementById('chat-messages');
+    const container = document.getElementById('conversation-content');
     container.addEventListener('scroll', () => {
         dotNetHelper.invokeMethodAsync('OnChatScrolled', container.scrollTop);
     });
 }
 
 function getScrollHeight() {
-    const element = document.getElementById('chat-messages');
+    const element = document.getElementById('conversation-content');
     return element.scrollHeight;
 };
 
 function getConversationViewHeight() {
-    const element = document.getElementById('chat-messages');
+    const element = document.getElementById('conversation-content');
     return element.clientHeight;
 };
 
 function setUserInputFocus() {
-    const element = document.getElementById('chat-messages');
+    const element = document.getElementById('conversation-content');
 
     element.focus();
 }
 
 function scrollToEnd(smooth) {
-    const element = document.getElementById('chat-messages');
+    const element = document.getElementById('conversation-content');
 
     if (element != null) {
         element.scrollTo({

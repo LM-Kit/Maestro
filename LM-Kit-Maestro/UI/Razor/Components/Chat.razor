@@ -25,63 +25,65 @@
         </div>
     </div>
 
-    <div id="chat-content">
-        @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
-        {
-            if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
+    <div id="chat-body">
+        <div id="conversation-content">
+            @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
-                <div id="empty-conversation" class="chat-element vertical-stack">
-                    <div class="vertical-stack spacing-4">
-                        <div class="welcome-message"><b>Maestro</b> at your service—let’s orchestrate something
-                            amazing!
-                        </div>
-                        <div class="welcome-message">
-                            Feel free to ask questions, explore ideas, or engage in meaningful conversations.
+                if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
+                {
+                    <div id="empty-conversation" class="chat-element vertical-stack">
+                        <div class="vertical-stack spacing-4">
+                            <div class="welcome-message"><b>Maestro</b> at your service—let’s orchestrate something
+                                amazing!
+                            </div>
+                            <div class="welcome-message">
+                                Feel free to ask questions, explore ideas, or engage in meaningful conversations.
+
+                            </div>
+                            <div class="welcome-message">
+                                Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to
+                                help.
+
+                            </div>
 
                         </div>
-                        <div class="welcome-message">
-                            Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to
-                            help.
 
+                        <div class="vertical-stack" style="gap:12px;">
+                            <div class="shortcut-instruction">
+                                Press Enter to send a new message
+                            </div>
+
+                            <div class="shortcut-instruction">
+                                Hold Shift + Enter to insert a new line
+                            </div>
                         </div>
-
                     </div>
+                }
+                else
+                {
+                    <div id="chat-messages" class="chat-element">
+                        @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
+                        {
+                            <ChatMessage MessageViewModel="message"/>
+                        }
 
-                    <div class="vertical-stack" style="gap:12px;">
-                        <div class="shortcut-instruction">
-                            Press Enter to send a new message
-                        </div>
-
-                        <div class="shortcut-instruction">
-                            Hold Shift + Enter to insert a new line
+                        <div id="chat-info" class="chat-element">
+                            <div id="scroll-to-end">
+                                @if (!IsScrolledToEnd)
+                                {
+                                    <button @onclick="OnScrollToEndButtonClicked"
+                                            class="round-button scroll-to-end-button">
+                                            <span>
+                                                <i class="fas fa-arrow-down"></i>
+                                            </span>
+                                    </button>
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             }
-            else
-            {
-                <div id="chat-messages" class="chat-element">
-                    @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
-                    {
-                        <ChatMessage MessageViewModel="message"/>
-                    }
-
-                    <div id="chat-info" class="chat-element">
-                        <div id="scroll-to-end">
-                            @if (!IsScrolledToEnd)
-                            {
-                                <button @onclick="OnScrollToEndButtonClicked" class="round-button scroll-to-end-button">
-                                <span>
-                                    <i class="fas fa-arrow-down"></i>
-                                </span>
-                                </button>
-                            }
-                        </div>
-                    </div>
-                </div>
-            }
-        }
-
+        </div>
 
         <div id="user-input" class="chat-element">
             <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
