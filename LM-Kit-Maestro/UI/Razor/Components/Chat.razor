@@ -10,7 +10,7 @@
 @inherits MvvmComponentBase<ChatPageViewModel>
 
 <div id="chat-container">
-    <div id="chats-sidebar" class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
+    <div id="chats-sidebar" class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar" : "sidebar-hide")">
 
         <div id="conversation-list">
 
@@ -103,7 +103,7 @@
     </div>
 
     @*     <div id="settings-sidebar"
-         class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar-show" : "sidebar-hide")">
+         class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar" : "sidebar-hide")">
         <ChatSettings/>
     </div> *@
 </div>

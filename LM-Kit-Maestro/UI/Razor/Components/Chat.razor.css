@@ -99,6 +99,10 @@ body.mac .chat-element {
     text-align: center;*/
 }
 
+#user-input{
+    padding-inline: 10px;
+}
+
 #chat-info {
     position: sticky;
     display: flex;
@@ -144,7 +148,7 @@ body.mac .chat-element {
     display: none;
 }
 
-.sidebar-show {
+.sidebar {
     overflow-y: auto;
     background-color: var(--Surface);
     width: 300px;
@@ -153,6 +157,10 @@ body.mac .chat-element {
     height: 100%;
 }
 
-#user-input{
-    padding-inline: 10px;
+body.windows .chat-element {
+    max-width: 800px;
+}
+
+body.mac .chat-element {
+    max-width: 1000px;
 }
