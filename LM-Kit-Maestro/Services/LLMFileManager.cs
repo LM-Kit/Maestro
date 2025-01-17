@@ -812,8 +812,10 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
         else
         {
-            return !(filePath.EndsWith(".download")) &&
-                   !(filePath.EndsWith(".origin"));
+            filePath = filePath.ToLower();
+            return !filePath.EndsWith(".lmk.gguf") &&
+                   !filePath.EndsWith(".download") &&
+                   !filePath.EndsWith(".origin");
         }
     }
 
