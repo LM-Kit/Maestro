@@ -22,9 +22,32 @@
         visibility: visible;
     }
 
-    #item-container.item-selected{
+    #item-container.item-selected {
         background-color: var(--Surface2);
     }
+
+::deep .mud-button-label {
+    text-transform: initial !important;
+}
+
+::deep .mud-input {
+    cursor: pointer !important;
+}
+
+::deep .mud-input-slot {
+    cursor: pointer !important;
+}
+
+::deep .mud-icon-button:hover {
+    color: var(--OnSurface) !important;
+    background-color: transparent !important;
+}
+
+/*::deep.item-actions{
+    background-color: var(--Primary);
+    text-transform: initial !important;
+    color: red !important;
+}*/
 
 /* Unable to override mud css. todo: find a way to do so. */
 /*#show-more-button .mud-icon-button {
@@ -34,10 +57,6 @@
 
 #show-more-button{
     background-color: pink !important;
-}
-
-.mud-icon-button:hover {
-    background-color: red !important;
 }
 
 #show-more-button:hover .mud-icon-button {

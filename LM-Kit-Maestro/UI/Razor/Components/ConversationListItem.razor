@@ -19,16 +19,16 @@
         </div>
 
         <MudPopover  Open="@ViewModel.IsShowingActionPopup" Fixed="true">
-            <div class="d-flex flex-column">
-                <MudButton @onclick="OnRenameClicked">
+            <div Class="d-flex flex-column item-actions">
+                <MudButton Variant="Variant.Text" @onclick="OnRenameClicked">
                     Rename
                 </MudButton>
 
-                <MudButton @onclick="OnSelected">
+                <MudButton Variant="Variant.Text" @onclick="OnSelected">
                     Select
                 </MudButton>
 
-                <MudButton @onclick="OnDeleteClicked"
+                <MudButton Variant="Variant.Text" @onclick="OnDeleteClicked"
                             Color="Color.Error">
                     Delete
                 </MudButton>
