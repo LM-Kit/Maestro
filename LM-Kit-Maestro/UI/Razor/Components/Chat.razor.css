@@ -103,12 +103,13 @@ body.mac .chat-element {
     padding-inline: 10px;
 }
 
-#chat-info {
+#chat-messages-bottom-space {
     position: sticky;
     display: flex;
     height: 48px;
     bottom: 0;
     margin-top: -48px;
+    align-self: center;
 }
 
 .scroll-to-end-button {
