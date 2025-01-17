@@ -33,14 +33,6 @@
     border-radius: 32px;
 }
 
-.show {
-    visibility: visible;
-}
-
-.hide {
-    visibility: hidden;
-}
-
 .chat-action-button {
     align-self: center;
     border-radius: 50%;

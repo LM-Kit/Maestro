@@ -21,24 +21,6 @@
     flex-direction: column;
 }
 
-    #conversation-content::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    #conversation-content::-webkit-scrollbar-thumb {
-        background-color: var(--OutlineVariant);
-        border-radius: 0;
-        border: 10px solid transparent;
-    }
-
-    #conversation-content::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-
-    #conversation-content::-webkit-scrollbar-thumb:hover {
-        background-color: var(--Outline);
-    }
-
     #chat-messages {
         display: flex;
         flex-direction: column;

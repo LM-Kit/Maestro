@@ -78,24 +78,6 @@ body.mac #input-text {
     border-color: var(--Primary);
 }
 
-#input-text::-webkit-scrollbar {
-    width: 10px;
-}
-
-#input-text::-webkit-scrollbar-thumb {
-    background-color: var(--OutlineVariant);
-    border-radius: 0;
-    border: 10px solid transparent;
-}
-
-#input-text::-webkit-scrollbar-track {
-    background-color: transparent;
-}
-
-#input-text::-webkit-scrollbar-thumb:hover {
-    background-color: var(--Outline);
-}
-
 .send-button {
     position: absolute;
     right: 0;
