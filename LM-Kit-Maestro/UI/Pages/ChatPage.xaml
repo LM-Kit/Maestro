@@ -120,20 +120,13 @@
     <ui:PageBase.Body>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"/>
             </Grid.ColumnDefinitions>
 
-            <ui:ChatConversationsView
-                x:Name="chatsSidebar"
-                WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}"
-                Grid.Row="1"/>
 
             <BlazorWebView
                 x:Name="blazorWebView"
-                Grid.RowSpan="2"
-                Grid.Column="1"
                 HostPage="wwwroot/index.html"
                 StartPath="/chat">
                 <BlazorWebView.RootComponents>
@@ -143,8 +136,7 @@
 
             <ui:ChatSettingsView
                 x:Name="settingsSidebar"
-                Grid.Row="1"
-                Grid.Column="2"
+                Grid.Column="1"
                 WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"
                 BindingContext="{Binding SettingsViewModel}"/>
         </Grid>

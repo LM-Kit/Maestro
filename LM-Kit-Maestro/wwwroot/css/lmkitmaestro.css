@@ -18,9 +18,9 @@
     }
 }*/
 
-    body.windows .small-text {
-        font-size: 12px;
-    }
+        body.windows .small-text {
+            font-size: 12px;
+        }
 
     body.mac .small-text {
         font-size: 14px;
@@ -242,6 +242,28 @@ body.windows .primary-button {
     display: inline-block;
 }
 
-.hidden {
+.hide {
     visibility: hidden;
+}
+
+.show {
+    visibility: visible;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--OutlineVariant);
+    border-radius: 0;
+    border: 10px solid transparent;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--Outline);
 }

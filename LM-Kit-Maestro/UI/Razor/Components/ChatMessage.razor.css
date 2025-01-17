@@ -18,9 +18,6 @@
     max-width: 75%;
     align-self: flex-end;
 }
-.user-message-container:hover .user-message-content {
-}
-
 
 .message-content {
     padding-inline: 16px;
@@ -34,17 +31,6 @@
     display: block;
     background-color: var(--Surface15);
     border-radius: 32px;
-}
-
-.assistant-message-content {
-}
-
-.show {
-    visibility: visible;
-}
-
-.hide {
-    visibility: hidden;
 }
 
 .chat-action-button {

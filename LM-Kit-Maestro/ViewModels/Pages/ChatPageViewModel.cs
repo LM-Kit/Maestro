@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Data;
 using Microsoft.Extensions.Logging;
@@ -23,7 +24,7 @@ public partial class ChatPageViewModel : PageViewModelBase
     [ObservableProperty]
     private SettingsViewModel _settingsViewModel;
 
-    public LMKitService LMKitService { get; }
+    public LMKitService LmKitService { get; }
     public ConversationListViewModel ConversationListViewModel { get; }
     public ModelListViewModel ModelListViewModel { get; }
 
@@ -37,7 +38,7 @@ public partial class ChatPageViewModel : PageViewModelBase
         ModelListViewModel = modelListViewModel;
         _database = database;
         _llmFileManager = llmFileManager;
-        LMKitService = lmKitService;
+        LmKitService = lmKitService;
         SettingsViewModel = settingsViewModel;
 
         ConversationListViewModel.Conversations.CollectionChanged += OnConversationListChanged;
@@ -75,15 +76,6 @@ public partial class ChatPageViewModel : PageViewModelBase
             ConversationListViewModel.CurrentConversation = ConversationListViewModel.Conversations.First();
         }
     }
-
-    private void InitializeCurrentConversation()
-    {
-        if (ConversationListViewModel.Conversations.Count == 0)
-        {
-            StartNewConversation();
-        }
-    }
-
     private void OnConversationListChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add && ConversationListViewModel.Conversations.Count == 1)

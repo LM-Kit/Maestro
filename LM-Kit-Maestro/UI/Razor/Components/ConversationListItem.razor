@@ -1,0 +1,42 @@
+﻿@inherits ComponentBase
+
+<div @onclick="OnSelected" id="item-container" class="@(IsSelected ? "item-selected" : "")">
+
+    <MudTextField Underline=false 
+        @ref="ItemTitleRef" 
+        @bind-Value="Title" 
+        OnKeyDown="OnKeyPressed"
+        Immediate="true"
+        @onfocusout="OnTitleFocusOut"
+        TextUpdateSuppression="false"
+        ReadOnly="@(!ViewModel.IsRenaming)"/>
+
+    <div>
+        <div id="show-more-button" class="@(IsSelected ? "show" : "hide")">
+            <MudIconButton @onclick="OnShowMoreClicked"
+                            Icon="@Icons.Material.Filled.MoreHoriz"
+                            Size="Size.Small"/>
+        </div>
+
+        <MudPopover  Open="@ViewModel.IsShowingActionPopup" Fixed="true">
+            <div Class="d-flex flex-column item-actions">
+                <MudButton Variant="Variant.Text" @onclick="OnRenameClicked">
+                    Rename
+                </MudButton>
+
+                <MudButton Variant="Variant.Text" @onclick="OnSelected">
+                    Select
+                </MudButton>
+
+                <MudButton Variant="Variant.Text" @onclick="OnDeleteClicked"
+                            Color="Color.Error">
+                    Delete
+                </MudButton>
+            </div>
+        </MudPopover>
+
+        <MudOverlay @bind-Visible="ViewModel.IsShowingActionPopup"
+                    @onclick="OnClickOutsideShowMore" 
+                    AutoClose="true" />
+    </div>
+</div>

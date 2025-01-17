@@ -2,7 +2,10 @@
 using LMKit.Maestro.Data;
 using LMKit.Maestro.Models;
 using Microsoft.Extensions.Logging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace LMKit.Maestro.ViewModels
 {
@@ -16,6 +19,7 @@ namespace LMKit.Maestro.ViewModels
         private readonly IAppSettingsService _appSettingsService;
 
         private ConversationViewModel? _currentConversation;
+
         public ConversationViewModel? CurrentConversation
         {
             get => _currentConversation;
@@ -37,10 +41,14 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
+        public event PropertyChangedEventHandler? ConversationPropertyChanged;
 
-        public ObservableCollection<ConversationViewModel> Conversations { get; } = new ObservableCollection<ConversationViewModel>();
+        public ObservableCollection<ConversationViewModel> Conversations { get; } =
+            new ObservableCollection<ConversationViewModel>();
 
-        public ConversationListViewModel(IMainThread mainThread, IPopupService popupService, ILogger<ConversationListViewModel> logger, IMaestroDatabase database, LMKitService lmKitService, IAppSettingsService appSettingsService)
+        public ConversationListViewModel(IMainThread mainThread, IPopupService popupService,
+            ILogger<ConversationListViewModel> logger, IMaestroDatabase database, LMKitService lmKitService,
+            IAppSettingsService appSettingsService)
         {
             _mainThread = mainThread;
             _logger = logger;
@@ -48,6 +56,8 @@ namespace LMKit.Maestro.ViewModels
             _database = database;
             _lmKitService = lmKitService;
             _appSettingsService = appSettingsService;
+
+            Conversations.CollectionChanged += OnConversationCollectionChanged;
         }
 
         public async Task LoadConversationLogs()
@@ -67,7 +77,8 @@ namespace LMKit.Maestro.ViewModels
 
             foreach (var conversation in conversations)
             {
-                ConversationViewModel conversationViewModel = new ConversationViewModel(_popupService, _lmKitService, _database, conversation);
+                ConversationViewModel conversationViewModel =
+                    new ConversationViewModel(_popupService, _lmKitService, _database, conversation);
 
                 if (conversation.ChatHistoryData != null)
                 {
@@ -130,6 +141,29 @@ namespace LMKit.Maestro.ViewModels
 
                 CurrentConversation = Conversations.First();
             }
+        }
+
+        private void OnConversationCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (var item in e.NewItems)
+                {
+                    ((ConversationViewModel)item).PropertyChanged += OnConversationPropertyChanged;
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var item in e.OldItems)
+                {
+                    (item as ConversationViewModel).PropertyChanged -= OnConversationPropertyChanged;
+                }
+            }
+        }
+
+        private void OnConversationPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            ConversationPropertyChanged?.Invoke(sender, e);
         }
     }
 }
