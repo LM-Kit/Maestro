@@ -7,7 +7,7 @@
     justify-content: space-between;
     padding-block: 12px;
     padding-inline: 8px;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
     #item-container:hover {
