@@ -21,37 +21,29 @@ public partial class ConversationViewModel : AssistantViewModelBase
     private MessageViewModel? _pendingResponse;
     private bool _isSynchedWithLog = true;
 
-    [ObservableProperty]
-    bool _isEmpty = true;
+    [ObservableProperty] bool _isEmpty = true;
 
-    [ObservableProperty]
-    bool _usedDifferentModel;
+    [ObservableProperty] bool _usedDifferentModel;
 
-    [ObservableProperty]
-    bool _logsLoadingInProgress;
+    [ObservableProperty] bool _logsLoadingInProgress;
 
-    [ObservableProperty]
-    bool _isInitialized;
+    [ObservableProperty] bool _isInitialized;
 
-    [ObservableProperty]
-    public LMKitRequestStatus _latestPromptStatus;
+    [ObservableProperty] public LMKitRequestStatus _latestPromptStatus;
 
-    [ObservableProperty]
-    bool _isSelected;
+    [ObservableProperty] bool _isSelected;
 
-    [ObservableProperty]
-    bool _isHovered;
+    [ObservableProperty] bool _isHovered;
 
-    [ObservableProperty]
-    bool _isRenaming;
+    [ObservableProperty] bool _isRenaming;
 
-    [ObservableProperty]
-    bool _isShowingActionPopup;
+    [ObservableProperty] bool _isShowingActionPopup;
 
     public ObservableCollection<MessageViewModel> Messages { get; } = new ObservableCollection<MessageViewModel>();
     public ConversationLog ConversationLog { get; }
 
     private string _title;
+
     public string Title
     {
         get => _title;
@@ -69,6 +61,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
     }
 
     private Uri? _lastUsedModel;
+
     public Uri? LastUsedModel
     {
         get => _lastUsedModel;
@@ -91,11 +84,13 @@ public partial class ConversationViewModel : AssistantViewModelBase
     public EventHandler? DatabaseSaveOperationCompleted;
     public EventHandler? DatabaseSaveOperationFailed;
 
-    public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database) : this(popupService, lmKitService, database, new ConversationLog(Locales.UntitledChat))
+    public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database) :
+        this(popupService, lmKitService, database, new ConversationLog(Locales.UntitledChat))
     {
     }
 
-    public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database, ConversationLog conversationLog) : base(popupService, lmKitService)
+    public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database,
+        ConversationLog conversationLog) : base(popupService, lmKitService)
     {
         _lmKitService = lmKitService;
         _lmKitService.ModelLoaded += OnModelLoadingCompleted;
@@ -112,7 +107,15 @@ public partial class ConversationViewModel : AssistantViewModelBase
         IsInitialized = conversationLog.ChatHistoryData == null;
     }
 
-    public void LoadConversationLogs()
+    public async Task Delete()
+    {
+        if (AwaitingResponse)
+        {
+            await HandleCancel(true);
+        }
+    }
+
+    public bool LoadConversationLog()
     {
         try
         {
@@ -135,20 +138,14 @@ public partial class ConversationViewModel : AssistantViewModelBase
                     LastUsedModel = new Uri(ConversationLog.LastUsedModel);
                 }
             }
+
+            IsInitialized = true;
+
+            return true;
         }
-        catch (Exception)
+        catch (Exception? ex)
         {
-
-        }
-
-        IsInitialized = true;
-    }
-
-    public async Task Delete()
-    {
-        if (AwaitingResponse)
-        {
-            await HandleCancel(true);
+            return false;
         }
     }
 
@@ -157,7 +154,8 @@ public partial class ConversationViewModel : AssistantViewModelBase
     {
         if (_lmKitService.ModelLoadingState != LMKitModelLoadingState.Loaded)
         {
-            _popupService.DisplayAlert("No model is loaded", "You need to load a model in order to regenerate a response", "OK");
+            _popupService.DisplayAlert("No model is loaded",
+                "You need to load a model in order to regenerate a response", "OK");
         }
         else
         {
@@ -235,7 +233,6 @@ public partial class ConversationViewModel : AssistantViewModelBase
         UsedDifferentModel &= false;
         LatestPromptStatus = LMKitRequestStatus.OK;
         AwaitingResponse = true;
-
     }
 
     private void OnTextGenerationResult(LMKitService.LMKitResult? result, Exception? exception = null)
@@ -245,14 +242,17 @@ public partial class ConversationViewModel : AssistantViewModelBase
         if (Messages.Count >= 2)
         {
             // Setting error status for the last assistant message if the response generation failed.
-            Messages.Last().Status = result != null ? result.Status : exception is OperationCanceledException ? LMKitRequestStatus.Cancelled : LMKitRequestStatus.GenericError;
+            Messages.Last().Status = result != null ? result.Status :
+                exception is OperationCanceledException ? LMKitRequestStatus.Cancelled :
+                LMKitRequestStatus.GenericError;
         }
 
         var textGenerationResult = result?.Result is TextGenerationResult ? (TextGenerationResult)result.Result : null;
 
         TextGenerationCompleted?.Invoke(this,
-            new TextGenerationCompletedEventArgs(result?.Result is TextGenerationResult ? (TextGenerationResult)result.Result : null,
-            exception ?? (result?.Exception), result?.Status));
+            new TextGenerationCompletedEventArgs(
+                result?.Result is TextGenerationResult ? (TextGenerationResult)result.Result : null,
+                exception ?? (result?.Exception), result?.Status));
 
         if (!_isSynchedWithLog)
         {
@@ -382,7 +382,8 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
         public TextGenerationResult? Result { get; }
 
-        public TextGenerationCompletedEventArgs(TextGenerationResult? result = null, Exception? exception = null, LMKitRequestStatus? status = null)
+        public TextGenerationCompletedEventArgs(TextGenerationResult? result = null, Exception? exception = null,
+            LMKitRequestStatus? status = null)
         {
             Result = result;
             Exception = exception;
