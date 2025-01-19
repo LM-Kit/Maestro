@@ -154,3 +154,33 @@ body.mac .chat-element {
     justify-content: center;
     max-width: 568px;
 }
+
+
+
+#chat-top-bar {
+    display: grid;
+    flex-direction: column;
+    grid-template-columns: auto 1fr auto;
+}
+
+.chat-top-bar-sidebar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.sidebar-toggle-button {
+    /* Add your button styles here */
+}
+
+.secondary-action-button {
+    /* Add your secondary button styles here */
+}
+
+.sidebar-title {
+    /* Add your label styles here */
+}
+
+.model-selection-button {
+    /* Add your ModelSelectionButton styles here */
+}

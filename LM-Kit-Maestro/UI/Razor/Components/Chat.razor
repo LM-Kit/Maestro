@@ -10,9 +10,51 @@
 @inherits MvvmComponentBase<ChatPageViewModel>
 
 <SectionContent SectionName="top-bar">
-    <div id="model-button">
-        <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel"/>
+    <div id="chat-top-bar">
+        <div class="top-bar-sidebar">
+
+            <MudIconButton class="secondary-action-button"
+                           title="@(Locales.DisplayChats)"
+                           Icon="fas fa-message"
+                           @onclick="ViewModel.ToggleChatsSidebar">
+            </MudIconButton>
+
+            <MudText>
+                Chats
+            </MudText>
+
+            <MudIconButton class="secondary-action-button"
+                           title="@(Locales.StartNewChat)"
+                           Icon="fas fa-add"
+                           @onclick="ViewModel.StartNewConversation">
+            </MudIconButton>
+        </div>
+
+        <div id="model-button">
+            <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel"/>
+        </div>
+
+
+        @* <div class="chat-top-bar-sidebar"> *@
+        @*     <button class="secondary-action-button" *@
+        @*             style="display: @(chatPage.SettingsSidebarIsToggled ? "block;" : "none;");" *@
+        @*             title="@(Locales.ResetDefaultSettings)" *@
+        @*             @onclick="ViewModel.SettingsViewModel.ResetDefaultValues"> *@
+        @*         @ui.Locales.Rotate_right *@
+        @*     </button> *@
+        @*     <label class="title sidebar-title" *@
+        @*            style="@(chatPage.SettingsSidebarIsToggled ? "display: block;" : "display: none;")"> *@
+        @*         Settings *@
+        @*     </label> *@
+        @*     <button class="sidebar-toggle-button" *@
+        @*             style="grid-column: 2;" *@
+        @*             title="@(ui.Locales.DisplaySettings)" *@
+        @*             @onclick="ToggleSettingsSidebarCommand"> *@
+        @*         @ui.Locales.Tune *@
+        @*     </button> *@
+        @* </div> *@
     </div>
+
 </SectionContent>
 
 <div id="chat-container">
