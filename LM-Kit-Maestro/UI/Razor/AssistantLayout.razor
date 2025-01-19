@@ -1,12 +1,11 @@
 ﻿@inherits LayoutComponentBase
 
+
 @inject ModelListViewModel ModelListViewModel
 
 <div id="root-container">
     <div id="top-bar">
-        <div id="model-button">
-            <ModelSelectionButton ModelListViewModel="ModelListViewModel" />
-        </div>
+        <SectionOutlet SectionName="top-bar" />
     </div>
 
     <div>
@@ -27,13 +26,6 @@
         align-items: center;
         justify-content: center;
         background-color: var(--Surface);
-    }
-
-    #model-button{
-        width: 100%;
-        align-self: center;
-        justify-content: center;
-        max-width: 568px;
     }
 </style>
 

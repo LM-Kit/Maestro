@@ -9,9 +9,14 @@
 @inject ISnackbar Snackbar
 @inherits MvvmComponentBase<ChatPageViewModel>
 
+<SectionContent SectionName="top-bar">
+    <div id="model-button">
+        <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel"/>
+    </div>
+</SectionContent>
+
 <div id="chat-container">
     <div id="chats-sidebar" class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar" : "sidebar-hide")">
-
         <div id="conversation-list">
 
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)

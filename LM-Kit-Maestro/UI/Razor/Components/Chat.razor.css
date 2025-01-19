@@ -147,3 +147,10 @@ body.windows .chat-element {
 body.mac .chat-element {
     max-width: 1000px;
 }
+
+#model-button{
+    width: 100%;
+    align-self: center;
+    justify-content: center;
+    max-width: 568px;
+}
