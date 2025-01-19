@@ -8,20 +8,22 @@
         <SectionOutlet SectionName="top-bar" />
     </div>
 
-    <div>
-        @Body
-    </div>
+    @Body
 </div>
 
 <style>
     #root-container {
-        display: flex; 
-        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
     }
 
     #top-bar {
         width: 100%;
-        height: 200px;
+        height: 96px;
         display: flex;
         align-items: center;
         justify-content: center;

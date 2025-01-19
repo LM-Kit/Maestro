@@ -11,18 +11,17 @@
 
 <SectionContent SectionName="top-bar">
     <div id="chat-top-bar">
-        <div class="top-bar-side">
-
+        <div class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
             <MudIconButton class="secondary-action-button"
                            title="@(Locales.DisplayChats)"
+                           Size="Size.Small"
                            Icon="fas fa-message"
                            @onclick="ViewModel.ToggleChatsSidebar">
             </MudIconButton>
 
-            @if (ViewModel.SettingsSidebarIsToggled)
+            @if (ViewModel.ChatsSidebarIsToggled)
             {
-
-                <MudText>
+                <MudText Typo="Typo.body2">
                     Chats
                 </MudText>
             }
@@ -30,6 +29,7 @@
             <MudIconButton Class="secondary-action-button"
                            title="@(Locales.StartNewChat)"
                            Icon="fas fa-add"
+                           Size="Size.Small"
                            @onclick="ViewModel.StartNewConversation">
             </MudIconButton>
         </div>
@@ -48,37 +48,18 @@
                                @onclick="ViewModel.SettingsViewModel.ResetDefaultValues">
                 </MudIconButton>
 
-                <MudText>
+                <MudText Typo="Typo.body2">
                     Settings
                 </MudText>
             }
 
             <MudIconButton Class="secondary-action-button"
                            title="@(Locales.DisplaySettings)"
-                           Icon="fas fa-add"
+                           Icon="@Icons.Material.Filled.Tune"
                            @onclick="ViewModel.ToggleSettingsSidebar">
             </MudIconButton>
         </div>
-        @* <div class="chat-top-bar-sidebar"> *@
-        @*     <button class="secondary-action-button" *@
-        @*             style="display: @(chatPage.SettingsSidebarIsToggled ? "block;" : "none;");" *@
-        @*             title="@(Locales.ResetDefaultSettings)" *@
-        @*             @onclick="ViewModel.SettingsViewModel.ResetDefaultValues"> *@
-        @*         @ui.Locales.Rotate_right *@
-        @*     </button> *@
-        @*     <label class="title sidebar-title" *@
-        @*            style="@(chatPage.SettingsSidebarIsToggled ? "display: block;" : "display: none;")"> *@
-        @*         Settings *@
-        @*     </label> *@
-        @*     <button class="sidebar-toggle-button" *@
-        @*             style="grid-column: 2;" *@
-        @*             title="@(ui.Locales.DisplaySettings)" *@
-        @*             @onclick="ToggleSettingsSidebarCommand"> *@
-        @*         @ui.Locales.Tune *@
-        @*     </button> *@
-        @* </div> *@
     </div>
-
 </SectionContent>
 
 <div id="chat-container">
@@ -96,7 +77,7 @@
     </div>
 
     <div id="chat-body">
-        <div id="conversation-content">
+@*         <div id="conversation-content">
             @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
@@ -155,7 +136,7 @@
                 }
             }
         </div>
-
+ *@
         <div id="user-input" class="chat-element">
             <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
         </div>
