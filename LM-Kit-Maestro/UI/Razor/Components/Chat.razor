@@ -9,7 +9,7 @@
 @inject ISnackbar Snackbar
 @inherits MvvmComponentBase<ChatPageViewModel>
 
-<SectionContent SectionName="top-bar">
+@* <SectionContent SectionName="top-bar">
     <div id="chat-top-bar">
         <div class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
             <MudIconButton class="secondary-action-button"
@@ -61,7 +61,7 @@
         </div>
     </div>
 </SectionContent>
-
+ *@
 <div id="chat-container">
     <div id="chats-sidebar" class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar" : "sidebar-hide")">
         <div id="conversation-list">
@@ -77,7 +77,7 @@
     </div>
 
     <div id="chat-body">
-@*         <div id="conversation-content">
+        <div id="conversation-content">
             @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
@@ -136,7 +136,7 @@
                 }
             }
         </div>
- *@
+
         <div id="user-input" class="chat-element">
             <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
         </div>
