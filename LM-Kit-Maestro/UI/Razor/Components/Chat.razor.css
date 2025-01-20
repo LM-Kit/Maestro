@@ -1,26 +1,24 @@
 ﻿#chat-container {
     height: 100%;
     width: 100%;
-    display: flex;
-    flex-direction: row;
+    display: flex
 }
 
 #chat-body {
-    width: 100%;
-    height: 100%;
-    /*position: relative;
-        box-sizing: border-box ?
-    */
-    background-color: red;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    width: 100%;
 }
 
 #conversation-content {
-    background-color: green;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0%;
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+    scrollbar-gutter: both-edges stable;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 #chat-messages {
@@ -28,7 +26,15 @@
     flex-direction: column;
 }
 
-
+#bottom-space {
+    display: flex;
+    min-height: 40px;
+    color: var(--Outline) !important;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0;
+}
 
 #conversation-list {
     padding-inline: 12px;
@@ -73,6 +79,10 @@ body.mac .chat-element {
     margin-inline: 0 auto;
     width: 100%;
     text-align: center;*/
+}
+
+#user-input {
+    padding-inline: 10px;
 }
 
 #chat-messages-bottom-space {
@@ -138,12 +148,17 @@ body.mac .chat-element {
     max-width: 1000px;
 }
 
+
+
 #top-bar-center {
     width: 100%;
     display: flex;
     align-self: center;
     justify-content: center;
 }
+
+
+
 
 #chat-top-bar {
     display: grid;
@@ -186,20 +201,4 @@ body.mac .chat-element {
 
 #conversation-bottom {
     display: block;
-}
-
-#user-input {
-    padding-inline: 10px;
-    display: block;
-    background-color: yellow;
-}
-
-#bottom-space {
-    display: flex;
-    min-height: 40px;
-    color: var(--Outline) !important;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0;
 }
