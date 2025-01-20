@@ -5,10 +5,38 @@
     display: flex;
 }
 
-.round-button {
-    border-radius: 50%;
+.mac.button {
+    width: 40px;
+    height : 40px;
+    font-size: 20px;
 }
 
-.square-button {
+.windows.button {
+    width: 32px;
+    height : 32px;
+    font-size: 16px;
+}
+
+.icon-button {
+    background-color: transparent;
+}
+
+.sidebar-toggle-button {
+    display: flex;
     border-radius: 4px;
+    text-align: center;
+    color: var(--Background);
+}
+
+.sidebar-toggle-button:hover{
+    color: var(--Primary);
+}
+
+.secondary-action {
+    border-radius: 50%;
+    color: var(--Background);
+}
+
+.secondary-action:hover {
+    color: var(--Surface3);
 }

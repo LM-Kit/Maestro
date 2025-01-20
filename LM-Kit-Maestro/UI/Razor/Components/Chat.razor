@@ -9,15 +9,13 @@
 @inject ISnackbar Snackbar
 @inherits MvvmComponentBase<ChatPageViewModel>
 
-@* <SectionContent SectionName="top-bar">
+<SectionContent SectionName="top-bar">
     <div id="chat-top-bar">
         <div class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
-            <MudIconButton class="secondary-action-button"
-                           title="@(Locales.DisplayChats)"
-                           Size="Size.Small"
-                           Icon="fas fa-message"
-                           @onclick="ViewModel.ToggleChatsSidebar">
-            </MudIconButton>
+            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                        Icon="fas fa-message"
+                        OnClick="ViewModel.ToggleChatsSidebar">
+            </IconButton>
 
             @if (ViewModel.ChatsSidebarIsToggled)
             {
@@ -42,7 +40,7 @@
 
             @if (ViewModel.SettingsSidebarIsToggled)
             {
-                <MudIconButton class="secondary-action-button"
+                <MudIconButton Class="secondary-action-button"
                                title="@(Locales.ResetDefaultSettings)"
                                Icon="@Icons.Material.Filled.SettingsBackupRestore"
                                @onclick="ViewModel.SettingsViewModel.ResetDefaultValues">
@@ -53,7 +51,7 @@
                 </MudText>
             }
 
-            <MudIconButton Class="secondary-action-button"
+            <MudIconButton class="sidebar-toggle-button"
                            title="@(Locales.DisplaySettings)"
                            Icon="@Icons.Material.Filled.Tune"
                            @onclick="ViewModel.ToggleSettingsSidebar">
@@ -61,7 +59,7 @@
         </div>
     </div>
 </SectionContent>
- *@
+
 
 <div id="chat-container">
     <div id="chats-sidebar" class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar" : "sidebar-hide")">
