@@ -3,21 +3,24 @@
     justify-content: center;
     align-items: center;
     display: flex;
+    min-width: 32px;
+    min-height: 32px;
 }
 
-.mac.button {
+body.mac.button {
     width: 40px;
-    height : 40px;
+    height: 40px;
     font-size: 20px;
 }
 
-.windows.button {
+body.windows.icon-button {
     width: 32px;
-    height : 32px;
+    height: 32px;
     font-size: 16px;
 }
 
 .icon-button {
+    font-size: 12px;
     background-color: transparent;
 }
 
@@ -25,18 +28,20 @@
     display: flex;
     border-radius: 4px;
     text-align: center;
-    color: var(--Background);
+    background-color: var(--Surface2);
+    color: var(--OnSurface);
 }
 
-.sidebar-toggle-button:hover{
-    color: var(--Primary);
-}
+    .sidebar-toggle-button:hover {
+        background-color: var(--Primary);
+    }
 
-.secondary-action {
+.secondary-action-button {
     border-radius: 50%;
-    color: var(--Background);
+    color: var(--Outline);
+    background-color: var(--Surface2);
 }
 
-.secondary-action:hover {
-    color: var(--Surface3);
-}
+    .secondary-action-button:hover {
+        background-color: var(--Surface3);
+    }

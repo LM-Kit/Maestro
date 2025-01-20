@@ -11,11 +11,11 @@
 
 <SectionContent SectionName="top-bar">
     <div id="chat-top-bar">
-        <div class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
+        <div
+            class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
             <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
                         Icon="fas fa-message"
-                        OnClick="ViewModel.ToggleChatsSidebar">
-            </IconButton>
+                        OnClick="ViewModel.ToggleChatsSidebar"/>
 
             @if (ViewModel.ChatsSidebarIsToggled)
             {
@@ -24,38 +24,32 @@
                 </MudText>
             }
 
-            <MudIconButton Class="secondary-action-button"
-                           title="@(Locales.StartNewChat)"
-                           Icon="fas fa-add"
-                           Size="Size.Small"
-                           @onclick="ViewModel.StartNewConversation">
-            </MudIconButton>
+            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                        Icon="fas fa-add"
+                        OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
         </div>
 
         <div id="top-bar-center">
-            <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel" />
+            <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel"/>
         </div>
 
-        <div class="top-bar-side @(ViewModel.SettingsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
+        <div
+            class="top-bar-side @(ViewModel.SettingsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
 
             @if (ViewModel.SettingsSidebarIsToggled)
             {
-                <MudIconButton Class="secondary-action-button"
-                               title="@(Locales.ResetDefaultSettings)"
-                               Icon="@Icons.Material.Filled.SettingsBackupRestore"
-                               @onclick="ViewModel.SettingsViewModel.ResetDefaultValues">
-                </MudIconButton>
+                <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                            Icon="fas fa-arrow-rotate-left"
+                            OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
 
                 <MudText Typo="Typo.body2">
                     Settings
                 </MudText>
             }
 
-            <MudIconButton class="sidebar-toggle-button"
-                           title="@(Locales.DisplaySettings)"
-                           Icon="@Icons.Material.Filled.Tune"
-                           @onclick="ViewModel.ToggleSettingsSidebar">
-            </MudIconButton>
+            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                        Icon="fas fa-gears"
+                        OnClick="ViewModel.ToggleSettingsSidebar"/>
         </div>
     </div>
 </SectionContent>
@@ -71,7 +65,7 @@
                 <ConversationListItem OnSelect="OnConversationItemSelected"
                                       OnDelete="OnConversationItemDeleteClicked"
                                       IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
-                                      ViewModel="conversation" />
+                                      ViewModel="conversation"/>
             }
         </div>
     </div>
@@ -116,7 +110,7 @@
                     <div id="chat-messages" class="chat-element">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
-                            <ChatMessage MessageViewModel="message" />
+                            <ChatMessage MessageViewModel="message"/>
                         }
 
                         <div id="chat-messages-bottom-space">
@@ -138,7 +132,7 @@
         </div>
 
         <div id="user-input" class="chat-element">
-            <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
+            <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
         </div>
 
         <div id="bottom-space">
@@ -148,7 +142,7 @@
                     Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                     @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
                     (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                             ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
                 </MudText>
             }
         </div>

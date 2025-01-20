@@ -1,7 +1,7 @@
 ﻿#chat-container {
     height: 100%;
     width: 100%;
-    display: flex
+    display: flex;
 }
 
 #chat-body {
@@ -172,6 +172,7 @@ body.mac .chat-element {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    padding: 20px;
 }
 
 
