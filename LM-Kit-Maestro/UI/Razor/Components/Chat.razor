@@ -68,10 +68,10 @@
 
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
             {
-                <ConversationListItem OnSelect="OnConversationItemSelected"
-                                      OnDelete="OnConversationItemDeleteClicked"
-                                      IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
-                                      ViewModel="conversation" />
+                    <ConversationListItem OnSelect="OnConversationItemSelected"
+                                          OnDelete="OnConversationItemDeleteClicked"
+                                          IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
+                                          ViewModel="conversation" />
             }
         </div>
     </div>
@@ -82,75 +82,77 @@
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
                 {
-                    <div id="empty-conversation" class="chat-element vertical-stack">
-                        <div class="vertical-stack spacing-4">
-                            <div class="welcome-message">
-                                <b>Maestro</b> at your service—let’s orchestrate something
-                                amazing!
-                            </div>
-                            <div class="welcome-message">
-                                Feel free to ask questions, explore ideas, or engage in meaningful conversations.
+                            <div id="empty-conversation" class="chat-element vertical-stack">
+                                <div class="vertical-stack spacing-4">
+                                    <div class="welcome-message">
+                                        <b>Maestro</b> at your service—let’s orchestrate something
+                                        amazing!
+                                    </div>
+                                    <div class="welcome-message">
+                                        Feel free to ask questions, explore ideas, or engage in meaningful conversations.
 
-                            </div>
-                            <div class="welcome-message">
-                                Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to
-                                help.
+                                    </div>
+                                    <div class="welcome-message">
+                                        Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to
+                                        help.
 
-                            </div>
+                                    </div>
 
-                        </div>
+                                </div>
 
-                        <div class="vertical-stack" style="gap:12px;">
-                            <div class="shortcut-instruction">
-                                Press Enter to send a new message
-                            </div>
+                                <div class="vertical-stack" style="gap:12px;">
+                                    <div class="shortcut-instruction">
+                                        Press Enter to send a new message
+                                    </div>
 
-                            <div class="shortcut-instruction">
-                                Hold Shift + Enter to insert a new line
+                                    <div class="shortcut-instruction">
+                                        Hold Shift + Enter to insert a new line
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
                 }
                 else
                 {
-                    <div id="chat-messages" class="chat-element">
+                            <div id="chat-messages" class="chat-element">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
-                            <ChatMessage MessageViewModel="message" />
+                                        <ChatMessage MessageViewModel="message" />
                         }
 
-                        <div id="chat-messages-bottom-space">
-                            <div id="scroll-to-end">
+                                <div id="chat-messages-bottom-space">
+                                    <div id="scroll-to-end">
                                 @if (!IsScrolledToEnd)
                                 {
-                                    <button @onclick="OnScrollToEndButtonClicked"
-                                            class="round-button scroll-to-end-button">
-                                        <span>
-                                            <i class="fas fa-arrow-down"></i>
-                                        </span>
-                                    </button>
+                                                <button @onclick="OnScrollToEndButtonClicked"
+                                                        class="round-button scroll-to-end-button">
+                                                    <span>
+                                                        <i class="fas fa-arrow-down"></i>
+                                                    </span>
+                                                </button>
                                 }
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
                 }
             }
         </div>
 
-        <div id="user-input" class="chat-element">
-            <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
-        </div>
+        <div id="conversation-bottom">
+            <div id="user-input" class="chat-element">
+                <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
+            </div>
 
-        <div id="bottom-space">
-            @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
-            {
-                <MudText Align="Align.Center" Typo="Typo.subtitle1">
-                    Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
-                    @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
-                    (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
-                </MudText>
-            }
+            <div id="bottom-space">
+                    @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
+                    {
+                        <MudText Align="Align.Center" Typo="Typo.subtitle1">
+                            Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
+                            @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
+                            (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
+                                            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                        </MudText>
+                    }
+            </div>
         </div>
     </div>
 
