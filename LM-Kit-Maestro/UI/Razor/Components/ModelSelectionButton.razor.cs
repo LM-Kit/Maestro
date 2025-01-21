@@ -6,24 +6,9 @@ namespace LMKit.Maestro.UI.Razor.Components;
 
 public partial class ModelSelectionButton
 {
-     [Parameter] required public ModelListViewModel ModelListViewModel { get; set; }
+    [Parameter] required public ModelListViewModel ModelListViewModel { get; set; }
 
-
-    private string _text = Locales.SelectModel;
-
-
-    private string Text
-    {
-        get => _text;
-        set
-        {
-            if (_text != value)
-            {
-                _text = value;
-                InvokeAsync(() => StateHasChanged());
-            }
-        }
-    }
+    public string Text { get; private set; } = Locales.SelectModel;
 
     protected override void OnParametersSet()
     {
@@ -31,6 +16,8 @@ public partial class ModelSelectionButton
 
         Text = GetModelStateText(ModelListViewModel);
         ModelListViewModel.PropertyChanged += OnModelListViewModelPropertyChanged;
+
+        InvokeAsync(() => StateHasChanged());
     }
 
     private void OnModelListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -38,6 +25,7 @@ public partial class ModelSelectionButton
         if (e.PropertyName == nameof(ModelListViewModel.LoadingState))
         {
             Text = GetModelStateText(ModelListViewModel);
+            InvokeAsync(() => StateHasChanged());
         }
     }
 
@@ -54,7 +42,7 @@ public partial class ModelSelectionButton
     {
         ModelListViewModel.EjectModel();
     }
-    
+
     private static string GetModelStateText(ModelListViewModel modelListViewModel)
     {
         switch (modelListViewModel.LoadingState)
@@ -74,6 +62,24 @@ public partial class ModelSelectionButton
 
             case ModelListViewModel.ModelLoadingState.Downloading:
                 return Locales.DownloadingModel;
+        }
+    }
+
+    private static string GetButtonContainerClasses(ModelListViewModel modelListViewModel)
+    {
+        switch (modelListViewModel.LoadingState)
+        {
+            default:
+            case ModelListViewModel.ModelLoadingState.NotLoaded:
+                return "button-model-unloaded";
+
+            case ModelListViewModel.ModelLoadingState.Loaded:
+                return "button-model-loaded";
+
+            case ModelListViewModel.ModelLoadingState.FinishinUp:
+            case ModelListViewModel.ModelLoadingState.Downloading:
+            case ModelListViewModel.ModelLoadingState.Loading:
+                return "button-model-loading";
         }
     }
 }
