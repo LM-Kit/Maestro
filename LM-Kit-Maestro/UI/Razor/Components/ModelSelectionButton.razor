@@ -1,6 +1,8 @@
 ﻿@inject LMKitService LMKitService
 
-<div id="model-selection-button-container" @onclick="() => OnButtonClicked()">
+<div id="model-selection-button-container"
+     class="@(ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded ? "border-primary" : "border-outline")"
+     @onclick="() => OnButtonClicked()">
     <div id="button-body">
         <div class="d-flex justify-center">
             @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
@@ -14,15 +16,14 @@
 
         <div id="button-text">
             <div class="text-wrapper">
-
-            <MudText Align="Align.Center" Typo="Typo.subtitle2">
-                    AAAAAAA BBBBBB CCCCC DDDDDD EEEEEE FFFFF GGGGG HHHH  IIIII JJJJJ KKKK LLLL MMMM
-            </MudText>
+                <MudText Align="Align.Center" Typo="Typo.subtitle2">
+                    @Text
+                </MudText>
             </div>
 
         </div>
 
-        <div class="d-flex justify-center">
+        <div  class="d-flex justify-center">
             <MudIcon Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark"/>
         </div>
 
