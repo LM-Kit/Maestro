@@ -1,36 +1,48 @@
-.root-container {
+#model-selection-button-container {
     width: 100%;
     max-width: 568px;
     border: 1px solid var(--Primary);
     border-radius: 4px;
     height: 48px;
-    display: flex;
+    display: grid;
     flex-direction: row;
     align-items: center;
     transition: background-color 0.3s;
     background-color: var(--Surface2);
 }
 
-.root-container:hover {
-    background-color: var(--Surface);
-    cursor: pointer;
-}
+    #model-selection-button-container:hover {
+        background-color: var(--Surface);
+        cursor: pointer;
+    }
 
 #button-body {
-    display: flex;
     width: 100%;
-    margin-inline: 8px;
-    justify-content: space-between;
+    display: grid;
     align-items: center;
+    grid-template-columns: 40px 1fr 40px;
 }
 
 #button-text {
     display: flex;
     position: relative;
     justify-content: center;
+    text-align: center;
     align-items: center;
     width: 100%;
     height: 100%;
+    background-color: red;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.text-wrapper {
+    text-align: center; 
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 #progress-bar {
@@ -50,17 +62,6 @@
     padding: 8px !important;
 }
 
-#chevron-icon {
-    color: var(--Outline) !important;
-    font-size: 10px !important;
-    background-color: transparent !important;
-}
-
-.root-container:hover #chevron-icon {
-    color: var(--Outline) !important;
-    background-color: transparent !important;
-}
-
 
 ::deep .eject-button {
     color: var(--Primary) !important;
@@ -68,10 +69,15 @@
     padding: 0.5rem !important;
 }
 
-::deep .eject-button:hover {
-    background-color: var(--Surface3) !important;
-}
+    ::deep .eject-button:hover {
+        background-color: var(--Surface3) !important;
+    }
 
 ::deep .mud-icon-size-small {
     font-size: 0.66rem !important;
+}
+
+.flex-center{
+    display: flex;
+    justify-content: center;
 }
