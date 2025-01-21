@@ -12,6 +12,14 @@
     [Parameter]
     public EventCallback OnClick { get; set; }
 
+    [Parameter]
+    public ButtonSize Size { get; set; }
+
+    public enum ButtonSize
+    {
+        Medium,
+        Small
+    }
 
     public enum ButtonStyle
     {
@@ -22,17 +30,35 @@
 
     private string GetClasses()
     {
+        string classes = "";
+
         switch (Style)
         {
             default:
             case ButtonStyle.Icon:
-                return "icon-button";
+                classes += "icon-button";
+                break;
 
             case ButtonStyle.SidebarToggle:
-                return "sidebar-toggle-button";
-
+                classes += "sidebar-toggle-button";
+                break;
             case ButtonStyle.SecondaryAction:
-                return "secondary-action-button";
+                classes += "secondary-action-button";
+                break;
         }
+
+        switch (Size)
+        {
+            default:
+            case ButtonSize.Medium:
+                classes += " icon-button-medium";
+                break;
+
+            case ButtonSize.Small:
+                classes += " icon-button-medium";
+                break;
+        }
+
+        return classes;
     }
 }

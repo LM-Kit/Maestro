@@ -21,6 +21,7 @@
     width: 100%;
     margin-inline: 8px;
     justify-content: space-between;
+    align-items: center;
 }
 
 #button-text {
@@ -53,9 +54,10 @@
     padding: 8px !important;
 }
 
-.eject-button {
+::deep .eject-button {
     display: flex;
     align-items: center;
+    font-size: 10px !important;
     background-color: var(--Surface2) !important;
 }
 
@@ -66,10 +68,15 @@
 
 #chevron-icon {
     color: var(--Outline) !important;
+    font-size: 10px !important;
     background-color: transparent !important;
 }
 
 .root-container:hover #chevron-icon {
     color: var(--Outline) !important;
     background-color: transparent !important;
+}
+
+::deep .icon-size-xs {
+    font-size: 10px !important;
 }

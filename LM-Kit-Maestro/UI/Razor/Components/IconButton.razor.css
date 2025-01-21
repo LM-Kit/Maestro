@@ -7,20 +7,7 @@
     min-height: 32px;
 }
 
-body.mac.button {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-}
-
-body.windows.icon-button {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
-}
-
 .icon-button {
-    font-size: 12px;
     background-color: transparent;
 }
 
@@ -45,3 +32,12 @@ body.windows.icon-button {
     .secondary-action-button:hover {
         background-color: var(--Surface3);
     }
+
+
+.icon-button-small {
+    font-size: 0.6em;
+}
+
+.icon-button-medium {
+    font-size: 0.8em;
+}
