@@ -38,10 +38,6 @@
     width: 100%;
 }
 
-
-#eject-button {
-}
-
 .mud-progress-linear-bar {
     background-color: var(--Primary) !important;
 }
@@ -52,18 +48,6 @@
     align-items: center !important;
     justify-content: center !important;
     padding: 8px !important;
-}
-
-::deep .eject-button {
-    display: flex;
-    align-items: center;
-    font-size: 10px !important;
-    background-color: var(--Surface2) !important;
-}
-
-.eject-button:hover {
-    color: var(--Surface) !important;
-    background-color: var(--Surface2) !important;
 }
 
 #chevron-icon {
@@ -77,6 +61,17 @@
     background-color: transparent !important;
 }
 
-::deep .icon-size-xs {
-    font-size: 10px !important;
+
+::deep .eject-button {
+    color: var(--Primary) !important;
+    background-color: var(--Surface2) !important;
+    padding: 0.5rem !important;
+}
+
+::deep .eject-button:hover {
+    background-color: var(--Surface3) !important;
+}
+
+::deep .mud-icon-size-small {
+    font-size: 0.66rem !important;
 }

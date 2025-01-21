@@ -3,8 +3,7 @@
     justify-content: center;
     align-items: center;
     display: flex;
-    min-width: 32px;
-    min-height: 32px;
+    padding: 8px;
 }
 
 .icon-button {

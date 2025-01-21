@@ -2,22 +2,26 @@
 
 <div class="root-container" @onclick="() => OnButtonClicked()">
     <div id="button-body">
-        <div class="icon-size-xs">
-            <IconButton OnClick="OnEjectButtonClicked"
-                        Icon="fas fa-eject"
-                        Style="IconButton.ButtonStyle.SecondaryAction" />
-        </div>
+
+        <MudIconButton Icon="fas fa-eject" 
+            Size="Size.Small" 
+            Class="eject-button"
+            OnClick="OnEjectButtonClicked"/>
+        @*         <IconButton OnClick="OnEjectButtonClicked"
+                    Icon="fas fa-eject"
+                    Size="IconButton.ButtonSize.Small"
+                    Style="IconButton.ButtonStyle.SecondaryAction" /> *@
 
         <MudText Align="Align.Center" Typo="Typo.caption">@Text</MudText>
 
-        <MudIcon Icon="fas fa-chevron-down" Class="icon-size-xs" Color="Color.Dark" />
+        <MudIcon Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark" />
 
     </div>
 
     @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading && ModelListViewModel.LoadingProgress != null)
     {
-        <div id="progress-bar">
-            <MudProgressLinear Value="ModelListViewModel.LoadingProgress.Value" />
-        </div>
+            <div id="progress-bar">
+                <MudProgressLinear Value="ModelListViewModel.LoadingProgress.Value" />
+            </div>
     }
 </div>
