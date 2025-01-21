@@ -1,7 +1,7 @@
 ﻿@inject LMKitService LMKitService
 
 <div id="model-selection-button-container"
-     class="@(ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded ? "border-primary" : "border-outline")"
+     class="@(GetButtonContainerClasses(ModelListViewModel))"
      @onclick="() => OnButtonClicked()">
     <div id="button-body">
         <div class="d-flex justify-center">

@@ -16,11 +16,15 @@
         cursor: pointer;
     }
 
-.border-primary {
+.button-model-loaded {
     border: 1px solid var(--Primary);
 }
 
-.border-outline {
+.button-model-unloaded {
+    border: 1px solid var(--Surface3);
+}
+
+.button-model-loading {
     border: 1px solid var(--Surface3);
 }
 
