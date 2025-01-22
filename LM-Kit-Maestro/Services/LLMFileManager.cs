@@ -251,7 +251,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 if (_models.Contains(modelCard))
                 {
                     _models.Remove(modelCard);
-                }                
+                }
             }
 #endif
         }
@@ -355,8 +355,14 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 }
             }
 
-            foreach (var modelCard in ModelCard.GetPredefinedModelCards(dropSmallerModels: !EnableLowPerformanceModels))
+            foreach (var modelCard in predefinedModels)
             {
+                if (!string.IsNullOrWhiteSpace(modelCard.ReplacementModel) &&
+                    !modelCard.IsLocallyAvailable)
+                {//ignoring models marked as legacy.
+                    continue;
+                }
+
                 TryRegisterChatModel(modelCard, isSorted: true);
 
                 _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
@@ -369,18 +375,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
             foreach (var filePath in files)
             {
-                bool processed = false;
-
-                foreach (var predefinedModel in ModelCard.GetPredefinedModelCards(dropSmallerModels: false))
-                {
-                    if (predefinedModel.LocalPath == filePath)
-                    {//Skip this model because it has already been processed
-                        processed = true;
-                        break;
-                    }
-                }
-
-                if (processed)
+                if (ContainsModel(_models, filePath))
                 {
                     continue;
                 }
@@ -712,6 +707,19 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                     //todo: propagate feedback indicating that a duplicate file exists.
                     return true;
                 }
+            }
+        }
+
+        return false;
+    }
+
+    private static bool ContainsModel(IList<ModelCard> models, string filePath)
+    {
+        foreach (var model in models)
+        {
+            if (model.LocalPath == filePath)
+            {
+                return true;
             }
         }
 
