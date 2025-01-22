@@ -71,11 +71,11 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(OS)' == 'Windows_NT'">
-		<PackageReference Include="LM-Kit.NET.Backend.Cuda12.Windows" Version="2025.1.3" />
+		<PackageReference Include="LM-Kit.NET.Backend.Cuda12.Windows" Version="2025.1.6" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="LM-Kit.NET" Version="2025.1.3" />
+		<PackageReference Include="LM-Kit.NET" Version="2025.1.6" />
 		<PackageReference Include="Majorsoft.Blazor.Components.Common.JsInterop" Version="1.5.0" />
 		<PackageReference Include="Markdig" Version="0.40.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.30" />
@@ -86,7 +86,7 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="MetroLog.Maui" Version="2.1.0" />
 		<PackageReference Include="Mopups" Version="1.3.2" />
-		<PackageReference Include="MudBlazor" Version="7.16.0" />
+		<PackageReference Include="MudBlazor" Version="8.0.0" />
 		<PackageReference Include="SimpleToolkit.SimpleShell" Version="5.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="System.Text.Json" Version="9.0.1" />
