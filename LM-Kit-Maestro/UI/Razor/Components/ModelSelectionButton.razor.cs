@@ -73,19 +73,28 @@ public partial class ModelSelectionButton
 
     private static string GetButtonContainerClasses(ModelListViewModel modelListViewModel)
     {
+        var classes = new List<string>();
+
+        return "button-model-loading";
+
         switch (modelListViewModel.LoadingState)
         {
             default:
             case ModelListViewModel.ModelLoadingState.NotLoaded:
-                return "button-model-unloaded";
+                classes.Add("button-model-unloaded");
+                break;
 
             case ModelListViewModel.ModelLoadingState.Loaded:
-                return "button-model-loaded";
+                classes.Add("button-model-loaded");
+                break;
 
             case ModelListViewModel.ModelLoadingState.FinishinUp:
             case ModelListViewModel.ModelLoadingState.Downloading:
             case ModelListViewModel.ModelLoadingState.Loading:
-                return "button-model-loading";
+                classes.Add("button-model-loading");
+                break;
         }
+
+        return string.Join(" ", classes);
     }
 }

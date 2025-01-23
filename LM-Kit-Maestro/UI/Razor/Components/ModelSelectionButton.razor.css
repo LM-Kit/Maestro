@@ -26,8 +26,9 @@
 }
 
 .button-model-loading {
-    background-color: var(--Surface2);
-    border: 1px solid var(--Surface2);
+    pointer-events: none;
+    background-color: var(--Surface);
+    border: 1px solid var(--Surface3);
 }
 
 #button-body {
