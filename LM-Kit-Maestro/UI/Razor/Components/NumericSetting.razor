@@ -1,0 +1,20 @@
+@typeparam T
+@inherits ComponentBase
+
+<div class="setting-container">
+    <div class="flex-row">
+        <MudText>
+            @Title
+        </MudText>
+
+        <MudTextField Class="setting-field"
+                      Margin="Margin.Dense"
+                      @onfocusout="OnInputFocusOut"
+                      @onkeydown="OnKeyDown"
+                      Variant="Variant.Outlined"
+                      Value="_inputText" />
+    </div>
+
+    <MudSlider T="T" Value="Value" Min="MinValue" Max="MaxValue" Color="Color.Primary"
+               Variant="Variant.Filled" />
+</div> 
