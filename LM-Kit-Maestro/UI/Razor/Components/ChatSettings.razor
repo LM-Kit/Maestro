@@ -9,7 +9,9 @@
                     Chatbot purpose
                 </MudText>
 
-                <MudTextField Variant="Variant.Outlined" Lines="5" Value="ViewModel.SystemPrompt"/>
+                <MudTextField Variant="Variant.Outlined"
+                              Lines="5"
+                              Value="ViewModel.SystemPrompt"/>
             </div>
 
             <div class="setting-container">
@@ -19,7 +21,9 @@
                         Maximum completion tokens
                     </MudText>
 
-                    <MudTextField Class="setting-field" Value="ViewModel.MaximumCompletionTokens"/>
+                    <MudTextField Class="setting-field"
+                                  Variant="Variant.Outlined"
+                                  Value="ViewModel.MaximumCompletionTokens"/>
                 </div>
             </div>
 
@@ -30,10 +34,13 @@
                         Request timeout
                     </MudText>
 
-                    <MudTextField Class="setting-field" Value="@ViewModel.RequestTimeout"/>
+                    <MudTextField Class="setting-field"
+                                  Variant="Variant.Outlined"
+                                  Value="@ViewModel.RequestTimeout"/>
                 </div>
 
-                <MudSlider Min="10" Max="120" Value="@ViewModel.RequestTimeout" Color="Color.Primary" Variant="Variant.Filled"/>
+                <MudSlider Min="10" Max="120" Value="@ViewModel.RequestTimeout" Color="Color.Primary"
+                           Variant="Variant.Filled"/>
             </div>
 
             <div class="setting-container">
@@ -43,7 +50,9 @@
                         Context size
                     </MudText>
 
-                    <MudTextField Class="setting-field" Value="ViewModel.ContextSize"/>
+                    <MudTextField Class="setting-field"
+                                  Value="ViewModel.ContextSize"
+                                  Variant="Variant.Outlined"/>
                 </div>
             </div>
         </MudStack>
