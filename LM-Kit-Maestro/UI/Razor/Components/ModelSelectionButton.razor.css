@@ -4,7 +4,6 @@
     height: 48px;
     border-radius: 4px;
     transition: background-color 0.3s;
-    background-color: var(--Surface2);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -17,15 +16,18 @@
     }
 
 .button-model-loaded {
+    background-color: var(--Surface2);
     border: 1px solid var(--Primary);
 }
 
 .button-model-unloaded {
+    background-color: var(--Surface2);
     border: 1px solid var(--Surface3);
 }
 
 .button-model-loading {
-    border: 1px solid var(--Surface3);
+    background-color: var(--Surface2);
+    border: 1px solid var(--Surface2);
 }
 
 #button-body {
@@ -62,7 +64,7 @@
     width: 100%;
 }
 
-.mud-progress-linear-bar {
+::deep .mud-progress-linear-bar {
     background-color: var(--Primary) !important;
 }
 

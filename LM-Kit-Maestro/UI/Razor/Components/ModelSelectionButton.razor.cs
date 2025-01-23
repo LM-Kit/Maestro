@@ -10,14 +10,16 @@ public partial class ModelSelectionButton
 
     public string Text { get; private set; } = Locales.SelectModel;
 
-    protected override void OnParametersSet()
+    protected override void OnAfterRender(bool firstRender)
     {
-        base.OnParametersSet();
+        base.OnAfterRender(firstRender);
 
-        Text = GetModelStateText(ModelListViewModel);
-        ModelListViewModel.PropertyChanged += OnModelListViewModelPropertyChanged;
-
-        InvokeAsync(() => StateHasChanged());
+        if (firstRender)
+        {
+            Text = GetModelStateText(ModelListViewModel);
+            ModelListViewModel.PropertyChanged += OnModelListViewModelPropertyChanged;
+            InvokeAsync(() => StateHasChanged());
+        }
     }
 
     private void OnModelListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -25,6 +27,10 @@ public partial class ModelSelectionButton
         if (e.PropertyName == nameof(ModelListViewModel.LoadingState))
         {
             Text = GetModelStateText(ModelListViewModel);
+            InvokeAsync(() => StateHasChanged());
+        }
+        else if (e.PropertyName == nameof(ModelListViewModel.LoadingProgress))
+        {
             InvokeAsync(() => StateHasChanged());
         }
     }
