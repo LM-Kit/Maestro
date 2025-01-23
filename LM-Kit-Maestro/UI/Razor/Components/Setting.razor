@@ -1,30 +1,20 @@
-@inherits ComponentBase
+@typeparam T
+@inherits Setting<T>
 
-<div class="setting-container">
-    <div class="flex-row">
-        <MudText>
-            Request timeout
-        </MudText>
-
-        <MudTextField Class="setting-field"
-                      Margin="Margin.Dense"
-                      @onfocusout="OnInputFocusOut"
-                      Variant="Variant.Outlined"
-                      Value="@Value"/>
-    </div>
-
-    @* <MudSlider Min="10" Max="120" Value="Value" Color="Color.Primary" *@
-    @*            Variant="Variant.Filled"/> *@
-</div>
-
-@code {
-    
-    [Parameter]  public required object Value { get; set; }
-    [Parameter] public object? MinValue { get; set; }
-    [Parameter] public object? MaxValue { get; set; }
-
-    private void OnInputFocusOut()
-    {
-        
-    }
-}
+@* <div class="setting-container"> *@
+@*     <div class="flex-row"> *@
+@*         <MudText> *@
+@*             Request timeout *@
+@*         </MudText> *@
+@* *@
+@*         <MudTextField Class="setting-field" *@
+@*                       Margin="Margin.Dense" *@
+@*                       @onfocusout="OnInputFocusOut" *@
+@*                       @onkeydown="OnKeyDown"     *@
+@*                       Variant="Variant.Outlined" *@
+@*                       Value="@Value"/> *@
+@*     </div> *@
+@* *@
+@*     <MudSlider Min="10" Max="120" Value="Value" Color="Color.Primary" *@
+@*                Variant="Variant.Filled"/> *@
+@* </div> *@
