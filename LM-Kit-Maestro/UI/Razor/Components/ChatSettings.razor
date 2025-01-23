@@ -1,7 +1,32 @@
-﻿<p>
-    Setting 1
-</p>
+﻿@inherits ComponentBase
 
-<p>
-    Setting 2
-</p>
+<MudExpansionPanels>
+    <MudExpansionPanel Text="General settings">
+        <MudStack>
+
+            <div>
+                <MudText>
+                    Chatbot purpose
+                </MudText>
+
+                <MudTextField Lines="5" Value="ViewModel.SystemPrompt"/>
+            </div>
+
+            <div>
+                <MudText>
+                    Chatbot purpose
+                </MudText>
+
+                <MudTextField Value="ViewModel.SystemPrompt"/>
+            </div>
+        </MudStack>
+    </MudExpansionPanel>
+
+    <MudExpansionPanel Text="Samping configuration">
+    </MudExpansionPanel>
+</MudExpansionPanels>
+
+@code
+{
+    [Parameter] public SettingsViewModel ViewModel { get; set; }
+}
