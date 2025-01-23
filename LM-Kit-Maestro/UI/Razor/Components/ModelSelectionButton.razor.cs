@@ -75,8 +75,6 @@ public partial class ModelSelectionButton
     {
         var classes = new List<string>();
 
-        return "button-model-loading";
-
         switch (modelListViewModel.LoadingState)
         {
             default:
