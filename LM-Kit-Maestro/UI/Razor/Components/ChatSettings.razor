@@ -1,6 +1,6 @@
 ﻿@inherits ComponentBase
 
-<MudExpansionPanels>
+<MudExpansionPanels MultiExpansion="true">
     <MudExpansionPanel Text="General settings">
         <MudStack>
 
@@ -14,11 +14,29 @@
 
             <div>
                 <MudText>
-                    Chatbot purpose
+                    Maximum completion tokens
                 </MudText>
 
-                <MudTextField Value="ViewModel.SystemPrompt"/>
+                <MudTextField Value="ViewModel.MaximumCompletionTokens"/>
             </div>
+
+            <div>
+                <MudText>
+                    Request timeout
+                </MudText>
+
+                <MudTextField Value="ViewModel.RequestTimeout"/>
+            </div>
+
+
+                        <div>
+                <MudText>
+                    Context size
+                </MudText>
+
+                <MudTextField Value="ViewModel.ContextSize"/>
+            </div>
+
         </MudStack>
     </MudExpansionPanel>
 
