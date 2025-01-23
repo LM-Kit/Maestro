@@ -2,39 +2,49 @@
 
 <MudExpansionPanels MultiExpansion="true">
     <MudExpansionPanel Text="General settings">
-        <MudStack>
+        <MudStack Spacing="6">
 
-            <div>
+            <div class="setting-container">
                 <MudText>
                     Chatbot purpose
                 </MudText>
 
-                <MudTextField Lines="5" Value="ViewModel.SystemPrompt"/>
+                <MudTextField Variant="Variant.Outlined" Lines="5" Value="ViewModel.SystemPrompt"/>
             </div>
 
-            <div>
+            <div class="setting-container">
+                                <div class="flex-row">
+
                 <MudText>
                     Maximum completion tokens
                 </MudText>
 
                 <MudTextField Value="ViewModel.MaximumCompletionTokens"/>
-            </div>
-
-            <div>
-                <MudText>
-                    Request timeout
-                </MudText>
-
-                <MudTextField Value="ViewModel.RequestTimeout"/>
+                </div>
             </div>
 
 
-            <div>
+            <div class="setting-container">
+                <div class="flex-row">
+                    <MudText>
+                        Request timeout
+                    </MudText>
+
+                    <MudTextField Class="setting-field" Value="@ViewModel.RequestTimeout"/>
+                </div>
+
+                <MudSlider Value="@ViewModel.RequestTimeout" Color="Color.Primary" Variant="Variant.Filled"/>
+            </div>
+
+            <div class="setting-container">
+                                                <div class="flex-row">
+
                 <MudText>
                     Context size
                 </MudText>
 
                 <MudTextField Value="ViewModel.ContextSize"/>
+                </div>
             </div>
 
         </MudStack>

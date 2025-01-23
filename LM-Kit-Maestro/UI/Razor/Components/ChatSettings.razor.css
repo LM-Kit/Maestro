@@ -1,3 +1,16 @@
-.setting{
+.setting-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+::deep .setting-field {
+    min-width: 60px !important;
+    max-width: 60px !important;
 }
