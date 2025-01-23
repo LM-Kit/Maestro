@@ -80,10 +80,9 @@ namespace LMKit.Maestro.ViewModels
                 ConversationViewModel conversationViewModel =
                     new ConversationViewModel(_popupService, _lmKitService, _database, conversation);
 
-                if (conversation.ChatHistoryData != null)
+                if (conversation.ChatHistoryData != null && conversationViewModel.LoadConversationLog())
                 {
                     loadedConversationViewModels.Insert(0, conversationViewModel);
-                    conversationViewModel.LoadConversationLogs();
                 }
             }
 

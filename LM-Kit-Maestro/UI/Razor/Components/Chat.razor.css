@@ -1,7 +1,7 @@
 ﻿#chat-container {
     height: 100%;
     width: 100%;
-    display: flex
+    display: flex;
 }
 
 #chat-body {
@@ -21,10 +21,10 @@
     flex-direction: column;
 }
 
-    #chat-messages {
-        display: flex;
-        flex-direction: column;
-    }
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+}
 
 #bottom-space {
     display: flex;
@@ -70,7 +70,7 @@ body.mac .chat-element {
 
 #empty-conversation {
     height: 100%;
-/*    gap: 32px;
+    /*    gap: 32px;
     display: flex;
     align-items: center;
     height: 100%;
@@ -81,7 +81,7 @@ body.mac .chat-element {
     text-align: center;*/
 }
 
-#user-input{
+#user-input {
     padding-inline: 10px;
 }
 
@@ -146,4 +146,71 @@ body.windows .chat-element {
 
 body.mac .chat-element {
     max-width: 1000px;
+}
+
+
+
+#top-bar-center {
+    width: 100%;
+    display: flex;
+    align-self: center;
+    justify-content: center;
+}
+
+
+
+
+#chat-top-bar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    width: 100%;
+}
+
+.top-bar-side {
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+
+::deep .sidebar-toggle-button.mud-icon-button {
+    color: var(--OnSurface);
+    border-radius: 4px;
+    background-color: var(--Surface2);
+    font-size: 12px;
+}
+
+::deep .sidebar-toggle-button.mud-icon-button:hover {
+    background-color: var(--Primary);
+}
+.sidebar-toggle-button {
+    /* Add your button styles here */
+}
+
+.secondary-action-button {
+    /* Add your secondary button styles here */
+}
+
+.sidebar-title {
+    /* Add your label styles here */
+}
+
+.model-selection-button {
+    /* Add your ModelSelectionButton styles here */
+}
+
+
+.top-bar-sidebar-toggled {
+    width: 300px;
+}
+
+.top-bar-sidebar-collapsed {
+    width: auto;
+}
+
+#conversation-bottom {
+    display: block;
 }

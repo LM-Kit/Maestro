@@ -284,7 +284,7 @@ namespace LMKit.Maestro.ViewModels
                 switch (LMKitService.ModelLoadingState)
                 {
                     case LMKitModelLoadingState.Unloaded:
-                        LoadingState = ModelLoadingState.Loading;
+                        LoadingState = ModelLoadingState.NotLoaded;
                         break;
                     case LMKitModelLoadingState.Loading:
                         LoadingState = ModelLoadingState.Loading;

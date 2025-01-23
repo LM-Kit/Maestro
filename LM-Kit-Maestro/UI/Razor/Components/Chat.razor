@@ -9,6 +9,52 @@
 @inject ISnackbar Snackbar
 @inherits MvvmComponentBase<ChatPageViewModel>
 
+<SectionContent SectionName="top-bar">
+    <div id="chat-top-bar">
+        <div
+            class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
+            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                        Icon="fas fa-message"
+                        OnClick="ViewModel.ToggleChatsSidebar"/>
+
+            @if (ViewModel.ChatsSidebarIsToggled)
+            {
+                <MudText Typo="Typo.body2">
+                    Chats
+                </MudText>
+            }
+
+            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                        Icon="fas fa-add"
+                        OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
+        </div>
+
+        <div id="top-bar-center">
+            <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel"/>
+        </div>
+
+        <div
+            class="top-bar-side @(ViewModel.SettingsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
+
+            @if (ViewModel.SettingsSidebarIsToggled)
+            {
+                <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                            Icon="fas fa-arrow-rotate-left"
+                            OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
+
+                <MudText Typo="Typo.body2">
+                    Settings
+                </MudText>
+            }
+
+            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                        Icon="fas fa-gears"
+                        OnClick="ViewModel.ToggleSettingsSidebar"/>
+        </div>
+    </div>
+</SectionContent>
+
+
 <div id="chat-container">
     <div id="chats-sidebar" class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar" : "sidebar-hide")">
 
@@ -16,11 +62,10 @@
 
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
             {
-                <ConversationListItem
-                    OnSelect="OnConversationItemSelected"
-                    OnDelete="OnConversationItemDeleteClicked"
-                    IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
-                    ViewModel="conversation"/>
+                <ConversationListItem OnSelect="OnConversationItemSelected"
+                                      OnDelete="OnConversationItemDeleteClicked"
+                                      IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
+                                      ViewModel="conversation"/>
             }
         </div>
     </div>
@@ -33,7 +78,8 @@
                 {
                     <div id="empty-conversation" class="chat-element vertical-stack">
                         <div class="vertical-stack spacing-4">
-                            <div class="welcome-message"><b>Maestro</b> at your service—let’s orchestrate something
+                            <div class="welcome-message">
+                                <b>Maestro</b> at your service—let’s orchestrate something
                                 amazing!
                             </div>
                             <div class="welcome-message">
@@ -73,9 +119,9 @@
                                 {
                                     <button @onclick="OnScrollToEndButtonClicked"
                                             class="round-button scroll-to-end-button">
-                                            <span>
-                                                <i class="fas fa-arrow-down"></i>
-                                            </span>
+                                        <span>
+                                            <i class="fas fa-arrow-down"></i>
+                                        </span>
                                     </button>
                                 }
                             </div>

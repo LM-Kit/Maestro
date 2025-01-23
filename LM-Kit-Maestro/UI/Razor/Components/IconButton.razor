@@ -1,10 +1,10 @@
-﻿<button class="@(GetClasses())" onclick="OnButtonClicked">
+﻿<button class="@(GetClasses())" @onclick="() => OnClick.InvokeAsync()">
     <span class="fas @Icon" />
 </button>
 
 @code {
     [Parameter]
-    public IconButtonStyle Style { get; set; }
+    public ButtonStyle Style { get; set; }
 
     [Parameter]
     public string? Icon { get; set; }
@@ -12,27 +12,53 @@
     [Parameter]
     public EventCallback OnClick { get; set; }
 
-    public enum IconButtonStyle
+    [Parameter]
+    public ButtonSize Size { get; set; }
+
+    public enum ButtonSize
     {
-        Round,
-        Square
+        Medium,
+        Small
     }
 
-    private void OnButtonClicked()
+    public enum ButtonStyle
     {
-        OnClick.InvokeAsync();
+        Icon,
+        SidebarToggle,
+        SecondaryAction
     }
 
     private string GetClasses()
     {
+        string classes = "";
+
         switch (Style)
         {
             default:
-            case IconButtonStyle.Round:
-                return "round-button";
+            case ButtonStyle.Icon:
+                classes += "icon-button";
+                break;
 
-            case IconButtonStyle.Square:
-                return "square-button";
+            case ButtonStyle.SidebarToggle:
+                classes += "sidebar-toggle-button";
+                break;
+            case ButtonStyle.SecondaryAction:
+                classes += "secondary-action-button";
+                break;
         }
+
+        switch (Size)
+        {
+            default:
+            case ButtonSize.Medium:
+                classes += " icon-button-medium";
+                break;
+
+            case ButtonSize.Small:
+                classes += " icon-button-medium";
+                break;
+        }
+
+        return classes;
     }
 }

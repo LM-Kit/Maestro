@@ -130,7 +130,6 @@
     
     <Style x:Key="SecondaryActionButtonStyle" TargetType="Button">
         <Setter Property="FontFamily" Value="Material"/>
-        <Setter Property="CornerRadius" Value="16"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="FontSize" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />
         <Setter Property="WidthRequest" Value="{x:Static ui:UIConstants.ChatPageToggleButtonWidth}"/>
@@ -138,6 +137,7 @@
         <Setter Property="BackgroundColor" Value="{StaticResource Background}"/>
         <Setter Property="BorderColor" Value="Transparent"/>
         <Setter Property="TextColor" Value="{StaticResource Outline}" />
+        <Setter Property="CornerRadius" Value="{OnPlatform MacCatalyst=20, WinUI=16}" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">

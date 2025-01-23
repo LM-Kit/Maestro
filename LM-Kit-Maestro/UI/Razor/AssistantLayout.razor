@@ -1,39 +1,40 @@
 ﻿@inherits LayoutComponentBase
 
+
 @inject ModelListViewModel ModelListViewModel
 
 <div id="root-container">
     <div id="top-bar">
-        <div id="model-button">
-            <ModelSelectionButton ModelListViewModel="ModelListViewModel" />
-        </div>
+        <SectionOutlet SectionName="top-bar" />
     </div>
 
-    <div>
-        @Body
-    </div>
+    @Body
 </div>
 
 <style>
     #root-container {
-        display: flex; 
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
         flex-direction: column;
     }
 
     #top-bar {
         width: 100%;
-        height: 200px;
+        height: 96px;
         display: flex;
         align-items: center;
         justify-content: center;
         background-color: var(--Surface);
     }
 
-    #model-button{
-        width: 100%;
-        align-self: center;
-        justify-content: center;
-        max-width: 568px;
+    .body {
+        display: block;
+        height: 100%;
     }
 </style>
 

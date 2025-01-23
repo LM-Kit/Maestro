@@ -6,31 +6,20 @@ namespace LMKit.Maestro.UI.Razor.Components;
 
 public partial class ModelSelectionButton
 {
-     [Parameter] public ModelListViewModel ModelListViewModel { get; set; }
+    [Parameter] required public ModelListViewModel ModelListViewModel { get; set; }
 
+    public string Text { get; private set; } = Locales.SelectModel;
 
-    private string _text = Locales.SelectModel;
-
-
-    private string Text
+    protected override void OnAfterRender(bool firstRender)
     {
-        get => _text;
-        set
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
         {
-            if (_text != value)
-            {
-                _text = value;
-                InvokeAsync(() => StateHasChanged());
-            }
+            Text = GetModelStateText(ModelListViewModel);
+            ModelListViewModel.PropertyChanged += OnModelListViewModelPropertyChanged;
+            InvokeAsync(() => StateHasChanged());
         }
-    }
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-
-        Text = GetModelStateText(ModelListViewModel);
-        ModelListViewModel.PropertyChanged += OnModelListViewModelPropertyChanged;
     }
 
     private void OnModelListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -38,6 +27,11 @@ public partial class ModelSelectionButton
         if (e.PropertyName == nameof(ModelListViewModel.LoadingState))
         {
             Text = GetModelStateText(ModelListViewModel);
+            InvokeAsync(() => StateHasChanged());
+        }
+        else if (e.PropertyName == nameof(ModelListViewModel.LoadingProgress))
+        {
+            InvokeAsync(() => StateHasChanged());
         }
     }
 
@@ -54,7 +48,7 @@ public partial class ModelSelectionButton
     {
         ModelListViewModel.EjectModel();
     }
-    
+
     private static string GetModelStateText(ModelListViewModel modelListViewModel)
     {
         switch (modelListViewModel.LoadingState)
@@ -75,5 +69,30 @@ public partial class ModelSelectionButton
             case ModelListViewModel.ModelLoadingState.Downloading:
                 return Locales.DownloadingModel;
         }
+    }
+
+    private static string GetButtonContainerClasses(ModelListViewModel modelListViewModel)
+    {
+        var classes = new List<string>();
+
+        switch (modelListViewModel.LoadingState)
+        {
+            default:
+            case ModelListViewModel.ModelLoadingState.NotLoaded:
+                classes.Add("button-model-unloaded");
+                break;
+
+            case ModelListViewModel.ModelLoadingState.Loaded:
+                classes.Add("button-model-loaded");
+                break;
+
+            case ModelListViewModel.ModelLoadingState.FinishinUp:
+            case ModelListViewModel.ModelLoadingState.Downloading:
+            case ModelListViewModel.ModelLoadingState.Loading:
+                classes.Add("button-model-loading");
+                break;
+        }
+
+        return string.Join(" ", classes);
     }
 }

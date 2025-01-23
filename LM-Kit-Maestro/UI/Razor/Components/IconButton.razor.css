@@ -3,12 +3,40 @@
     justify-content: center;
     align-items: center;
     display: flex;
+    padding: 8px;
 }
 
-.round-button {
-    border-radius: 50%;
+.icon-button {
+    background-color: transparent;
 }
 
-.square-button {
+.sidebar-toggle-button {
+    display: flex;
     border-radius: 4px;
+    text-align: center;
+    background-color: var(--Surface2);
+    color: var(--OnSurface);
+}
+
+    .sidebar-toggle-button:hover {
+        background-color: var(--Primary);
+    }
+
+.secondary-action-button {
+    border-radius: 50%;
+    color: var(--Outline);
+    background-color: var(--Surface2);
+}
+
+    .secondary-action-button:hover {
+        background-color: var(--Surface3);
+    }
+
+
+.icon-button-small {
+    font-size: 0.6em;
+}
+
+.icon-button-medium {
+    font-size: 0.8em;
 }

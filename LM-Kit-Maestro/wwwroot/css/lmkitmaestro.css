@@ -250,6 +250,10 @@ body.windows .primary-button {
     visibility: visible;
 }
 
+.collapse {
+    visibility: collapse;
+}
+
 ::-webkit-scrollbar {
     width: 10px;
 }

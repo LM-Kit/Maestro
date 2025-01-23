@@ -12,7 +12,7 @@
         ReadOnly="@(!ViewModel.IsRenaming)"/>
 
     <div>
-        <div id="show-more-button" class="@(IsSelected ? "show" : "hide")">
+        <div id="show-more-button" class="@(IsSelected ? "show" : "collapse")">
             <MudIconButton @onclick="OnShowMoreClicked"
                             Icon="@Icons.Material.Filled.MoreHoriz"
                             Size="Size.Small"/>

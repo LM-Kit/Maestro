@@ -1,35 +1,63 @@
-.root-container {
+#model-selection-button-container {
     width: 100%;
     max-width: 568px;
-    border: 1px solid var(--Primary);
-    border-radius: 4px;
     height: 48px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    border-radius: 4px;
     transition: background-color 0.3s;
-    background-color: var(--Surface2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.root-container:hover {
+    #model-selection-button-container:hover {
+        background-color: var(--Surface);
+        cursor: pointer;
+    }
+
+.button-model-loaded {
+    background-color: var(--Surface2);
+    border: 1px solid var(--Primary);
+}
+
+.button-model-unloaded {
+    background-color: var(--Surface2);
+    border: 1px solid var(--Surface3);
+}
+
+.button-model-loading {
+    pointer-events: none;
     background-color: var(--Surface);
-    cursor: pointer;
+    border: 1px solid var(--Surface3);
 }
 
 #button-body {
-    display: flex;
     width: 100%;
-    margin-inline: 8px;
-    justify-content: space-between;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 40px 1fr 40px;
+    flex: 1;
 }
 
 #button-text {
     display: flex;
     position: relative;
     justify-content: center;
+    text-align: center;
     align-items: center;
     width: 100%;
     height: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.text-wrapper {
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 #progress-bar {
@@ -37,11 +65,7 @@
     width: 100%;
 }
 
-
-#eject-button {
-}
-
-.mud-progress-linear-bar {
+::deep .mud-progress-linear-bar {
     background-color: var(--Primary) !important;
 }
 
@@ -53,23 +77,17 @@
     padding: 8px !important;
 }
 
-.eject-button {
-    display: flex;
-    align-items: center;
+
+::deep .eject-button {
+    color: var(--Primary) !important;
     background-color: var(--Surface2) !important;
+    padding: 0.5rem !important;
 }
 
-.eject-button:hover {
-    color: var(--Surface) !important;
-    background-color: var(--Surface2) !important;
-}
+    ::deep .eject-button:hover {
+        background-color: var(--Surface3) !important;
+    }
 
-#chevron-icon {
-    color: var(--Outline) !important;
-    background-color: transparent !important;
-}
-
-.root-container:hover #chevron-icon {
-    color: var(--Outline) !important;
-    background-color: transparent !important;
+::deep .mud-icon-size-small {
+    font-size: 0.66rem !important;
 }
