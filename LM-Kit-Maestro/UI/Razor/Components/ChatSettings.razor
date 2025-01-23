@@ -4,6 +4,8 @@
     <MudExpansionPanel Text="General settings">
         <MudStack Spacing="6">
 
+            <Setting Value="ViewModel.RequestTimeout"/>
+            
             <div class="setting-container">
                 <MudText>
                     Chatbot purpose
@@ -24,6 +26,7 @@
                     <MudTextField Class="setting-field"
                                   Margin="Margin.Dense"
                                   Variant="Variant.Outlined"
+                                  InputType="InputType.Number"
                                   Value="ViewModel.MaximumCompletionTokens"/>
                 </div>
             </div>
