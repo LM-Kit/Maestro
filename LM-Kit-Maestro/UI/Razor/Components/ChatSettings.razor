@@ -1,105 +1,106 @@
 ﻿@inherits ComponentBase
+<div style="overflow-y: scroll">
+    <MudExpansionPanels MultiExpansion="true">
+        <MudExpansionPanel Text="General settings">
+            <MudStack Spacing="6">
+                <div class="setting-container">
+                    <MudText>
+                        Chatbot purpose
+                    </MudText>
 
-<MudExpansionPanels MultiExpansion="true">
-    <MudExpansionPanel Text="General settings">
-        <MudStack Spacing="6">
-            <div class="setting-container">
-                <MudText>
-                    Chatbot purpose
-                </MudText>
-
-                <MudTextField Variant="Variant.Outlined"
-                              Lines="5"
-                              Value="ViewModel.SystemPrompt" />
-            </div>
-
-
-            <NumericSetting @bind-Value="ViewModel.MaximumCompletionTokens"
-                            Title="Maximum completion tokens"
-                            Variant="NumericSettingVariant.Optional" />
+                    <MudTextField Variant="Variant.Outlined"
+                                  Lines="5"
+                                  Value="ViewModel.SystemPrompt" />
+                </div>
 
 
-            <NumericSetting @bind-Value="ViewModel.RequestTimeout"
-                            Title="Request timeout (sec)"
-                            MinValue="10"
-                            MaxValue="120" />
+                <NumericSetting @bind-Value="ViewModel.MaximumCompletionTokens"
+                                Title="Maximum completion tokens"
+                                Variant="NumericSettingVariant.Optional" />
 
-            <NumericSetting @bind-Value="ViewModel.ContextSize"
-                            Title="Context size"
-                            MinValue="512"
-                            MaxValue="32768" />
-        </MudStack>
-    </MudExpansionPanel>
 
-    <MudExpansionPanel Text="Samping configuration">
-        <MudStack Spacing="6">
+                <NumericSetting @bind-Value="ViewModel.RequestTimeout"
+                                Title="Request timeout (sec)"
+                                MinValue="10"
+                                MaxValue="120" />
 
-            <div class="d-flex row justify-content-around">
+                <NumericSetting @bind-Value="ViewModel.ContextSize"
+                                Title="Context size"
+                                MinValue="512"
+                                MaxValue="32768" />
+            </MudStack>
+        </MudExpansionPanel>
 
-                <MudText>
-                    Sampling mode
-                </MudText>
+        <MudExpansionPanel Text="Samping configuration">
+            <MudStack Spacing="6">
 
-                <MudSpacer/>
+                <div class="d-flex row justify-content-around">
 
-                <MudSelect @bind-Value="ViewModel.SamplingMode">
-                    @foreach (var value in Enum.GetValues<SamplingMode>())
-                    {
-                        <MudSelectItem Value="@value">
-                            @value
-                        </MudSelectItem>
-                    }
-                </MudSelect>
-            </div>
+                    <MudText>
+                        Sampling mode
+                    </MudText>
 
-            @if (ViewModel.SamplingMode == SamplingMode.Random)
-            {
-                <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.Temperature"
-                                Title="Temperature"
-                                MinValue="0"
-                                MaxValue="1" />
+                    <MudSpacer />
 
-                <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.DynamicTemperatureRange"
-                                Title="Dynamic temperature range"
-                                MinValue="0"
-                                MaxValue="1" />
+                    <MudSelect @bind-Value="ViewModel.SamplingMode">
+                        @foreach (var value in Enum.GetValues<SamplingMode>())
+                        {
+                            <MudSelectItem Value="@value">
+                                @value
+                            </MudSelectItem>
+                        }
+                    </MudSelect>
+                </div>
 
-                <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopP"
-                                Title="Top P"
-                                MinValue="0"
-                                MaxValue="1" />
+                @if (ViewModel.SamplingMode == SamplingMode.Random)
+                {
+                    <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.Temperature"
+                                    Title="Temperature"
+                                    MinValue="0"
+                                    MaxValue="1" />
 
-                <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopK"
-                                Title="Top K"
-                                MinValue="1"
-                                MaxValue="1000" />
+                    <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.DynamicTemperatureRange"
+                                    Title="Dynamic temperature range"
+                                    MinValue="0"
+                                    MaxValue="1" />
 
-                <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.LocallyTypical"
-                                Title="Locally typical"
-                                MinValue="0"
-                                MaxValue="1" />
-            }
-            else if (ViewModel.SamplingMode == SamplingMode.Mirostat2)
-            {
-                <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.Temperature"
-                                Title="Temperature"
-                                MinValue="0"
-                                MaxValue="1" />
+                    <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopP"
+                                    Title="Top P"
+                                    MinValue="0"
+                                    MaxValue="1" />
 
-                <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.TargetEntropy"
-                                Title="Target entropy"
-                                MinValue="0"
-                                MaxValue="10" />
+                    <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopK"
+                                    Title="Top K"
+                                    MinValue="1"
+                                    MaxValue="1000" />
 
-                <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.LearningRate"
-                                Title="Learning rate"
-                                MinValue="0"
-                                MaxValue="1" />
-            }
+                    <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.LocallyTypical"
+                                    Title="Locally typical"
+                                    MinValue="0"
+                                    MaxValue="1" />
+                }
+                else if (ViewModel.SamplingMode == SamplingMode.Mirostat2)
+                {
+                    <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.Temperature"
+                                    Title="Temperature"
+                                    MinValue="0"
+                                    MaxValue="1" />
 
-        </MudStack>
-    </MudExpansionPanel>
-</MudExpansionPanels>
+                    <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.TargetEntropy"
+                                    Title="Target entropy²"
+                                    MinValue="0"
+                                    MaxValue="10" />
+
+                    <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.LearningRate"
+                                    Title="Learning rate"
+                                    MinValue="0"
+                                    MaxValue="1" />
+                }
+
+            </MudStack>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+</div>
 
 @code
 {
