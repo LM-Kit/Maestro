@@ -4,7 +4,8 @@
     <MudExpansionPanel Text="General settings">
         <MudStack Spacing="6">
 
-            <NumericSetting Value="ViewModel.MaximumCompletionTokens" />
+            <NumericSetting @bind-Value="ViewModel.RequestTimeout" 
+                Title="Request timeout (sec)" MinValue="10" MaxValue="120" />
 
             <div class="setting-container">
                 <MudText>
@@ -71,4 +72,5 @@
 @code
 {
     [Parameter] public SettingsViewModel ViewModel { get; set; }
+
 }
