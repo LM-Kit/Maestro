@@ -8,7 +8,9 @@
         <SectionOutlet SectionName="top-bar" />
     </div>
 
-    @Body
+    <div class="page-body">
+        @Body
+    </div>
 </div>
 
 <style>
@@ -32,9 +34,11 @@
         background-color: var(--Surface);
     }
 
-    .body {
-        display: block;
+    .page-body {
+        display: flex;
+        flex-direction: column;
         height: 100%;
+        width: 100%;
     }
 </style>
 
