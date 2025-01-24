@@ -3,10 +3,6 @@
 <MudExpansionPanels MultiExpansion="true">
     <MudExpansionPanel Text="General settings">
         <MudStack Spacing="6">
-
-            <NumericSetting @bind-Value="ViewModel.RequestTimeout" 
-                Title="Request timeout (sec)" MinValue="10" MaxValue="120" />
-
             <div class="setting-container">
                 <MudText>
                     Chatbot purpose
@@ -17,51 +13,21 @@
                               Value="ViewModel.SystemPrompt"/>
             </div>
 
-            <div class="setting-container">
-                <div class="flex-row">
 
-                    <MudText>
-                        Maximum completion tokens
-                    </MudText>
-
-                    <MudTextField Class="setting-field"
-                                  Margin="Margin.Dense"
-                                  Variant="Variant.Outlined"
-                                  InputType="InputType.Number"
-                                  Value="ViewModel.MaximumCompletionTokens"/>
-                </div>
-            </div>
+            <NumericSetting @bind-Value="ViewModel.MaximumCompletionTokens"
+                            Title="Maximum completion tokens"
+                            Variant="NumericSettingVariant.Optional" />
 
 
-            <div class="setting-container">
-                <div class="flex-row">
-                    <MudText>
-                        Request timeout
-                    </MudText>
+            <NumericSetting @bind-Value="ViewModel.RequestTimeout"
+                            Title="Request timeout (sec)"
+                            MinValue="10"
+                            MaxValue="120" />
 
-                    <MudTextField Class="setting-field"
-                                  Margin="Margin.Dense"
-                                  Variant="Variant.Outlined"
-                                  Value="@ViewModel.RequestTimeout"/>
-                </div>
-
-                <MudSlider Min="10" Max="120" Value="@ViewModel.RequestTimeout" Color="Color.Primary"
-                           Variant="Variant.Filled"/>
-            </div>
-
-            <div class="setting-container">
-                <div class="flex-row">
-
-                    <MudText>
-                        Context size
-                    </MudText>
-
-                    <MudTextField Class="setting-field"
-                                  Margin="Margin.Dense"
-                                  Value="ViewModel.ContextSize"
-                                  Variant="Variant.Outlined"/>
-                </div>
-            </div>
+            <NumericSetting @bind-Value="ViewModel.RequestTimeout"
+                            Title="Context size"
+                            MinValue="512"
+                            MaxValue="32768" />
         </MudStack>
     </MudExpansionPanel>
 

@@ -13,7 +13,7 @@ public partial class NumericSetting<T> : ComponentBase where T : struct, INumber
 
     [Parameter] public required T MinValue { get; set; }
     [Parameter] public required T MaxValue { get; set; }
-
+    [Parameter] public NumericSettingVariant Variant { get; set; }
 
     private T _value;
 
@@ -65,4 +65,11 @@ public partial class NumericSetting<T> : ComponentBase where T : struct, INumber
             InvokeAsync(() => StateHasChanged());
         }
     }
+}
+
+
+public enum NumericSettingVariant
+{
+    Default,
+    Optional
 }

@@ -3,18 +3,25 @@
 
 <div class="setting-container">
     <div class="flex-row">
-        <MudText>
+        <MudText Typo="Typo.subtitle2">
             @Title
         </MudText>
 
         <MudTextField Class="setting-field"
                       Margin="Margin.Dense"
+                      Variant="MudBlazor.Variant.Outlined"
                       @onfocusout="OnInputFocusOut"
                       @onkeydown="OnKeyDown"
-                      Variant="Variant.Outlined"
-                      Value="_inputText" />
+                      @bind-Value="_inputText" />
     </div>
 
-    <MudSlider T="T" Value="Value" Min="MinValue" Max="MaxValue" Color="Color.Primary"
-               Variant="Variant.Filled" />
+    @if (Variant == NumericSettingVariant.Default)
+    {
+        <MudSlider T="T"
+                   @bind-Value="Value"
+                   Min="MinValue"
+                   Max="MaxValue"
+                   Color="Color.Primary"
+                   Variant="MudBlazor.Variant.Filled" />
+    }
 </div> 
