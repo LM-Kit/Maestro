@@ -2,7 +2,7 @@ using LMKit.Maestro.ViewModels;
 
 namespace LMKit.Maestro.UI;
 
-public partial class ChatPage : PageBase
+public partial class ChatPage : ContentPage
 {
     private const int SidebarAnimationLength = 100;
     public static readonly Thickness ChatViewMargin = new Thickness(UIConstants.HeaderHorizontalMargin, 0, UIConstants.HeaderHorizontalMargin, 0);
