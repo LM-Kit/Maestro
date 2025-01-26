@@ -9,23 +9,21 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-    box-sizing: border-box;
 }
 
 #conversation-content {
-    overflow-y: hidden;
-    display: block;
-        flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0%;
-    background-color: red;
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+    scrollbar-gutter: both-edges stable;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 #chat-messages {
-    display: block;
-    background-color: blue;
-    overflow-y: auto;
-    scrollbar-gutter: both-edges stable;
+    display: flex;
+    flex-direction: column;
 }
 
 #bottom-space {
@@ -85,10 +83,6 @@ body.mac .chat-element {
 
 #user-input {
     padding-inline: 10px;
-    display: block;
-    box-sizing: border-box;
-    height: auto;
-    background-color: yellow;
 }
 
 #chat-messages-bottom-space {

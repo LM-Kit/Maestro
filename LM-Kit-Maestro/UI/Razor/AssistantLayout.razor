@@ -3,26 +3,36 @@
 
 @inject ModelListViewModel ModelListViewModel
 
-<div id="root-container">
+<div id="page-container">
     <div id="top-bar">
         <SectionOutlet SectionName="top-bar" />
     </div>
 
-    <div class="page-body">
+    <div id="body-container">
         @Body
     </div>
 </div>
 
 <style>
-    #root-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
+
+    #page-container {
         display: flex;
         flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 1;
+        box-sizing: border-box;
+        flex-basis: 0%;
+        background-color: cyan;
+    }
+
+    #body-container {
+        display: block;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 0%;
+        background-color: yellow;
+        overflow-x: hidden;
+        overflow-y: hidden;
     }
 
     #top-bar {
@@ -32,13 +42,6 @@
         align-items: center;
         justify-content: center;
         background-color: var(--Surface);
-    }
-
-    .page-body {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        width: 100%;
     }
 </style>
 
