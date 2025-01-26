@@ -9,22 +9,23 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
+    box-sizing: border-box;
 }
 
 #conversation-content {
-    overflow-y: auto;
-    height: 100%;
-    width: 100%;
-    scrollbar-gutter: both-edges stable;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
+    overflow-y: hidden;
+    display: block;
     flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+    background-color: red;
 }
 
 #chat-messages {
-    display: flex;
-    flex-direction: column;
+    display: block;
+    background-color: blue;
+    overflow-y: auto;
+    scrollbar-gutter: both-edges stable;
 }
 
 #bottom-space {
