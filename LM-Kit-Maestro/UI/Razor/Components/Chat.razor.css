@@ -15,7 +15,7 @@
 #conversation-content {
     overflow-y: hidden;
     display: block;
-    flex-grow: 1;
+        flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 0%;
     background-color: red;
@@ -84,8 +84,11 @@ body.mac .chat-element {
 }
 
 #user-input {
-    flex-shrink: 0;
     padding-inline: 10px;
+    display: block;
+    box-sizing: border-box;
+    height: auto;
+    background-color: yellow;
 }
 
 #chat-messages-bottom-space {
@@ -186,9 +189,10 @@ body.mac .chat-element {
     font-size: 12px;
 }
 
-::deep .sidebar-toggle-button.mud-icon-button:hover {
-    background-color: var(--Primary);
-}
+    ::deep .sidebar-toggle-button.mud-icon-button:hover {
+        background-color: var(--Primary);
+    }
+
 .sidebar-toggle-button {
     /* Add your button styles here */
 }
