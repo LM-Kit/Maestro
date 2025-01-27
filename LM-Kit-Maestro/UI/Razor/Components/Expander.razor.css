@@ -2,8 +2,7 @@
 }
 
 #expander-header {
-    padding-block: 8px;
-    padding-inline: 12px;
+    padding: 12px;
     cursor: pointer;
     background-color: var(--Surface2);
 }
@@ -13,16 +12,10 @@
     }
 
 #expander-content {
+    padding: 12px;
     background-color: var(--Surface15);
 }
 
-
-.flex-between {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-grow: 1;
-}
 
 ::deep .mud-icon-size-small {
     font-size: 0.66rem !important;

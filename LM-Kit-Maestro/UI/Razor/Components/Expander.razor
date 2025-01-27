@@ -3,8 +3,8 @@
 <div id="expander-container">
 
     <div id="expander-header" @onclick="ToggleExpansion">
-        <div class="flex-between">
-            <MudText Typo="Typo.subtitle2">
+        <div class="d-flex justify-space-between flex-grow-1 align-center">
+            <MudText Typo="Typo.subtitle1">
                 @Title
             </MudText>
 
@@ -19,7 +19,6 @@
         <div id="expander-content">
             @ChildContent
         </div>
-
     }
 </div>
 
