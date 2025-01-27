@@ -13,20 +13,26 @@
     <div id="chat-top-bar">
         <div
             class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
-            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
-                        Icon="fas fa-message"
-                        OnClick="ViewModel.ToggleChatsSidebar"/>
+                    <div class="d-flex justify-content-around">
+                            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                                Icon="fas fa-message"
+                                OnClick="ViewModel.ToggleChatsSidebar"/>
 
-            @if (ViewModel.ChatsSidebarIsToggled)
-            {
-                <MudText Typo="Typo.body2">
-                    Chats
-                </MudText>
-            }
+                        @if (ViewModel.ChatsSidebarIsToggled)
+                        {
+                            <MudText Typo="Typo.body2">
+                                Chats
+                            </MudText>
 
-            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                        Icon="fas fa-add"
-                        OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
+                            <div class="horizontal-divider"></div>
+                        }
+
+                        <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                                    Icon="fas fa-add"
+                                    OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
+                    </div>
+
+                    <div class="divider bottom-most"></div>
         </div>
 
         <div id="top-bar-center">
@@ -57,10 +63,8 @@
 
 <div id="chat-container">
     <div class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-container" : "hide")">
-
         <div id="chats-sidebar" class="sidebar-content">
             <div id="conversation-list">
-
                 @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
                 {
                     <ConversationListItem OnSelect="OnConversationItemSelected"
@@ -69,8 +73,9 @@
                                           ViewModel="conversation"/>
                 }
             </div>
-            <MudDivider Vertical="true"/>
+            @* <MudDivider/> *@
         </div>
+        <div class="vertical-divider"></div>
     </div>
 
     <div id="chat-body">
@@ -152,7 +157,7 @@
     </div>
 
     <div class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar-container" : "hide")">
-        <div id="divider-v"></div>
+        <div class="vertical-divider"></div>
         <div id="settings-sidebar" class="sidebar-content">
             <ChatSettings ViewModel="ViewModel.SettingsViewModel"/>
         </div>
