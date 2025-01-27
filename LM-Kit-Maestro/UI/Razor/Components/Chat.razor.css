@@ -109,14 +109,15 @@ body.mac .chat-element {
 }
 
 .shortcut-instruction {
-    margin-inline: 20%;
+    margin-inline: 20px;
     border: 1px solid;
     display: flex;
     flex-direction: row;
     border-radius: 0;
-    border-color: var(--Surface4);
+    border-color: var(--OutlineVariant);
     color: var(--Outline);
-    padding: 12px;
+    padding-inline: 12px;
+    padding-block: 6px;
 }
 
 body.windows .chat-element {
@@ -129,10 +130,10 @@ body.mac .chat-element {
 
 
 #empty-chat{
-    background-color: yellow !important;
     align-self: center;
     display: flex;
     flex-grow: 1;
+    overflow: hidden;
 }
 
 #top-bar-center {
