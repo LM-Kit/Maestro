@@ -2,42 +2,39 @@
 
 <div @onclick="OnSelected" id="item-container" class="@(IsSelected ? "item-selected" : "")">
 
-    <MudTextField Underline=false 
-        @ref="ItemTitleRef" 
-        @bind-Value="Title" 
-        @onfocusout="OnTitleFocusOut"
-        OnKeyDown="OnKeyPressed"
-        Typo="Typo.body2"
-        Immediate="true"
-        TextUpdateSuppression="false"
-        ReadOnly="@(!ViewModel.IsRenaming)"/>
+    <MudTextField Underline=false
+                  @ref="ItemTitleRef"
+                  @bind-Value="Title"
+                  @onfocusout="OnTitleFocusOut"
+                  OnKeyDown="OnKeyPressed"
+                  Typo="Typo.body2"
+                  Immediate="true"
+                  TextUpdateSuppression="false"
+                  ReadOnly="@(!ViewModel.IsRenaming)"/>
 
     <div>
         <div id="show-more-button" class="@(IsSelected ? "show" : "collapse")">
             <MudIconButton @onclick="OnShowMoreClicked"
-                            Icon="@Icons.Material.Filled.MoreHoriz"
-                            Size="Size.Small"/>
+                           Icon="@Icons.Material.Filled.MoreHoriz"
+                           Size="Size.Small"/>
         </div>
 
-        <MudPopover  Open="@ViewModel.IsShowingActionPopup" Fixed="true">
+        <MudPopover Open="@ViewModel.IsShowingActionPopup" Fixed="true">
             <div Class="d-flex flex-column item-actions">
-                <MudButton Variant="Variant.Text" @onclick="OnRenameClicked">
-                    Rename
-                </MudButton>
-
                 <MudButton Variant="Variant.Text" @onclick="OnSelected">
-                    Select
+                    <MudText Typo="Typo.subtitle2">Select</MudText>
                 </MudButton>
-
-                <MudButton Variant="Variant.Text" @onclick="OnDeleteClicked"
-                            Color="Color.Error">
-                    Delete
+                <MudButton Variant="Variant.Text" @onclick="OnRenameClicked">
+                    <MudText Typo="Typo.subtitle2">Rename</MudText>
+                </MudButton>
+                <MudButton Variant="Variant.Text" @onclick="OnDeleteClicked">
+                    <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete</MudText>
                 </MudButton>
             </div>
         </MudPopover>
 
         <MudOverlay @bind-Visible="ViewModel.IsShowingActionPopup"
-                    @onclick="OnClickOutsideShowMore" 
-                    AutoClose="true" />
+                    @onclick="OnClickOutsideShowMore"
+                    AutoClose="true"/>
     </div>
 </div>

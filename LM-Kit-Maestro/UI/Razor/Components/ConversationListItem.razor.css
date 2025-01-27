@@ -8,6 +8,7 @@
     padding-inline: 8px;
     cursor: pointer !important;
     align-items: center;
+
 }
 
     #item-container:hover {
@@ -47,4 +48,9 @@
 ::deep .mud-icon-button:hover {
     color: var(--OnSurface) !important;
     background-color: transparent !important;
+}
+
+.item-actions {
+    padding: 4px;
+    background-color: var(--Surface15);
 }
