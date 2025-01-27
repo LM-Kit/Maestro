@@ -44,6 +44,15 @@
     display: flex;
     flex-direction: row;
     height: 100%;
+    background-color: red;
+}
+
+.sidebar-content {
+    overflow-y: auto;
+    background-color: var(--Surface);
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
 }
 
 .chat-element {
@@ -131,19 +140,6 @@ body.mac .chat-element {
     border-radius: 0;
     border-color: var(--Surface4);
     color: var(--Outline);
-}
-
-.sidebar-hide {
-    display: none;
-}
-
-.sidebar {
-    overflow-y: auto;
-    background-color: var(--Surface);
-    width: 300px;
-    min-width: 300px;
-    max-width: 300px;
-    height: 100%;
 }
 
 body.windows .chat-element {
