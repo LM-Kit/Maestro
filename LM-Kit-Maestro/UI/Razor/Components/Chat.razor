@@ -88,41 +88,42 @@
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
                 {
-                    <div id="empty-conversation" class="chat-element vertical-stack">
-                        <div class="vertical-stack spacing-4">
-                            <div class="welcome-message">
-                                <b>Maestro</b> at your service—let’s orchestrate something
-                                amazing!
-                            </div>
-                            <div class="welcome-message">
-                                Feel free to ask questions, explore ideas, or engage in meaningful conversations.
+                            <div id="empty-chat">
+                        <MudStack Class="chat-element align-self-center flex-1" Spacing="8">
+                            <MudStack Spacing="2">
+                                <div class="welcome-message">
+                                    <b>Maestro</b> at your service—let’s orchestrate something
+                                    amazing!
+                                </div>
+                                <div class="welcome-message">
+                                    Feel free to ask questions, explore ideas, or engage in meaningful conversations.
 
-                            </div>
-                            <div class="welcome-message">
-                                Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to
-                                help.
+                                </div>
+                                <div class="welcome-message">
+                                    Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to
+                                    help.
 
-                            </div>
+                                </div>
 
-                        </div>
+                            </MudStack>
 
-                        <div class="vertical-stack" style="gap:12px;">
-                            <div class="shortcut-instruction">
-                                <MudText Typo="Typo.overline">
-                                    Press Enter to send a new message
+                            <MudStack Spacing="4">
+                                <div class="shortcut-instruction">
+                                    <MudText Typo="Typo.overline">
+                                        Press Enter to send a new message
 
-                                </MudText>
+                                    </MudText>
 
-                            </div>
+                                </div>
 
-                            <div class="shortcut-instruction">
-                                <MudText Typo="Typo.overline">
-                                    Hold Shift + Enter to insert a new line
+                                <div class="shortcut-instruction">
+                                    <MudText Typo="Typo.overline">
+                                        Hold Shift + Enter to insert a new line
 
-                                </MudText>
-
-                            </div>
-                        </div>
+                                    </MudText>
+                                </div>
+                            </MudStack>
+                        </MudStack>
                     </div>
                 }
                 else
@@ -139,9 +140,9 @@
                                 {
                                     <button @onclick="OnScrollToEndButtonClicked"
                                             class="round-button scroll-to-end-button">
-                                                                                            <span>
-                                                                                                <i class="fas fa-arrow-down"></i>
-                                                                                            </span>
+                                                                                                                    <span>
+                                                                                                                        <i class="fas fa-arrow-down"></i>
+                                                                                                                    </span>
                                     </button>
                                 }
                             </div>

@@ -77,17 +77,6 @@ body.mac .chat-element {
     max-width: 1000px;
 }
 
-#empty-conversation {
-    height: 100%;
-    /*    gap: 32px;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    justify-content: center;
-    margin-inline: 0 auto;
-    width: 100%;
-    text-align: center;*/
-}
 
 #user-input {
     padding-inline: 10px;
@@ -114,12 +103,6 @@ body.mac .chat-element {
         color: var(--OnSurface);
     }
 
-.vertical-stack {
-    gap: 8px;
-    display: flex;
-    flex-direction: column;
-}
-
 .welcome-message {
     color: var(--Outline);
     text-align: center;
@@ -145,6 +128,12 @@ body.mac .chat-element {
 }
 
 
+#empty-chat{
+    background-color: yellow !important;
+    align-self: center;
+    display: flex;
+    flex-grow: 1;
+}
 
 #top-bar-center {
     width: 100%;
