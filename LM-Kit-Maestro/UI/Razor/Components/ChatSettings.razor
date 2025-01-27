@@ -1,6 +1,6 @@
 ﻿@inherits ComponentBase
 <div style="overflow-y: scroll">
-    <MudExpansionPanels MultiExpansion="true">
+    <MudExpansionPanels Outlined="false" Class="setting-list" MultiExpansion="true">
         <MudExpansionPanel Text="General settings">
             <MudStack Spacing="6">
                 <div class="setting-container">
@@ -31,9 +31,8 @@
             </MudStack>
         </MudExpansionPanel>
 
-        <MudExpansionPanel Text="Samping configuration">
-            <MudStack Spacing="6">
-
+        <MudExpansionPanel Text="Sampling configuration">
+            <MudStack Class="setting-list" Spacing="6">
                 <div class="d-flex row justify-content-around">
 
                     <MudText>
@@ -87,7 +86,7 @@
                                     MaxValue="1" />
 
                     <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.TargetEntropy"
-                                    Title="Target entropy²"
+                                    Title="Target entropy"
                                     MinValue="0"
                                     MaxValue="10" />
 
