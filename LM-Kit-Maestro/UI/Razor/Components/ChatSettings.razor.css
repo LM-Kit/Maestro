@@ -1,10 +1,13 @@
+#root-container{
+}
+
 .setting-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.flex-row{
+.flex-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -16,10 +19,14 @@
     min-width: 64px !important;
 }
 
-::deep .setting-field .mud-input-root {
-    text-align: right !important;
-    padding-inline: 8px !important;
-    padding-block: 8px !important;
-    /*padding-block-start: 0 !important;*/
-    /*padding-block-end: 0 !important;*/
+    ::deep .setting-field .mud-input-root {
+        text-align: right !important;
+        padding-inline: 8px !important;
+        padding-block: 8px !important;
+        /*padding-block-start: 0 !important;*/
+        /*padding-block-end: 0 !important;*/
+    }
+
+::deep .mud-collapse-container {
+    background-color: var(--Surface2) !important;
 }

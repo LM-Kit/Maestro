@@ -1,7 +1,7 @@
 ﻿@inherits ComponentBase
-<div style="overflow-y: scroll">
-    <MudExpansionPanels Outlined="false" Class="setting-list" MultiExpansion="true">
-        <MudExpansionPanel Text="General settings">
+
+<div id="root-container">
+        <Expander Title="General settings">
             <MudStack Spacing="6">
                 <div class="setting-container">
                     <MudText>
@@ -29,9 +29,9 @@
                                 MinValue="512"
                                 MaxValue="32768" />
             </MudStack>
-        </MudExpansionPanel>
+        </Expander>
 
-        <MudExpansionPanel Text="Sampling configuration">
+@*         <Expander Title="Sampling configuration">
             <MudStack Class="setting-list" Spacing="6">
                 <div class="d-flex row justify-content-around">
 
@@ -97,8 +97,7 @@
                 }
 
             </MudStack>
-        </MudExpansionPanel>
-    </MudExpansionPanels>
+        </Expander> *@
 </div>
 
 @code

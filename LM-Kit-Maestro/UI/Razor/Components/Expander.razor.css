@@ -1,0 +1,32 @@
+#expander-container {
+}
+
+#expander-header {
+    padding-block: 12px;
+    cursor: pointer;
+    background-color: var(--Surface2);
+}
+
+    #expander-header:hover {
+    }
+
+#expander-content {
+    background-color: var(--Surface15);
+}
+
+
+.flex-around {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.divider-v {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px; /* Adjust the width as needed */
+    background-color: #ccc; /* Adjust the color as needed */
+    z-index: 1; /* Ensure it doesn't overlap other elements */
+    color: var(--Outline);
+}

@@ -1,0 +1,40 @@
+﻿@inherits ComponentBase
+
+<div id="expander-container">
+    <MudDivider/>
+
+    <div id="expander-header" @onclick="ToggleExpansion">
+        <div class="flex-around">
+            <MudText Typo="Typo.subtitle1">
+                @Title
+            </MudText>
+
+            <MudIcon Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark"/>
+        </div>
+    </div>
+
+    @if (_isExpanded)
+    {
+        <div id="expander-content">
+            @ChildContent
+        </div>
+
+        <MudDivider />
+    }
+</div>
+
+
+@code {
+    private bool _isExpanded;
+
+    [Parameter]
+    public required string Title { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private void ToggleExpansion()
+    {
+        _isExpanded = !_isExpanded;
+    }
+}

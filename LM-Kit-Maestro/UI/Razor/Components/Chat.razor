@@ -55,7 +55,6 @@
 
 <div id="chat-container">
     <div id="chats-sidebar" class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar" : "sidebar-hide")">
-
         <div id="conversation-list">
 
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
@@ -66,6 +65,7 @@
                                       ViewModel="conversation" />
             }
         </div>
+        <MudDivider Vertical="true"/>
     </div>
 
     <div id="chat-body">
@@ -146,8 +146,11 @@
         </div>
     </div>
 
-    <div id="settings-sidebar"
-         class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar" : "sidebar-hide")">
-        <ChatSettings ViewModel="ViewModel.SettingsViewModel" />
-    </div>
+    <div class="sidebar-container">
+            <div id="divider-v"></div>
+            <div id="settings-sidebar"
+                 class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar" : "sidebar-hide")">
+                <ChatSettings ViewModel="ViewModel.SettingsViewModel" />
+            </div>
+        </div>
 </div>
