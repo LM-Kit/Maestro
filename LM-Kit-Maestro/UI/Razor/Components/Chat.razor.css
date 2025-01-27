@@ -12,7 +12,6 @@
 }
 
 #conversation-content {
-    background-color: red;
     overflow-y: auto;
     height: 100%;
     width: 100%;
@@ -78,17 +77,6 @@ body.mac .chat-element {
     max-width: 1000px;
 }
 
-.top-align-container {
-    align-items: flex-start;
-}
-
-.centered-container {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    justify-content: center;
-}
-
 #empty-conversation {
     height: 100%;
     /*    gap: 32px;
@@ -96,7 +84,6 @@ body.mac .chat-element {
     align-items: center;
     height: 100%;
     justify-content: center;
-    background-color: red;
     margin-inline: 0 auto;
     width: 100%;
     text-align: center;*/
@@ -139,13 +126,14 @@ body.mac .chat-element {
 }
 
 .shortcut-instruction {
-    padding: 12px;
+    margin-inline: 20%;
     border: 1px solid;
     display: flex;
     flex-direction: row;
     border-radius: 0;
     border-color: var(--Surface4);
     color: var(--Outline);
+    padding: 12px;
 }
 
 body.windows .chat-element {

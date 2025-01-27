@@ -108,11 +108,19 @@
 
                         <div class="vertical-stack" style="gap:12px;">
                             <div class="shortcut-instruction">
-                                Press Enter to send a new message
+                                <MudText Typo="Typo.overline">
+                                    Press Enter to send a new message
+
+                                </MudText>
+
                             </div>
 
                             <div class="shortcut-instruction">
-                                Hold Shift + Enter to insert a new line
+                                <MudText Typo="Typo.overline">
+                                    Hold Shift + Enter to insert a new line
+
+                                </MudText>
+
                             </div>
                         </div>
                     </div>
@@ -131,9 +139,9 @@
                                 {
                                     <button @onclick="OnScrollToEndButtonClicked"
                                             class="round-button scroll-to-end-button">
-                                                                                <span>
-                                                                                    <i class="fas fa-arrow-down"></i>
-                                                                                </span>
+                                                                                            <span>
+                                                                                                <i class="fas fa-arrow-down"></i>
+                                                                                            </span>
                                     </button>
                                 }
                             </div>
