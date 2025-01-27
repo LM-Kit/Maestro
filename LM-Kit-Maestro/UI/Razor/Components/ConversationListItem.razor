@@ -5,9 +5,10 @@
     <MudTextField Underline=false 
         @ref="ItemTitleRef" 
         @bind-Value="Title" 
-        OnKeyDown="OnKeyPressed"
-        Immediate="true"
         @onfocusout="OnTitleFocusOut"
+        OnKeyDown="OnKeyPressed"
+        Typo="Typo.body2"
+        Immediate="true"
         TextUpdateSuppression="false"
         ReadOnly="@(!ViewModel.IsRenaming)"/>
 
