@@ -41,9 +41,9 @@
 }
 
 .sidebar-container {
-    display: flex; 
+    display: flex;
     flex-direction: row;
-    height: 100%;
+    flex-grow: 1;
     background-color: var(--Surface);
 }
 
@@ -216,10 +216,4 @@ body.mac .chat-element {
 
 #conversation-bottom {
     display: block;
-}
-
-.bottom-most{
-    position: absolute;
-    bottom : 0px;
-    width: 100%;
 }

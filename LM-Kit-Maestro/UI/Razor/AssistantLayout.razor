@@ -6,6 +6,7 @@
 <div id="page-container">
     <div id="top-bar">
         <SectionOutlet SectionName="top-bar" />
+        <div class="bottom-divider"> </div>
     </div>
 
     <div id="body-container">
@@ -19,11 +20,14 @@
     #top-bar {
         background-color: var(--Surface);
         height: 96px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
     }
 
     #body-container {
         flex: 1;
-        overflow-y: auto;
+        overflow: hidden;
     }
 
     #page-container {

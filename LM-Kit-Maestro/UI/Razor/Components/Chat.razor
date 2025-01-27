@@ -13,26 +13,26 @@
     <div id="chat-top-bar">
         <div
             class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
-                    <div class="d-flex justify-content-around">
-                            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
-                                Icon="fas fa-message"
-                                OnClick="ViewModel.ToggleChatsSidebar"/>
+            <div class="d-flex justify-space-between flex-grow-1 align-center">
+                <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                            Icon="fas fa-message"
+                            OnClick="ViewModel.ToggleChatsSidebar"/>
 
-                        @if (ViewModel.ChatsSidebarIsToggled)
-                        {
-                            <MudText Typo="Typo.body2">
-                                Chats
-                            </MudText>
-
-                            <div class="horizontal-divider"></div>
-                        }
-
-                        <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                                    Icon="fas fa-add"
-                                    OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
+                @if (ViewModel.ChatsSidebarIsToggled)
+                {
+                    <div>
+                        <MudText Typo="Typo.body2">
+                            Chats
+                        </MudText>
                     </div>
+                }
 
-                    <div class="divider bottom-most"></div>
+                <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                            Icon="fas fa-add"
+                            OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
+            </div>
+
+            <div class="bottom-divider"></div>
         </div>
 
         <div id="top-bar-center">
@@ -42,20 +42,24 @@
         <div
             class="top-bar-side @(ViewModel.SettingsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
 
-            @if (ViewModel.SettingsSidebarIsToggled)
-            {
-                <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                            Icon="fas fa-arrow-rotate-left"
-                            OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
+            <div class="d-flex justify-space-between flex-grow-1 align-center">
+                @if (ViewModel.SettingsSidebarIsToggled)
+                {
+                    <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                                Icon="fas fa-arrow-rotate-left"
+                                OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
 
-                <MudText Typo="Typo.body2">
-                    Settings
-                </MudText>
-            }
+                    <MudText Typo="Typo.body2">
+                        Settings
+                    </MudText>
+                }
 
-            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
-                        Icon="fas fa-gears"
-                        OnClick="ViewModel.ToggleSettingsSidebar"/>
+                <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                            Icon="fas fa-gears"
+                            OnClick="ViewModel.ToggleSettingsSidebar"/>
+            </div>
+
+            <div class="bottom-divider"></div>
         </div>
     </div>
 </SectionContent>
@@ -127,9 +131,9 @@
                                 {
                                     <button @onclick="OnScrollToEndButtonClicked"
                                             class="round-button scroll-to-end-button">
-                                                                    <span>
-                                                                        <i class="fas fa-arrow-down"></i>
-                                                                    </span>
+                                                                                <span>
+                                                                                    <i class="fas fa-arrow-down"></i>
+                                                                                </span>
                                     </button>
                                 }
                             </div>

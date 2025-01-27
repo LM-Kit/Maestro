@@ -259,6 +259,15 @@ body.windows .primary-button {
     height: 1px;
     background-color: var(--OutlineVariant);
 }
+
+.bottom-divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--OutlineVariant);
+    position: absolute;
+    bottom: 0;
+}
+
 .vertical-divider {
     height: 100%;
     width: 1px;
