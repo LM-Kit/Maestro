@@ -1,7 +1,6 @@
 ﻿@inherits ComponentBase
 
 <div id="expander-container">
-    <MudDivider/>
 
     <div id="expander-header" @onclick="ToggleExpansion">
         <div class="flex-around">
@@ -15,11 +14,12 @@
 
     @if (_isExpanded)
     {
+        <MudDivider />
+
         <div id="expander-content">
             @ChildContent
         </div>
 
-        <MudDivider />
     }
 </div>
 

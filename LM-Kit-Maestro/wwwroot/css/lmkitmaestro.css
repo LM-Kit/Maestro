@@ -251,6 +251,7 @@ body.windows .primary-button {
 }
 
 .collapse {
+    background-color: yellow;
     visibility: collapse;
 }
 

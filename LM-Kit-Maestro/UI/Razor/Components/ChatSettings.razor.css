@@ -1,4 +1,7 @@
 #root-container{
+    display: flex;
+    flex-direction:column;
+    flex-grow: 1;
 }
 
 .setting-container {
