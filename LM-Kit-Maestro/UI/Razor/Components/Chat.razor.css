@@ -12,10 +12,8 @@
 }
 
 #conversation-content {
-    overflow-y: auto;
     height: 100%;
     width: 100%;
-    scrollbar-gutter: both-edges stable;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -51,21 +49,6 @@
     visibility: hidden;
     display: none;
 }
-
-.scrollable-container {
-    scrollbar-gutter: stable both-edges;
-    overflow-y: hidden;
-    padding-inline: 10px;
-}
-
-    .scrollable-container:hover {
-        padding-inline: 0px;
-        overflow-y: scroll;
-        scrollbar-gutter: stable both-edges;
-        background-color: red;
-    }
-
-
 
 .sidebar-content {
     background-color: var(--Surface);
@@ -215,14 +198,4 @@ body.mac .chat-element {
 
 #conversation-bottom {
     display: block;
-}
-
-
-.scrollable {
-    scrollbar-gutter: stable both-edges;
-    overflow-y: auto;
-}
-
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
 }

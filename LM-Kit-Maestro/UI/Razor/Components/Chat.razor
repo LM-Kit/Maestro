@@ -67,7 +67,7 @@
 
 <div id="chat-container">
     <div class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-container" : "sidebar-hidden")">
-        <div id="chats-sidebar" class="sidebar-content scrollable-container">
+        <div id="chats-sidebar" class="sidebar-content hover-scrollable">
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
             {
                 <ConversationListItem OnSelect="OnConversationItemSelected"
@@ -80,7 +80,7 @@
     </div>
 
     <div id="chat-body">
-        <div id="conversation-content">
+        <div id="conversation-content" class="hover-scrollable">
             @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)

@@ -274,6 +274,7 @@ body.windows .primary-button {
     background-color: var(--OutlineVariant);
 }
 
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 10px;
@@ -292,3 +293,21 @@ body.windows .primary-button {
 ::-webkit-scrollbar-thumb:hover {
     background-color: var(--Outline);
 }
+
+.scrollable {
+    scrollbar-gutter: stable both-edges;
+    overflow-y: auto;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hover-scrollable {
+    scrollbar-gutter: stable both-edges;
+    overflow-y: hidden;
+}
+
+    .hover-scrollable:hover {
+        overflow-y: scroll;
+    }
