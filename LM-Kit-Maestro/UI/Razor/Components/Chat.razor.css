@@ -36,8 +36,8 @@
     padding: 0;
 }
 
-#conversation-list {
-    margin: 8px;
+#chats-sidebar {
+    padding: 8px;
 }
 
 .sidebar-container {
@@ -52,18 +52,28 @@
     display: none;
 }
 
+.scrollable-container {
+    scrollbar-gutter: stable both-edges;
+    overflow-y: hidden;
+    padding-inline: 10px;
+}
+
+    .scrollable-container:hover {
+        padding-inline: 0px;
+        overflow-y: scroll;
+        scrollbar-gutter: stable both-edges;
+        background-color: red;
+    }
+
+
+
 .sidebar-content {
-    overflow-y: auto;
     background-color: var(--Surface);
     width: 300px;
     min-width: 300px;
     max-width: 300px;
-    scrollbar-gutter: stable;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-    display: none;
-}
 
 .chat-element {
     width: 100%;
@@ -205,4 +215,14 @@ body.mac .chat-element {
 
 #conversation-bottom {
     display: block;
+}
+
+
+.scrollable {
+    scrollbar-gutter: stable both-edges;
+    overflow-y: auto;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
 }
