@@ -15,18 +15,7 @@
     <Color x:Key="Outline">#9198A1</Color>
     <Color x:Key="OutlineVariant">#2E3033</Color>
 
-    <!-- Gray palette -->
-    <Color x:Key="Gray50">#FAFAFA</Color>
-    <Color x:Key="Gray100">#F5F5F5</Color>
-    <Color x:Key="Gray200">#EEEEEE</Color>
-    <Color x:Key="Gray300">#E0E0E0</Color>
-    <Color x:Key="Gray400">#BDBDBD</Color>
-    <Color x:Key="Gray500">#9E9E9E</Color>
-    <Color x:Key="Gray600">#757575</Color>
-    <Color x:Key="Gray700">#616161</Color>
-    <Color x:Key="Gray800">#424242</Color>
-    <Color x:Key="Gray900">#212121</Color>
-    <Color x:Key="Gray950">#121212</Color>
+
 
     <!-- HSV palette -->
     <!-- 4-->
@@ -41,5 +30,18 @@
     <Color x:Key="Surface4">#1F2933</Color>
     <!-- 24-->
     <Color x:Key="Surface5">#25313D</Color>
+
+    <!-- Gray palette -->
+    <Color x:Key="Gray50">#FAFAFA</Color>
+    <Color x:Key="Gray100">#F5F5F5</Color>
+    <Color x:Key="Gray200">#EEEEEE</Color>
+    <Color x:Key="Gray300">#E0E0E0</Color>
+    <Color x:Key="Gray400">#BDBDBD</Color>
+    <Color x:Key="Gray500">#9E9E9E</Color>
+    <Color x:Key="Gray600">#757575</Color>
+    <Color x:Key="Gray700">#616161</Color>
+    <Color x:Key="Gray800">#424242</Color>
+    <Color x:Key="Gray900">#212121</Color>
+    <Color x:Key="Gray950">#121212</Color>
 
 </ResourceDictionary>

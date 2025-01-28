@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MudBlazor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Color = Microsoft.Maui.Graphics.Color;
 
 namespace LMKit.Maestro.UI;
 
@@ -13,7 +15,7 @@ public static class UIConstants
     public const double WindowMinimumWidth = 568;
 
     public const double WindowMinimumHeight = 600;
-    
+
     public const double AlertPopupWidth = 400;
 
 
@@ -52,4 +54,47 @@ public static class UIConstants
 
     public const double ModelSelectionButtonMaxWidth = 568;
 #endif
+
+    public static class Colors
+    {
+        public const string Primary = "#512BD4";
+        public const string PrimaryAccent = "#512BD4";
+        public const string Error = "#512BD4";
+        public const string Surface = "#512BD4";
+        public const string OnSurface = "#512BD4";
+        public const string Outline = "9198A1";
+        public const string OutlineVariant = "2E3033";
+    }
+
+    public static readonly MudTheme MaestroTheme = new MudTheme()
+    {
+        PaletteDark = new()
+        {
+            Primary = Colors.Primary,
+            Surface = Colors.Surface,
+            Background = Colors.Surface,
+            TextPrimary = Colors.OnSurface,
+            Divider = Colors.OutlineVariant,
+            BackgroundGray = Colors.OutlineVariant,
+            AppbarText = "#92929f",
+            AppbarBackground = "rgba(26,26,39,0.8)",
+            DrawerBackground = "#1a1a27",
+            ActionDefault = "#74718e",
+            ActionDisabled = "#9999994d",
+            ActionDisabledBackground = "#605f6d4d",
+            TextSecondary = Colors.Outline,
+            TextDisabled = "#ffffff33",
+            DrawerIcon = "#92929f",
+            DrawerText = "#92929f",
+            GrayLight = "#2a2833",
+            GrayLighter = "#06080A",
+            Info = "#4a86ff",
+            Success = "#3dcb6c",
+            Warning = "#ffb545",
+            Error = Colors.Error,
+            LinesDefault = "#33323e",
+            TableLines = "#33323e",
+            OverlayLight = "#12181F",
+        }
+    };
 }
