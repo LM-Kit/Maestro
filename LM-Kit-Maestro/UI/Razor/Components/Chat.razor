@@ -11,56 +11,62 @@
 
 <SectionContent SectionName="top-bar">
     <div id="chat-top-bar">
-        <div
-            class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
-            <div class="d-flex justify-space-between flex-grow-1 align-center">
-                <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+        @if (ShowSidebarToggles)
+        {
+                <div
+                    class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
+                        <div class="d-flex justify-space-between flex-grow-1 align-center">
+                            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
                             Icon="fas fa-message"
                             OnClick="ViewModel.ToggleChatsSidebar"/>
 
-                @if (ViewModel.ChatsSidebarIsToggled)
-                {
-                    <div>
-                        <MudText Typo="Typo.body2">
-                            Chats
-                        </MudText>
-                    </div>
-                }
+                            @if (ViewModel.ChatsSidebarIsToggled)
+                            {
+                                <div>
+                                    <MudText Typo="Typo.body2">
+                                    Chats
+                                </MudText>
+                            </div>
+                        }
 
-                <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                            Icon="fas fa-add"
-                            OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
+                    <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                                Icon="fas fa-add"
+                                OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
+                </div>
+
+                <div class="bottom-divider"></div>
             </div>
-
-            <div class="bottom-divider"></div>
-        </div>
+        }
 
         <div id="top-bar-center">
             <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel"/>
         </div>
 
-        <div
-            class="top-bar-side @(ViewModel.SettingsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
+        @if (ShowSidebarToggles)
+        {
+            <div
+                class="top-bar-side @(ViewModel.SettingsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
 
-            <div class="d-flex justify-space-between flex-grow-1 align-center">
-                @if (ViewModel.SettingsSidebarIsToggled)
-                {
-                    <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                                Icon="fas fa-arrow-rotate-left"
-                                OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
+                <div class="d-flex justify-space-between flex-grow-1 align-center">
+                    @if (ViewModel.SettingsSidebarIsToggled)
+                    {
+                        <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                                    Icon="fas fa-arrow-rotate-left"
+                                    OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
 
-                    <MudText Typo="Typo.body2">
-                        Settings
-                    </MudText>
-                }
+                        <MudText Typo="Typo.body2">
+                            Settings
+                        </MudText>
+                    }
 
-                <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
-                            Icon="fas fa-gears"
-                            OnClick="ViewModel.ToggleSettingsSidebar"/>
+                    <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                                Icon="fas fa-gears"
+                                OnClick="ViewModel.ToggleSettingsSidebar"/>
+                </div>
+
+                <div class="bottom-divider"></div>
             </div>
-
-            <div class="bottom-divider"></div>
-        </div>
+        }
     </div>
 </SectionContent>
 

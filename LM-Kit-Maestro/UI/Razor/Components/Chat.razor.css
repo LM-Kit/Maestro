@@ -9,6 +9,8 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
+    padding-inline: 8px;
+    padding-top: 8px;
 }
 
 #conversation-content {
@@ -145,13 +147,13 @@ body.mac .chat-element {
 
 
 #chat-top-bar {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: space-around;
 }
 
 .top-bar-side {
-    width: 300px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -189,6 +191,8 @@ body.mac .chat-element {
 
 
 .top-bar-sidebar-toggled {
+    min-width: 300px;
+    max-width: 300px;
     width: 300px;
 }
 
