@@ -110,7 +110,6 @@
                                 <div class="shortcut-instruction">
                                     <MudText Typo="Typo.caption">
                                         Press Enter to send a new message
-
                                     </MudText>
 
                                 </div>
@@ -139,9 +138,9 @@
                                 {
                                     <button @onclick="OnScrollToEndButtonClicked"
                                             class="round-button scroll-to-end-button">
-                                                                                                                    <span>
-                                                                                                                        <i class="fas fa-arrow-down"></i>
-                                                                                                                    </span>
+                                            <span>
+                                                <i class="fas fa-arrow-down"></i>
+                                            </span>
                                     </button>
                                 }
                             </div>
@@ -170,7 +169,7 @@
 
     <div class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar-container" : "sidebar-hidden")">
         <div class="vertical-divider"></div>
-        <div id="settings-sidebar" class="sidebar-content">
+        <div id="settings-sidebar" class="sidebar-content hide-scrollbar">
             <ChatSettings ViewModel="ViewModel.SettingsViewModel"/>
         </div>
     </div>

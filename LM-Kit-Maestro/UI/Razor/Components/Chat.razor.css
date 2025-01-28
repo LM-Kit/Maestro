@@ -58,6 +58,11 @@
     width: 300px;
     min-width: 300px;
     max-width: 300px;
+    scrollbar-gutter: stable;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
 }
 
 .chat-element {
@@ -129,7 +134,7 @@ body.mac .chat-element {
 }
 
 
-#empty-chat{
+#empty-chat {
     align-self: center;
     display: flex;
     flex-grow: 1;
