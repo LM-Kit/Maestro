@@ -143,9 +143,6 @@ body.mac .chat-element {
     justify-content: center;
 }
 
-
-
-
 #chat-top-bar {
     display: flex;
     flex-direction: row;

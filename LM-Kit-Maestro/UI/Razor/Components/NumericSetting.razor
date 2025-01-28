@@ -3,13 +3,15 @@
 
 <div class="setting-container">
     <div class="flex-row">
-        <MudText Typo="Typo.subtitle2">
+        <MudText Typo="Typo.body2">
             @Title
         </MudText>
 
         <MudTextField Class="setting-field"
                       Margin="Margin.Dense"
+                      Typo="Typo.subtitle2"
                       Variant="MudBlazor.Variant.Outlined"
+                      AdornmentColor="Color.Secondary"
                       @onfocusout="OnInputFocusOut"
                       @onkeydown="OnKeyDown"
                       @bind-Value="_inputText" />
@@ -21,7 +23,7 @@
                    @bind-Value="Value"
                    Min="MinValue"
                    Max="MaxValue"
-                   Color="Color.Primary"
+                   Color="Color.Secondary"
                    Variant="MudBlazor.Variant.Filled" />
     }
 </div> 

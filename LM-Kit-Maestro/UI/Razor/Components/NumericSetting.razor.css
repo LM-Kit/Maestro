@@ -23,3 +23,11 @@
         /*padding-block-start: 0 !important;*/
         /*padding-block-end: 0 !important;*/
     }
+
+
+/*::deep .mud-slider-container {
+    text-shadow: var(--mud-palette-white) !important;
+}
+
+::deep .mud-slider-filled {
+}*/
