@@ -1,23 +1,22 @@
 ﻿html, body {
     background-color: #12181F;
-    color: white;
+    color: var(--OnSurface);
     font-family: system-ui, sans-serif;
+    font-size: 1rem;
 }
 
-    body.mac {
-        font-size: 20px;
-    }
-
-    body.windows {
-        font-size: 16px;
-    }
-
-        /*@media (-webkit-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media (min-width: 1024px) {
     html, body {
-        font-size: 20px;
+        font-size: 1.2rem;
     }
-}*/
+}
 
+@media (min-width: 1440px) {
+    html, body {
+        font-size: 1.4rem;
+    }
+}
+  
         body.windows .small-text {
             font-size: 12px;
         }
