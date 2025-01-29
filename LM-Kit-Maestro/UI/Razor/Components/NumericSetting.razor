@@ -17,14 +17,11 @@
                       @bind-Value="_inputText" />
     </div>
 
-    @if (Variant == NumericSettingVariant.Default)
-    {
-        <MudSlider T="T"
-                   @bind-Value="Value"
-                   Min="MinValue"
-                   Max="MaxValue"
-                   Color="Color.Secondary"
-                   Step="Increment"
-                   Variant="MudBlazor.Variant.Filled" />
-    }
+    <MudSlider T="T"
+                @bind-Value="Value"
+                Min="MinValue"
+                Max="MaxValue"
+                Color="Color.Secondary"
+                Step="Increment"
+                Variant="MudBlazor.Variant.Filled" />
 </div> 

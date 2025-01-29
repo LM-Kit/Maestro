@@ -15,7 +15,6 @@ public partial class NumericSetting<T> : ComponentBase where T : struct, INumber
     [Parameter] public required T MinValue { get; set; }
     [Parameter] public required T MaxValue { get; set; }
     [Parameter] public T Increment { get; set; }
-    [Parameter] public NumericSettingVariant Variant { get; set; }
 
     private T _value;
 
@@ -85,11 +84,4 @@ public partial class NumericSetting<T> : ComponentBase where T : struct, INumber
         var typeCode = (int)Type.GetTypeCode(type);
         return typeCode > 4 && typeCode < 13;
     }
-}
-
-
-public enum NumericSettingVariant
-{
-    Default,
-    Optional
 }

@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Globalization;
-
 using System.Numerics;
-
 
 namespace LMKit.Maestro.UI.Razor.Components;
 
-public partial class TextField<T> : ComponentBase where T : struct, INumber<T>
+public partial class NumericTextField<T> : ComponentBase where T : struct, INumber<T>
 {
     private string _inputText = "";
 
