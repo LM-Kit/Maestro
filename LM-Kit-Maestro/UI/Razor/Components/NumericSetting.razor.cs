@@ -8,11 +8,13 @@ namespace LMKit.Maestro.UI.Razor.Components;
 public partial class NumericSetting<T> : ComponentBase where T : struct, INumber<T>
 {
     private string _inputText = "";
+
     [Parameter] public required string Title { get; set; }
     [Parameter] public EventCallback<T> ValueChanged { get; set; }
 
     [Parameter] public required T MinValue { get; set; }
     [Parameter] public required T MaxValue { get; set; }
+    [Parameter] public T Increment { get; set; }
     [Parameter] public NumericSettingVariant Variant { get; set; }
 
     private T _value;
@@ -43,6 +45,18 @@ public partial class NumericSetting<T> : ComponentBase where T : struct, INumber
 
         _inputText = Value.ToString()!;
         InvokeAsync(() => StateHasChanged());
+
+        if (EqualityComparer<T>.Default.Equals(Increment, default))
+        {
+            if (IsIntegral(typeof(T)))
+            {
+                Increment = T.One;
+            }
+            else
+            {
+                Increment = T.CreateChecked(0.01);
+            }
+        }
     }
 
     private void OnKeyDown(KeyboardEventArgs keyboardEventArgs)
@@ -64,6 +78,12 @@ public partial class NumericSetting<T> : ComponentBase where T : struct, INumber
             _inputText = Value.ToString()!;
             InvokeAsync(() => StateHasChanged());
         }
+    }
+
+    private static bool IsIntegral(Type type)
+    {
+        var typeCode = (int)Type.GetTypeCode(type);
+        return typeCode > 4 && typeCode < 13;
     }
 }
 
