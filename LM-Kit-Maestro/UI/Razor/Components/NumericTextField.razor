@@ -1,0 +1,11 @@
+﻿@typeparam T
+@inherits ComponentBase
+
+<div>
+    <MudTextField Margin="Margin.Dense"
+                  Typo="Typo.subtitle2"
+                  Variant="MudBlazor.Variant.Outlined"
+                  @onfocusout="OnInputFocusOut"
+                  @onkeydown="OnKeyDown"
+                  @bind-Value="_inputText" />
+</div>
