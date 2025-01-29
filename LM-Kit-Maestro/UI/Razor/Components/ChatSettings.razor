@@ -1,108 +1,167 @@
 ﻿@inherits ComponentBase
 
 <div id="root-container">
-        <Expander Title="General settings">
-            <MudStack Spacing="6">
-                <div class="setting-container">
+    <Expander Title="General settings">
+        <MudStack Spacing="6">
+            <div class="setting-container">
+                <MudText Typo="Typo.subtitle2">
+                    Chatbot purpose
+                </MudText>
+
+                <MudTextField Variant="Variant.Outlined"
+                              Typo="Typo.subtitle2"
+                              Lines="5"
+                              Value="ViewModel.SystemPrompt" />
+            </div>
+
+            <div class="d-flex justify-space-between flex-grow-1 align-center">
+                <div class="d-flex justify-start flex-row gap-2 align-center">
                     <MudText Typo="Typo.subtitle2">
-                        Chatbot purpose
+                        Limit response length
                     </MudText>
 
-                    <MudTextField Variant="Variant.Outlined"
-                                  Typo="Typo.subtitle2"
-                                  Lines="5"
-                                  Value="ViewModel.SystemPrompt" />
+                    <MudSwitch @bind-Value="LimitRespongeLength" />
                 </div>
 
+                @if (LimitRespongeLength)
+                {
+                    <NumericTextField @bind-Value="ViewModel.MaximumCompletionTokens" MinValue="1" MaxValue="2048" />
+                }
+            </div>
 
-                <NumericSetting @bind-Value="ViewModel.MaximumCompletionTokens"
-                                Title="Maximum completion tokens"/>
-
-
-                <NumericSetting @bind-Value="ViewModel.RequestTimeout"
-                                Title="Request timeout (sec)"
-                                MinValue="10"
-                                MaxValue="120" />
-
-                <NumericSetting @bind-Value="ViewModel.ContextSize"
-                                Title="Context size"
-                                MinValue="512"
-                                MaxValue="32768" />
-            </MudStack>
-        </Expander>
-        <MudDivider />
-
-        <Expander Title="Sampling configuration">
-            <MudStack Class="setting-list" Spacing="6">
-                 <div class="d-flex flex-row justify-space-between align-center">
-                    <MudText Typo="Typo.subtitle2">
-                        Sampling mode
+            @if (LimitRespongeLength)
+            {
+                <div>
+                    <MudText Typo="Typo.caption">
+                        Maximum number of tokens
                     </MudText>
 
-                    <MudSpacer />
-
-                    <MudSelect Typo="Typo.subtitle2" AdornmentColor="Color.Secondary" @bind-Value="ViewModel.SamplingMode">
-                        @foreach (var value in Enum.GetValues<SamplingMode>())
-                        {
-                            <MudSelectItem Value="@value">
-                                @value
-                            </MudSelectItem>
-                        }
-                    </MudSelect>
+                    <MudSlider @bind-Value="ViewModel.MaximumCompletionTokens"
+                               Min="1"
+                               Max="2048"
+                               Color="Color.Secondary" />
                 </div>
+            }
 
-                @if (ViewModel.SamplingMode == SamplingMode.Random)
-                {
-                    <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.Temperature"
-                                    Title="Temperature"
-                                    MinValue="0"
-                                    MaxValue="1" />
+            <NumericSetting @bind-Value="ViewModel.RequestTimeout"
+                            Title="Request timeout (sec)"
+                            MinValue="10"
+                            MaxValue="120" />
 
-                    <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.DynamicTemperatureRange"
-                                    Title="Dynamic temperature range"
-                                    MinValue="0"
-                                    MaxValue="1" />
+            <NumericSetting @bind-Value="ViewModel.ContextSize"
+                            Title="Context size"
+                            MinValue="512"
+                            MaxValue="32768" />
+        </MudStack>
+    </Expander>
+    <MudDivider />
 
-                    <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopP"
-                                    Title="Top P"
-                                    MinValue="0"
-                                    MaxValue="1" />
+    <Expander Title="Sampling configuration">
+        <MudStack Class="setting-list" Spacing="6">
+            <div class="d-flex flex-row justify-space-between align-center">
+                <MudText Typo="Typo.subtitle2">
+                    Sampling mode
+                </MudText>
 
-                    <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopK"
-                                    Title="Top K"
-                                    MinValue="1"
-                                    MaxValue="1000" />
+                <MudSpacer />
 
-                    <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.LocallyTypical"
-                                    Title="Locally typical"
-                                    MinValue="0"
-                                    MaxValue="1" />
-                }
-                else if (ViewModel.SamplingMode == SamplingMode.Mirostat2)
-                {
-                    <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.Temperature"
-                                    Title="Temperature"
-                                    MinValue="0"
-                                    MaxValue="1" />
+                <MudSelect Typo="Typo.subtitle2" AdornmentColor="Color.Secondary" @bind-Value="ViewModel.SamplingMode">
+                    @foreach (var value in Enum.GetValues<SamplingMode>())
+                    {
+                        <MudSelectItem Value="@value">
+                            @value
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+            </div>
 
-                    <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.TargetEntropy"
-                                    Title="Target entropy"
-                                    MinValue="0"
-                                    MaxValue="10" />
+            @if (ViewModel.SamplingMode == SamplingMode.Random)
+            {
+                <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.Temperature"
+                                Title="Temperature"
+                                MinValue="0"
+                                MaxValue="1" />
 
-                    <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.LearningRate"
-                                    Title="Learning rate"
-                                    MinValue="0"
-                                    MaxValue="1" />
-                }
+                <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.DynamicTemperatureRange"
+                                Title="Dynamic temperature range"
+                                MinValue="0"
+                                MaxValue="1" />
 
-            </MudStack>
-        </Expander>
-        <MudDivider/>
+                <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopP"
+                                Title="Top P"
+                                MinValue="0"
+                                MaxValue="1" />
+
+                <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopK"
+                                Title="Top K"
+                                MinValue="1"
+                                MaxValue="1000" />
+
+                <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.LocallyTypical"
+                                Title="Locally typical"
+                                MinValue="0"
+                                MaxValue="1" />
+            }
+            else if (ViewModel.SamplingMode == SamplingMode.Mirostat2)
+            {
+                <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.Temperature"
+                                Title="Temperature"
+                                MinValue="0"
+                                MaxValue="1" />
+
+                <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.TargetEntropy"
+                                Title="Target entropy"
+                                MinValue="0"
+                                MaxValue="10" />
+
+                <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.LearningRate"
+                                Title="Learning rate"
+                                MinValue="0"
+                                MaxValue="1" />
+            }
+
+        </MudStack>
+    </Expander>
+    <MudDivider />
 </div>
 
 @code
 {
     [Parameter] public SettingsViewModel ViewModel { get; set; }
 
+    private int? _previousTokenLimit;
+
+    private bool _limitResponseLength = false;
+    bool LimitRespongeLength
+    {
+        get => _limitResponseLength;
+        set
+        {
+            if (_limitResponseLength != value)
+            {
+                _limitResponseLength = value;
+                InvokeAsync(() => StateHasChanged());
+
+                if (!value)
+                {
+                    _previousTokenLimit = ViewModel.MaximumCompletionTokens;
+                    ViewModel.MaximumCompletionTokens = -1;
+                }
+                else
+                {
+                    if (ViewModel.MaximumCompletionTokens == -1)
+                    {
+                        ViewModel.MaximumCompletionTokens = _previousTokenLimit != null ? _previousTokenLimit.Value : 2048;
+                    }
+                }
+            }
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        LimitRespongeLength = ViewModel.MaximumCompletionTokens != -1;
+    }
 }
