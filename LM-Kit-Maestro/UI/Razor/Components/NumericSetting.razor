@@ -7,14 +7,7 @@
             @Title
         </MudText>
 
-        <MudTextField Class="setting-field"
-                      Margin="Margin.Dense"
-                      Typo="Typo.subtitle2"
-                      Variant="MudBlazor.Variant.Outlined"
-                      AdornmentColor="Color.Secondary"
-                      @onfocusout="OnInputFocusOut"
-                      @onkeydown="OnKeyDown"
-                      @bind-Value="_inputText" />
+        <NumericTextField @bind-Value="Value" MinValue="MinValue" MaxValue="MaxValue" />
     </div>
 
     <MudSlider T="T"

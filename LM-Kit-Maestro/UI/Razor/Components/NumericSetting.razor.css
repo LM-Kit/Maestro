@@ -4,19 +4,6 @@
     gap: 10px;
 }
 
-::deep .setting-field {
-    max-width: 64px !important;
-    min-width: 64px !important;
-}
-
-    ::deep .setting-field .mud-input-root {
-        text-align: right !important;
-        padding-inline: 8px !important;
-        padding-block: 8px !important;
-        /*padding-block-start: 0 !important;*/
-        /*padding-block-end: 0 !important;*/
-    }
-
 
 /*::deep .mud-slider-container {
     text-shadow: var(--mud-palette-white) !important;

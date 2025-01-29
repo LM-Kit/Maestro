@@ -1,0 +1,7 @@
+::deep .mud-input-root {
+    text-align: right !important;
+    padding-inline: 8px !important;
+    padding-block: 8px !important;
+    max-width: 64px !important;
+    min-width: 64px !important;
+}

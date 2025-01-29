@@ -1,11 +1,12 @@
 ﻿@typeparam T
 @inherits ComponentBase
 
-<div>
+<div class="d-flex">
+
     <MudTextField Margin="Margin.Dense"
-                  Typo="Typo.subtitle2"
-                  Variant="MudBlazor.Variant.Outlined"
-                  @onfocusout="OnInputFocusOut"
-                  @onkeydown="OnKeyDown"
-                  @bind-Value="_inputText" />
+                Typo="Typo.subtitle2"
+                Variant="MudBlazor.Variant.Outlined"
+                @onfocusout="OnInputFocusOut"
+                @onkeydown="OnKeyDown"
+                @bind-Value="_inputText" />
 </div>
