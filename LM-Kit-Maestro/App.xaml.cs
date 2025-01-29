@@ -9,6 +9,10 @@ using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components.WebView.Maui;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls.PlatformConfiguration;
+#if MACCATALYST
+using UIKit;
+using WebKit;
+#endif
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
@@ -41,7 +45,11 @@ namespace LMKit.Maestro
                         B = b
                     };
 #elif MACCATALYST
-                    handler.PlatformView.Layer.BackgroundColor = new CoreGraphics.CGColor(r, g, b, 255);
+                  if (handler.PlatformView is WKWebView wv)
+                  {
+                      wv.Opaque = false;
+                      wv.BackgroundColor = UIColor.Clear;
+                  }
 #endif
                 }
             });
