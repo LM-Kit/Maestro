@@ -35,15 +35,14 @@
 
         <Expander Title="Sampling configuration">
             <MudStack Class="setting-list" Spacing="6">
-                <div class="d-flex row justify-content-around">
-
+                 <div class="d-flex flex-row justify-space-between align-center">
                     <MudText Typo="Typo.subtitle2">
                         Sampling mode
                     </MudText>
 
                     <MudSpacer />
 
-                    <MudSelect @bind-Value="ViewModel.SamplingMode">
+                    <MudSelect Typo="Typo.subtitle2" AdornmentColor="Color.Secondary" @bind-Value="ViewModel.SamplingMode">
                         @foreach (var value in Enum.GetValues<SamplingMode>())
                         {
                             <MudSelectItem Value="@value">

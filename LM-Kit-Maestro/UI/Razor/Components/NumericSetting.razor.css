@@ -4,13 +4,6 @@
     gap: 10px;
 }
 
-.flex-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
 ::deep .setting-field {
     max-width: 64px !important;
     min-width: 64px !important;
