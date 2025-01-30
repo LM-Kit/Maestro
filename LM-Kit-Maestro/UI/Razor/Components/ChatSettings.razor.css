@@ -1,6 +1,6 @@
-#root-container{
+#settings-container {
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     flex-grow: 1;
 }
 
