@@ -54,6 +54,34 @@ function scrollToEnd(smooth) {
     }
 }
 
+function initializeResizeHandler() {
+    const resizeHandle = document.getElementById("resize-handle");
+    const settingsSidebar = document.getElementById("settings-sidebar");
+
+    let isResizing = false;
+    resizeHandle.addEventListener("mousedown", function (e) {
+        isResizing = true;
+        console.log("++resizing");
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+    });
+
+    function onMouseMove(e) {
+        if (!isResizing) return;
+        console.log("e.X: " + e.clientX);
+        console.log("rect: " + settingsSidebar.getBoundingClientRect().left);
+        let newWidth = e.clientX - settingsSidebar.getBoundingClientRect().left;
+        newWidth = Math.max(250, Math.min(newWidth, 500));
+        settingsSidebar.style.width = newWidth + "px";
+        console.log("new width:  " + newWidth);
+    }
+
+    function onMouseUp() {
+        isResizing = false;
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
+    }
+}
 
 /*
     UserInput 

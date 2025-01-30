@@ -54,9 +54,9 @@
 
 .sidebar-content {
     background-color: var(--Surface);
-    width: 300px;
+/*    width: 300px;
     min-width: 300px;
-    max-width: 300px;
+    max-width: 300px;*/
 }
 
 
@@ -199,4 +199,15 @@ body.mac .chat-element {
 
 #conversation-bottom {
     display: block;
+
+    width: 5px;
+    cursor: ew-resize;
+    background-color: var(--OutlineVariant);
+    position: relative;
+}
+
+#settings-sidebar {
+    min-width: 250px;
+    max-width: 500px;
+    width: 300px;
 }
