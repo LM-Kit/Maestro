@@ -1,0 +1,18 @@
+.sidebar-container {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    background-color: var(--Surface);
+}
+
+.sidebar-hidden {
+    visibility: hidden;
+    display: none;
+}
+
+.sidebar-content {
+    background-color: var(--Surface);
+    min-width: 250px;
+    max-width: 500px;
+    width: 300px;
+}
