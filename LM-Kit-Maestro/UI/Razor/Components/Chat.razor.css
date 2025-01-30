@@ -181,9 +181,3 @@ body.mac .chat-element {
     background-color: var(--OutlineVariant);
     position: relative;
 }
-
-#settings-sidebar {
-    min-width: 250px;
-    max-width: 500px;
-    width: 300px;
-}

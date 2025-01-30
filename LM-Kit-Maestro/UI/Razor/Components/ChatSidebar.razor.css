@@ -17,6 +17,16 @@
     flex-grow: 1;
 }
 
+#resize-handle {
+    cursor: ew-resize;
+    width: 1px;
+    background-color: var(--OutlineVariant);
+}
+
+#resize-handle:hover{
+    width: 2px;
+}
+
 .fixed-sidebar{
     min-width: 300px;
     max-width: 300px;

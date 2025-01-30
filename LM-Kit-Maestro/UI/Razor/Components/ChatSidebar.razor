@@ -1,10 +1,19 @@
 ﻿@inherits ComponentBase
 
 <div class="@GetClasses()">
-    <div id="resize-handle"></div>
+    @if (Position == SidebarPosition.Right)
+    {
+        <div id="resize-handle"></div>
+    }
+
     <div id="sidebar-content" class="scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
         @ChildContent
     </div>
+
+    @if (Position == SidebarPosition.Left)
+    {
+        <div id="resize-handle"></div>
+    }
 </div>
 
 
@@ -15,9 +24,15 @@
     [Parameter] public required RenderFragment ChildContent { get; set; }
     [Parameter] public bool ShowScrollbar { get; set; }
     [Parameter] public bool Resizable { get; set; }
-
+    [Parameter] public required SidebarPosition Position { get; set; }
     private string GetClasses()
     {
         return $"{(IsToggled ? "sidebar-container" : "sidebar-hidden")} {(Resizable ? "resizable-sidebar" : "fixed-sidebar")}";
+    }
+
+    public enum SidebarPosition
+    {
+        Left,
+        Right
     }
 }
