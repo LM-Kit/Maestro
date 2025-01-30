@@ -36,30 +36,6 @@
     padding: 0;
 }
 
-#chats-sidebar {
-    padding: 8px;
-}
-
-.sidebar-container {
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-    background-color: var(--Surface);
-}
-
-.sidebar-hidden {
-    visibility: hidden;
-    display: none;
-}
-
-.sidebar-content {
-    background-color: var(--Surface);
-/*    width: 300px;
-    min-width: 300px;
-    max-width: 300px;*/
-}
-
-
 .chat-element {
     width: 100%;
     justify-content: center;

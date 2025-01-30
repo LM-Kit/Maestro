@@ -1,6 +1,6 @@
 ﻿@inherits ComponentBase
 
-<div class="@(IsToggled ? "sidebar-container" : "sidebar-hidden")">
+<div class="@GetClasses()">
     <div id="resize-handle"></div>
     <div id="sidebar-content" class="scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
         @ChildContent
@@ -14,4 +14,10 @@
     [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
     [Parameter] public required RenderFragment ChildContent { get; set; }
     [Parameter] public bool ShowScrollbar { get; set; }
+    [Parameter] public bool Resizable { get; set; }
+
+    private string GetClasses()
+    {
+        return $"{(IsToggled ? "sidebar-container" : "sidebar-hidden")} {(Resizable ? "resizable-sidebar" : "fixed-sidebar")}";
+    }
 }

@@ -69,8 +69,9 @@
 </SectionContent>
 
 <div id="chat-container">
-    <div class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar-container" : "sidebar-hidden")">
-        <div id="chats-sidebar" class="sidebar-content hover-scrollable">
+    <ChatSidebar ShowScrollbar="true"
+                 @bind-IsToggled="ViewModel.ChatsSidebarIsToggled">
+        <div class="d-flex flex-column flex-grow-1 pa-1">
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
             {
                 <ConversationListItem OnSelect="OnConversationItemSelected"
@@ -79,8 +80,8 @@
                                       ViewModel="conversation" />
             }
         </div>
-        <div class="vertical-divider"></div>
-    </div>
+    </ChatSidebar>
+
 
     <div id="chat-body">
         <div id="conversation-content" class="hover-scrollable">

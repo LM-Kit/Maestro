@@ -2,6 +2,9 @@
     display: flex;
     flex-direction: row;
     flex-grow: 1;
+    min-width: 300px;
+    max-width: 500px;
+    width: 300px;
     background-color: var(--Surface);
 }
 
@@ -10,9 +13,19 @@
     display: none;
 }
 
-.sidebar-content {
-    background-color: var(--Surface);
-    min-width: 250px;
+#sidebar-content {
+    display: flex;
+    flex-grow: 1;
+}
+
+.fixed-sidebar{
+    min-width: 300px;
+    max-width: 300px;
+    width: 300px;
+}
+
+.resizable-sidebar {
+    min-width: 300px;
     max-width: 500px;
     width: 300px;
 }
