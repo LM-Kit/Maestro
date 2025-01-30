@@ -78,7 +78,6 @@ public partial class Chat
 
         await ResizeHandler.RegisterPageResizeAsync(Resized);
         await JS.InvokeVoidAsync("initializeScrollHandler", DotNetObjectReference.Create(this));
-        await JS.InvokeVoidAsync("initializeResizeHandler");
     }
 
 

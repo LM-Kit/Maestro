@@ -1,9 +1,11 @@
 ﻿@inherits ComponentBase
+@inject IJSRuntime JS
 
-<div class="@GetClasses()">
+<div id="sidebar-container"
+    class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
-        <div id="resize-handle"></div>
+        <div id="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 
     <div id="sidebar-content" class="scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
@@ -12,10 +14,9 @@
 
     @if (Position == SidebarPosition.Left)
     {
-        <div id="resize-handle"></div>
+        <div id="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 </div>
-
 
 @code
 {
@@ -25,9 +26,20 @@
     [Parameter] public bool ShowScrollbar { get; set; }
     [Parameter] public bool Resizable { get; set; }
     [Parameter] public required SidebarPosition Position { get; set; }
+
     private string GetClasses()
     {
         return $"{(IsToggled ? "sidebar-container" : "sidebar-hidden")} {(Resizable ? "resizable-sidebar" : "fixed-sidebar")}";
+    }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender && Resizable)
+        {
+            await JS.InvokeVoidAsync("initSidebarResizeHandler");
+        }
     }
 
     public enum SidebarPosition

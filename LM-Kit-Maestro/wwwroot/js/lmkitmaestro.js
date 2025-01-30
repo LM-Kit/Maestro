@@ -54,34 +54,56 @@ function scrollToEnd(smooth) {
     }
 }
 
-function initializeResizeHandler() {
+/* ChatSidebar */
+function initSidebarResizeHandler() {
     const resizeHandle = document.getElementById("resize-handle");
-    const settingsSidebar = document.getElementById("settings-sidebar");
+    const sidebarContainer = document.getElementById("sidebar-container");
 
+    if (!resizeHandle || !sidebarContainer) {
+        console.error("Resize handle or sidebar container not found.");
+        return;
+    }
+    position = "Right";
     let isResizing = false;
+    console.error("ok.");
+
     resizeHandle.addEventListener("mousedown", function (e) {
         isResizing = true;
-        console.log("++resizing");
+        console.error("mouse down");
+
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
     });
 
     function onMouseMove(e) {
         if (!isResizing) return;
-        console.log("e.X: " + e.clientX);
-        console.log("rect: " + settingsSidebar.getBoundingClientRect().left);
-        let newWidth = e.clientX - settingsSidebar.getBoundingClientRect().left;
+        console.error("mouse move");
+
+        let rect = sidebarContainer.getBoundingClientRect();
+        let newWidth;
+
+        if (position === "Right") {
+            newWidth = rect.right - e.clientX;
+        } else {
+            newWidth = e.clientX - rect.left;
+        }
+
         newWidth = Math.max(250, Math.min(newWidth, 500));
-        settingsSidebar.style.width = newWidth + "px";
-        console.log("new width:  " + newWidth);
+        sidebarContainer.style.width = newWidth + "px";
+
+        console.error(`New width (${position}): ${newWidth}`);
     }
 
     function onMouseUp() {
+        console.error("mouse up");
+
         isResizing = false;
         document.removeEventListener("mousemove", onMouseMove);
         document.removeEventListener("mouseup", onMouseUp);
     }
-}
+};
+
+
 
 /*
     UserInput 

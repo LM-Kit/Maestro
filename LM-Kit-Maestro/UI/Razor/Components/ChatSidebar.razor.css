@@ -1,4 +1,4 @@
-.sidebar-container {
+#sidebar-container {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
@@ -38,3 +38,4 @@
     max-width: 500px;
     width: 300px;
 }
+
