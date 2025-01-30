@@ -261,6 +261,11 @@ body.windows .primary-button {
     background-color: var(--OutlineVariant);
 }
 
+.text-truncate {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar {
