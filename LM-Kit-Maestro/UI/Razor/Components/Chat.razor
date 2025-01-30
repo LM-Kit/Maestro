@@ -168,10 +168,10 @@
         </div>
     </div>
 
-    <div class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar-container" : "sidebar-hidden")">
-        <div id="resize-handle"></div>
-        <div id="settings-sidebar" class="sidebar-content scrollable no-scrollbar">
+    <ChatSidebar ShowScrollbar="false"
+                 @bind-IsToggled="ViewModel.SettingsSidebarIsToggled">
+        <div class="d-flex flex-column flex-grow-1">
             <ChatSettings ViewModel="ViewModel.SettingsViewModel" />
         </div>
-    </div>
+    </ChatSidebar>
 </div>
