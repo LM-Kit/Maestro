@@ -55,7 +55,7 @@ function scrollToEnd(smooth) {
 }
 
 /* ChatSidebar */
-function initSidebarResizeHandler() {
+function initSidebarResizeHandler(position) {
     const resizeHandle = document.getElementById("resize-handle");
     const sidebarContainer = document.getElementById("sidebar-container");
 
@@ -63,9 +63,8 @@ function initSidebarResizeHandler() {
         console.error("Resize handle or sidebar container not found.");
         return;
     }
-    position = "Right";
+
     let isResizing = false;
-    console.error("ok.");
 
     resizeHandle.addEventListener("mousedown", function (e) {
         isResizing = true;

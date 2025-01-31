@@ -29,7 +29,7 @@
 
     private string GetClasses()
     {
-        return $"{(IsToggled ? "sidebar-container" : "sidebar-hidden")} {(Resizable ? "resizable-sidebar" : "fixed-sidebar")}";
+        return $"{(IsToggled ? "sidebar-toggled" : "sidebar-hidden")} {(Resizable ? "resizable-sidebar" : "fixed-sidebar")}";
     }
 
     protected override async void OnAfterRender(bool firstRender)
@@ -38,7 +38,7 @@
 
         if (firstRender && Resizable)
         {
-            await JS.InvokeVoidAsync("initSidebarResizeHandler");
+            await JS.InvokeVoidAsync("initSidebarResizeHandler", Position.ToString());
         }
     }
 
