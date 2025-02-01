@@ -44,6 +44,13 @@
         }
     }
 
+    [JSInvokable]
+    public void ToggleSidebar(bool value)
+    {
+        IsToggled = value;
+        StateHasChanged();
+    }
+
     public enum SidebarPosition
     {
         Left,
