@@ -63,7 +63,7 @@ function scrollToEnd(smooth) {
 }
 
 /* ChatSidebar */
-function initSidebarResizeHandler(sidebarContainer, position) {
+function initSidebarResizeHandler(dotnetReference, sidebarContainer, position) {
     var rect = sidebarContainer.getBoundingClientRect();
     let isResizing = false;
     var resizeHandle = sidebarContainer.getElementsByClassName('resize-handle')[0];
@@ -76,22 +76,30 @@ function initSidebarResizeHandler(sidebarContainer, position) {
 
     const debouncedOnMouseMove = debounce(onMouseMove, 10);
 
-    function onMouseMove(e) {
+    async function onMouseMove(e) {
         if (!isResizing) return;
 
         var rect = sidebarContainer.getBoundingClientRect();
         var sidebarWidth = sidebarContainer.offsetWidth;
+        var isToggled = await dotnetReference.invokeMethodAsync('CheckIsToggled');
 
         let newWidth;
+        console.error(isToggled);
 
         if (position == "Right") {
             if (e.clientX > rect.left) {
                 newWidth = Math.max(150, sidebarWidth - (e.clientX - rect.left));
 
                 if (sidebarWidth - (e.clientX - rect.left) < 150) {
-                    DotNet.invokeMethodAsync('Maestro', 'ToggleSidebar', false);
+                    dotnetReference.invokeMethodAsync('ToggleSidebar', false);
                 }
             } else {
+                console.error(rect.left - e.clientX);
+
+                if (!isToggled && rect.left - e.clientX > 70) {
+                    console.error("------------------------------toggle");
+                    dotnetReference.invokeMethodAsync('ToggleSidebar', true);
+                }
                 newWidth = Math.min(500, sidebarWidth + (rect.left - e.clientX));
             }
         } else {

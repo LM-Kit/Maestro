@@ -2,7 +2,7 @@
 @inject IJSRuntime JS
 
 <div @ref="SidebarContainer"
-    class="@GetClasses()">
+     class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
         <div class="@(Resizable ? "resize-handle" : "v-separator")"></div>
@@ -40,7 +40,7 @@
 
         if (firstRender && Resizable)
         {
-            await JS.InvokeVoidAsync("initSidebarResizeHandler", SidebarContainer, Position.ToString());
+            await JS.InvokeVoidAsync("initSidebarResizeHandler", DotNetObjectReference.Create(this), SidebarContainer, Position.ToString());
         }
     }
 
@@ -49,6 +49,12 @@
     {
         IsToggled = value;
         StateHasChanged();
+    }
+
+    [JSInvokable]
+    public bool CheckIsToggled()
+    {
+        return IsToggled;
     }
 
     public enum SidebarPosition
