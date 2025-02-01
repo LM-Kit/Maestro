@@ -16,6 +16,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+function debounce(func, delay) {
+    let timeout;
+    return function () {
+        const context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), delay);
+    };
+}
+
 /* 
     Chat 
 */
@@ -61,9 +70,11 @@ function initSidebarResizeHandler(sidebarContainer, position) {
 
     resizeHandle.addEventListener("mousedown", function (e) {
         isResizing = true;
-        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mousemove", debouncedOnMouseMove);
         document.addEventListener("mouseup", onMouseUp);
     });
+
+    const debouncedOnMouseMove = debounce(onMouseMove, 10);
 
     function onMouseMove(e) {
         if (!isResizing) return;
@@ -74,19 +85,19 @@ function initSidebarResizeHandler(sidebarContainer, position) {
         let newWidth;
 
         if (position == "Right") {
-
             if (e.clientX > rect.left) {
-                newWidth = Math.max(150, sidebarWidth - (e.clientX - rec.left));
-            }
-            else {
+                newWidth = Math.max(150, sidebarWidth - (e.clientX - rect.left));
+
+                if (sidebarWidth - (e.clientX - rect.left) < 150) {
+                    DotNet.invokeMethodAsync('Maestro', 'ToggleSidebar', false);
+                }
+            } else {
                 newWidth = Math.min(500, sidebarWidth + (rect.left - e.clientX));
             }
-        }
-        else {
+        } else {
             if (e.clientX < rect.right) {
-                newWidth = Math.max(150, sidebarWidth - (rec.right - e.clientX));
-            }
-            else {
+                newWidth = Math.max(150, sidebarWidth - (rect.right - e.clientX));
+            } else {
                 newWidth = Math.min(500, sidebarWidth + (e.clientX - rect.right));
             }
         }
@@ -98,11 +109,10 @@ function initSidebarResizeHandler(sidebarContainer, position) {
         console.error("mouse up");
 
         isResizing = false;
-        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mousemove", debouncedOnMouseMove);
         document.removeEventListener("mouseup", onMouseUp);
     }
-};
-
+}
 
 
 /*
