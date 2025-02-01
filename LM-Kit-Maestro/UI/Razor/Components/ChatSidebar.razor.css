@@ -1,4 +1,4 @@
-#sidebar-container {
+.sidebar-container {
 }
 
 .sidebar-hidden {
@@ -14,17 +14,17 @@
     background-color: var(--Surface);
 }
 
-#sidebar-content {
+sidebar-content {
     flex-grow: 1;
 }
 
-#resize-handle {
+.resize-handle {
     cursor: ew-resize;
     width: 8px;
     background-color: var(--OutlineVariant);
 }
 
-#resize-handle:hover{
+.resize-handle:hover{
 }
 
 .fixed-sidebar{

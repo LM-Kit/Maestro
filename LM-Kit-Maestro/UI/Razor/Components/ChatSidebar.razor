@@ -1,20 +1,20 @@
 ﻿@inherits ComponentBase
 @inject IJSRuntime JS
 
-<div id="sidebar-container"
+<div @ref="SidebarContainer"
     class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
-        <div id="@(Resizable ? "resize-handle" : "v-separator")"></div>
+        <div class="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 
-    <div id="sidebar-content" class="scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
+    <div class=" sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
         @ChildContent
     </div>
 
     @if (Position == SidebarPosition.Left)
     {
-        <div id="@(Resizable ? "resize-handle" : "v-separator")"></div>
+        <div class="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 </div>
 
@@ -27,9 +27,11 @@
     [Parameter] public bool Resizable { get; set; }
     [Parameter] public required SidebarPosition Position { get; set; }
 
+    private ElementReference SidebarContainer;
+
     private string GetClasses()
     {
-        return $"{(IsToggled ? "sidebar-toggled" : "sidebar-hidden")} {(Resizable ? "resizable-sidebar" : "fixed-sidebar")}";
+        return $"sidebar-container {(IsToggled ? "sidebar-toggled" : "sidebar-hidden")} {(Resizable ? "resizable-sidebar" : "fixed-sidebar")}";
     }
 
     protected override async void OnAfterRender(bool firstRender)
@@ -38,7 +40,7 @@
 
         if (firstRender && Resizable)
         {
-            await JS.InvokeVoidAsync("initSidebarResizeHandler", Position.ToString());
+            await JS.InvokeVoidAsync("initSidebarResizeHandler", SidebarContainer, Position.ToString());
         }
     }
 

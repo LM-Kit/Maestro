@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-
 /* 
     Chat 
 */
@@ -55,42 +54,44 @@ function scrollToEnd(smooth) {
 }
 
 /* ChatSidebar */
-function initSidebarResizeHandler(position) {
-    const resizeHandle = document.getElementById("resize-handle");
-    const sidebarContainer = document.getElementById("sidebar-container");
-
-    if (!resizeHandle || !sidebarContainer) {
-        console.error("Resize handle or sidebar container not found.");
-        return;
-    }
-
+function initSidebarResizeHandler(sidebarContainer, position) {
+    var rect = sidebarContainer.getBoundingClientRect();
     let isResizing = false;
+    var resizeHandle = sidebarContainer.getElementsByClassName('resize-handle')[0];
 
     resizeHandle.addEventListener("mousedown", function (e) {
         isResizing = true;
-        console.error("mouse down");
-
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
     });
 
     function onMouseMove(e) {
         if (!isResizing) return;
-        console.error("mouse move");
 
-        let rect = sidebarContainer.getBoundingClientRect();
+        var rect = sidebarContainer.getBoundingClientRect();
+        var sidebarWidth = sidebarContainer.offsetWidth;
+
         let newWidth;
 
-        if (position === "Right") {
-            newWidth = rect.right - e.clientX;
-        } else {
-            newWidth = e.clientX - rect.left;
+        if (position == "Right") {
+
+            if (e.clientX > rect.left) {
+                newWidth = Math.max(150, sidebarWidth - (e.clientX - rec.left));
+            }
+            else {
+                newWidth = Math.min(500, sidebarWidth + (rect.left - e.clientX));
+            }
+        }
+        else {
+            if (e.clientX < rect.right) {
+                newWidth = Math.max(150, sidebarWidth - (rec.right - e.clientX));
+            }
+            else {
+                newWidth = Math.min(500, sidebarWidth + (e.clientX - rect.right));
+            }
         }
 
-        newWidth = Math.max(250, Math.min(newWidth, 500));
         sidebarContainer.style.width = newWidth + "px";
-
-        console.error(`New width (${position}): ${newWidth}`);
     }
 
     function onMouseUp() {
