@@ -84,14 +84,11 @@ function initSidebarResizeHandler(dotnetReference, sidebarContainer, position) {
         var isToggled = await dotnetReference.invokeMethodAsync('CheckIsToggled');
 
         let newWidth;
-        console.error(isToggled + "  " + rect.left); 
+        console.error("toggled: " + isToggled + "  rect.left: " + rect.left + " offset.w: " + sidebarContainer.offsetWidth); 
        
         if (position == "Right") {
 
             if (!isToggled) {
-
-                console.error("not toggled");
-                console.error(sidebarContainer.offsetWidth);
             }
             else {
                 if (e.clientX > rect.left) {
@@ -101,10 +98,7 @@ function initSidebarResizeHandler(dotnetReference, sidebarContainer, position) {
                         dotnetReference.invokeMethodAsync('ToggleSidebar', false);
                     }
                 } else {
-                    console.error(rect.left - e.clientX);
-
                     if (!isToggled && rect.left - e.clientX > 70) {
-                        console.error("------------------------------toggle");
                         dotnetReference.invokeMethodAsync('ToggleSidebar', true);
                     }
 
@@ -123,8 +117,6 @@ function initSidebarResizeHandler(dotnetReference, sidebarContainer, position) {
     }
 
     function onMouseUp() {
-        console.error("mouse up");
-
         isResizing = false;
         document.removeEventListener("mousemove", debouncedOnMouseMove);
         document.removeEventListener("mouseup", onMouseUp);
