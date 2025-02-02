@@ -1,10 +1,10 @@
 .sidebar-container {
+    transition: width 0.5s;
+    width: 300px;
 }
 
 .sidebar-hidden {
-    visibility: hidden;
-    display: none;
-    width: 8px;
+    width: 0px;
 }
 
     .sidebar-hidden .resize-handle {
@@ -15,6 +15,7 @@
 .sidebar-toggled {
     flex-grow: 1;
     flex-shrink: 1;
+    transition: width 0.5s;
     background-color: var(--Surface);
 }
 
@@ -25,7 +26,6 @@
 
 .resize-handle {
     cursor: ew-resize;
-    width: 8px;
     background-color: red;
 }
 
