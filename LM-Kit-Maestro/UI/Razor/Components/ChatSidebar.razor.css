@@ -1,10 +1,5 @@
 .sidebar-container {
     transition: width 0.5s;
-    width: 300px;
-}
-
-.sidebar-hidden {
-    width: 0px;
 }
 
     .sidebar-hidden .resize-handle {
@@ -13,20 +8,21 @@
     }
 
 .sidebar-toggled {
-    flex-grow: 1;
-    flex-shrink: 1;
-    transition: width 0.5s;
+    flex-grow: 0;
+    flex-shrink: 0;
     background-color: var(--Surface);
+    display: flex;
+    flex-direction: row;
 }
 
 .sidebar-content {
     flex-grow: 1;
-
 }
 
 .resize-handle {
     cursor: ew-resize;
     background-color: red;
+    width: 10px;
 }
 
 .resize-handle:hover{

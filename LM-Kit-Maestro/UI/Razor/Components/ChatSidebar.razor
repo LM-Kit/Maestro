@@ -1,8 +1,8 @@
 ﻿@inherits ComponentBase
 @inject IJSRuntime JS
 
-@* style="width: @(Width)px; min-width: @(Width)px; max-width: (@Width)px" *@
 <div @ref="SidebarContainer"
+style="width: @(Width)px;" 
 class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
@@ -21,12 +21,29 @@ class="@GetClasses()">
 
 @code
 {
-    [Parameter] public bool IsToggled { get; set; }
     [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
     [Parameter] public required RenderFragment ChildContent { get; set; }
     [Parameter] public bool ShowScrollbar { get; set; }
     [Parameter] public bool Resizable { get; set; }
     [Parameter] public required SidebarPosition Position { get; set; }
+
+    private bool _isToggled;
+
+    [Parameter]
+    public bool IsToggled
+    {
+        get => _isToggled;
+        set
+        {
+            if (value != _isToggled)
+            {
+                _isToggled = value;
+                IsToggledChanged.InvokeAsync(value);
+                Width = IsToggled ? 300 : 0;
+                StateHasChanged();
+            }
+        }
+    }
 
     private int _width;
     private int Width
@@ -55,8 +72,6 @@ class="@GetClasses()">
 
         if (firstRender)
         {
-            Width = 300;
-
             if (Resizable)
             {
                 await JS.InvokeVoidAsync("initSidebarResizeHandler", DotNetObjectReference.Create(this), SidebarContainer, Position.ToString());
