@@ -45,6 +45,7 @@ public partial class Chat
     }
 
     private bool _isScrolledToEnd;
+
     private bool IsScrolledToEnd
     {
         get => _isScrolledToEnd;
@@ -61,6 +62,21 @@ public partial class Chat
             }
 
             RefreshUIAsync(forceRerender: true);
+        }
+    }
+
+    private int _settingSidebarWidth;
+
+    private int SettingSidebarWidth
+    {
+        get => _settingSidebarWidth;
+        set
+        {
+            if (_settingSidebarWidth != value)
+            {
+                _settingSidebarWidth = value;
+                RefreshUIAsync(forceRerender: true);
+            }
         }
     }
 
@@ -132,6 +148,7 @@ public partial class Chat
             RefreshUIAsync();
         }
     }
+
     private void OnCurrentLMKitConversationPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(LMKitService.Conversation.ContextRemainingSpace))
@@ -177,9 +194,12 @@ public partial class Chat
 
         if (ViewModel.ConversationListViewModel.CurrentConversation != null)
         {
-            ViewModel.ConversationListViewModel.CurrentConversation.Messages.CollectionChanged += OnConversationMessagesCollectionChanged;
-            ViewModel.ConversationListViewModel.CurrentConversation.TextGenerationCompleted += OnTextGenerationCompleted;
-            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.PropertyChanged += OnCurrentLMKitConversationPropertyChanged;
+            ViewModel.ConversationListViewModel.CurrentConversation.Messages.CollectionChanged +=
+                OnConversationMessagesCollectionChanged;
+            ViewModel.ConversationListViewModel.CurrentConversation.TextGenerationCompleted +=
+                OnTextGenerationCompleted;
+            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.PropertyChanged +=
+                OnCurrentLMKitConversationPropertyChanged;
 
             _previousScrollTop = null;
             _ignoreScrollsUntilNextScrollUp = true;

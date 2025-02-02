@@ -22,13 +22,13 @@ class="@GetClasses()">
 @code
 {
     [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
+    [Parameter] public EventCallback<int> WidthChanged { get; set; }
     [Parameter] public required RenderFragment ChildContent { get; set; }
     [Parameter] public bool ShowScrollbar { get; set; }
     [Parameter] public bool Resizable { get; set; }
     [Parameter] public required SidebarPosition Position { get; set; }
-
+   
     private bool _isToggled;
-
     [Parameter]
     public bool IsToggled
     {
@@ -46,7 +46,8 @@ class="@GetClasses()">
     }
 
     private int _width;
-    private int Width
+    [Parameter]
+    public int Width
     {
         get => _width;
         set
