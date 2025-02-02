@@ -79,28 +79,37 @@ function initSidebarResizeHandler(dotnetReference, sidebarContainer, position) {
     async function onMouseMove(e) {
         if (!isResizing) return;
 
-        var rect = sidebarContainer.getBoundingClientRect();
+        var rect = resizeHandle.getBoundingClientRect();
         var sidebarWidth = sidebarContainer.offsetWidth;
         var isToggled = await dotnetReference.invokeMethodAsync('CheckIsToggled');
 
         let newWidth;
-        console.error(isToggled);
-
+        console.error(isToggled + "  " + rect.left); 
+       
         if (position == "Right") {
-            if (e.clientX > rect.left) {
-                newWidth = Math.max(150, sidebarWidth - (e.clientX - rect.left));
 
-                if (sidebarWidth - (e.clientX - rect.left) < 150) {
-                    dotnetReference.invokeMethodAsync('ToggleSidebar', false);
-                }
-            } else {
-                console.error(rect.left - e.clientX);
+            if (!isToggled) {
 
-                if (!isToggled && rect.left - e.clientX > 70) {
-                    console.error("------------------------------toggle");
-                    dotnetReference.invokeMethodAsync('ToggleSidebar', true);
+                console.error("not toggled");
+                console.error(sidebarContainer.offsetWidth);
+            }
+            else {
+                if (e.clientX > rect.left) {
+                    newWidth = Math.max(150, sidebarWidth - (e.clientX - rect.left));
+
+                    if (sidebarWidth - (e.clientX - rect.left) < 150) {
+                        dotnetReference.invokeMethodAsync('ToggleSidebar', false);
+                    }
+                } else {
+                    console.error(rect.left - e.clientX);
+
+                    if (!isToggled && rect.left - e.clientX > 70) {
+                        console.error("------------------------------toggle");
+                        dotnetReference.invokeMethodAsync('ToggleSidebar', true);
+                    }
+
+                    newWidth = Math.min(500, sidebarWidth + (rect.left - e.clientX));
                 }
-                newWidth = Math.min(500, sidebarWidth + (rect.left - e.clientX));
             }
         } else {
             if (e.clientX < rect.right) {
