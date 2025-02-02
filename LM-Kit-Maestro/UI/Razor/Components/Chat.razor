@@ -43,8 +43,8 @@
 
         @if (ShowSidebarToggles)
         {
-            <div class="top-bar-side @(ViewModel.SettingsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")"
-                 style="width: @(SettingSidebarWidth)px;">
+                <div class="top-bar-side top-bar-sidebar-resizable"
+                 style="width: @(ViewModel.SettingsSidebarIsToggled ? SettingSidebarWidth : "48")px">
 
 
                         <div class="d-flex justify-space-between flex-grow-1 align-center">
@@ -182,9 +182,3 @@
         </div>
     </ChatSidebar>
 </div>
-
-<style>
-    .top-bar-side:first-child {
-        width: @(SettingSidebarWidth)px;
-    }
-</style>

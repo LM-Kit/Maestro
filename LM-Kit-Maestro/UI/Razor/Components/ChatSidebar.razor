@@ -27,10 +27,10 @@ class="@GetClasses()">
     [Parameter] public bool ShowScrollbar { get; set; }
     [Parameter] public bool Resizable { get; set; }
     [Parameter] public required SidebarPosition Position { get; set; }
-   
+
     private bool _isToggled;
     [Parameter]
-    public bool IsToggled
+    public bool IsToggled   
     {
         get => _isToggled;
         set
@@ -55,6 +55,7 @@ class="@GetClasses()">
             if (value != _width)
             {
                 _width = value;
+                WidthChanged.InvokeAsync(value);
                 StateHasChanged();
             }
         }
