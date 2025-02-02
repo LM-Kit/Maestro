@@ -2,11 +2,14 @@
 @inject IJSRuntime JS
 
 <div @ref="SidebarContainer"
-style="width: @(Width)px;" 
-class="@GetClasses()">
+    @onmousemove="OnMouseMove"
+     @onmouseup="OnMouseUp"
+
+     style="width: @(Width)px;" 
+    class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
-        <div class="@(Resizable ? "resize-handle" : "v-separator")"></div>
+        <div @onmousedown="OnMouseDown" class="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 
     <div class="sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
@@ -15,9 +18,13 @@ class="@GetClasses()">
 
     @if (Position == SidebarPosition.Left)
     {
-        <div class="@(Resizable ? "resize-handle" : "v-separator")"></div>
+            <div @onmousedown="OnMouseDown" class="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 </div>
+
+<script>
+
+</script>
 
 @code
 {
@@ -30,7 +37,7 @@ class="@GetClasses()">
 
     private bool _isToggled;
     [Parameter]
-    public bool IsToggled   
+    public bool IsToggled
     {
         get => _isToggled;
         set
@@ -92,6 +99,35 @@ class="@GetClasses()">
     public bool CheckIsToggled()
     {
         return IsToggled;
+    }
+
+
+    private bool IsResizing { get; set; } = false;
+    private int StartX { get; set; }
+    private int StartWidth { get; set; }
+
+    private void OnMouseDown(MouseEventArgs e)
+    {
+        // IsResizing = true;
+        // StartX = (int)e.ClientX;
+        // StartWidth = SidebarWidth;
+    }
+
+    private async void OnMouseMove(MouseEventArgs e)
+    {
+        // if (IsResizing)
+        // {
+        //     var rect = await JS.InvokeAsync<DOMRect>("getElementRect", SidebarContainer);
+        //     rectInfo = $"X: {rect.X}, Y: {rect.Y}, Width: {rect.Width}, Height: {rect.Height}";
+
+        //     int newWidth = StartWidth + ((int)e.ClientX - StartX);
+        //     Width = Math.Max(150, Math.Min(500, newWidth));
+        // }
+    }
+
+    private void OnMouseUp()
+    {
+        IsResizing = false;
     }
 
     public enum SidebarPosition

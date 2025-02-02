@@ -16,14 +16,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-function debounce(func, delay) {
-    let timeout;
-    return function () {
-        const context = this, args = arguments;
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(context, args), delay);
-    };
-}
+window.getElementRect = (element) => {
+    if (!element) return null;
+    return element.getBoundingClientRect();
+};
+
 
 /* 
     Chat 
@@ -61,68 +58,6 @@ function scrollToEnd(smooth) {
         });
     }
 }
-
-/* ChatSidebar */
-function initSidebarResizeHandler(dotnetReference, sidebarContainer, position) {
-    var rect = sidebarContainer.getBoundingClientRect();
-    let isResizing = false;
-    var resizeHandle = sidebarContainer.getElementsByClassName('resize-handle')[0];
-
-    resizeHandle.addEventListener("mousedown", function (e) {
-        isResizing = true;
-        document.addEventListener("mousemove", debouncedOnMouseMove);
-        document.addEventListener("mouseup", onMouseUp);
-    });
-
-    const debouncedOnMouseMove = debounce(onMouseMove, 10);
-
-    async function onMouseMove(e) {
-        if (!isResizing) return;
-
-        var rect = resizeHandle.getBoundingClientRect();
-        var sidebarWidth = sidebarContainer.offsetWidth;
-        var isToggled = await dotnetReference.invokeMethodAsync('CheckIsToggled');
-
-        let newWidth;
-        console.error("toggled: " + isToggled + "  rect.left: " + rect.left + " offset.w: " + sidebarContainer.offsetWidth); 
-       
-        if (position == "Right") {
-
-            if (!isToggled) {
-            }
-            else {
-                if (e.clientX > rect.left) {
-                    newWidth = Math.max(150, sidebarWidth - (e.clientX - rect.left));
-
-                    if (sidebarWidth - (e.clientX - rect.left) < 150) {
-                        dotnetReference.invokeMethodAsync('ToggleSidebar', false);
-                    }
-                } else {
-                    if (!isToggled && rect.left - e.clientX > 70) {
-                        dotnetReference.invokeMethodAsync('ToggleSidebar', true);
-                    }
-
-                    newWidth = Math.min(500, sidebarWidth + (rect.left - e.clientX));
-                }
-            }
-        } else {
-            if (e.clientX < rect.right) {
-                newWidth = Math.max(150, sidebarWidth - (rect.right - e.clientX));
-            } else {
-                newWidth = Math.min(500, sidebarWidth + (e.clientX - rect.right));
-            }
-        }
-
-        sidebarContainer.style.width = newWidth + "px";
-    }
-
-    function onMouseUp() {
-        isResizing = false;
-        document.removeEventListener("mousemove", debouncedOnMouseMove);
-        document.removeEventListener("mouseup", onMouseUp);
-    }
-}
-
 
 /*
     UserInput 
