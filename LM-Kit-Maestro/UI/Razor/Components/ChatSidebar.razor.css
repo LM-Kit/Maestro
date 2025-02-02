@@ -3,6 +3,7 @@
 
 .sidebar-hidden {
     visibility: hidden;
+    display: none;
     width: 8px;
 }
 
@@ -19,8 +20,9 @@
     background-color: var(--Surface);
 }
 
-sidebar-content {
+.sidebar-content {
     flex-grow: 1;
+
 }
 
 .resize-handle {
