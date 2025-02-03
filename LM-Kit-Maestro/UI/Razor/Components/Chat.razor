@@ -14,7 +14,7 @@
         @if (ShowSidebarToggles)
         {
                     <div class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
-                        <div class="d-flex justify-space-between flex-grow-1 align-center">
+                        <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
                             <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
                                         Icon="fas fa-message"
                                         OnClick="ViewModel.ToggleChatsSidebar" />
@@ -44,10 +44,10 @@
         @if (ShowSidebarToggles)
         {
                 <div class="top-bar-side top-bar-sidebar-resizable"
-                 style="width: @(ViewModel.SettingsSidebarIsToggled ? SettingSidebarWidth : "48")px">
+                 style="width: @(ViewModel.SettingsSidebarIsToggled ? $"{SettingSidebarWidth}px" : "auto")">
 
 
-                        <div class="d-flex justify-space-between flex-grow-1 align-center">
+                        <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
                     @if (ViewModel.SettingsSidebarIsToggled)
                     {
                                         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"

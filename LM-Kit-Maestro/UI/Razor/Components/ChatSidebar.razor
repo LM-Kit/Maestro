@@ -6,7 +6,10 @@ style="width: @(Width)px;"
 class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
-        <div @onmousedown="OnResizeHandlerMouseDown" class="@(Resizable ? "resize-handle" : "v-separator")"></div>
+        <div @onmousedown="OnResizeHandlerMouseDown" 
+            @onmousedown:preventDefault="true"  
+            @onmousedown:stopPropagation="true"
+            class="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 
     <div class="sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
@@ -15,7 +18,10 @@ class="@GetClasses()">
 
     @if (Position == SidebarPosition.Left)
     {
-        <div @onmousedown="OnResizeHandlerMouseDown" class="@(Resizable ? "resize-handle" : "v-separator")"></div>
+        <div @onmousedown="OnResizeHandlerMouseDown"
+            @onmousedown:preventDefault="true"  
+            @onmousedown:stopPropagation="true"
+            class="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 </div>
 
@@ -111,11 +117,19 @@ class="@GetClasses()">
             }
             else
             {
-                Width = Math.Max(150, Math.Min(500, requestedWidth));
+                if (!IsToggled)
+                {
+                    IsToggled = requestedWidth > 80;
+                }
+
+                if (IsToggled)
+                {
+                    Width = Math.Max(150, Math.Min(500, requestedWidth));
+                }
             }
         }
-        Debug.WriteLine("[move] " + _isResizing);
 
+        Debug.WriteLine("[move] " + _isResizing);
     }
 
     [JSInvokable]

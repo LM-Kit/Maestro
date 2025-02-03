@@ -132,7 +132,9 @@ body.mac .chat-element {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    transition: width 0.5s;
+    /*transition: width 0.5s;*/
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 
