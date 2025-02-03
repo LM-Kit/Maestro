@@ -131,7 +131,10 @@ function countLines(textarea) {
 }
 
 /* ChatSidebar */
-window.attachResizeListeners = (dotnetObject) => {
+let dotnetRef = null;
+
+window.attachResizeListeners = (dotnetReference) => {
+    dotnetRef = dotnetReference; // Store reference globally
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
 };
@@ -139,13 +142,18 @@ window.attachResizeListeners = (dotnetObject) => {
 window.detachResizeListeners = () => {
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
+    dotnetRef = null;
 };
 
 function handleMouseMove(event) {
-    DotNet.invokeMethodAsync('Maestro', 'OnMouseMove', { clientX: event.clientX });
+    if (dotnetRef) {
+        dotnetRef.invokeMethodAsync('OnMouseMove', { clientX: event.clientX });
+    }
 }
 
-function handleMouseUp(dotnetObject) {
-    dotnetReference.invokeMethodAsync('OnMouseUp');
+function handleMouseUp() {
+    if (dotnetRef) {
+        dotnetRef.invokeMethodAsync('OnMouseUp');
+    }
     window.detachResizeListeners();
 }
