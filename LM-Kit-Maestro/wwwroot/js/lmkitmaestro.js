@@ -129,3 +129,23 @@ function countLines(textarea) {
     if (result == 0) result = 1;
     return result;
 }
+
+/* ChatSidebar */
+window.attachResizeListeners = (dotnetObject) => {
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+};
+
+window.detachResizeListeners = () => {
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+};
+
+function handleMouseMove(event) {
+    DotNet.invokeMethodAsync('Maestro', 'OnMouseMove', { clientX: event.clientX });
+}
+
+function handleMouseUp(dotnetObject) {
+    dotnetReference.invokeMethodAsync('OnMouseUp');
+    window.detachResizeListeners();
+}

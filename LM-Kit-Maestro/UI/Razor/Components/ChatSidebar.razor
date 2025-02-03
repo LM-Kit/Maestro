@@ -2,14 +2,11 @@
 @inject IJSRuntime JS
 
 <div @ref="SidebarContainer"
-    @onmousemove="OnMouseMove"
-     @onmouseup="OnMouseUp"
-
-     style="width: @(Width)px;" 
-    class="@GetClasses()">
+style="width: @(Width)px;"
+class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
-        <div @onmousedown="OnMouseDown" class="@(Resizable ? "resize-handle" : "v-separator")"></div>
+        <div @onmousedown="OnResizeHandlerMouseDown" class="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 
     <div class="sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
@@ -18,16 +15,16 @@
 
     @if (Position == SidebarPosition.Left)
     {
-            <div @onmousedown="OnMouseDown" class="@(Resizable ? "resize-handle" : "v-separator")"></div>
+        <div @onmousedown="OnResizeHandlerMouseDown" class="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 </div>
 
-<script>
-
-</script>
-
 @code
 {
+    private bool _isResizing;
+    private int _resizeStartX;
+    private int _resizeStartWidth;
+
     [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
     [Parameter] public EventCallback<int> WidthChanged { get; set; }
     [Parameter] public required RenderFragment ChildContent { get; set; }
@@ -75,19 +72,6 @@
         return $"sidebar-container {(IsToggled ? "sidebar-toggled" : "sidebar-hidden")} {(Resizable ? "resizable-sidebar" : "fixed-sidebar")}";
     }
 
-    protected override async void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-
-        if (firstRender)
-        {
-            if (Resizable)
-            {
-                await JS.InvokeVoidAsync("initSidebarResizeHandler", DotNetObjectReference.Create(this), SidebarContainer, Position.ToString());
-            }
-        }
-    }
-
     [JSInvokable]
     public void ToggleSidebar(bool value)
     {
@@ -102,32 +86,43 @@
     }
 
 
-    private bool IsResizing { get; set; } = false;
-    private int StartX { get; set; }
-    private int StartWidth { get; set; }
 
-    private void OnMouseDown(MouseEventArgs e)
+    private async Task OnResizeHandlerMouseDown(MouseEventArgs e)
     {
-        // IsResizing = true;
-        // StartX = (int)e.ClientX;
-        // StartWidth = SidebarWidth;
+        _isResizing = true;
+        _resizeStartX = (int)e.ClientX;
+        _resizeStartWidth = Width;
+        Debug.WriteLine("[down]");
+
+        await JS.InvokeVoidAsync("attachResizeListeners", DotNetObjectReference.Create(this));
     }
 
-    private async void OnMouseMove(MouseEventArgs e)
+    [JSInvokable]
+    private void OnMouseMove(MouseEventArgs e)
     {
-        // if (IsResizing)
-        // {
-        //     var rect = await JS.InvokeAsync<DOMRect>("getElementRect", SidebarContainer);
-        //     rectInfo = $"X: {rect.X}, Y: {rect.Y}, Width: {rect.Width}, Height: {rect.Height}";
+        if (_isResizing)
+        {
+            int requestedWidth = _resizeStartWidth + (int)(_resizeStartX - e.ClientX);
 
-        //     int newWidth = StartWidth + ((int)e.ClientX - StartX);
-        //     Width = Math.Max(150, Math.Min(500, newWidth));
-        // }
+            if (requestedWidth < 80)
+            {
+                IsToggled = false;
+            }
+            else
+            {
+                Width = Math.Max(150, Math.Min(500, requestedWidth));
+            }
+        }
+        Debug.WriteLine("[move] " + _isResizing);
+
     }
 
+    [JSInvokable]
     private void OnMouseUp()
     {
-        IsResizing = false;
+        Debug.WriteLine("[released]");
+        _isResizing = false;
+
     }
 
     public enum SidebarPosition
