@@ -6,10 +6,10 @@ style="width: @(Width)px;"
 class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
-        <div @onmousedown="OnResizeHandlerMouseDown"
-        @onmousedown:preventDefault="true"
-        @onmousedown:stopPropagation="true"
-        class="@(Resizable ? "resize-handle" : "v-separator")"></div>
+        <div @onmousedown="OnResizeHandlerMouseDown" 
+            @onmousedown:preventDefault="true"  
+            @onmousedown:stopPropagation="true"
+            class="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 
     <div class="sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
@@ -19,40 +19,24 @@ class="@GetClasses()">
     @if (Position == SidebarPosition.Left)
     {
         <div @onmousedown="OnResizeHandlerMouseDown"
-        @onmousedown:preventDefault="true"
-        @onmousedown:stopPropagation="true"
-        class="@(Resizable ? "resize-handle" : "v-separator")"></div>
+            @onmousedown:preventDefault="true"  
+            @onmousedown:stopPropagation="true"
+            class="@(Resizable ? "resize-handle" : "v-separator")"></div>
     }
 </div>
 
 @code
 {
+    private bool _isResizing;
     private int _resizeStartX;
     private int _resizeStartWidth;
 
     [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
-    [Parameter] public EventCallback<bool> IsResizingChanged { get; set; }
     [Parameter] public EventCallback<int> WidthChanged { get; set; }
     [Parameter] public required RenderFragment ChildContent { get; set; }
     [Parameter] public bool ShowScrollbar { get; set; }
     [Parameter] public bool Resizable { get; set; }
     [Parameter] public required SidebarPosition Position { get; set; }
-
-    private bool _isResizing;
-    [Parameter]
-    public bool IsResizing
-    {
-        get => _isResizing;
-        set
-        {
-            if (value != _isResizing)
-            {
-                _isResizing = value;
-                IsResizingChanged.InvokeAsync(value);
-                StateHasChanged();
-            }
-        }
-    }
 
     private bool _isToggled;
     [Parameter]
@@ -91,32 +75,7 @@ class="@GetClasses()">
 
     private string GetClasses()
     {
-        string classes = "sidebar-container";
-
-        if (IsToggled)
-        {
-            classes += " sidebar-toggled";
-        }
-        else
-        {
-            classes += " sidebar-hidden";
-        }
-
-        if (Resizable)
-        {
-            classes += " resizable-sidebar";
-        }
-        else
-        {
-            classes += " fixed-sidebar";
-        }
-
-        if (!IsResizing)
-        {
-            classes += " width-transition";
-        }
-
-        return classes;
+        return $"sidebar-container {(IsToggled ? "sidebar-toggled" : "sidebar-hidden")} {(Resizable ? "resizable-sidebar" : "fixed-sidebar")}";
     }
 
     [JSInvokable]
@@ -133,9 +92,11 @@ class="@GetClasses()">
         return IsToggled;
     }
 
+
+
     private async Task OnResizeHandlerMouseDown(MouseEventArgs e)
     {
-        IsResizing = true;
+        _isResizing = true;
         _resizeStartX = (int)e.ClientX;
         _resizeStartWidth = Width;
         Debug.WriteLine("[down]");
@@ -146,7 +107,7 @@ class="@GetClasses()">
     [JSInvokable]
     public void OnMouseMove(MouseEventArgs e)
     {
-        if (IsResizing)
+        if (_isResizing)
         {
             int requestedWidth = _resizeStartWidth + (int)(_resizeStartX - e.ClientX);
 
@@ -168,14 +129,14 @@ class="@GetClasses()">
             }
         }
 
-        Debug.WriteLine("[move] " + IsResizing);
+        Debug.WriteLine("[move] " + _isResizing);
     }
 
     [JSInvokable]
     public void OnMouseUp()
     {
         Debug.WriteLine("[released]");
-        IsResizing = false;
+        _isResizing = false;
 
     }
 

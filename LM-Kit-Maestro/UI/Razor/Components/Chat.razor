@@ -13,74 +13,75 @@
     <div id="chat-top-bar">
         @if (ShowSidebarToggles)
         {
-            <div class="top-bar-side width-transition @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
-                <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
-                    <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
-                                Icon="fas fa-message"
-                                OnClick="ViewModel.ToggleChatsSidebar"/>
+                    <div class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
+                        <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
+                            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                                        Icon="fas fa-message"
+                                        OnClick="ViewModel.ToggleChatsSidebar" />
 
                     @if (ViewModel.ChatsSidebarIsToggled)
                     {
-                        <div>
-                            <MudText Typo="Typo.body1">
-                                Chats
-                            </MudText>
-                        </div>
+                                        <div>
+                                            <MudText Typo="Typo.body1">
+                                                Chats
+                                            </MudText>
+                                        </div>
                     }
 
-                    <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                                Icon="fas fa-add"
-                                OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
-                </div>
+                            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                                        Icon="fas fa-add"
+                                        OnClick="ViewModel.ConversationListViewModel.AddNewConversation" />
+                        </div>
 
-                <div class="bottom-divider"></div>
-            </div>
+                        <div class="bottom-divider"></div>
+                    </div>
         }
 
         <div id="top-bar-center">
-            <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel"/>
+            <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel" />
         </div>
 
         @if (ShowSidebarToggles)
         {
-            <div class="top-bar-side top-bar-sidebar-resizable @(SettingSidebarIsResizing ? "" : "width-transition")"
+                <div class="top-bar-side top-bar-sidebar-resizable"
                  style="width: @(ViewModel.SettingsSidebarIsToggled ? $"{SettingSidebarWidth}px" : "auto")">
 
 
-                <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
+                        <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
                     @if (ViewModel.SettingsSidebarIsToggled)
                     {
-                        <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                                    Icon="fas fa-arrow-rotate-left"
-                                    OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
+                                        <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                                                    Icon="fas fa-arrow-rotate-left"
+                                                    OnClick="ViewModel.SettingsViewModel.ResetDefaultValues" />
 
-                        <MudText Typo="Typo.body1">
-                            Settings
-                        </MudText>
+                                        <MudText Typo="Typo.body1">
+                                            Settings
+                                        </MudText>
                     }
 
-                    <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
-                                Icon="fas fa-gears"
-                                OnClick="ViewModel.ToggleSettingsSidebar"/>
-                </div>
+                            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                                        Icon="fas fa-gears"
+                                        OnClick="ViewModel.ToggleSettingsSidebar" />
+                        </div>
 
-                <div class="bottom-divider"></div>
-            </div>
+                        <div class="bottom-divider"></div>
+                    </div>
         }
     </div>
 </SectionContent>
 
 <div id="chat-container">
     <ChatSidebar ShowScrollbar="true"
-                 Position="ChatSidebar.SidebarPosition.Left"
+        Position="ChatSidebar.SidebarPosition.Left"
+
                  @bind-IsToggled="ViewModel.ChatsSidebarIsToggled">
         <div class="d-flex flex-column flex-grow-1 pa-1">
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
             {
-                <ConversationListItem OnSelect="OnConversationItemSelected"
-                                      OnDelete="OnConversationItemDeleteClicked"
-                                      IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
-                                      ViewModel="conversation"/>
+                        <ConversationListItem OnSelect="OnConversationItemSelected"
+                                              OnDelete="OnConversationItemDeleteClicked"
+                                              IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
+                                              ViewModel="conversation" />
             }
         </div>
     </ChatSidebar>
@@ -92,93 +93,92 @@
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
                 {
-                    <div id="empty-chat">
-                        <MudStack Class="chat-element align-self-center flex-1" Spacing="8">
-                            <MudStack Spacing="2">
-                                <MudText Align="Align.Center" Typo="Typo.body2">
-                                    <b>Maestro</b> at your service—let’s orchestrate something amazing!
-                                </MudText>
+                                    <div id="empty-chat">
+                                        <MudStack Class="chat-element align-self-center flex-1" Spacing="8">
+                                            <MudStack Spacing="2">
+                                                <MudText Align="Align.Center" Typo="Typo.body2">
+                                                    <b>Maestro</b> at your service—let’s orchestrate something amazing!
+                                                </MudText>
 
-                                <MudText Align="Align.Center" Typo="Typo.body2">
-                                    Feel free to ask questions, explore ideas, or engage in meaningful conversations.
-                                </MudText>
+                                                <MudText Align="Align.Center" Typo="Typo.body2">
+                                                    Feel free to ask questions, explore ideas, or engage in meaningful conversations.
+                                                </MudText>
 
-                                <MudText Align="Align.Center" Typo="Typo.body2">
-                                    Whether you need assistance, inspiration, or just some lighthearted chat, I'm here
-                                    to
-                                    help.
-                                </MudText>
-                            </MudStack>
+                                                <MudText Align="Align.Center" Typo="Typo.body2">
+                                                    Whether you need assistance, inspiration, or just some lighthearted chat, I'm here
+                                                    to
+                                                    help.
+                                                </MudText>
+                                            </MudStack>
 
-                            <MudStack Spacing="4">
-                                <div class="shortcut-instruction">
-                                    <MudText Typo="Typo.caption">
-                                        Press Enter to send a new message
-                                    </MudText>
+                                            <MudStack Spacing="4">
+                                                <div class="shortcut-instruction">
+                                                    <MudText Typo="Typo.caption">
+                                                        Press Enter to send a new message
+                                                    </MudText>
 
-                                </div>
+                                                </div>
 
-                                <div class="shortcut-instruction">
-                                    <MudText Typo="Typo.caption">
-                                        Hold Shift + Enter to insert a new line
+                                                <div class="shortcut-instruction">
+                                                    <MudText Typo="Typo.caption">
+                                                        Hold Shift + Enter to insert a new line
 
-                                    </MudText>
-                                </div>
-                            </MudStack>
-                        </MudStack>
-                    </div>
+                                                    </MudText>
+                                                </div>
+                                            </MudStack>
+                                        </MudStack>
+                                    </div>
                 }
                 else
                 {
-                    <div id="chat-messages" class="chat-element">
+                                    <div id="chat-messages" class="chat-element">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
-                            <ChatMessage MessageViewModel="message"/>
+                                                    <ChatMessage MessageViewModel="message" />
                         }
 
-                        <div id="chat-messages-bottom-space">
-                            <div id="scroll-to-end">
+                                        <div id="chat-messages-bottom-space">
+                                            <div id="scroll-to-end">
                                 @if (!IsScrolledToEnd)
                                 {
-                                    <button @onclick="OnScrollToEndButtonClicked"
-                                            class="round-button scroll-to-end-button">
+                                                            <button @onclick="OnScrollToEndButtonClicked"
+                                                                    class="round-button scroll-to-end-button">
                                                                 <span>
                                                                     <i class="fas fa-arrow-down"></i>
                                                                 </span>
-                                    </button>
+                                                            </button>
                                 }
-                            </div>
-                        </div>
-                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
                 }
             }
         </div>
 
         <div id="user-input" class="chat-element">
-            <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
+            <UserInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
         </div>
 
         <div id="bottom-space">
             @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
             {
-                <MudText Align="Align.Center" Typo="Typo.caption">
-                    Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
+                        <MudText Align="Align.Center" Typo="Typo.caption">
+                            Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                     @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
-                    (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                             ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
-                </MudText>
+                            (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
+                                        ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                        </MudText>
             }
         </div>
     </div>
 
     <ChatSidebar ShowScrollbar="false"
-                 Resizable="true"
-                 Position="ChatSidebar.SidebarPosition.Right"
-                 @bind-Width="SettingSidebarWidth"
-                 @bind-IsResizing="SettingSidebarIsResizing"
-                 @bind-IsToggled="ViewModel.SettingsSidebarIsToggled">
+        Resizable="true"
+        Position="ChatSidebar.SidebarPosition.Right"
+        @bind-Width="SettingSidebarWidth"
+        @bind-IsToggled="ViewModel.SettingsSidebarIsToggled">
         <div class="d-flex flex-column flex-grow-1">
-            <ChatSettings ViewModel="ViewModel.SettingsViewModel"/>
+            <ChatSettings ViewModel="ViewModel.SettingsViewModel" />
         </div>
     </ChatSidebar>
 </div>
