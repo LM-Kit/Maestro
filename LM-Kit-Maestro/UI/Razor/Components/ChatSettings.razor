@@ -33,7 +33,8 @@
             @if (LimitRespongeLength)
             {
                 <div>
-                    <MudText Typo="Typo.caption">
+                    <MudText Class="text-truncate" 
+                    Typo="Typo.caption">
                         Maximum number of tokens
                     </MudText>
 
@@ -60,7 +61,8 @@
     <Expander Title="Sampling configuration">
         <MudStack Class="setting-list" Spacing="6">
             <div class="d-flex flex-row justify-space-between align-center">
-                <MudText Typo="Typo.subtitle2">
+                <MudText Class="text-truncate"
+                         Typo="Typo.subtitle2">
                     Sampling mode
                 </MudText>
 
