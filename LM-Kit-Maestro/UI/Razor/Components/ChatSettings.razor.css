@@ -3,12 +3,6 @@
     flex-direction: column;
 }
 
-.setting-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
 .flex-row {
     display: flex;
     flex-direction: row;

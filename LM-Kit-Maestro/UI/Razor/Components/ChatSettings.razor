@@ -3,7 +3,7 @@
 <div id="settings-container">
     <Expander Title="General settings">
         <MudStack Spacing="6">
-            <div class="setting-container">
+            <div class="d-flex flex-column gap-2">
                 <MudText Typo="Typo.subtitle2">
                     Chatbot purpose
                 </MudText>
@@ -14,20 +14,22 @@
                               Value="ViewModel.SystemPrompt" />
             </div>
 
-            <div class="d-flex justify-space-between flex-grow-1 align-center">
+            <div class="d-flex flex-row justify-space-between align-center" style="background-color: red">
                 <div class="d-flex justify-start flex-row gap-2 align-center">
-                    <MudText Class="text-truncate" 
+                    <MudText Class="text-truncate"
                              Typo="Typo.subtitle2">
                         Limit response length
                     </MudText>
 
                     <MudSwitch @bind-Value="LimitRespongeLength" />
-                </div>
 
-                @if (LimitRespongeLength)
-                {
-                    <NumericTextField @bind-Value="ViewModel.MaximumCompletionTokens" MinValue="1" MaxValue="2048" />
-                }
+                    @if (LimitRespongeLength)
+                    {
+                        <div style="flex-shrink: 0; background-color: red">
+                            <NumericTextField @bind-Value="ViewModel.MaximumCompletionTokens" MinValue="1" MaxValue="2048" />
+                        </div>
+                    }
+                </div>
             </div>
 
             @if (LimitRespongeLength)

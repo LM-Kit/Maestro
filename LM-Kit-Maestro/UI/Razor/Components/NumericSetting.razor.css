@@ -1,10 +1,3 @@
-.setting-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-
 /*::deep .mud-slider-container {
     text-shadow: var(--mud-palette-white) !important;
 }
