@@ -66,7 +66,6 @@ public partial class Chat
     }
 
     private int _settingSidebarWidth;
-
     private int SettingSidebarWidth
     {
         get => _settingSidebarWidth;
@@ -75,6 +74,20 @@ public partial class Chat
             if (_settingSidebarWidth != value)
             {
                 _settingSidebarWidth = value;
+                RefreshUIAsync(forceRerender: true);
+            }
+        }
+    }
+
+    private bool _settingSidebarIsResizing;
+    private bool SettingSidebarIsResizing
+    {
+        get => _settingSidebarIsResizing;
+        set
+        {
+            if (_settingSidebarIsResizing != value)
+            {
+                _settingSidebarIsResizing = value;
                 RefreshUIAsync(forceRerender: true);
             }
         }

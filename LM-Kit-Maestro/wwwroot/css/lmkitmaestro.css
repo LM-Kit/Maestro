@@ -267,6 +267,10 @@ body.windows .primary-button {
     white-space: nowrap;
 }
 
+.width-transition {
+    transition: width 0.5s;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
