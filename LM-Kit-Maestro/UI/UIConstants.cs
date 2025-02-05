@@ -60,10 +60,12 @@ public static class UIConstants
         public const string Primary = "#512BD4";
         public const string PrimaryAccent = "#512BD4";
         public const string Error = "#512BD4";
-        public const string Surface = "#512BD4";
-        public const string OnSurface = "#512BD4";
-        public const string Outline = "9198A1";
-        public const string OutlineVariant = "2E3033";
+        public const string Surface = "#06080A";
+        public const string Background = "#12181F";
+        public const string OnSurface = "#F0F6FC";
+        public const string Outline = "#9198A1";
+        public const string OutlineVariant = "#2E3033";
+        public const string Secondary = "#096BDE";
     }
 
     public static readonly MudTheme MaestroTheme = new MudTheme()
@@ -72,10 +74,11 @@ public static class UIConstants
         {
             Primary = Colors.Primary,
             Surface = Colors.Surface,
-            Background = Colors.Surface,
+            Background = Colors.Background,
             TextPrimary = Colors.OnSurface,
             Divider = Colors.OutlineVariant,
             BackgroundGray = Colors.OutlineVariant,
+            Secondary = Colors.Secondary,
             AppbarText = "#92929f",
             AppbarBackground = "rgba(26,26,39,0.8)",
             DrawerBackground = "#1a1a27",

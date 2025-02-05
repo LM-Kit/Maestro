@@ -5,3 +5,7 @@
     max-width: 64px !important;
     min-width: 64px !important;
 }
+
+::deep .text-field-container > .mud-input-control-input-container > .mud-input.mud-input-outlined > input:focus ~ .mud-input-outlined-border {
+    border-color: var(--Secondary) !important;
+}

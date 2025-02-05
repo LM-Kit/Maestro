@@ -2,14 +2,14 @@
 
 <div id="settings-container">
     <Expander Title="General settings">
-        <MudStack Spacing="6">
+        <MudStack Class="pa-2" Spacing="6">
             <div class="d-flex flex-column gap-2">
                 <MudText Typo="Typo.subtitle2">
                     Chatbot purpose
                 </MudText>
 
                 <MudTextField Variant="Variant.Outlined"
-                              Typo="Typo.subtitle2"
+                              Typo="Typo.body2"
                               Lines="5"
                               Value="ViewModel.SystemPrompt"/>
             </div>
@@ -17,7 +17,7 @@
             <div class="d-flex justify-content-between align-center">
                 <div class="d-flex align-center flex-grow-1 overflow-hidden">
                     <span class="text-truncate">Limit response length</span>
-                    <MudSwitch @bind-Value="LimitRespongeLength" />
+                    <MudSwitch Color="Color.Secondary" Ripple="false" Size="Size.Small" @bind-Value="LimitRespongeLength" />
                 </div>
 
                 <div class="flex-shrink-0">
@@ -57,7 +57,7 @@
     <MudDivider/>
 
     <Expander Title="Sampling configuration">
-        <MudStack Class="setting-list" Spacing="6">
+        <MudStack Class="pa-2" Spacing="6">
             <div class="d-flex flex-row justify-space-between align-center">
                 <MudText Class="text-truncate"
                          Typo="Typo.subtitle2">
@@ -66,7 +66,7 @@
 
                 <MudSpacer/>
 
-                <MudSelect Typo="Typo.subtitle2" AdornmentColor="Color.Secondary" @bind-Value="ViewModel.SamplingMode">
+                <MudSelect Typo="Typo.body2" AdornmentColor="Color.Secondary" @bind-Value="ViewModel.SamplingMode">
                     @foreach (var value in Enum.GetValues<SamplingMode>())
                     {
                         <MudSelectItem Value="@value">
