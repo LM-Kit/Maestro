@@ -7,9 +7,14 @@ class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
         <div @onmousedown="OnResizeHandlerMouseDown" 
-            @onmousedown:preventDefault="true"  
-            @onmousedown:stopPropagation="true"
-            class="@(Resizable ? "resize-handle" : "v-separator")"></div>
+        @onmousedown:preventDefault="true"  
+        @onmousedown:stopPropagation="true"
+        class="@(Resizable ? "resize-handle" : "v-separator")">
+            @if (Resizable)
+            {
+                <div class="v-separator"></div>
+            }
+    </div>
     }
 
     <div class="sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
@@ -19,9 +24,14 @@ class="@GetClasses()">
     @if (Position == SidebarPosition.Left)
     {
         <div @onmousedown="OnResizeHandlerMouseDown"
-            @onmousedown:preventDefault="true"  
-            @onmousedown:stopPropagation="true"
-            class="@(Resizable ? "resize-handle" : "v-separator")"></div>
+        @onmousedown:preventDefault="true"  
+        @onmousedown:stopPropagation="true"
+        class="@(Resizable ? "resize-handle" : "v-separator")">
+            @if (Resizable)
+            {
+                <div class="v-separator"></div>
+            }
+        </div>
     }
 </div>
 

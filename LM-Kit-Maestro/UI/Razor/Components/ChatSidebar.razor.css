@@ -1,5 +1,6 @@
 .sidebar-container {
     /*transition: width 0.5s;*/
+    position: relative;
 }
 
     .sidebar-hidden .resize-handle {
@@ -21,8 +22,11 @@
 
 .resize-handle {
     cursor: ew-resize;
-    background-color: red;
-    width: 10px;
+    width: 4px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
 }
 
 .resize-handle:hover{
@@ -44,4 +48,8 @@
     height: 100%;
     width: 1px;
     background-color: var(--OutlineVariant);
+}
+
+.resizable-sidebar:hover.v-separator {
+    background-color: var(--Outline);
 }
