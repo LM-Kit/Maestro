@@ -1,4 +1,5 @@
-﻿using LMKit.TextGeneration;
+﻿using CommunityToolkit.Mvvm.ComponentModel.__Internals;
+using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
 using System.ComponentModel;
 
@@ -288,33 +289,29 @@ public partial class LMKitService
                     {
                         SamplingMode = GetTokenSampling(_state.Config),
                         MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
+                        SystemPrompt = _state.Config.SystemPrompt,
                     };
                 }
                 else
                 {
-                    _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, _state.Config.ContextSize)
-                    {
-                        SamplingMode = GetTokenSampling(_state.Config),
-                        MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
-                        SystemPrompt = _state.Config.SystemPrompt
-                    };
+                    SetMultiTurnConversation();
                 }
-                _multiTurnConversation.AfterTokenSampling += conversation.AfterTokenSampling;
+
+                _multiTurnConversation!.AfterTokenSampling += conversation.AfterTokenSampling;
 
                 conversation.ChatHistory = _multiTurnConversation.ChatHistory;
                 conversation.LastUsedModelUri = _state.Config.LoadedModelUri;
                 _lastConversationUsed = conversation;
             }
-            else //updating sampling options, if any.
+            else
             {
-                //todo: Implement a mechanism to determine whether SamplingMode and MaximumCompletionTokens need to be updated.
-                _multiTurnConversation!.SamplingMode = GetTokenSampling(_state.Config);
-                _multiTurnConversation.MaximumCompletionTokens = _state.Config.MaximumCompletionTokens;
-
-                if (_state.Config.ContextSize != _multiTurnConversation.ContextSize)
+                // note: When a model change occur MultiTurnConversation instance is set to null.
+                if (_multiTurnConversation == null)
                 {
-                    //todo: implement context size update.
+                    SetMultiTurnConversation();
                 }
+
+                //todo: implement context size update.
             }
 
             conversation.InTextCompletion = true;
@@ -323,6 +320,28 @@ public partial class LMKitService
         private void AfterSubmittingPrompt(Conversation conversation)
         {
             conversation.InTextCompletion = false;
+        }
+
+        private void SetMultiTurnConversation(ChatHistory? chatHistory = null)
+        {
+            if (chatHistory != null)
+            {
+                _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, chatHistory, _state.Config.ContextSize)
+                {
+                    SamplingMode = GetTokenSampling(_state.Config),
+                    MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
+                    SystemPrompt = _state.Config.SystemPrompt,
+                };
+            }
+            else
+            {
+                _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, _state.Config.ContextSize)
+                {
+                    SamplingMode = GetTokenSampling(_state.Config),
+                    MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
+                    SystemPrompt = _state.Config.SystemPrompt
+                };
+            }
         }
     }
 }
