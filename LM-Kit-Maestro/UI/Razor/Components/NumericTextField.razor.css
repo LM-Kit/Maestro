@@ -6,6 +6,13 @@
     min-width: 64px !important;
 }
 
-::deep .text-field-container > .mud-input-control-input-container > .mud-input.mud-input-outlined > input:focus ~ .mud-input-outlined-border {
-    border-color: var(--Secondary) !important;
-}
+
+/*.text-field-container .mud-input-control-input-container > .mud-input .mud-input-outlined > input:focus ~ .mud-input-outlined-border {
+    border-color: red !important;
+}*/
+
+
+/*::deep .mud-input-outlined > input:focus {
+    background-color: pink !important;
+    border-color: red !important;
+}*/

@@ -9,15 +9,16 @@
                 </MudText>
 
                 <MudTextField Variant="Variant.Outlined"
+                              Style="--mud-palette-primary: var(--Secondary)"
                               Typo="Typo.body2"
                               Lines="5"
-                              Value="ViewModel.SystemPrompt"/>
+                              @bind-Value="ViewModel.SystemPrompt"/>
             </div>
 
             <div class="d-flex justify-content-between align-center">
                 <div class="d-flex align-center flex-grow-1 overflow-hidden">
                     <span class="text-truncate">Limit response length</span>
-                    <MudSwitch Color="Color.Secondary" Ripple="false" Size="Size.Small" @bind-Value="LimitRespongeLength" />
+                    <MudSwitch UncheckedColor="Color.Secondary" Color="Color.Secondary" Ripple="false" Size="Size.Small" @bind-Value="LimitRespongeLength" />
                 </div>
 
                 <div class="flex-shrink-0">
