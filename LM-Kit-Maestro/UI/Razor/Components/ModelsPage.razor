@@ -24,6 +24,15 @@
     </div>
 </SectionContent>
 
+<div>
+    @foreach (var model in ViewModel.ModelListViewModel.Models)
+    {
+       <div>
+               @(model.Name)
+        </div>
+    }
+</div>
+
 <style>
     #model-folder-container {
         max-width: 500px;
