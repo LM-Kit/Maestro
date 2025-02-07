@@ -13,7 +13,7 @@ public sealed class ConversationLog
 
     public byte[]? ChatHistoryData { get; set; }
 
-    public string? LastUsedModel { get; set; }
+    public Uri? LastUsedModel { get; set; }
 
     public ConversationLog()
     {
