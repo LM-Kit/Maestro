@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace LMKit.Maestro.UI;
 
-public partial class ModelsPage : ContentPage
+public partial class ModelsPage : PageBase
 {
     private readonly ModelsPageViewModel _modelsPageViewModel;
 
@@ -17,7 +17,7 @@ public partial class ModelsPage : ContentPage
 
     public ModelsPage(ModelsPageViewModel modelsPageViewModel)
     {
-        InitializeComponent();  
+        InitializeComponent();
         BindingContext = modelsPageViewModel;
         _modelsPageViewModel = modelsPageViewModel;
     }
