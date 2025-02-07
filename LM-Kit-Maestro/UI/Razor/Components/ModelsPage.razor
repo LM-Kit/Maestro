@@ -15,26 +15,99 @@
         </div>
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                    Icon="fas fa-edit"
-                    OnClick="ViewModel.OpenModelsFolder"/>
+        Icon="fas fa-edit"
+        OnClick="ViewModel.OpenModelsFolder"/>
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                    Icon="fas fa-folder-open"
-                    OnClick="ViewModel.OpenModelsFolder"/>
+        Icon="fas fa-folder-open"
+        OnClick="ViewModel.OpenModelsFolder"/>
     </div>
 </SectionContent>
 
-<div>
-    @foreach (var model in ViewModel.ModelListViewModel.Models)
-    {
-       <div>
-               @(model.Name)
-        </div>
-    }
+<div id="model-page-container">
+    <div id="model-list-container">
+        @foreach (var model in ViewModel.ModelListViewModel.Models)
+        {
+            <div class="model-card">
+                <div class="text-truncate">
+                    @(model.ModelInfo.ShortModelName)
+                </div>
+
+                <div>
+                    @(model.ModelInfo.Architecture)
+
+                </div>
+
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    @if (model.IsChatModel)
+                    {
+                        <MudIcon Icon="fas fa-message" Size="Size.Small" />
+                    }
+
+                    @if (model.HasVisionCapability)
+                    {
+                        <MudIcon Icon="fas fa-eye" Size="Size.Small" />
+                    }
+
+                    @if (model.IsCodeModel)
+                    {
+                        <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
+                    }
+
+                    @if (model.IsMathModel)
+                    {
+                        <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
+                    }
+                </MudStack>
+            </div>
+
+       
+        }
+    </div>
+
+    <div class="bottom-space">
+        Explore more models
+    </div>
 </div>
 
 <style>
+    #model-page-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
     #model-folder-container {
         max-width: 500px;
+    }
+
+    #model-list-container {
+        gap: 20px;
+        background-color: blue;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow-y: auto;
+        flex-grow: 0;
+    }
+
+    .model-card
+    {
+        max-width: 800px;
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        border: 1px solid var(--Outline);
+        border-radius: 4px;
+    }
+
+    .bottom-space {
+        flex-shrink: 0;
+       height: 40px;
+       background-color: pink;
     }
 </style>
