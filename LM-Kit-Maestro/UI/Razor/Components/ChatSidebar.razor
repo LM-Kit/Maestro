@@ -77,7 +77,6 @@ class="@GetClasses()">
                 _width = value;
                 WidthChanged.InvokeAsync(value);
                 InvokeAsync(() => StateHasChanged());
-            }
         }
     }
 
@@ -93,7 +92,6 @@ class="@GetClasses()">
     {
         IsToggled = value;
         InvokeAsync(() => StateHasChanged());
-
     }
 
     [JSInvokable]
