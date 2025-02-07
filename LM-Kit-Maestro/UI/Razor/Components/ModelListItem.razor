@@ -1,4 +1,4 @@
-﻿<div id="root" class="d-flex flex-row justify-content-center">
+﻿<div id="root">
     <div class="model-card" @onclick="OnItemClicked">
         <div class="text-truncate">
             @(ViewModel.ModelInfo.ShortModelName)
@@ -78,6 +78,9 @@
         width: 100%;
         padding: 20px;
         background-color: lime;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
     }
 
     .model-card {
