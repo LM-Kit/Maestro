@@ -17,7 +17,7 @@ public partial class ModelsPage : ContentPage
 
     public ModelsPage(ModelsPageViewModel modelsPageViewModel)
     {
-        InitializeComponent();
+        InitializeComponent();  
         BindingContext = modelsPageViewModel;
         _modelsPageViewModel = modelsPageViewModel;
     }

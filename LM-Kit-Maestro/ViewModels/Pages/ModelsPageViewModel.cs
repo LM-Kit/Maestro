@@ -115,28 +115,27 @@ public partial class ModelsPageViewModel : PageViewModelBase
     }
 
     [RelayCommand]
-    public async Task OpenModelsFolder()
+    public void OpenModelsFolder()
     {
-        try
-        {
-            await _launcher.OpenAsync(new Uri($"file://{AppSettingsService.ModelStorageDirectory}"));
-        }
-        catch (Exception)
-        {
-        }
+        _ = _launcher.OpenAsync(new Uri($"file://{AppSettingsService.ModelStorageDirectory}"));
     }
 
     [RelayCommand]
-    public async Task OpenHuggingFaceLink()
+    public void OpenHuggingFaceLink()
     {
-        try
-        {
-            await _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
-        }
-        catch
-        {
-        }
+        _ = _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
     }
+
+    public void OpenModelInExplorer(ModelInfoViewModel modelInfoViewModel)
+    {
+
+    }
+
+    public void OpenModelHuggingFace(ModelInfoViewModel modelInfoViewModel)
+    {
+
+    }
+
 
 #if BETA_DOWNLOAD_MODELS
     private void OnModelDownloadingProgressed(object? sender, EventArgs e)

@@ -52,16 +52,16 @@
     <MudPopover Open="@_isShowingActionSheet" Fixed="true">
         <div Class="d-flex flex-column item-actions">
             <MudButton Variant="Variant.Text" @onclick="OnOpenInExplorerClicked">
-                <MudText Typo="Typo.subtitle2">Select</MudText>
+                <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
             </MudButton>
             <MudButton Variant="Variant.Text" @onclick="OnOpenHfLinkClicked">
-                <MudText Typo="Typo.subtitle2">Rename</MudText>
+                <MudText Typo="Typo.subtitle1">Open on Hugging Face</MudText>
             </MudButton>
 
             @if (ViewModel.DownloadInfo.Status == DownloadStatus.Downloaded)
             {
                 <MudButton Variant="Variant.Text" @onclick="OnDeleteClicked">
-                    <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete</MudText>
+                    <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
                 </MudButton>
             }
         </div>
