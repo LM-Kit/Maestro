@@ -65,7 +65,7 @@ public partial class LMKitService : INotifyPropertyChanged
         Translation = new LMKitTranslation(_state);
     }
 
-    public void LoadModel(Uri fileUri, string? localFilePath = null)
+    public void LoadModel(Uri modelUri, string? localFilePath = null)
     {
         if (_state.LoadedModel != null)
         {
@@ -73,7 +73,7 @@ public partial class LMKitService : INotifyPropertyChanged
         }
 
         _state.Semaphore.Wait();
-        LoadedModelUri = fileUri;
+        LoadedModelUri = modelUri;
         ModelLoadingState = LMKitModelLoadingState.Loading;
 
         var modelLoadingTask = new Task(() =>
@@ -82,14 +82,14 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                _state.LoadedModel = new LM(fileUri, downloadingProgress: OnModelDownloadingProgressed, loadingProgress: OnModelLoadingProgressed);
+                _state.LoadedModel = new LM(modelUri, downloadingProgress: OnModelDownloadingProgressed, loadingProgress: OnModelLoadingProgressed);
 
                 modelLoadingSuccess = true;
             }
             catch (Exception exception)
             {
                 modelLoadingSuccess = false;
-                ModelLoadingFailed?.Invoke(this, new ModelLoadingFailedEventArgs(fileUri, exception));
+                ModelLoadingFailed?.Invoke(this, new ModelLoadingFailedEventArgs(modelUri, exception));
             }
             finally
             {
@@ -99,7 +99,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             if (modelLoadingSuccess)
             {
-                LMKitConfig.LoadedModelUri = fileUri!;
+                LMKitConfig.LoadedModelUri = modelUri!;
 
                 ModelLoaded?.Invoke(this, new NotifyModelStateChangedEventArgs(LMKitConfig.LoadedModelUri));
                 ModelLoadingState = LMKitModelLoadingState.Loaded;

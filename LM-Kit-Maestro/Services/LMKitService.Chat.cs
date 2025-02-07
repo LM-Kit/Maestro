@@ -289,7 +289,7 @@ public partial class LMKitService
                     {
                         SamplingMode = GetTokenSampling(_state.Config),
                         MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
-                        SystemPrompt = _state.Config.SystemPrompt,
+                        //SystemPrompt = _state.Config.SystemPrompt, //we can't update system prompt if the conversation already started.
                     };
                 }
                 else
