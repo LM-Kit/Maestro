@@ -38,9 +38,7 @@
     <div id="model-list-container">
         @foreach (var model in ViewModel.ModelListViewModel.Models)
         {
-            <ModelListItem 
-            DeleteClicked=""
-            ViewModel="model"/>
+            <ModelListItem ViewModel="model"/>
         }
     </div>
 
@@ -89,11 +87,16 @@
 @code {
     private void OnDeleteClicked(ModelInfoViewModel modelInfoViewModel)
     {
-        ViewModel.DeleteModel(Model);
+        ViewModel.DeleteModel(modelInfoViewModel);
     }
 
     private void OnModelOpenInExplorerClicked(ModelInfoViewModel modelInfoViewModel)
     {
-        
+        ViewModel.OpenModelInExplorer(modelInfoViewModel);
+    }
+
+    private void OnModelOpenHfLinkClicked(ModelInfoViewModel modelInfoViewModel)
+    {
+        ViewModel.OpenModelInExplorer(modelInfoViewModel);
     }
 }

@@ -131,7 +131,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
 
     }
 
-    public void OpenModelHuggingFace(ModelInfoViewModel modelInfoViewModel)
+    public void OpenModelHfLink(ModelInfoViewModel modelInfoViewModel)
     {
 
     }

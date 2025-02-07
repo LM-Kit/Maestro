@@ -60,7 +60,7 @@ class="@GetClasses()">
                 _isToggled = value;
                 IsToggledChanged.InvokeAsync(value);
                 Width = IsToggled ? 300 : 0;
-                StateHasChanged();
+                InvokeAsync(() => StateHasChanged());
             }
         }
     }
@@ -76,7 +76,7 @@ class="@GetClasses()">
             {
                 _width = value;
                 WidthChanged.InvokeAsync(value);
-                StateHasChanged();
+                InvokeAsync(() => StateHasChanged());
             }
         }
     }
@@ -92,7 +92,7 @@ class="@GetClasses()">
     public void ToggleSidebar(bool value)
     {
         IsToggled = value;
-        StateHasChanged();
+        InvokeAsync(() => StateHasChanged());
 
     }
 
