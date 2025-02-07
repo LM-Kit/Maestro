@@ -7,24 +7,34 @@
 
     <div class="d-flex flex-row gap-2 justify-center align-center align-content-center">
         <span>
-            Model folder: 
+            Model folder:
         </span>
 
         <div id="model-folder-container">
-            <MudTextField @bind-Value="ViewModel.AppSettingsService.ModelStorageDirectory"/>
+            <MudTextField @bind-Value="ViewModel.AppSettingsService.ModelStorageDirectory" />
         </div>
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-        Icon="fas fa-edit"
-        OnClick="ViewModel.OpenModelsFolder"/>
+                    Icon="fas fa-edit"
+                    OnClick="ViewModel.OpenModelsFolder" />
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-        Icon="fas fa-folder-open"
-        OnClick="ViewModel.OpenModelsFolder"/>
+                    Icon="fas fa-folder-open"
+                    OnClick="ViewModel.OpenModelsFolder" />
     </div>
 </SectionContent>
 
 <div id="model-page-container">
+
+    <div>
+        <MudText Align="Align.Center">
+            @if (ViewModel.FileManager.Models.Count > 0)
+            {
+                @($"You have {ViewModel.FileManager.Models.Count} {(ViewModel.FileManager.Models.Count > 1 ? "models" : "model")} taking up {ViewModel.FileManager.TotalModelSize}.")
+            }
+        </MudText>
+    </div>
+
     <div id="model-list-container">
         @foreach (var model in ViewModel.ModelListViewModel.Models)
         {
@@ -59,14 +69,33 @@
                         <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
                     }
                 </MudStack>
+
+                <MudStack Row="true">
+                    <MudText>
+                        @model.ModelSize
+                    </MudText>
+
+                    <MudText>
+                        @model.MaxContextLengthKB
+                    </MudText>
+
+                    <MudText>
+                        @model.Precision
+                    </MudText>
+
+                    <MudText>
+                        @model.MaxContextLengthKB
+                    </MudText>
+                </MudStack>
             </div>
 
-       
         }
     </div>
 
     <div class="bottom-space">
-        Explore more models
+        <div class="">
+            Explore more models
+        </div>
     </div>
 </div>
 
@@ -92,8 +121,7 @@
         flex-grow: 0;
     }
 
-    .model-card
-    {
+    .model-card {
         max-width: 800px;
         display: flex;
         width: 100%;
@@ -106,8 +134,12 @@
     }
 
     .bottom-space {
-        flex-shrink: 0;
-       height: 40px;
-       background-color: pink;
+        display: flex;
+        min-height: 40px;
+        color: var(--Outline) !important;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0;
     }
 </style>
