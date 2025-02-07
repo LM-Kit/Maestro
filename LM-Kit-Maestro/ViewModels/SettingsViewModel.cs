@@ -136,5 +136,10 @@ namespace LMKit.Maestro.ViewModels
             _appSettingsService.RandomSamplingConfig = _config.RandomSamplingConfig;
             _appSettingsService.Mirostat2SamplingConfig = _config.Mirostat2SamplingConfig;
         }
+
+        public void ResetSystemPrompt()
+        {
+            SystemPrompt = LMKitDefaultSettings.DefaultSystemPrompt;
+        }
     }
 }

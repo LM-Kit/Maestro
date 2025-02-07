@@ -60,7 +60,7 @@ function scrollToEnd(smooth) {
 }
 
 /*
-    UserInput 
+    ChatInput 
 */
 function resizeUserInput() {
     const inputText = document.getElementById('input-text');

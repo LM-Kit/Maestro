@@ -49,7 +49,7 @@
             if (_canSubmit != value)
             {
                 _canSubmit = value;
-                StateHasChanged();
+                InvokeAsync(() => StateHasChanged());
             }
         }
     }
@@ -111,7 +111,7 @@
     private void Submit()
     {
         ViewModel.Submit();
-        StateHasChanged();
+        InvokeAsync(() => StateHasChanged());
     }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
