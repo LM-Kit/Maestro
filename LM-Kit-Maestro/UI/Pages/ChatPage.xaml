@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ui:PageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:local="clr-namespace:LMKit.Maestro"
@@ -39,106 +39,13 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ui:PageBase.Header>
-        <Grid
-            VerticalOptions="Center"
-            Grid.ColumnSpan="3"
-            ColumnDefinitions="auto, *, auto">
+    <BlazorWebView
+            x:Name="blazorWebView"
+            HostPage="wwwroot/index.html"
+            StartPath="/chat">
 
-            <Grid
-                Style="{StaticResource SidebarHeaderGrid}"
-                Padding="16, 0, 0, 0"
-                WidthRequest="{Binding Source={x:Reference chatPage}, Path=ChatsSidebarWidth, x:DataType=ui:ChatPage}">
-
-                <Button
-                    Style="{StaticResource SidebarToggleButtonStyle}"
-                    Text="{StaticResource Forum}"
-                    Command="{Binding ToggleChatsSidebarCommand}"
-                    ToolTipProperties.Text="{x:Static ui:Locales.DisplayChats}"
-                    HorizontalOptions="Start"/>
-
-                <Label
-                    StyleClass="Title"
-                    Style="{StaticResource SidebarTitleStyle}"
-                    IsVisible="{Binding ChatsSidebarIsToggled}"
-                    Text="Chats"/>
-
-                <Button
-                    HorizontalOptions="End"
-                    ToolTipProperties.Text="{x:Static ui:Locales.StartNewChat}"
-                    Style="{StaticResource SecondaryActionButtonStyle}"
-                    Grid.Column="2"
-                    FontFamily="Material"
-                    Text="{StaticResource Add}"
-                    Command="{Binding StartNewConversationCommand}"/>
-            </Grid>
-
-            <ui:ModelSelectionButton
-                BindingContext="{Binding ModelListViewModel}"
-                x:Name="modelSelectionButton"
-                VerticalOptions="Start"
-                Margin="16, 0"
-                HeightRequest="{x:Static ui:UIConstants.ModelSelectionButtonHeight}"
-                Grid.Column="1">
-                <ui:ModelSelectionButton.Triggers>
-                    <DataTrigger TargetType="ui:ModelSelectionButton" Binding="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles, x:DataType=ui:ChatPage}" Value="True">
-                        <Setter Property="MaximumWidthRequest" Value="{x:Static ui:UIConstants.ModelSelectionButtonMaxWidth}"/>
-                    </DataTrigger>
-                </ui:ModelSelectionButton.Triggers>
-            </ui:ModelSelectionButton>
-
-            <Grid
-                Style="{StaticResource SidebarHeaderGrid}"
-                Padding="0, 0, 16, 0"
-                WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"
-                Grid.Column="2">
-
-                <Button
-                    IsVisible="{Binding SettingsSidebarIsToggled}"
-                    HorizontalOptions="Start"
-                    ToolTipProperties.Text="{x:Static ui:Locales.ResetDefaultSettings}"
-                    Style="{StaticResource SecondaryActionButtonStyle}"
-                    Text="{StaticResource Rotate_right}"
-                    Command="{Binding SettingsViewModel.ResetDefaultValuesCommand}" />
-
-                <Label
-                    StyleClass="Title"
-                    Style="{StaticResource SidebarTitleStyle}"
-                    IsVisible="{Binding SettingsSidebarIsToggled}"
-                    Text="Settings"/>
-
-                <Button
-                    Grid.Column="2"
-                    Style="{StaticResource SidebarToggleButtonStyle}"
-                    Text="{StaticResource Tune}"
-                    ToolTipProperties.Text="{x:Static ui:Locales.DisplaySettings}"
-                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ChatPageViewModel}}, Path=ToggleSettingsSidebarCommand}"/>
-            </Grid>
-        </Grid>
-    </ui:PageBase.Header>
-
-    <ui:PageBase.Body>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"/>
-            </Grid.ColumnDefinitions>
-
-
-            <BlazorWebView
-                x:Name="blazorWebView"
-                HostPage="wwwroot/index.html"
-                StartPath="/chat">
-                <BlazorWebView.RootComponents>
-                    <RootComponent Selector="#app" ComponentType="{x:Type razor:Routes}" />
-                </BlazorWebView.RootComponents>
-            </BlazorWebView>
-
-            <ui:ChatSettingsView
-                x:Name="settingsSidebar"
-                Grid.Column="1"
-                WidthRequest="{Binding Source={x:Reference chatPage}, Path=SettingsSidebarWidth, x:DataType=ui:ChatPage}"
-                BindingContext="{Binding SettingsViewModel}"/>
-        </Grid>
-    </ui:PageBase.Body>
-</ui:PageBase>
+        <BlazorWebView.RootComponents>
+            <RootComponent Selector="#app" ComponentType="{x:Type razor:Routes}" />
+        </BlazorWebView.RootComponents>
+    </BlazorWebView>
+</ContentPage>

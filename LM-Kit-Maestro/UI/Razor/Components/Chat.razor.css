@@ -9,13 +9,13 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
+    padding-inline: 8px;
+    padding-top: 8px;
 }
 
 #conversation-content {
-    overflow-y: auto;
     height: 100%;
     width: 100%;
-    scrollbar-gutter: both-edges stable;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -36,10 +36,6 @@
     padding: 0;
 }
 
-#conversation-list {
-    padding-inline: 12px;
-}
-
 .chat-element {
     width: 100%;
     justify-content: center;
@@ -57,29 +53,6 @@ body.mac .chat-element {
     max-width: 1000px;
 }
 
-.top-align-container {
-    align-items: flex-start;
-}
-
-.centered-container {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    justify-content: center;
-}
-
-#empty-conversation {
-    height: 100%;
-    /*    gap: 32px;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    justify-content: center;
-    background-color: red;
-    margin-inline: 0 auto;
-    width: 100%;
-    text-align: center;*/
-}
 
 #user-input {
     padding-inline: 10px;
@@ -106,38 +79,21 @@ body.mac .chat-element {
         color: var(--OnSurface);
     }
 
-.vertical-stack {
-    gap: 8px;
-    display: flex;
-    flex-direction: column;
-}
-
 .welcome-message {
     color: var(--Outline);
     text-align: center;
 }
 
 .shortcut-instruction {
-    padding: 12px;
+    margin-inline: 20px;
     border: 1px solid;
     display: flex;
     flex-direction: row;
     border-radius: 0;
-    border-color: var(--Surface4);
+    border-color: var(--OutlineVariant);
     color: var(--Outline);
-}
-
-.sidebar-hide {
-    display: none;
-}
-
-.sidebar {
-    overflow-y: auto;
-    background-color: var(--Surface);
-    width: 300px;
-    min-width: 300px;
-    max-width: 300px;
-    height: 100%;
+    padding-inline: 12px;
+    padding-block: 6px;
 }
 
 body.windows .chat-element {
@@ -149,6 +105,12 @@ body.mac .chat-element {
 }
 
 
+#empty-chat {
+    align-self: center;
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+}
 
 #top-bar-center {
     width: 100%;
@@ -157,22 +119,22 @@ body.mac .chat-element {
     justify-content: center;
 }
 
-
-
-
 #chat-top-bar {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: space-around;
 }
 
 .top-bar-side {
-    width: 300px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 20px;
+    /*transition: width 0.5s;*/
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 
@@ -183,9 +145,10 @@ body.mac .chat-element {
     font-size: 12px;
 }
 
-::deep .sidebar-toggle-button.mud-icon-button:hover {
-    background-color: var(--Primary);
-}
+    ::deep .sidebar-toggle-button.mud-icon-button:hover {
+        background-color: var(--Primary);
+    }
+
 .sidebar-toggle-button {
     /* Add your button styles here */
 }
@@ -204,6 +167,8 @@ body.mac .chat-element {
 
 
 .top-bar-sidebar-toggled {
+    min-width: 300px;
+    max-width: 300px;
     width: 300px;
 }
 
@@ -211,6 +176,15 @@ body.mac .chat-element {
     width: auto;
 }
 
+.top-bar-sidebar-resizable {
+
+}
+
 #conversation-bottom {
     display: block;
+
+    width: 5px;
+    cursor: ew-resize;
+    background-color: var(--OutlineVariant);
+    position: relative;
 }

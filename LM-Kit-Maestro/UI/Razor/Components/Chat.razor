@@ -11,55 +11,72 @@
 
 <SectionContent SectionName="top-bar">
     <div id="chat-top-bar">
-        <div
-            class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
-            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
-                        Icon="fas fa-message"
-                        OnClick="ViewModel.ToggleChatsSidebar"/>
+        @if (ShowSidebarToggles)
+        {
+            <div
+                class="top-bar-side @(ViewModel.ChatsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
+                <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
+                    <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                                Icon="fas fa-message"
+                                OnClick="ViewModel.ToggleChatsSidebar"/>
 
-            @if (ViewModel.ChatsSidebarIsToggled)
-            {
-                <MudText Typo="Typo.body2">
-                    Chats
-                </MudText>
-            }
+                    @if (ViewModel.ChatsSidebarIsToggled)
+                    {
+                        <div>
+                            <MudText Class="text-truncate"  Typo="Typo.body1">
+                                Chats
+                            </MudText>
+                        </div>
+                    }
 
-            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                        Icon="fas fa-add"
-                        OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
-        </div>
+                    <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                                Icon="fas fa-add"
+                                OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
+                </div>
+
+                <div class="bottom-divider"></div>
+            </div>
+        }
 
         <div id="top-bar-center">
             <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel"/>
         </div>
 
-        <div
-            class="top-bar-side @(ViewModel.SettingsSidebarIsToggled ? "top-bar-sidebar-toggled" : "top-bar-sidebar-collapsed")">
+        @if (ShowSidebarToggles)
+        {
+            <div class="top-bar-side top-bar-sidebar-resizable"
+                 style="width: @(ViewModel.SettingsSidebarIsToggled ? $"{SettingSidebarWidth}px" : "auto")">
 
-            @if (ViewModel.SettingsSidebarIsToggled)
-            {
-                <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                            Icon="fas fa-arrow-rotate-left"
-                            OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
 
-                <MudText Typo="Typo.body2">
-                    Settings
-                </MudText>
-            }
+                <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
+                    @if (ViewModel.SettingsSidebarIsToggled)
+                    {
+                        <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                                    Icon="fas fa-arrow-rotate-left"
+                                    OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
 
-            <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
-                        Icon="fas fa-gears"
-                        OnClick="ViewModel.ToggleSettingsSidebar"/>
-        </div>
+                        <MudText Class="text-truncate" Typo="Typo.body1">
+                            Settings
+                        </MudText>
+                    }
+
+                    <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                                Icon="fas fa-gears"
+                                OnClick="ViewModel.ToggleSettingsSidebar"/>
+                </div>
+
+                <div class="bottom-divider"></div>
+            </div>
+        }
     </div>
 </SectionContent>
 
-
 <div id="chat-container">
-    <div id="chats-sidebar" class="@(ViewModel.ChatsSidebarIsToggled ? "sidebar" : "sidebar-hide")">
+    <ChatSidebar ShowScrollbar="true"
+                 Position="ChatSidebar.SidebarPosition.Left"
 
-        <div id="conversation-list">
-
+                 @bind-IsToggled="ViewModel.ChatsSidebarIsToggled">
+        <div class="d-flex flex-column flex-grow-1 pa-1">
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
             {
                 <ConversationListItem OnSelect="OnConversationItemSelected"
@@ -68,41 +85,49 @@
                                       ViewModel="conversation"/>
             }
         </div>
-    </div>
+    </ChatSidebar>
+
 
     <div id="chat-body">
-        <div id="conversation-content">
+        <div id="conversation-content" class="hover-scrollable">
             @if (ViewModel?.ConversationListViewModel.CurrentConversation != null)
             {
                 if (ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
                 {
-                    <div id="empty-conversation" class="chat-element vertical-stack">
-                        <div class="vertical-stack spacing-4">
-                            <div class="welcome-message">
-                                <b>Maestro</b> at your service—let’s orchestrate something
-                                amazing!
-                            </div>
-                            <div class="welcome-message">
-                                Feel free to ask questions, explore ideas, or engage in meaningful conversations.
+                    <div id="empty-chat">
+                        <MudStack Class="chat-element align-self-center flex-1" Spacing="8">
+                            <MudStack Spacing="2">
+                                <MudText Align="Align.Center" Typo="Typo.body2">
+                                    <b>Maestro</b> at your service—let’s orchestrate something amazing!
+                                </MudText>
 
-                            </div>
-                            <div class="welcome-message">
-                                Whether you need assistance, inspiration, or just some lighthearted chat, I'm here to
-                                help.
+                                <MudText Align="Align.Center" Typo="Typo.body2">
+                                    Feel free to ask questions, explore ideas, or engage in meaningful conversations.
+                                </MudText>
 
-                            </div>
+                                <MudText Align="Align.Center" Typo="Typo.body2">
+                                    Whether you need assistance, inspiration, or just some lighthearted chat, I'm here
+                                    to
+                                    help.
+                                </MudText>
+                            </MudStack>
 
-                        </div>
+                            <MudStack Spacing="4">
+                                <div class="shortcut-instruction">
+                                    <MudText Typo="Typo.caption">
+                                        Press Enter to send a new message
+                                    </MudText>
 
-                        <div class="vertical-stack" style="gap:12px;">
-                            <div class="shortcut-instruction">
-                                Press Enter to send a new message
-                            </div>
+                                </div>
 
-                            <div class="shortcut-instruction">
-                                Hold Shift + Enter to insert a new line
-                            </div>
-                        </div>
+                                <div class="shortcut-instruction">
+                                    <MudText Typo="Typo.caption">
+                                        Hold Shift + Enter to insert a new line
+
+                                    </MudText>
+                                </div>
+                            </MudStack>
+                        </MudStack>
                     </div>
                 }
                 else
@@ -119,9 +144,9 @@
                                 {
                                     <button @onclick="OnScrollToEndButtonClicked"
                                             class="round-button scroll-to-end-button">
-                                        <span>
-                                            <i class="fas fa-arrow-down"></i>
-                                        </span>
+                                                                <span>
+                                                                    <i class="fas fa-arrow-down"></i>
+                                                                </span>
                                     </button>
                                 }
                             </div>
@@ -148,8 +173,13 @@
         </div>
     </div>
 
-    @*     <div id="settings-sidebar"
-         class="@(ViewModel.SettingsSidebarIsToggled ? "sidebar" : "sidebar-hide")">
-        <ChatSettings/>
-    </div> *@
+    <ChatSidebar ShowScrollbar="false"
+                 Resizable="true"
+                 Position="ChatSidebar.SidebarPosition.Right"
+                 @bind-Width="SettingSidebarWidth"
+                 @bind-IsToggled="ViewModel.SettingsSidebarIsToggled">
+        <div class="d-flex flex-column flex-grow-1">
+            <ChatSettings ViewModel="ViewModel.SettingsViewModel"/>
+        </div>
+    </ChatSidebar>
 </div>

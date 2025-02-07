@@ -5,17 +5,20 @@
 <div id="message-container"
      class="@(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-container" : "user-message-container")">
     <div class="message-content @(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-content" : "user-message-content")">
-        @if (MessageViewModel.Sender == MessageSender.Assistant)
-        {
-            if (MessageHtml != null)
+        
+       <MudText Typo="Typo.body1">
+            @if (MessageViewModel.Sender == MessageSender.Assistant)
             {
-                @((MarkupString)MessageHtml)
+                if (MessageHtml != null)
+                {
+                    @((MarkupString)MessageHtml)
+                }
             }
-        }
-        else
-        {
-            @MessageViewModel.GetContent(responseIndex)
-        }
+            else
+            {
+                @MessageViewModel.GetContent(responseIndex)
+            }
+           </MudText>
     </div>
 
     @if (MessageViewModel.Sender == MessageSender.User || (MessageViewModel.Sender == MessageSender.Assistant && !MessageViewModel.MessageInProgress))

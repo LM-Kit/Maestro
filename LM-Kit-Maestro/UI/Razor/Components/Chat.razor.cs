@@ -24,8 +24,29 @@ public partial class Chat
 
     private bool _refreshScheduled;
 
+    private bool _showSidebarToggles = true;
+
+    private bool ShowSidebarToggles
+    {
+        get => _showSidebarToggles;
+        set
+        {
+            if (_showSidebarToggles != value)
+            {
+                _showSidebarToggles = value;
+
+                Task.Run(async () =>
+                {
+                    await RefreshUIAsync(true);
+                    await CheckIsScrolledToEnd();
+                });
+            }
+        }
+    }
+
     private bool _isScrolledToEnd;
-    public bool IsScrolledToEnd
+
+    private bool IsScrolledToEnd
     {
         get => _isScrolledToEnd;
         set
@@ -40,7 +61,22 @@ public partial class Chat
                 _autoScrolling |= true;
             }
 
-            UpdateUIAsync();
+            RefreshUIAsync(forceRerender: true);
+        }
+    }
+
+    private int _settingSidebarWidth;
+
+    private int SettingSidebarWidth
+    {
+        get => _settingSidebarWidth;
+        set
+        {
+            if (_settingSidebarWidth != value)
+            {
+                _settingSidebarWidth = value;
+                RefreshUIAsync(forceRerender: true);
+            }
         }
     }
 
@@ -52,7 +88,7 @@ public partial class Chat
         {
             OnConversationSet();
         }
-        
+
         ViewModel.ConversationListViewModel.ConversationPropertyChanged += OnConversationPropertyChanged;
         ViewModel.ConversationListViewModel.PropertyChanged += OnConversationListViewModelPropertyChanged;
 
@@ -73,9 +109,9 @@ public partial class Chat
     }
 
 
-    private Task UpdateUIAsync(bool forceRedraw = false)
+    private Task RefreshUIAsync(bool forceRerender = false)
     {
-        if (forceRedraw)
+        if (forceRerender)
         {
             return InvokeAsync(() => StateHasChanged());
         }
@@ -109,18 +145,19 @@ public partial class Chat
     {
         if (e.PropertyName == nameof(ConversationViewModel.IsShowingActionPopup))
         {
-            UpdateUIAsync();
+            RefreshUIAsync();
         }
     }
+
     private void OnCurrentLMKitConversationPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(LMKitService.Conversation.ContextRemainingSpace))
         {
-            UpdateUIAsync();
+            RefreshUIAsync();
         }
         else if (e.PropertyName == nameof(LMKitService.Conversation.InTextCompletion))
         {
-            UpdateUIAsync(forceRedraw: true);
+            RefreshUIAsync(forceRerender: true);
         }
     }
 
@@ -157,9 +194,12 @@ public partial class Chat
 
         if (ViewModel.ConversationListViewModel.CurrentConversation != null)
         {
-            ViewModel.ConversationListViewModel.CurrentConversation.Messages.CollectionChanged += OnConversationMessagesCollectionChanged;
-            ViewModel.ConversationListViewModel.CurrentConversation.TextGenerationCompleted += OnTextGenerationCompleted;
-            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.PropertyChanged += OnCurrentLMKitConversationPropertyChanged;
+            ViewModel.ConversationListViewModel.CurrentConversation.Messages.CollectionChanged +=
+                OnConversationMessagesCollectionChanged;
+            ViewModel.ConversationListViewModel.CurrentConversation.TextGenerationCompleted +=
+                OnTextGenerationCompleted;
+            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.PropertyChanged +=
+                OnCurrentLMKitConversationPropertyChanged;
 
             _previousScrollTop = null;
             _ignoreScrollsUntilNextScrollUp = true;
@@ -172,7 +212,7 @@ public partial class Chat
 
     private async void OnConversationMessagesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        await UpdateUIAsync(forceRedraw: true);
+        await RefreshUIAsync(forceRerender: true);
 
         await ScrollToEnd();
 
@@ -196,7 +236,7 @@ public partial class Chat
             Snackbar.Add($"Text generation failed unexpectedly:\n{e.Exception.Message}", Severity.Error);
         }
 
-        UpdateUIAsync();
+        RefreshUIAsync();
     }
 
     private async void OnLatestAssistantResponseProgressed()
@@ -216,6 +256,15 @@ public partial class Chat
         else
         {
             await CheckIsScrolledToEnd();
+        }
+
+        if (args.Width < UIConstants.ChatWindowLayoutMinimumWidth)
+        {
+            ShowSidebarToggles &= false;
+        }
+        else
+        {
+            ShowSidebarToggles |= true;
         }
     }
 

@@ -1,0 +1,22 @@
+#expander-container {
+}
+
+#expander-header {
+    padding: 12px;
+    cursor: pointer;
+    background-color: var(--Surface2);
+}
+
+    #expander-header:hover {
+        background-color: var(--Surface15);
+    }
+
+#expander-content {
+    padding: 12px;
+    background-color: var(--Surface15);
+}
+
+
+::deep .mud-icon-size-small {
+    font-size: 0.66rem !important;
+}

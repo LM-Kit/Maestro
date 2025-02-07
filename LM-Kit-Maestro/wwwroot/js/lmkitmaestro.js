@@ -16,6 +16,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+window.getElementRect = (element) => {
+    if (!element) return null;
+    return element.getBoundingClientRect();
+};
+
 
 /* 
     Chat 
@@ -53,7 +58,6 @@ function scrollToEnd(smooth) {
         });
     }
 }
-
 
 /*
     UserInput 
@@ -124,4 +128,32 @@ function countLines(textarea) {
     var result = Math.floor(_buffer.scrollHeight / lh);
     if (result == 0) result = 1;
     return result;
+}
+
+/* ChatSidebar */
+let dotnetRef = null;
+
+window.attachResizeListeners = (dotnetReference) => {
+    dotnetRef = dotnetReference; // Store reference globally
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+};
+
+window.detachResizeListeners = () => {
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+    dotnetRef = null;
+};
+
+function handleMouseMove(event) {
+    if (dotnetRef) {
+        dotnetRef.invokeMethodAsync('OnMouseMove', { clientX: event.clientX });
+    }
+}
+
+function handleMouseUp() {
+    if (dotnetRef) {
+        dotnetRef.invokeMethodAsync('OnMouseUp');
+    }
+    window.detachResizeListeners();
 }
