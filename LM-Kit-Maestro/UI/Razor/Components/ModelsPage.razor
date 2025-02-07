@@ -15,17 +15,16 @@
         </div>
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-        Icon="fas fa-edit"
-        OnClick="ViewModel.OpenModelsFolder" />
+                    Icon="fas fa-edit"
+                    OnClick="ViewModel.OpenModelsFolder" />
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-        Icon="fas fa-folder-open"
-        OnClick="ViewModel.OpenModelsFolder" />
+                    Icon="fas fa-folder-open"
+                    OnClick="ViewModel.OpenModelsFolder" />
     </div>
 </SectionContent>
 
 <div id="model-page-container">
-
     <div>
         <MudText Align="Align.Center">
             @if (ViewModel.FileManager.Models.Count > 0)
@@ -38,7 +37,7 @@
     <div id="model-list-container">
         @foreach (var model in ViewModel.ModelListViewModel.Models)
         {
-            <ModelListItem ViewModel="model"/>
+            <ModelListItem ViewModel="model" />
         }
     </div>
 
@@ -51,36 +50,36 @@
 
 <style>
     #model-page-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        gap: 40px;
     }
 
     #model-folder-container {
-    max-width: 500px;
+        max-width: 500px;
     }
 
     #model-list-container {
-    gap: 20px;
-    background-color: blue;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow-y: auto;
-    flex-grow: 0;
+        gap: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow-y: auto;
+        background-color: red;
     }
 
 
 
     .bottom-space {
-    display: flex;
-    min-height: 40px;
-    color: var(--Outline) !important;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0;
+        display: flex;
+        min-height: 40px;
+        color: var(--Outline) !important;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0;
     }
 </style>
 
