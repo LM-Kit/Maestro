@@ -2,19 +2,19 @@
 @inject IJSRuntime JS
 
 <div @ref="SidebarContainer"
-style="width: @(Width)px;"
-class="@GetClasses()">
+     style="width: @(Width)px;"
+     class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
-        <div @onmousedown="OnResizeHandlerMouseDown" 
-        @onmousedown:preventDefault="true"  
-        @onmousedown:stopPropagation="true"
-        class="@(Resizable ? "resize-handle" : "v-separator")">
+        <div @onmousedown="OnResizeHandlerMouseDown"
+             @onmousedown:preventDefault="true"
+             @onmousedown:stopPropagation="true"
+             class="@(Resizable ? "resize-handle" : "v-separator")">
             @if (Resizable)
             {
                 <div class="v-separator"></div>
             }
-    </div>
+        </div>
     }
 
     <div class="sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
@@ -24,9 +24,9 @@ class="@GetClasses()">
     @if (Position == SidebarPosition.Left)
     {
         <div @onmousedown="OnResizeHandlerMouseDown"
-        @onmousedown:preventDefault="true"  
-        @onmousedown:stopPropagation="true"
-        class="@(Resizable ? "resize-handle" : "v-separator")">
+             @onmousedown:preventDefault="true"
+             @onmousedown:stopPropagation="true"
+             class="@(Resizable ? "resize-handle" : "v-separator")">
             @if (Resizable)
             {
                 <div class="v-separator"></div>
@@ -49,6 +49,7 @@ class="@GetClasses()">
     [Parameter] public required SidebarPosition Position { get; set; }
 
     private bool _isToggled;
+
     [Parameter]
     public bool IsToggled
     {
@@ -66,6 +67,7 @@ class="@GetClasses()">
     }
 
     private int _width;
+
     [Parameter]
     public int Width
     {
@@ -77,6 +79,7 @@ class="@GetClasses()">
                 _width = value;
                 WidthChanged.InvokeAsync(value);
                 InvokeAsync(() => StateHasChanged());
+            }
         }
     }
 
@@ -99,7 +102,6 @@ class="@GetClasses()">
     {
         return IsToggled;
     }
-
 
 
     private async Task OnResizeHandlerMouseDown(MouseEventArgs e)
@@ -145,7 +147,6 @@ class="@GetClasses()">
     {
         Debug.WriteLine("[released]");
         _isResizing = false;
-
     }
 
     public enum SidebarPosition
