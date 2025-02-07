@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System;
 
 namespace LMKit.Maestro.ViewModels
 {
@@ -80,8 +81,14 @@ namespace LMKit.Maestro.ViewModels
                 ConversationViewModel conversationViewModel =
                     new ConversationViewModel(_popupService, _lmKitService, _database, conversation);
 
-                if (conversation.ChatHistoryData != null && conversationViewModel.LoadConversationLog())
+                if (conversation.ChatHistoryData != null)
                 {
+                    if (conversationViewModel.LoadConversationLog())
+                    {
+                        _logger.LogWarning($"Failed to restore conversation chat history - ID:  {conversationViewModel.ConversationLog.ID}");
+                        continue;
+                    }
+
                     loadedConversationViewModels.Insert(0, conversationViewModel);
                 }
             }
