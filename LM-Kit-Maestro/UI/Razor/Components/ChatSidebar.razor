@@ -109,7 +109,7 @@
         _isResizing = true;
         _resizeStartX = (int)e.ClientX;
         _resizeStartWidth = Width;
-        Debug.WriteLine("[down]");
+        // Debug.WriteLine("[down]");
 
         await JS.InvokeVoidAsync("attachResizeListeners", DotNetObjectReference.Create(this));
     }
@@ -139,13 +139,13 @@
             }
         }
 
-        Debug.WriteLine("[move] " + _isResizing);
+        // Debug.WriteLine("[move] " + _isResizing);
     }
 
     [JSInvokable]
     public void OnMouseUp()
     {
-        Debug.WriteLine("[released]");
+        // Debug.WriteLine("[released]");
         _isResizing = false;
     }
 

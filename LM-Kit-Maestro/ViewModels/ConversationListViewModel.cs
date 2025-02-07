@@ -83,7 +83,7 @@ namespace LMKit.Maestro.ViewModels
 
                 if (conversation.ChatHistoryData != null)
                 {
-                    if (conversationViewModel.LoadConversationLog())
+                    if (!conversationViewModel.LoadConversationLog())
                     {
                         _logger.LogWarning($"Failed to restore conversation chat history - ID:  {conversationViewModel.ConversationLog.ID}");
                         continue;
