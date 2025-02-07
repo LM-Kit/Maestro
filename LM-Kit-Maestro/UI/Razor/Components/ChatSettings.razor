@@ -4,16 +4,28 @@
     <Expander Title="General settings">
         <MudStack Class="pa-2" Spacing="6">
             <div class="d-flex flex-column gap-2">
-                <MudText Typo="Typo.subtitle2">
-                    Chatbot purpose
-                </MudText>
+
+                <div class="d-flex flex-row justify-content-around">
+
+                    <MudText Typo="Typo.subtitle2">
+                        Chatbot purpose
+                    </MudText>
+
+                    @if (ViewModel.SystemPrompt != LMKitDefaultSettings.DefaultSystemPrompt)
+                    {
+                        <IconButton Style="IconButton.ButtonStyle.Icon"
+                                    Icon="fas fa-rotate-left"
+                                    OnClick="OnResetSystemPromptClicked" />
+                    }
+
+                </div>
 
                 <MudTextField Variant="Variant.Outlined"
-                @onfocusout="OnChatbotPurposeInputFocusOut"
-                Style="--mud-palette-primary: var(--Secondary)"
-                Typo="Typo.body2"
-                Lines="5"
-                @bind-Value="ChatbotPurposeInput" />
+                              @onfocusout="OnChatbotPurposeInputFocusOut"
+                              Style="--mud-palette-primary: var(--Secondary)"
+                              Typo="Typo.body2"
+                              Lines="5"
+                              @bind-Value="ChatbotPurposeInput" />
             </div>
 
             <div class="d-flex justify-content-between align-center">
@@ -34,26 +46,26 @@
             {
                 <div>
                     <MudText Class="text-truncate"
-                    Typo="Typo.caption">
+                             Typo="Typo.caption">
                         Maximum number of tokens
                     </MudText>
 
                     <MudSlider @bind-Value="ViewModel.MaximumCompletionTokens"
-                    Min="1"
-                    Max="2048"
-                    Color="Color.Secondary" />
+                               Min="1"
+                               Max="2048"
+                               Color="Color.Secondary" />
                 </div>
             }
 
             <NumericSetting @bind-Value="ViewModel.RequestTimeout"
-            Title="Request timeout (sec)"
-            MinValue="10"
-            MaxValue="120" />
+                            Title="Request timeout (sec)"
+                            MinValue="10"
+                            MaxValue="120" />
 
             <NumericSetting @bind-Value="ViewModel.ContextSize"
-            Title="Context size"
-            MinValue="512"
-            MaxValue="32768" />
+                            Title="Context size"
+                            MinValue="512"
+                            MaxValue="32768" />
         </MudStack>
     </Expander>
     <MudDivider />
@@ -62,7 +74,7 @@
         <MudStack Class="pa-2" Spacing="6">
             <div class="d-flex flex-row justify-space-between align-center">
                 <MudText Class="text-truncate"
-                Typo="Typo.subtitle2">
+                         Typo="Typo.subtitle2">
                     Sampling mode
                 </MudText>
 
@@ -81,46 +93,46 @@
             @if (ViewModel.SamplingMode == SamplingMode.Random)
             {
                 <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.Temperature"
-                Title="Temperature"
-                MinValue="0"
-                MaxValue="1" />
+                                Title="Temperature"
+                                MinValue="0"
+                                MaxValue="1" />
 
                 <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.DynamicTemperatureRange"
-                Title="Dynamic temperature range"
-                MinValue="0"
-                MaxValue="1" />
+                                Title="Dynamic temperature range"
+                                MinValue="0"
+                                MaxValue="1" />
 
                 <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopP"
-                Title="Top P"
-                MinValue="0"
-                MaxValue="1" />
+                                Title="Top P"
+                                MinValue="0"
+                                MaxValue="1" />
 
                 <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopK"
-                Title="Top K"
-                MinValue="1"
-                MaxValue="1000" />
+                                Title="Top K"
+                                MinValue="1"
+                                MaxValue="1000" />
 
                 <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.LocallyTypical"
-                Title="Locally typical"
-                MinValue="0"
-                MaxValue="1" />
+                                Title="Locally typical"
+                                MinValue="0"
+                                MaxValue="1" />
             }
             else if (ViewModel.SamplingMode == SamplingMode.Mirostat2)
             {
                 <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.Temperature"
-                Title="Temperature"
-                MinValue="0"
-                MaxValue="1" />
+                                Title="Temperature"
+                                MinValue="0"
+                                MaxValue="1" />
 
                 <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.TargetEntropy"
-                Title="Target entropy"
-                MinValue="0"
-                MaxValue="10" />
+                                Title="Target entropy"
+                                MinValue="0"
+                                MaxValue="10" />
 
                 <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.LearningRate"
-                Title="Learning rate"
-                MinValue="0"
-                MaxValue="1" />
+                                Title="Learning rate"
+                                MinValue="0"
+                                MaxValue="1" />
             }
 
         </MudStack>
@@ -187,11 +199,17 @@
 
     private void OnChatbotPurposeInputFocusOut()
     {
-        if (!string.IsNullOrWhiteSpace(ViewModel.SystemPrompt))
+        if (!string.IsNullOrWhiteSpace(ChatbotPurposeInput))
         {
-            ViewModel.SystemPrompt = _chatbotPurposeInput.Trim();
+            ViewModel.SystemPrompt = ChatbotPurposeInput.Trim();
         }
 
+        ChatbotPurposeInput = ViewModel.SystemPrompt;
+    }
+
+    private void OnResetSystemPromptClicked()
+    {
+        ViewModel.ResetSystemPrompt();
         ChatbotPurposeInput = ViewModel.SystemPrompt;
     }
 }
