@@ -1,71 +1,75 @@
-﻿<div class="model-card" @onclick="OnItemClicked">
-    <div class="text-truncate">
-        @(ViewModel.ModelInfo.ShortModelName)
-    </div>
-
-    <div>
-        @(ViewModel.ModelInfo.Architecture)
-
-    </div>
-
-    <MudStack Row="true" AlignItems="AlignItems.Center">
-        @if (ViewModel.IsChatModel)
-        {
-            <MudIcon Icon="fas fa-message" Size="Size.Small"/>
-        }
-
-        @if (ViewModel.HasVisionCapability)
-        {
-            <MudIcon Icon="fas fa-eye" Size="Size.Small"/>
-        }
-
-        @if (ViewModel.IsCodeModel)
-        {
-            <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small"/>
-        }
-
-        @if (ViewModel.IsMathModel)
-        {
-            <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small"/>
-        }
-    </MudStack>
-
-    <MudStack Row="true">
-        <MudText>
-            @ViewModel.ModelSize
-        </MudText>
-
-        <MudText>
-            @ViewModel.MaxContextLengthKB
-        </MudText>
-
-        <MudText>
-            @ViewModel.Precision
-        </MudText>
-
-        <MudText>
-            @ViewModel.MaxContextLengthKB
-        </MudText>
-    </MudStack>
-
-
-    <MudPopover Open="@_isShowingActionSheet" Fixed="true">
-        <div Class="d-flex flex-column item-actions">
-            <MudButton Variant="Variant.Text" @onclick="OnOpenInExplorerClicked">
-                <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
-            </MudButton>
-            <MudButton Variant="Variant.Text" @onclick="OnOpenHfLinkClicked">
-                <MudText Typo="Typo.subtitle1">Open on Hugging Face</MudText>
-            </MudButton>
-
-            @if (ViewModel.DownloadInfo.Status == DownloadStatus.Downloaded)
-            {
-                <MudButton Variant="Variant.Text" @onclick="OnDeleteClicked">
-                    <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
-                </MudButton>
-            }
+﻿<div class="d-flex flex-row">
+    <div class="model-card" @onclick="OnItemClicked">
+        <div class="text-truncate">
+            @(ViewModel.ModelInfo.ShortModelName)
         </div>
-    </MudPopover>
+
+        <div>
+            @(ViewModel.ModelInfo.Architecture)
+
+        </div>
+
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+            @if (ViewModel.IsChatModel)
+            {
+                <MudIcon Icon="fas fa-message" Size="Size.Small" />
+            }
+
+            @if (ViewModel.HasVisionCapability)
+            {
+                <MudIcon Icon="fas fa-eye" Size="Size.Small" />
+            }
+
+            @if (ViewModel.IsCodeModel)
+            {
+                <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
+            }
+
+            @if (ViewModel.IsMathModel)
+            {
+                <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
+            }
+        </MudStack>
+
+        <MudStack Row="true">
+            <MudText>
+                @ViewModel.ModelSize
+            </MudText>
+
+            <MudText>
+                @ViewModel.MaxContextLengthKB
+            </MudText>
+
+            <MudText>
+                @ViewModel.Precision
+            </MudText>
+
+            <MudText>
+                @ViewModel.MaxContextLengthKB
+            </MudText>
+        </MudStack>
+    </div>
+
+    <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true" />
+    <div>
+        <MudPopover AnchorOrigin="Origin.TopLeft" Open="@_isShowingActionSheet" Fixed="true">
+            <div Class="d-flex flex-column item-actions">
+                <MudButton Variant="Variant.Text" @onclick="OnOpenInExplorerClicked">
+                    <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
+                </MudButton>
+                <MudButton Variant="Variant.Text" @onclick="OnOpenHfLinkClicked">
+                    <MudText Typo="Typo.subtitle1">Open on Hugging Face</MudText>
+                </MudButton>
+
+                @if (ViewModel.DownloadInfo.Status == DownloadStatus.Downloaded)
+                {
+                    <MudButton Variant="Variant.Text" @onclick="OnDeleteClicked">
+                        <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
+                    </MudButton>
+                }
+            </div>
+        </MudPopover>
+    </div>
 </div>
 
 <style>
