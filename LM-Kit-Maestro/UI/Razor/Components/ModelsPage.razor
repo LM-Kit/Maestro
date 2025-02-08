@@ -16,11 +16,18 @@
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
                     Icon="fas fa-edit"
+                    Tooltip="Locales.SelectAnotherFolder"
                     OnClick="ViewModel.PickModelsFolder" />
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
                     Icon="fas fa-folder-open"
+                    Tooltip="Locales.OpenInFileExplorer"
                     OnClick="ViewModel.OpenModelsFolder" />
+
+        <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                    Icon="fas fa-rotate-left"
+                    Tooltip="Locales.ResetModelFolder"
+                    OnClick="ViewModel.ResetModelsFolder" />
     </div>
 </SectionContent>
 

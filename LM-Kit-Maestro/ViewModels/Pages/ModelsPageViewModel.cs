@@ -121,6 +121,12 @@ public partial class ModelsPageViewModel : PageViewModelBase
     }
 
     [RelayCommand]
+    public void ResetModelsFolder()
+    {
+        AppSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
+    }
+
+    [RelayCommand]
     public void OpenHuggingFaceLink()
     {
         _ = _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
@@ -128,7 +134,12 @@ public partial class ModelsPageViewModel : PageViewModelBase
 
     public void OpenModelInExplorer(ModelInfoViewModel modelInfoViewModel)
     {
+        var uri = new Uri($"file://{modelInfoViewModel.ModelInfo.LocalPath}");
 
+        if (uri.IsFile)
+        {
+            _ = _launcher.OpenAsync(uri);
+        }
     }
 
     public void OpenModelHfLink(ModelInfoViewModel modelInfoViewModel)
