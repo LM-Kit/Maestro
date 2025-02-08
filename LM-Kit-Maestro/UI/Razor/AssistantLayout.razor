@@ -1,7 +1,9 @@
 ﻿@inherits LayoutComponentBase
 
-
 @inject ModelListViewModel ModelListViewModel
+@inject ILLMFileManager FileManager
+@inject LMKitService LmKitService
+@inject ISnackbar Snackbar
 
 <div id="page-container">
     <div id="top-bar">
@@ -18,22 +20,22 @@
 
 
     #top-bar {
-        background-color: var(--Surface);
-        height: 96px;
-        display: flex;
-        flex-direction: column;
-        position: relative;
+    background-color: var(--Surface);
+    height: 96px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
     }
 
     #body-container {
-        flex: 1;
-        overflow: hidden;
+    flex: 1;
+    overflow: hidden;
     }
 
     #page-container {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     }
 </style>
 
@@ -44,4 +46,35 @@
 
 @code {
     public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
+
+    public AssistantLayout()
+    {
+        FileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
+        LmKitService.ModelLoadingFailed += OnModelLoadingFailed;
+    }
+
+    private void OnFileManagerFileCollectingCompleted(object? sender, EventArgs e)
+    {
+        var fileCollectingCompletedEventArgs = (LLMFileManager.FileCollectingCompletedEventArgs)e;
+
+        if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
+        {
+            Snackbar.Clear();
+            Snackbar.Add("Error with your model folder");
+            // _popupService!.DisplayAlert("Error with your model folder",
+                //     $"Model files failed to be collected from the input folder:\n{fileCollectingCompletedEventArgs.Exception.Message!}\n\nYour model folder has been reset to the default one.",
+                //     "OK");
+
+        }
+    }
+
+    private void OnModelLoadingFailed(object? sender, EventArgs e)
+    {
+        var modelLoadingFailedEventArgs = (LMKitService.ModelLoadingFailedEventArgs)e;
+
+        if (Microsoft.Maui.ApplicationModel.MainThread.IsMainThread)
+        {
+            // _popupService.DisplayAlert("Error loading model", $"The model failed to be loaded: {modelLoadingFailedEventArgs.Exception.Message}", "OK");
+        }
+    }
 }
