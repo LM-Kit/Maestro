@@ -1,26 +1,40 @@
 ﻿<div id="root">
     <div class="model-card" @onclick="OnItemClicked">
+        <MudGrid Spacing="1">
+            <MudItem xs="6">
+                <MudStack Spacing="2">
+                    <div class="d-flex flex-row gap-2 ">
+                        <MudText>
+                            @ViewModel.ModelInfo.ShortModelName
+                        </MudText>
 
-        <MudStack Spacing="2">
-            <div class="d-flex flex-row gap-2">
-                <MudIcon Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)" Size="Size.Small"/>
 
-                <MudText>
-                    @ViewModel.ModelInfo.ShortModelName
+                    </div>
+                </MudStack>
+            </MudItem>
+
+            <MudItem xs="6">
+                <div class="d-flex justify-end">
+                    <MudIcon Class="outline small-icon"
+                             Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
+                             Color="Color.Dark"
+                             Size="Size.Small" />
+                </div>
+            </MudItem>
+
+            <MudItem xs="3" Class="d-flex align-items-center">
+                <MudText Typo="Typo.overline" Color="Color.Secondary">
+                    @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
                 </MudText>
-            </div>
+            </MudItem>
 
-            <MudText Typo="Typo.overline" Color="Color.Secondary">
-                @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
-            </MudText>
-        </MudStack>
+            <MudItem xs="3" Class="d-flex align-items-center">
+                <MudText Typo="Typo.overline">
+                    @ViewModel.ModelInfo.Architecture
+                </MudText>
+            </MudItem>
 
-        <div class="d-flex flex-row gap-20 justify-content-evenly">
-            <MudText Typo="Typo.overline">
-                @ViewModel.ModelInfo.Architecture
-            </MudText>
-
-            <MudStack Row="true" AlignItems="AlignItems.Center">
+            <MudItem xs="3" Class="d-flex align-items-center">
                 @if (ViewModel.IsChatModel)
                 {
                     <MudIcon Icon="@Icons.Material.Outlined.Message" Size="Size.Small" />
@@ -40,26 +54,29 @@
                 {
                     <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
                 }
-            </MudStack>
+            </MudItem>
 
-            <MudStack Row="true">
-                <MudText Typo="Typo.overline">
-                    @ViewModel.ModelSize
-                </MudText>
+            <MudItem xs="3" Class="d-flex align-items-center">
+                <MudStack Row="true">
+                    <MudText Typo="Typo.overline">
+                        @ViewModel.ModelSize
+                    </MudText>
 
-                <MudText Typo="Typo.overline">
-                    @ViewModel.MaxContextLengthKB
-                </MudText>
+                    <MudText Typo="Typo.overline">
+                        @ViewModel.MaxContextLengthKB
+                    </MudText>
 
-                <MudText Typo="Typo.overline">
-                    @ViewModel.Precision
-                </MudText>
+                    <MudText Typo="Typo.overline">
+                        @ViewModel.Precision
+                    </MudText>
 
-                <MudText Typo="Typo.overline">
-                    @ViewModel.MaxContextLengthKB
-                </MudText>
-            </MudStack>
-        </div>
+                    <MudText Typo="Typo.overline">
+                        @ViewModel.MaxContextLengthKB
+                    </MudText>
+                </MudStack>
+            </MudItem>
+
+        </MudGrid>
     </div>
 
     <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true" />
@@ -111,6 +128,14 @@
         .model-card:hover {
             background-color: var(--Surface2);
         }
+
+    .outline {
+        color: var(--Outline) !important;
+    }
+
+    .small-icon {
+        font-size: 0.85rem !important;
+    }
 </style>
 
 @code {
