@@ -1,58 +1,58 @@
 ﻿<div id="root">
     <div class="model-card" @onclick="OnItemClicked">
         <MudStack Spacing="2">
-            <div class="text-truncate">
-                @(ViewModel.ModelInfo.ShortModelName)
-            </div>
+            <MudText Color="Color.Primary">
+                @ViewModel.ModelInfo.ShortModelName
+            </MudText>
 
             <MudText Typo="Typo.overline" Color="Color.Secondary">
                 @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
             </MudText>
         </MudStack>
 
-        <div>
+        <div class="d-flex flex-row gap-20">
             @(ViewModel.ModelInfo.Architecture)
+
+            <MudStack Row="true" AlignItems="AlignItems.Center">
+                @if (ViewModel.IsChatModel)
+                {
+                    <MudIcon Icon="@Icons.Material.Outlined.Message" Size="Size.Small" />
+                }
+
+                @if (ViewModel.HasVisionCapability)
+                {
+                    <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
+                }
+
+                @if (ViewModel.IsCodeModel)
+                {
+                    <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
+                }
+
+                @if (ViewModel.IsMathModel)
+                {
+                    <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
+                }
+            </MudStack>
+
+            <MudStack Row="true">
+                <MudText Typo="Typo.overline">
+                    @ViewModel.ModelSize
+                </MudText>
+
+                <MudText Typo="Typo.overline">
+                    @ViewModel.MaxContextLengthKB
+                </MudText>
+
+                <MudText Typo="Typo.overline">
+                    @ViewModel.Precision
+                </MudText>
+
+                <MudText Typo="Typo.overline">
+                    @ViewModel.MaxContextLengthKB
+                </MudText>
+            </MudStack>
         </div>
-
-        <MudStack Row="true" AlignItems="AlignItems.Center">
-            @if (ViewModel.IsChatModel)
-            {
-                <MudIcon Icon="@Icons.Material.Outlined.Message" Size="Size.Small" />
-            }
-
-            @if (ViewModel.HasVisionCapability)
-            {
-                <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
-            }
-
-            @if (ViewModel.IsCodeModel)
-            {
-                <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
-            }
-
-            @if (ViewModel.IsMathModel)
-            {
-                <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
-            }
-        </MudStack>
-
-        <MudStack Row="true">
-            <MudText>
-                @ViewModel.ModelSize
-            </MudText>
-
-            <MudText>
-                @ViewModel.MaxContextLengthKB
-            </MudText>
-
-            <MudText>
-                @ViewModel.Precision
-            </MudText>
-
-            <MudText>
-                @ViewModel.MaxContextLengthKB
-            </MudText>
-        </MudStack>
     </div>
 
     <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true" />
