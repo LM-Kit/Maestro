@@ -94,7 +94,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
     }
 
     [RelayCommand]
-    private void PickModelsFolder()
+    public void PickModelsFolder()
     {
 #if MACCATALYST  || WINDOWS
         _mainThread.BeginInvokeOnMainThread(async () =>

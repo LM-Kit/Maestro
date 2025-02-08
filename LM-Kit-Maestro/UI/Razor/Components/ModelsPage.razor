@@ -11,12 +11,12 @@
         </span>
 
         <div id="model-folder-container">
-            <MudTextField @bind-Value="ViewModel.AppSettingsService.ModelStorageDirectory" />
+            <MudTextField ReadOnly="true" @bind-Value="ViewModel.AppSettingsService.ModelStorageDirectory" />
         </div>
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
                     Icon="fas fa-edit"
-                    OnClick="ViewModel.OpenModelsFolder" />
+                    OnClick="ViewModel.PickModelsFolder" />
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
                     Icon="fas fa-folder-open"
