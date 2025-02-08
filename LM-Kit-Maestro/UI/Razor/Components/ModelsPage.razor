@@ -17,32 +17,53 @@
         </div>
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                    Icon="fas fa-edit"
-                    Tooltip="@Locales.SelectAnotherFolder"
-                    OnClick="ViewModel.PickModelsFolder" />
+        Icon="fas fa-edit"
+        Tooltip="@Locales.SelectAnotherFolder"
+        OnClick="ViewModel.PickModelsFolder" />
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                    Icon="fas fa-folder-open"
-                    Tooltip="@Locales.OpenInFileExplorer"
-                    OnClick="ViewModel.OpenModelsFolder" />
+        Icon="fas fa-folder-open"
+        Tooltip="@Locales.OpenInFileExplorer"
+        OnClick="ViewModel.OpenModelsFolder" />
 
         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                    Icon="fas fa-rotate-left"
-                    Tooltip="@Locales.ResetModelFolder"
-                    OnClick="ViewModel.ResetModelsFolder" />
+        Icon="fas fa-rotate-left"
+        Tooltip="@Locales.ResetModelFolder"
+        OnClick="ViewModel.ResetModelsFolder" />
     </div>
 </SectionContent>
 
 <div id="model-page-container">
-    <div>
-        <MudText Align="Align.Center">
-            @if (ViewModel.FileManager.Models.Count > 0)
+    <div class="d-flex flex-row justify-center align-center align-content-center" style="background-color: red">
+
+        @if (ViewModel.FileManager.FileCollectingInProgress)
+        {
+            <MudProgressCircular Indeterminate="true" />
+        }
+
+        <MudText>
+            @if (ViewModel.FileManager.DownloadedCount > 0)
             {
                 <span>You have</span>
-                <span><b> @(ViewModel.FileManager.Models.Count) </b></span>
-                <span> @(ViewModel.FileManager.Models.Count > 1 ? "models" : "model") </span>
+                <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
+                <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
                 <span> taking up </span>
                 <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
+            }
+            else
+            {
+                @if (ViewModel.FileManager.FileCollectingInProgress)
+                {
+                    <span>
+                        Scanning for models...
+                    </span>
+                }
+                else
+                {
+                    <span>
+                        You don't have any model yet. You may download some directly from the app, or add files to your model folder.
+                    </span>
+                }
             }
         </MudText>
     </div>
@@ -124,4 +145,4 @@
     {
         ViewModel.OpenModelInExplorer(modelInfoViewModel);
     }
-}
+    }
