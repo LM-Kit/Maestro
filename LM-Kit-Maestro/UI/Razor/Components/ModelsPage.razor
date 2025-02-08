@@ -5,8 +5,7 @@
 @inherits MvvmComponentBase<ModelsPageViewModel>
 
 <SectionContent SectionName="top-bar">
-
-    <div class="d-flex flex-row gap-2 justify-center align-center align-content-center">
+    <div class="d-flex flex-row gap-2 flex-grow-1 justify-center align-center align-content-center px-4">
         <span>
             Model folder:
         </span>
@@ -63,7 +62,7 @@
         flex-direction: column;
         height: 100%;
         gap: 40px;
-        padding: 20px;
+        padding-block: 20px;
     }
 
     #model-folder-container {

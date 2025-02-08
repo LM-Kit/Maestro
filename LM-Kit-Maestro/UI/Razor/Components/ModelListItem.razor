@@ -12,12 +12,12 @@
         <MudStack Row="true" AlignItems="AlignItems.Center">
             @if (ViewModel.IsChatModel)
             {
-                <MudIcon Icon="fas fa-message" Size="Size.Small" />
+                <MudIcon Icon="@Icons.Material.Outlined.Message" Size="Size.Small" />
             }
 
             @if (ViewModel.HasVisionCapability)
             {
-                <MudIcon Icon="fas fa-eye" Size="Size.Small" />
+                <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
             }
 
             @if (ViewModel.IsCodeModel)
