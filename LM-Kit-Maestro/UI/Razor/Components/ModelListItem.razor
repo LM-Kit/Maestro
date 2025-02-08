@@ -42,9 +42,9 @@
                     </MudText>
 
                     <MudIcon Class="outline xs-icon"
-                    Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
-                    Color="Color.Dark"
-                    Size="Size.Small" />
+                             Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
+                             Color="Color.Dark"
+                             Size="Size.Small" />
                 </MudStack>
             </MudItem>
 
@@ -100,73 +100,72 @@
 <style>
 
     #root {
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+        width: 100%;
+        background-color: cyan;
     }
 
     .model-card {
-    max-width: 800px;
-    flex-direction: row;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-    border: 1px solid var(--Outline);
-    border-radius: 4px;
-    background-color: var(--Surface15);
-    flex-grow: 1;
-    cursor: pointer;
+        max-width: 800px;
+        flex-direction: row;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        margin-inline: auto;
+        border: 1px solid var(--OutlineVariant);
+        border-radius: 4px;
+        background-color: var(--Surface15);
+        flex-grow: 1;
+        cursor: pointer;
     }
 
     .item-actions {
-    padding: 4px;
-    background-color: var(--Surface3);
+        padding: 4px;
+        background-color: var(--Surface3);
     }
 
     .model-card:hover {
-    background-color: var(--Surface2);
+        background-color: var(--Surface2);
+        border: 1px solid var(--Outline);
     }
 
     .outline {
-    color: var(--Outline) !important;
+        color: var(--Outline) !important;
     }
 
     .small-icon {
-    font-size: 1rem !important;
+        font-size: 1rem !important;
     }
 
     .xs-icon {
-    font-size: 0.85rem !important;
+        font-size: 0.85rem !important;
     }
 
     .primary {
-    color: var(--Primary);
+        color: var(--Primary);
     }
 
     .secondary {
-    color: var(--Secondary);
+        color: var(--Secondary);
     }
 
     .tertiary {
-    color: var(--Tertiary);
+        color: var(--Tertiary);
     }
 
     .score-1 {
-    background-color: #FA8168;
-    color: #FA8168;
+        background-color: #FA8168;
+        color: #FA8168;
     }
 
     .score-2 {
-    background-color: #FFD21E;
-    color: #FFD21E;
+        background-color: #FFD21E;
+        color: #FFD21E;
     }
 
     .score-3 {
-    background-color: #1C8736;
-    color: #1C8736;
+        background-color: #1C8736;
+        color: #1C8736;
     }
 
 </style>

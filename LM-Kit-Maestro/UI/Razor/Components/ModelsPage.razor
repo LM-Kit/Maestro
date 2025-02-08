@@ -72,10 +72,10 @@
     <div id="model-list-container">
         @foreach (var model in ViewModel.ModelListViewModel.Models)
         {
-            <ModelListItem ViewModel="model" 
-                OpenInExplorerClicked="(() => ViewModel.OpenModelInExplorer(model))" 
-                OpenHfLinkClicked="(() => ViewModel.OpenModelHfLink(model))" 
-                DeleteClicked="(() => ViewModel.DeleteModel(model))" />
+            <ModelListItem ViewModel="model"
+                           OpenInExplorerClicked="(() => ViewModel.OpenModelInExplorer(model))"
+                           OpenHfLinkClicked="(() => ViewModel.OpenModelHfLink(model))"
+                           DeleteClicked="(() => ViewModel.DeleteModel(model))" />
         }
     </div>
 
@@ -94,7 +94,7 @@
         display: flex;
         flex-direction: column;
         height: 100%;
-        gap: 40px;
+        gap: 20px;
         padding-block: 20px;
     }
 
@@ -107,14 +107,12 @@
     }
 
     #model-list-container {
-        gap: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        gap: 0px;
+        display: block;
         overflow-y: auto;
+        background-color: yellow;
+        padding-block: 20px;
     }
-
 
     .bottom-space {
         display: flex;
