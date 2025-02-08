@@ -1,63 +1,59 @@
 ﻿<div id="root">
     <div class="model-card" @onclick="OnItemClicked">
         <MudGrid Spacing="1">
-            <MudItem xs="6">
-                <MudStack Spacing="2">
-                    <div class="d-flex flex-row gap-2 ">
+            <MudItem xs="12">
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
                         <MudText>
                             @ViewModel.ModelInfo.ShortModelName
                         </MudText>
 
+                        <div class="dot @(GetScoreClass(ViewModel.CompatibilityLevel))"></div>
+                    </MudStack>
 
-                    </div>
+                    <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Row="true">
+                        @if (ViewModel.IsChatModel)
+                        {
+                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message" Size="Size.Small" />
+                        }
+
+                        @if (ViewModel.HasVisionCapability)
+                        {
+                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
+                        }
+
+                        @if (ViewModel.IsCodeModel)
+                        {
+                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
+                        }
+
+                        @if (ViewModel.IsMathModel)
+                        {
+                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
+                        }
+                    </MudStack>
+                </MudStack>
+            </MudItem>
+
+            <MudItem xs="6" Class="d-flex align-items-center">
+                <MudStack AlignItems="AlignItems.Center" Row="true">
+                    <MudText Typo="Typo.overline" Class="outline">
+                        @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
+                    </MudText>
+
+                    <MudIcon Class="outline xs-icon"
+                             Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
+                             Color="Color.Dark"
+                             Size="Size.Small" />
                 </MudStack>
             </MudItem>
 
             <MudItem xs="6">
-                <div class="d-flex justify-end">
-                    <MudIcon Class="outline small-icon"
-                             Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
-                             Color="Color.Dark"
-                             Size="Size.Small" />
-                </div>
-            </MudItem>
+                <MudStack Justify="Justify.SpaceBetween" Row="true" Class="outline">
+                    <MudText Typo="Typo.overline">
+                        @ViewModel.ModelInfo.Architecture
+                    </MudText>
 
-            <MudItem xs="3" Class="d-flex align-items-center">
-                <MudText Typo="Typo.overline" Color="Color.Secondary">
-                    @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
-                </MudText>
-            </MudItem>
-
-            <MudItem xs="3" Class="d-flex align-items-center">
-                <MudText Typo="Typo.overline">
-                    @ViewModel.ModelInfo.Architecture
-                </MudText>
-            </MudItem>
-
-            <MudItem xs="3" Class="d-flex align-items-center">
-                @if (ViewModel.IsChatModel)
-                {
-                    <MudIcon Icon="@Icons.Material.Outlined.Message" Size="Size.Small" />
-                }
-
-                @if (ViewModel.HasVisionCapability)
-                {
-                    <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
-                }
-
-                @if (ViewModel.IsCodeModel)
-                {
-                    <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
-                }
-
-                @if (ViewModel.IsMathModel)
-                {
-                    <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
-                }
-            </MudItem>
-
-            <MudItem xs="3" Class="d-flex align-items-center">
-                <MudStack Row="true">
                     <MudText Typo="Typo.overline">
                         @ViewModel.ModelSize
                     </MudText>
@@ -134,8 +130,40 @@
     }
 
     .small-icon {
+        font-size: 1rem !important;
+    }
+
+    .xs-icon {
         font-size: 0.85rem !important;
     }
+
+    .primary {
+        color: var(--Primary);
+    }
+
+    .secondary {
+        color: var(--Secondary);
+    }
+
+    .tertiary {
+        color: var(--Tertiary);
+    }
+
+    .score-1 {
+        background-color: #FA8168;
+        color: #FA8168;
+    }
+
+    .score-2 {
+        background-color: #FFD21E;
+        color: #FFD21E;
+    }
+
+    .score-3 {
+        background-color: #1C8736;
+        color: #1C8736;
+    }
+
 </style>
 
 @code {
@@ -177,5 +205,10 @@
     private async Task OnDownloadClicked()
     {
         // await OnDownloadClicked.InvokeAsync();
+    }
+
+    private static string GetScoreClass(float score)
+    {
+        return score < 0.4 ? "score-1" : score < 0.7 ? "score-2" : "score-3";
     }
 }
