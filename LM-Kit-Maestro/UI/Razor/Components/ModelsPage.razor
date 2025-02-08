@@ -34,39 +34,46 @@
 </SectionContent>
 
 <div id="model-page-container">
-    <div class="d-flex flex-row justify-center align-center align-content-center px-4">
+    <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
 
         @if (ViewModel.FileManager.FileCollectingInProgress)
         {
             <MudProgressCircular Size="Size.Small" Indeterminate="true" />
         }
 
-        <MudText Typo="Typo.body2">
-            @if (ViewModel.FileManager.DownloadedCount > 0)
-            {
+        @if (ViewModel.FileManager.DownloadedCount > 0)
+        {
+            <MudText Typo="Typo.body2">
                 <span>You have</span>
                 <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
                 <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
                 <span> taking up </span>
                 <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
+            </MudText>
+        }
+        else
+        {
+            @if (ViewModel.FileManager.FileCollectingInProgress)
+            {
+                <span>
+                    Scanning for models...
+                </span>
             }
             else
             {
-                @if (ViewModel.FileManager.FileCollectingInProgress)
-                {
-                    <span>
-                        Scanning for models...
-                    </span>
-                }
-                else
-                {
-                    <p>
+                <p>
+                    <MudText Typo="Typo.body2">
                         You don't have any model yet.
+                    </MudText>
+                </p>
+
+                <p>
+                    <MudText Typo="Typo.body2">
                         You may download some directly from the app, or add files to your model folder.
-                    </p>
-                }
+                    </MudText>
+                </p>
             }
-        </MudText>
+        }
     </div>
 
     <div id="model-list-container">
@@ -112,6 +119,7 @@
         overflow-y: auto;
         padding-block: 20px;
         gap: 10px;
+        padding-inline: 10px;
     }
 
     .bottom-space {
