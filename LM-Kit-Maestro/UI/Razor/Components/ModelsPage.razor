@@ -72,7 +72,10 @@
     <div id="model-list-container">
         @foreach (var model in ViewModel.ModelListViewModel.Models)
         {
-            <ModelListItem ViewModel="model" />
+            <ModelListItem ViewModel="model" 
+                OpenInExplorerClicked="(() => ViewModel.OpenModelInExplorer(model))" 
+                OpenHfLinkClicked="(() => ViewModel.OpenModelHfLink(model))" 
+                DeleteClicked="(() => ViewModel.DeleteModel(model))" />
         }
     </div>
 

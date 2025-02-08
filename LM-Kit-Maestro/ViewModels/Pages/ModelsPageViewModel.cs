@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mopups.Interfaces;
 using CommunityToolkit.Maui.Storage;
+using System.Diagnostics;
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -134,17 +135,26 @@ public partial class ModelsPageViewModel : PageViewModelBase
 
     public void OpenModelInExplorer(ModelInfoViewModel modelInfoViewModel)
     {
-        var uri = new Uri($"file://{modelInfoViewModel.ModelInfo.LocalPath}");
+        string filePath = modelInfoViewModel.ModelInfo.LocalPath;
 
-        if (uri.IsFile)
+        if (File.Exists(filePath))
         {
-            _ = _launcher.OpenAsync(uri);
+            Task.Run(() =>
+            {
+                try
+                {
+                    Process.Start("explorer.exe", $"/select,\"{filePath}\"");
+                }
+                catch { }
+            });
         }
     }
 
+
     public void OpenModelHfLink(ModelInfoViewModel modelInfoViewModel)
     {
-
+         //todo: open model Hugging Face page
+        _ = _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
     }
 
 
