@@ -1,6 +1,7 @@
 ﻿@page "/models"
 
 @inject ISnackbar Snackbar
+@using LMKit.Maestro.Helpers
 @inherits MvvmComponentBase<ModelsPageViewModel>
 
 <SectionContent SectionName="top-bar">
@@ -29,7 +30,11 @@
         <MudText Align="Align.Center">
             @if (ViewModel.FileManager.Models.Count > 0)
             {
-                @($"You have {ViewModel.FileManager.Models.Count} {(ViewModel.FileManager.Models.Count > 1 ? "models" : "model")} taking up {ViewModel.FileManager.TotalModelSize}.")
+                <span>You have</span>
+                <span><b> @(ViewModel.FileManager.Models.Count) </b></span>
+                <span> @(ViewModel.FileManager.Models.Count > 1 ? "models" : "model") </span>
+                <span> taking up </span>
+                <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
             }
         </MudText>
     </div>
@@ -42,7 +47,7 @@
     </div>
 
     <div class="bottom-space">
-        <div class="">
+        <div>
             Explore more models
         </div>
     </div>
@@ -67,7 +72,6 @@
         align-items: center;
         justify-content: center;
         overflow-y: auto;
-        background-color: red;
     }
 
 

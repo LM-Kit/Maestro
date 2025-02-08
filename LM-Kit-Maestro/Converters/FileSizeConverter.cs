@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using LMKit.Maestro.Helpers;
 
 namespace LMKit.Maestro.Converters;
 
@@ -12,7 +13,7 @@ internal sealed class FileSizeConverter : IValueConverter
 
             if (value is long bytes)
             {
-                return FormatFileSize(bytes);
+                return FileHelpers.FormatFileSize(bytes);
             }
         }
 
@@ -22,19 +23,5 @@ internal sealed class FileSizeConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
-    }
-
-    private static string FormatFileSize(long bytes)
-    {
-        var unit = 1024;
-
-        if (bytes < unit)
-        {
-            return $"{bytes} B";
-        }
-
-        var exp = (int)(Math.Log(bytes) / Math.Log(unit));
-
-        return $"{bytes / Math.Pow(unit, exp):F2} {("KMGTPE")[exp - 1]}B";
     }
 }
