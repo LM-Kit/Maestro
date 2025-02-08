@@ -20,22 +20,22 @@
 
 
     #top-bar {
-    background-color: var(--Surface);
-    height: 96px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
+        background-color: var(--Surface);
+        height: 96px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
     }
 
     #body-container {
-    flex: 1;
-    overflow: hidden;
+        flex: 1;
+        overflow: hidden;
     }
 
     #page-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
     }
 </style>
 
@@ -47,10 +47,15 @@
 @code {
     public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
 
-    public AssistantLayout()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        FileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
-        LmKitService.ModelLoadingFailed += OnModelLoadingFailed;
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            FileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
+            LmKitService.ModelLoadingFailed += OnModelLoadingFailed;
+        }
     }
 
     private void OnFileManagerFileCollectingCompleted(object? sender, EventArgs e)
@@ -62,8 +67,8 @@
             Snackbar.Clear();
             Snackbar.Add("Error with your model folder");
             // _popupService!.DisplayAlert("Error with your model folder",
-                //     $"Model files failed to be collected from the input folder:\n{fileCollectingCompletedEventArgs.Exception.Message!}\n\nYour model folder has been reset to the default one.",
-                //     "OK");
+            //     $"Model files failed to be collected from the input folder:\n{fileCollectingCompletedEventArgs.Exception.Message!}\n\nYour model folder has been reset to the default one.",
+            //     "OK");
 
         }
     }
