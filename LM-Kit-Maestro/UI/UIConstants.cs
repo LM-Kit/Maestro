@@ -59,7 +59,7 @@ public static class UIConstants
     {
         public const string Primary = "#512BD4";
         public const string PrimaryAccent = "#512BD4";
-        public const string Error = "#512BD4";
+        public const string Error = "#FF5551";
         public const string Surface = "#06080A";
         public const string Background = "#12181F";
         public const string OnSurface = "#F0F6FC";

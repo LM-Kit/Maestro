@@ -78,15 +78,15 @@
     <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true" />
     <div>
         <MudPopover AnchorOrigin="Origin.TopLeft" Open="@_isShowingActionSheet" Fixed="true">
-            <div Class="d-flex flex-column item-actions">
+            <div class="d-flex flex-column item-actions">
                 <MudButton Variant="Variant.Text" @onclick="OnOpenInExplorerClicked">
                     <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
                 </MudButton>
                 <MudButton Variant="Variant.Text" @onclick="OnOpenHfLinkClicked">
-                    <MudText Typo="Typo.subtitle1">Open on Hugging Face</MudText>
+                    <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
                 </MudButton>
 
-                @if (ViewModel.DownloadInfo.Status == DownloadStatus.Downloaded)
+                @if (ViewModel.ModelInfo.IsLocallyAvailable)
                 {
                     <MudButton Variant="Variant.Text" @onclick="OnDeleteClicked">
                         <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
@@ -121,9 +121,14 @@
         cursor: pointer;
     }
 
-        .model-card:hover {
-            background-color: var(--Surface2);
-        }
+    .item-actions {
+        padding: 4px;
+        background-color: var(--Surface3);
+    }
+
+    .model-card:hover {
+        background-color: var(--Surface2);
+    }
 
     .outline {
         color: var(--Outline) !important;
