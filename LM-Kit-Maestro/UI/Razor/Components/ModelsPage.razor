@@ -47,8 +47,12 @@
     </div>
 
     <div class="bottom-space">
-        <div>
-            Explore more models
+        <div id="hf-link" class="d-flex flex-row align-center gap-2">
+            <img width="20" height="20" src="huggingface.svg" />
+
+            <span class="hf-link">
+                Explore more models
+            </span>
         </div>
     </div>
 </div>
@@ -59,14 +63,16 @@
         flex-direction: column;
         height: 100%;
         gap: 40px;
+        padding: 20px;
     }
 
     #model-folder-container {
         max-width: 500px;
+        flex-grow: 1;
     }
 
     #model-list-container {
-        gap: 20px;
+        gap: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -75,16 +81,22 @@
     }
 
 
-
     .bottom-space {
         display: flex;
-        min-height: 40px;
-        color: var(--Outline) !important;
         justify-content: center;
         align-items: center;
         text-align: center;
-        padding: 0;
     }
+
+    #hf-link {
+        cursor: pointer;
+        color: var(--Outline);
+    }
+
+        #hf-link:hover {
+            color: #FFD21E;
+        }
+
 </style>
 
 @code {
