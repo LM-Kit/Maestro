@@ -20,22 +20,22 @@
 
 
     #top-bar {
-        background-color: var(--Surface);
-        height: 96px;
-        display: flex;
-        flex-direction: column;
-        position: relative;
+    background-color: var(--Surface);
+    height: 96px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
     }
 
     #body-container {
-        flex: 1;
-        overflow: hidden;
+    flex: 1;
+    overflow: hidden;
     }
 
     #page-container {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     }
 </style>
 
@@ -70,6 +70,11 @@
             //     $"Model files failed to be collected from the input folder:\n{fileCollectingCompletedEventArgs.Exception.Message!}\n\nYour model folder has been reset to the default one.",
             //     "OK");
 
+        }
+        else
+        {
+            Snackbar.Clear();
+            Snackbar.Add("Model scan completed.");
         }
     }
 

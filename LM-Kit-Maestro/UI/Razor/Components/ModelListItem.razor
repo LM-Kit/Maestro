@@ -1,8 +1,14 @@
 ﻿<div id="root">
     <div class="model-card" @onclick="OnItemClicked">
-        <div class="text-truncate">
-            @(ViewModel.ModelInfo.ShortModelName)
-        </div>
+        <MudStack Spacing="2">
+            <div class="text-truncate">
+                @(ViewModel.ModelInfo.ShortModelName)
+            </div>
+
+            <MudText Typo="Typo.overline" Color="Color.Secondary">
+                @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
+            </MudText>
+        </MudStack>
 
         <div>
             @(ViewModel.ModelInfo.Architecture)
@@ -73,7 +79,7 @@
 
 <style>
 
-    #root{
+    #root {
         width: 100%;
         padding: 20px;
         display: flex;
@@ -94,10 +100,10 @@
         flex-grow: 1;
         cursor: pointer;
     }
-    
-    .model-card:hover {
-        background-color: var(--Surface2);
-    }
+
+        .model-card:hover {
+            background-color: var(--Surface2);
+        }
 </style>
 
 @code {

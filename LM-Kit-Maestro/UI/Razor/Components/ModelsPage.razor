@@ -34,14 +34,14 @@
 </SectionContent>
 
 <div id="model-page-container">
-    <div class="d-flex flex-row justify-center align-center align-content-center" style="background-color: red">
+    <div class="d-flex flex-row justify-center align-center align-content-center px-4">
 
         @if (ViewModel.FileManager.FileCollectingInProgress)
         {
-            <MudProgressCircular Indeterminate="true" />
+            <MudProgressCircular Size="Size.Small" Indeterminate="true" />
         }
 
-        <MudText>
+        <MudText Typo="Typo.body2">
             @if (ViewModel.FileManager.DownloadedCount > 0)
             {
                 <span>You have</span>
@@ -60,9 +60,10 @@
                 }
                 else
                 {
-                    <span>
-                        You don't have any model yet. You may download some directly from the app, or add files to your model folder.
-                    </span>
+                    <p>
+                        You don't have any model yet.
+                        You may download some directly from the app, or add files to your model folder.
+                    </p>
                 }
             }
         </MudText>
@@ -87,46 +88,46 @@
 
 <style>
     #model-page-container {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        gap: 40px;
-        padding-block: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 40px;
+    padding-block: 20px;
     }
 
     #model-folder-container {
-        max-width: 400px;
-        border-radius: 4px;
-        border: 1px solid var(--Surface3);
-        flex-grow: 1;
-        padding: 4px;
+    max-width: 400px;
+    border-radius: 4px;
+    border: 1px solid var(--Surface3);
+    flex-grow: 1;
+    padding: 4px;
     }
 
     #model-list-container {
-        gap: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        overflow-y: auto;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
     }
 
 
     .bottom-space {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     }
 
     #hf-link {
-        cursor: pointer;
-        color: var(--Outline);
+    cursor: pointer;
+    color: var(--Outline);
     }
 
-        #hf-link:hover {
-            color: #FFD21E;
-        }
+    #hf-link:hover {
+    color: #FFD21E;
+    }
 
 </style>
 
@@ -145,4 +146,25 @@
     {
         ViewModel.OpenModelInExplorer(modelInfoViewModel);
     }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            ViewModel.ModelListViewModel.Models.CollectionChanged += OnModelCollectionChanged;
+            ViewModel.FileManager.PropertyChanged += OnFileManagerPropertyChanged;
+        }
     }
+
+    private void OnFileManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    private void OnModelCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        InvokeAsync(() => StateHasChanged());
+    }
+}
