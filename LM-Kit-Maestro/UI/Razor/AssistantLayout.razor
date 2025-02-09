@@ -5,9 +5,30 @@
 @inject LMKitService LmKitService
 @inject ISnackbar Snackbar
 
-<div id="page-container">
+
+<div id="main-container">
     <div id="top-bar">
-        <SectionOutlet SectionName="top-bar" />
+        <nav id="nav-bar">
+            <div class="nav-item px-3">
+                <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
+                    <MudText Typo="Typo.overline">
+                        Chat
+                    </MudText>
+
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink ActiveClass="nav-link-active" class="nav-link" href="models">
+                    <MudText Typo="Typo.overline">
+                        Models
+                    </MudText>
+                </NavLink>
+            </div>
+        </nav>
+
+        <div id="page-top-bar">
+            <SectionOutlet SectionName="top-bar" />
+        </div>
         <div class="bottom-divider"> </div>
     </div>
 
@@ -17,30 +38,46 @@
 </div>
 
 <style>
-
-
-    #top-bar {
-        background-color: var(--Surface);
-        min-height: 96px;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-    }
-
-    #body-container {
-        flex: 1;
-        overflow: hidden;
-    }
-
-    #page-container {
+    #main-container {
         display: flex;
         flex-direction: column;
         height: 100vh;
     }
 
-    .popup-background {
-        background-color: red;
-        padding: 20px;
+    #nav-bar {
+        display: flex;
+        flex-direction: row;
+        margin-block: 20px;
+    }
+
+    #top-bar {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--Surface);
+    }
+
+    .nav-link {
+        font-size: 1.2rem !important;
+        color: var(--Outline);
+        transition: color 0.2s;
+    }
+
+    .nav-link-active {
+        color: var(--Primary);
+    }
+
+    #page-top-bar {
+        min-height: 96px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        flex-grow: 1;
+        gap: 20px;
+    }
+
+    #body-container {
+        flex: 1;
+        overflow: hidden;
     }
 </style>
 
@@ -53,8 +90,7 @@
                    BackdropClick="true"
                    NoHeader="true"
                    Position="DialogPosition.TopLeft"
-                   CloseOnEscapeKey="true"
-                   BackgroundClass="popup-background" />
+                   CloseOnEscapeKey="true" />
 
 @code {
     public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
