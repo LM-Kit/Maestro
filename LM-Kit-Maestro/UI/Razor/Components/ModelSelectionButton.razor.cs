@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace LMKit.Maestro.UI.Razor.Components;
 
@@ -37,11 +38,9 @@ public partial class ModelSelectionButton
 
     private async Task OnButtonClicked()
     {
-        ModelSelectionPopupViewModel modelSelectionPopupViewModel = new ModelSelectionPopupViewModel(ModelListViewModel);
+        var options = new DialogOptions { CloseOnEscapeKey = true };
 
-        var popup = new ModelSelectionPopup(ModelListViewModel.PopupNavigation, modelSelectionPopupViewModel);
-
-        await ModelListViewModel.PopupNavigation.PushAsync(popup, true);
+        await DialogService.ShowAsync<ModelSelectionDialog>(null, options);
     }
 
     private void OnEjectButtonClicked()

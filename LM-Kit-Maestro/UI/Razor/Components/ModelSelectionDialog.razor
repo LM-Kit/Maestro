@@ -1,0 +1,34 @@
+﻿@inject ModelListViewModel ModelListViewModel
+
+<MudDialog>
+    <DialogContent>
+        <div id="model-selection-dialog-container">
+            <MudStack Spacing="2">
+                @foreach(var model in ModelListViewModel.Models)
+                {
+                    <div>
+                        <ModelListItem ViewModel="model" />
+                    </div>
+                }
+            </MudStack>
+        </div>
+    </DialogContent>
+</MudDialog>
+
+<style>
+    #model-selection-dialog-container
+    {
+        padding: 20px;
+        background-color: var(--Surface2);
+        max-height: 500px;
+    }
+</style>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => MudDialog.Cancel();
+}
