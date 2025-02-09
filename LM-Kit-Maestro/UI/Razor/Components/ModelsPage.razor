@@ -31,14 +31,12 @@
                     Tooltip="@Locales.ResetModelFolder"
                     OnClick="ViewModel.ResetModelsFolder" />
     </div>
-</SectionContent>
 
-<div id="model-page-container">
     <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
 
         @if (ViewModel.FileManager.FileCollectingInProgress)
         {
-            <MudProgressCircular Class="xs-icon outline" Size="Size.Small" Indeterminate="true" />
+            <MudProgressCircular Class="xs-loader outline" Size="Size.Small" Indeterminate="true" />
         }
 
         @if (ViewModel.FileManager.DownloadedCount > 0)
@@ -73,7 +71,9 @@
             }
         }
     </div>
+</SectionContent>
 
+<div id="model-page-container">
     <div id="model-list-container">
         @foreach (var model in ViewModel.ModelListViewModel.Models)
         {

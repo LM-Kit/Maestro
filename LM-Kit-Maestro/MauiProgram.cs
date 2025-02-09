@@ -51,7 +51,10 @@ namespace LMKit.Maestro
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddJsInteropExtensions();
-            builder.Services.AddMudServices();
+            builder.Services.AddMudServices(config =>
+            {
+                config.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomRight;
+            });
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
