@@ -6,7 +6,6 @@
 
 <SectionContent SectionName="top-bar">
     <div id="model-page-top-bar">
-        <MudStack Spacing="3" Justify="Justify.FlexStart">
             <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
                 @if (ViewModel.FileManager.FileCollectingInProgress)
                 {
@@ -15,7 +14,7 @@
 
                 @if (ViewModel.FileManager.DownloadedCount > 0)
                 {
-                    <MudText Typo="Typo.body2">
+                    <MudText Typo="Typo.overline">
                         <span>You have</span>
                         <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
                         <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
@@ -33,19 +32,19 @@
                     }
                     else
                     {
-                        <MudText Align="Align.Center" Typo="Typo.body2">
+                        <MudText Align="Align.Center" Typo="Typo.overline">
                             You model folder is empty.
                         </MudText>
                     }
                 }
             </div>
             <div class="d-flex flex-row gap-2 flex-grow-1 justify-center align-center align-content-center px-4">
-                <MudText Typo="Typo.body2">
+                <MudText Typo="Typo.overline">
                     Model folder:
                 </MudText>
 
                 <div id="model-folder-container">
-                    <MudText>
+                    <MudText Typo="Typo.body2">
                         @ViewModel.AppSettingsService.ModelStorageDirectory
                     </MudText>
                 </div>
@@ -65,7 +64,6 @@
                             Tooltip="@Locales.ResetModelFolder"
                             OnClick="ViewModel.ResetModelsFolder" />
             </div>
-        </MudStack>
     </div>
 </SectionContent>
 
@@ -118,8 +116,8 @@
     #model-page-top-bar {
         display: flex;
         flex-direction: column;
-        padding-block: 20px;
         flex-grow: 1;
+        gap: 8px;
     }
 
     #model-page-container {
@@ -143,7 +141,7 @@
         flex-direction: column;
         overflow-y: auto;
         padding-block: 20px;
-        gap: 10px;
+        gap: 12px;
         padding-inline: 10px;
     }
 
