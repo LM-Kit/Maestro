@@ -6,7 +6,7 @@
 
 <SectionContent SectionName="top-bar">
     <div id="model-page-top-bar">
-        <MudStack Justify="Justify.SpaceBetween">
+        <MudStack Spacing="3" Justify="Justify.FlexStart">
             <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
                 @if (ViewModel.FileManager.FileCollectingInProgress)
                 {
@@ -118,8 +118,8 @@
     #model-page-top-bar {
         display: flex;
         flex-direction: column;
-        background-color: green;
-        padding-inline: 20px;
+        padding-block: 20px;
+        flex-grow: 1;
     }
 
     #model-page-container {
