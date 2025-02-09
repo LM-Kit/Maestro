@@ -156,13 +156,13 @@ namespace Maestro.Tests
             var mainThread = new Mock<IMainThread>().Object;
             var navigationService = new Mock<INavigationService>().Object;
             var popupNavigation = new Mock<IPopupNavigation>().Object;
-            var launcher = new Mock<ILauncher>().Object;
             var popupService = new Mock<IPopupService>().Object;
-            return new ModelListViewModel(mainThread, llmFileManager, lmKitService, popupService, launcher, navigationService, popupNavigation);
+
+            return new ModelListViewModel(mainThread, llmFileManager, lmKitService, popupService, navigationService, popupNavigation);
         }
 
         private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService, ConversationListViewModel conversationListViewModel,
-            ModelListViewModel modelListViewModel, IMaestroDatabase database, ILLMFileManager llmFileManager, SettingsViewModel settingsViewModel)
+            ModelListViewModel modelListViewModel, IMaestroDatabase database,  ILLMFileManager llmFileManager, SettingsViewModel settingsViewModel)
         {
             var popupService = new Mock<IPopupService>().Object;
             var mainThread = new Mock<IMainThread>().Object;
@@ -171,7 +171,7 @@ namespace Maestro.Tests
             var navigationService = new Mock<INavigationService>().Object;
             var popupNavigation = new Mock<IPopupNavigation>().Object;
 
-            return new ChatPageViewModel(navigationService, popupService, popupNavigation, conversationListViewModel,
+            return new ChatPageViewModel(navigationService, popupService, popupNavigation, conversationListViewModel, 
                 modelListViewModel, logger, database, lmKitService, llmFileManager, settingsViewModel);
         }
     }

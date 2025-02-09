@@ -5,7 +5,6 @@ using LMKit.Maestro.Services;
 using LMKit.Model;
 using Mopups.Interfaces;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace LMKit.Maestro.ViewModels
 {
@@ -14,19 +13,20 @@ namespace LMKit.Maestro.ViewModels
         private readonly IMainThread _mainThread;
         private readonly ILLMFileManager _fileManager;
         private readonly IPopupService _popupService;
-        private readonly ILauncher _launcher;
+
         public IPopupNavigation PopupNavigation { get; }
         public INavigationService NavigationService { get; }
         public LMKitService LMKitService { get; }
 
         public ObservableCollection<ModelInfoViewModel> Models { get; }
 
-        [ObservableProperty] public ModelLoadingState _loadingState;
+        [ObservableProperty]
+        public ModelLoadingState _loadingState;
 
-        [ObservableProperty] private double? _loadingProgress;
+        [ObservableProperty]
+        private double? _loadingProgress;
 
         private ModelInfoViewModel? _selectedModel;
-
         public ModelInfoViewModel? SelectedModel
         {
             get => _selectedModel;
@@ -37,8 +37,7 @@ namespace LMKit.Maestro.ViewModels
                     _selectedModel = value;
                     OnPropertyChanged();
 
-                    if (_selectedModel != null &&
-                        _selectedModel.ModelInfo.ModelUri != LMKitService.LMKitConfig.LoadedModelUri)
+                    if (_selectedModel != null && _selectedModel.ModelInfo.ModelUri != LMKitService.LMKitConfig.LoadedModelUri)
                     {
                         LoadModel(_selectedModel.ModelInfo.ModelUri);
                     }
@@ -46,8 +45,7 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        public ModelListViewModel(IMainThread mainThread, ILLMFileManager fileManager, LMKitService lmKitService,
-            IPopupService popupService, ILauncher launcher,
+        public ModelListViewModel(IMainThread mainThread, ILLMFileManager fileManager, LMKitService lmKitService, IPopupService popupService,
             INavigationService navigationService, IPopupNavigation popupNavigation)
         {
             _mainThread = mainThread;
@@ -56,10 +54,9 @@ namespace LMKit.Maestro.ViewModels
             _popupService = popupService;
             NavigationService = navigationService;
             PopupNavigation = popupNavigation;
-            _launcher = launcher;
             _fileManager.SortedModelCollectionChanged += OnModelCollectionChanged;
             Models = new ObservableCollection<ModelInfoViewModel>();
-
+            
             LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
             LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
             LMKitService.ModelLoadingFailed += OnModelLoadingFailed;
@@ -71,8 +68,7 @@ namespace LMKit.Maestro.ViewModels
         {
             if (LMKitService.LMKitConfig.LoadedModelUri != null)
             {
-                SelectedModel =
-                    MaestroHelpers.TryGetExistingModelInfoViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri);
+                SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri);
             }
         }
 
@@ -111,49 +107,8 @@ namespace LMKit.Maestro.ViewModels
                     "OK");
             }
         }
-        public void OpenModelInExplorer(ModelInfoViewModel modelInfoViewModel)
-        {
-            string filePath = modelInfoViewModel.ModelInfo.LocalPath;
 
-            if (File.Exists(filePath))
-            {
-                Task.Run(() =>
-                {
-                    try
-                    {
-                        Process.Start("explorer.exe", $"/select,\"{filePath}\"");
-                    }
-                    catch { }
-                });
-            }
-        }
-
-
-        public void OpenModelHfLink(ModelInfoViewModel modelInfoViewModel)
-        {
-            //todo: open model Hugging Face page
-            _ = _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
-        }
-
-        [RelayCommand]
-        public void DeleteModel(ModelInfoViewModel modelCardViewModel)
-        {
-            try
-            {
-                _fileManager.DeleteModel(modelCardViewModel.ModelInfo);
-                modelCardViewModel.OnLocalModelRemoved();
-            }
-            catch (Exception ex)
-            {
-                _popupService.DisplayAlert("Failure to delete model file",
-                    $"{ex.Message}", "OK");
-            }
-        }
-
-        #region Private methods
-
-        private void OnModelCollectionChanged(object? sender,
-            System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void OnModelCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -190,8 +145,7 @@ namespace LMKit.Maestro.ViewModels
         private void AddNewModel(ModelCard modelCard)
         {
 #if BETA_DOWNLOAD_MODELS
-            ModelInfoViewModel? modelCardViewModel =
- MaestroHelpers.TryGetExistingModelInfoViewModel(AvailableModels, modelCard);
+            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(AvailableModels, modelCard);
 
             if (modelCardViewModel == null)
             {
@@ -213,8 +167,7 @@ namespace LMKit.Maestro.ViewModels
                 int insertIndex = 0;
 
                 //First sorting pass: Sort by short name in ascending order.
-                while (insertIndex < Models.Count &&
-                       string.Compare(Models[insertIndex].ShortName, modelCardViewModel.ShortName) < 0)
+                while (insertIndex < Models.Count && string.Compare(Models[insertIndex].ShortName, modelCardViewModel.ShortName) < 0)
                 {
                     insertIndex++;
                 }
@@ -277,8 +230,7 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnModelLoadingCompleted(object? sender, EventArgs e)
         {
-            SelectedModel =
-                MaestroHelpers.TryGetExistingModelInfoViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri!);
+            SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri!);
             LoadingProgress = 0;
             LoadingState = ModelLoadingState.FinishinUp;
         }
@@ -343,7 +295,5 @@ namespace LMKit.Maestro.ViewModels
                 }
             }
         }
-
-        #endregion
     }
 }
