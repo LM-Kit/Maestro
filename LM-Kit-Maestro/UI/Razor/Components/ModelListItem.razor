@@ -1,148 +1,36 @@
-﻿    <div class="model-card">
-        <MudGrid Spacing="1">
-            <MudItem xs="12">
-                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                        <MudText>
-                        @ViewModel.ModelInfo.ShortModelName
-                        </MudText>
+﻿@inject ModelListViewModel ModelListViewModel
 
-                        <div class="dot @(GetScoreClass(ViewModel.CompatibilityLevel))"></div>
-                    </MudStack>
+<ListItemWrapper>
+    <ChildContent>
+        <ModelListItem ViewModel="ViewModel" />
+    </ChildContent>
 
-                </MudStack>
-            </MudItem>
+    <ActionSheet>
+        <div class="d-flex flex-column item-actions">
+            @if (ViewModel.IsLocallyAvailable)
+            {
+                <MudButton Variant="Variant.Text"
+                           @onclick="() => ModelListViewModel.OpenModelInExplorer(ViewModel)">
+                    <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
+                </MudButton>
+            }
 
-            <MudItem xs="3" Class="d-flex align-items-center">
-                <MudStack AlignItems="AlignItems.Center" Row="true">
-                    <MudText Typo="Typo.overline" Class="outline">
-                    @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
-                    </MudText>
+            <MudButton Variant="Variant.Text" @onclick="() => ModelListViewModel.OpenModelHfLink(ViewModel)">
+                <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
+            </MudButton>
 
-                    <MudIcon Class="outline xs-icon"
-                             Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
-                             Color="Color.Dark"
-                             Size="Size.Small"/>
-                </MudStack>
-            </MudItem>
-
-            <MudItem xs="9">
-                <MudStack AlignItems="AlignItems.Center" Justify="Justify.SpaceAround" Row="true" Class="outline">
-                    <MudText Typo="Typo.overline">
-                    @ViewModel.ModelInfo.Architecture
-                    </MudText>
-
-                    <MudText Typo="Typo.overline">
-                    @ViewModel.ModelSize
-                    </MudText>
-
-                    <MudText Typo="Typo.overline">
-                    @ViewModel.MaxContextLengthKB
-                    </MudText>
-
-                    <MudText Typo="Typo.overline">
-                    @ViewModel.Precision
-                    </MudText>
-
-                    <MudText Typo="Typo.overline">
-                    @ViewModel.MaxContextLengthKB
-                    </MudText>
-
-                    <MudStack Spacing="1" AlignItems="AlignItems.Center" Row="true">
-                    @if (ViewModel.IsChatModel)
-                    {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
-                                             Size="Size.Small" />
-                    }
-
-                    @if (ViewModel.HasVisionCapability)
-                    {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
-                                             Size="Size.Small" />
-                    }
-
-                    @if (ViewModel.IsCodeModel)
-                    {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
-                                             Size="Size.Small" />
-                    }
-
-                    @if (ViewModel.IsMathModel)
-                    {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
-                                             Size="Size.Small" />
-                    }
-                    </MudStack>
-                </MudStack>
-            </MudItem>
-        </MudGrid>
-    </div>
-
-<style>
-
-    .model-card {
-        max-width: 800px;
-        flex-direction: row;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px;
-        margin-inline: auto;
-        border: 1px solid var(--OutlineVariant);
-        border-radius: 4px;
-        background-color: var(--Surface15);
-        flex-grow: 1;
-        cursor: pointer;
-    }
-
-    .item-actions {
-        padding: 4px;
-        background-color: var(--Surface3);
-    }
-
-    .model-card:hover {
-        background-color: var(--Surface2);
-        border: 1px solid var(--Outline);
-    }
-
-    .outline {
-        color: var(--Outline) !important;
-    }
-
-    .primary {
-        color: var(--Primary);
-    }
-
-    .secondary {
-        color: var(--Secondary);
-    }
-
-    .tertiary {
-        color: var(--Tertiary);
-    }
-
-    .score-1 {
-        background-color: #FA8168;
-        color: #FA8168;
-    }
-
-    .score-2 {
-        background-color: #FFD21E;
-        color: #FFD21E;
-    }
-
-    .score-3 {
-        background-color: #1C8736;
-        color: #1C8736;
-    }
-
-</style>
+            @if (ViewModel.IsLocallyAvailable)
+            {
+                <MudButton Variant="Variant.Text" @onclick="() => ModelListViewModel.DeleteModel(ViewModel)">
+                    <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
+                </MudButton>
+            }
+        </div>
+    </ActionSheet>
+</ListItemWrapper>
 
 @code {
     [Parameter] public required ModelInfoViewModel ViewModel { get; set; }
 
-    private static string GetScoreClass(float score)
-    {
-        return score < 0.4 ? "score-1" : score < 0.7 ? "score-2" : "score-3";
-    }
+
 }

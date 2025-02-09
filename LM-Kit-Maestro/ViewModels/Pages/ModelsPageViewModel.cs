@@ -80,21 +80,6 @@ public partial class ModelsPageViewModel : PageViewModelBase
 #endif
 
     [RelayCommand]
-    public void DeleteModel(ModelInfoViewModel modelCardViewModel)
-    {
-        try
-        {
-            FileManager.DeleteModel(modelCardViewModel.ModelInfo);
-            modelCardViewModel.OnLocalModelRemoved();
-        }
-        catch (Exception ex)
-        {
-            _popupService.DisplayAlert("Failure to delete model file",
-                $"{ex.Message}", "OK");
-        }
-    }
-
-    [RelayCommand]
     public void PickModelsFolder()
     {
 #if MACCATALYST  || WINDOWS
@@ -132,31 +117,6 @@ public partial class ModelsPageViewModel : PageViewModelBase
     {
         _ = _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
     }
-
-    public void OpenModelInExplorer(ModelInfoViewModel modelInfoViewModel)
-    {
-        string filePath = modelInfoViewModel.ModelInfo.LocalPath;
-
-        if (File.Exists(filePath))
-        {
-            Task.Run(() =>
-            {
-                try
-                {
-                    Process.Start("explorer.exe", $"/select,\"{filePath}\"");
-                }
-                catch { }
-            });
-        }
-    }
-
-
-    public void OpenModelHfLink(ModelInfoViewModel modelInfoViewModel)
-    {
-         //todo: open model Hugging Face page
-        _ = _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
-    }
-
 
 #if BETA_DOWNLOAD_MODELS
     private void OnModelDownloadingProgressed(object? sender, EventArgs e)
