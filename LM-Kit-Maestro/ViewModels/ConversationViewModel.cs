@@ -71,7 +71,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
             {
                 _lastUsedModel = value;
                 UsedDifferentModel = LastUsedModel != _lmKitService.LMKitConfig.LoadedModelUri;
-                ConversationLog.LastUsedModel = _lastUsedModel?.LocalPath;
+                ConversationLog.LastUsedModel = _lastUsedModel;
 
                 OnPropertyChanged();
             }
@@ -135,7 +135,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
                 if (ConversationLog.LastUsedModel != null)
                 {
-                    LastUsedModel = new Uri(ConversationLog.LastUsedModel);
+                    LastUsedModel = ConversationLog.LastUsedModel;
                 }
             }
 
