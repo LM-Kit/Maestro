@@ -87,18 +87,18 @@
 
                         @if (model.IsLocallyAvailable)
                         {
-                                    <MudButton Variant="Variant.Text" @onclick="() => ViewModel.OpenModelInExplorer(model)">
+                            <MudButton Variant="Variant.Text" @onclick="() => ViewModel.ModelListViewModel.OpenModelInExplorer(model)">
                                         <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
                                     </MudButton>
                         }
 
-                            <MudButton Variant="Variant.Text" @onclick="() => ViewModel.OpenModelHfLink(model)">
+                        <MudButton Variant="Variant.Text" @onclick="() => ViewModel.ModelListViewModel.OpenModelHfLink(model)">
                                 <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
                             </MudButton>
 
                         @if (model.IsLocallyAvailable)
                         {
-                                    <MudButton Variant="Variant.Text" @onclick="() => ViewModel.DeleteModel(model)">
+                            <MudButton Variant="Variant.Text" @onclick="() => ViewModel.ModelListViewModel.DeleteModel(model)">
                                         <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
                                     </MudButton>
                         }
@@ -166,17 +166,17 @@
 
     private void OnDeleteClicked(ModelInfoViewModel modelInfoViewModel)
     {
-        ViewModel.DeleteModel(modelInfoViewModel);
+        ViewModel.ModelListViewModel.DeleteModel(modelInfoViewModel);
     }
 
     private void OnModelOpenInExplorerClicked(ModelInfoViewModel modelInfoViewModel)
     {
-        ViewModel.OpenModelInExplorer(modelInfoViewModel);
+        ViewModel.ModelListViewModel.OpenModelInExplorer(modelInfoViewModel);
     }
 
     private void OnModelOpenHfLinkClicked(ModelInfoViewModel modelInfoViewModel)
     {
-        ViewModel.OpenModelInExplorer(modelInfoViewModel);
+        ViewModel.ModelListViewModel.OpenModelInExplorer(modelInfoViewModel);
     }
 
     protected override void OnAfterRender(bool firstRender)
