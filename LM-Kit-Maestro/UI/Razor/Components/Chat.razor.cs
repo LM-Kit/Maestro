@@ -11,7 +11,7 @@ namespace LMKit.Maestro.UI.Razor.Components;
 
 public partial class Chat
 {
-    private const int UIUpdateDelayMilliseconds = 50;
+    private const int UIUpdateDelayMilliseconds = 200;
 
     private ConversationViewModel? _previousConversationViewModel;
     private MessageViewModel? _latestAssistantResponse;
@@ -61,7 +61,7 @@ public partial class Chat
                 _autoScrolling |= true;
             }
 
-            RefreshUIAsync(forceRerender: true);
+            RefreshUIAsync(forceRerender: false);
         }
     }
 
