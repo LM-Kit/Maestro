@@ -36,38 +36,38 @@
 
         @if (ViewModel.FileManager.FileCollectingInProgress)
         {
-            <MudProgressCircular Class="xs-loader outline" Size="Size.Small" Indeterminate="true"/>
+                <MudProgressCircular Class="xs-loader outline" Size="Size.Small" Indeterminate="true"/>
         }
 
         @if (ViewModel.FileManager.DownloadedCount > 0)
         {
-            <MudText Typo="Typo.body2">
-                <span>You have</span>
-                <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
-                <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
-                <span> taking up </span>
-                <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
-            </MudText>
+                <MudText Typo="Typo.body2">
+                    <span>You have</span>
+                    <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
+                    <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
+                    <span> taking up </span>
+                    <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
+                </MudText>
         }
         else
         {
             @if (ViewModel.FileManager.FileCollectingInProgress)
             {
-                <span>
-                    Scanning for models...
-                </span>
+                        <span>
+                            Scanning for models...
+                        </span>
             }
             else
             {
-                <MudStack Spacing="1">
-                    <MudText Align="Align.Center" Typo="Typo.body2">
-                        You don't have any model yet.
-                    </MudText>
+                        <MudStack Spacing="1">
+                            <MudText Align="Align.Center" Typo="Typo.body2">
+                                You don't have any model yet.
+                            </MudText>
 
-                    <MudText Align="Align.Center">
-                        You may download some directly from the app, or add files to your model folder.
-                    </MudText>
-                </MudStack>
+                            <MudText Align="Align.Center">
+                                You may download some directly from the app, or add files to your model folder.
+                            </MudText>
+                        </MudStack>
             }
         }
     </div>
@@ -77,34 +77,34 @@
     <div id="model-list-container">
         @foreach (var model in ViewModel.ModelListViewModel.Models)
         {
-            <ListItemWrapper>
-                <ChildContent>
-                    <ModelListItem ViewModel="model"/>
-                </ChildContent>
-                
-                <ActionSheet>
-                    <div class="d-flex flex-column item-actions">
+                <ListItemWrapper>
+                    <ChildContent>
+                        <ModelListItem ViewModel="model"/>
+                    </ChildContent>
+
+                    <ActionSheet>
+                        <div class="d-flex flex-column item-actions">
 
                         @if (model.IsLocallyAvailable)
                         {
-                            <MudButton Variant="Variant.Text" @onclick="() => ViewModel.OpenModelInExplorer(model)">
-                                <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
-                            </MudButton>
+                                    <MudButton Variant="Variant.Text" @onclick="() => ViewModel.OpenModelInExplorer(model)">
+                                        <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
+                                    </MudButton>
                         }
 
-                        <MudButton Variant="Variant.Text" @onclick="() => ViewModel.OpenModelHfLink(model)">
-                            <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
-                        </MudButton>
+                            <MudButton Variant="Variant.Text" @onclick="() => ViewModel.OpenModelHfLink(model)">
+                                <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
+                            </MudButton>
 
                         @if (model.IsLocallyAvailable)
                         {
-                            <MudButton Variant="Variant.Text" @onclick="() => ViewModel.DeleteModel(model)">
-                                <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
-                            </MudButton>
+                                    <MudButton Variant="Variant.Text" @onclick="() => ViewModel.DeleteModel(model)">
+                                        <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
+                                    </MudButton>
                         }
-                    </div>
-                </ActionSheet>
-            </ListItemWrapper>
+                        </div>
+                    </ActionSheet>
+                </ListItemWrapper>
         }
     </div>
 

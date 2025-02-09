@@ -37,6 +37,11 @@
     flex-direction: column;
     height: 100vh;
     }
+
+    .popup-background{
+        background-color: red;
+        padding: 20px;
+    }
 </style>
 
 <MudThemeProvider IsDarkMode="true" DefaultScrollbar="true" Theme="@CurrentTheme" />
@@ -47,9 +52,9 @@
                    CloseButton="true"
                    BackdropClick="true"
                    NoHeader="true"
-                   Position="DialogPosition.Center"
+                   Position="DialogPosition.TopLeft"
                    CloseOnEscapeKey="true"
-                   BackgroundClass="my-custom-class" />
+                   BackgroundClass="popup-background" />
 
 @code {
     public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
