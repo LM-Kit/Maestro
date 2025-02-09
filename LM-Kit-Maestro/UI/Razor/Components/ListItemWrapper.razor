@@ -3,8 +3,9 @@
         @ChildContent
     </div>
 
-    <MudOverlay/>
-    <div>
+    <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true" />
+
+    <div style="position: absolute; left: @($"{_popoverX}px"); top:@($"{_popoverY}px")">
         <MudPopover AnchorOrigin="Origin.TopLeft" Open="@_isShowingActionSheet" Fixed="true">
             @ActionSheet
         </MudPopover>

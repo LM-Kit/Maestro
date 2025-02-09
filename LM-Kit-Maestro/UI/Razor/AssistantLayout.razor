@@ -41,8 +41,15 @@
 
 <MudThemeProvider IsDarkMode="true" DefaultScrollbar="true" Theme="@CurrentTheme" />
 <MudPopoverProvider />
-<MudDialogProvider />
 <MudSnackbarProvider />
+
+<MudDialogProvider FullWidth="true"
+                   CloseButton="true"
+                   BackdropClick="true"
+                   NoHeader="true"
+                   Position="DialogPosition.Center"
+                   CloseOnEscapeKey="true"
+                   BackgroundClass="my-custom-class" />
 
 @code {
     public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;

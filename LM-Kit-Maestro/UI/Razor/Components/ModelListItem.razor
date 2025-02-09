@@ -1,11 +1,10 @@
-﻿<div>
-    <div class="model-card" @onclick="OnItemClicked">
+﻿    <div class="model-card">
         <MudGrid Spacing="1">
             <MudItem xs="12">
                 <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                     <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
                         <MudText>
-                            @ViewModel.ModelInfo.ShortModelName
+                        @ViewModel.ModelInfo.ShortModelName
                         </MudText>
 
                         <div class="dot @(GetScoreClass(ViewModel.CompatibilityLevel))"></div>
@@ -17,7 +16,7 @@
             <MudItem xs="3" Class="d-flex align-items-center">
                 <MudStack AlignItems="AlignItems.Center" Row="true">
                     <MudText Typo="Typo.overline" Class="outline">
-                        @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
+                    @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
                     </MudText>
 
                     <MudIcon Class="outline xs-icon"
@@ -30,57 +29,54 @@
             <MudItem xs="9">
                 <MudStack AlignItems="AlignItems.Center" Justify="Justify.SpaceAround" Row="true" Class="outline">
                     <MudText Typo="Typo.overline">
-                        @ViewModel.ModelInfo.Architecture
+                    @ViewModel.ModelInfo.Architecture
                     </MudText>
 
                     <MudText Typo="Typo.overline">
-                        @ViewModel.ModelSize
+                    @ViewModel.ModelSize
                     </MudText>
 
                     <MudText Typo="Typo.overline">
-                        @ViewModel.MaxContextLengthKB
+                    @ViewModel.MaxContextLengthKB
                     </MudText>
 
                     <MudText Typo="Typo.overline">
-                        @ViewModel.Precision
+                    @ViewModel.Precision
                     </MudText>
 
                     <MudText Typo="Typo.overline">
-                        @ViewModel.MaxContextLengthKB
+                    @ViewModel.MaxContextLengthKB
                     </MudText>
 
                     <MudStack Spacing="1" AlignItems="AlignItems.Center" Row="true">
-                        @if (ViewModel.IsChatModel)
-                        {
-                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
-                                     Size="Size.Small"/>
-                        }
+                    @if (ViewModel.IsChatModel)
+                    {
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
+                                             Size="Size.Small" />
+                    }
 
-                        @if (ViewModel.HasVisionCapability)
-                        {
-                            <MudIcon Color="Color.Secondary" Class="small-icon"
-                                     Icon="@Icons.Material.Outlined.Visibility"
-                                     Size="Size.Small"/>
-                        }
+                    @if (ViewModel.HasVisionCapability)
+                    {
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
+                                             Size="Size.Small" />
+                    }
 
-                        @if (ViewModel.IsCodeModel)
-                        {
-                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
-                                     Size="Size.Small"/>
-                        }
+                    @if (ViewModel.IsCodeModel)
+                    {
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
+                                             Size="Size.Small" />
+                    }
 
-                        @if (ViewModel.IsMathModel)
-                        {
-                            <MudIcon Color="Color.Secondary" Class="small-icon"
-                                     Icon="@Icons.Material.Outlined.Calculate"
-                                     Size="Size.Small"/>
-                        }
+                    @if (ViewModel.IsMathModel)
+                    {
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
+                                             Size="Size.Small" />
+                    }
                     </MudStack>
                 </MudStack>
             </MudItem>
         </MudGrid>
     </div>
-</div>
 
 <style>
 
@@ -145,45 +141,8 @@
 @code {
     [Parameter] public required ModelInfoViewModel ViewModel { get; set; }
 
-    [Parameter] public EventCallback<ModelInfoViewModel> OpenInExplorerClicked { get; set; }
-    [Parameter] public EventCallback<ModelInfoViewModel> OpenHfLinkClicked { get; set; }
-    [Parameter] public EventCallback<ModelInfoViewModel> DeleteClicked { get; set; }
-
-    private bool _isShowingActionSheet;
-    private int _popoverX;
-    private int _popoverY;
-
-    private void OnItemClicked(MouseEventArgs e)
-    {
-        _popoverX = (int)e.ClientX;
-        _popoverY = (int)e.ClientY;
-        _isShowingActionSheet = !_isShowingActionSheet;
-        InvokeAsync(() => StateHasChanged());
-    }
-
-    private async Task OnOpenInExplorerClicked()
-    {
-        await OpenInExplorerClicked.InvokeAsync();
-    }
-
-    private async Task OnOpenHfLinkClicked()
-    {
-        await OpenHfLinkClicked.InvokeAsync();
-    }
-
-    private async Task OnDeleteClicked()
-    {
-        await DeleteClicked.InvokeAsync();
-    }
-
-    private async Task OnDownloadClicked()
-    {
-        // await OnDownloadClicked.InvokeAsync();
-    }
-
     private static string GetScoreClass(float score)
     {
         return score < 0.4 ? "score-1" : score < 0.7 ? "score-2" : "score-3";
     }
-
 }
