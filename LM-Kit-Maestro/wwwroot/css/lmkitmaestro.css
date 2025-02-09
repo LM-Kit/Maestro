@@ -21,6 +21,13 @@
         font-size: 12px;
     }
 
+.small-icon {
+    font-size: 1rem !important;
+}
+
+.xs-icon {
+    font-size: 0.85rem !important;
+}
 /*@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
     .small {
         font-size: 16px;

@@ -38,7 +38,7 @@
 
         @if (ViewModel.FileManager.FileCollectingInProgress)
         {
-            <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+            <MudProgressCircular Class="xs-icon outline" Size="Size.Small" Indeterminate="true" />
         }
 
         @if (ViewModel.FileManager.DownloadedCount > 0)
@@ -61,17 +61,15 @@
             }
             else
             {
-                <p>
-                    <MudText Typo="Typo.body2">
+                <MudStack Spacing="1">
+                    <MudText Align="Align.Center" Typo="Typo.body2">
                         You don't have any model yet.
                     </MudText>
-                </p>
 
-                <p>
-                    <MudText Typo="Typo.body2">
+                    <MudText Align="Align.Center">
                         You may download some directly from the app, or add files to your model folder.
                     </MudText>
-                </p>
+                </MudStack>
             }
         }
     </div>
