@@ -44,7 +44,7 @@
         </div> *@
 
         @* <IconButton Style="IconButton.IconButtonStyle.Square" Icon="fa-arrow-right-arrow-left" OnClick="OnCopyResultButtonClicked" /> *@
-        <div class="vertical-separator"></div>
+        <div class="vertical-divider"></div>
 
         <div class="language-select">
             <MudSelect Label="Output language" @bind-Value="TranslationViewModel.OutputLanguage">
@@ -63,7 +63,7 @@
             <InputBox @bind-InputText="TranslationViewModel.InputText" />
         </div>
 
-        <div class="vertical-separator"></div>
+        <div class="vertical-divider"></div>
 
         <div id="translation-output">
             <div class="loading-content @(!TranslationViewModel.AwaitingResponse ? "hide" :  "show")">

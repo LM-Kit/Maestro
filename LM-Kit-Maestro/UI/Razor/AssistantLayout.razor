@@ -11,7 +11,7 @@
         <nav id="nav-bar">
             <div class="nav-item px-3">
                 <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
-                    <MudText Typo="Typo.overline">
+                    <MudText Typo="Typo.body1">
                         Chat
                     </MudText>
 
@@ -19,7 +19,7 @@
             </div>
             <div class="nav-item px-3">
                 <NavLink ActiveClass="nav-link-active" class="nav-link" href="models">
-                    <MudText Typo="Typo.overline">
+                    <MudText Typo="Typo.body1">
                         Models
                     </MudText>
                 </NavLink>
@@ -29,7 +29,7 @@
         <div id="page-top-bar">
             <SectionOutlet SectionName="top-bar" />
         </div>
-        <div class="bottom-divider"> </div>
+        @* <div class="horizontal-divider"> </div> *@
     </div>
 
     <div id="body-container">
@@ -44,30 +44,31 @@
         height: 100vh;
     }
 
+    #top-bar {
+        background-color: red;
+        padding-block: 40px;
+        display: flex;
+        flex-direction: column;
+    }
+
     #nav-bar {
         display: flex;
         flex-direction: row;
         margin-block: 20px;
     }
 
-    #top-bar {
-        display: flex;
-        flex-direction: column;
-        background-color: var(--Surface);
-    }
 
     .nav-link {
-        font-size: 1.2rem !important;
+        font-size: 2rem !important;
         color: var(--Outline);
         transition: color 0.2s;
     }
 
     .nav-link-active {
-        color: var(--Primary);
+        color: var(--OnSurface);
     }
 
     #page-top-bar {
-        min-height: 96px;
         display: flex;
         flex-direction: column;
         position: relative;
