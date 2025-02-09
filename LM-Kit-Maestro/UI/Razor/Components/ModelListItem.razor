@@ -53,51 +53,32 @@
                         @if (ViewModel.IsChatModel)
                         {
                             <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
-                                     Size="Size.Small" />
+                                     Size="Size.Small"/>
                         }
 
                         @if (ViewModel.HasVisionCapability)
                         {
-                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
-                                     Size="Size.Small" />
+                            <MudIcon Color="Color.Secondary" Class="small-icon"
+                                     Icon="@Icons.Material.Outlined.Visibility"
+                                     Size="Size.Small"/>
                         }
 
                         @if (ViewModel.IsCodeModel)
                         {
                             <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
-                                     Size="Size.Small" />
+                                     Size="Size.Small"/>
                         }
 
                         @if (ViewModel.IsMathModel)
                         {
-                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
-                                     Size="Size.Small" />
+                            <MudIcon Color="Color.Secondary" Class="small-icon"
+                                     Icon="@Icons.Material.Outlined.Calculate"
+                                     Size="Size.Small"/>
                         }
                     </MudStack>
                 </MudStack>
             </MudItem>
         </MudGrid>
-    </div>
-
-    <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true"/>
-    <div style="position: absolute; left: @($"{_popoverX}px"); top:@($"{_popoverY}px")">
-        <MudPopover AnchorOrigin="Origin.TopLeft" Open="@_isShowingActionSheet" Fixed="true">
-            <div class="d-flex flex-column item-actions">
-                <MudButton Variant="Variant.Text" @onclick="OnOpenInExplorerClicked">
-                    <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
-                </MudButton>
-                <MudButton Variant="Variant.Text" @onclick="OnOpenHfLinkClicked">
-                    <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
-                </MudButton>
-
-                @if (ViewModel.ModelInfo.IsLocallyAvailable)
-                {
-                    <MudButton Variant="Variant.Text" @onclick="OnDeleteClicked">
-                        <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
-                    </MudButton>
-                }
-            </div>
-        </MudPopover>
     </div>
 </div>
 

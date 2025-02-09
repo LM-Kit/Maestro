@@ -1,0 +1,31 @@
+﻿<div>
+    <div @onclick="OnItemClicked">
+        @ChildContent
+    </div>
+
+    <MudOverlay/>
+    <div>
+        <MudPopover AnchorOrigin="Origin.TopLeft" Open="@_isShowingActionSheet" Fixed="true">
+            @ActionSheet
+        </MudPopover>
+    </div>
+</div>
+
+@code {
+    private bool _isShowingActionSheet;
+    private int _popoverX;
+    private int _popoverY;
+
+    [Parameter] public required RenderFragment ChildContent { get; set; }
+    
+    [Parameter] public required RenderFragment ActionSheet { get; set; }
+    
+
+    private void OnItemClicked(MouseEventArgs e)
+    {
+        _popoverX = (int)e.ClientX;
+        _popoverY = (int)e.ClientY;
+        _isShowingActionSheet = !_isShowingActionSheet;
+        InvokeAsync(() => StateHasChanged());
+    }
+}
