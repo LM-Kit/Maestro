@@ -11,31 +11,10 @@
                         <div class="dot @(GetScoreClass(ViewModel.CompatibilityLevel))"></div>
                     </MudStack>
 
-                    <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Row="true">
-                        @if (ViewModel.IsChatModel)
-                        {
-                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message" Size="Size.Small" />
-                        }
-
-                        @if (ViewModel.HasVisionCapability)
-                        {
-                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
-                        }
-
-                        @if (ViewModel.IsCodeModel)
-                        {
-                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
-                        }
-
-                        @if (ViewModel.IsMathModel)
-                        {
-                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
-                        }
-                    </MudStack>
                 </MudStack>
             </MudItem>
 
-            <MudItem xs="6" Class="d-flex align-items-center">
+            <MudItem xs="3" Class="d-flex align-items-center">
                 <MudStack AlignItems="AlignItems.Center" Row="true">
                     <MudText Typo="Typo.overline" Class="outline">
                         @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
@@ -44,12 +23,12 @@
                     <MudIcon Class="outline xs-icon"
                              Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
                              Color="Color.Dark"
-                             Size="Size.Small" />
+                             Size="Size.Small"/>
                 </MudStack>
             </MudItem>
 
-            <MudItem xs="6">
-                <MudStack Justify="Justify.SpaceAround" Row="true" Class="outline">
+            <MudItem xs="9">
+                <MudStack AlignItems="AlignItems.Center" Justify="Justify.SpaceAround" Row="true" Class="outline">
                     <MudText Typo="Typo.overline">
                         @ViewModel.ModelInfo.Architecture
                     </MudText>
@@ -69,13 +48,38 @@
                     <MudText Typo="Typo.overline">
                         @ViewModel.MaxContextLengthKB
                     </MudText>
+
+                    <MudStack Spacing="1" AlignItems="AlignItems.Center" Row="true">
+                        @if (ViewModel.IsChatModel)
+                        {
+                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
+                                     Size="Size.Small" />
+                        }
+
+                        @if (ViewModel.HasVisionCapability)
+                        {
+                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
+                                     Size="Size.Small" />
+                        }
+
+                        @if (ViewModel.IsCodeModel)
+                        {
+                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
+                                     Size="Size.Small" />
+                        }
+
+                        @if (ViewModel.IsMathModel)
+                        {
+                            <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
+                                     Size="Size.Small" />
+                        }
+                    </MudStack>
                 </MudStack>
             </MudItem>
-
         </MudGrid>
     </div>
 
-    <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true" />
+    <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true"/>
     <div style="position: absolute; left: @($"{_popoverX}px"); top:@($"{_popoverY}px")">
         <MudPopover AnchorOrigin="Origin.TopLeft" Open="@_isShowingActionSheet" Fixed="true">
             <div class="d-flex flex-column item-actions">
@@ -200,4 +204,5 @@
     {
         return score < 0.4 ? "score-1" : score < 0.7 ? "score-2" : "score-3";
     }
+
 }
