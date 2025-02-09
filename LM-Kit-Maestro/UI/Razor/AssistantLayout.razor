@@ -9,7 +9,7 @@
 <div id="main-container">
     <div id="top-bar">
         <nav id="nav-bar">
-            <div class="nav-item px-3">
+            <div class="nav-item">
                 <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
                     <MudText Typo="Typo.body1">
                         Chat
@@ -47,15 +47,14 @@
 
     #top-bar {
         background-color: var(--Surface);
-        padding-block: 20px;
         display: flex;
         flex-direction: column;
     }
 
     #nav-bar {
+        padding-inline: 20px;
         display: flex;
         flex-direction: row;
-        margin-block: 20px;
     }
 
 
