@@ -44,7 +44,7 @@
                 </MudText>
 
                 <div id="model-folder-container">
-                    <MudText Typo="Typo.body2">
+                    <MudText Typo="Typo.body2" Class="text-truncate">
                         @ViewModel.AppSettingsService.ModelStorageDirectory
                     </MudText>
                 </div>
@@ -103,6 +103,7 @@
         border-radius: 4px;
         border: 1px solid var(--Surface3);
         flex-grow: 1;
+        flex-shrink: 1;
         padding: 4px;
     }
 
