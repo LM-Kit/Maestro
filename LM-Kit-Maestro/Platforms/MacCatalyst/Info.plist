@@ -13,7 +13,7 @@
     <!-- <string>public.app-category.YOUR-CATEGORY-HERE</string> -->
 	<key>UIDeviceFamily</key>
 	<array>
-		<integer>2</integer>
+		<integer>6</integer>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
@@ -34,12 +34,10 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
-
-	<!--Mandatory to use CommunityToolkit Launcher service-->
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-	    <string>lyft</string>
-	    <string>fb</string>
+		<string>lyft</string>
+		<string>fb</string>
 	</array>
 </dict>
 </plist>
