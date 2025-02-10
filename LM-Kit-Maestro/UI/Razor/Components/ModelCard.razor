@@ -140,7 +140,7 @@
 
 @code {
     [Parameter] public required ModelInfoViewModel ViewModel { get; set; }
-
+    
     private static string GetScoreClass(float score)
     {
         return score < 0.4 ? "score-1" : score < 0.7 ? "score-2" : "score-3";

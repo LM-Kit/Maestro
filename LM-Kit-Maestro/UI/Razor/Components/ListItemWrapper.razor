@@ -1,9 +1,9 @@
 ﻿<div @ref="_parentDiv" id="list-item-container">
-    <div @onclick="OnItemClicked">
+    <div @onclick="OnItemClicked" @oncontextmenu="HandleRightClick" @oncontextmenu:preventDefault="true">
         @ChildContent
     </div>
 
-    <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true" />
+    <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true"/>
 
     <div style="position: absolute; left: @($"{_popoverX}px"); top:@($"{_popoverY}px")">
         <MudPopover AnchorOrigin="Origin.TopLeft" Open="@_isShowingActionSheet" Fixed="true">
@@ -25,14 +25,20 @@
 
     private async Task OnItemClicked(MouseEventArgs e)
     {
-        var rect = await _parentDiv.GetClientRectAsync();
+    }
 
-        // Debug.WriteLine($"{rect.X} : {rect.Y}  -   {e.ClientX} : {e.ClientY} y----> " + _popoverY);
-        _popoverX = (int)(e.ClientX - rect.Left);
-        _popoverY = (int)(e.ClientY - rect.Top);
-        _isShowingActionSheet = !_isShowingActionSheet;
+    private async Task HandleRightClick(MouseEventArgs e)
+    {
+        if (e.Button == 2)
+        {
+            var rect = await _parentDiv.GetClientRectAsync();
 
-        StateHasChanged();
+            _popoverX = (int)(e.ClientX - rect.Left);
+            _popoverY = (int)(e.ClientY - rect.Top);
+            _isShowingActionSheet = !_isShowingActionSheet;
+            
+            await InvokeAsync(StateHasChanged);
+        }
     }
 }
 

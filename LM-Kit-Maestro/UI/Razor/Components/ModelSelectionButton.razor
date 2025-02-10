@@ -8,10 +8,10 @@
         <div class="d-flex justify-center">
             @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
             {
-                <MudIconButton Icon="fas fa-eject"
-                               Size="Size.Small"
-                               Class="eject-button"
-                               OnClick="OnEjectButtonClicked"/>
+                    <MudIconButton Icon="fas fa-eject"
+                                   Size="Size.Small"
+                                   Class="eject-button"
+                                   OnClick="OnEjectButtonClicked"/>
             }
         </div>
 
@@ -25,19 +25,19 @@
         </div>
 
         @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.NotLoaded ||
-             ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
+            ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
         {
-            <div class="d-flex justify-center">
-                <MudIcon Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark"/>
-            </div>
+                <div class="d-flex justify-center">
+                    <MudIcon Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark"/>
+                </div>
         }
     </div>
 
     @if (ModelListViewModel.LoadingState is ModelListViewModel.ModelLoadingState.Loading or
-                 ModelListViewModel.ModelLoadingState.Downloading && ModelListViewModel.LoadingProgress != null)
+                ModelListViewModel.ModelLoadingState.Downloading && ModelListViewModel.LoadingProgress != null)
     {
-        <div id="progress-bar">
-            <MudProgressLinear Value="@(ModelListViewModel.LoadingProgress.Value * 100)"/>
-        </div>
+            <div id="progress-bar">
+                <MudProgressLinear Value="@(ModelListViewModel.LoadingProgress.Value * 100)"/>
+            </div>
     }
 </div>
