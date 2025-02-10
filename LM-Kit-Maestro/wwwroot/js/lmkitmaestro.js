@@ -16,12 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-window.getElementRect = (element) => {
-    if (!element) return null;
-    return element.getBoundingClientRect();
-};
-
-
 /* 
     Chat 
 */

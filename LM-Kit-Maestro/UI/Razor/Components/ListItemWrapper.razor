@@ -1,4 +1,4 @@
-﻿<div>
+﻿<div @ref="_parentDiv" id="list-item-container">
     <div @onclick="OnItemClicked">
         @ChildContent
     </div>
@@ -13,20 +13,31 @@
 </div>
 
 @code {
+    private ElementReference _parentDiv;
     private bool _isShowingActionSheet;
     private int _popoverX;
     private int _popoverY;
 
     [Parameter] public required RenderFragment ChildContent { get; set; }
-    
-    [Parameter] public required RenderFragment ActionSheet { get; set; }
-    
 
-    private void OnItemClicked(MouseEventArgs e)
+    [Parameter] public required RenderFragment ActionSheet { get; set; }
+
+
+    private async Task OnItemClicked(MouseEventArgs e)
     {
-        _popoverX = (int)e.ClientX;
-        _popoverY = (int)e.ClientY;
+        var rect = await _parentDiv.GetClientRectAsync();
+
+        // Debug.WriteLine($"{rect.X} : {rect.Y}  -   {e.ClientX} : {e.ClientY} y----> " + _popoverY);
+        _popoverX = (int)(e.ClientX - rect.Left);
+        _popoverY = (int)(e.ClientY - rect.Top);
         _isShowingActionSheet = !_isShowingActionSheet;
-        InvokeAsync(() => StateHasChanged());
+
+        StateHasChanged();
     }
 }
+
+<style>
+    #list-item-container {
+        position: relative;
+    }
+</style>

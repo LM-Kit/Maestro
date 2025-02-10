@@ -38,7 +38,7 @@ public partial class ModelSelectionButton
 
     private async Task OnButtonClicked()
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true, FullScreen = true, FullWidth = true };
+        var options = new DialogOptions { CloseOnEscapeKey = true, Position=DialogPosition.Center };
 
         await DialogService.ShowAsync<ModelSelectionDialog>(null, options);
     }
