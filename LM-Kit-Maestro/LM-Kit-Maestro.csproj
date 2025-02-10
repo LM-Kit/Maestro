@@ -66,10 +66,6 @@
 		<MauiFont Include="Resources\Fonts\Font Awesome 6 Free-Solid-900.otf" Alias="Material" />
 	</ItemGroup>-->
 
-	<ItemGroup>
-		<None Include="wwwroot\css\bootstrap.min.css" />
-	</ItemGroup>
-
 	<ItemGroup Condition="'$(OS)' == 'Windows_NT'">
 		<PackageReference Include="LM-Kit.NET.Backend.Cuda12.Windows" Version="2025.2.1" />
 	</ItemGroup>
