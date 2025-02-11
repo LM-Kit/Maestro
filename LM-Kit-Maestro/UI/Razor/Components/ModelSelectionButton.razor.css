@@ -1,13 +1,13 @@
 #toto {
     width: 100%;
-    max-width: 568px;
-    background-color: red;
-    padding: 20px;
+    max-width: 300px;
 }
 
-.model-list{
-    overflow-y: scroll;
+.model-list-container {
     max-height: 400px;
+    padding: 20px;
+    background-color: red;
+    overflow: scroll;
 }
 
 #model-selection-button-container {
