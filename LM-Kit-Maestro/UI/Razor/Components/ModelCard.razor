@@ -1,4 +1,4 @@
-﻿<div class="model-card">
+﻿<div class="model-card @(Dense ? "model-card-dense" : "")">
     <MudGrid Spacing="1">
         <MudItem xs="12">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
@@ -51,26 +51,26 @@
                 <MudStack Spacing="1" AlignItems="AlignItems.Center" Row="true">
                     @if (ViewModel.IsChatModel)
                     {
-                        <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
-                                 Size="Size.Small"/>
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
+                                             Size="Size.Small"/>
                     }
 
                     @if (ViewModel.HasVisionCapability)
                     {
-                        <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
-                                 Size="Size.Small"/>
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
+                                             Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsCodeModel)
                     {
-                        <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
-                                 Size="Size.Small"/>
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
+                                             Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsMathModel)
                     {
-                        <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
-                                 Size="Size.Small"/>
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
+                                             Size="Size.Small"/>
                     }
                 </MudStack>
             </MudStack>
@@ -96,13 +96,18 @@
         cursor: pointer;
     }
 
-    .item-actions {
-        padding: 4px;
-        background-color: var(--Surface3);
+    .model-card-dense {
+        padding: 8px;
+        border: none;
+        background-color: var(--Surface2);
     }
 
-    .model-card:hover {
-        background-color: var(--Surface2);
+    .model-card-dense:hover{
+        background-color: var(--Surface15);
+    }
+
+.model-card:not(.model-card-dense):hover {
+        background-color: var(--Surface15);
         border: 1px solid var(--Outline);
     }
 
@@ -122,6 +127,10 @@
         color: var(--Tertiary);
     }
 
+       .item-actions {
+        padding: 4px;
+        background-color: var(--Surface3);
+    }
     .score-1 {
         background-color: #FA8168;
         color: #FA8168;
@@ -141,6 +150,21 @@
 
 @code {
     [Parameter] public required ModelInfoViewModel ViewModel { get; set; }
+
+    private bool _dense;
+    [Parameter]
+    public bool Dense
+    {
+        get => _dense;
+        set
+        {
+            if (value != _dense)
+            {
+                _dense = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
 
     private static string GetScoreClass(float score)
     {

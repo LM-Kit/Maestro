@@ -12,7 +12,7 @@
                     <MudIconButton Icon="fas fa-eject"
                                    Size="Size.Small"
                                    Class="eject-button"
-                                   OnClick="OnEjectButtonClicked"/>
+                                   OnClick="OnEjectButtonClicked" />
                 }
             </div>
 
@@ -26,45 +26,47 @@
             </div>
 
             @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.NotLoaded ||
-                 ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
+            ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
             {
                 <div class="d-flex justify-center">
-                    <MudIcon Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark"/>
+                    <MudIcon Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark" />
                 </div>
             }
         </div>
 
         @if (ModelListViewModel.LoadingState is ModelListViewModel.ModelLoadingState.Loading or
-                     ModelListViewModel.ModelLoadingState.Downloading && ModelListViewModel.LoadingProgress != null)
+        ModelListViewModel.ModelLoadingState.Downloading && ModelListViewModel.LoadingProgress != null)
         {
             <div id="progress-bar">
-                <MudProgressLinear Value="@(ModelListViewModel.LoadingProgress.Value * 100)"/>
+                <MudProgressLinear Value="@(ModelListViewModel.LoadingProgress.Value * 100)" />
             </div>
         }
     </div>
 
-    <MudOverlay DarkBackground="true"  @bind-Visible="_isShowingModelList" AutoClose="true"/>
+    <MudOverlay DarkBackground="true" @bind-Visible="_isShowingModelList" AutoClose="true" />
     <MudPopover TransformOrigin="Origin.TopCenter"
                 AnchorOrigin="Origin.TopCenter"
                 RelativeWidth="DropdownWidth.Adaptive"
-                Class="models-popover-container"
                 Style="--mud-palette-surface: transparent"
                 Open="@_isShowingModelList">
         <div class="models-popover-container">
-            <div class="models-popover-header">
+            <MudStack Spacing="0">
+                <div class="models-popover-header">
                     <MudText Class="outline flex-grow-1" Typo="Typo.caption">
                         Available models
                     </MudText>
 
-                <div class="d-flex justify-end close-button">
-                    <IconButton Style="IconButton.ButtonStyle.Icon"
-                                Icon="fas fa-close"
-                                Size="IconButton.ButtonSize.Small"
-                                OnClick="() => _isShowingModelList = false"/>
+                    <div class="d-flex justify-end close-button">
+                        <IconButton Style="IconButton.ButtonStyle.Icon"
+                                    Icon="fas fa-close"
+                                    Size="IconButton.ButtonSize.Small"
+                                    OnClick="() => _isShowingModelList = false" />
+                    </div>
                 </div>
-            </div>
-            <div class="model-list-container hover-scrollable">
-                <ModelList OnClick="OnModelClicked"/>
+                <MudDivider />
+            </MudStack>
+            <div class="models-popover-body hover-scrollable no-gutter">
+                <ModelList Dense="true" OnClick="OnModelClicked" />
             </div>
         </div>
     </MudPopover>

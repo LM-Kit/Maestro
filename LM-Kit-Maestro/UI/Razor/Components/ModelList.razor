@@ -1,12 +1,12 @@
 ﻿@inject ModelListViewModel ModelListViewModel
 
-<MudStack Class="model-list-root" Spacing="2">
+<MudStack Class="model-list-root" Spacing="@(Dense ? 0 : 2)">
     @foreach (var model in ModelListViewModel.Models)
     {
         <ListItemWrapper>
             <ChildContent>
                 <div @onclick="() => OnClick.InvokeAsync(model)">
-                    <ModelCard ViewModel="model"/>
+                    <ModelCard Dense="true" ViewModel="model"/>
                 </div>
             </ChildContent>
 
@@ -15,33 +15,46 @@
                     @if (model.IsLocallyAvailable)
                     {
                         <MudButton Class="action-button" Variant="Variant.Text"
-                                   @onclick="() => ModelListViewModel.OpenModelInExplorer(model)">
+                        @onclick="() => ModelListViewModel.OpenModelInExplorer(model)">
                             <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
                         </MudButton>
                     }
 
                     <MudButton Class="action-button" Variant="Variant.Text"
-                               @onclick="() => ModelListViewModel.OpenModelHfLink(model)">
+                    @onclick="() => ModelListViewModel.OpenModelHfLink(model)">
                         <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
                     </MudButton>
 
                     @if (model.IsLocallyAvailable)
                     {
                         <MudButton Class="action-button" Variant="Variant.Text"
-                                   @onclick="() => ModelListViewModel.DeleteModel(model)">
+                        @onclick="() => ModelListViewModel.DeleteModel(model)">
                             <MudText Color="Color.Error" Typo="Typo.button">Delete from disk</MudText>
                         </MudButton>
                     }
                 </div>
             </ActionSheet>
         </ListItemWrapper>
-        }
+    }
 </MudStack>
 
 @code {
     [Parameter] public EventCallback<ModelInfoViewModel> OnClick { get; set; }
 
-    [Parameter] public bool Dense { get; set; } // todo: implement dense UI for model selection dialog.
+    private bool _dense;
+    [Parameter]
+    public bool Dense
+    {
+        get => _dense;
+        set
+        {
+            if (value != _dense)
+            {
+                _dense = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
 }
 
 

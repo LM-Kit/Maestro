@@ -275,6 +275,10 @@ body.windows .primary-button {
     overflow-y: auto;
 }
 
+.no-gutter{
+    scrollbar-gutter: initial;
+}
+
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }
