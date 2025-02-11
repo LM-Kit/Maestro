@@ -8,12 +8,13 @@
 }
 
 .model-list-container {
-    background-color: var(--Surface);
-    padding: 8px;
-    max-height: 400px;
-    flex-shrink: 1;
-    flex-grow: 1;
+    background-color: var(--Surface2);
+    max-height: 496px;
     display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-block: 12px;
+    padding-inline: 8px;
 }
 
 #model-selection-button-container {
@@ -114,14 +115,14 @@
 .models-popover-container {
     display: flex;
     flex-direction: column;
-    border: 2px solid var(--Surface3);
-    border-radius: 4px;
+    border: 2px solid var(--Surface2);
+    border-radius: 8px;
 }
 
 .models-popover-header {
     padding-inline: 4px;
     padding-block: 4px;
-    background-color: var(--Surface3);
+    background-color: var(--Surface2);
     display: flex;
     justify-content: space-between;
     text-align: center;

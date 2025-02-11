@@ -1,6 +1,6 @@
 ﻿@inject ModelListViewModel ModelListViewModel
 
-<MudStack Spacing="2">
+<MudStack Class="model-list-root" Spacing="2">
     @foreach (var model in ModelListViewModel.Models)
     {
         <ListItemWrapper>
@@ -56,5 +56,8 @@
 
     .action-button:hover {
         background-color: var(--Surface15) !important;
+    }
+
+    .model-list-root{
     }
 </style>
