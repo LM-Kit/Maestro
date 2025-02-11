@@ -8,14 +8,12 @@
 }
 
 .model-list-container {
-    background-color: var(--Surface2);
-    padding: 20px;
-    border-radius: 4px;
+    background-color: var(--Surface);
+    padding: 8px;
     max-height: 400px;
     flex-shrink: 1;
     flex-grow: 1;
     display: flex;
-    border: solid 1px transparent;
 }
 
 #model-selection-button-container {
@@ -116,18 +114,25 @@
 .models-popover-container {
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--OutlineVariant);
+    border: 2px solid var(--Surface3);
+    border-radius: 4px;
 }
 
 .models-popover-header {
     padding-inline: 4px;
-    padding-block: 8px;
-    background-color: var(--Surface);
+    padding-block: 4px;
+    background-color: var(--Surface3);
     display: flex;
     justify-content: space-between;
+    text-align: center;
     align-items: center;
 }
 
-.models-popover-body{
-    margin-inline: 1px;
+
+.close-button {
+    color: var(--Outline) !important;
 }
+
+    .close-button:hover {
+        color: var(--OnSurface) !important;
+    }

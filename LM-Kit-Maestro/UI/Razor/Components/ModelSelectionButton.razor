@@ -52,15 +52,14 @@
                 Open="@_isShowingModelList">
         <div class="models-popover-container">
             <div class="models-popover-header">
-                <div class="d-flex justify-center w-100">
-                    <MudText Align="Align.Center" Typo="Typo.caption">
+                    <MudText Class="outline flex-grow-1" Typo="Typo.caption">
                         Available models
                     </MudText>
-                </div>
 
-                <div class="d-flex justify-end">
-                    <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                <div class="d-flex justify-end close-button">
+                    <IconButton Style="IconButton.ButtonStyle.Icon"
                                 Icon="fas fa-close"
+                                Size="IconButton.ButtonSize.Small"
                                 OnClick="() => _isShowingModelList = false"/>
                 </div>
             </div>
