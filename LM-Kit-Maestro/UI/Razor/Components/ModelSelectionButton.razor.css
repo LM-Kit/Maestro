@@ -10,7 +10,7 @@
 .model-list-container {
     background-color: var(--Surface2);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 4px;
     max-height: 400px;
     flex-shrink: 1;
     flex-grow: 1;
@@ -109,4 +109,16 @@
 
 ::deep .mud-icon-size-small {
     font-size: 0.66rem !important;
+}
+
+
+
+.models-popover-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.models-popover-header{
+    background-color: var(--Surface3);
 }

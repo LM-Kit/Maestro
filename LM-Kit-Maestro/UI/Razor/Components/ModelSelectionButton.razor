@@ -44,10 +44,21 @@
     </div>
 
     <MudOverlay @bind-Visible="_isShowingModelList" AutoClose="true"/>
-    <MudPopover TransformOrigin="Origin.TopCenter" AnchorOrigin="Origin.TopCenter" RelativeWidth="DropdownWidth.Adaptive" Class="models-popover-container"
+    <MudPopover TransformOrigin="Origin.TopCenter"
+                AnchorOrigin="Origin.TopCenter"
+                RelativeWidth="DropdownWidth.Adaptive"
+                Class="models-popover-container"
+                Style="--mud-palette-surface: transparent"
                 Open="@_isShowingModelList">
-        <div class="model-list-container hover-scrollable">
-            <ModelList OnClick="OnModelClicked"/>
+        <div class="models-popover-container">
+            <div>
+                <MudText Align="Align.Center">
+                    Available models
+                </MudText>
+            </div>
+            <div class="model-list-container hover-scrollable">
+                <ModelList OnClick="OnModelClicked"/>
+            </div>
         </div>
     </MudPopover>
 </div>
