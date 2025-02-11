@@ -120,5 +120,7 @@
 }
 
 .models-popover-header{
+    padding: 12px;
     background-color: var(--Surface3);
+    display: flex;
 }

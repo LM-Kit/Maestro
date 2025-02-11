@@ -51,10 +51,19 @@
                 Style="--mud-palette-surface: transparent"
                 Open="@_isShowingModelList">
         <div class="models-popover-container">
-            <div>
-                <MudText Align="Align.Center">
-                    Available models
-                </MudText>
+            <div class="models-popover-header">
+                <div class="d-flex justify-center">
+
+                    <MudText Align="Align.Center">
+                        Available models
+                    </MudText>
+                </div>
+
+                <div class="d-flex justify-end">
+                    <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                                Icon="fas fa-close"
+                                OnClick="() => _isShowingModelList = false"/>
+                </div>
             </div>
             <div class="model-list-container hover-scrollable">
                 <ModelList OnClick="OnModelClicked"/>
