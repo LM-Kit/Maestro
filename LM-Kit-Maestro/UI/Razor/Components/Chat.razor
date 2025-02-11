@@ -23,7 +23,7 @@
                     @if (ViewModel.ChatsSidebarIsToggled)
                     {
                         <div>
-                            <MudText Class="text-truncate"  Typo="Typo.body1">
+                            <MudText Class="text-truncate"  Typo="Typo.subtitle2">
                                 Chats
                             </MudText>
                         </div>
@@ -55,7 +55,7 @@
                                     Icon="fas fa-arrow-rotate-left"
                                     OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
 
-                        <MudText Class="text-truncate" Typo="Typo.body1">
+                        <MudText Class="text-truncate" Typo="Typo.subtitle2">
                             Settings
                         </MudText>
                     }
@@ -162,7 +162,7 @@
         <div id="bottom-space">
             @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
             {
-                <MudText Align="Align.Center" Typo="Typo.caption">
+                <MudText Align="Align.Center" Typo="Typo.overline">
                     Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                     @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
                     (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,

@@ -120,7 +120,8 @@
 }
 
 .models-popover-header{
-    padding: 12px;
-    background-color: var(--Surface3);
+    padding: 40px;
+    background-color: var(--Surface);
     display: flex;
+    justify-content: space-between;
 }

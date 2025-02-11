@@ -18,5 +18,10 @@
 
 
 ::deep .mud-icon-size-small {
-    font-size: 0.66rem !important;
+    font-size: 0.7rem !important;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
 }

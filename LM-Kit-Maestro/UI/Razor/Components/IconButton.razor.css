@@ -3,7 +3,10 @@
     justify-content: center;
     align-items: center;
     display: flex;
-    padding: 8px;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
 }
 
 .icon-button {
@@ -33,10 +36,10 @@
     }
 
 
-.icon-button-small {
-    font-size: 0.6em;
+.icon-button-small {    
+    font-size: 0.6rem;
 }
 
 .icon-button-medium {
-    font-size: 0.8em;
+    font-size: 0.75rem;
 }
