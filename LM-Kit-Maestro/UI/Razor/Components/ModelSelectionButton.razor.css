@@ -1,12 +1,14 @@
 #toto {
     width: 100%;
-    max-width: 300px;
+    max-width: 568px;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-inline: 16px;
 }
 
 .model-list-container {
-    max-height: 400px;
-    padding: 20px;
-    background-color: red;
+    max-height: 200px;
     overflow: scroll;
 }
 
