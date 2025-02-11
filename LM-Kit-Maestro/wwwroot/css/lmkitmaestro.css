@@ -10,7 +10,7 @@
 }
 
 .small-icon {
-    font-size: 1rem !important;
+    font-size: 0.6rem !important;
 }
 
 .xs-icon {
@@ -275,10 +275,6 @@ body.windows .primary-button {
     overflow-y: auto;
 }
 
-.no-gutter{
-    scrollbar-gutter: initial;
-}
-
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }
@@ -289,5 +285,16 @@ body.windows .primary-button {
 }
 
     .hover-scrollable:hover {
+        overflow-y: scroll;
+    }
+
+
+.hover-scrollable-no-gutter {
+    scrollbar-gutter: stable both-edges;
+    overflow-y: hidden;
+}
+
+
+    .hover-scrollable-no-gutter:hover {
         overflow-y: scroll;
     }
