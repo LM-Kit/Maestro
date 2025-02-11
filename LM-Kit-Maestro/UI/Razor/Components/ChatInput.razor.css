@@ -41,13 +41,13 @@ body.windows #input-border {
     outline: none;
     resize: none;
     height: auto;
-    font-family: system-ui, sans-serif;
-    color: white;
+    font-size: 1rem;
+    font-family: 'Roboto','Helvetica','Arial','sans-serif';
+    color: var(--OnSurface);
     background-color: transparent;
     scrollbar-gutter: stable;
-/*    white-space: pre-wrap;
-    word-wrap: break-word;*/
-    /*background-color: transparent;*/
+    padding-right: 2rem;
+    padding-left: 1rem;
 }
 
 .input-border-large #input-text {
@@ -59,13 +59,6 @@ body.windows #input-border {
 .input-border-small #input-text {
     /*margin-block: auto;*/
 }
-
-body.windows #input-text {
-    font-size: 1rem;
-    padding-right: 2rem;
-    padding-left: 1rem;
-}
-
 
 .input-text:focus-within {
     border-color: var(--Primary);

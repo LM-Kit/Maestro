@@ -9,7 +9,7 @@
 
 #model-selection-button-container {
     width: 100%;
-    height: 48px;
+    height: 2.5rem;
     border-radius: 4px;
     transition: background-color 0.3s;
     display: flex;
