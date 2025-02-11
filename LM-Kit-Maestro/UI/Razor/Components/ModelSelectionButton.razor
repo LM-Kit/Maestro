@@ -1,7 +1,7 @@
 ﻿@inject LMKitService LMKitService
 @inject IDialogService DialogService
 
-<div id="toto">
+<div id="model-selection-button-root">
     <div id="model-selection-button-container"
          class="@(GetButtonContainerClasses(ModelListViewModel))"
          @onclick="() => OnButtonClicked()">
@@ -18,7 +18,7 @@
 
             <div id="button-text">
                 <div class="text-wrapper">
-                    <MudText Align="Align.Center" Typo="Typo.subtitle2">
+                    <MudText Align="Align.Center" Typo="Typo.overline">
                         @Text
                     </MudText>
                 </div>
@@ -46,7 +46,7 @@
     <MudOverlay @bind-Visible="_isShowingModelList" AutoClose="true"/>
     <MudPopover TransformOrigin="Origin.TopCenter" AnchorOrigin="Origin.TopCenter" RelativeWidth="DropdownWidth.Adaptive" Class="models-popover-container"
                 Open="@_isShowingModelList">
-        <div class="model-list-container">
+        <div class="model-list-container hover-scrollable">
             <ModelList OnClick="OnModelClicked"/>
         </div>
     </MudPopover>

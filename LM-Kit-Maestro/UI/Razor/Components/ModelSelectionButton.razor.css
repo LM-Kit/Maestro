@@ -1,4 +1,4 @@
-#toto {
+#model-selection-button-root {
     width: 100%;
     max-width: 568px;
     display: flex;
@@ -8,8 +8,14 @@
 }
 
 .model-list-container {
-    max-height: 200px;
-    overflow: scroll;
+    background-color: var(--Surface2);
+    padding: 20px;
+    border-radius: 12px;
+    max-height: 400px;
+    flex-shrink: 1;
+    flex-grow: 1;
+    display: flex;
+    border: solid 1px transparent;
 }
 
 #model-selection-button-container {
