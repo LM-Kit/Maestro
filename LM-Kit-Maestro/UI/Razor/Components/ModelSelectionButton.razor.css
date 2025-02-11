@@ -116,12 +116,18 @@
 .models-popover-container {
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    border: 1px solid var(--OutlineVariant);
 }
 
-.models-popover-header{
-    padding: 40px;
+.models-popover-header {
+    padding-inline: 4px;
+    padding-block: 8px;
     background-color: var(--Surface);
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.models-popover-body{
+    margin-inline: 1px;
 }
