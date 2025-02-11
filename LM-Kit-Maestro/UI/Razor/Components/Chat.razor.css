@@ -42,16 +42,8 @@
     margin-left: auto;
     margin-right: auto;
     scrollbar-gutter: both-edges stable;
-}
-
-body.windows .chat-element {
     max-width: 800px;
 }
-
-body.mac .chat-element {
-    max-width: 1000px;
-}
-
 
 #user-input {
     padding-inline: 10px;
@@ -98,11 +90,6 @@ body.mac .chat-element {
 body.windows .chat-element {
     max-width: 800px;
 }
-
-body.mac .chat-element {
-    max-width: 1000px;
-}
-
 
 #empty-chat {
     align-self: center;

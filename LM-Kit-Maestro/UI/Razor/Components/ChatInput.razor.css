@@ -11,7 +11,7 @@ body.windows #input-border {
     position: relative;
     margin: 0;
     width: 100%;
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     transition: border-color 0.1s;
     background-color: var(--Surface15);
 }
@@ -22,7 +22,7 @@ body.windows #input-border {
      
 .input-border-small {
     padding-block: 8px;
-    border-radius: 32px;
+    border-radius: 16px;
 }
 
 .input-border-large {
@@ -61,24 +61,19 @@ body.windows #input-border {
 }
 
 body.windows #input-text {
-    font-size: 16px;
-    padding-right: 32px;
-    padding-left: 16px;
-/*    padding-left: 16px;
-    padding-right: 40px;
-*/}
-
-body.mac #input-text {
-    font-size: 20px;
-    padding-right: 40px;
-    padding-left: 20px;
+    font-size: 1rem;
+    padding-right: 2rem;
+    padding-left: 1rem;
 }
+
 
 .input-text:focus-within {
     border-color: var(--Primary);
 }
 
 .send-button {
+    width: 2rem;
+    height: 2rem;
     position: absolute;
     right: 0;
     margin-right: 8px;
@@ -95,16 +90,6 @@ body.mac #input-text {
 .input-border-small .send-button {
     top: 50%;
     transform: translateY(-50%);
-}
-
-body.mac .send-button {
-    width: 40px;
-    height: 40px;
-}
-
-body.windows .send-button {
-    width: 32px;
-    height: 32px;
 }
 
 .disabled-button {
