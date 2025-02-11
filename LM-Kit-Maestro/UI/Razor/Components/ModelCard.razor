@@ -3,7 +3,7 @@
         <MudItem xs="12">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                 <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                    <MudText>
+                    <MudText Class="text-truncate">
                         @ViewModel.ModelInfo.ShortModelName
                     </MudText>
 
@@ -15,36 +15,36 @@
 
         <MudItem xs="3" Class="d-flex align-items-center">
             <MudStack AlignItems="AlignItems.Center" Row="true">
-                <MudText Typo="Typo.overline" Class="outline">
+                <MudText Typo="Typo.overline" Class="outline text-truncate">
                     @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
                 </MudText>
 
                 <MudIcon Class="outline xs-icon"
                          Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
                          Color="Color.Dark"
-                         Size="Size.Small" />
+                         Size="Size.Small"/>
             </MudStack>
         </MudItem>
 
         <MudItem xs="9">
             <MudStack AlignItems="AlignItems.Center" Justify="Justify.SpaceAround" Row="true" Class="outline">
-                <MudText Typo="Typo.overline">
+                <MudText Typo="Typo.overline" Class="text-truncate">
                     @ViewModel.ModelInfo.Architecture
                 </MudText>
 
-                <MudText Typo="Typo.overline">
+                <MudText Typo="Typo.overline" Class="text-truncate">
                     @ViewModel.ModelSize
                 </MudText>
 
-                <MudText Typo="Typo.overline">
+                <MudText Typo="Typo.overline" Class="text-truncate">
                     @ViewModel.MaxContextLengthKB
                 </MudText>
 
-                <MudText Typo="Typo.overline">
+                <MudText Typo="Typo.overline" Class="text-truncate">
                     @ViewModel.Precision
                 </MudText>
 
-                <MudText Typo="Typo.overline">
+                <MudText Typo="Typo.overline" Class="text-truncate">
                     @ViewModel.MaxContextLengthKB
                 </MudText>
 
@@ -52,25 +52,25 @@
                     @if (ViewModel.IsChatModel)
                     {
                         <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
-                                 Size="Size.Small" />
+                                 Size="Size.Small"/>
                     }
 
                     @if (ViewModel.HasVisionCapability)
                     {
                         <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
-                                 Size="Size.Small" />
+                                 Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsCodeModel)
                     {
                         <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
-                                 Size="Size.Small" />
+                                 Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsMathModel)
                     {
                         <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
-                                 Size="Size.Small" />
+                                 Size="Size.Small"/>
                     }
                 </MudStack>
             </MudStack>
@@ -92,6 +92,7 @@
         border-radius: 4px;
         background-color: var(--Surface15);
         flex-grow: 1;
+        flex-shrink: 1;
         cursor: pointer;
     }
 
@@ -140,9 +141,10 @@
 
 @code {
     [Parameter] public required ModelInfoViewModel ViewModel { get; set; }
-    
+
     private static string GetScoreClass(float score)
     {
         return score < 0.4 ? "score-1" : score < 0.7 ? "score-2" : "score-3";
     }
+
 }
