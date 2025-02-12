@@ -46,33 +46,27 @@
     display: flex;
     flex-direction: column;
     justify-content: end;
-    padding-block: 8px;
+    padding: 0.5rem;
     grid-column: 2;
 }
 
 .send-button {
-    width: auto;
-    height: auto;
-    padding-inline: 1rem;
-    padding-block: 0.25rem;
-    border: none;
+    height: 1.75rem;
+    width: 1.75rem;
     transition: background-color 0.1s;
     cursor: pointer;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    border-radius: 0.25rem;
     font-size: 1rem;
+    color: var(--Surface2);
+    border-radius: 0.5rem;
 }
 
 .disabled-button {
-    color: var(--OutlineVariant);
     background-color: var(--OutlineVariant);
     cursor: not-allowed;
 }
 
 .enabled-button {
-    color: var(--Outline);
+    background-color: var(--Outline);
     /*background-color: var(--Primary);*/
 }
 
@@ -81,5 +75,7 @@
         } */
 
 .input-textarea-wrapper {
-    /*background-color: pink;*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
