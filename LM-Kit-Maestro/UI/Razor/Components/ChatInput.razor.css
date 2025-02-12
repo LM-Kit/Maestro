@@ -15,7 +15,7 @@
 
     #input-border:focus-within {
         background-color: var(--Surface2);
-        border-color: transparent;
+        border-color: var(--OutlineVariant);
     }
 
 
@@ -40,10 +40,6 @@
     #input-text::-webkit-scrollbar-thumb {
         background-color: var(--Outline) !important;
     }
-
-.input-text:focus-within {
-    border-color: var(--Primary);
-}
 
 .send-button-container {
     display: flex;
