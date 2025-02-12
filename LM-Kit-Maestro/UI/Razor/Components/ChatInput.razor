@@ -14,18 +14,18 @@
     <div class="send-button-container">
 
         <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
-                class="send-button round-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
+                class="send-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
 
                 @if (!ViewModel.AwaitingResponse)
             {
-                <span>
-                    <i class="material-symbols-outlined">send</i>
+                <span style="background-color: red ! important;">
+                    <i class="fas fa-paper-plane"></i>
                 </span>
             }
             else
             {
                 <span>
-                    <i class="material-symbols-outlined">stop</i>
+                    <i class="fas fa-stop"></i>
                 </span>
             }
         </button>

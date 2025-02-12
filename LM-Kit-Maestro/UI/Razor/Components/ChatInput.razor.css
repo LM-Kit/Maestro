@@ -51,22 +51,29 @@
 }
 
 .send-button {
-    width: 2rem;
-    height: 2rem;
+    width: auto;
+    height: auto;
+    padding-inline: 1rem;
+    padding-block: 0.25rem;
     border: none;
-    cursor: pointer;
-    color: var(--Surface15);
     transition: background-color 0.1s;
-    background-color: transparent;
+    cursor: pointer;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    border-radius: 0.25rem;
+    font-size: 1rem;
 }
 
 .disabled-button {
+    color: var(--OutlineVariant);
     background-color: var(--OutlineVariant);
     cursor: not-allowed;
 }
 
 .enabled-button {
-    background-color: var(--Primary);
+    color: var(--Outline);
+    /*background-color: var(--Primary);*/
 }
 
 /*     .send-button:hover:not(:disabled) {

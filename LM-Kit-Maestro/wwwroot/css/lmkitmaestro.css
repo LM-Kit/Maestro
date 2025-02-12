@@ -155,36 +155,6 @@
     }
 }
 
-
-.round-button {
-    display: flex;
-    cursor: pointer;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    color: black;
-    width: 2rem;
-    height: 2rem;
-}
-
-.primary-button {
-    padding: 0.5rem;
-    vertical-align: middle;
-    border-width: 0;
-    color: var(--OnBackground);
-    background-color: var(--Background);
-    height: 2rem;
-    font-size: 1rem;
-}
-.primary-button:active {
-    background-color: var(--PrimaryAccent);
-}
-
-
-.primary-button:hover {
-    background-color: var(--Primary);
-}
-
 .dot {
     height: 10px;
     width: 10px;
