@@ -12,7 +12,7 @@
 
 .assistant-message-container:hover {
     transition: background-color 0.2s;
-    background-color: var(--Surface15);
+    background-color: var(--Surface2);
 }
 
 .user-message-container {
