@@ -11,6 +11,7 @@
     }
 
 .assistant-message-container:hover {
+    transition: background-color 0.2s;
     background-color: var(--Surface15);
 }
 
@@ -29,7 +30,7 @@
 
 .user-message-content {
     display: block;
-    background-color: var(--Surface15);
+    background-color: var(--Surface2);
     border-radius: 32px;
 }
 

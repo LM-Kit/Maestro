@@ -7,15 +7,15 @@
     grid-template-columns: 1fr auto;
     position: relative;
     width: 100%;
-    border: 1px solid var(--Surface3);
-    transition: background-color 0.3s;
+    border: 1px solid var(--OutlineVariant);
+    transition: background-color 0.3s, border-color 0.3s;
     background-color: var(--Surface15);
     border-radius: 1rem;
 }
 
     #input-border:focus-within {
-        background-color: var(--Surface3);
-        /*border-color: var(--Outline);*/
+        background-color: var(--Surface2);
+        border-color: transparent;
     }
 
 
