@@ -5,8 +5,16 @@
     font-size: 1rem;
 }
 
+.icon-button-small {
+    font-size: 0.6rem;
+}
+
+.icon-button-medium {
+    font-size: 0.75rem;
+}
+
 .small-text {
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .small-icon {
@@ -202,6 +210,7 @@
     white-space: nowrap;
 }
 
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px !important;
@@ -218,7 +227,7 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    cursor: pointer !important;
+    /*cursor: pointer !important;*/
     background-color: var(--OutlineVariant)!important;
 }
 

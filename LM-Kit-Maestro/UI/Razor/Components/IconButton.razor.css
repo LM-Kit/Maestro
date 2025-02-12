@@ -34,12 +34,3 @@
     .secondary-action-button:hover {
         background-color: var(--Surface3);
     }
-
-
-.icon-button-small {    
-    font-size: 0.6rem;
-}
-
-.icon-button-medium {
-    font-size: 0.75rem;
-}

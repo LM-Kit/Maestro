@@ -58,7 +58,7 @@ function scrollToEnd(smooth) {
 */
 function resizeUserInput() {
     const inputText = document.getElementById('input-text');
-    const inputBorder = document.getElementById('input-border');
+    const inputBorder = document.getElementById('input-textarea-wrapper');
 
     inputText.style.height = "auto";
     inputText.style.height = `${inputText.scrollHeight}px`;
@@ -66,11 +66,12 @@ function resizeUserInput() {
     var lineCount = countLines(inputText);
 
     if (lineCount > 1) {
-        inputBorder.classList.add('input-border-large');
-        inputBorder.classList.remove('input-border-small');
+        inputBorder.classList.add('input-textarea-multiline');
+        inputBorder.classList.remove('input-textarea-initial');
+
     } else {
-        inputBorder.classList.add('input-border-small');
-        inputBorder.classList.remove('input-border-large');
+        inputBorder.classList.remove('input-textarea-multiline');
+        inputBorder.classList.add('input-textarea-initial');
     }
 }
 
