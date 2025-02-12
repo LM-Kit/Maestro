@@ -7,14 +7,15 @@
     grid-template-columns: 1fr auto;
     position: relative;
     width: 100%;
-    border: 1px solid var(--OutlineVariant);
-    transition: border-color 0.2s;
-    background-color: var(--Surface2);
+    border: 1px solid var(--Surface3);
+    transition: background-color 0.3s;
+    background-color: var(--Surface15);
     border-radius: 1rem;
 }
 
     #input-border:focus-within {
-        border-color: var(--Outline);
+        background-color: var(--Surface3);
+        /*border-color: var(--Outline);*/
     }
 
 
@@ -55,20 +56,24 @@
 .send-button {
     height: 1.75rem;
     width: 1.75rem;
-    transition: background-color 0.1s;
+    transition: background-color 0.1s, border-color 0.1s;
     cursor: pointer;
     font-size: 0.75rem;
     color: var(--Surface2);
     border-radius: 0.5rem;
+    background-color: transparent;
 }
 
 .disabled-button {
-    background-color: var(--OutlineVariant);
+    background-color: transparent;
+    color: var(--OutlineVariant);
     cursor: not-allowed;
 }
 
 .enabled-button {
+    color: var(--Surface2);
     background-color: var(--Outline);
+    /*background-color: var(--Outline);*/
     /*background-color: var(--Primary);*/
 }
 
