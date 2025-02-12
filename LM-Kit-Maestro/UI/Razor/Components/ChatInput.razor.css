@@ -56,7 +56,7 @@
     cursor: pointer;
     font-size: 0.75rem;
     color: var(--Surface2);
-    border-radius: 0.5rem;
+    border-radius: 50%;
     background-color: transparent;
 }
 

@@ -61,14 +61,14 @@
 .scroll-to-end-button {
     color: var(--Outline);
     background-color: var(--Surface3);
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.75rem;
     display: flex;
     border: none;
+    border-radius: 50%;
     align-self: center;
 }
-
-    .scroll-to-end-button:hover {
-        color: var(--OnSurface);
-    }
 
 .welcome-message {
     color: var(--Outline);
