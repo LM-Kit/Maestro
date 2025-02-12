@@ -124,17 +124,14 @@
         if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
         {
             Snackbar.Clear();
-            Snackbar.Add("Error with your model folder");
-            // _popupService!.DisplayAlert("Error with your model folder",
-            //     $"Model files failed to be collected from the input folder:\n{fileCollectingCompletedEventArgs.Exception.Message!}\n\nYour model folder has been reset to the default one.",
-            //     "OK");
+            Snackbar.Add($"Error with your model folder:\n{fileCollectingCompletedEventArgs.Exception.Message!}\n\nResetting to the default one.");
 
         }
-        else
-        {
-            Snackbar.Clear();
-            Snackbar.Add("Model scan completed.");
-        }
+        // else
+        // {
+        //     Snackbar.Clear();
+        //     Snackbar.Add("Model scan completed.");
+        // }
     }
 
     private void OnModelLoadingFailed(object? sender, EventArgs e)
