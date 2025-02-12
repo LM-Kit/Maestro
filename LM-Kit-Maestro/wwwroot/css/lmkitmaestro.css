@@ -163,19 +163,18 @@
     align-items: center;
     border-radius: 50%;
     color: black;
-    background-color: white;
-    width: 32px;
-    height: 32px;
+    width: 2rem;
+    height: 2rem;
 }
 
 .primary-button {
-    padding: 8px;
+    padding: 0.5rem;
     vertical-align: middle;
     border-width: 0;
     color: var(--OnBackground);
     background-color: var(--Background);
-    height: 32px;
-    font-size: 16px;
+    height: 2rem;
+    font-size: 1rem;
 }
 .primary-button:active {
     background-color: var(--PrimaryAccent);

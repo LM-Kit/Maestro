@@ -1,5 +1,6 @@
 ﻿@inject IJSRuntime JS
 
+
 <div id="input-border" class="input-border-small">
     <div class="input-textarea-wrapper">
 
@@ -14,16 +15,17 @@
 
         <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
                 class="send-button round-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
-            @if (!ViewModel.AwaitingResponse)
+
+                @if (!ViewModel.AwaitingResponse)
             {
                 <span>
-                    <i class="fas fa-arrow-up"></i>
+                    <i class="material-symbols-outlined">send</i>
                 </span>
             }
             else
             {
                 <span>
-                    <i class="fas fa-stop"></i>
+                    <i class="material-symbols-outlined">stop</i>
                 </span>
             }
         </button>

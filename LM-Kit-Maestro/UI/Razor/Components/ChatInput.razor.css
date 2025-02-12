@@ -5,7 +5,7 @@
 #input-border {
     display: grid;
     grid-template-columns: 1fr auto;
-    grid-template-rows: 1fr auto;
+    gap: 0.5rem;
     position: relative;
     width: 100%;
     border: 1px solid var(--OutlineVariant);
@@ -57,6 +57,7 @@
     cursor: pointer;
     color: var(--Surface15);
     transition: background-color 0.1s;
+    background-color: transparent;
 }
 
 .disabled-button {
