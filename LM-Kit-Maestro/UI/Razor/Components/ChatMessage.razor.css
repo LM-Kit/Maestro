@@ -2,8 +2,8 @@
     display: flex;
     position: relative;
     flex-direction: column;
-    margin-block: 20px;
-    margin-inline: 10px;
+    margin-block: 1.25rem;
+    margin-inline: 0.5rem;
 }
 
     #message-container:hover > div {
@@ -21,17 +21,17 @@
 }
 
 .message-content {
-    padding-inline: 16px;
+    padding-inline: 1rem;
     word-break: break-word; /* Ensures long words break and wrap */
     overflow-wrap: break-word; /* Allows wrapping long words */
     max-width: 100%; /* Prevents the div from exceeding the width of its container */
-    padding-block: 16px;
+    padding-block: 1rem;
 }
 
 .user-message-content {
     display: block;
     background-color: var(--Surface2);
-    border-radius: 32px;
+    border-radius: 2rem;
 }
 
 .chat-action-button {

@@ -62,7 +62,7 @@ public static class UIConstants
         public const string Error = "#FF5551";
         public const string Surface = "#06080A";
         public const string Background = "#12181F";
-        public const string OnSurface = "#F0F6FC";
+        public const string OnSurface = "#FFFFFF";
         public const string Outline = "#9198A1";
         public const string OutlineVariant = "#2E3033";
         public const string Secondary = "#096BDE";
