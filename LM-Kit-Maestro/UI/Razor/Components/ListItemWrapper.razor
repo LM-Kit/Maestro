@@ -1,4 +1,6 @@
-﻿<div @ref="_parentDiv" id="list-item-container">
+﻿@typeparam T
+
+<div @ref="_parentDiv" id="list-item-container">
     <div @onclick="OnItemClicked"
     @oncontextmenu="HandleRightClick"
     @oncontextmenu:preventDefault="true">
@@ -13,39 +15,6 @@
         </MudPopover>
     </div>
 </div>
-
-@code {
-    private ElementReference _parentDiv;
-    private int _popoverX;
-    private int _popoverY;
-
-    public bool IsShowingActionSheet { get; private set; }
-
-    [Parameter] public required RenderFragment ChildContent { get; set; }
-
-    [Parameter] public required RenderFragment ActionSheet { get; set; }
-
-    [Parameter] public EventCallback<bool> IsShowingActionSheetChanged { get; set; }
-
-    private async Task OnItemClicked(MouseEventArgs e)
-    {
-    }
-
-    private async Task HandleRightClick(MouseEventArgs e)
-    {
-        if (e.Button == 2)
-        {
-            var rect = await _parentDiv.GetClientRectAsync();
-
-            _popoverX = (int)(e.ClientX - rect.Left);
-            _popoverY = (int)(e.ClientY - rect.Top);
-            IsShowingActionSheet = !IsShowingActionSheet;
-            
-            await IsShowingActionSheetChanged.InvokeAsync(IsShowingActionSheet);
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-}
 
 <style>
     #list-item-container {

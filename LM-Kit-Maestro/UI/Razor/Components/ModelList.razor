@@ -1,36 +1,34 @@
 ﻿@inject ModelListViewModel ModelListViewModel
 
 <MudStack Class="model-list-root" Spacing="@(Dense ? 0 : 2)">
-    @foreach (var modelItem in _models)
+    @foreach (var modelItem in _modelItems)
     {
-        var model = modelItem.ViewModel;
-
-        <ListItemWrapper>
+        <ListItemWrapper ListItemViewModel="modelItem">
             <ChildContent>
-                <div class="toto" @onclick="() => OnClick.InvokeAsync(model)">
-                    <ModelCard Dense="Dense" Selectable="Selectable" ViewModel="model"/>
+                <div class="toto" @onclick="() => OnClick.InvokeAsync(modelItem.ViewModel)">
+                    <ModelCard IsFocused="modelItem.IsShowingActionSheet" Dense="Dense" Selectable="Selectable" ViewModel="modelItem.ViewModel" />
                 </div>
             </ChildContent>
 
             <ActionSheet>
                 <div class="d-flex flex-column item-actions">
-                    @if (model.IsLocallyAvailable)
+                    @if (modelItem.ViewModel.IsLocallyAvailable)
                     {
                         <MudButton Class="action-button" Variant="Variant.Text"
-                                   @onclick="() => ModelListViewModel.OpenModelInExplorer(model)">
+                                   @onclick="() => ModelListViewModel.OpenModelInExplorer(modelItem.ViewModel)">
                             <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
                         </MudButton>
                     }
 
                     <MudButton Class="action-button" Variant="Variant.Text"
-                               @onclick="() => ModelListViewModel.OpenModelHfLink(model)">
+                               @onclick="() => ModelListViewModel.OpenModelHfLink(modelItem.ViewModel)">
                         <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
                     </MudButton>
 
-                    @if (model.IsLocallyAvailable)
+                    @if (modelItem.ViewModel.IsLocallyAvailable)
                     {
                         <MudButton Class="action-button" Variant="Variant.Text"
-                                   @onclick="() => ModelListViewModel.DeleteModel(model)">
+                                   @onclick="() => ModelListViewModel.DeleteModel(modelItem.ViewModel)">
                             <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
                         </MudButton>
                     }
@@ -65,7 +63,7 @@
 </style>
 
 @code {
-    private ObservableCollection<ListItemViewModel<ModelInfoViewModel>> _models = new();
+    private ObservableCollection<ListItemViewModel<ModelInfoViewModel>> _modelItems = new();
     [Parameter] public EventCallback<ModelInfoViewModel> OnClick { get; set; }
 
     private bool _dense;
@@ -116,11 +114,11 @@
 
     private void UpdateModels()
     {
-        _models.Clear();
+        _modelItems.Clear();
 
         foreach (var model in ModelListViewModel.Models)
         {
-            _models.Add(new ListItemViewModel
+            _modelItems.Add(new ListItemViewModel
                 <ModelInfoViewModel>(model));
         }
 

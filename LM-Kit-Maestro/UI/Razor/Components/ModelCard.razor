@@ -51,26 +51,26 @@
                 <MudStack Spacing="1" AlignItems="AlignItems.Center" Row="true">
                     @if (ViewModel.IsChatModel)
                     {
-                                <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
-                                Size="Size.Small"/>
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
+                                    Size="Size.Small"/>
                     }
 
                     @if (ViewModel.HasVisionCapability)
                     {
-                                <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
-                                Size="Size.Small"/>
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
+                                    Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsCodeModel)
                     {
-                                <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
-                                Size="Size.Small"/>
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
+                                    Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsMathModel)
                     {
-                                <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
-                                Size="Size.Small"/>
+                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
+                                    Size="Size.Small"/>
                     }
                 </MudStack>
             </MudStack>
@@ -96,7 +96,7 @@
         }
     }
 
-    public bool _selectable;
+    private bool _selectable;
     [Parameter]
     public bool Selectable
     {
@@ -106,6 +106,21 @@
             if (value != _selectable)
             {
                 _selectable = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
+    private bool _isFocused;
+    [Parameter]
+    public bool IsFocused
+    {
+        get => _isFocused;
+        set
+        {
+            if (value != _isFocused)
+            {
+                _isFocused = value;
                 InvokeAsync(() => StateHasChanged());
             }
         }
