@@ -42,4 +42,14 @@ public partial class ListItemWrapper<T> : ComponentBase where T : ViewModelBase
             await InvokeAsync(StateHasChanged);
         }
     }
+
+    private void OnMouseOver()
+    {
+        ListItemViewModel.IsHovered = true;
+    }
+
+    private void OnMouseOut()
+    {
+        ListItemViewModel.IsHovered = false;
+    }
 }

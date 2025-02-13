@@ -13,9 +13,9 @@
     flex-shrink: 1;
 }
 
-    .model-card:hover {
-        background-color: var(--Surface15);
-    }
+.model-card-focused {
+    background-color: pink !important;
+}
 
 .model-card-dense {
     padding: 8px;
@@ -62,9 +62,4 @@
 .score-3 {
     background-color: #1C8736;
     color: #1C8736;
-}
-
-
-.model-card-focused{
-    background-color: pink !important;
 }

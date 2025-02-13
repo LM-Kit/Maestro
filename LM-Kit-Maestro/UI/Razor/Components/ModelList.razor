@@ -6,7 +6,7 @@
         <ListItemWrapper ListItemViewModel="modelItem">
             <ChildContent>
                 <div @onclick="() => OnClick.InvokeAsync(modelItem.ViewModel)">
-                    <ModelCard IsFocused="modelItem.IsShowingActionSheet" Dense="Dense" Selectable="Selectable" ViewModel="modelItem.ViewModel" />
+                    <ModelCard IsFocused="modelItem.IsShowingActionSheet || modelItem.IsHovered" Dense="Dense" Selectable="Selectable" ViewModel="modelItem.ViewModel" />
                 </div>
             </ChildContent>
 
