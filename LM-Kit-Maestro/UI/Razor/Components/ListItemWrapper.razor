@@ -1,9 +1,12 @@
 ﻿<div @ref="_parentDiv" id="list-item-container">
-    <div @onclick="OnItemClicked" @oncontextmenu="HandleRightClick" @oncontextmenu:preventDefault="true">
+    <div @onclick="OnItemClicked"
+         @oncontextmenu="HandleRightClick"
+         @oncontextmenu:preventDefault="true"
+         class="@(_isShowingActionSheet ? "hover-effect" : "" )">
         @ChildContent
     </div>
 
-    <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true"/>
+    <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true" />
 
     <div style="position: absolute; left: @($"{_popoverX}px"); top:@($"{_popoverY}px")">
         <MudPopover AnchorOrigin="Origin.TopLeft" Open="@_isShowingActionSheet" Fixed="true">
@@ -14,9 +17,9 @@
 
 @code {
     private ElementReference _parentDiv;
-    private bool _isShowingActionSheet;
     private int _popoverX;
     private int _popoverY;
+    private bool _isShowingActionSheet;
 
     [Parameter] public required RenderFragment ChildContent { get; set; }
 
@@ -45,5 +48,9 @@
 <style>
     #list-item-container {
         position: relative;
+    }
+
+    .hover-effect {
+        background-color: var(--Surface);
     }
 </style>
