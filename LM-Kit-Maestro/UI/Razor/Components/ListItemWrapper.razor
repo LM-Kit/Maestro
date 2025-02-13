@@ -1,15 +1,14 @@
 ﻿<div @ref="_parentDiv" id="list-item-container">
     <div @onclick="OnItemClicked"
-         @oncontextmenu="HandleRightClick"
-         @oncontextmenu:preventDefault="true"
-         class="@(_isShowingActionSheet ? "hover-effect" : "" )">
+    @oncontextmenu="HandleRightClick"
+    @oncontextmenu:preventDefault="true">
         @ChildContent
     </div>
 
-    <MudOverlay @bind-Visible="_isShowingActionSheet" AutoClose="true" />
+    <MudOverlay @bind-Visible="IsShowingActionSheet" AutoClose="true" />
 
     <div style="position: absolute; left: @($"{_popoverX}px"); top:@($"{_popoverY}px")">
-        <MudPopover AnchorOrigin="Origin.TopLeft" Open="@_isShowingActionSheet" Fixed="true">
+        <MudPopover AnchorOrigin="Origin.TopLeft" Open="@IsShowingActionSheet" Fixed="true">
             @ActionSheet
         </MudPopover>
     </div>
@@ -19,12 +18,14 @@
     private ElementReference _parentDiv;
     private int _popoverX;
     private int _popoverY;
-    private bool _isShowingActionSheet;
+
+    public bool IsShowingActionSheet { get; private set; }
 
     [Parameter] public required RenderFragment ChildContent { get; set; }
 
     [Parameter] public required RenderFragment ActionSheet { get; set; }
 
+    [Parameter] public EventCallback<bool> IsShowingActionSheetChanged { get; set; }
 
     private async Task OnItemClicked(MouseEventArgs e)
     {
@@ -38,8 +39,9 @@
 
             _popoverX = (int)(e.ClientX - rect.Left);
             _popoverY = (int)(e.ClientY - rect.Top);
-            _isShowingActionSheet = !_isShowingActionSheet;
+            IsShowingActionSheet = !IsShowingActionSheet;
             
+            await IsShowingActionSheetChanged.InvokeAsync(IsShowingActionSheet);
             await InvokeAsync(StateHasChanged);
         }
     }
@@ -48,9 +50,5 @@
 <style>
     #list-item-container {
         position: relative;
-    }
-
-    .hover-effect {
-        background-color: var(--Surface);
     }
 </style>
