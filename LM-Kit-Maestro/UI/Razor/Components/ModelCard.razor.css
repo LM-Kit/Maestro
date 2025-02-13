@@ -63,3 +63,8 @@
     background-color: #1C8736;
     color: #1C8736;
 }
+
+
+.model-card-focused{
+    background-color: pink !important;
+}

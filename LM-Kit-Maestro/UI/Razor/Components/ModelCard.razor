@@ -51,26 +51,26 @@
                 <MudStack Spacing="1" AlignItems="AlignItems.Center" Row="true">
                     @if (ViewModel.IsChatModel)
                     {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
-                                    Size="Size.Small"/>
+                        <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
+                        Size="Size.Small"/>
                     }
 
                     @if (ViewModel.HasVisionCapability)
                     {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
-                                    Size="Size.Small"/>
+                        <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
+                        Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsCodeModel)
                     {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
-                                    Size="Size.Small"/>
+                        <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
+                        Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsMathModel)
                     {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
-                                    Size="Size.Small"/>
+                        <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
+                        Size="Size.Small"/>
                     }
                 </MudStack>
             </MudStack>
@@ -138,6 +138,11 @@
         if (Selectable)
         {
             classes += " model-card-selectable";
+        }
+
+        if (IsFocused)
+        {
+            classes += " model-card-focused";
         }
 
         return classes.TrimStart();

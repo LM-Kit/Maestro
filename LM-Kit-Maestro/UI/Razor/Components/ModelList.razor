@@ -5,7 +5,7 @@
     {
         <ListItemWrapper ListItemViewModel="modelItem">
             <ChildContent>
-                <div class="toto" @onclick="() => OnClick.InvokeAsync(modelItem.ViewModel)">
+                <div @onclick="() => OnClick.InvokeAsync(modelItem.ViewModel)">
                     <ModelCard IsFocused="modelItem.IsShowingActionSheet" Dense="Dense" Selectable="Selectable" ViewModel="modelItem.ViewModel" />
                 </div>
             </ChildContent>
@@ -53,12 +53,6 @@
     }
 
     .model-list-root {
-    }
-
-    .toto {
-        display: flex;
-        background-color: red;
-        padding: 20px;
     }
 </style>
 
