@@ -7,10 +7,10 @@
         @ChildContent
     </div>
 
-    <MudOverlay @bind-Visible="IsShowingActionSheet" AutoClose="true" />
+    <MudOverlay @bind-Visible="ListItemViewModel.IsShowingActionSheet" AutoClose="true" />
 
     <div style="position: absolute; left: @($"{_popoverX}px"); top:@($"{_popoverY}px")">
-        <MudPopover AnchorOrigin="Origin.TopLeft" Open="@IsShowingActionSheet" Fixed="true">
+        <MudPopover AnchorOrigin="Origin.TopLeft" Open="ListItemViewModel.IsShowingActionSheet" Fixed="true">
             @ActionSheet
         </MudPopover>
     </div>

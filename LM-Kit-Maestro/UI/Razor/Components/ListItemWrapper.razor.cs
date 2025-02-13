@@ -11,15 +11,19 @@ public partial class ListItemWrapper<T> : ComponentBase where T : ViewModelBase
     private int _popoverX;
     private int _popoverY;
 
-    public bool IsShowingActionSheet { get; private set; }
-
     [Parameter] public required ListItemViewModel<T> ListItemViewModel { get; set; }
 
     [Parameter] public required RenderFragment ChildContent { get; set; }
 
     [Parameter] public required RenderFragment ActionSheet { get; set; }
 
-    [Parameter] public EventCallback<bool> IsShowingActionSheetChanged { get; set; }
+
+    protected override void OnInitialized()
+    {
+        ListItemViewModel.PropertyChanged += (_, _) => InvokeAsync(() => StateHasChanged());
+
+        base.OnInitialized();
+    }
 
     private async Task OnItemClicked(MouseEventArgs e)
     {
@@ -33,9 +37,8 @@ public partial class ListItemWrapper<T> : ComponentBase where T : ViewModelBase
 
             _popoverX = (int)(e.ClientX - rect.Left);
             _popoverY = (int)(e.ClientY - rect.Top);
-            IsShowingActionSheet = !IsShowingActionSheet;
+            ListItemViewModel.IsShowingActionSheet = !ListItemViewModel.IsShowingActionSheet;
 
-            await IsShowingActionSheetChanged.InvokeAsync(IsShowingActionSheet);
             await InvokeAsync(StateHasChanged);
         }
     }
