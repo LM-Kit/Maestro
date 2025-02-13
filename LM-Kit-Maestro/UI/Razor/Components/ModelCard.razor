@@ -1,4 +1,4 @@
-﻿<div class="model-card @(Dense ? "model-card-dense" : "")">
+﻿<div class="model-card @(GetClasses())">
     <MudGrid Spacing="1">
         <MudItem xs="12">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
@@ -20,9 +20,9 @@
                 </MudText>
 
                 <MudIcon Class="outline xs-icon"
-                         Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
-                         Color="Color.Dark"
-                         Size="Size.Small"/>
+                Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
+                Color="Color.Dark"
+                Size="Size.Small"/>
             </MudStack>
         </MudItem>
 
@@ -51,102 +51,32 @@
                 <MudStack Spacing="1" AlignItems="AlignItems.Center" Row="true">
                     @if (ViewModel.IsChatModel)
                     {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
-                                             Size="Size.Small"/>
+                                <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Message"
+                                Size="Size.Small"/>
                     }
 
                     @if (ViewModel.HasVisionCapability)
                     {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
-                                             Size="Size.Small"/>
+                                <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Visibility"
+                                Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsCodeModel)
                     {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
-                                             Size="Size.Small"/>
+                                <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Code"
+                                Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsMathModel)
                     {
-                                    <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
-                                             Size="Size.Small"/>
+                                <MudIcon Color="Color.Secondary" Class="small-icon" Icon="@Icons.Material.Outlined.Calculate"
+                                Size="Size.Small"/>
                     }
                 </MudStack>
             </MudStack>
         </MudItem>
     </MudGrid>
 </div>
-
-<style>
-
-    .model-card {
-        max-width: 800px;
-        flex-direction: row;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px;
-        margin-inline: auto;
-        border: 1px solid var(--OutlineVariant);
-        border-radius: 4px;
-        background-color: var(--Surface15);
-        flex-grow: 1;
-        flex-shrink: 1;
-        cursor: pointer;
-    }
-
-    .model-card-dense {
-        padding: 8px;
-        border: none;
-        background-color: var(--Surface2);
-    }
-
-    .model-card-dense:hover{
-        background-color: var(--Surface15);
-    }
-
-.model-card:not(.model-card-dense):hover {
-        background-color: var(--Surface15);
-        border: 1px solid var(--Outline);
-    }
-
-    .outline {
-        color: var(--Outline) !important;
-    }
-
-    .primary {
-        color: var(--Primary);
-    }
-
-    .secondary {
-        color: var(--Secondary);
-    }
-
-    .tertiary {
-        color: var(--Tertiary);
-    }
-
-       .item-actions {
-        padding: 4px;
-        background-color: var(--Surface3);
-    }
-    .score-1 {
-        background-color: #FA8168;
-        color: #FA8168;
-    }
-
-    .score-2 {
-        background-color: #FFD21E;
-        color: #FFD21E;
-    }
-
-    .score-3 {
-        background-color: #1C8736;
-        color: #1C8736;
-    }
-
-</style>
 
 @code {
     [Parameter] public required ModelInfoViewModel ViewModel { get; set; }
@@ -166,9 +96,40 @@
         }
     }
 
+    public bool _selectable;
+    [Parameter]
+    public bool Selectable
+    {
+        get => _selectable;
+        set
+        {
+            if (value != _selectable)
+            {
+                _selectable = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
+    private string GetClasses()
+    {
+        string classes = "";
+
+        if (Dense)
+        {
+            classes += "model-card-dense";
+        }
+
+        if (Selectable)
+        {
+            classes += " model-card-selectable";
+        }
+
+        return classes.TrimStart();
+    }
+
     private static string GetScoreClass(float score)
     {
         return score < 0.4 ? "score-1" : score < 0.7 ? "score-2" : "score-3";
     }
-
 }
