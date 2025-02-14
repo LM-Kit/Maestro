@@ -1,16 +1,12 @@
 ﻿.model-card {
-    max-width: 800px;
     flex-direction: row;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 1rem;
-    margin-inline: auto;
     border: 1px solid var(--OutlineVariant);
     border-radius: 0.25rem;
     background-color: var(--Surface2);
     flex-grow: 1;
     flex-shrink: 1;
+    display: flex;
 }
 
 .model-card-focused {

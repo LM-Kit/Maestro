@@ -17,6 +17,20 @@ public partial class ListItemWrapper<T> : ComponentBase where T : ViewModelBase
 
     [Parameter] public required RenderFragment ActionSheet { get; set; }
 
+    private bool _limitWidth;
+    [Parameter]
+    public bool LimitWidth
+    {
+        get => _limitWidth;
+        set
+        {
+            if (value != _limitWidth)
+            {
+                _limitWidth = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
 
     protected override void OnInitialized()
     {
@@ -24,6 +38,7 @@ public partial class ListItemWrapper<T> : ComponentBase where T : ViewModelBase
 
         base.OnInitialized();
     }
+
 
     private async Task OnItemClicked(MouseEventArgs e)
     {
