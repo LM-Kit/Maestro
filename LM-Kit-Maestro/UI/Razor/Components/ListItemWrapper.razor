@@ -11,9 +11,9 @@
         @ChildContent
     </div>
 
-    <MudOverlay @bind-Visible="ListItemViewModel.IsShowingActionSheet" AutoClose="true" />
+    <MudOverlay Style="background-color: aqua; z-index: 1000; padding: 20px" @bind-Visible="ListItemViewModel.IsShowingActionSheet" AutoClose="true" />
 
-    <div style="position: absolute; left: @($"{_popoverX}px"); top:@($"{_popoverY}px")">
+    <div style="background-color: yellow; padding: 20px; position: absolute; left: @($"{_popoverX}px"); top:@($"{_popoverY}px")">
         <MudPopover AnchorOrigin="Origin.TopLeft" Open="ListItemViewModel.IsShowingActionSheet" Fixed="true">
             @ActionSheet
         </MudPopover>

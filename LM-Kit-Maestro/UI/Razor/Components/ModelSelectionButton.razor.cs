@@ -7,8 +7,6 @@ namespace LMKit.Maestro.UI.Razor.Components;
 
 public partial class ModelSelectionButton
 {
-    private bool _isShowingModelList;
-
     [Parameter] required public ModelListViewModel ModelListViewModel { get; set; }
 
     public string Text { get; private set; } = Locales.SelectModel;
@@ -40,7 +38,9 @@ public partial class ModelSelectionButton
 
     private async Task OnButtonClicked()
     {
-        _isShowingModelList = true;
+        var options = new DialogOptions { CloseOnEscapeKey = true, Position=DialogPosition.TopCenter };
+
+        await DialogService.ShowAsync<ModelSelectionDialog>(null, options);
     }
 
     private void OnEjectButtonClicked()
@@ -53,8 +53,6 @@ public partial class ModelSelectionButton
         if (model != ModelListViewModel.SelectedModel)
         {
             ModelListViewModel.SelectedModel = model;
-
-            _isShowingModelList = false;
         }
     }
 

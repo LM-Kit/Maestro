@@ -1,0 +1,73 @@
+﻿<MudDialog>
+    <DialogContent>
+        <div class="models-popover-container">
+            <MudStack Spacing="0">
+                <div class="models-popover-header">
+                    <MudText Class="outline flex-grow-1" Typo="Typo.caption">
+                        Available models
+                    </MudText>
+
+                    <div class="d-flex justify-end close-button">
+                        <IconButton Style="IconButton.ButtonStyle.Icon"
+                                    Icon="fas fa-close"
+                                    Size="IconButton.ButtonSize.Small"
+                                    OnClick="() => MudDialog.Cancel()" />
+                    </div>
+                </div>
+                <MudDivider />
+            </MudStack>
+
+            <div class="models-popover-body hover-scrollable-no-gutter">
+                <ModelList Selectable="true" Dense="true" />
+            </div>
+        </div>
+    </DialogContent>
+
+</MudDialog>
+
+<style>
+
+    .models-popover-container {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--OutlineVariant);
+        border-radius: 8px;
+    }
+
+    .models-popover-header {
+        padding-inline: 4px;
+        padding-block: 4px;
+        background-color: var(--Surface15);
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+        align-items: center;
+        border-radius: 8px;
+    }
+
+    .models-popover-body {
+        background-color: var(--Surface2);
+        max-height: 496px;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .close-button {
+        color: var(--Outline) !important;
+    }
+
+        .close-button:hover {
+            color: var(--OnSurface) !important;
+        }
+
+</style>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => MudDialog.Cancel();
+}
