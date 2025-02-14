@@ -1,24 +1,29 @@
-﻿<MudDialog>
+﻿<MudDialog Class="dialog-top-left">
     <DialogContent>
-        <div class="models-popover-container">
-            <MudStack Spacing="0">
-                <div class="models-popover-header">
-                    <MudText Class="outline flex-grow-1" Typo="Typo.caption">
-                        Available models
-                    </MudText>
+        @* <MudOverlay Absolute="true" Style="background-color: green; padding: 20px" Visible="true" AutoClose="true" /> *@
 
-                    <div class="d-flex justify-end close-button">
-                        <IconButton Style="IconButton.ButtonStyle.Icon"
-                                    Icon="fas fa-close"
-                                    Size="IconButton.ButtonSize.Small"
-                                    OnClick="() => MudDialog.Cancel()" />
+        <div class="container">
+            <div @onclick="() => MudDialog.Cancel()" class="backdrop"></div>
+            <div class="models-popover-container">
+                <MudStack Spacing="0">
+                    <div class="models-popover-header">
+                        <MudText Class="outline flex-grow-1" Typo="Typo.caption">
+                            Available models
+                        </MudText>
+
+                        <div class="d-flex justify-end close-button">
+                            <IconButton Style="IconButton.ButtonStyle.Icon"
+                                        Icon="fas fa-close"
+                                        Size="IconButton.ButtonSize.Small"
+                                        OnClick="() => MudDialog.Cancel()" />
+                        </div>
                     </div>
-                </div>
-                <MudDivider />
-            </MudStack>
+                    <MudDivider />
+                </MudStack>
 
-            <div class="models-popover-body hover-scrollable-no-gutter">
-                <ModelList Selectable="true" Dense="true" />
+                <div class="models-popover-body hover-scrollable-no-gutter">
+                    <ModelList Selectable="true" Dense="true" />
+                </div>
             </div>
         </div>
     </DialogContent>
@@ -27,11 +32,36 @@
 
 <style>
 
+    .backdrop{
+        background-color: darkslateblue;
+        opacity: 0.2;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+
+    .container{
+        background-color: red;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    .dialog-top-left {
+        left: 0 !important;
+        top: 0 !important;
+    }
+
     .models-popover-container {
         display: flex;
         flex-direction: column;
         border: 1px solid var(--OutlineVariant);
         border-radius: 8px;
+        background-color: mediumvioletred;
+        padding: 20px;
+        width: 40rem;
     }
 
     .models-popover-header {
