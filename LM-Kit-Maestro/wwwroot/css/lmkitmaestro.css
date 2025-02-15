@@ -89,6 +89,10 @@
     --Secondary: #096BDE;
 }
 
+.outline {
+    color: var(--Outline);
+}
+
 .loading-section {
     height: 100vh;
     display: flex;

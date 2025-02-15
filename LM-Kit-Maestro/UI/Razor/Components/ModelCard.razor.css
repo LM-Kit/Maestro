@@ -23,11 +23,6 @@
     cursor: pointer;
 }
 
-
-.outline {
-    color: var(--Outline) !important;
-}
-
 .primary {
     color: var(--Primary);
 }
