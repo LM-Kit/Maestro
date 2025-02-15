@@ -17,13 +17,6 @@
     font-size: 0.75rem;
 }
 
-.small-icon {
-    font-size: 0.6rem !important;
-}
-
-.xs-icon {
-    font-size: 0.85rem !important;
-}
 
 .xs-loader {
     width: 0.85rem !important;
@@ -228,7 +221,7 @@
 
 ::-webkit-scrollbar-thumb:hover {
     /*cursor: pointer !important;*/
-    background-color: var(--OutlineVariant)!important;
+    background-color: var(--OutlineVariant) !important;
 }
 
 .scrollable {
@@ -259,3 +252,17 @@
     .hover-scrollable-no-gutter:hover {
         overflow-y: scroll;
     }
+
+
+/* MudBlazor styles override */
+.mud-icon-size-small {
+    font-size: 1rem !important;
+}
+
+.mud-icon-size-medium {
+    font-size: 1.5rem !important;
+}
+
+.mud-icon-size-large {
+    font-size: 2rem !important;
+}
