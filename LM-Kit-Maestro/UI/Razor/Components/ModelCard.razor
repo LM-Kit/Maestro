@@ -1,17 +1,15 @@
-﻿<div class="model-card @(GetClasses())">
+﻿<div class="model-card @(GetClasses())" title="@ViewModel.ModelInfo.Description">
     <MudGrid Spacing="1">
         <MudItem xs="12">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                 <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                    <MudTooltip Text="@ViewModel.ModelInfo.Description">
-                        <MudText Typo="Typo.subtitle2" Class="text-truncate">
-                            @ViewModel.ModelInfo.ShortModelName
+                    <MudText Typo="Typo.subtitle2" Class="text-truncate">
+                        @ViewModel.ModelInfo.ShortModelName
                         </MudText>
-                    </MudTooltip>
 
-                    <MudTooltip Text="@string.Format("Estimated performance level of the model on this machine is {0}", ViewModel.CompatibilityLevel.ToString("P0"))">
-                        <div class="dot @(GetScoreClass(ViewModel.CompatibilityLevel))"></div>
-                    </MudTooltip>
+                        <div class="dot @(GetScoreClass(ViewModel.CompatibilityLevel))"
+                             title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
+                        </div>
                 </MudStack>
 
             </MudStack>
@@ -32,61 +30,46 @@
 
         <MudItem xs="9">
             <MudStack AlignItems="AlignItems.Center" Justify="Justify.SpaceAround" Row="true" Class="outline">
-                <MudTooltip Text="@string.Format("The architecture of this model is {0}", ViewModel.ModelInfo.Architecture)">
-                    <MudText Typo="Typo.overline" Class="text-truncate">
-                        @ViewModel.ModelInfo.Architecture
+                <MudText title="@string.Format("The architecture of this model is {0}", ViewModel.ModelInfo.Architecture)" 
+                Typo="Typo.overline" Class="text-truncate">
+                    @ViewModel.ModelInfo.Architecture
                     </MudText>
-                </MudTooltip>
 
-                <MudTooltip Text="@string.Format("This model has {0:N0} parameters", ViewModel.ModelInfo.ParameterCount)">
-                    <MudText Typo="Typo.overline" Class="text-truncate">
-                        @ViewModel.ModelSize
+                    <MudText title="@string.Format("This model has {0:N0} parameters", ViewModel.ModelInfo.ParameterCount)" Typo="Typo.overline" Class="text-truncate">
+                    @ViewModel.ModelSize
                     </MudText>
-                </MudTooltip>
 
-                <MudTooltip Text="@string.Format("This model supports a maximum context length of {0:N0} tokens", ViewModel.ModelInfo.ContextLength)">
-                    <MudText Typo="Typo.overline" Class="text-truncate">
-                        @($"{ViewModel.MaxContextLengthKB}k")
+                    <MudText title="@string.Format("This model supports a maximum context length of {0:N0} tokens", ViewModel.ModelInfo.ContextLength)" Typo="Typo.overline" Class="text-truncate">
+                    @($"{ViewModel.MaxContextLengthKB}k")
                     </MudText>
-                </MudTooltip>
 
-                <MudTooltip Text="@string.Format("This model uses {0}-bit precision, which indicates the number of bits used for numerical representation", ViewModel.Precision)">
-                    <MudText Typo="Typo.overline" Class="text-truncate">
-                        @ViewModel.Precision
+                    <MudText title="@string.Format("This model uses {0}-bit precision, which indicates the number of bits used for numerical representation", ViewModel.Precision)" Typo="Typo.overline" Class="text-truncate">
+                    @ViewModel.Precision
                     </MudText>
-                </MudTooltip>
 
                 <MudStack Spacing="1" AlignItems="AlignItems.Center" Row="true">
                     @if (ViewModel.IsChatModel)
                     {
-                        <MudTooltip Text="@Locales.ChatModelOptimized">
-                            <MudIcon Color="Color.Secondary" Icon="@Icons.Material.Outlined.Message"
-                                     Size="Size.Small" />
-                        </MudTooltip>
+                                                    <MudIcon title="@Locales.ChatModelOptimized" Color="Color.Secondary" Icon="@Icons.Material.Outlined.Message"
+                                                         Size="Size.Small" />
                     }
 
                     @if (ViewModel.HasVisionCapability)
                     {
-                        <MudTooltip Text="@Locales.VisionModelOptimized">
-                            <MudIcon Color="Color.Secondary" Icon="@Icons.Material.Outlined.Visibility"
-                                     Size="Size.Small" />
-                        </MudTooltip>
+                                                        <MudIcon title="@Locales.VisionModelOptimized" Color="Color.Secondary" Icon="@Icons.Material.Outlined.Visibility"
+                                                         Size="Size.Small" />
                     }
 
                     @if (ViewModel.IsCodeModel)
                     {
-                        <MudTooltip Text="@Locales.CodeCompletionModelOptimized">
-                            <MudIcon Color="Color.Secondary" Icon="@Icons.Material.Outlined.Code"
-                                     Size="Size.Small" />
-                        </MudTooltip>
+                                                        <MudIcon title="@Locales.CodeCompletionModelOptimized" Color="Color.Secondary" Icon="@Icons.Material.Outlined.Code"
+                                                         Size="Size.Small" />
                     }
 
                     @if (ViewModel.IsMathModel)
                     {
-                        <MudTooltip Text="@Locales.MathModelOptimized">
-                            <MudIcon Color="Color.Secondary" Icon="@Icons.Material.Outlined.Calculate"
-                                     Size="Size.Small" />
-                        </MudTooltip>
+                                                        <MudIcon title="@Locales.MathModelOptimized" Color="Color.Secondary" Icon="@Icons.Material.Outlined.Calculate"
+                                                         Size="Size.Small" />
                     }
                 </MudStack>
             </MudStack>
