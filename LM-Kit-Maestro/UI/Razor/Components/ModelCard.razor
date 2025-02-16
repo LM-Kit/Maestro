@@ -5,11 +5,11 @@
                 <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
                     <MudText Typo="Typo.subtitle2" Class="text-truncate">
                         @ViewModel.ModelInfo.ShortModelName
-                        </MudText>
+                    </MudText>
 
-                        <div class="dot @(GetScoreClass(ViewModel.CompatibilityLevel))"
-                             title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
-                        </div>
+                    <div class="dot @(GetScoreClass(ViewModel.CompatibilityLevel))"
+                         title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
+                    </div>
                 </MudStack>
 
             </MudStack>
@@ -24,52 +24,62 @@
                 <MudIcon Class="outline xs-icon"
                          Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
                          Color="Color.Dark"
-                         Size="Size.Small" />
+                         Size="Size.Small"/>
             </MudStack>
         </MudItem>
 
         <MudItem xs="9">
             <MudStack AlignItems="AlignItems.Center" Justify="Justify.SpaceAround" Row="true" Class="outline">
-                <MudText title="@string.Format("The architecture of this model is {0}", ViewModel.ModelInfo.Architecture)" 
-                Typo="Typo.overline" Class="text-truncate">
+                <MudText
+                    title="@string.Format("The architecture of this model is {0}", ViewModel.ModelInfo.Architecture)"
+                    Typo="Typo.overline" Class="text-truncate">
                     @ViewModel.ModelInfo.Architecture
-                    </MudText>
+                </MudText>
 
-                    <MudText title="@string.Format("This model has {0:N0} parameters", ViewModel.ModelInfo.ParameterCount)" Typo="Typo.overline" Class="text-truncate">
+                <MudText title="@string.Format("This model has {0:N0} parameters", ViewModel.ModelInfo.ParameterCount)"
+                         Typo="Typo.overline" Class="text-truncate">
                     @ViewModel.ModelSize
-                    </MudText>
+                </MudText>
 
-                    <MudText title="@string.Format("This model supports a maximum context length of {0:N0} tokens", ViewModel.ModelInfo.ContextLength)" Typo="Typo.overline" Class="text-truncate">
+                <MudText
+                    title="@string.Format("This model supports a maximum context length of {0:N0} tokens", ViewModel.ModelInfo.ContextLength)"
+                    Typo="Typo.overline" Class="text-truncate">
                     @($"{ViewModel.MaxContextLengthKB}k")
-                    </MudText>
+                </MudText>
 
-                    <MudText title="@string.Format("This model uses {0}-bit precision, which indicates the number of bits used for numerical representation", ViewModel.Precision)" Typo="Typo.overline" Class="text-truncate">
+                <MudText
+                    title="@string.Format("This model uses {0}-bit precision, which indicates the number of bits used for numerical representation", ViewModel.Precision)"
+                    Typo="Typo.overline" Class="text-truncate">
                     @ViewModel.Precision
-                    </MudText>
+                </MudText>
 
                 <MudStack Spacing="1" AlignItems="AlignItems.Center" Row="true">
                     @if (ViewModel.IsChatModel)
                     {
-                                                    <MudIcon title="@Locales.ChatModelOptimized" Color="Color.Secondary" Icon="@Icons.Material.Outlined.Message"
-                                                         Size="Size.Small" />
+                        <MudIcon title="@Locales.ChatModelOptimized" Color="Color.Secondary"
+                                 Icon="@Icons.Material.Outlined.Message"
+                                 Size="Size.Small"/>
                     }
 
                     @if (ViewModel.HasVisionCapability)
                     {
-                                                        <MudIcon title="@Locales.VisionModelOptimized" Color="Color.Secondary" Icon="@Icons.Material.Outlined.Visibility"
-                                                         Size="Size.Small" />
+                        <MudIcon title="@Locales.VisionModelOptimized" Color="Color.Secondary"
+                                 Icon="@Icons.Material.Outlined.Visibility"
+                                 Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsCodeModel)
                     {
-                                                        <MudIcon title="@Locales.CodeCompletionModelOptimized" Color="Color.Secondary" Icon="@Icons.Material.Outlined.Code"
-                                                         Size="Size.Small" />
+                        <MudIcon title="@Locales.CodeCompletionModelOptimized" Color="Color.Secondary"
+                                 Icon="@Icons.Material.Outlined.Code"
+                                 Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsMathModel)
                     {
-                                                        <MudIcon title="@Locales.MathModelOptimized" Color="Color.Secondary" Icon="@Icons.Material.Outlined.Calculate"
-                                                         Size="Size.Small" />
+                        <MudIcon title="@Locales.MathModelOptimized" Color="Color.Secondary"
+                                 Icon="@Icons.Material.Outlined.Calculate"
+                                 Size="Size.Small"/>
                     }
                 </MudStack>
             </MudStack>
@@ -81,6 +91,7 @@
     [Parameter] public required ModelInfoViewModel ViewModel { get; set; }
 
     private bool _dense;
+
     [Parameter]
     public bool Dense
     {
@@ -96,6 +107,7 @@
     }
 
     private bool _selectable;
+
     [Parameter]
     public bool Selectable
     {
@@ -111,6 +123,7 @@
     }
 
     private bool _isFocused;
+
     [Parameter]
     public bool IsFocused
     {
@@ -151,4 +164,5 @@
     {
         return score < 0.4 ? "score-1" : score < 0.7 ? "score-2" : "score-3";
     }
+
 }
