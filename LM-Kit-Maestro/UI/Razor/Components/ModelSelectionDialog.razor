@@ -19,7 +19,7 @@
                     <MudDivider />
                 </MudStack>
 
-                <div class="model-selection-dialog-body hover-scrollable-no-gutter">
+                <div class="model-selection-dialog-body">
                     <ModelList LimitWidth="false" Selectable="true" Dense="true" />
                 </div>
             </div>
@@ -75,8 +75,13 @@
     .model-selection-dialog-body {
         display: flex;
         flex-direction: column;
-        overflow-y: auto;
+        overflow-y: hidden;
+        scrollbar-gutter: stable both-edges;
     }
+
+    .model-selection-dialog-body:hover{
+            overflow-y: scroll;
+        }
 
     .close-button {
         color: var(--Outline) !important;
