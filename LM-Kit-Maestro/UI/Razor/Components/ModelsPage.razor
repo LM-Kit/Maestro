@@ -1,75 +1,74 @@
 ﻿@page "/models"
 
 @inject ISnackbar Snackbar
-@using LMKit.Maestro.Helpers
 @inherits MvvmComponentBase<ModelsPageViewModel>
 
 <SectionContent SectionName="top-bar">
     <div id="model-page-top-bar">
-            <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
+        <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
+            @if (ViewModel.FileManager.FileCollectingInProgress)
+            {
+                <MudProgressCircular Class="xs-loader outline" Size="Size.Small" Indeterminate="true" />
+            }
+
+            @if (ViewModel.FileManager.DownloadedCount > 0)
+            {
+                <MudText Typo="Typo.overline">
+                    <span>You have</span>
+                    <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
+                    <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
+                    <span> taking up </span>
+                    <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
+                </MudText>
+            }
+            else
+            {
                 @if (ViewModel.FileManager.FileCollectingInProgress)
                 {
-                    <MudProgressCircular Class="xs-loader outline" Size="Size.Small" Indeterminate="true" />
-                }
-
-                @if (ViewModel.FileManager.DownloadedCount > 0)
-                {
-                    <MudText Typo="Typo.overline">
-                        <span>You have</span>
-                        <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
-                        <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
-                        <span> taking up </span>
-                        <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
+                    <MudText Align="Align.Center" Typo="Typo.overline">
+                        Scanning for models...
                     </MudText>
                 }
                 else
                 {
-                    @if (ViewModel.FileManager.FileCollectingInProgress)
-                    {
-                        <span>
-                            Scanning for models...
-                        </span>
-                    }
-                    else
-                    {
-                        <MudText Align="Align.Center" Typo="Typo.overline">
-                            You model folder is empty.
-                        </MudText>
-                    }
-                }
-            </div>
-            <div class="d-flex flex-row gap-2 flex-grow-1 justify-center align-center align-content-center px-4">
-                <MudText Typo="Typo.overline">
-                    Model folder:
-                </MudText>
-
-                <div id="model-folder-container">
-                    <MudText Typo="Typo.body2" Class="text-truncate">
-                        @ViewModel.AppSettingsService.ModelStorageDirectory
+                    <MudText Align="Align.Center" Typo="Typo.overline">
+                        You model folder is empty.
                     </MudText>
-                </div>
+                }
+            }
+        </div>
+        <div class="d-flex flex-row gap-2 flex-grow-1 justify-center align-center align-content-center px-4">
+            <MudText Typo="Typo.overline">
+                Model folder:
+            </MudText>
 
-                <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                            Icon="fas fa-edit"
-                            Tooltip="@Locales.SelectAnotherFolder"
-                            OnClick="ViewModel.PickModelsFolder" />
-
-                <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                            Icon="fas fa-folder-open"
-                            Tooltip="@Locales.OpenInFileExplorer"
-                            OnClick="ViewModel.OpenModelsFolder" />
-
-                <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                            Icon="fas fa-rotate-left"
-                            Tooltip="@Locales.ResetModelFolder"
-                            OnClick="ViewModel.ResetModelsFolder" />
+            <div id="model-folder-container">
+                <MudText Typo="Typo.body2" Class="text-truncate">
+                    @ViewModel.AppSettingsService.ModelStorageDirectory
+                </MudText>
             </div>
+
+            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                        Icon="fas fa-edit"
+                        Tooltip="@Locales.SelectAnotherFolder"
+                        OnClick="ViewModel.PickModelsFolder" />
+
+            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                        Icon="fas fa-folder-open"
+                        Tooltip="@Locales.OpenInFileExplorer"
+                        OnClick="ViewModel.OpenModelsFolder" />
+
+            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                        Icon="fas fa-rotate-left"
+                        Tooltip="@Locales.ResetModelFolder"
+                        OnClick="ViewModel.ResetModelsFolder" />
+        </div>
     </div>
 </SectionContent>
 
 <div id="model-page-container">
     <div id="model-list-container">
-          <ModelList LimitWidth="true"/>
+        <ModelList Dense="true" LimitWidth="false" />
     </div>
 
     <div class="bottom-space">
@@ -111,9 +110,6 @@
         display: flex;
         flex-direction: column;
         overflow-y: auto;
-        padding-block: 20px;
-        gap: 12px;
-        padding-inline: 10px;
     }
 
     .bottom-space {
