@@ -10,7 +10,7 @@
 }
 
 .model-card-focused {
-    background-color: pink !important;
+    background-color: var(--Surface15);
 }
 
 .model-card-dense {
