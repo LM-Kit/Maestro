@@ -4,7 +4,7 @@
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                 <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
                     <div class="dot @(GetScoreClass(ViewModel.CompatibilityLevel))"
-                         title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
+                    title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
                     </div>
 
                     <MudText Typo="Typo.subtitle2" Class="text-truncate">
@@ -21,10 +21,12 @@
                     @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
                 </MudText>
 
-                <MudIcon Class="outline xs-icon"
-                         Icon="@(ViewModel.IsLocallyAvailable ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Cloud)"
-                         Color="Color.Dark"
-                         Size="Size.Small"/>
+                @if (!ViewModel.IsLocallyAvailable)
+                {
+                    <MudIcon Class="outline"
+                             Icon="@Icons.Material.Outlined.Cloud"
+                             Size="Size.Small" />
+                }
             </MudStack>
         </MudItem>
 
