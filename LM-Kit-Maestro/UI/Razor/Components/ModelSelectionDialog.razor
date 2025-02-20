@@ -20,7 +20,7 @@
                 </MudStack>
 
                 <div class="model-selection-dialog-body">
-                    <ModelList LimitWidth="false" Selectable="true" Dense="true" />
+                    <ModelList OnClick="(model) => MudDialog.Close(model)" LimitWidth="false" Selectable="true" Dense="true" />
                 </div>
             </div>
         </div>
@@ -96,8 +96,4 @@
 @code {
     [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; }
-
-    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
-
-    private void Cancel() => MudDialog.Cancel();
 }

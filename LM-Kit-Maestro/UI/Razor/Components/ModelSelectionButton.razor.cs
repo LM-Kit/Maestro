@@ -40,20 +40,19 @@ public partial class ModelSelectionButton
     {
         var options = new DialogOptions { CloseOnEscapeKey = true, FullScreen=true };
 
-        await DialogService.ShowAsync<ModelSelectionDialog>(null, options);
+        var dialog = await DialogService.ShowAsync<ModelSelectionDialog>(null, options);
+
+        var result = await dialog.Result;
+
+        if (result !=null && !result.Canceled && result.Data is ModelInfoViewModel modelInfoViewModel)
+        {
+            ModelListViewModel.SelectedModel = modelInfoViewModel;
+        }
     }
 
     private void OnEjectButtonClicked()
     {
         ModelListViewModel.EjectModel();
-    }
-
-    private void OnModelClicked(ModelInfoViewModel model)
-    {
-        if (model != ModelListViewModel.SelectedModel)
-        {
-            ModelListViewModel.SelectedModel = model;
-        }
     }
 
     private static string GetModelStateText(ModelListViewModel modelListViewModel)
