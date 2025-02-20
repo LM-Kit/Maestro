@@ -1,93 +1,70 @@
 ﻿<div class="model-card @(GetClasses())" title="@ViewModel.ModelInfo.Description">
-    <MudGrid Spacing="1">
+    <MudGrid Justify="Justify.SpaceBetween" Spacing="@(Dense ? 0: 3)">
         <MudItem xs="12">
-            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-                <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                    <div class="dot @(GetScoreClass(ViewModel.CompatibilityLevel))"
-                    title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
-                    </div>
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3">
+                <div class="dot d-flex align-content-end @(GetScoreClass(ViewModel.CompatibilityLevel))"
+                     title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
+                </div>
 
-                    <MudText Typo="Typo.subtitle2" Class="text-truncate">
+
+                <MudText Typo="Typo.subtitle2" Class="text-truncate">
                         @ViewModel.ModelInfo.ShortModelName
-                    </MudText>
-                </MudStack>
-
-            </MudStack>
-        </MudItem>
-
-        <MudItem xs="3" Class="d-flex align-items-center">
-            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                <MudText Typo="Typo.overline" Class="outline text-truncate">
-                    @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
                 </MudText>
 
                 @if (!ViewModel.IsLocallyAvailable)
                 {
-                    <MudIcon Class="outline"
-                             title="@Locales.ModelDownloadAvailable"
-                             Icon="@Icons.Material.Outlined.Cloud"
-                             Size="Size.Small" />
+                            <MudIcon Class="outline"
+                                     title="@Locales.ModelDownloadAvailable"
+                                     Icon="@Icons.Material.Outlined.Cloud"
+                                     Size="Size.Small"/>
                 }
             </MudStack>
         </MudItem>
 
-        <MudItem xs="9">
-            <MudStack AlignItems="AlignItems.Center" Justify="Justify.SpaceAround" Row="true" Class="outline">
-                <MudText
-                    title="@string.Format("The architecture of this model is {0}", ViewModel.ModelInfo.Architecture)"
-                    Typo="Typo.overline" Class="text-truncate">
-                    @ViewModel.ModelInfo.Architecture
-                </MudText>
+        <MudItem xs="2">
+            <MudText Typo="Typo.overline" Class="outline text-truncate">
+                @ViewModel.ModelInfo.Publisher
+            </MudText>
+        </MudItem>
 
-                <MudText title="@string.Format("This model has {0:N0} parameters", ViewModel.ModelInfo.ParameterCount)"
-                         Typo="Typo.overline" Class="text-truncate">
-                    @ViewModel.ModelSize
-                </MudText>
+        <MudItem xs="2">
+            <MudText Class="outline text-truncate"
+                     title="@string.Format("The architecture of this model is {0}", ViewModel.ModelInfo.Architecture)"
+                     Typo="Typo.overline">
+                @ViewModel.ModelInfo.Architecture
+            </MudText>
+        </MudItem>
 
-                <MudText
-                    title="@string.Format("This model supports a maximum context length of {0:N0} tokens", ViewModel.ModelInfo.ContextLength)"
-                    Typo="Typo.overline" Class="text-truncate">
-                    @($"{ViewModel.MaxContextLengthKB}k")
-                </MudText>
+        <MudItem xs="2">
+            <MudText title="@string.Format("This model has {0:N0} parameters", ViewModel.ModelInfo.ParameterCount)"
+                     Typo="Typo.overline" Class="outline text-truncate">
+                @ViewModel.ModelSize
+            </MudText>
+        </MudItem>
 
-                <MudText
-                    title="@string.Format("This model uses {0}-bit precision, which indicates the number of bits used for numerical representation", ViewModel.Precision)"
-                    Typo="Typo.overline" Class="text-truncate">
-                    @ViewModel.Precision
-                </MudText>
+        <MudItem xs="2">
+            <MudText
+                title="@string.Format("This model supports a maximum context length of {0:N0} tokens", ViewModel.ModelInfo.ContextLength)"
+                Typo="Typo.overline" Class="outline text-truncate">
+                @($"{ViewModel.MaxContextLengthKB}k")
+            </MudText>
+        </MudItem>
 
-                <MudStack Spacing="1" AlignItems="AlignItems.Center" Row="true">
-                    @if (ViewModel.IsChatModel)
-                    {
-                        <MudIcon title="@Locales.ChatModelOptimized" Color="Color.Secondary"
-                                 Icon="@Icons.Material.Outlined.Message"
-                                 Size="Size.Small"/>
-                    }
+        <MudItem xs="2">
+            <MudText
+                title="@string.Format("This model uses {0}-bit precision, which indicates the number of bits used for numerical representation", ViewModel.Precision)"
+                Typo="Typo.overline" Class="outline text-truncate">
+                @ViewModel.Precision
+            </MudText>
+        </MudItem>
 
-                    @if (ViewModel.HasVisionCapability)
-                    {
-                        <MudIcon title="@Locales.VisionModelOptimized" Color="Color.Secondary"
-                                 Icon="@Icons.Material.Outlined.Visibility"
-                                 Size="Size.Small"/>
-                    }
-
-                    @if (ViewModel.IsCodeModel)
-                    {
-                        <MudIcon title="@Locales.CodeCompletionModelOptimized" Color="Color.Secondary"
-                                 Icon="@Icons.Material.Outlined.Code"
-                                 Size="Size.Small"/>
-                    }
-
-                    @if (ViewModel.IsMathModel)
-                    {
-                        <MudIcon title="@Locales.MathModelOptimized" Color="Color.Secondary"
-                                 Icon="@Icons.Material.Outlined.Calculate"
-                                 Size="Size.Small"/>
-                    }
-                </MudStack>
-            </MudStack>
+        <MudItem xs="2">
+            <MudText Typo="Typo.overline" Class="outline text-truncate">
+                @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
+            </MudText>
         </MudItem>
     </MudGrid>
+
 </div>
 
 @code {

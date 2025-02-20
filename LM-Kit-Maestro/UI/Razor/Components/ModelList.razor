@@ -1,7 +1,7 @@
 ﻿@inject ModelListViewModel ModelListViewModel
 
 
-<MudStack Class="model-list-root" Spacing="@(Dense ? 0 : 2)">
+<MudStack Spacing="@(Dense ? 0 : 5)">
     @foreach (var modelItem in _modelItems)
     {
         <ListItemWrapper LimitWidth="LimitWidth" ListItemViewModel="modelItem">

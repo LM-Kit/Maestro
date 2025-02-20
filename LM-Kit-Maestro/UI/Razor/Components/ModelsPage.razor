@@ -68,7 +68,7 @@
 
 <div id="model-page-container">
     <div id="model-list-container">
-        <ModelList Dense="true" LimitWidth="false" />
+        <ModelList  LimitWidth="true" />
     </div>
 
     <div class="bottom-space">
@@ -93,8 +93,6 @@
         display: flex;
         flex-direction: column;
         height: 100%;
-        gap: 20px;
-        padding-block: 20px;
     }
 
     #model-folder-container {
@@ -110,6 +108,7 @@
         display: flex;
         flex-direction: column;
         overflow-y: auto;
+        padding: 0.5rem;
     }
 
     .bottom-space {
@@ -117,6 +116,7 @@
         justify-content: center;
         align-items: center;
         text-align: center;
+        padding-block: 1.25rem;
     }
 
     #hf-link {
