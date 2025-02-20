@@ -16,7 +16,7 @@
         <div style="position: absolute; left: @($"{_popoverX}px"); top:@($"{_popoverY}px")">
 
             <MudPopover Style="z-index: 99999" AnchorOrigin="Origin.TopLeft" Open="ListItemViewModel.IsShowingActionSheet" Fixed="true">
-                <div>
+                <div class="d-flex flex-column item-actions">
                     @ActionSheet
                 </div>
             </MudPopover>
@@ -46,5 +46,11 @@
                             width: max-content;
                             justify-content: center;
                             margin-inline: auto; */
+    }
+
+    .item-actions{
+        background-color: var(--Surface);
+        border-radius: 0.25rem;
+        border: 1px solid var(--OutlineVariant);
     }
 </style>
