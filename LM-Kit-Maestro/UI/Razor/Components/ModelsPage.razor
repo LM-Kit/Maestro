@@ -67,16 +67,16 @@
 </SectionContent>
 
 <div id="model-page-container">
-    <div id="model-list-container">
+    <div id="model-list-container" class="hover-scrollable">
         <ModelList  LimitWidth="true" />
     </div>
 
     <div class="bottom-space">
         <div id="hf-link" class="d-flex flex-row align-center gap-2">
-            <img width="20" height="20" src="huggingface.svg" />
-            <span class="hf-link">
+            <img width="20" height="20" style="margin-bottom:2px" src="huggingface.svg" />
+            <MudText Typo="Typo.overline" Class="hf-link">
                 Explore more models
-            </span>
+            </MudText>
         </div>
     </div>
 </div>
@@ -107,8 +107,8 @@
     #model-list-container {
         display: flex;
         flex-direction: column;
-        overflow-y: auto;
-        padding: 0.5rem;
+        padding: 1rem;
+        margin-bottom: auto;
     }
 
     .bottom-space {
@@ -116,7 +116,7 @@
         justify-content: center;
         align-items: center;
         text-align: center;
-        padding-block: 1.25rem;
+        padding-block: 0.5rem;
     }
 
     #hf-link {

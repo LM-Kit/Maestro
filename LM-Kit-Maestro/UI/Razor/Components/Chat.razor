@@ -74,8 +74,8 @@
 <div id="chat-container">
     <ChatSidebar ShowScrollbar="true"
                  Position="ChatSidebar.SidebarPosition.Left"
-
                  @bind-IsToggled="ViewModel.ChatsSidebarIsToggled">
+
         <div class="d-flex flex-column flex-grow-1 pa-1">
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
             {
