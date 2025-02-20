@@ -98,6 +98,14 @@ public static class UIConstants
             //LinesDefault = "#33323e",
             //TableLines = "#33323e",
             //OverlayLight = "#12181F",
-        }
+        },
+
+         Typography = new Typography()
+         {
+             Overline = new OverlineTypography()
+             {
+                 LineHeight = "1.5",
+             }
+         }
     };
 }
