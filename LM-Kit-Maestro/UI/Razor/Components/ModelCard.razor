@@ -1,5 +1,5 @@
-﻿<div class="model-card @(GetClasses())" title="@ViewModel.ModelInfo.Description">
-    <MudGrid Justify="Justify.SpaceBetween" Spacing="@(Dense ? 0: 3)">
+﻿<div class="model-card-root @(GetClasses())" title="@ViewModel.ModelInfo.Description">
+    <MudGrid Justify="Justify.SpaceBetween" Spacing="@(Dense ? 0: 0)">
         <MudItem xs="12">
             <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3">
                 <div class="dot d-flex align-content-end @(GetScoreClass(ViewModel.CompatibilityLevel))"

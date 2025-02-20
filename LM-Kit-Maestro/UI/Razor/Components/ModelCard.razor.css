@@ -1,12 +1,12 @@
-﻿.model-card {
+﻿.model-card-root {
     flex-direction: row;
-    padding: 1rem;
     border: 1px solid var(--OutlineVariant);
     border-radius: 0.25rem;
     background-color: var(--Surface2);
     flex-grow: 1;
     flex-shrink: 1;
     display: flex;
+    /*padding: 1rem;*/
 }
 
 .model-card-focused {
@@ -14,7 +14,7 @@
 }
 
 .model-card-dense {
-    padding: 8px;
+    padding: 0.5rem;
     border: none;
 }
 
