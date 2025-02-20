@@ -3,13 +3,13 @@
         <MudItem xs="12">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                 <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                    <MudText Typo="Typo.subtitle2" Class="text-truncate">
-                        @ViewModel.ModelInfo.ShortModelName
-                    </MudText>
-
                     <div class="dot @(GetScoreClass(ViewModel.CompatibilityLevel))"
                          title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
                     </div>
+
+                    <MudText Typo="Typo.subtitle2" Class="text-truncate">
+                        @ViewModel.ModelInfo.ShortModelName
+                    </MudText>
                 </MudStack>
 
             </MudStack>

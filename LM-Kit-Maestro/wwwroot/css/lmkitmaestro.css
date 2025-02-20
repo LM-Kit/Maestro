@@ -77,7 +77,7 @@
     --PrimaryAccent: #3100AF;
     --Error: #FF5551;
     --Background: #12181F;
-    --OnBackground: #F0F6FC;
+    --OnSurface: #FFFFFF;
     --Surface: #06080A;
     --Surface15: #0C1014;
     --Surface2: #12181F;
@@ -161,12 +161,10 @@
 }
 
 .dot {
-    height: 10px;
-    width: 10px;
-    margin-left: 4px;
-    background-color: var(--OnBackground);
+    height: 0.75rem;
+    width: 0.75rem;
+    background-color: var(--OnSurface);
     border-radius: 50%;
-    display: inline-block;
 }
 
 .hide {
