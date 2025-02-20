@@ -16,7 +16,7 @@
         </MudItem>
 
         <MudItem xs="3" Class="d-flex align-items-center">
-            <MudStack AlignItems="AlignItems.Center" Row="true">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
                 <MudText Typo="Typo.overline" Class="outline text-truncate">
                     @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
                 </MudText>
@@ -24,6 +24,7 @@
                 @if (!ViewModel.IsLocallyAvailable)
                 {
                     <MudIcon Class="outline"
+                             title="@Locales.ModelDownloadAvailable"
                              Icon="@Icons.Material.Outlined.Cloud"
                              Size="Size.Small" />
                 }
