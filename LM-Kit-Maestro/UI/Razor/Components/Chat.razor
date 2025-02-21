@@ -162,7 +162,7 @@
         <div id="bottom-space">
             @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
             {
-                <MudText Align="Align.Center" Typo="Typo.overline">
+                <MudText Style="font-size:0.7rem" Align="Align.Center" Typo="Typo.overline">
                     Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                     @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
                     (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
