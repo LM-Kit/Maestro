@@ -13,23 +13,20 @@
 
             <ActionSheet>
                 <div class="d-flex flex-column">
-                    @if (modelItem.ViewModel.IsLocallyAvailable)
-                    {
-                        <MudButton Class="action-button" Variant="Variant.Text"
-                                   @onclick="() => ModelListViewModel.OpenModelInExplorer(modelItem.ViewModel)">
-                            <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
-                        </MudButton>
-                    }
+                    <MudButton Class="action-button" Variant="Variant.Text"
+                               @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelInExplorer(modelItem.ViewModel), modelItem)">
+                        <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
+                    </MudButton>
 
                     <MudButton Class="action-button" Variant="Variant.Text"
-                               @onclick="() => ModelListViewModel.OpenModelHfLink(modelItem.ViewModel)">
+                               @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelHfLink(modelItem.ViewModel), modelItem)">
                         <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
                     </MudButton>
 
                     @if (modelItem.ViewModel.IsLocallyAvailable)
                     {
                         <MudButton Class="action-button" Variant="Variant.Text"
-                                   @onclick="() => ModelListViewModel.DeleteModel(modelItem.ViewModel)">
+                                   @onclick="() => HandleActionButtonClick(() => ModelListViewModel.DeleteModel(modelItem.ViewModel), modelItem)">
                             <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
                         </MudButton>
                     }
@@ -132,9 +129,11 @@
         InvokeAsync(StateHasChanged);
     }
 
-    public void Dispose()
+    private void HandleActionButtonClick(Action action, ListItemViewModel<ModelInfoViewModel> modelItem)
     {
-        ModelListViewModel.Models.CollectionChanged -= OnModelsChanged;
-    }
+        action.Invoke();
+        modelItem.IsShowingActionSheet = false;
 
+        InvokeAsync(StateHasChanged);
+    }
 }
