@@ -9,13 +9,14 @@ using System.ComponentModel;
 
 namespace LMKit.Maestro.UI.Razor.Components;
 
-public partial class Chat
+public partial class Chat : IDisposable
 {
     private const int UIUpdateDelayMilliseconds = 200;
 
     private ConversationViewModel? _previousConversationViewModel;
     private MessageViewModel? _latestAssistantResponse;
 
+    private string? _pageResizeEventId;
     private bool _autoScrolling;
     private bool _hasPendingScrollToEnd;
     private bool _ignoreScrollsUntilNextScrollUp;
@@ -92,7 +93,7 @@ public partial class Chat
         ViewModel.ConversationListViewModel.ConversationPropertyChanged += OnConversationPropertyChanged;
         ViewModel.ConversationListViewModel.PropertyChanged += OnConversationListViewModelPropertyChanged;
 
-        await ResizeHandler.RegisterPageResizeAsync(Resized);
+        _pageResizeEventId = await ResizeHandler.RegisterPageResizeAsync(Resized);
         await JS.InvokeVoidAsync("initializeScrollHandler", DotNetObjectReference.Create(this));
     }
 
@@ -334,6 +335,17 @@ public partial class Chat
         }
 
         _previousScrollTop = _scrollTop;
+    }
+
+    public async void Dispose()
+    {
+        ViewModel.ConversationListViewModel.ConversationPropertyChanged -= OnConversationPropertyChanged;
+        ViewModel.ConversationListViewModel.PropertyChanged -= OnConversationListViewModelPropertyChanged;
+
+        if (_pageResizeEventId != null)
+        {
+            await ResizeHandler.RemovePageResizeAsync(_pageResizeEventId);
+        }
     }
 
     private void OnConversationItemSelected(ConversationViewModel conversationViewModel)
