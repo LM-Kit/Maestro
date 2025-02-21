@@ -36,37 +36,50 @@
 
 .chat-action-button {
     align-self: center;
-    border-radius: 50%;
-    border-width: 0;
-    padding: 6px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     background-color: transparent;
     color: var(--Outline);
+    font-size: 0.7rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.25rem;
 }
 
     .chat-action-button:hover {
-        background-color: var(--Surface3);
+        background-color: var(--Surface2);
     }
 
 .message-footer {
-    margin: 8px;
+    margin: 0.5rem;
     display: flex;
     align-items: center;
 }
 
 
-.message-footer-text {
-    line-height: 20px;
-    color: var(--Outline);
+/*.message-footer-text {
+    color: var(--Outline) !important;
     display: inline-block;
     align-self: center;
     margin-inline: 4px;
     background-color: red;
 }
-
+*/
 
 .user-message-footer-content {
     margin-left: auto;
+}
+
+/*.eject-button {
+    font-size: 0.6rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--Primary);
+    background-color: var(--Surface2);
+    border-radius: 50%;
+}*/
+
+.message-footer-content{
+    /*padding-block: 0.5rem;*/
 }
