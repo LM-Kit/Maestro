@@ -29,8 +29,6 @@ public partial class NumericTextField<T> : ComponentBase where T : struct, INumb
                 _value = value;
                 ValueChanged.InvokeAsync(value);
                 _inputText = value.ToString()!;
-                Debug.WriteLine("_input text: " + _inputText);
-
             }
         }
     }

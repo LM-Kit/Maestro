@@ -8,35 +8,36 @@
         <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
             @if (ViewModel.FileManager.FileCollectingInProgress)
             {
-                <MudProgressCircular Class="xs-loader outline" Size="Size.Small" Indeterminate="true" />
+                        <MudProgressCircular Class="xs-loader outline" Size="Size.Small" Indeterminate="true"/>
             }
 
             @if (ViewModel.FileManager.DownloadedCount > 0)
             {
-                <MudText Typo="Typo.overline">
-                    <span>You have</span>
-                    <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
-                    <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
-                    <span> taking up </span>
-                    <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
-                </MudText>
+                        <MudText Typo="Typo.overline">
+                            <span>You have</span>
+                            <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
+                            <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
+                            <span> taking up </span>
+                            <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
+                        </MudText>
             }
             else
             {
                 @if (ViewModel.FileManager.FileCollectingInProgress)
                 {
-                    <MudText Align="Align.Center" Typo="Typo.overline">
-                        Scanning for models...
-                    </MudText>
+                                    <MudText Align="Align.Center" Typo="Typo.overline">
+                                        Scanning for models...
+                                    </MudText>
                 }
                 else
                 {
-                    <MudText Align="Align.Center" Typo="Typo.overline">
-                        You model folder is empty.
-                    </MudText>
+                                    <MudText Align="Align.Center" Typo="Typo.overline">
+                                        You model folder is empty.
+                                    </MudText>
                 }
             }
         </div>
+
         <div class="d-flex flex-row gap-2 flex-grow-1 justify-center align-center align-content-center px-4">
             <MudText Typo="Typo.overline">
                 Model folder:
@@ -48,32 +49,46 @@
                 </MudText>
             </div>
 
-            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                        Icon="fas fa-edit"
-                        Tooltip="@Locales.SelectAnotherFolder"
-                        OnClick="ViewModel.PickModelsFolder" />
+            <MudOverlay @bind-Visible="IsShowingModelFolderActions" AutoClose="true" />
+            <div>
+                <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                            Icon="fas fa-ellipsis"
+                            OnClick="() => IsShowingModelFolderActions = !IsShowingModelFolderActions"/>
 
-            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                        Icon="fas fa-folder-open"
-                        Tooltip="@Locales.OpenInFileExplorer"
-                        OnClick="ViewModel.OpenModelsFolder" />
+                <MudPopover Open="IsShowingModelFolderActions" 
+                            AnchorOrigin="Origin.CenterRight"
+                            TransformOrigin="Origin.CenterLeft">
 
-            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                        Icon="fas fa-rotate-left"
-                        Tooltip="@Locales.ResetModelFolder"
-                        OnClick="ViewModel.ResetModelsFolder" />
+                <div class="action-sheet">
+                        <MudButton Class="action-button" Variant="Variant.Text"
+                                   @onclick="ViewModel.OpenModelsFolder">
+                            <MudText Typo="Typo.subtitle2">@Locales.OpenInFileExplorer</MudText>
+                        </MudButton>
+
+                        <MudButton Class="action-button" Variant="Variant.Text"
+                                   @onclick="ViewModel.PickModelsFolder">
+                            <MudText Typo="Typo.subtitle2">@Locales.SelectAnotherFolder</MudText>
+                        </MudButton>
+
+                        <MudButton Class="action-button" Variant="Variant.Text"
+                                   @onclick="ViewModel.ResetModelsFolder">
+                            <MudText Typo="Typo.subtitle2">@Locales.ResetModelFolder</MudText>
+                        </MudButton>
+                    </div>
+                </MudPopover>
+            </div>
         </div>
     </div>
 </SectionContent>
 
 <div id="model-page-container">
     <div id="model-list-container" class="hover-scrollable">
-        <ModelList  LimitWidth="true" />
+        <ModelList LimitWidth="true"/>
     </div>
 
     <div class="bottom-space">
         <div id="hf-link" class="d-flex flex-row align-center gap-2">
-            <img width="20" height="20" style="margin-bottom:2px" src="huggingface.svg" />
+            <img width="20" height="20" style="margin-bottom:2px" src="huggingface.svg"/>
             <MudText Typo="Typo.overline" Class="hf-link">
                 Explore more models
             </MudText>
@@ -124,13 +139,28 @@
         color: var(--Outline);
     }
 
-        #hf-link:hover {
-            color: #FFD21E;
-        }
+    #hf-link:hover {
+        color: #FFD21E;
+    }
 
 </style>
 
 @code {
+
+    private bool _isShowingModelFolderActions;
+
+    private bool IsShowingModelFolderActions
+    {
+        get => _isShowingModelFolderActions;
+        set
+        {
+            if (value != _isShowingModelFolderActions)
+            {
+                _isShowingModelFolderActions = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
 
     private void OnDeleteClicked(ModelInfoViewModel modelInfoViewModel)
     {
@@ -167,5 +197,4 @@
     {
         InvokeAsync(() => StateHasChanged());
     }
-
 }

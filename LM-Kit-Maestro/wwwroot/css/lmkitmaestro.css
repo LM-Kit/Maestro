@@ -214,6 +214,14 @@
     flex-direction: column;
 }
 
+.action-button {
+    border-radius: 0.25rem;
+}
+
+    .action-button:hover {
+        background-color: var(--Surface15) !important;
+    }
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px !important;

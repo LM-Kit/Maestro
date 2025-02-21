@@ -13,8 +13,8 @@
         public const string DisplaySettings = "Display Settings";
         public const string DisplayChats = "Display Chats";
         public const string EjectModel = "Eject model";
-        public const string SelectAnotherFolder = "Select another folder";
-        public const string ResetModelFolder = "Reset to default model folder";
+        public const string SelectAnotherFolder = "Change folder";
+        public const string ResetModelFolder = "Reset to default folder";
         public const string OpenInFileExplorer = "Open in File Explorer";
         public const string ChatbotPurpose = "Chatbot purpose";
         public const string MaxCompletionTokens = "Maximum completion tokens";

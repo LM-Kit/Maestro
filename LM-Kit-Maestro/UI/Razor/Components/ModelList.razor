@@ -36,23 +36,6 @@
     }
 </MudStack>
 
-
-<style>
-    .item-actions {
-        background-color: var(--Surface);
-        border-radius: 0.25rem;
-        border: 1px solid var(--OutlineVariant);
-    }
-
-    .action-button {
-        border-radius: 0.25rem;
-    }
-
-        .action-button:hover {
-            background-color: var(--Surface2) !important;
-        }
-</style>
-
 @code {
     private ObservableCollection<ListItemViewModel<ModelInfoViewModel>> _modelItems = new();
     [Parameter] public EventCallback<ModelInfoViewModel> OnClick { get; set; }
