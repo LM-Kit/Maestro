@@ -206,6 +206,13 @@
     display: block;
 }
 
+.action-sheet {
+    background-color: var(--Surface);
+    border-radius: 0.25rem;
+    border: 1px solid var(--OutlineVariant);
+    display: flex;
+    flex-direction: column;
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar {
