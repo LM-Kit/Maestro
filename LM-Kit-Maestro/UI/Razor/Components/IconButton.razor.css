@@ -3,8 +3,6 @@
     justify-content: center;
     align-items: center;
     display: flex;
-    width: 28px;
-    height: 28px;
     justify-content: center;
     align-items: center;
 }
@@ -33,4 +31,14 @@
 
     .secondary-action-button:hover {
         background-color: var(--Surface3);
+    }
+
+    .icon-button-medium{
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+
+    .icon-button-small{
+        width: 1.25rem;
+        height: 1.25rem;
     }

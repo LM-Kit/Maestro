@@ -4,7 +4,7 @@
     display: flex;
     flex-grow: 1;
     flex-shrink: 1;
-    margin-inline: 16px;
+    margin-inline: 1rem;
 }
 
 #model-selection-button-container {
