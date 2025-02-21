@@ -8,32 +8,32 @@
         <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
             @if (ViewModel.FileManager.FileCollectingInProgress)
             {
-                            <MudProgressCircular Class="xs-loader outline" Size="Size.Small" Indeterminate="true"/>
+                <MudProgressCircular Class="xs-loader outline" Size="Size.Small" Indeterminate="true"/>
             }
 
             @if (ViewModel.FileManager.DownloadedCount > 0)
             {
-                            <MudText Typo="Typo.overline">
-                                <span>You have</span>
-                                <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
-                                <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
-                                <span> taking up </span>
-                                <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
-                            </MudText>
+                <MudText Typo="Typo.overline">
+                    <span>You have</span>
+                    <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
+                    <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
+                    <span> taking up </span>
+                    <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
+                </MudText>
             }
             else
             {
                 @if (ViewModel.FileManager.FileCollectingInProgress)
                 {
-                                            <MudText Align="Align.Center" Typo="Typo.overline">
-                                                Scanning for models...
-                                            </MudText>
+                    <MudText Align="Align.Center" Typo="Typo.overline">
+                        Scanning for models...
+                    </MudText>
                 }
                 else
                 {
-                                            <MudText Align="Align.Center" Typo="Typo.overline">
-                                                You model folder is empty.
-                                            </MudText>
+                    <MudText Align="Align.Center" Typo="Typo.overline">
+                        You model folder is empty.
+                    </MudText>
                 }
             }
         </div>
@@ -49,29 +49,30 @@
                 </MudText>
             </div>
 
-            <MudOverlay @bind-Visible="IsShowingModelFolderActions" AutoClose="true" />
+            <MudOverlay @bind-Visible="IsShowingModelFolderActions" AutoClose="true"/>
             <div>
-                <button id="model-folder-button" @onclick="() => IsShowingModelFolderActions = !IsShowingModelFolderActions">
+                <button id="model-folder-button"
+                        @onclick="() => IsShowingModelFolderActions = !IsShowingModelFolderActions">
                     <span class="fas fa-ellipsis"></span>
                 </button>
 
-                <MudPopover Open="IsShowingModelFolderActions" 
+                <MudPopover Open="IsShowingModelFolderActions"
                             AnchorOrigin="Origin.CenterRight"
                             TransformOrigin="Origin.CenterLeft">
 
-                <div class="action-sheet">
+                    <div class="action-sheet">
                         <MudButton Class="action-button" Variant="Variant.Text"
-                                   @onclick="ViewModel.OpenModelsFolder">
+                                   @onclick="() => HandleActionButtonClick(() => ViewModel.OpenModelsFolder())">
                             <MudText Typo="Typo.subtitle2">@Locales.OpenInFileExplorer</MudText>
                         </MudButton>
 
                         <MudButton Class="action-button" Variant="Variant.Text"
-                                   @onclick="ViewModel.PickModelsFolder">
+                                   @onclick="() => HandleActionButtonClick(() => ViewModel.PickModelsFolder())">
                             <MudText Typo="Typo.subtitle2">@Locales.SelectAnotherFolder</MudText>
                         </MudButton>
 
                         <MudButton Class="action-button" Variant="Variant.Text"
-                                   @onclick="ViewModel.ResetModelsFolder">
+                                   @onclick="() => HandleActionButtonClick(() => ViewModel.ResetModelsFolder())">
                             <MudText Typo="Typo.subtitle2">@Locales.ResetModelFolder</MudText>
                         </MudButton>
                     </div>
@@ -87,8 +88,8 @@
     </div>
 
     <div class="bottom-space">
-        <div id="hf-link" 
-              class="d-flex flex-row align-center gap-2"
+        <div id="hf-link"
+             class="d-flex flex-row align-center gap-2"
              @onclick="ViewModel.OpenHuggingFaceLink">
             <img width="20" height="20" style="margin-bottom:2px" src="huggingface.svg"/>
             <MudText Typo="Typo.overline" Class="hf-link">
@@ -149,7 +150,7 @@
         color: #FFD21E;
     }
 
-    #model-folder-button{
+    #model-folder-button {
         width: 1.75rem;
         height: 1.75rem;
         background-color: transparent;
@@ -160,7 +161,7 @@
     }
 
     #model-folder-button:hover {
-            background-color: var(--Surface3);
+        background-color: var(--Surface3);
     }
 </style>
 
@@ -216,4 +217,12 @@
     {
         InvokeAsync(() => StateHasChanged());
     }
+
+    private void HandleActionButtonClick(Action action)
+    {
+        action.Invoke();
+        IsShowingModelFolderActions = false;
+        InvokeAsync(StateHasChanged);
+    }
+
 }
