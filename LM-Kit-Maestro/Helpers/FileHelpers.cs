@@ -136,6 +136,15 @@ public static class FileHelpers
         return filePath;
     }
 
+    public static Uri GetModelFileHuggingFaceLink(ModelCard modelCard)
+    {
+        var builder = new UriBuilder("https://huggingface.co");
+
+        builder.Path = $"{modelCard.Publisher}/{modelCard.Repository}";
+
+        return builder.Uri;
+    }
+
     public static bool IsFileDirectory(string filePath)
     {
         try

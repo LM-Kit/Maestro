@@ -111,6 +111,7 @@ namespace LMKit.Maestro.ViewModels
                     "OK");
             }
         }
+
         public void OpenModelInExplorer(ModelInfoViewModel modelInfoViewModel)
         {
             string filePath = modelInfoViewModel.ModelInfo.LocalPath;
@@ -119,11 +120,11 @@ namespace LMKit.Maestro.ViewModels
             {
                 Task.Run(() =>
                 {
-                    try
-                    {
-                        Process.Start("explorer.exe", $"/select,\"{filePath}\"");
-                    }
-                    catch { }
+#if WINDOWS
+                    Process.Start("explorer.exe", $"/select,\"{filePath}\"");
+#elif MACCATALYST
+                    Process.Start("open", "-R " + filePath);
+#endif
                 });
             }
         }
@@ -131,8 +132,10 @@ namespace LMKit.Maestro.ViewModels
 
         public void OpenModelHfLink(ModelInfoViewModel modelInfoViewModel)
         {
-            //todo: open model Hugging Face page
-            _ = _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
+            Task.Run(() =>
+            {
+                _ = _launcher.OpenAsync(FileHelpers.GetModelFileHuggingFaceLink(modelInfoViewModel.ModelInfo));
+            });
         }
 
         [RelayCommand]

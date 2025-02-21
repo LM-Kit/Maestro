@@ -4,38 +4,38 @@
 <MudStack Spacing="@(Dense ? 0 : 5)">
     @foreach (var modelItem in _modelItems)
     {
-            <ListItemWrapper LimitWidth="LimitWidth" ListItemViewModel="modelItem">
-                <ChildContent>
-                    <div @onclick="() => OnClick.InvokeAsync(modelItem.ViewModel)">
+        <ListItemWrapper LimitWidth="LimitWidth" ListItemViewModel="modelItem">
+            <ChildContent>
+                <div @onclick="() => OnClick.InvokeAsync(modelItem.ViewModel)">
                     <ModelCard IsFocused="modelItem.IsShowingActionSheet || modelItem.IsHovered" Dense="Dense" Selectable="Selectable" ViewModel="modelItem.ViewModel" />
-                    </div>
-                </ChildContent>
+                </div>
+            </ChildContent>
 
-                <ActionSheet>
-                    <div class="d-flex flex-column">
+            <ActionSheet>
+                <div class="d-flex flex-column">
                     @if (modelItem.ViewModel.IsLocallyAvailable)
                     {
-                                <MudButton Class="action-button" Variant="Variant.Text"
-                                           @onclick="() => ModelListViewModel.OpenModelInExplorer(modelItem.ViewModel)">
-                                    <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
-                                </MudButton>    
-                    }
-
                         <MudButton Class="action-button" Variant="Variant.Text"
-                                   @onclick="() => ModelListViewModel.OpenModelHfLink(modelItem.ViewModel)">
-                            <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
+                                   @onclick="() => ModelListViewModel.OpenModelInExplorer(modelItem.ViewModel)">
+                            <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
                         </MudButton>
+                    }
+
+                    <MudButton Class="action-button" Variant="Variant.Text"
+                               @onclick="() => ModelListViewModel.OpenModelHfLink(modelItem.ViewModel)">
+                        <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
+                    </MudButton>
 
                     @if (modelItem.ViewModel.IsLocallyAvailable)
                     {
-                                <MudButton Class="action-button" Variant="Variant.Text"
-                                           @onclick="() => ModelListViewModel.DeleteModel(modelItem.ViewModel)">
-                                    <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
-                                </MudButton>
+                        <MudButton Class="action-button" Variant="Variant.Text"
+                                   @onclick="() => ModelListViewModel.DeleteModel(modelItem.ViewModel)">
+                            <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
+                        </MudButton>
                     }
-                    </div>
-                </ActionSheet>
-            </ListItemWrapper>
+                </div>
+            </ActionSheet>
+        </ListItemWrapper>
     }
 </MudStack>
 
@@ -47,13 +47,13 @@
         border: 1px solid var(--OutlineVariant);
     }
 
-    .action-button{
+    .action-button {
         border-radius: 0.25rem;
     }
 
-    .action-button:hover {
-        background-color: var(--Surface2) !important;
-    }
+        .action-button:hover {
+            background-color: var(--Surface2) !important;
+        }
 </style>
 
 @code {
