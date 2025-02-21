@@ -9,10 +9,12 @@
             <div class="d-flex justify-center">
                 @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
                 {
-                    <MudIconButton Icon="fas fa-eject"
-                                   Size="Size.Small"
-                                   Class="eject-button"
-                                   OnClick="OnEjectButtonClicked" />
+                    <button title="@Locales.EjectModel"
+                            class="eject-button"
+                            @onclick:stopPropagation="true"
+                            @onclick="OnEjectButtonClicked">
+                        <span class="fas fa-eject" />
+                    </button>
                 }
             </div>
 

@@ -77,25 +77,15 @@
     background-color: var(--Primary) !important;
 }
 
-.mud-icon-size-small {
-    font-size: 10px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 8px !important;
+.eject-button {
+    font-size: 0.6rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--Primary);
+    background-color: var(--Surface2);
+    border-radius: 50%;
 }
 
-
-::deep .eject-button {
-    color: var(--Primary) !important;
-    background-color: var(--Surface2) !important;
-    padding: 0.5rem !important;
-}
-
-    ::deep .eject-button:hover {
-        background-color: var(--Surface3) !important;
+    .eject-button:hover {
+        background-color: var(--Surface3);
     }
-
-::deep .mud-icon-size-small {
-    font-size: 0.66rem !important;
-}
