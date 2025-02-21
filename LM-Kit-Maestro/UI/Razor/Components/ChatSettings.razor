@@ -15,7 +15,7 @@
                     {
                         <IconButton Style="IconButton.ButtonStyle.Icon"
                                     Icon="fas fa-rotate-left"
-                                    OnClick="OnResetSystemPromptClicked"/>
+                                    OnClick="OnResetSystemPromptClicked" />
                     }
 
                 </div>
@@ -25,20 +25,20 @@
                               Style="--mud-palette-primary: var(--Secondary)"
                               Typo="Typo.caption"
                               Lines="5"
-                              @bind-Value="ChatbotPurposeInput"/>
+                              @bind-Value="ChatbotPurposeInput" />
             </div>
 
             <div class="d-flex justify-content-between align-center">
                 <div class="d-flex align-center flex-grow-1 overflow-hidden">
                     <MudText Typo="Typo.overline" Class="text-truncate">Limit response length</MudText>
                     <MudSwitch UncheckedColor="Color.Secondary" Color="Color.Secondary" Ripple="false" Size="Size.Small"
-                               @bind-Value="LimitRespongeLength"/>
+                               @bind-Value="LimitRespongeLength" />
                 </div>
 
                 <div class="flex-shrink-0">
                     @if (LimitRespongeLength)
                     {
-                        <NumericTextField @bind-Value="ViewModel.MaximumCompletionTokens" MinValue="1" MaxValue="2048"/>
+                        <NumericTextField @bind-Value="ViewModel.MaximumCompletionTokens" MinValue="1" MaxValue="2048" />
                     }
                 </div>
             </div>
@@ -54,22 +54,22 @@
                     <MudSlider @bind-Value="ViewModel.MaximumCompletionTokens"
                                Min="1"
                                Max="2048"
-                               Color="Color.Secondary"/>
+                               Color="Color.Secondary" />
                 </div>
             }
 
             <NumericSetting @bind-Value="ViewModel.RequestTimeout"
                             Title="Request timeout (sec)"
                             MinValue="10"
-                            MaxValue="120"/>
+                            MaxValue="120" />
 
             <NumericSetting @bind-Value="ViewModel.ContextSize"
                             Title="Context size"
                             MinValue="512"
-                            MaxValue="32768"/>
+                            MaxValue="32768" />
         </MudStack>
     </Expander>
-    <MudDivider/>
+    <MudDivider />
 
     <Expander Title="Sampling configuration">
         <MudStack Class="pa-2" Spacing="6">
@@ -79,12 +79,15 @@
                     Sampling mode
                 </MudText>
 
-                <MudSpacer/>
+                <MudSpacer />
 
-                <MudSelect Typo="Typo.caption" Adornment="Adornment.None" @bind-Value="ViewModel.SamplingMode">
+                <MudSelect Typo="Typo.caption"
+                           Adornment="Adornment.None"
+                           @bind-Value="ViewModel.SamplingMode"
+                           Style="--mud-palette-primary: var(--Secondary)">
                     @foreach (var value in Enum.GetValues<SamplingMode>())
                     {
-                        <MudSelectItem Value="@value">
+                        <MudSelectItem Style="--mud-palette-primary: var(--Secondary)" Value="@value">
                             <MudText Typo="Typo.overline">
                                 @value
                             </MudText>
@@ -98,49 +101,49 @@
                 <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.Temperature"
                                 Title="Temperature"
                                 MinValue="0"
-                                MaxValue="1"/>
+                                MaxValue="1" />
 
                 <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.DynamicTemperatureRange"
                                 Title="Dynamic temperature range"
                                 MinValue="0"
-                                MaxValue="1"/>
+                                MaxValue="1" />
 
                 <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopP"
                                 Title="Top P"
                                 MinValue="0"
-                                MaxValue="1"/>
+                                MaxValue="1" />
 
                 <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.TopK"
                                 Title="Top K"
                                 MinValue="1"
-                                MaxValue="1000"/>
+                                MaxValue="1000" />
 
                 <NumericSetting @bind-Value="ViewModel.RandomSamplingSettings.LocallyTypical"
                                 Title="Locally typical"
                                 MinValue="0"
-                                MaxValue="1"/>
+                                MaxValue="1" />
             }
             else if (ViewModel.SamplingMode == SamplingMode.Mirostat2)
             {
                 <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.Temperature"
                                 Title="Temperature"
                                 MinValue="0"
-                                MaxValue="1"/>
+                                MaxValue="1" />
 
                 <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.TargetEntropy"
                                 Title="Target entropy"
                                 MinValue="0"
-                                MaxValue="10"/>
+                                MaxValue="10" />
 
                 <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.LearningRate"
                                 Title="Learning rate"
                                 MinValue="0"
-                                MaxValue="1"/>
+                                MaxValue="1" />
             }
 
         </MudStack>
     </Expander>
-    <MudDivider/>
+    <MudDivider />
 </div>
 
 @code
