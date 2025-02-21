@@ -8,14 +8,14 @@
     position: relative;
     width: 100%;
     transition: background-color 0.5s, border-color 0.5s;
-    border-color: transparent;
     background-color: var(--Surface2);
     border-radius: 1rem;
+    border: 1px solid transparent;
 }
 
     #input-border:focus-within {
         background-color: var(--Surface);
-        border: 1px solid var(--OutlineVariant);
+        border-color: var(--OutlineVariant);
     }
 
 
@@ -52,23 +52,22 @@
 .send-button {
     height: 1.75rem;
     width: 1.75rem;
-    transition: background-color 0.1s, border-color 0.1s;
+    transition: color 0.3s, background-color 0.3s, border-color 0.3s;
     cursor: pointer;
     font-size: 0.75rem;
-    color: var(--Surface2);
     border-radius: 50%;
     background-color: transparent;
 }
 
 .disabled-button {
     background-color: transparent;
-    color: var(--Outline);
+    color: var(--OutlineVariant);
     cursor: not-allowed;
 }
 
 .enabled-button {
-    color: var(--Surface2);
-    background-color: var(--Outline);
+    color: var(--OnSurface);
+    /*background-color: var(--Outline);*/
     /*background-color: var(--Outline);*/
     /*background-color: var(--Primary);*/
 }
