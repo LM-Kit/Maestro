@@ -32,7 +32,7 @@
 }
 
 .tertiary {
-    color: var(--Tertiary);
+    color: #FA8168;
 }
 
 .item-actions {
@@ -41,8 +41,8 @@
 }
 
 .score-1 {
-    background-color: #FA8168;
-    color: #FA8168;
+    background-color: #EF594D;
+    color: #EF594D;
 }
 
 .score-2 {

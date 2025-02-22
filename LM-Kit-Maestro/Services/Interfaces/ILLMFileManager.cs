@@ -13,7 +13,6 @@ public interface ILLMFileManager
     string ModelStorageDirectory { get; set; }
     long TotalModelSize { get; }
     int DownloadedCount { get; }
-    public bool EnableLowPerformanceModels { get; set; }
     event EventHandler? FileCollectingCompleted;
     void Initialize();
     void DeleteModel(ModelCard modelCard);

@@ -57,10 +57,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     [ObservableProperty]
     private bool _fileCollectingInProgress;
 
-    [ObservableProperty]
-    private bool _enableLowPerformanceModels;
-
-
     private string _modelStorageDirectory = string.Empty;
     public string ModelStorageDirectory
     {
@@ -97,7 +93,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         Models = new ReadOnlyObservableCollection<ModelCard>(_models);
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
         _appSettingsService = appSettingsService;
-        _enableLowPerformanceModels = _appSettingsService.EnableLowPerformanceModels;
         _httpClient = httpClient;
         _models.CollectionChanged += OnModelCollectionChanged;
         _unsortedModels.CollectionChanged += OnUnsortedModelCollectionChanged;
@@ -341,7 +336,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         if (_enablePredefinedModels)
         {
-            var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !EnableLowPerformanceModels);
+            var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !_appSettingsService.EnableLowPerformanceModels);
 
             if (_models.Count > 0)
             {
@@ -414,7 +409,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
             if (!ContainsModel(_models, modelCard))
             {
-                if (isSlowModel && !EnableLowPerformanceModels)
+                if (isSlowModel && !_appSettingsService.EnableLowPerformanceModels)
                 {
                     return false;
                 }
@@ -428,7 +423,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
                 return true;
             }
-            else if (isSlowModel && !EnableLowPerformanceModels)
+            else if (isSlowModel && !_appSettingsService.EnableLowPerformanceModels)
             {
                 _models.Remove(modelCard);
             }
@@ -493,6 +488,10 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         if (e.PropertyName == nameof(IAppSettingsService.ModelStorageDirectory))
         {
             ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
+        }
+        else if (e.PropertyName == nameof(IAppSettingsService.EnableLowPerformanceModels))
+        {
+            _ = CollectModelsAsync();
         }
     }
 
@@ -586,11 +585,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 #endif
 
-    partial void OnEnableLowPerformanceModelsChanged(bool value)
-    {
-        _appSettingsService.EnableLowPerformanceModels = value;
-        _ = CollectModelsAsync();
-    }
 
     private void OnModelCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
