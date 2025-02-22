@@ -13,10 +13,13 @@
 
             <ActionSheet>
                 <div class="d-flex flex-column">
-                    <MudButton Class="action-button" Variant="Variant.Text"
-                               @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelInExplorer(modelItem.ViewModel), modelItem)">
-                        <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
-                    </MudButton>
+                    @if (modelItem.ViewModel.IsLocallyAvailable)
+                    {
+                        <MudButton Class="action-button" Variant="Variant.Text"
+                                   @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelInExplorer(modelItem.ViewModel), modelItem)">
+                            <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
+                        </MudButton>
+                    }
 
                     <MudButton Class="action-button" Variant="Variant.Text"
                                @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelHfLink(modelItem.ViewModel), modelItem)">
