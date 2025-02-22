@@ -12,5 +12,5 @@ public sealed class RandomSamplingConfig
 
     public int TopK { get; set; } = LMKitDefaultSettings.DefaultRandomSamplingTopK;
 
-    public float LocallyTypical { get; set; } = LMKitDefaultSettings.DefaultRandomSamplingLocallyTypical;
+    //public float LocallyTypical { get; set; } = LMKitDefaultSettings.DefaultRandomSamplingLocallyTypical;
 }

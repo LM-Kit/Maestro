@@ -80,7 +80,7 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        public float LocallyTypical
+        /*public float LocallyTypical
         {
             get => _config.LocallyTypical;
             set
@@ -93,7 +93,7 @@ namespace LMKit.Maestro.ViewModels
                     OnPropertyChanged();
                 }
             }
-        }
+        }*/
 
         public RandomSamplingSettingsViewModel(RandomSamplingConfig randomSamplingConfig)
         {
@@ -107,7 +107,7 @@ namespace LMKit.Maestro.ViewModels
             TopP = LMKitDefaultSettings.DefaultRandomSamplingTopP;
             MinP = LMKitDefaultSettings.DefaultRandomSamplingMinP;
             TopK = LMKitDefaultSettings.DefaultRandomSamplingTopK;
-            LocallyTypical = LMKitDefaultSettings.DefaultRandomSamplingLocallyTypical;
+            //LocallyTypical = LMKitDefaultSettings.DefaultRandomSamplingLocallyTypical;
         }
     }
 }

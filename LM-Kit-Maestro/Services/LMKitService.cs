@@ -165,7 +165,7 @@ public partial class LMKitService : INotifyPropertyChanged
                     TopP = config.RandomSamplingConfig.TopP,
                     TopK = config.RandomSamplingConfig.TopK,
                     MinP = config.RandomSamplingConfig.MinP,
-                    LocallyTypical = config.RandomSamplingConfig.LocallyTypical
+                    //LocallyTypical = config.RandomSamplingConfig.LocallyTypical
                 };
 
             case SamplingMode.Greedy:

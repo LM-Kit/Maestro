@@ -54,7 +54,6 @@ namespace LMKit.Maestro.ViewModels
             set
             {
                 int newValue = (int)Math.Round(value / 128.0) * 128;
-
                 if (_config.ContextSize != newValue)
                 {
                     _config.ContextSize = newValue;
@@ -77,13 +76,13 @@ namespace LMKit.Maestro.ViewModels
         }
 
         [ObservableProperty]
-        RandomSamplingSettingsViewModel _randomSamplingSettings;
+        private RandomSamplingSettingsViewModel _randomSamplingSettings;
 
         [ObservableProperty]
-        TopNSigmaSamplingSettingsViewModel _topNSigmaSamplingSettings;
+        private TopNSigmaSamplingSettingsViewModel _topNSigmaSamplingSettings;
 
         [ObservableProperty]
-        Mirostat2SamplingSettingsViewModel _Mirostat2SamplingSettings;
+        private Mirostat2SamplingSettingsViewModel _mirostat2SamplingSettings;
 
         public SettingsViewModel(IAppSettingsService appSettingsService, LMKitService lmkitService)
         {
@@ -102,6 +101,7 @@ namespace LMKit.Maestro.ViewModels
             MaximumCompletionTokens = LMKitDefaultSettings.DefaultMaximumCompletionTokens;
             RequestTimeout = LMKitDefaultSettings.DefaultRequestTimeout;
             ContextSize = LMKitDefaultSettings.DefaultContextSize;
+
             RandomSamplingSettings.Reset();
             Mirostat2SamplingSettings.Reset();
             TopNSigmaSamplingSettings.Reset();
@@ -113,7 +113,6 @@ namespace LMKit.Maestro.ViewModels
             SamplingMode = _appSettingsService.SamplingMode;
             MaximumCompletionTokens = _appSettingsService.MaximumCompletionTokens;
             RequestTimeout = _appSettingsService.RequestTimeout;
-            SamplingMode = _appSettingsService.SamplingMode;
             ContextSize = _appSettingsService.ContextSize;
 
             var randomSamplingConfig = _appSettingsService.RandomSamplingConfig;
@@ -122,17 +121,17 @@ namespace LMKit.Maestro.ViewModels
             RandomSamplingSettings.TopP = randomSamplingConfig.TopP;
             RandomSamplingSettings.MinP = randomSamplingConfig.MinP;
             RandomSamplingSettings.TopK = randomSamplingConfig.TopK;
-            RandomSamplingSettings.LocallyTypical = randomSamplingConfig.LocallyTypical;
+            //RandomSamplingSettings.LocallyTypical = randomSamplingConfig.LocallyTypical;
 
-            var topNSigmaConfig = _appSettingsService.TopNSigmaSamplingConfig;
-            TopNSigmaSamplingSettings.Temperature = topNSigmaConfig.Temperature;
-            TopNSigmaSamplingSettings.TopK = topNSigmaConfig.TopK;
-            TopNSigmaSamplingSettings.TopNSigma = topNSigmaConfig.TopNSigma;
+            var topNSigmaSamplingConfig = _appSettingsService.TopNSigmaSamplingConfig;
+            TopNSigmaSamplingSettings.Temperature = topNSigmaSamplingConfig.Temperature;
+            TopNSigmaSamplingSettings.TopK = topNSigmaSamplingConfig.TopK;
+            TopNSigmaSamplingSettings.TopNSigma = topNSigmaSamplingConfig.TopNSigma;
 
-            var Mirostat2SamplingConfig = _appSettingsService.Mirostat2SamplingConfig;
-            Mirostat2SamplingSettings.Temperature = Mirostat2SamplingConfig.Temperature;
-            Mirostat2SamplingSettings.TargetEntropy = Mirostat2SamplingConfig.TargetEntropy;
-            Mirostat2SamplingSettings.LearningRate = Mirostat2SamplingConfig.LearningRate;
+            var mirostat2SamplingConfig = _appSettingsService.Mirostat2SamplingConfig;
+            Mirostat2SamplingSettings.Temperature = mirostat2SamplingConfig.Temperature;
+            Mirostat2SamplingSettings.TargetEntropy = mirostat2SamplingConfig.TargetEntropy;
+            Mirostat2SamplingSettings.LearningRate = mirostat2SamplingConfig.LearningRate;
         }
 
         public void Save()
@@ -148,9 +147,7 @@ namespace LMKit.Maestro.ViewModels
             _appSettingsService.TopNSigmaSamplingConfig = _config.TopNSigmaSamplingConfig;
         }
 
-        public void ResetSystemPrompt()
-        {
+        public void ResetSystemPrompt() =>
             SystemPrompt = LMKitDefaultSettings.DefaultSystemPrompt;
-        }
     }
 }

@@ -2,8 +2,8 @@
 
 public enum SamplingMode
 {
-    Random,
     Greedy,
-    Mirostat2,
-    TopNSigma
+    Random,
+    TopNSigma,
+    Mirostat2
 }
