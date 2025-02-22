@@ -20,6 +20,8 @@ public static class LMKitDefaultSettings
     public const int DefaultRandomSamplingTopK = 40;
     public const float DefaultRandomSamplingLocallyTypical = 1;
 
+    public const float DefaultTopNSigmaSampling = 1f;
+
     public const float DefaultMirostat2SamplingTemperature = 0.8f;
     public const float DefaultMirostat2SamplingTargetEntropy = 5.0f;
     public const float DefaultMirostat2SamplingLearningRate = 0.1f;

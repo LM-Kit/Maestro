@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Services;
+using LMKit.TextGeneration.Sampling;
 
 namespace LMKit.Maestro.ViewModels
 {
@@ -80,6 +81,9 @@ namespace LMKit.Maestro.ViewModels
         RandomSamplingSettingsViewModel _randomSamplingSettings;
 
         [ObservableProperty]
+        TopNSigmaSamplingSettingsViewModel _topNSigmaSamplingSettings;
+
+        [ObservableProperty]
         Mirostat2SamplingSettingsViewModel _Mirostat2SamplingSettings;
 
         public SettingsViewModel(IAppSettingsService appSettingsService, LMKitService lmkitService)
@@ -88,6 +92,7 @@ namespace LMKit.Maestro.ViewModels
             _config = lmkitService.LMKitConfig;
             RandomSamplingSettings = new RandomSamplingSettingsViewModel(_config.RandomSamplingConfig);
             Mirostat2SamplingSettings = new Mirostat2SamplingSettingsViewModel(_config.Mirostat2SamplingConfig);
+            TopNSigmaSamplingSettings = new TopNSigmaSamplingSettingsViewModel(_config.TopNSigmaSamplingConfig);
         }
 
         [RelayCommand]
@@ -100,6 +105,7 @@ namespace LMKit.Maestro.ViewModels
             ContextSize = LMKitDefaultSettings.DefaultContextSize;
             RandomSamplingSettings.Reset();
             Mirostat2SamplingSettings.Reset();
+            TopNSigmaSamplingSettings.Reset();
         }
 
         public void Init()
@@ -119,6 +125,11 @@ namespace LMKit.Maestro.ViewModels
             RandomSamplingSettings.TopK = randomSamplingConfig.TopK;
             RandomSamplingSettings.LocallyTypical = randomSamplingConfig.LocallyTypical;
 
+            var topNSigmaConfig = _appSettingsService.TopNSigmaSamplingConfig;
+            TopNSigmaSamplingSettings.Temperature = topNSigmaConfig.Temperature;
+            TopNSigmaSamplingSettings.TopK = topNSigmaConfig.TopK;
+            TopNSigmaSamplingSettings.TopNSigma = topNSigmaConfig.TopNSigma;
+
             var Mirostat2SamplingConfig = _appSettingsService.Mirostat2SamplingConfig;
             Mirostat2SamplingSettings.Temperature = Mirostat2SamplingConfig.Temperature;
             Mirostat2SamplingSettings.TargetEntropy = Mirostat2SamplingConfig.TargetEntropy;
@@ -135,6 +146,7 @@ namespace LMKit.Maestro.ViewModels
             _appSettingsService.SamplingMode = _config.SamplingMode;
             _appSettingsService.RandomSamplingConfig = _config.RandomSamplingConfig;
             _appSettingsService.Mirostat2SamplingConfig = _config.Mirostat2SamplingConfig;
+            _appSettingsService.TopNSigmaSamplingConfig = _config.TopNSigmaSamplingConfig;
         }
 
         public void ResetSystemPrompt()

@@ -123,6 +123,24 @@
                                 MinValue="0"
                                 MaxValue="1" />
             }
+            else if (ViewModel.SamplingMode == SamplingMode.TopNSigma)
+            {
+                <NumericSetting @bind-Value="ViewModel.TopNSigmaSamplingSettings.Temperature"
+                                Title="Temperature"
+                                MinValue="0"
+                                MaxValue="1" />
+
+                <NumericSetting @bind-Value="ViewModel.TopNSigmaSamplingSettings.TopNSigma"
+                                Title="Top-nσ threshold"
+                                MinValue="0"
+                                MaxValue="5" />
+
+                <NumericSetting @bind-Value="ViewModel.TopNSigmaSamplingSettings.TopK"
+                                Title="Top K"
+                                MinValue="1"
+                                MaxValue="1000" />
+
+            }
             else if (ViewModel.SamplingMode == SamplingMode.Mirostat2)
             {
                 <NumericSetting @bind-Value="ViewModel.Mirostat2SamplingSettings.Temperature"

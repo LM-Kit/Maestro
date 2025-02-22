@@ -181,6 +181,14 @@ public partial class LMKitService : INotifyPropertyChanged
                     LearningRate = config.Mirostat2SamplingConfig.LearningRate,
                     TargetEntropy = config.Mirostat2SamplingConfig.TargetEntropy
                 };
+
+            case SamplingMode.TopNSigma:
+                return new TopNSigmaSampling()
+                {
+                    Temperature = config.TopNSigmaSamplingConfig.Temperature,
+                    TopK = config.TopNSigmaSamplingConfig.TopK,
+                    TopNSigma = config.TopNSigmaSamplingConfig.TopNSigma,
+                };
         }
     }
 }
