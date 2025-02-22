@@ -26,15 +26,15 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly FileSystemEntryRecorder _fileSystemEntryRecorder;
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
-    private bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
+    private readonly bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
     //todo: make this user-configurable is some way.
-    private List<ModelCapabilities> _filteredCapabilities = new List<ModelCapabilities>() { ModelCapabilities.Chat,
+    private readonly List<ModelCapabilities> _filteredCapabilities = [ ModelCapabilities.Chat,
                                                                                             ModelCapabilities.Math,
-                                                                                            ModelCapabilities.CodeCompletion };
-    private bool _enableCustomModels = true;
-    private bool _isLoaded = false;
+                                                                                            ModelCapabilities.CodeCompletion ];
+    private readonly bool _enableCustomModels = true;
+    private readonly bool _isLoaded = false;
 
-    private readonly Dictionary<Uri, FileDownloader> _fileDownloads = new Dictionary<Uri, FileDownloader>();
+    private readonly Dictionary<Uri, FileDownloader> _fileDownloads = [];
 
     private delegate bool ModelDownloadingProgressCallback(string path, long? contentLength, long bytesRead);
     public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
@@ -45,8 +45,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     public ReadOnlyObservableCollection<ModelCard> Models { get; }
     public ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
 
-    private ObservableCollection<ModelCard> _models { get; } = new ObservableCollection<ModelCard>();
-    private ObservableCollection<ModelCard> _unsortedModels { get; } = new ObservableCollection<ModelCard>();
+    private ObservableCollection<ModelCard> _models { get; } = [];
+    private ObservableCollection<ModelCard> _unsortedModels { get; } = [];
 
     [ObservableProperty]
     private long _totalModelSize;
@@ -592,7 +592,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             foreach (var item in e.NewItems!)
             {
-                var card = ((ModelCard)item);
+                var card = (ModelCard)item;
 
                 if (card.IsLocallyAvailable)
                 {
@@ -607,7 +607,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             foreach (var item in e.OldItems!)
             {
-                var card = ((ModelCard)item);
+                var card = (ModelCard)item;
 
                 if (card.IsLocallyAvailable)
                 {
@@ -690,7 +690,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             }*/
 
             if (model.ModelUri == modelCard.ModelUri ||
-                model.FileName == modelCard.FileName && model.FileSize == modelCard.FileSize)
+                (model.FileName == modelCard.FileName && model.FileSize == modelCard.FileSize))
             {
                 if (model.LocalPath == modelCard.LocalPath)
                 {

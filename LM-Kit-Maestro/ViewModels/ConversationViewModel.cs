@@ -39,7 +39,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
     [ObservableProperty] bool _isShowingActionPopup;
 
-    public ObservableCollection<MessageViewModel> Messages { get; } = new ObservableCollection<MessageViewModel>();
+    public ObservableCollection<MessageViewModel> Messages { get; } = [];
     public ConversationLog ConversationLog { get; }
 
     private string _title;
@@ -143,7 +143,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
             return true;
         }
-        catch (Exception? ex)
+        catch (Exception?)
         {
             return false;
         }

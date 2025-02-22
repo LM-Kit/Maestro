@@ -7,7 +7,7 @@ namespace LMKit.Maestro.UI.Razor.Components;
 
 public partial class ModelSelectionButton
 {
-    [Parameter] required public ModelListViewModel ModelListViewModel { get; set; }
+    [Parameter] public required ModelListViewModel ModelListViewModel { get; set; }
 
     public string Text { get; private set; } = Locales.SelectModel;
 

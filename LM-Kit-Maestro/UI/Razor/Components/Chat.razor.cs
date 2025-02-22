@@ -294,8 +294,12 @@ public partial class Chat : IDisposable
 
     private int CalculateUsagePercentage(int used, int total)
     {
-        if (total == 0) return 0;
-        return (int)(100 * used / total);
+        if (total == 0)
+        {
+            return 0;
+        }
+
+        return 100 * used / total;
     }
 
 

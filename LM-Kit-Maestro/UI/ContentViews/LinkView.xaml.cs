@@ -50,7 +50,7 @@ public partial class LinkView : ContentView
     public object CommandParameter
     {
         get =>
-            (object)GetValue(CommandParameterProperty);
+            GetValue(CommandParameterProperty);
         set => SetValue(CommandParameterProperty, value);
     }
 

@@ -10,7 +10,7 @@ public partial class LLMFileManager
 
             public DirectoryRecord(string name, DirectoryRecord? parent) : base(name, parent)
             {
-                Entries = new List<FileSystemEntryRecord>();
+                Entries = [];
             }
 
             public bool DeleteEntry(FileSystemEntryRecord entry)
@@ -85,7 +85,7 @@ public partial class LLMFileManager
 #if DEBUG
             public override string ToString()
             {
-                return ("(directory)" + Name);
+                return "(directory)" + Name;
             }
 #endif
         }

@@ -138,9 +138,10 @@ public static class FileHelpers
 
     public static Uri GetModelFileHuggingFaceLink(ModelCard modelCard)
     {
-        var builder = new UriBuilder("https://huggingface.co");
-
-        builder.Path = $"{modelCard.Publisher}/{modelCard.Repository}";
+        var builder = new UriBuilder("https://huggingface.co")
+        {
+            Path = $"{modelCard.Publisher}/{modelCard.Repository}"
+        };
 
         return builder.Uri;
     }
@@ -185,6 +186,6 @@ public static class FileHelpers
 
         var exp = (int)(Math.Log(bytes) / Math.Log(unit));
 
-        return $"{bytes / Math.Pow(unit, exp):F2} {("KMGTPE")[exp - 1]}B";
+        return $"{bytes / Math.Pow(unit, exp):F2} {"KMGTPE"[exp - 1]}B";
     }
 }

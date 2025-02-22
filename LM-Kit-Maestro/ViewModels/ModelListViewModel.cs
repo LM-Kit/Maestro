@@ -58,7 +58,7 @@ namespace LMKit.Maestro.ViewModels
             PopupNavigation = popupNavigation;
             _launcher = launcher;
             _fileManager.SortedModelCollectionChanged += OnModelCollectionChanged;
-            Models = new ObservableCollection<ModelInfoViewModel>();
+            Models = [];
 
             LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
             LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;

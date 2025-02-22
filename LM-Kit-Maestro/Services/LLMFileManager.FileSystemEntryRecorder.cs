@@ -17,7 +17,7 @@ public partial class LLMFileManager
 
         public void Update(Uri rootDirectoryUri)
         {
-            if ((rootDirectoryUri == _rootDirectoryUri))
+            if (rootDirectoryUri == _rootDirectoryUri)
             {
                 return;
             }
@@ -119,7 +119,7 @@ public partial class LLMFileManager
 
         public static List<FileRecord> GetAllChildFiles(DirectoryRecord directoryRecord)
         {
-            List<FileRecord> files = new List<FileRecord>();
+            List<FileRecord> files = [];
 
             CollectChildFiles(directoryRecord, files);
 

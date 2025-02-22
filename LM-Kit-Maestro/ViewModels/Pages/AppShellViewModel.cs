@@ -20,7 +20,7 @@ public partial class AppShellViewModel : ViewModelBase
     private bool _appIsInitialized = false;
 
     [ObservableProperty]
-    List<MaestroTabViewModel> _tabs = new List<MaestroTabViewModel>();
+    List<MaestroTabViewModel> _tabs = [];
 
     [ObservableProperty]
     MaestroTabViewModel _chatTab = new MaestroTabViewModel("Chat", "ChatPage");

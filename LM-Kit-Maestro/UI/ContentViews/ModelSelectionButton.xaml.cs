@@ -105,10 +105,7 @@ public partial class ModelSelectionButton : ContentView
             // -> ignore next click event
             _mustIgnoreNextStatefulContentViewTap = true;
 
-            if (_modelListViewModel != null)
-            {
-                _modelListViewModel.EjectModel();
-            }
+            _modelListViewModel?.EjectModel();
         }
     }
 

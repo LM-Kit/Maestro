@@ -38,10 +38,7 @@ public partial class LMKitService
         {
             if (_requestSchedule.Count > 0)
             {
-                if (_requestSchedule.RunningPromptRequest != null)
-                {
-                    _requestSchedule.RunningPromptRequest.CancelAndAwaitTermination();
-                }
+                _requestSchedule.RunningPromptRequest?.CancelAndAwaitTermination();
 
                 while (_requestSchedule.Next != null)
                 {
