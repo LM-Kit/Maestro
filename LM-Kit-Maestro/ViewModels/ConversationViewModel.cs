@@ -301,6 +301,11 @@ public partial class ConversationViewModel : AssistantViewModelBase
             {
                 var message = (ChatHistory.Message)item;
 
+                if (message.AuthorRole == AuthorRole.System)
+                {
+                    continue;
+                }
+
                 if (message.AuthorRole == AuthorRole.User && _pendingPrompt != null)
                 {
                     _pendingPrompt.LMKitMessage = message;
