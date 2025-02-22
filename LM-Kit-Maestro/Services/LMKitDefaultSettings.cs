@@ -18,7 +18,7 @@ public static class LMKitDefaultSettings
     public const float DefaultRandomSamplingTopP = 0.95f;
     public const float DefaultRandomSamplingMinP = 0.05f;
     public const int DefaultRandomSamplingTopK = 40;
-   // public const float DefaultRandomSamplingLocallyTypical = 1;
+    // public const float DefaultRandomSamplingLocallyTypical = 1;
 
     public const float DefaultTopNSigmaSampling = 1f;
 

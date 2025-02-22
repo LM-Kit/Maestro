@@ -173,7 +173,7 @@ public static class FileHelpers
 
         return false;
     }
-    
+
     public static string FormatFileSize(long bytes)
     {
         var unit = 1024;

@@ -6,9 +6,9 @@ public partial class LLMFileManager
     {
         public sealed class FileRecordPathChangedEventArgs : EventArgs
         {
-            public Uri OldPath { get;  }
+            public Uri OldPath { get; }
 
-            public Uri NewPath { get;  }
+            public Uri NewPath { get; }
 
             public FileRecordPathChangedEventArgs(Uri oldPath, Uri newPath)
             {

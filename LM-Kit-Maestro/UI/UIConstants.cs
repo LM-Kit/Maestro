@@ -94,12 +94,12 @@ public static class UIConstants
             //OverlayLight = "#12181F",
         },
 
-         Typography = new Typography()
-         {
-             Overline = new OverlineTypography()
-             {
-                 LineHeight = "1.5",
-             }
-         }
+        Typography = new Typography()
+        {
+            Overline = new OverlineTypography()
+            {
+                LineHeight = "1.5",
+            }
+        }
     };
 }

@@ -18,10 +18,10 @@ public partial class LMKitService
         {
             var textTranslation = new TextTranslation(_state.LoadedModel!);
 
-           return await textTranslation.TranslateAsync(translation, outputLanguage);
+            return await textTranslation.TranslateAsync(translation, outputLanguage);
         }
 
-        public async Task<Language>DetectLanguage(string text)
+        public async Task<Language> DetectLanguage(string text)
         {
             var textTranslation = new TextTranslation(_state.LoadedModel!);
 

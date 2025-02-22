@@ -1,7 +1,7 @@
-using System.ComponentModel;
 using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.ComponentModel;
 
 namespace LMKit.Maestro.UI.Razor.Components;
 
@@ -38,13 +38,13 @@ public partial class ModelSelectionButton
 
     private async Task OnButtonClicked()
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true, FullScreen=true };
+        var options = new DialogOptions { CloseOnEscapeKey = true, FullScreen = true };
 
         var dialog = await DialogService.ShowAsync<ModelSelectionDialog>(null, options);
 
         var result = await dialog.Result;
 
-        if (result !=null && !result.Canceled && result.Data is ModelInfoViewModel modelInfoViewModel)
+        if (result != null && !result.Canceled && result.Data is ModelInfoViewModel modelInfoViewModel)
         {
             ModelListViewModel.SelectedModel = modelInfoViewModel;
         }

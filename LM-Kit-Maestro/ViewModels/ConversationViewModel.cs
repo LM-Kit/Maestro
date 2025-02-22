@@ -1,13 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using LMKit.TextGeneration;
-using LMKit.TextGeneration.Chat;
-using LMKit.Maestro.Models;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using LMKit.Maestro.Data;
+using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
 using LMKit.Maestro.UI;
+using LMKit.TextGeneration;
+using LMKit.TextGeneration.Chat;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace LMKit.Maestro.ViewModels;
 

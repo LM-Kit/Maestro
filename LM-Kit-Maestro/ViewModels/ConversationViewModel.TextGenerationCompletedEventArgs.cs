@@ -1,5 +1,5 @@
-﻿using LMKit.TextGeneration;
-using LMKit.Maestro.Services;
+﻿using LMKit.Maestro.Services;
+using LMKit.TextGeneration;
 
 namespace LMKit.Maestro.ViewModels;
 

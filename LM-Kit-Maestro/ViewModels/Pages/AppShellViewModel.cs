@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.Logging;
 using LMKit.Maestro.Services;
+using Microsoft.Extensions.Logging;
 
 namespace LMKit.Maestro.ViewModels;
 

@@ -55,7 +55,7 @@ public partial class NumericTextField<T> : ComponentBase where T : struct, INumb
 
     private void ValidateSettingValue()
     {
-        if (T.TryParse(_inputText, new CultureInfo("en-US"), out T parsedValue) && 
+        if (T.TryParse(_inputText, new CultureInfo("en-US"), out T parsedValue) &&
             (parsedValue >= MinValue && parsedValue <= MaxValue))
         {
             Value = parsedValue;

@@ -17,7 +17,7 @@ public partial class PageBase : ContentPage
     }
 
     public PageBase()
-	{
-		InitializeComponent();
-	}
+    {
+        InitializeComponent();
+    }
 }

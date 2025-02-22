@@ -1,5 +1,5 @@
-﻿using LMKit.Maestro.ViewModels;
-using LMKit.Maestro.UI;
+﻿using LMKit.Maestro.UI;
+using LMKit.Maestro.ViewModels;
 using Mopups.Interfaces;
 
 namespace LMKit.Maestro.Services;
