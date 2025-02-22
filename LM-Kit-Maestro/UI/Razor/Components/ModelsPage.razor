@@ -83,6 +83,15 @@
 </SectionContent>
 
 <div id="model-page-container">
+    <div class="d-flex justify-center">
+        <div class="d-flex flex-row gap-1 align-center my-4">
+            <MudCheckBox Size="Size.Small" @bind-Value="ViewModel.AppSettingsService.EnableLowPerformanceModels"/>
+            <MudText Typo="Typo.overline">
+                @Locales.DisplayLowPerformingModels
+                </MudText>
+            </div>
+    </div>
+
     <div id="model-list-container" class="hover-scrollable">
         <ModelList LimitWidth="true"/>
     </div>
@@ -129,7 +138,7 @@
     #model-list-container {
         display: flex;
         flex-direction: column;
-        padding: 1rem;
+        padding-inline: 1rem;
         margin-bottom: auto;
     }
 
