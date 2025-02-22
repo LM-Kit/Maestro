@@ -266,53 +266,53 @@ public partial class LMKitService
 
         private void BeforeSubmittingPrompt(Conversation conversation)
         {
-            bool conversationIsInitialized = conversation == _lastConversationUsed;
-
-            if (!conversationIsInitialized)
+            if (conversation != _lastConversationUsed &&
+                _multiTurnConversation != null)
             {
-                if (_multiTurnConversation != null)
-                {
-                    _multiTurnConversation.Dispose();
-                    _multiTurnConversation = null;
-                }
+                _multiTurnConversation.AfterTokenSampling -= conversation.AfterTokenSampling;
+                _multiTurnConversation.Dispose();
+                _multiTurnConversation = null;
+            }
 
+            if (_multiTurnConversation == null)
+            {
                 // Latest chat history of this conversation was generated with a different model
                 bool lastUsedDifferentModel = _state.Config.LoadedModelUri != conversation.LastUsedModelUri;
                 bool shouldUseCurrentChatHistory = !lastUsedDifferentModel && conversation.ChatHistory != null;
                 bool shouldDeserializeChatHistoryData = (lastUsedDifferentModel && conversation.LatestChatHistoryData != null) || (!lastUsedDifferentModel && conversation.ChatHistory == null);
 
-                if (shouldUseCurrentChatHistory || shouldDeserializeChatHistoryData)
+                if (shouldUseCurrentChatHistory)
                 {
-                    ChatHistory? chatHistory = shouldUseCurrentChatHistory ? conversation.ChatHistory : ChatHistory.Deserialize(conversation.LatestChatHistoryData, _state.LoadedModel);
-
-                    _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, chatHistory, _state.Config.ContextSize)
-                    {
-                        SamplingMode = GetTokenSampling(_state.Config),
-                        MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
-                        //SystemPrompt = _state.Config.SystemPrompt, //we can't update system prompt if the conversation already started.
-                    };
+                    _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, conversation.ChatHistory, _state.Config.ContextSize);
+                }
+                else if (shouldDeserializeChatHistoryData)
+                {
+                    var chatHistory = ChatHistory.Deserialize(conversation.LatestChatHistoryData, _state.LoadedModel);
+                    _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, chatHistory, _state.Config.ContextSize);
                 }
                 else
                 {
-                    SetMultiTurnConversation();
+                    _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, _state.Config.ContextSize);
                 }
 
-                _multiTurnConversation!.AfterTokenSampling += conversation.AfterTokenSampling;
-
-                conversation.ChatHistory = _multiTurnConversation.ChatHistory;
-                conversation.LastUsedModelUri = _state.Config.LoadedModelUri;
-                _lastConversationUsed = conversation;
+                _multiTurnConversation.AfterTokenSampling += conversation.AfterTokenSampling;
             }
-            else
+
+            // Binding everything
+            conversation.ChatHistory = _multiTurnConversation.ChatHistory;
+            conversation.LastUsedModelUri = _state.Config.LoadedModelUri;
+            _lastConversationUsed = conversation;
+
+            // Update conversation
+            if (_multiTurnConversation.ChatHistory.MessageCount == 0 ||
+                _multiTurnConversation.ChatHistory.Messages.Last().AuthorRole == AuthorRole.System)
             {
-                // note: When a model change occur MultiTurnConversation instance is set to null.
-                if (_multiTurnConversation == null)
-                {
-                    SetMultiTurnConversation();
-                }
-
-                //todo: implement context size update.
+                _multiTurnConversation.SystemPrompt = _state.Config.SystemPrompt;
             }
+
+            _multiTurnConversation.SamplingMode = GetTokenSampling(_state.Config);
+            _multiTurnConversation.MaximumCompletionTokens = _state.Config.MaximumCompletionTokens;
+            //
 
             conversation.InTextCompletion = true;
         }
@@ -320,28 +320,6 @@ public partial class LMKitService
         private void AfterSubmittingPrompt(Conversation conversation)
         {
             conversation.InTextCompletion = false;
-        }
-
-        private void SetMultiTurnConversation(ChatHistory? chatHistory = null)
-        {
-            if (chatHistory != null)
-            {
-                _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, chatHistory, _state.Config.ContextSize)
-                {
-                    SamplingMode = GetTokenSampling(_state.Config),
-                    MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
-                    SystemPrompt = _state.Config.SystemPrompt,
-                };
-            }
-            else
-            {
-                _multiTurnConversation = new MultiTurnConversation(_state.LoadedModel, _state.Config.ContextSize)
-                {
-                    SamplingMode = GetTokenSampling(_state.Config),
-                    MaximumCompletionTokens = _state.Config.MaximumCompletionTokens,
-                    SystemPrompt = _state.Config.SystemPrompt
-                };
-            }
         }
     }
 }
