@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using LMKit.Maestro.Services;
-using LMKit.Maestro.Helpers;
 
 namespace LMKit.Maestro.ViewModels;
 

@@ -1,10 +1,4 @@
 ﻿using MudBlazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Color = Microsoft.Maui.Graphics.Color;
 
 namespace LMKit.Maestro.UI;
 

@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
+﻿using Microsoft.Maui.Handlers;
 
 #if ANDROID
 using Android.Graphics.Drawables;

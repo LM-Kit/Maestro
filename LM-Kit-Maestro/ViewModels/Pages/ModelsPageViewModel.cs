@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mopups.Interfaces;
 using CommunityToolkit.Maui.Storage;
-using System.Diagnostics;
 
 namespace LMKit.Maestro.ViewModels;
 

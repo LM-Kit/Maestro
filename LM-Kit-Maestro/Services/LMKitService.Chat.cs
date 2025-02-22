@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel.__Internals;
-using LMKit.TextGeneration;
+﻿using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
 using System.ComponentModel;
 

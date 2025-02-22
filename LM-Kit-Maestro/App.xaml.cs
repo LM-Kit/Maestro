@@ -7,8 +7,6 @@ using Microsoft.UI.Windowing;
 using LMKit.Maestro.UI;
 using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components.WebView.Maui;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls.PlatformConfiguration;
 #if MACCATALYST
 using UIKit;
 using WebKit;
