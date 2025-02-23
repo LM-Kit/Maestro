@@ -16,7 +16,8 @@
                                         OnClick="() => MudDialog.Cancel()" />
                         </div>
                     </div>
-                    <MudDivider />
+
+                    @* <MudDivider Style="border-color: var(--Surface3); margin-inline: 0.5rem" /> *@
                 </MudStack>
 
                 <div class="model-selection-dialog-body">
@@ -57,7 +58,7 @@
         flex-direction: column;
         border: 1px solid var(--OutlineVariant);
         border-radius: 8px;
-        background-color: var(--Surface15);
+        background-color: var(--Surface);
         overflow: hidden;
         flex-grow: 1;
         flex-shrink: 1;
@@ -70,18 +71,18 @@
         justify-content: space-between;
         text-align: center;
         align-items: center;
+        background-color: var(--Surface3);
     }
 
     .model-selection-dialog-body {
         display: flex;
         flex-direction: column;
-        overflow-y: hidden;
-        scrollbar-gutter: stable both-edges;
+        overflow-y: scroll;
     }
 
-    .model-selection-dialog-body:hover{
-            overflow-y: scroll;
-        }
+    .model-selection-dialog-body::-webkit-scrollbar{
+        display: none;
+    }
 
     .close-button {
         color: var(--Outline) !important;

@@ -6,8 +6,12 @@
     {
         <ListItemWrapper LimitWidth="LimitWidth" ListItemViewModel="modelItem">
             <ChildContent>
-                <div @onclick="() => OnClick.InvokeAsync(modelItem.ViewModel)">
+                <div class="@(Dense ? "model-card-dense-wrapper" : "")" @onclick="() => OnClick.InvokeAsync(modelItem.ViewModel)">
                     <ModelCard IsFocused="modelItem.IsShowingActionSheet || modelItem.IsHovered" Dense="Dense" Selectable="Selectable" ViewModel="modelItem.ViewModel" />
+                    @if (Dense && modelItem != _modelItems.Last())
+                    {
+                        <hr class="model-card-divider" />
+                    }
                 </div>
             </ChildContent>
 
@@ -38,6 +42,20 @@
         </ListItemWrapper>
     }
 </MudStack>
+
+<style>
+     .model-card-divider {
+        border-color: var(--Surface3);
+        border-width: 1px;
+        border-style: solid none none none;
+        margin-left:  1rem;
+    }
+
+    .model-card-dense-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
 
 @code {
     private ObservableCollection<ListItemViewModel<ModelInfoViewModel>> _modelItems = new();

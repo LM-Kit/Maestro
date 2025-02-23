@@ -2,7 +2,7 @@
     flex-direction: row;
     border: 1px solid var(--OutlineVariant);
     border-radius: 0.25rem;
-    background-color: var(--Surface15);
+    background-color: transparent;
     flex-grow: 1;
     flex-shrink: 1;
     display: flex;
@@ -13,11 +13,16 @@
     background-color: var(--Surface2);
 }
 
-.model-card-dense {
-    padding: 0.5rem;
-    border: none;
+.model-card-dense.model-card-focused {
+    background-color: var(--Surface15);
 }
 
+.model-card-dense {
+    padding-block: 0.5rem;
+    padding-inline: 1rem;
+    border: none;
+    border-radius: 0;
+}
 
 .model-card-selectable:hover {
     cursor: pointer;
@@ -33,11 +38,6 @@
 
 .tertiary {
     color: #FA8168;
-}
-
-.item-actions {
-    padding: 4px;
-    background-color: var(--Surface3);
 }
 
 .score-1 {
