@@ -34,7 +34,7 @@ public partial class LLMFileManager
 #if DEBUG
             public override string ToString()
             {
-                return ("(file)" + Name);
+                return "(file)" + Name;
             }
 #endif
         }

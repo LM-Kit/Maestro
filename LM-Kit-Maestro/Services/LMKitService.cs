@@ -1,8 +1,5 @@
 ﻿using LMKit.Model;
-using LMKit.TextGeneration;
-using LMKit.TextGeneration.Chat;
 using LMKit.TextGeneration.Sampling;
-using LMKit.Translation;
 using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
@@ -168,7 +165,7 @@ public partial class LMKitService : INotifyPropertyChanged
                     TopP = config.RandomSamplingConfig.TopP,
                     TopK = config.RandomSamplingConfig.TopK,
                     MinP = config.RandomSamplingConfig.MinP,
-                    LocallyTypical = config.RandomSamplingConfig.LocallyTypical
+                    //LocallyTypical = config.RandomSamplingConfig.LocallyTypical
                 };
 
             case SamplingMode.Greedy:
@@ -180,6 +177,14 @@ public partial class LMKitService : INotifyPropertyChanged
                     Temperature = config.Mirostat2SamplingConfig.Temperature,
                     LearningRate = config.Mirostat2SamplingConfig.LearningRate,
                     TargetEntropy = config.Mirostat2SamplingConfig.TargetEntropy
+                };
+
+            case SamplingMode.TopNSigma:
+                return new TopNSigmaSampling()
+                {
+                    Temperature = config.TopNSigmaSamplingConfig.Temperature,
+                    TopK = config.TopNSigmaSamplingConfig.TopK,
+                    TopNSigma = config.TopNSigmaSamplingConfig.TopNSigma,
                 };
         }
     }

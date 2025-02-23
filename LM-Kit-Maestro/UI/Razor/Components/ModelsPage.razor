@@ -4,99 +4,234 @@
 @inherits MvvmComponentBase<ModelsPageViewModel>
 
 <SectionContent SectionName="top-bar">
+    <div id="model-page-top-bar">
+        <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
+            @if (ViewModel.FileManager.FileCollectingInProgress)
+            {
+                <MudProgressCircular Class="xs-loader outline" Size="Size.Small" Indeterminate="true"/>
+            }
 
-    <div class="d-flex flex-row gap-2 justify-center align-center align-content-center">
-        <span>
-            Model folder:
-        </span>
-
-        <div id="model-folder-container">
-            <MudTextField @bind-Value="ViewModel.AppSettingsService.ModelStorageDirectory" />
+            @if (ViewModel.FileManager.DownloadedCount > 0)
+            {
+                <MudText Typo="Typo.overline">
+                    <span>You have</span>
+                    <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
+                    <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
+                    <span> taking up </span>
+                    <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
+                </MudText>
+            }
+            else
+            {
+                @if (ViewModel.FileManager.FileCollectingInProgress)
+                {
+                    <MudText Align="Align.Center" Typo="Typo.overline">
+                        Scanning for models...
+                    </MudText>
+                }
+                else
+                {
+                    <MudText Align="Align.Center" Typo="Typo.overline">
+                        You model folder is empty.
+                    </MudText>
+                }
+            }
         </div>
 
-        <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-        Icon="fas fa-edit"
-        OnClick="ViewModel.OpenModelsFolder" />
+        <div class="d-flex flex-row gap-2 flex-grow-1 justify-center align-center align-content-center px-4">
+            <MudText Typo="Typo.overline">
+                Model folder:
+            </MudText>
 
-        <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-        Icon="fas fa-folder-open"
-        OnClick="ViewModel.OpenModelsFolder" />
+            <div id="model-folder-container">
+                <MudText Typo="Typo.caption" Class="text-truncate">
+                    @ViewModel.AppSettingsService.ModelStorageDirectory
+                </MudText>
+            </div>
+
+            <MudOverlay @bind-Visible="IsShowingModelFolderActions" AutoClose="true"/>
+            <div>
+                <button id="model-folder-button"
+                        @onclick="() => IsShowingModelFolderActions = !IsShowingModelFolderActions">
+                    <span class="fas fa-ellipsis"></span>
+                </button>
+
+                <MudPopover Open="IsShowingModelFolderActions"
+                            AnchorOrigin="Origin.CenterRight"
+                            TransformOrigin="Origin.CenterLeft">
+
+                    <div class="action-sheet">
+                        <MudButton Class="action-button" Variant="Variant.Text"
+                                   @onclick="() => HandleActionButtonClick(() => ViewModel.OpenModelsFolder())">
+                            <MudText Typo="Typo.subtitle2">@Locales.OpenInFileExplorer</MudText>
+                        </MudButton>
+
+                        <MudButton Class="action-button" Variant="Variant.Text"
+                                   @onclick="() => HandleActionButtonClick(() => ViewModel.PickModelsFolder())">
+                            <MudText Typo="Typo.subtitle2">@Locales.SelectAnotherFolder</MudText>
+                        </MudButton>
+
+                        <MudButton Class="action-button" Variant="Variant.Text"
+                                   @onclick="() => HandleActionButtonClick(() => ViewModel.ResetModelsFolder())">
+                            <MudText Typo="Typo.subtitle2">@Locales.ResetModelFolder</MudText>
+                        </MudButton>
+                    </div>
+                </MudPopover>
+            </div>
+        </div>
     </div>
 </SectionContent>
 
 <div id="model-page-container">
-
-    <div>
-        <MudText Align="Align.Center">
-            @if (ViewModel.FileManager.Models.Count > 0)
-            {
-                @($"You have {ViewModel.FileManager.Models.Count} {(ViewModel.FileManager.Models.Count > 1 ? "models" : "model")} taking up {ViewModel.FileManager.TotalModelSize}.")
-            }
-        </MudText>
+    <div class="d-flex justify-center">
+        <div class="d-flex flex-row gap-1 align-center my-4">
+            <MudCheckBox Size="Size.Small" @bind-Value="ViewModel.AppSettingsService.EnableLowPerformanceModels"/>
+            <MudText Typo="Typo.overline">
+                @Locales.DisplayLowPerformingModels
+                </MudText>
+            </div>
     </div>
 
-    <div id="model-list-container">
-        @foreach (var model in ViewModel.ModelListViewModel.Models)
-        {
-            <ModelListItem ViewModel="model"/>
-        }
+    <div id="model-list-container" class="hover-scrollable">
+        <ModelList LimitWidth="true"/>
     </div>
 
     <div class="bottom-space">
-        <div class="">
-            Explore more models
+        <div id="hf-link"
+             class="d-flex flex-row align-center gap-2"
+             @onclick="ViewModel.OpenHuggingFaceLink">
+            <img width="20" height="20" style="margin-bottom:2px" src="huggingface.svg"/>
+            <MudText Typo="Typo.overline" Class="hf-link">
+                Explore more models
+            </MudText>
         </div>
     </div>
 </div>
 
 <style>
+    #model-page-top-bar {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        gap: 8px;
+    }
+
     #model-page-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
     }
 
     #model-folder-container {
-    max-width: 500px;
+        max-width: 20rem;
+        border-radius: 0.25rem;
+        border: 1px solid var(--Surface3);
+        flex-grow: 1;
+        flex-shrink: 1;
+        height: 1.75rem;
+        display: flex;
+        padding-inline: 0.5rem;
+        align-content: center;
+        align-items: center;
     }
 
     #model-list-container {
-    gap: 20px;
-    background-color: blue;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow-y: auto;
-    flex-grow: 0;
+        display: flex;
+        flex-direction: column;
+        padding-inline: 1rem;
+        margin-bottom: auto;
     }
 
-
-
     .bottom-space {
-    display: flex;
-    min-height: 40px;
-    color: var(--Outline) !important;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding-block: 0.5rem;
+    }
+
+    #hf-link {
+        cursor: pointer;
+        color: var(--Outline);
+    }
+
+    #hf-link:hover {
+        color: #FFD21E;
+    }
+
+    #model-folder-button {
+        width: 1.75rem;
+        height: 1.75rem;
+        background-color: transparent;
+        border-radius: 0.25rem;
+        border: 1px solid var(--Surface3);
+        font-size: 0.75rem;
+        color: var(--Outline);
+    }
+
+    #model-folder-button:hover {
+        background-color: var(--Surface3);
     }
 </style>
 
 @code {
+
+    private bool _isShowingModelFolderActions;
+
+    private bool IsShowingModelFolderActions
+    {
+        get => _isShowingModelFolderActions;
+        set
+        {
+            if (value != _isShowingModelFolderActions)
+            {
+                _isShowingModelFolderActions = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
     private void OnDeleteClicked(ModelInfoViewModel modelInfoViewModel)
     {
-        ViewModel.DeleteModel(modelInfoViewModel);
+        ViewModel.ModelListViewModel.DeleteModel(modelInfoViewModel);
     }
 
     private void OnModelOpenInExplorerClicked(ModelInfoViewModel modelInfoViewModel)
     {
-        ViewModel.OpenModelInExplorer(modelInfoViewModel);
+        ViewModel.ModelListViewModel.OpenModelInExplorer(modelInfoViewModel);
     }
 
     private void OnModelOpenHfLinkClicked(ModelInfoViewModel modelInfoViewModel)
     {
-        ViewModel.OpenModelInExplorer(modelInfoViewModel);
+        ViewModel.ModelListViewModel.OpenModelInExplorer(modelInfoViewModel);
     }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            ViewModel.ModelListViewModel.Models.CollectionChanged += OnModelCollectionChanged;
+            ViewModel.FileManager.PropertyChanged += OnFileManagerPropertyChanged;
+        }
+    }
+
+    private void OnFileManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    private void OnModelCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    private void HandleActionButtonClick(Action action)
+    {
+        action.Invoke();
+        IsShowingModelFolderActions = false;
+        InvokeAsync(StateHasChanged);
+    }
+
 }

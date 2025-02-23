@@ -9,10 +9,10 @@
         <div @onmousedown="OnResizeHandlerMouseDown"
              @onmousedown:preventDefault="true"
              @onmousedown:stopPropagation="true"
-             class="@(Resizable ? "resize-handle" : "v-separator")">
+             class="@(Resizable ? "resize-handle" : "vertical-divider")">
             @if (Resizable)
             {
-                <div class="v-separator"></div>
+                <div class="vertical-divider"></div>
             }
         </div>
     }
@@ -26,10 +26,10 @@
         <div @onmousedown="OnResizeHandlerMouseDown"
              @onmousedown:preventDefault="true"
              @onmousedown:stopPropagation="true"
-             class="@(Resizable ? "resize-handle" : "v-separator")">
+             class="@(Resizable ? "resize-handle" : "vertical-divider")">
             @if (Resizable)
             {
-                <div class="v-separator"></div>
+                <div class="vertical-divider"></div>
             }
         </div>
     }

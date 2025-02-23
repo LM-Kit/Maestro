@@ -36,47 +36,6 @@
     </shell:SimpleShell.RootPageContainer>
 
     <shell:SimpleShell.Content>
-        <Grid BackgroundColor="{StaticResource Surface}" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="{x:Static ui:UIConstants.TabBarHeight}"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <!-- Horizontal separator-->
-            <BoxView HeightRequest="3" />
-
-            <Border Grid.Row="1" StrokeThickness="0" BackgroundColor="{StaticResource Surface}" Stroke="Transparent">
-                <Grid Padding="12, 0">
-                    <HorizontalStackLayout
-                        VerticalOptions="Center"
-                        BindableLayout.ItemsSource="{Binding Tabs}"
-                        Spacing="12">
-                        <BindableLayout.ItemTemplate>
-                            <DataTemplate x:DataType="vm:MaestroTabViewModel">
-                                <ui:LinkView
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=NavigateCommand, x:DataType=vm:AppShellViewModel}"
-                                    CommandParameter="{Binding}"
-                                    FontFamily="SegoeLight"
-                                    VerticalOptions="End"
-                                    StyleClass="Title"
-                                    TextColor="{StaticResource Outline}"
-                                    Text="{Binding Title}">
-                                    <ui:LinkView.Triggers>
-                                        <DataTrigger TargetType="ui:LinkView" Binding="{Binding IsSelected}" Value="True">
-
-                                            <Setter Property="TextColor" Value="{StaticResource OnBackground}"/>
-                                            <Setter Property="FontFamily" Value="SegoeSemiLight"/>
-                                        </DataTrigger>
-                                    </ui:LinkView.Triggers>
-                                </ui:LinkView>
-                            </DataTemplate>
-                        </BindableLayout.ItemTemplate>
-                    </HorizontalStackLayout>
-                </Grid>
-            </Border>
-
-            <shell:SimpleNavigationHost Grid.Row="2"/>
-        </Grid>
+        <shell:SimpleNavigationHost/>
     </shell:SimpleShell.Content>
 </shell:SimpleShell>

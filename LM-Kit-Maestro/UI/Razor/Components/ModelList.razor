@@ -1,0 +1,143 @@
+﻿@inject ModelListViewModel ModelListViewModel
+
+
+<MudStack Spacing="@(Dense ? 0 : 5)">
+    @foreach (var modelItem in _modelItems)
+    {
+        <ListItemWrapper LimitWidth="LimitWidth" ListItemViewModel="modelItem">
+            <ChildContent>
+                <div class="@(Dense ? "model-card-dense-wrapper" : "")" @onclick="() => OnClick.InvokeAsync(modelItem.ViewModel)">
+                    <ModelCard IsFocused="modelItem.IsShowingActionSheet || modelItem.IsHovered" Dense="Dense" Selectable="Selectable" ViewModel="modelItem.ViewModel" />
+                    @if (Dense && modelItem != _modelItems.Last())
+                    {
+                        <hr class="model-card-divider" />
+                    }
+                </div>
+            </ChildContent>
+
+            <ActionSheet>
+                <div class="d-flex flex-column">
+                    @if (modelItem.ViewModel.IsLocallyAvailable)
+                    {
+                        <MudButton Class="action-button" Variant="Variant.Text"
+                                   @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelInExplorer(modelItem.ViewModel), modelItem)">
+                            <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
+                        </MudButton>
+                    }
+
+                    <MudButton Class="action-button" Variant="Variant.Text"
+                               @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelHfLink(modelItem.ViewModel), modelItem)">
+                        <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
+                    </MudButton>
+
+                    @if (modelItem.ViewModel.IsLocallyAvailable)
+                    {
+                        <MudButton Class="action-button" Variant="Variant.Text"
+                                   @onclick="() => HandleActionButtonClick(() => ModelListViewModel.DeleteModel(modelItem.ViewModel), modelItem)">
+                            <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
+                        </MudButton>
+                    }
+                </div>
+            </ActionSheet>
+        </ListItemWrapper>
+    }
+</MudStack>
+
+<style>
+     .model-card-divider {
+        border-color: var(--Surface3);
+        border-width: 1px;
+        border-style: solid none none none;
+        margin-left:  1rem;
+    }
+
+    .model-card-dense-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+
+@code {
+    private ObservableCollection<ListItemViewModel<ModelInfoViewModel>> _modelItems = new();
+    [Parameter] public EventCallback<ModelInfoViewModel> OnClick { get; set; }
+
+    private bool _dense;
+    [Parameter]
+    public bool Dense
+    {
+        get => _dense;
+        set
+        {
+            if (value != _dense)
+            {
+                _dense = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
+    public bool _selectable;
+    [Parameter]
+    public bool Selectable
+    {
+        get => _selectable;
+        set
+        {
+            if (value != _selectable)
+            {
+                _selectable = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
+    private bool _limitWidth;
+    [Parameter]
+    public bool LimitWidth
+    {
+        get => _limitWidth;
+        set
+        {
+            if (value != _limitWidth)
+            {
+                _limitWidth = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        UpdateModels();
+
+        ModelListViewModel.Models.CollectionChanged += OnModelsChanged;
+    }
+
+    private void OnModelsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        InvokeAsync(UpdateModels);
+    }
+
+    private void UpdateModels()
+    {
+        _modelItems.Clear();
+
+        foreach (var model in ModelListViewModel.Models)
+        {
+            _modelItems.Add(new ListItemViewModel
+                <ModelInfoViewModel>(model));
+        }
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void HandleActionButtonClick(Action action, ListItemViewModel<ModelInfoViewModel> modelItem)
+    {
+        action.Invoke();
+        modelItem.IsShowingActionSheet = false;
+
+        InvokeAsync(StateHasChanged);
+    }
+}

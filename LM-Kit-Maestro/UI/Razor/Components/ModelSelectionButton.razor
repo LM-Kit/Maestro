@@ -1,42 +1,47 @@
 ﻿@inject LMKitService LMKitService
+@inject IDialogService DialogService
 
-<div id="model-selection-button-container"
-     class="@(GetButtonContainerClasses(ModelListViewModel))"
-     @onclick="() => OnButtonClicked()">
-    <div id="button-body">
-        <div class="d-flex justify-center">
-            @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
+<div id="model-selection-button-root">
+    <div id="model-selection-button-container"
+         class="@(GetButtonContainerClasses(ModelListViewModel))"
+         @onclick="() => OnButtonClicked()">
+        <div id="button-body">
+            <div class="d-flex justify-center">
+                @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
+                {
+                    <button title="@Locales.EjectModel"
+                            class="eject-button"
+                            @onclick:stopPropagation="true"
+                            @onclick="OnEjectButtonClicked">
+                        <span class="fas fa-eject" />
+                    </button>
+                }
+            </div>
+
+            <div id="button-text">
+                <div class="text-wrapper">
+                    <MudText Align="Align.Center" Typo="Typo.caption">
+                        @Text
+                    </MudText>
+                </div>
+
+            </div>
+
+            @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.NotLoaded ||
+            ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
             {
-                <MudIconButton Icon="fas fa-eject"
-                               Size="Size.Small"
-                               Class="eject-button"
-                               OnClick="OnEjectButtonClicked"/>
+                <div class="d-flex justify-center">
+                    <MudIcon Icon="fas fa-chevron-down" Size="Size.Small" Style="color: var(--Outline); font-size: 0.6rem !important" />
+                </div>
             }
         </div>
 
-        <div id="button-text">
-            <div class="text-wrapper">
-                <MudText Align="Align.Center" Typo="Typo.subtitle2">
-                    @Text
-                </MudText>
-            </div>
-
-        </div>
-
-        @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.NotLoaded ||
-             ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
+        @if (ModelListViewModel.LoadingState is ModelListViewModel.ModelLoadingState.Loading or
+        ModelListViewModel.ModelLoadingState.Downloading && ModelListViewModel.LoadingProgress != null)
         {
-            <div class="d-flex justify-center">
-                <MudIcon Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark"/>
+            <div id="progress-bar">
+                <MudProgressLinear Value="@(ModelListViewModel.LoadingProgress.Value * 100)" />
             </div>
         }
     </div>
-
-    @if (ModelListViewModel.LoadingState is ModelListViewModel.ModelLoadingState.Loading or
-                 ModelListViewModel.ModelLoadingState.Downloading && ModelListViewModel.LoadingProgress != null)
-    {
-        <div id="progress-bar">
-            <MudProgressLinear Value="@(ModelListViewModel.LoadingProgress.Value * 100)"/>
-        </div>
-    }
 </div>

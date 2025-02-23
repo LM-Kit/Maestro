@@ -1,35 +1,22 @@
-﻿body.mac #input-border {
-    max-width: 1000px;
-}
-
-body.windows #input-border {
+﻿#input-border {
     max-width: 800px;
 }
 
 #input-border {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto;
     position: relative;
-    margin: 0;
     width: 100%;
-    border: 2px solid transparent;
-    transition: border-color 0.1s;
-    background-color: var(--Surface15);
+    transition: background-color 0.5s, border-color 0.5s;
+    background-color: var(--Surface2);
+    border-radius: 1rem;
+    border: 1px solid transparent;
 }
 
     #input-border:focus-within {
+        background-color: var(--Surface);
         border-color: var(--OutlineVariant);
     }
-     
-.input-border-small {
-    padding-block: 8px;
-    border-radius: 32px;
-}
-
-.input-border-large {
-    border-radius: 16px;
-    padding-bottom: 32px;
-    padding-top: 12px;
-}
 
 
 #input-text {
@@ -41,81 +28,69 @@ body.windows #input-border {
     outline: none;
     resize: none;
     height: auto;
-    font-family: system-ui, sans-serif;
-    color: white;
+    font-size: 1rem;
+    font-family: 'Roboto','Helvetica','Arial','sans-serif';
+    color: var(--OnSurface);
     background-color: transparent;
     scrollbar-gutter: stable;
-/*    white-space: pre-wrap;
-    word-wrap: break-word;*/
-    /*background-color: transparent;*/
+    max-height: 12rem;
+    scrollbar-gutter: both-edges stable;
 }
 
-.input-border-large #input-text {
-    max-height: 200px;
-/*    margin-top: 8px;
-    margin-bottom: 28px;
-*/}
+    #input-text::-webkit-scrollbar-thumb {
+        background-color: var(--Outline) !important;
+    }
 
-.input-border-small #input-text {
-    /*margin-block: auto;*/
-}
-
-body.windows #input-text {
-    font-size: 16px;
-    padding-right: 32px;
-    padding-left: 16px;
-/*    padding-left: 16px;
-    padding-right: 40px;
-*/}
-
-body.mac #input-text {
-    font-size: 20px;
-    padding-right: 40px;
-    padding-left: 20px;
-}
-
-.input-text:focus-within {
-    border-color: var(--Primary);
+.send-button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 0.5rem;
+    grid-column: 2;
 }
 
 .send-button {
-    position: absolute;
-    right: 0;
-    margin-right: 8px;
-    border: none;
+    height: 1.75rem;
+    width: 1.75rem;
+    transition: color 0.3s, background-color 0.3s, border-color 0.3s;
     cursor: pointer;
-    color: var(--Surface15);
-    transition: background-color 0.1s;
-}
-
-.input-border-large .send-button {
-    bottom: 8px;
-}
-
-.input-border-small .send-button {
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-body.mac .send-button {
-    width: 40px;
-    height: 40px;
-}
-
-body.windows .send-button {
-    width: 32px;
-    height: 32px;
+    font-size: 0.75rem;
+    border-radius: 50%;
+    background-color: transparent;
 }
 
 .disabled-button {
-    background-color: var(--OutlineVariant);
+    background-color: transparent;
+    color: var(--OutlineVariant);
     cursor: not-allowed;
 }
 
 .enabled-button {
-    background-color: var(--Outline);
+    color: var(--OnSurface);
+    /*background-color: var(--Outline);*/
+    /*background-color: var(--Outline);*/
+    /*background-color: var(--Primary);*/
 }
 
 /*     .send-button:hover:not(:disabled) {
         background-color: var(--OutlineVariant);
         } */
+
+#input-textarea-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 0.5rem;
+}
+
+
+.input-textarea-initial {
+    padding-block: 0.5rem;
+    /*background-color: blue;*/
+}
+
+.input-textarea-multiline {
+    padding-top: 0.5rem;
+    padding-bottom: 2.25rem;
+    /*background-color: green;*/
+}

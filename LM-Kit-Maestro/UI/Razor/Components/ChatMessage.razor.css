@@ -2,8 +2,8 @@
     display: flex;
     position: relative;
     flex-direction: column;
-    margin-block: 20px;
-    margin-inline: 10px;
+    margin-block: 1.25rem;
+    margin-inline: 0.5rem;
 }
 
     #message-container:hover > div {
@@ -11,7 +11,8 @@
     }
 
 .assistant-message-container:hover {
-    background-color: var(--Surface15);
+    transition: background-color 0.2s;
+    background-color: var(--Surface);
 }
 
 .user-message-container {
@@ -20,51 +21,65 @@
 }
 
 .message-content {
-    padding-inline: 16px;
+    padding-inline: 1rem;
     word-break: break-word; /* Ensures long words break and wrap */
     overflow-wrap: break-word; /* Allows wrapping long words */
     max-width: 100%; /* Prevents the div from exceeding the width of its container */
-    padding-block: 16px;
+    padding-block: 1rem;
 }
 
 .user-message-content {
     display: block;
-    background-color: var(--Surface15);
-    border-radius: 32px;
+    background-color: var(--Surface2);
+    border-radius: 2rem;
 }
 
 .chat-action-button {
     align-self: center;
-    border-radius: 50%;
-    border-width: 0;
-    padding: 6px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     background-color: transparent;
     color: var(--Outline);
+    font-size: 0.7rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.25rem;
 }
 
     .chat-action-button:hover {
-        background-color: var(--Surface3);
+        background-color: var(--Surface2);
     }
 
 .message-footer {
-    margin: 8px;
+    margin: 0.5rem;
     display: flex;
     align-items: center;
 }
 
 
-.message-footer-text {
-    line-height: 20px;
-    color: var(--Outline);
+/*.message-footer-text {
+    color: var(--Outline) !important;
     display: inline-block;
     align-self: center;
     margin-inline: 4px;
+    background-color: red;
 }
-
+*/
 
 .user-message-footer-content {
     margin-left: auto;
+}
+
+/*.eject-button {
+    font-size: 0.6rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--Primary);
+    background-color: var(--Surface2);
+    border-radius: 50%;
+}*/
+
+.message-footer-content{
+    /*padding-block: 0.5rem;*/
 }

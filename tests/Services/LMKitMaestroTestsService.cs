@@ -12,9 +12,18 @@ namespace Maestro.Tests
 {
     internal class MaestroTestsService
     {
-        public static readonly Uri Model1 = new(@"https://huggingface.co/lm-kit/llama-3.2-1b-instruct.gguf/resolve/main/Llama-3.2-1B-Instruct-Q4_K_M.gguf?download=true");
-        public static readonly Uri Model2 = new(@"https://huggingface.co/lm-kit/qwen-2.5-0.5b-instruct-gguf/resolve/main/Qwen-2.5-0.5B-Instruct-Q4_K_M.gguf?download=true");
-        public static readonly Uri TranslationModel = new Uri(@"https://huggingface.co/lm-kit/falcon-3-10.3b-instruct-gguf/resolve/main/Falcon3-10B-Instruct-q4_k_m.gguf?download=true");
+        public static readonly Uri Model1 =
+            new(
+                @"https://huggingface.co/lm-kit/llama-3.2-1b-instruct.gguf/resolve/main/Llama-3.2-1B-Instruct-Q4_K_M.gguf?download=true");
+
+        public static readonly Uri Model2 =
+            new(
+                @"https://huggingface.co/lm-kit/qwen-2.5-0.5b-instruct-gguf/resolve/main/Qwen-2.5-0.5B-Instruct-Q4_K_M.gguf?download=true");
+
+        public static readonly Uri TranslationModel =
+            new Uri(
+                @"https://huggingface.co/lm-kit/falcon-3-10.3b-instruct-gguf/resolve/main/Falcon3-10B-Instruct-q4_k_m.gguf?download=true");
+
         private Exception? _errorLoadingException;
         TaskCompletionSource<bool>? _modelLoadingTask;
         TaskCompletionSource<bool>? _modelUnloadedTask;
@@ -35,7 +44,8 @@ namespace Maestro.Tests
             SettingsViewModel = GetNewSettingsViewModel(LMKitService);
             ConversationListViewModel = GetNewConversationListViewModel(LMKitService, Database);
             ModelListViewModel = GetNewModelListViewModel(LMKitService, LLmFileManager);
-            ChatPageViewModel = GetNewChatPageViewModel(LMKitService, ConversationListViewModel, ModelListViewModel, Database, LLmFileManager, SettingsViewModel);
+            ChatPageViewModel = GetNewChatPageViewModel(LMKitService, ConversationListViewModel, ModelListViewModel,
+                Database, LLmFileManager, SettingsViewModel);
             LMKitService.LMKitConfig.MaximumCompletionTokens = 200;
             LMKitService.LMKitConfig.RequestTimeout = 15;
         }
@@ -65,7 +75,8 @@ namespace Maestro.Tests
             LMKitService.ModelLoaded += LMKitService_ModelLoadingCompleted;
             LMKitService.ModelLoadingFailed += LMKitService_ModelLoadingFailed;
 
-            string? localFilePath = FileHelpers.GetModelFilePathFromUrl(modelUri, LMKitDefaultSettings.DefaultModelStorageDirectory);
+            string? localFilePath =
+                FileHelpers.GetModelFilePathFromUrl(modelUri, LMKitDefaultSettings.DefaultModelStorageDirectory);
 
             if (localFilePath == null)
             {
@@ -126,7 +137,8 @@ namespace Maestro.Tests
             _modelLoadingTask?.TrySetResult(false);
         }
 
-        private static ConversationViewModel GetNewConversationViewModel(LMKitService lmKitService, IMaestroDatabase database)
+        private static ConversationViewModel GetNewConversationViewModel(LMKitService lmKitService,
+            IMaestroDatabase database)
         {
             var popupService = new Mock<IPopupService>().Object;
             var mainThread = new Mock<IMainThread>().Object;
@@ -141,28 +153,34 @@ namespace Maestro.Tests
             return new SettingsViewModel(appSettingsService, lmKitService);
         }
 
-        private static ConversationListViewModel GetNewConversationListViewModel(LMKitService lmKitService, IMaestroDatabase database)
+        private static ConversationListViewModel GetNewConversationListViewModel(LMKitService lmKitService,
+            IMaestroDatabase database)
         {
             var popupService = new Mock<IPopupService>().Object;
             var mainThread = new Mock<IMainThread>().Object;
             var appSettingsService = new Mock<IAppSettingsService>().Object;
             var logger = new Mock<ILogger<ConversationListViewModel>>().Object;
 
-            return new ConversationListViewModel(mainThread, popupService, logger, database, lmKitService, appSettingsService);
+            return new ConversationListViewModel(mainThread, popupService, logger, database, lmKitService,
+                appSettingsService);
         }
 
-        private static ModelListViewModel GetNewModelListViewModel(LMKitService lmKitService, ILLMFileManager llmFileManager)
+        private static ModelListViewModel GetNewModelListViewModel(LMKitService lmKitService,
+            ILLMFileManager llmFileManager)
         {
             var mainThread = new Mock<IMainThread>().Object;
             var navigationService = new Mock<INavigationService>().Object;
             var popupNavigation = new Mock<IPopupNavigation>().Object;
             var popupService = new Mock<IPopupService>().Object;
-
-            return new ModelListViewModel(mainThread, llmFileManager, lmKitService, popupService, navigationService, popupNavigation);
+            var launcher = new Mock<ILauncher>().Object;
+            return new ModelListViewModel(mainThread, llmFileManager, lmKitService, popupService, launcher, navigationService,
+                popupNavigation);
         }
 
-        private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService, ConversationListViewModel conversationListViewModel,
-            ModelListViewModel modelListViewModel, IMaestroDatabase database,  ILLMFileManager llmFileManager, SettingsViewModel settingsViewModel)
+        private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService,
+            ConversationListViewModel conversationListViewModel,
+            ModelListViewModel modelListViewModel, IMaestroDatabase database, ILLMFileManager llmFileManager,
+            SettingsViewModel settingsViewModel)
         {
             var popupService = new Mock<IPopupService>().Object;
             var mainThread = new Mock<IMainThread>().Object;
@@ -171,7 +189,7 @@ namespace Maestro.Tests
             var navigationService = new Mock<INavigationService>().Object;
             var popupNavigation = new Mock<IPopupNavigation>().Object;
 
-            return new ChatPageViewModel(navigationService, popupService, popupNavigation, conversationListViewModel, 
+            return new ChatPageViewModel(navigationService, popupService, popupNavigation, conversationListViewModel,
                 modelListViewModel, logger, database, lmKitService, llmFileManager, settingsViewModel);
         }
     }

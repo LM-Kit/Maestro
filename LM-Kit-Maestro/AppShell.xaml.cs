@@ -1,5 +1,5 @@
-﻿using SimpleToolkit.SimpleShell;
-using LMKit.Maestro.ViewModels;
+﻿using LMKit.Maestro.ViewModels;
+using SimpleToolkit.SimpleShell;
 
 namespace LMKit.Maestro
 {

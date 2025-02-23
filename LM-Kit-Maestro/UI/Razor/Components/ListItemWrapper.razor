@@ -1,0 +1,50 @@
+﻿@typeparam T
+
+<div>
+    <div @ref="_parentDiv" id="list-item-container">
+        <div @onclick="OnItemClicked"
+             @oncontextmenu="HandleRightClick"
+             @oncontextmenu:preventDefault="true"
+             @onmouseover="OnMouseOver"
+             @onmouseout="OnMouseOut"
+             class="list-item-content @(LimitWidth ? "max-width" : "")">
+            @ChildContent
+        </div>
+
+
+        <MudOverlay ZIndex="9999" @bind-Visible="ListItemViewModel.IsShowingActionSheet" AutoClose="true" />
+        <div style="position: absolute; left: @($"{_popoverX}px"); top:@($"{_popoverY}px")">
+
+            <MudPopover Style="z-index: 99999" AnchorOrigin="Origin.TopLeft" Open="ListItemViewModel.IsShowingActionSheet" Fixed="true">
+                <div class="action-sheet">
+                    @ActionSheet
+                </div>
+            </MudPopover>
+        </div>
+    </div>
+</div>
+
+<style>
+    #list-item-container {
+        position: relative;
+        width: 100%;
+        justify-content: center;
+        display: flex;
+    }
+
+    .max-width {
+        max-width: 75rem;
+    }
+
+    .list-item-content {
+        flex-grow: 1;
+        flex-shrink: 1;
+        justify-content: center;
+        /*         display: flex;
+                            flex-grow: 1;
+                            flex-shrink: 1;
+                            width: max-content;
+                            justify-content: center;
+                            margin-inline: auto; */
+    }
+</style>

@@ -137,7 +137,7 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
     {
         get
         {
-            RandomSamplingConfig? randomSamplingConfig = null;
+            RandomSamplingConfig? samplingConfig = null;
 
             try
             {
@@ -145,14 +145,56 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
 
                 if (!string.IsNullOrEmpty(json))
                 {
-                    randomSamplingConfig = JsonSerializer.Deserialize<RandomSamplingConfig>(json);
+                    samplingConfig = JsonSerializer.Deserialize<RandomSamplingConfig>(json);
                 }
             }
             catch
             {
             }
 
-            return randomSamplingConfig != null ? randomSamplingConfig : new RandomSamplingConfig();
+            return samplingConfig != null ? samplingConfig : new RandomSamplingConfig();
+        }
+        set
+        {
+            string? json;
+
+            try
+            {
+                json = JsonSerializer.Serialize(value);
+            }
+            catch
+            {
+                json = null;
+            }
+
+            if (!string.IsNullOrEmpty(json))
+            {
+                Settings.Set(nameof(RandomSamplingConfig), json);
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public TopNSigmaSamplingConfig TopNSigmaSamplingConfig
+    {
+        get
+        {
+            TopNSigmaSamplingConfig? samplingConfig = null;
+
+            try
+            {
+                string? json = Settings.Get(nameof(TopNSigmaSamplingConfig), default(string?));
+
+                if (!string.IsNullOrEmpty(json))
+                {
+                    samplingConfig = JsonSerializer.Deserialize<TopNSigmaSamplingConfig>(json);
+                }
+            }
+            catch
+            {
+            }
+
+            return samplingConfig != null ? samplingConfig : new TopNSigmaSamplingConfig();
         }
         set
         {
@@ -179,22 +221,22 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
     {
         get
         {
-            Mirostat2SamplingConfig? Mirostat2SamplingConfig = null;
+            Mirostat2SamplingConfig? samplingConfig = null;
 
             try
             {
-                string? json = Settings.Get(nameof(Mirostat2SamplingConfig), default(string?));
+                string? json = Settings.Get(nameof(samplingConfig), default(string?));
 
                 if (!string.IsNullOrEmpty(json))
                 {
-                    Mirostat2SamplingConfig = JsonSerializer.Deserialize<Mirostat2SamplingConfig>(json);
+                    samplingConfig = JsonSerializer.Deserialize<Mirostat2SamplingConfig>(json);
                 }
             }
             catch
             {
             }
 
-            return Mirostat2SamplingConfig != null ? Mirostat2SamplingConfig : new Mirostat2SamplingConfig();
+            return samplingConfig != null ? samplingConfig : new Mirostat2SamplingConfig();
         }
         set
         {

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace LMKit.Maestro.Services;
+﻿namespace LMKit.Maestro.Services;
 
 public partial class LMKitService
 {
@@ -8,7 +6,7 @@ public partial class LMKitService
     {
         private readonly object _locker = new object();
 
-        private List<ChatRequest> _scheduledPrompts = new List<ChatRequest>();
+        private readonly List<ChatRequest> _scheduledPrompts = [];
 
         public int Count
         {

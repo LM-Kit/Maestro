@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
 
@@ -29,8 +28,6 @@ public partial class NumericTextField<T> : ComponentBase where T : struct, INumb
                 _value = value;
                 ValueChanged.InvokeAsync(value);
                 _inputText = value.ToString()!;
-                Debug.WriteLine("_input text: " + _inputText);
-
             }
         }
     }
@@ -58,8 +55,8 @@ public partial class NumericTextField<T> : ComponentBase where T : struct, INumb
 
     private void ValidateSettingValue()
     {
-        if (T.TryParse(_inputText, new CultureInfo("en-US"), out T parsedValue) && 
-            (parsedValue >= MinValue && parsedValue <= MaxValue))
+        if (T.TryParse(_inputText, new CultureInfo("en-US"), out T parsedValue) &&
+            parsedValue >= MinValue && parsedValue <= MaxValue)
         {
             Value = parsedValue;
         }

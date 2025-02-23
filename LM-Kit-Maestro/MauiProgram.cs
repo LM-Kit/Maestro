@@ -1,18 +1,18 @@
 ﻿using CommunityToolkit.Maui;
-using Microsoft.Extensions.Logging;
+using CommunityToolkit.Maui.Storage;
+using LMKit.Maestro.Data;
+using LMKit.Maestro.Handlers;
+using LMKit.Maestro.Services;
 using LMKit.Maestro.UI;
 using LMKit.Maestro.ViewModels;
-using LMKit.Maestro.Services;
-using LMKit.Maestro.Data;
-using SimpleToolkit.SimpleShell;
-using LMKit.Maestro.Handlers;
+using Majorsoft.Blazor.Components.Common.JsInterop;
 using MetroLog.MicrosoftExtensions;
 using MetroLog.Operators;
-using Majorsoft.Blazor.Components.Common.JsInterop;
+using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
 using Mopups.Services;
-using CommunityToolkit.Maui.Storage;
 using MudBlazor.Services;
+using SimpleToolkit.SimpleShell;
 
 namespace LMKit.Maestro
 {
@@ -51,7 +51,10 @@ namespace LMKit.Maestro
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddJsInteropExtensions();
-            builder.Services.AddMudServices();
+            builder.Services.AddMudServices(config =>
+            {
+                config.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomRight;
+            });
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

@@ -1,13 +1,39 @@
 ﻿@inherits LayoutComponentBase
 
-
 @inject ModelListViewModel ModelListViewModel
+@inject ILLMFileManager FileManager
+@inject LMKitService LmKitService
+@inject ISnackbar Snackbar
 
-<div id="page-container">
+
+<div id="main-container">
     <div id="top-bar">
-        <SectionOutlet SectionName="top-bar" />
-        <div class="bottom-divider"> </div>
+        <nav id="nav-bar">
+            <div class="nav-item">
+                <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
+                    <MudText Typo="Typo.body1">
+                        Chat
+                    </MudText>
+
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink ActiveClass="nav-link-active" class="nav-link" href="models">
+                    <MudText Typo="Typo.body1">
+                        Models
+                    </MudText>
+                </NavLink>
+            </div>
+        </nav>
+
+        <div id="page-top-bar">
+            <div id="page-top-bar-wrapper">
+                <SectionOutlet SectionName="top-bar" />
+            </div>
+        </div>
     </div>
+
+    <div class="horizontal-divider"> </div>
 
     <div id="body-container">
         @Body
@@ -15,33 +41,106 @@
 </div>
 
 <style>
-
+    #main-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
 
     #top-bar {
         background-color: var(--Surface);
-        height: 96px;
         display: flex;
         flex-direction: column;
-        position: relative;
+        padding-top: 20px;
+    }
+
+    #nav-bar {
+        padding-inline: 20px;
+        display: flex;
+        flex-direction: row;
+    }
+
+
+    .nav-link {
+        font-size: 2rem !important;
+        color: var(--Outline);
+        transition: color 0.2s;
+    }
+
+    .nav-link-active {
+        color: var(--OnSurface);
+    }
+
+    #page-top-bar {
+        display: flex;
+        flex-direction: column;
+        min-height: 100px;
+    }
+
+    #page-top-bar-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
     }
 
     #body-container {
         flex: 1;
         overflow: hidden;
-    }
-
-    #page-container {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
+        background-color: var(--Surface15);
     }
 </style>
 
 <MudThemeProvider IsDarkMode="true" DefaultScrollbar="true" Theme="@CurrentTheme" />
 <MudPopoverProvider />
-<MudDialogProvider />
 <MudSnackbarProvider />
+
+<MudDialogProvider FullWidth="true"
+                   CloseButton="false"
+                   BackdropClick="true"
+                   NoHeader="true"
+                   Position="DialogPosition.TopLeft"
+                   CloseOnEscapeKey="true" />
 
 @code {
     public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            FileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
+            LmKitService.ModelLoadingFailed += OnModelLoadingFailed;
+        }
+    }
+
+    private void OnFileManagerFileCollectingCompleted(object? sender, EventArgs e)
+    {
+        var fileCollectingCompletedEventArgs = (LLMFileManager.FileCollectingCompletedEventArgs)e;
+
+        if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
+        {
+            Snackbar.Clear();
+            Snackbar.Add($"Error with your model folder:\n{fileCollectingCompletedEventArgs.Exception.Message!}\n\nResetting to the default one.");
+
+        }
+        // else
+        // {
+        //     Snackbar.Clear();
+        //     Snackbar.Add("Model scan completed.");
+        // }
+    }
+
+    private void OnModelLoadingFailed(object? sender, EventArgs e)
+    {
+        var modelLoadingFailedEventArgs = (LMKitService.ModelLoadingFailedEventArgs)e;
+
+        if (Microsoft.Maui.ApplicationModel.MainThread.IsMainThread)
+        {
+            // _popupService.DisplayAlert("Error loading model", $"The model failed to be loaded: {modelLoadingFailedEventArgs.Exception.Message}", "OK");
+        }
+    }
 }

@@ -24,27 +24,27 @@
     @if (MessageViewModel.Sender == MessageSender.User || (MessageViewModel.Sender == MessageSender.Assistant && !MessageViewModel.MessageInProgress))
     {
         <div class="message-footer @(MessageJustTerminated ? "show" : "hide")">
-            <div class="message-footerContent small-text @(MessageViewModel.Sender == MessageSender.User ? "user-message-footer-content" : "")">
+            <div class="message-footer-content @(MessageViewModel.Sender == MessageSender.User ? "user-message-footer-content" : "")">
                 @if (MessageViewModel.GetResponseCount() > 1)
                 {
                     <button title="@Locales.PreviousGeneratedResponse" @onclick="OnPreviousResponseButtonClicked"
                             class="chat-action-button ">
-                        <i class="small-icon fas fa-chevron-left"/>
+                        <i class="fas fa-chevron-left"/>
                     </button>
 
-                    <span class="message-footer-text">
+                    <MudText Class="mx-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
                         @($"{responseIndex + 1} / {MessageViewModel.GetResponseCount()}")
-                    </span>
+                        </MudText>
 
                     <button title="@Locales.NextGeneratedResponse" @onclick="OnNextResponseButtonClicked"
                             class="chat-action-button">
-                        <i class="small-icon fas fa-chevron-right" />
+                        <i class="fas fa-chevron-right" />
                     </button>
                 }
 
                 <button title="@Locales.CopyMessage" @onclick="OnCopyMessageButtonClicked"
                         class="chat-action-button">
-                    <i class="small-icon fas @(MessageJustCopied ? "fa-check" : "fa-copy")" />
+                    <i class="fas @(MessageJustCopied ? "fa-check" : "fa-copy")" />
                 </button>
 
                 @if (MessageViewModel.Sender == MessageSender.Assistant)
@@ -53,15 +53,15 @@
                     {
                         <button title="@Locales.RegenerateResponse" @onclick="OnRegenerateResponseButtonClicked"
                                 class="chat-action-button">
-                            <i class="small-icon fas fa-rotate" />
+                            <i class="fas fa-rotate" />
                         </button>
                     }
 
                     @if (MessageViewModel.GetTerminationReason(responseIndex) != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
                     {
-                        <span class="message-footer-text">
+                        <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
                             @($"{MessageViewModel.GetGeneratedTokens(responseIndex)} tokens • Termination reason: {MessageViewModel.GetTerminationReason(responseIndex)}")
-                        </span>
+                        </MudText>
                     }
                 }
             </div>
@@ -71,7 +71,7 @@
 
 @code {
 
-    const string ProgressIndicatorHtml = "<span class=\"dot\"></span>";
+    const string ProgressIndicatorHtml = "<span class=\"dot ml-1 d-inline-block\"></span>";
 
     private int responseIndex;
 

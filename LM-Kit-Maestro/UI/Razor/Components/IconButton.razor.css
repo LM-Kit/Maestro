@@ -3,7 +3,8 @@
     justify-content: center;
     align-items: center;
     display: flex;
-    padding: 8px;
+    justify-content: center;
+    align-items: center;
 }
 
 .icon-button {
@@ -32,11 +33,12 @@
         background-color: var(--Surface3);
     }
 
+    .icon-button-medium{
+        width: 1.75rem;
+        height: 1.75rem;
+    }
 
-.icon-button-small {
-    font-size: 0.6em;
-}
-
-.icon-button-medium {
-    font-size: 0.8em;
-}
+    .icon-button-small{
+        width: 1.25rem;
+        height: 1.25rem;
+    }

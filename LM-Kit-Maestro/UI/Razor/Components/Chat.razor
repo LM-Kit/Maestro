@@ -23,7 +23,7 @@
                     @if (ViewModel.ChatsSidebarIsToggled)
                     {
                         <div>
-                            <MudText Class="text-truncate"  Typo="Typo.body1">
+                            <MudText Class="text-truncate"  Typo="Typo.subtitle2">
                                 Chats
                             </MudText>
                         </div>
@@ -34,7 +34,7 @@
                                 OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
                 </div>
 
-                <div class="bottom-divider"></div>
+                @* <div class="bottom-divider"></div> *@
             </div>
         }
 
@@ -55,7 +55,7 @@
                                     Icon="fas fa-arrow-rotate-left"
                                     OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
 
-                        <MudText Class="text-truncate" Typo="Typo.body1">
+                        <MudText Class="text-truncate" Typo="Typo.subtitle2">
                             Settings
                         </MudText>
                     }
@@ -65,7 +65,7 @@
                                 OnClick="ViewModel.ToggleSettingsSidebar"/>
                 </div>
 
-                <div class="bottom-divider"></div>
+                @* <div class="bottom-divider"></div> *@
             </div>
         }
     </div>
@@ -74,8 +74,8 @@
 <div id="chat-container">
     <ChatSidebar ShowScrollbar="true"
                  Position="ChatSidebar.SidebarPosition.Left"
-
                  @bind-IsToggled="ViewModel.ChatsSidebarIsToggled">
+
         <div class="d-flex flex-column flex-grow-1 pa-1">
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
             {
@@ -114,16 +114,15 @@
 
                             <MudStack Spacing="4">
                                 <div class="shortcut-instruction">
-                                    <MudText Typo="Typo.caption">
+                                    <MudText Typo="Typo.overline">
                                         Press Enter to send a new message
                                     </MudText>
 
                                 </div>
 
                                 <div class="shortcut-instruction">
-                                    <MudText Typo="Typo.caption">
-                                        Hold Shift + Enter to insert a new line
-
+                                            <MudText Typo="Typo.overline">
+                                                Hold Shift + Enter to insert a new line
                                     </MudText>
                                 </div>
                             </MudStack>
@@ -143,7 +142,7 @@
                                 @if (!IsScrolledToEnd)
                                 {
                                     <button @onclick="OnScrollToEndButtonClicked"
-                                            class="round-button scroll-to-end-button">
+                                            class="scroll-to-end-button">
                                                                 <span>
                                                                     <i class="fas fa-arrow-down"></i>
                                                                 </span>
@@ -163,7 +162,7 @@
         <div id="bottom-space">
             @if (ViewModel?.ConversationListViewModel?.CurrentConversation?.LMKitConversation?.ContextSize > 0)
             {
-                <MudText Align="Align.Center" Typo="Typo.caption">
+                <MudText Style="font-size:0.7rem" Align="Align.Center" Typo="Typo.overline">
                     Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                     @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
                     (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,

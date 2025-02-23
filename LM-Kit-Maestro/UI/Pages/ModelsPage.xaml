@@ -7,25 +7,15 @@
              xmlns:local="clr-namespace:LMKit.Maestro"
              xmlns:models="clr-namespace:LMKit.Maestro.Models"
              xmlns:vm="clr-namespace:LMKit.Maestro.ViewModels"
+             xmlns:razor="clr-namespace:LMKit.Maestro.UI.Razor"
              xmlns:converters="clr-namespace:LMKit.Maestro.Converters"
              x:DataType="vm:ModelsPageViewModel"
              x:Class="LMKit.Maestro.UI.ModelsPage"
              x:Name="modelsPage"
              Title="ModelsPage">
 
-    <!--<ContentPage.Resources>
-        <ControlTemplate "ModelDownloadingTemplate">
-            
-        </ControlTemplate>
-        <ControlTemplate "ModelDownloadedTemplate">
-
-        </ControlTemplate>
-        <ControlTemplate "ModelNotDownloadedTemplate">
-
-        </ControlTemplate>
-    </ContentPage.Resources>-->
-    <ui:PageBase.Resources>
-        <!--<Style TargetType="controls:StatefulContentView">
+    <!--<ui:PageBase.Resources>
+        --><!--<Style TargetType="controls:StatefulContentView">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup x:Name="CommonStates">
@@ -43,7 +33,7 @@
                     </VisualStateGroup>
                 </VisualStateGroupList>
             </Setter>
-        </Style>-->
+        </Style>--><!--
 
         <Style x:Key="ModelCardButton" TargetType="controls:StatefulContentView">
             <Setter Property="VisualStateManager.VisualStateGroups">
@@ -78,7 +68,7 @@
             <Setter Property="StrokeShape" Value="RoundRectangle 4"/>
         </Style>
 
-        <!--<DataTemplate x:Key="LMKitModelsTemplate" x:DataType="vm:ModelInfoViewModel">
+        --><!--<DataTemplate x:Key="LMKitModelsTemplate" x:DataType="vm:ModelInfoViewModel">
             <Grid Padding="16, 0">
                 <Border Style="{StaticResource ModelBorderStyle}">
                     <Grid RowDefinitions="*, *, auto" ColumnSpacing="8" ColumnDefinitions="*, auto">
@@ -182,7 +172,7 @@
                     </Grid>
                 </Border>
             </Grid>
-        </DataTemplate>-->
+        </DataTemplate>--><!--
 
         <DataTemplate x:Key="SortedModelsTemplate" x:DataType="vm:ModelInfoViewModel">
             <Grid>
@@ -229,7 +219,7 @@
                                ToolTipProperties.Text="{Binding ModelInfo.Architecture, StringFormat='The architecture of this model is {0}'}" />
 
                         <StackLayout Orientation="Horizontal"  Grid.Column="4" Spacing="8" HorizontalOptions="Start">
-                            <!-- Chat Icon -->
+                            --><!-- Chat Icon --><!--
                             <Label Text="{StaticResource Chat}" 
                                IsVisible="{Binding IsChatModel}" 
                                BackgroundColor="Transparent"
@@ -239,7 +229,7 @@
                                TextColor="#ffcccc"
                                FontFamily = "Material" />
 
-                            <!-- Vision Icon -->
+                            --><!-- Vision Icon --><!--
                             <Label Text="{StaticResource  Image}" 
                                IsVisible="{Binding HasVisionCapability}" 
                                BackgroundColor="Transparent"
@@ -250,7 +240,7 @@
                                FontFamily = "Material" />
 
 
-                            <!-- Code Icon -->
+                            --><!-- Code Icon --><!--
                             <Label Text="{StaticResource Code}" 
                                IsVisible="{Binding IsCodeModel}" 
                                VerticalOptions="Center" 
@@ -260,7 +250,7 @@
                                TextColor="#7d5fff"
                                FontFamily = "Material" />
 
-                            <!-- Math Icon -->
+                            --><!-- Math Icon --><!--
                             <Label Text="{StaticResource Calculate}" 
                                IsVisible="{Binding IsMathModel}" 
                                VerticalOptions="Center" 
@@ -488,14 +478,14 @@
                                 </Setter>
                             </DataTrigger>
 
-                            <!--<DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.LMKitModels}">
+                            --><!--<DataTrigger TargetType="CollectionView" Binding="{Binding Source={x:Reference modelsPage}, Path=SelectedTab}" Value="{x:Static ui:ModelsPageTab.LMKitModels}">
                             <Setter Property="ItemsSource" Value="{Binding ModelListViewModel.AvailableModels}"/>
                             <Setter Property="ItemTemplate" Value="{StaticResource LMKitModelsTemplate}"/>
-                        </DataTrigger>-->
+                        </DataTrigger>--><!--
                         </CollectionView.Triggers>
                     </CollectionView>
 
-                    <!--<Grid RowDefinitions="1, *" Margin="0, 0" Grid.Row="2">
+                    --><!--<Grid RowDefinitions="1, *" Margin="0, 0" Grid.Row="2">
                     <BoxView  Margin="16,0"/>
                     <Grid Padding="16" VerticalOptions="Center" Grid.Row="1" ColumnDefinitions="*, auto, *">
                         <controls:StatefulContentView Grid.Row="1" Tapped="SortedModelsTabTapped">
@@ -520,7 +510,7 @@
                             </Label>
                         </controls:StatefulContentView>
                     </Grid>
-                </Grid>-->
+                </Grid>--><!--
                 </Grid>
             </Border>
 
@@ -538,10 +528,10 @@
                             <VisualState x:Name="PointerOver">
                                 <VisualState.Setters>
 
-                                    <!--<Setter Property="Opacity" Value="0.7"/>-->
+                                    --><!--<Setter Property="Opacity" Value="0.7"/>--><!--
                                     <Setter TargetName="hfLabel" Property="Label.TextColor" Value="#FFD21E"/>
-                                    <!--<Setter TargetName="hfLogo" Property="Image.WidthRequest" Value="20"/>
-                                <Setter TargetName="hfLogo" Property="Image.HeightRequest" Value="20"/>-->
+                                    --><!--<Setter TargetName="hfLogo" Property="Image.WidthRequest" Value="20"/>
+                                <Setter TargetName="hfLogo" Property="Image.HeightRequest" Value="20"/>--><!--
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -554,5 +544,16 @@
                 </HorizontalStackLayout>
             </controls:StatefulContentView>
         </Grid>
-    </ui:PageBase.Body>
+    </ui:PageBase.Body>-->
+
+
+    <BlazorWebView
+            x:Name="blazorWebView"
+            HostPage="wwwroot/index.html"
+            StartPath="/models">
+
+        <BlazorWebView.RootComponents>
+            <RootComponent Selector="#app" ComponentType="{x:Type razor:Routes}" />
+        </BlazorWebView.RootComponents>
+    </BlazorWebView>
 </ui:PageBase>

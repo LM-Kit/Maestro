@@ -9,8 +9,6 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-    padding-inline: 8px;
-    padding-top: 8px;
 }
 
 #conversation-content {
@@ -43,16 +41,8 @@
     margin-left: auto;
     margin-right: auto;
     scrollbar-gutter: both-edges stable;
-}
-
-body.windows .chat-element {
     max-width: 800px;
 }
-
-body.mac .chat-element {
-    max-width: 1000px;
-}
-
 
 #user-input {
     padding-inline: 10px;
@@ -70,14 +60,14 @@ body.mac .chat-element {
 .scroll-to-end-button {
     color: var(--Outline);
     background-color: var(--Surface3);
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.75rem;
     display: flex;
     border: none;
+    border-radius: 50%;
     align-self: center;
 }
-
-    .scroll-to-end-button:hover {
-        color: var(--OnSurface);
-    }
 
 .welcome-message {
     color: var(--Outline);
@@ -99,11 +89,6 @@ body.mac .chat-element {
 body.windows .chat-element {
     max-width: 800px;
 }
-
-body.mac .chat-element {
-    max-width: 1000px;
-}
-
 
 #empty-chat {
     align-self: center;

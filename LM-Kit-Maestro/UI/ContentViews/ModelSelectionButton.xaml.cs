@@ -1,5 +1,5 @@
-using LMKit.Maestro.ViewModels;
 using LMKit.Maestro.Services;
+using LMKit.Maestro.ViewModels;
 
 namespace LMKit.Maestro.UI;
 
@@ -72,8 +72,8 @@ public partial class ModelSelectionButton : ContentView
         if (modelDownloadingProgressedEventArgs != null)
         {
             string caption = Locales.DownloadingModel;
-            
-            if(modelDownloadingProgressedEventArgs.ContentLength != null)
+
+            if (modelDownloadingProgressedEventArgs.ContentLength != null)
             {
                 caption += $" {ToMB(modelDownloadingProgressedEventArgs.BytesRead)} / {ToMB(modelDownloadingProgressedEventArgs.ContentLength.Value)} MB";
             }
@@ -88,7 +88,7 @@ public partial class ModelSelectionButton : ContentView
 
     private long ToMB(long size)
     {
-        return (long)Math.Round((double)size /1024 / 1024);
+        return (long)Math.Round((double)size / 1024 / 1024);
     }
 
     private void OnModelLoadingCompleted(object? sender, LMKitService.NotifyModelStateChangedEventArgs notifyModelStateChangedEventArgs)
@@ -105,10 +105,7 @@ public partial class ModelSelectionButton : ContentView
             // -> ignore next click event
             _mustIgnoreNextStatefulContentViewTap = true;
 
-            if (_modelListViewModel != null)
-            {
-                _modelListViewModel.EjectModel();
-            }
+            _modelListViewModel?.EjectModel();
         }
     }
 

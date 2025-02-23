@@ -1,5 +1,5 @@
-﻿<button class="@(GetClasses())" @onclick="() => OnClick.InvokeAsync()">
-    <span class="fas @Icon" />
+﻿<button class="@(GetClasses())" @onclick="() => OnClick.InvokeAsync()" title="@Tooltip">
+    <span class="@Icon" />
 </button>
 
 @code {
@@ -14,6 +14,9 @@
 
     [Parameter]
     public ButtonSize Size { get; set; }
+
+    [Parameter]
+    public string? Tooltip { get; set; }
 
     public enum ButtonSize
     {

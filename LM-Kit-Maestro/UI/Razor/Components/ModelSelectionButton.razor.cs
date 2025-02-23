@@ -1,12 +1,13 @@
-using System.ComponentModel;
 using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
+using System.ComponentModel;
 
 namespace LMKit.Maestro.UI.Razor.Components;
 
 public partial class ModelSelectionButton
 {
-    [Parameter] required public ModelListViewModel ModelListViewModel { get; set; }
+    [Parameter] public required ModelListViewModel ModelListViewModel { get; set; }
 
     public string Text { get; private set; } = Locales.SelectModel;
 
@@ -37,11 +38,16 @@ public partial class ModelSelectionButton
 
     private async Task OnButtonClicked()
     {
-        ModelSelectionPopupViewModel modelSelectionPopupViewModel = new ModelSelectionPopupViewModel(ModelListViewModel);
+        var options = new DialogOptions { CloseOnEscapeKey = true, FullScreen = true };
 
-        var popup = new ModelSelectionPopup(ModelListViewModel.PopupNavigation, modelSelectionPopupViewModel);
+        var dialog = await DialogService.ShowAsync<ModelSelectionDialog>(null, options);
 
-        await ModelListViewModel.PopupNavigation.PushAsync(popup, true);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled && result.Data is ModelInfoViewModel modelInfoViewModel)
+        {
+            ModelListViewModel.SelectedModel = modelInfoViewModel;
+        }
     }
 
     private void OnEjectButtonClicked()

@@ -1,0 +1,100 @@
+﻿<MudDialog Class="dialog-root-container">
+    <DialogContent>
+        <div class="dialog-content-root">
+            <div @onclick="() => MudDialog.Cancel()" class="dialog-backdrop"></div>
+            <div class="model-selection-dialog-container">
+                <MudStack Spacing="0">
+                    <div class="model-selection-dialog-header">
+                        <MudText Class="flex-grow-1" Typo="Typo.caption">
+                            Available models
+                        </MudText>
+
+                        <div class="d-flex justify-end close-button">
+                            <IconButton Style="IconButton.ButtonStyle.Icon"
+                                        Icon="fas fa-close"
+                                        Size="IconButton.ButtonSize.Small"
+                                        OnClick="() => MudDialog.Cancel()" />
+                        </div>
+                    </div>
+
+                    @* <MudDivider Style="border-color: var(--Surface3); margin-inline: 0.5rem" /> *@
+                </MudStack>
+
+                <div class="model-selection-dialog-body">
+                    <ModelList OnClick="(model) => MudDialog.Close(model)" LimitWidth="false" Selectable="true" Dense="true" />
+                </div>
+            </div>
+        </div>
+    </DialogContent>
+
+</MudDialog>
+
+<style>
+    .dialog-root-container {
+        left: 0 !important;
+        top: 0 !important;
+        background-color: transparent !important;
+    }
+
+    .dialog-backdrop {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-color: transparent;
+    }
+
+    .dialog-content-root {
+        width: 100%;
+        max-width: 50rem;
+        height: auto;
+        max-height: min(55rem, 100%);
+        display: flex;
+        justify-content: center;
+        margin-inline: auto;
+    }
+
+    .model-selection-dialog-container {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--OutlineVariant);
+        border-radius: 8px;
+        background-color: var(--Surface);
+        overflow: hidden;
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+
+    .model-selection-dialog-header {
+        padding-inline: 4px;
+        padding-block: 4px;
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+        align-items: center;
+        background-color: var(--Surface3);
+    }
+
+    .model-selection-dialog-body {
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+    }
+
+    .model-selection-dialog-body::-webkit-scrollbar{
+        display: none;
+    }
+
+    .close-button {
+        color: var(--Outline) !important;
+    }
+
+        .close-button:hover {
+            color: var(--OnSurface) !important;
+        }
+
+</style>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+}

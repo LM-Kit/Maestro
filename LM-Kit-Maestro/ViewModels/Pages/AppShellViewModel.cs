@@ -1,8 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.Logging;
 using LMKit.Maestro.Services;
-using LMKit.Maestro.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -21,7 +20,7 @@ public partial class AppShellViewModel : ViewModelBase
     private bool _appIsInitialized = false;
 
     [ObservableProperty]
-    List<MaestroTabViewModel> _tabs = new List<MaestroTabViewModel>();
+    List<MaestroTabViewModel> _tabs = [];
 
     [ObservableProperty]
     MaestroTabViewModel _chatTab = new MaestroTabViewModel("Chat", "ChatPage");

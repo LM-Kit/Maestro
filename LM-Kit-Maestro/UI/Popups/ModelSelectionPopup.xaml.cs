@@ -5,7 +5,7 @@ namespace LMKit.Maestro.UI;
 
 public partial class ModelSelectionPopup : PopupView
 {
-    private ModelSelectionPopupViewModel _modelSelectionPopupViewModel;
+    private readonly ModelSelectionPopupViewModel _modelSelectionPopupViewModel;
 
     public ModelSelectionPopup(IPopupNavigation popupNavigation, ModelSelectionPopupViewModel modelSelectionPopupViewModel) : base(popupNavigation)
     {

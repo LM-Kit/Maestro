@@ -1,13 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using LMKit.TextGeneration;
-using LMKit.TextGeneration.Chat;
-using LMKit.Maestro.Models;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using LMKit.Maestro.Data;
+using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
 using LMKit.Maestro.UI;
+using LMKit.TextGeneration;
+using LMKit.TextGeneration.Chat;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -39,7 +39,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
     [ObservableProperty] bool _isShowingActionPopup;
 
-    public ObservableCollection<MessageViewModel> Messages { get; } = new ObservableCollection<MessageViewModel>();
+    public ObservableCollection<MessageViewModel> Messages { get; } = [];
     public ConversationLog ConversationLog { get; }
 
     private string _title;
@@ -143,7 +143,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
             return true;
         }
-        catch (Exception? ex)
+        catch (Exception?)
         {
             return false;
         }
@@ -301,6 +301,11 @@ public partial class ConversationViewModel : AssistantViewModelBase
             {
                 var message = (ChatHistory.Message)item;
 
+                if (message.AuthorRole == AuthorRole.System)
+                {
+                    continue;
+                }
+
                 if (message.AuthorRole == AuthorRole.User && _pendingPrompt != null)
                 {
                     _pendingPrompt.LMKitMessage = message;
@@ -371,23 +376,6 @@ public partial class ConversationViewModel : AssistantViewModelBase
         else if (e.PropertyName == nameof(LMKitService.Conversation.LatestChatHistoryData))
         {
             ConversationLog.ChatHistoryData = LMKitConversation.LatestChatHistoryData;
-        }
-    }
-
-    public sealed class TextGenerationCompletedEventArgs : EventArgs
-    {
-        public Exception? Exception { get; }
-
-        public LMKitRequestStatus? Status { get; }
-
-        public TextGenerationResult? Result { get; }
-
-        public TextGenerationCompletedEventArgs(TextGenerationResult? result = null, Exception? exception = null,
-            LMKitRequestStatus? status = null)
-        {
-            Result = result;
-            Exception = exception;
-            Status = status;
         }
     }
 }

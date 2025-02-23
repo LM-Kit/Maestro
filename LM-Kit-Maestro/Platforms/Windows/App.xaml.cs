@@ -15,14 +15,14 @@ namespace LMKit.Maestro.WinUI
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             base.OnLaunched(args);
 
-            this.Resources["AppNameWithVersion"] = AppConstants.AppNameWithVersion;
+            Resources["AppNameWithVersion"] = AppConstants.AppNameWithVersion;
         }
 
 

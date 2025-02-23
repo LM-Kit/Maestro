@@ -31,12 +31,6 @@
     display: grid;
 }
 
-.vertical-separator {
-    width: 1px;
-    background-color: var(--OutlineVariant);
-    height: 100%;
-}
-
 .horizontal-separator {
     height: 1px;
     background-color: var(--OutlineVariant);

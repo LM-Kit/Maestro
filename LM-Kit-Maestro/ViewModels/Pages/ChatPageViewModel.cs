@@ -1,10 +1,8 @@
-﻿using System.ComponentModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Data;
-using Microsoft.Extensions.Logging;
-using LMKit.Maestro.Helpers;
 using LMKit.Maestro.Services;
+using Microsoft.Extensions.Logging;
 using Mopups.Interfaces;
 
 namespace LMKit.Maestro.ViewModels;

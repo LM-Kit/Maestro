@@ -13,7 +13,8 @@
         public const string DisplaySettings = "Display Settings";
         public const string DisplayChats = "Display Chats";
         public const string EjectModel = "Eject model";
-        public const string SelectAnotherFolder = "Select another folder";
+        public const string SelectAnotherFolder = "Change folder";
+        public const string ResetModelFolder = "Reset to default folder";
         public const string OpenInFileExplorer = "Open in File Explorer";
         public const string ChatbotPurpose = "Chatbot purpose";
         public const string MaxCompletionTokens = "Maximum completion tokens";
@@ -27,9 +28,10 @@
         public const string VisionModelOptimized = "This model has vision capability";
         public const string MathModelOptimized = "This model is optimized for solving mathematical problems";
         public const string DeleteLocalModel = "Delete the model file from local storage";
-        public const string DisplayLowPerformingModels = "Show All Models (Including Low Performance)";
+        public const string DisplayLowPerformingModels = "Show all models (including low performance)";
         public const string NoModelYetAvailable = "It looks like you don't have any model yet.";
         public const string ModelFilesWillAppearHere = "Model files added to your model folder will appear here.";
+        public const string ModelDownloadAvailable = "This model is available for download";
 
         public const string SelectModel = "Load a model to start";
         public const string DownloadingModel = "Downloading model";

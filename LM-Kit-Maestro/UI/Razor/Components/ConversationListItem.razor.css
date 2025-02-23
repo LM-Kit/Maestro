@@ -49,8 +49,3 @@
     color: var(--OnSurface) !important;
     background-color: transparent !important;
 }
-
-.item-actions {
-    padding: 4px;
-    background-color: var(--Surface15);
-}

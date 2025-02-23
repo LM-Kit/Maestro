@@ -136,6 +136,16 @@ public static class FileHelpers
         return filePath;
     }
 
+    public static Uri GetModelFileHuggingFaceLink(ModelCard modelCard)
+    {
+        var builder = new UriBuilder("https://huggingface.co")
+        {
+            Path = $"{modelCard.Publisher}/{modelCard.Repository}"
+        };
+
+        return builder.Uri;
+    }
+
     public static bool IsFileDirectory(string filePath)
     {
         try
@@ -163,5 +173,19 @@ public static class FileHelpers
         }
 
         return false;
+    }
+
+    public static string FormatFileSize(long bytes)
+    {
+        var unit = 1024;
+
+        if (bytes < unit)
+        {
+            return $"{bytes} B";
+        }
+
+        var exp = (int)(Math.Log(bytes) / Math.Log(unit));
+
+        return $"{bytes / Math.Pow(unit, exp):F2} {"KMGTPE"[exp - 1]}B";
     }
 }

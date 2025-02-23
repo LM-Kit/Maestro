@@ -5,7 +5,7 @@ namespace LMKit.Maestro.UI;
 
 public partial class ChatConversationActionPopup : PopupBase
 {
-    private ChatConversationActionPopupViewModel _chatConversationActionPopupViewModel;
+    private readonly ChatConversationActionPopupViewModel _chatConversationActionPopupViewModel;
 
     public ChatConversationActionPopup(IPopupNavigation popupNavigation, ChatConversationActionPopupViewModel chatConversationActionPopupViewModel) : base(popupNavigation)
     {

@@ -1,10 +1,4 @@
 ﻿using MudBlazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Color = Microsoft.Maui.Graphics.Color;
 
 namespace LMKit.Maestro.UI;
 
@@ -59,10 +53,10 @@ public static class UIConstants
     {
         public const string Primary = "#512BD4";
         public const string PrimaryAccent = "#512BD4";
-        public const string Error = "#512BD4";
+        public const string Error = "#FF5551";
         public const string Surface = "#06080A";
         public const string Background = "#12181F";
-        public const string OnSurface = "#F0F6FC";
+        public const string OnSurface = "#FFFFFF";
         public const string Outline = "#9198A1";
         public const string OutlineVariant = "#2E3033";
         public const string Secondary = "#096BDE";
@@ -98,6 +92,14 @@ public static class UIConstants
             //LinesDefault = "#33323e",
             //TableLines = "#33323e",
             //OverlayLight = "#12181F",
+        },
+
+        Typography = new Typography()
+        {
+            Overline = new OverlineTypography()
+            {
+                LineHeight = "1.5",
+            }
         }
     };
 }

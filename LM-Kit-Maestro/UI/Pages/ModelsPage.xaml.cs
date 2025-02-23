@@ -1,6 +1,6 @@
+using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Helpers;
 using LMKit.Maestro.ViewModels;
-using CommunityToolkit.Mvvm.Input;
 
 namespace LMKit.Maestro.UI;
 

@@ -16,5 +16,7 @@ public class LMKitConfig
 
     public RandomSamplingConfig RandomSamplingConfig { get; set; } = new RandomSamplingConfig();
 
+    public TopNSigmaSamplingConfig TopNSigmaSamplingConfig { get; set; } = new TopNSigmaSamplingConfig();
+
     public Mirostat2SamplingConfig Mirostat2SamplingConfig { get; set; } = new Mirostat2SamplingConfig();
 }

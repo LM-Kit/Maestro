@@ -1,8 +1,8 @@
-﻿using LMKit.Maestro.Services;
+﻿using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LMKit.Maestro.Services;
 using Mopups.Interfaces;
-using CommunityToolkit.Maui.Storage;
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -79,22 +79,7 @@ public partial class ModelsPageViewModel : PageViewModelBase
 #endif
 
     [RelayCommand]
-    public void DeleteModel(ModelInfoViewModel modelCardViewModel)
-    {
-        try
-        {
-            FileManager.DeleteModel(modelCardViewModel.ModelInfo);
-            modelCardViewModel.OnLocalModelRemoved();
-        }
-        catch (Exception ex)
-        {
-            _popupService.DisplayAlert("Failure to delete model file",
-                $"{ex.Message}", "OK");
-        }
-    }
-
-    [RelayCommand]
-    private void PickModelsFolder()
+    public void PickModelsFolder()
     {
 #if MACCATALYST  || WINDOWS
         _mainThread.BeginInvokeOnMainThread(async () =>
@@ -121,21 +106,16 @@ public partial class ModelsPageViewModel : PageViewModelBase
     }
 
     [RelayCommand]
+    public void ResetModelsFolder()
+    {
+        AppSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
+    }
+
+    [RelayCommand]
     public void OpenHuggingFaceLink()
     {
         _ = _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
     }
-
-    public void OpenModelInExplorer(ModelInfoViewModel modelInfoViewModel)
-    {
-
-    }
-
-    public void OpenModelHfLink(ModelInfoViewModel modelInfoViewModel)
-    {
-
-    }
-
 
 #if BETA_DOWNLOAD_MODELS
     private void OnModelDownloadingProgressed(object? sender, EventArgs e)

@@ -1,5 +1,4 @@
-﻿using static Microsoft.Maui.Controls.VisualStateManager;
-using Microsoft.Maui.Handlers;
+﻿using Microsoft.Maui.Handlers;
 using System.Windows.Input;
 using LMKit.Maestro.Controls;
 

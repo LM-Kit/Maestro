@@ -49,8 +49,8 @@ public partial class LinkView : ContentView
     public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(LinkView));
     public object CommandParameter
     {
-        get => 
-            (object)GetValue(CommandParameterProperty);
+        get =>
+            GetValue(CommandParameterProperty);
         set => SetValue(CommandParameterProperty, value);
     }
 

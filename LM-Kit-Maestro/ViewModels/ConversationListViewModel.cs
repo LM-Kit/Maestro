@@ -43,7 +43,7 @@ namespace LMKit.Maestro.ViewModels
         public event PropertyChangedEventHandler? ConversationPropertyChanged;
 
         public ObservableCollection<ConversationViewModel> Conversations { get; } =
-            new ObservableCollection<ConversationViewModel>();
+            [];
 
         public ConversationListViewModel(IMainThread mainThread, IPopupService popupService,
             ILogger<ConversationListViewModel> logger, IMaestroDatabase database, LMKitService lmKitService,
@@ -61,8 +61,8 @@ namespace LMKit.Maestro.ViewModels
 
         public async Task LoadConversationLogs()
         {
-            List<ConversationLog> conversations = new List<ConversationLog>();
-            List<ConversationViewModel> loadedConversationViewModels = new List<ConversationViewModel>();
+            List<ConversationLog> conversations = [];
+            List<ConversationViewModel> loadedConversationViewModels = [];
 
             try
             {

@@ -4,11 +4,11 @@
 
     <div id="expander-header" @onclick="ToggleExpansion">
         <div class="d-flex justify-space-between flex-grow-1 align-center">
-            <MudText Typo="Typo.subtitle1">
+            <MudText Typo="Typo.caption">
                 @Title
             </MudText>
 
-            <MudIcon Icon="fas fa-chevron-down" Size="Size.Small" Color="Color.Dark"/>
+            <MudIcon Class="@GetIconRotateClass()" Icon="fas fa-chevron-down" Size="Size.Small" Style="color: var(--Outline); font-size: 0.6rem !important" />
         </div>
     </div>
 
@@ -25,6 +25,18 @@
 
 @code {
     private bool _isExpanded;
+    private bool IsExpanded
+    {
+        get => _isExpanded;
+        set
+        {
+            if (value != _isExpanded)
+            {
+                _isExpanded = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
 
     [Parameter]
     public required string Title { get; set; }
@@ -34,6 +46,11 @@
 
     private void ToggleExpansion()
     {
-        _isExpanded = !_isExpanded;
+        IsExpanded = !IsExpanded;
+    }
+
+    private string GetIconRotateClass()
+    {
+        return IsExpanded ? "rotate-180" : "";
     }
 }

@@ -5,40 +5,20 @@
     font-size: 1rem;
 }
 
-    body.windows .small-text {
-        font-size: 12px;
-    }
-
-    body.mac .small-text {
-        font-size: 14px;
-    }
-
-    body.windows .small-icon {
-        font-size: 10px;
-    }
-
-    body.mac .small-icon {
-        font-size: 12px;
-    }
-
-/*@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
-    .small {
-        font-size: 16px;
-    }
+.icon-button-small {
+    font-size: 0.6rem;
 }
 
-@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
-    .title {
-        font-size: 22px;
-    }
+.icon-button-medium {
+    font-size: 0.75rem;
 }
 
-@media screen and (min-width: 0px) and (max-width: 9999px) and (-webkit-min-device-pixel-ratio: 1) and (max-width: 9999px) {
-    .subtitle
-    {
-        font-size: 20px;
-    }
-}*/
+
+
+.xs-loader {
+    width: 0.85rem !important;
+    height: 0.85rem !important;
+}
 
 #blazor-error-ui {
     background: lightyellow;
@@ -92,18 +72,22 @@
 .dark {
     --Primary: #512BD4;
     --PrimaryAccent: #3100AF;
-    --Error: #BB3D36;
+    --Error: #FF5551;
     --Background: #12181F;
-    --OnBackground: #F0F6FC;
+    --OnSurface: #FFFFFF;
     --Surface: #06080A;
     --Surface15: #0C1014;
     --Surface2: #12181F;
     --Surface3: #182129;
     --Surface4: #1F2933;
-    --OnSurface: #F0F6FC;
+    --OnSurface: #FFFFFF;
     --Outline: #9198A1;
     --OutlineVariant: #2E3033;
     --Secondary: #096BDE;
+}
+
+.outline {
+    color: var(--Outline);
 }
 
 .loading-section {
@@ -173,61 +157,11 @@
     }
 }
 
-
-.round-button {
-    display: flex;
-    cursor: pointer;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    color: black;
-    background-color: white;
-}
-
-body.mac .round-button {
-    width: 40px;
-    height: 40px;
-}
-
-body.windows .round-button {
-    width: 32px;
-    height: 32px;
-}
-
-.primary-button {
-    padding: 8px;
-    vertical-align: middle;
-    border-width: 0;
-    color: var(--OnBackground);
-    background-color: var(--Background);
-}
-
-body.mac .primary-button {
-    height: 40px;
-    font-size: 20px;
-}
-
-body.windows .primary-button {
-    height: 32px;
-    font-size: 16px;
-}
-
-.primary-button:active {
-    background-color: var(--PrimaryAccent);
-}
-
-
-.primary-button:hover {
-    background-color: var(--Primary);
-}
-
 .dot {
-    height: 10px;
-    width: 10px;
-    margin-left: 4px;
-    background-color: var(--OnBackground);
+    height: 0.75rem;
+    width: 0.75rem;
+    background-color: var(--OnSurface);
     border-radius: 50%;
-    display: inline-block;
 }
 
 .hide {
@@ -266,26 +200,43 @@ body.windows .primary-button {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    display: block;
 }
+
+.action-sheet {
+    background-color: var(--Surface);
+    border-radius: 0.25rem;
+    border: 1px solid var(--OutlineVariant);
+    display: flex;
+    flex-direction: column;
+}
+
+.action-button {
+    border-radius: 0.25rem;
+}
+
+    .action-button:hover {
+        background-color: var(--Surface15) !important;
+    }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 8px !important;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--OutlineVariant);
-    border-radius: 0;
-    border: 4px solid transparent;
+    background-color: var(--OutlineVariant) !important;
+    border-radius: 0 !important;
+    border: 4px solid transparent !important;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: transparent;
+    background-color: transparent !important;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    cursor: pointer;
-    background-color: var(--OutlineVariant);
+    /*cursor: pointer !important;*/
+    background-color: var(--OutlineVariant) !important;
 }
 
 .scrollable {
@@ -305,3 +256,28 @@ body.windows .primary-button {
     .hover-scrollable:hover {
         overflow-y: scroll;
     }
+
+
+.hover-scrollable-no-gutter {
+    scrollbar-gutter: stable both-edges;
+    overflow-y: hidden;
+}
+
+
+    .hover-scrollable-no-gutter:hover {
+        overflow-y: scroll;
+    }
+
+
+/* MudBlazor styles override */
+.mud-icon-size-small {
+    font-size: 1rem !important;
+}
+
+.mud-icon-size-medium {
+    font-size: 1.5rem !important;
+}
+
+.mud-icon-size-large {
+    font-size: 2rem !important;
+}

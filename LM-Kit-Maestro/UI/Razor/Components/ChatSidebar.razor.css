@@ -44,12 +44,6 @@
     width: 300px;*/
 }
 
-.v-separator{
-    height: 100%;
-    width: 1px;
-    background-color: var(--OutlineVariant);
-}
-
-.resizable-sidebar:hover.v-separator {
+.resizable-sidebar:hover.vertical-divider {
     background-color: var(--Outline);
 }

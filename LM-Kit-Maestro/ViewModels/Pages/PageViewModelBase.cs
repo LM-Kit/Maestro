@@ -11,10 +11,10 @@ public abstract partial class PageViewModelBase : ViewModelBase
 
     public IPopupNavigation PopupNavigation { get; }
 
-    protected PageViewModelBase(INavigationService navigationService,  IPopupService popupService, IPopupNavigation popupNavigation)
+    protected PageViewModelBase(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation)
     {
         NavigationService = navigationService;
         PopupService = popupService;
-        PopupNavigation = popupNavigation; 
+        PopupNavigation = popupNavigation;
     }
 }

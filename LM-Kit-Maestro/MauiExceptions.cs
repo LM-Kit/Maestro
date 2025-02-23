@@ -3,7 +3,7 @@
 public static class MauiExceptions
 {
 #if WINDOWS
-private static Exception? _lastFirstChanceException;
+    private static Exception? _lastFirstChanceException;
 #endif
 
     // We'll route all unhandled exceptions through this one event.
@@ -52,33 +52,33 @@ private static Exception? _lastFirstChanceException;
 
 #elif WINDOWS
 
-    // For WinUI 3:
-    //
-    // * Exceptions on background threads are caught by AppDomain.CurrentDomain.UnhandledException,
-    //   not by Microsoft.UI.Xaml.Application.Current.UnhandledException
-    //   See: https://github.com/microsoft/microsoft-ui-xaml/issues/5221
-    //
-    // * Exceptions caught by Microsoft.UI.Xaml.Application.Current.UnhandledException have details removed,
-    //   but that can be worked around by saved by trapping first chance exceptions
-    //   See: https://github.com/microsoft/microsoft-ui-xaml/issues/7160
-    //
+        // For WinUI 3:
+        //
+        // * Exceptions on background threads are caught by AppDomain.CurrentDomain.UnhandledException,
+        //   not by Microsoft.UI.Xaml.Application.Current.UnhandledException
+        //   See: https://github.com/microsoft/microsoft-ui-xaml/issues/5221
+        //
+        // * Exceptions caught by Microsoft.UI.Xaml.Application.Current.UnhandledException have details removed,
+        //   but that can be worked around by saved by trapping first chance exceptions
+        //   See: https://github.com/microsoft/microsoft-ui-xaml/issues/7160
+        //
 
-    AppDomain.CurrentDomain.FirstChanceException += (_, args) =>
-    {
-        _lastFirstChanceException = args.Exception;
-    };
-
-    Microsoft.UI.Xaml.Application.Current.UnhandledException += (sender, args) =>
-    {
-        var exception = args.Exception;
-
-        if (exception.StackTrace is null)
+        AppDomain.CurrentDomain.FirstChanceException += (_, args) =>
         {
-            exception = _lastFirstChanceException;
-        }
+            _lastFirstChanceException = args.Exception;
+        };
 
-        UnhandledException?.Invoke(sender, new UnhandledExceptionEventArgs(exception!, true));
-    };
+        Microsoft.UI.Xaml.Application.Current.UnhandledException += (sender, args) =>
+        {
+            var exception = args.Exception;
+
+            if (exception.StackTrace is null)
+            {
+                exception = _lastFirstChanceException;
+            }
+
+            UnhandledException?.Invoke(sender, new UnhandledExceptionEventArgs(exception!, true));
+        };
 #endif
     }
 }
