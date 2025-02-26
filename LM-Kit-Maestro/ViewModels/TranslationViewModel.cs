@@ -36,7 +36,7 @@ namespace LMKit.Maestro.ViewModels
             {
                 try
                 {
-                    DetectedLanguage = await _lmKitService.Translation.DetectLanguage(input);
+                    DetectedLanguage = await LmKitService.Translation.DetectLanguage(input);
                 }
                 catch
                 {
@@ -54,7 +54,7 @@ namespace LMKit.Maestro.ViewModels
             {
                 try
                 {
-                    var result = await _lmKitService.Translation.Translate(input, outputLanguage);
+                    var result = await LmKitService.Translation.Translate(input, outputLanguage);
 
                     OnTranslationResult(result);
                 }
@@ -69,7 +69,7 @@ namespace LMKit.Maestro.ViewModels
 
         public async Task<Language> DetectLanguage(string text)
         {
-            return await _lmKitService.Translation.DetectLanguage(text);
+            return await LmKitService.Translation.DetectLanguage(text);
         }
 
         private void OnTranslationResult(string? result, Exception? exception = null)

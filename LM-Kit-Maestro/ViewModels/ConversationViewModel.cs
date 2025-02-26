@@ -70,7 +70,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
             if (_lastUsedModel != value)
             {
                 _lastUsedModel = value;
-                UsedDifferentModel = LastUsedModel != _lmKitService.LMKitConfig.LoadedModelUri;
+                UsedDifferentModel = LastUsedModel != LmKitService.LMKitConfig.LoadedModelUri;
                 ConversationLog.LastUsedModel = _lastUsedModel;
 
                 OnPropertyChanged();
@@ -92,9 +92,9 @@ public partial class ConversationViewModel : AssistantViewModelBase
     public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database,
         ConversationLog conversationLog) : base(popupService, lmKitService)
     {
-        _lmKitService = lmKitService;
-        _lmKitService.ModelLoaded += OnModelLoadingCompleted;
-        _lmKitService.ModelUnloaded += OnModelUnloaded;
+        LmKitService = lmKitService;
+        LmKitService.ModelLoaded += OnModelLoadingCompleted;
+        LmKitService.ModelUnloaded += OnModelUnloaded;
         _database = database;
         _popupService = popupService;
         _title = conversationLog.Title!;
@@ -149,33 +149,24 @@ public partial class ConversationViewModel : AssistantViewModelBase
         }
     }
 
-    [RelayCommand]
     private void RegenerateResponse(MessageViewModel message)
     {
-        if (_lmKitService.ModelLoadingState != LMKitModelLoadingState.Loaded)
-        {
-            _popupService.DisplayAlert("No model is loaded",
-                "You need to load a model in order to regenerate a response", "OK");
-        }
-        else
-        {
-            OnResponseRegenerationRequested(message);
+        OnResponseRegenerationRequested(message);
 
-            Task.Run(async () =>
+        Task.Run(async () =>
+        {
+            LMKitService.LMKitResult? result = null;
+
+            try
             {
-                LMKitService.LMKitResult? result = null;
-
-                try
-                {
-                    result = await _lmKitService.Chat.RegenerateResponse(LMKitConversation, message.LMKitMessage!);
-                    OnTextGenerationResult(result);
-                }
-                catch (Exception exception)
-                {
-                    OnTextGenerationResult(null, exception);
-                }
-            });
-        }
+                result = await LmKitService.Chat.RegenerateResponse(LMKitConversation, message.LMKitMessage!);
+                OnTextGenerationResult(result);
+            }
+            catch (Exception exception)
+            {
+                OnTextGenerationResult(null, exception);
+            }
+        });
     }
 
     protected override void HandleSubmit()
@@ -190,7 +181,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
         {
             try
             {
-                promptResult = await _lmKitService.Chat.SubmitPrompt(LMKitConversation, prompt);
+                promptResult = await LmKitService.Chat.SubmitPrompt(LMKitConversation, prompt);
                 OnTextGenerationResult(promptResult);
             }
             catch (Exception ex)
@@ -271,7 +262,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
             _pendingPrompt = null;
         }
 
-        await _lmKitService.Chat.CancelPrompt(LMKitConversation, shouldAwaitTermination);
+        await LmKitService.Chat.CancelPrompt(LMKitConversation, shouldAwaitTermination);
     }
 
     private void SaveConversation()
@@ -353,7 +344,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
     {
         if (LastUsedModel != null)
         {
-            UsedDifferentModel = LastUsedModel != _lmKitService.LMKitConfig.LoadedModelUri;
+            UsedDifferentModel = LastUsedModel != LmKitService.LMKitConfig.LoadedModelUri;
         }
     }
 

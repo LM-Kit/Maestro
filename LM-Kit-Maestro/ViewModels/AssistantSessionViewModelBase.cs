@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Services;
+using MudBlazor;
 using System.ComponentModel;
 
 namespace LMKit.Maestro.ViewModels
@@ -21,20 +22,14 @@ namespace LMKit.Maestro.ViewModels
 
         protected IPopupService _popupService;
 
-        protected LMKitService _lmKitService;
+        public LMKitService LmKitService { get; protected set; }
+
 
         [RelayCommand]
         public void Submit()
         {
-            if (_lmKitService.ModelLoadingState != LMKitModelLoadingState.Loaded)
-            {
-                _popupService.DisplayAlert("No model is loaded", "You need to load a model in order to submit a prompt", "OK");
-            }
-            else
-            {
-                AwaitingResponse = true;
-                HandleSubmit();
-            }
+            AwaitingResponse = true;
+            HandleSubmit();
         }
 
         [RelayCommand]
@@ -53,7 +48,7 @@ namespace LMKit.Maestro.ViewModels
         protected AssistantViewModelBase(IPopupService popupService, LMKitService lmKitService)
         {
             _popupService = popupService;
-            _lmKitService = lmKitService;
+            LmKitService = lmKitService;
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
