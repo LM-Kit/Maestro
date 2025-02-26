@@ -232,7 +232,7 @@ public class ChatTests
         TestsHelpers.AssertConversationPromptSuccessState(testConversation);
 
         var lastMessageViewModel = testConversation.ConversationViewModel.Messages.Last();
-        testConversation.ConversationViewModel.RegenerateResponseCommand.Execute(lastMessageViewModel);
+        testConversation.ConversationViewModel.RegenerateResponse(lastMessageViewModel);
         await testConversation.PromptResultTask.Task;
         TestsHelpers.AssertConversationPromptSuccessState(testConversation);
     }

@@ -149,7 +149,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
         }
     }
 
-    private void RegenerateResponse(MessageViewModel message)
+    public void RegenerateResponse(MessageViewModel message)
     {
         OnResponseRegenerationRequested(message);
 

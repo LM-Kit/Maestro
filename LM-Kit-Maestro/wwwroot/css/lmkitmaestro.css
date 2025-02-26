@@ -13,11 +13,19 @@
     font-size: 0.75rem;
 }
 
-
-
 .xs-loader {
-    width: 0.85rem !important;
-    height: 0.85rem !important;
+    width: 0.85rem;
+    height: 0.85rem;
+}
+
+.nav-link {
+    font-size: 2rem;
+    color: var(--Outline);
+    transition: color 0.2s;
+}
+
+.nav-link-active {
+    color: var(--OnSurface) !important;
 }
 
 #blazor-error-ui {
@@ -280,4 +288,24 @@
 
 .mud-icon-size-large {
     font-size: 2rem !important;
+}
+
+.mud-snackbar {
+    background-color: var(--Surface15) !important;    
+    border: 1px solid var(--OutlineVariant) !important;
+    opacity: 1 !important;
+}
+
+.mud-snackbar-content-message {
+    padding-inline: 0 !important;
+    padding-block: 0.25rem !important;
+}
+
+.mud-snackbar-location-bottom-right {
+    bottom: 24px !important;
+    right: 8px !important;
+}
+
+.mud-snackbar .mud-snackbar-icon {
+    display: none;
 }
