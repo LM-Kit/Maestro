@@ -67,10 +67,11 @@ class="@GetClasses()">
     }
 
     private int _width;
+    [Parameter]
     public int Width
     {
         get => _width;
-        private set
+        set
         {
             if (value != _width)
             {
@@ -82,10 +83,11 @@ class="@GetClasses()">
     }
 
     private bool _isResizing;
+    [Parameter]
     public bool IsResizing
     {
         get => _isResizing;
-        private set
+        set
         {
             if (value != _isResizing)
             {
