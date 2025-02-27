@@ -114,12 +114,10 @@ body.windows .chat-element {
 .top-bar-side {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    /*transition: width 0.5s;*/
-    flex-grow: 0;
+    padding: 1.25rem;
     flex-shrink: 0;
+    background-color: green;
 }
 
 
@@ -159,10 +157,6 @@ body.windows .chat-element {
 
 .top-bar-sidebar-collapsed {
     width: auto;
-}
-
-.top-bar-sidebar-resizable {
-
 }
 
 #conversation-bottom {

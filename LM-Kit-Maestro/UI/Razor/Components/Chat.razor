@@ -44,7 +44,7 @@
 
         @if (ShowSidebarToggles)
         {
-            <div class="top-bar-side top-bar-sidebar-resizable @(!SettingSidebarIsResizing ? "width-transition" : "")"
+            <div class="top-bar-side @(!SettingSidebarIsResizing ? "width-transition" : "")"
                  style="background-color: red; padding: 8px; width: @(ViewModel.SettingsSidebarIsToggled ? $"{SettingSidebarWidth}px" : "6rem")">
 
                 <div
@@ -52,7 +52,7 @@
                     class="d-flex flex-grow-1 flex-shrink-1 align-center gap-2 @(ViewModel.SettingsSidebarIsToggled ? "justify-space-between" : "justify-end")">
                     @if (ViewModel.SettingsSidebarIsToggled)
                     {
-                        <div style="flex: 0 0 auto;">
+                        <div class="d-flex flex-shrink-0">
                             <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
                                         Icon="fas fa-arrow-rotate-left"
                                         OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
@@ -67,14 +67,12 @@
                         </div>
                     }
 
-                    <div style="flex: 0 0 auto;">
+                    <div class="d-flex flex-shrink-0">
                         <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
                                     Icon="fas fa-gears"
                                     OnClick="ViewModel.ToggleSettingsSidebar"/>
                     </div>
                 </div>
-
-                @* <div class="bottom-divider"></div> *@
             </div>
         }
     </div>
