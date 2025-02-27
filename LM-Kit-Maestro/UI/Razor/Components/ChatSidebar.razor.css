@@ -1,12 +1,11 @@
 .sidebar-container {
-    /*transition: width 0.5s;*/
     position: relative;
 }
 
-    .sidebar-hidden .resize-handle {
-        visibility: visible;
-        display: block;
-    }
+.sidebar-hidden .resize-handle {
+    visibility: visible;
+    display: block;
+}
 
 .sidebar-toggled {
     flex-grow: 0;
@@ -29,21 +28,21 @@
     z-index: 10;
 }
 
-.resize-handle:hover{
-}
+    .resize-handle:hover {
+    }
 
-.fixed-sidebar{
-/*    min-width: 300px;
+.fixed-sidebar {
+    /*    min-width: 300px;
     max-width: 300px;
     width: 300px;*/
 }
 
 .resizable-sidebar {
-/*    min-width: 150px;
+    /*    min-width: 150px;
     max-width: 500px;
     width: 300px;*/
 }
 
-.resizable-sidebar:hover.vertical-divider {
-    background-color: var(--Outline);
-}
+    .resizable-sidebar:hover.vertical-divider {
+        background-color: var(--Outline);
+    }

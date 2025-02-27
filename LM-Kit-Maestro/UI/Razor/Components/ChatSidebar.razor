@@ -1,15 +1,15 @@
 ﻿@inherits ComponentBase
 @inject IJSRuntime JS
 
-<div @ref="SidebarContainer"
-     style="width: @(Width)px;"
-     class="@GetClasses()">
+<div @ref="_sidebarContainer"
+style="width: @(Width)px;"
+class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
         <div @onmousedown="OnResizeHandlerMouseDown"
-             @onmousedown:preventDefault="true"
-             @onmousedown:stopPropagation="true"
-             class="@(Resizable ? "resize-handle" : "vertical-divider")">
+        @onmousedown:preventDefault="true"
+        @onmousedown:stopPropagation="true"
+        class="@(Resizable ? "resize-handle" : "vertical-divider")">
             @if (Resizable)
             {
                 <div class="vertical-divider"></div>
@@ -24,9 +24,9 @@
     @if (Position == SidebarPosition.Left)
     {
         <div @onmousedown="OnResizeHandlerMouseDown"
-             @onmousedown:preventDefault="true"
-             @onmousedown:stopPropagation="true"
-             class="@(Resizable ? "resize-handle" : "vertical-divider")">
+        @onmousedown:preventDefault="true"
+        @onmousedown:stopPropagation="true"
+        class="@(Resizable ? "resize-handle" : "vertical-divider")">
             @if (Resizable)
             {
                 <div class="vertical-divider"></div>
@@ -37,11 +37,12 @@
 
 @code
 {
-    private bool _isResizing;
     private int _resizeStartX;
     private int _resizeStartWidth;
+    private ElementReference _sidebarContainer;
 
     [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
+    [Parameter] public EventCallback<bool> IsResizingChanged { get; set; }
     [Parameter] public EventCallback<int> WidthChanged { get; set; }
     [Parameter] public required RenderFragment ChildContent { get; set; }
     [Parameter] public bool ShowScrollbar { get; set; }
@@ -49,7 +50,6 @@
     [Parameter] public required SidebarPosition Position { get; set; }
 
     private bool _isToggled;
-
     [Parameter]
     public bool IsToggled
     {
@@ -67,7 +67,6 @@
     }
 
     private int _width;
-
     [Parameter]
     public int Width
     {
@@ -83,11 +82,35 @@
         }
     }
 
-    private ElementReference SidebarContainer;
+    private bool _isResizing;
+    [Parameter]
+    public bool IsResizing
+    {
+        get => _isResizing;
+        set
+        {
+            if (value != _isResizing)
+            {
+                _isResizing = value;
+                IsResizingChanged.InvokeAsync(value);
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
 
     private string GetClasses()
     {
-        return $"sidebar-container {(IsToggled ? "sidebar-toggled" : "sidebar-hidden")} {(Resizable ? "resizable-sidebar" : "fixed-sidebar")}";
+        string classes = "sidebar-container";
+
+        classes += IsToggled ? " sidebar-toggled" : " sidebar-hidden";
+        classes += Resizable ? " resizable-sidebar" : " fixed-sidebar";
+
+        if (!IsResizing)
+        {
+            classes += " width-transition";
+        }
+
+        return classes;
     }
 
     [JSInvokable]
