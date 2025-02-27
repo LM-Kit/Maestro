@@ -231,9 +231,6 @@
     transition: width 0.5s;
 }
 
-.hide-overflow{
-    overflow: hidden;
-}
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px !important;
