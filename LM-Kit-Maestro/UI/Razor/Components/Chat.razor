@@ -45,10 +45,10 @@
         @if (ShowSidebarToggles)
         {
                 <div class="top-bar-side top-bar-sidebar-resizable @(!SettingSidebarIsResizing ? "width-transition" : "")"
-                 style="width: @(ViewModel.SettingsSidebarIsToggled ? $"{SettingSidebarWidth}px" : "6rem")">
+                 style="background-color: red; padding: 8px; width: @(ViewModel.SettingsSidebarIsToggled ? $"{SettingSidebarWidth}px" : "6rem")">
 
 
-                <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
+                <div style="background-color: green; padding: 8px" class="d-flex flex-grow-1 align-center gap-2 @(ViewModel.SettingsSidebarIsToggled ? "justify-space-between" : "justify-end")">
                     @if (ViewModel.SettingsSidebarIsToggled)
                     {
                         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
