@@ -23,7 +23,7 @@
                     @if (ViewModel.ChatsSidebarIsToggled)
                     {
                         <div>
-                            <MudText Class="text-truncate"  Typo="Typo.subtitle2">
+                            <MudText Class="text-truncate" Typo="Typo.subtitle2">
                                 Chats
                             </MudText>
                         </div>
@@ -44,25 +44,34 @@
 
         @if (ShowSidebarToggles)
         {
-                <div class="top-bar-side top-bar-sidebar-resizable @(!SettingSidebarIsResizing ? "width-transition" : "")"
+            <div class="top-bar-side top-bar-sidebar-resizable @(!SettingSidebarIsResizing ? "width-transition" : "")"
                  style="background-color: red; padding: 8px; width: @(ViewModel.SettingsSidebarIsToggled ? $"{SettingSidebarWidth}px" : "6rem")">
 
-
-                <div style="background-color: green; padding: 8px" class="d-flex flex-grow-1 align-center gap-2 @(ViewModel.SettingsSidebarIsToggled ? "justify-space-between" : "justify-end")">
+                <div
+                    style="background-color: green; padding: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
+                    class="d-flex flex-grow-1 flex-shrink-1 align-center gap-2 @(ViewModel.SettingsSidebarIsToggled ? "justify-space-between" : "justify-end")">
                     @if (ViewModel.SettingsSidebarIsToggled)
                     {
-                        <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                                    Icon="fas fa-arrow-rotate-left"
-                                    OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
+                        <div style="flex: 0 0 auto;">
+                            <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
+                                        Icon="fas fa-arrow-rotate-left"
+                                        OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
+                        </div>
 
-                        <MudText Class="text-truncate" Typo="Typo.subtitle2">
-                            Settings
-                        </MudText>
+                        <div class="text-truncate"
+
+                             style="background-color: pink; flex: 1 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <MudText Class="text-truncate" Align="Align.Center" Typo="Typo.subtitle2">
+                                Settings barambibol wakatepe batchoul
+                            </MudText>
+                        </div>
                     }
 
-                    <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
-                                Icon="fas fa-gears"
-                                OnClick="ViewModel.ToggleSettingsSidebar"/>
+                    <div style="flex: 0 0 auto;">
+                        <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
+                                    Icon="fas fa-gears"
+                                    OnClick="ViewModel.ToggleSettingsSidebar"/>
+                    </div>
                 </div>
 
                 @* <div class="bottom-divider"></div> *@
@@ -121,8 +130,8 @@
                                 </div>
 
                                 <div class="shortcut-instruction">
-                                            <MudText Typo="Typo.overline">
-                                                Hold Shift + Enter to insert a new line
+                                    <MudText Typo="Typo.overline">
+                                        Hold Shift + Enter to insert a new line
                                     </MudText>
                                 </div>
                             </MudStack>
