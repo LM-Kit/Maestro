@@ -67,11 +67,10 @@ class="@GetClasses()">
     }
 
     private int _width;
-    [Parameter]
     public int Width
     {
         get => _width;
-        set
+        private set
         {
             if (value != _width)
             {
@@ -83,11 +82,10 @@ class="@GetClasses()">
     }
 
     private bool _isResizing;
-    [Parameter]
     public bool IsResizing
     {
         get => _isResizing;
-        set
+        private set
         {
             if (value != _isResizing)
             {
@@ -129,7 +127,7 @@ class="@GetClasses()">
 
     private async Task OnResizeHandlerMouseDown(MouseEventArgs e)
     {
-        _isResizing = true;
+        IsResizing = true;
         _resizeStartX = (int)e.ClientX;
         _resizeStartWidth = Width;
         // Debug.WriteLine("[down]");
@@ -140,7 +138,7 @@ class="@GetClasses()">
     [JSInvokable]
     public void OnMouseMove(MouseEventArgs e)
     {
-        if (_isResizing)
+        if (IsResizing)
         {
             int requestedWidth = _resizeStartWidth + (int)(_resizeStartX - e.ClientX);
 
@@ -169,7 +167,7 @@ class="@GetClasses()">
     public void OnMouseUp()
     {
         // Debug.WriteLine("[released]");
-        _isResizing = false;
+        IsResizing = false;
     }
 
     public enum SidebarPosition

@@ -6,6 +6,7 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace LMKit.Maestro.UI.Razor.Components;
 
@@ -76,6 +77,20 @@ public partial class Chat : IDisposable
             if (_settingSidebarWidth != value)
             {
                 _settingSidebarWidth = value;
+                RefreshUIAsync(forceRerender: true);
+            }
+        }
+    }
+
+    private bool _settingSidebarIsResizing;
+    private bool SettingSidebarIsResizing
+    {
+        get => _settingSidebarIsResizing;
+        set
+        {
+            if (_settingSidebarIsResizing != value)
+            {
+                _settingSidebarIsResizing = value;
                 RefreshUIAsync(forceRerender: true);
             }
         }
