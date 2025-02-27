@@ -109,6 +109,7 @@ body.windows .chat-element {
     flex-direction: row;
     flex-grow: 1;
     justify-content: space-around;
+    background-color: yellow;
 }
 
 .top-bar-side {
