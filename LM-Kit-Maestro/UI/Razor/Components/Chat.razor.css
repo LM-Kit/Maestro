@@ -118,6 +118,7 @@ body.windows .chat-element {
     padding: 1.25rem;
     flex-shrink: 0;
     background-color: red;
+    width: 6rem;
 }
 
 .top-bar-side-title{
