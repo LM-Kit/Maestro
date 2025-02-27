@@ -45,7 +45,7 @@
         @if (ShowSidebarToggles)
         {
             <div class="top-bar-side @(!SettingSidebarIsResizing ? "width-transition" : "")"
-                 style="background-color: red; padding: 8px; width: @(ViewModel.SettingsSidebarIsToggled ? $"{SettingSidebarWidth}px" : "6rem")">
+                 style="padding: 8px; width: @(ViewModel.SettingsSidebarIsToggled ? $"{SettingSidebarWidth}px" : "6rem")">
 
                 <div
                     style="background-color: green; padding: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
@@ -58,9 +58,7 @@
                                         OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
                         </div>
 
-                        <div class="text-truncate"
-
-                             style="background-color: pink; flex: 1 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <div class="top-bar-side-title">
                             <MudText Class="text-truncate" Align="Align.Center" Typo="Typo.subtitle2">
                                 Settings barambibol wakatepe batchoul
                             </MudText>
