@@ -13,11 +13,6 @@
     font-size: 0.75rem;
 }
 
-.xs-loader {
-    width: 0.85rem;
-    height: 0.85rem;
-}
-
 .nav-link {
     font-size: 2rem;
     color: var(--Outline);
@@ -185,9 +180,9 @@
 }
 
 .horizontal-divider {
-    width: 100%;
-    height: 1px;
-    background-color: var(--OutlineVariant);
+    border-width: 1px;
+    border-style: solid none none none;
+    border-color: var(--OutlineVariant);
 }
 
 .bottom-divider {

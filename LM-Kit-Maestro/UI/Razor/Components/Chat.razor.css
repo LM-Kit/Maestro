@@ -109,23 +109,23 @@ body.windows .chat-element {
     flex-direction: row;
     flex-grow: 1;
     justify-content: space-around;
-    background-color: yellow;
+    /*background-color: yellow;*/
+    padding-block: 0.5rem;
 }
 
 .top-bar-side {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 1.25rem;
+    padding-inline: 1rem;
     flex-shrink: 0;
-    background-color: red;
+    /*background-color: red;*/
     width: 6rem;
 }
 
 .top-bar-side-title{
     overflow: hidden;
     flex: 1 1 auto;
-    background-color: pink;
 }
 
 ::deep .sidebar-toggle-button.mud-icon-button {

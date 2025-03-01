@@ -8,13 +8,15 @@
     background-color: var(--Surface);
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
+    /*background-color: green;*/
 }
 
 #nav-bar {
-    padding-inline: 20px;
+    padding-block: 0.5rem;
+    padding-inline: 1rem;
     display: flex;
     flex-direction: row;
+    /*background-color: blue;*/
 }
 
 
@@ -31,7 +33,6 @@
 #page-top-bar {
     display: flex;
     flex-direction: column;
-    min-height: 100px;
 }
 
 #page-top-bar-wrapper {

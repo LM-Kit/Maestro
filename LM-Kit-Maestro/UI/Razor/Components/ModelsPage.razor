@@ -8,7 +8,7 @@
         <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
             @if (ViewModel.FileManager.FileCollectingInProgress)
             {
-                <MudProgressCircular Class="xs-loader outline" Size="Size.Small" Indeterminate="true"/>
+                <MudProgressCircular Style="width: 0.85rem; height: 0.85rem; color: var(--Outline)" Indeterminate="true"/>
             }
 
             @if (ViewModel.FileManager.DownloadedCount > 0)
@@ -113,7 +113,8 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        gap: 8px;
+        gap: 0.5rem;
+        padding-bottom: 0.5rem;
     }
 
     #model-page-container {

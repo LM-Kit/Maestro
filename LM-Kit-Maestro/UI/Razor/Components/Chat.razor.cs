@@ -23,11 +23,9 @@ public partial class Chat : IDisposable
     private bool _ignoreScrollsUntilNextScrollUp;
     private double? _previousScrollTop;
     private double _scrollTop;
-
     private bool _refreshScheduled;
 
     private bool _showSidebarToggles = true;
-
     private bool ShowSidebarToggles
     {
         get => _showSidebarToggles;
@@ -47,7 +45,6 @@ public partial class Chat : IDisposable
     }
 
     private bool _isScrolledToEnd;
-
     private bool IsScrolledToEnd
     {
         get => _isScrolledToEnd;
@@ -67,8 +64,21 @@ public partial class Chat : IDisposable
         }
     }
 
-    private int _settingSidebarWidth;
+    private int _chatsSidebarWidth;
+    private int ChatsSidebarWidth
+    {
+        get => _chatsSidebarWidth;
+        set
+        {
+            if (_chatsSidebarWidth != value)
+            {
+                _chatsSidebarWidth = value;
+                RefreshUIAsync(forceRerender: true);
+            }
+        }
+    }
 
+    private int _settingSidebarWidth;
     private int SettingSidebarWidth
     {
         get => _settingSidebarWidth;
