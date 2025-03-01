@@ -1,6 +1,6 @@
 #model-selection-button-root {
     width: 100%;
-    max-width: 568px;
+    max-width: 30rem;
     display: flex;
     flex-grow: 1;
     flex-shrink: 1;

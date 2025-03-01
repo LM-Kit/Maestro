@@ -110,7 +110,6 @@ body.windows .chat-element {
     flex-grow: 1;
     justify-content: space-around;
     /*background-color: yellow;*/
-    padding-block: 0.5rem;
 }
 
 .top-bar-side {
@@ -139,21 +138,6 @@ body.windows .chat-element {
         background-color: var(--Primary);
     }
 
-.sidebar-toggle-button {
-    /* Add your button styles here */
-}
-
-.secondary-action-button {
-    /* Add your secondary button styles here */
-}
-
-.sidebar-title {
-    /* Add your label styles here */
-}
-
-.model-selection-button {
-    /* Add your ModelSelectionButton styles here */
-}
 
 
 .top-bar-sidebar-toggled {
