@@ -5,10 +5,10 @@ using Microsoft.Extensions.Logging;
 
 namespace LMKit.Maestro.ViewModels;
 
-public partial class AppShellViewModel : ViewModelBase
+public partial class MaestroViewModel : ViewModelBase
 {
     private readonly ISnackbarService _snackbarService;
-    private readonly ILogger<AppShellViewModel> _logger;
+    private readonly ILogger<MaestroViewModel> _logger;
     private readonly SettingsViewModel _settingsViewModel;
     private readonly ModelListViewModel _modelListViewModel;
     private readonly ConversationListViewModel _conversationListViewModel;
@@ -19,7 +19,7 @@ public partial class AppShellViewModel : ViewModelBase
     [ObservableProperty]
     private bool _appIsInitialized = false;
 
-    public AppShellViewModel(ISnackbarService snackbarService, ILogger<AppShellViewModel> logger,
+    public MaestroViewModel(ISnackbarService snackbarService, ILogger<MaestroViewModel> logger,
         ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
         SettingsViewModel settingsViewModel, LMKitService lmKitService,
         ILLMFileManager llmFileManager, IAppSettingsService appSettingsService)

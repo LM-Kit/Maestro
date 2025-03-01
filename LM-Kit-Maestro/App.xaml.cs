@@ -19,9 +19,9 @@ namespace LMKit.Maestro
 {
     public partial class App : Application
     {
-        private readonly AppShellViewModel _appShellViewModel;
+        private readonly MaestroViewModel _appViewModel;
 
-        public App(AppShellViewModel appShellViewModel)
+        public App(MaestroViewModel appShellViewModel)
         {
             InitializeComponent();
 
@@ -53,7 +53,7 @@ namespace LMKit.Maestro
                 }
             });
 
-            _appShellViewModel = appShellViewModel;
+            _appViewModel = appShellViewModel;
         }
 
         protected override async void OnStart()
@@ -61,7 +61,7 @@ namespace LMKit.Maestro
             base.OnStart();
 
             Current!.UserAppTheme = AppTheme.Dark;
-            await _appShellViewModel.Init();
+            await _appViewModel.Init();
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
@@ -89,7 +89,7 @@ namespace LMKit.Maestro
 
         private void OnAppWindowDestroying(object? sender, EventArgs e)
         {
-            _appShellViewModel.SaveAppSettings();
+            _appViewModel.SaveAppSettings();
         }
 
 #if WINDOWS

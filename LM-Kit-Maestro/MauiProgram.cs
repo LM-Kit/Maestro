@@ -75,7 +75,7 @@ namespace LMKit.Maestro
 
         private static void RegisterViewModels(this MauiAppBuilder builder)
         {
-            builder.Services.AddSingleton<AppShellViewModel>();
+            builder.Services.AddSingleton<MaestroViewModel>();
             builder.Services.AddSingleton<ConversationListViewModel>();
             builder.Services.AddSingleton<ModelListViewModel>();
             builder.Services.AddSingleton<SettingsViewModel>();
