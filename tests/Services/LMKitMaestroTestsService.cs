@@ -166,8 +166,9 @@ namespace Maestro.Tests
             ILLMFileManager llmFileManager)
         {
             var launcher = new Mock<ILauncher>().Object;
+            var snackbarService = new Mock<ISnackbarService>().Object;
 
-            return new ModelListViewModel(llmFileManager, lmKitService, launcher);
+            return new ModelListViewModel(llmFileManager, lmKitService, launcher, snackbarService);
         }
 
         private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService,
