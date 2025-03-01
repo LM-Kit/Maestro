@@ -89,7 +89,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="UI\Pages\MainPage.xaml">
+	  <MauiXaml Update="MainPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
