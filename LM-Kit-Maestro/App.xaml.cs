@@ -7,6 +7,7 @@ using Microsoft.UI.Windowing;
 using LMKit.Maestro.UI;
 using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components.WebView.Maui;
+using LMKit.Maestro.UI.Pages;
 #if MACCATALYST
 using UIKit;
 using WebKit;
@@ -65,7 +66,7 @@ namespace LMKit.Maestro
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            Window window = new Window(new ChatPage());
+            Window window = new Window(new MainPage());
 
 #if WINDOWS
             window.HandlerChanged += (sender, args) =>

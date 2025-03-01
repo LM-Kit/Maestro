@@ -4,6 +4,7 @@ using LMKit.Maestro.Data;
 using LMKit.Maestro.Handlers;
 using LMKit.Maestro.Services;
 using LMKit.Maestro.UI;
+using LMKit.Maestro.UI.Pages;
 using LMKit.Maestro.ViewModels;
 using Majorsoft.Blazor.Components.Common.JsInterop;
 using MetroLog.MicrosoftExtensions;
@@ -86,9 +87,7 @@ namespace LMKit.Maestro
 
         private static void RegisterViews(this MauiAppBuilder builder)
         {
-            builder.Services.AddTransient<ChatPage>();
-            builder.Services.AddTransient<ModelsPage>();
-            builder.Services.AddTransient<AssistantsPage>();
+            builder.Services.AddTransient<MainPage>();
         }
 
         private static void RegisterServices(this MauiAppBuilder builder)
