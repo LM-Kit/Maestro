@@ -24,7 +24,7 @@ namespace LMKit.Maestro.ViewModels
         public EventHandler? TranslationCompleted;
         public EventHandler? TranslationFailed;
 
-        public TranslationViewModel(IPopupService popupService, LMKitService lmKitService) : base(popupService, lmKitService)
+        public TranslationViewModel(LMKitService lmKitService) : base(lmKitService)
         {
         }
 

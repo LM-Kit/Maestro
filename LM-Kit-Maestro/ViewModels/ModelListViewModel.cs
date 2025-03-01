@@ -13,10 +13,7 @@ namespace LMKit.Maestro.ViewModels
     {
         private readonly IMainThread _mainThread;
         private readonly ILLMFileManager _fileManager;
-        private readonly IPopupService _popupService;
         private readonly ILauncher _launcher;
-        public IPopupNavigation PopupNavigation { get; }
-        public INavigationService NavigationService { get; }
         public LMKitService LMKitService { get; }
 
         public ObservableCollection<ModelInfoViewModel> Models { get; }
@@ -47,15 +44,11 @@ namespace LMKit.Maestro.ViewModels
         }
 
         public ModelListViewModel(IMainThread mainThread, ILLMFileManager fileManager, LMKitService lmKitService,
-            IPopupService popupService, ILauncher launcher,
-            INavigationService navigationService, IPopupNavigation popupNavigation)
+            ILauncher launcher)
         {
             _mainThread = mainThread;
             _fileManager = fileManager;
             LMKitService = lmKitService;
-            _popupService = popupService;
-            NavigationService = navigationService;
-            PopupNavigation = popupNavigation;
             _launcher = launcher;
             _fileManager.SortedModelCollectionChanged += OnModelCollectionChanged;
             Models = [];
@@ -106,9 +99,10 @@ namespace LMKit.Maestro.ViewModels
             }
             else
             {
-                _popupService.DisplayAlert("Model not found",
-                    $"This model was not found in your model folder.\nMake sure the path points to your current model folder and that the file exists on your disk: {fileUri.LocalPath}",
-                    "OK");
+                //todo: display snackbar
+                //_popupService.DisplayAlert("Model not found",
+                //    $"This model was not found in your model folder.\nMake sure the path points to your current model folder and that the file exists on your disk: {fileUri.LocalPath}",
+                //    "OK");
             }
         }
 
@@ -148,8 +142,9 @@ namespace LMKit.Maestro.ViewModels
             }
             catch (Exception ex)
             {
-                _popupService.DisplayAlert("Failure to delete model file",
-                    $"{ex.Message}", "OK");
+                //todo: show snackbar
+                //_popupService.DisplayAlert("Failure to delete model file",
+                //    $"{ex.Message}", "OK");
             }
         }
 

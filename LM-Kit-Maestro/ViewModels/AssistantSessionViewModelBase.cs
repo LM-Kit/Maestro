@@ -20,8 +20,6 @@ namespace LMKit.Maestro.ViewModels
         [ObservableProperty]
         bool _awaitingResponse;
 
-        protected IPopupService _popupService;
-
         public LMKitService LmKitService { get; protected set; }
 
 
@@ -45,9 +43,8 @@ namespace LMKit.Maestro.ViewModels
 
         protected abstract Task HandleCancel(bool shouldAwait);
 
-        protected AssistantViewModelBase(IPopupService popupService, LMKitService lmKitService)
+        protected AssistantViewModelBase(LMKitService lmKitService)
         {
-            _popupService = popupService;
             LmKitService = lmKitService;
         }
 

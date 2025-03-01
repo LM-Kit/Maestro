@@ -47,7 +47,7 @@ public partial class AppShellViewModel : ViewModelBase
         }
     }
 
-    public AppShellViewModel(ISnackbarService snackbarService, INavigationService navigationService, ILogger<AppShellViewModel> logger,
+    public AppShellViewModel(ISnackbarService snackbarService, ILogger<AppShellViewModel> logger,
         ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
         SettingsViewModel settingsViewModel, LMKitService lmKitService,
         ILLMFileManager llmFileManager, IAppSettingsService appSettingsService)

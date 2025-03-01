@@ -84,19 +84,17 @@ public partial class ConversationViewModel : AssistantViewModelBase
     public EventHandler? DatabaseSaveOperationCompleted;
     public EventHandler? DatabaseSaveOperationFailed;
 
-    public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database) :
-        this(popupService, lmKitService, database, new ConversationLog(Locales.UntitledChat))
+    public ConversationViewModel(LMKitService lmKitService, IMaestroDatabase database) :
+        this(lmKitService, database, new ConversationLog(Locales.UntitledChat))
     {
     }
 
-    public ConversationViewModel(IPopupService popupService, LMKitService lmKitService, IMaestroDatabase database,
-        ConversationLog conversationLog) : base(popupService, lmKitService)
+    public ConversationViewModel(LMKitService lmKitService, IMaestroDatabase database, ConversationLog conversationLog) : base(lmKitService)
     {
         LmKitService = lmKitService;
         LmKitService.ModelLoaded += OnModelLoadingCompleted;
         LmKitService.ModelUnloaded += OnModelUnloaded;
         _database = database;
-        _popupService = popupService;
         _title = conversationLog.Title!;
         LMKitConversation = new LMKitService.Conversation(lmKitService, conversationLog.ChatHistoryData);
         LMKitConversation.ChatHistoryChanged += OnLMKitChatHistoryChanged;

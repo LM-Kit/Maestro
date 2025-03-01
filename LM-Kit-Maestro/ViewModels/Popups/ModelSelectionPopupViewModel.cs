@@ -16,6 +16,5 @@ public partial class ModelSelectionPopupViewModel : ViewModelBase
     [RelayCommand]
     public async Task NavigateToModelPage()
     {
-        await ModelListViewModel.NavigationService.NavigateToAsync("//ModelsPage");
     }
 }

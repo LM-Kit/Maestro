@@ -14,7 +14,6 @@ namespace LMKit.Maestro.ViewModels
         private readonly ILogger<ConversationListViewModel> _logger;
         private readonly IMaestroDatabase _database;
         private readonly LMKitService _lmKitService;
-        private readonly IPopupService _popupService;
         private readonly IAppSettingsService _appSettingsService;
 
         private ConversationViewModel? _currentConversation;
@@ -45,13 +44,12 @@ namespace LMKit.Maestro.ViewModels
         public ObservableCollection<ConversationViewModel> Conversations { get; } =
             [];
 
-        public ConversationListViewModel(IMainThread mainThread, IPopupService popupService,
+        public ConversationListViewModel(IMainThread mainThread,
             ILogger<ConversationListViewModel> logger, IMaestroDatabase database, LMKitService lmKitService,
             IAppSettingsService appSettingsService)
         {
             _mainThread = mainThread;
             _logger = logger;
-            _popupService = popupService;
             _database = database;
             _lmKitService = lmKitService;
             _appSettingsService = appSettingsService;
@@ -76,8 +74,7 @@ namespace LMKit.Maestro.ViewModels
 
             foreach (var conversation in conversations)
             {
-                ConversationViewModel conversationViewModel =
-                    new ConversationViewModel(_popupService, _lmKitService, _database, conversation);
+                ConversationViewModel conversationViewModel = new ConversationViewModel(_lmKitService, _database, conversation);
 
                 if (conversation.ChatHistoryData != null)
                 {
@@ -98,7 +95,7 @@ namespace LMKit.Maestro.ViewModels
 
             if (Conversations.Count == 0)
             {
-                Conversations.Add(new ConversationViewModel(_popupService, _lmKitService, _database));
+                Conversations.Add(new ConversationViewModel(_lmKitService, _database));
             }
 
             CurrentConversation = Conversations.First();
@@ -106,7 +103,7 @@ namespace LMKit.Maestro.ViewModels
 
         public void AddNewConversation()
         {
-            var newConversation = new ConversationViewModel(_popupService, _lmKitService, _database);
+            var newConversation = new ConversationViewModel(_lmKitService, _database);
             Conversations.Insert(0, newConversation);
             CurrentConversation = newConversation;
         }

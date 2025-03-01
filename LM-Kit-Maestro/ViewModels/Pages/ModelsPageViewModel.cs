@@ -9,7 +9,6 @@ namespace LMKit.Maestro.ViewModels;
 public partial class ModelsPageViewModel : PageViewModelBase
 {
     private readonly IFolderPicker _folderPicker;
-    private readonly IPopupService _popupService;
     private readonly ILauncher _launcher;
     private readonly LMKitService _lmKitService;
     private readonly IMainThread _mainThread;
@@ -20,18 +19,15 @@ public partial class ModelsPageViewModel : PageViewModelBase
 
     [ObservableProperty] long _totalModelSize;
 
-    public ModelsPageViewModel(INavigationService navigationService, IFolderPicker folderPicker,
-        ILauncher launcher, IMainThread mainThread,
-        IPopupService popupService, IPopupNavigation popupNavigation, ILLMFileManager llmFileManager,
+    public ModelsPageViewModel(IFolderPicker folderPicker,
+        ILauncher launcher, IMainThread mainThread, ILLMFileManager llmFileManager,
         LMKitService lmKitService,
-        IAppSettingsService appSettingsService, ModelListViewModel modelListViewModel) : base(navigationService,
-        popupService, popupNavigation)
+        IAppSettingsService appSettingsService, ModelListViewModel modelListViewModel)
     {
         _folderPicker = folderPicker;
         _launcher = launcher;
         _mainThread = mainThread;
         _lmKitService = lmKitService;
-        _popupService = popupService;
         FileManager = llmFileManager;
         ModelListViewModel = modelListViewModel;
         AppSettingsService = appSettingsService;

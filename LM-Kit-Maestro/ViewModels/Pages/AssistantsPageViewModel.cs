@@ -13,9 +13,9 @@ namespace LMKit.Maestro.ViewModels
 
         public LMKitService LMKitService { get; }
 
-        public AssistantsPageViewModel(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation, ModelListViewModel modelListViewModel, LMKitService lMKitService) : base(navigationService, popupService, popupNavigation)
+        public AssistantsPageViewModel(ModelListViewModel modelListViewModel, LMKitService lMKitService)
         {
-            TranslationViewModel = new TranslationViewModel(popupService, lMKitService);
+            TranslationViewModel = new TranslationViewModel(lMKitService);
             ModelListViewModel = modelListViewModel;
             LMKitService = lMKitService;
         }

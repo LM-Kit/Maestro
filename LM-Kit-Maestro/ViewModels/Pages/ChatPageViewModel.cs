@@ -26,10 +26,9 @@ public partial class ChatPageViewModel : PageViewModelBase
     public ConversationListViewModel ConversationListViewModel { get; }
     public ModelListViewModel ModelListViewModel { get; }
 
-    public ChatPageViewModel(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation,
-        ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
+    public ChatPageViewModel(ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
         ILogger<ChatPageViewModel> logger, IMaestroDatabase database,
-        LMKitService lmKitService, ILLMFileManager llmFileManager, SettingsViewModel settingsViewModel) : base(navigationService, popupService, popupNavigation)
+        LMKitService lmKitService, ILLMFileManager llmFileManager, SettingsViewModel settingsViewModel)
     {
         _logger = logger;
         ConversationListViewModel = conversationListViewModel;
