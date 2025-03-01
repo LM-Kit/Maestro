@@ -1,19 +1,14 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
 using LMKit.Maestro.Data;
-using LMKit.Maestro.Handlers;
 using LMKit.Maestro.Services;
-using LMKit.Maestro.UI;
 using LMKit.Maestro.UI.Pages;
 using LMKit.Maestro.ViewModels;
 using Majorsoft.Blazor.Components.Common.JsInterop;
 using MetroLog.MicrosoftExtensions;
 using MetroLog.Operators;
 using Microsoft.Extensions.Logging;
-using Mopups.Hosting;
-using Mopups.Services;
 using MudBlazor.Services;
-using SimpleToolkit.SimpleShell;
 
 namespace LMKit.Maestro
 {
@@ -25,7 +20,6 @@ namespace LMKit.Maestro
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
-                .ConfigureMopups()
                 .ConfigureFonts(fonts =>
                 {
                     // Roboto
@@ -46,8 +40,7 @@ namespace LMKit.Maestro
                     //fonts.AddFont("FontAkwesome.ttf", "Material");
                     // FontAwesome
                     //fonts.AddFont("Font Awesome 6 Free-Regular-400.otf", "FARegular");
-                })
-                .ConfigureMauiHandlers(handlers => { handlers.AddCustomHandlers(); });
+                });
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddJsInteropExtensions();
@@ -92,8 +85,6 @@ namespace LMKit.Maestro
 
         private static void RegisterServices(this MauiAppBuilder builder)
         {
-            builder.Services.AddSingleton(MopupService.Instance);
-
             builder.Services.AddSingleton<AppSettingsService>();
             builder.Services.AddSingleton<IMaestroDatabase, MaestroDatabase>();
             builder.Services.AddSingleton<ILLMFileManager, LLMFileManager>();

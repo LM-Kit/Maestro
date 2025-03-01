@@ -4,7 +4,6 @@ using LMKit.Maestro.Services;
 using Maestro.Tests.Services;
 using LMKit.Maestro.ViewModels;
 using Microsoft.Extensions.Logging;
-using Mopups.Interfaces;
 using Moq;
 using System.Diagnostics;
 
@@ -179,7 +178,6 @@ namespace Maestro.Tests
             var mainThread = new Mock<IMainThread>().Object;
             var appSettingsService = new Mock<IAppSettingsService>().Object;
             var logger = new Mock<ILogger<ChatPageViewModel>>().Object;
-            var popupNavigation = new Mock<IPopupNavigation>().Object;
 
             return new ChatPageViewModel(conversationListViewModel, modelListViewModel,
                 logger, database, lmKitService, llmFileManager, settingsViewModel);

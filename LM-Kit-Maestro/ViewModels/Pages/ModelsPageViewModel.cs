@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Services;
-using Mopups.Interfaces;
 
 namespace LMKit.Maestro.ViewModels;
 

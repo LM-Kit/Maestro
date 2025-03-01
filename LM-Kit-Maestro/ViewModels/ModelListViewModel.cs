@@ -3,9 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Helpers;
 using LMKit.Maestro.Services;
 using LMKit.Model;
-using Mopups.Interfaces;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace LMKit.Maestro.ViewModels
 {
@@ -113,9 +111,9 @@ namespace LMKit.Maestro.ViewModels
                 Task.Run(() =>
                 {
 #if WINDOWS
-                    Process.Start("explorer.exe", $"/select,\"{filePath}\"");
+                    System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{filePath}\"");
 #elif MACCATALYST
-                    Process.Start("open", "-R " + filePath);
+                    System.Diagnostics.Process.Start("open", "-R " + filePath);
 #endif
                 });
             }

@@ -3,8 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Data;
 using LMKit.Maestro.Services;
 using Microsoft.Extensions.Logging;
-using Mopups.Interfaces;
-
 namespace LMKit.Maestro.ViewModels;
 
 public partial class ChatPageViewModel : ViewModelBase
