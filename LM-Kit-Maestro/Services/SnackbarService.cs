@@ -2,7 +2,7 @@
 
 namespace LMKit.Maestro.Services;
 
-public class SnackbarService
+public class SnackbarService : ISnackbarService
 {
     public event Action<string, string, Severity>? OnShowSnackbar;
 

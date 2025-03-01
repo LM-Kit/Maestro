@@ -1,4 +1,4 @@
-﻿@inject Maestro.Services.SnackbarService SnackbarService
+﻿@inject Maestro.Services.ISnackbarService SnackbarService
 @inject ISnackbar Snackbar
 
 @code {
@@ -9,6 +9,7 @@
 
     private void ShowSnackbar(string title, string message, Severity severity)
     {
+        Snackbar.Clear();
         Snackbar.Add(
             @<div>
                 <MudText Typo='Typo.subtitle2' Class='mb-1'>@title</MudText>

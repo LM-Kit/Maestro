@@ -104,7 +104,7 @@ namespace LMKit.Maestro
             builder.Services.AddSingleton<INavigationService, NavigationService>();
             builder.Services.AddSingleton<IMainThread, Services.MainThread>();
             builder.Services.AddSingleton<CommunityToolkit.Maui.Core.IPopupService, CommunityToolkit.Maui.PopupService>();
-            builder.Services.AddSingleton<SnackbarService>();
+            builder.Services.AddSingleton<ISnackbarService, SnackbarService>();
 
             builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
 

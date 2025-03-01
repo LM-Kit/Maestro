@@ -7,7 +7,7 @@ namespace LMKit.Maestro.ViewModels;
 
 public partial class AppShellViewModel : ViewModelBase
 {
-    private readonly IPopupService _popupService;
+    private readonly ISnackbarService _snackbarService;
     private readonly ILogger<AppShellViewModel> _logger;
     private readonly SettingsViewModel _settingsViewModel;
     private readonly ModelListViewModel _modelListViewModel;
@@ -47,12 +47,12 @@ public partial class AppShellViewModel : ViewModelBase
         }
     }
 
-    public AppShellViewModel(IPopupService popupService, INavigationService navigationService, ILogger<AppShellViewModel> logger,
+    public AppShellViewModel(ISnackbarService snackbarService, INavigationService navigationService, ILogger<AppShellViewModel> logger,
         ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
         SettingsViewModel settingsViewModel, LMKitService lmKitService,
         ILLMFileManager llmFileManager, IAppSettingsService appSettingsService)
     {
-        _popupService = popupService;
+        _snackbarService = snackbarService;
         _logger = logger;
         _conversationListViewModel = conversationListViewModel;
         _modelListViewModel = modelListViewModel;
@@ -98,6 +98,7 @@ public partial class AppShellViewModel : ViewModelBase
         }
     }
 
+
     private void OnFileManagerFileCollectingCompleted(object? sender, EventArgs e)
     {
         var fileCollectingCompletedEventArgs = (LLMFileManager.FileCollectingCompletedEventArgs)e;
@@ -106,19 +107,7 @@ public partial class AppShellViewModel : ViewModelBase
         {
             _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
 
-            if (Microsoft.Maui.ApplicationModel.MainThread.IsMainThread)
-            {
-                _popupService!.DisplayAlert("Error with your model folder",
-                    $"Model files failed to be collected from the input folder:\n{fileCollectingCompletedEventArgs.Exception.Message!}\n\nYour model folder has been reset to the default one.",
-                    "OK");
-            }
-            else
-            {
-                Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread(() =>
-                _popupService!.DisplayAlert("Error with your model folder",
-                    $"Model files failed to be collected from the input folder:\n{fileCollectingCompletedEventArgs.Exception.Message!}\n\nYour model folder has been reset to the default one.",
-                    "OK"));
-            }
+            _snackbarService!.Show("Error with your model folder", fileCollectingCompletedEventArgs.Exception.Message!);
         }
     }
 
@@ -126,15 +115,7 @@ public partial class AppShellViewModel : ViewModelBase
     {
         var modelLoadingFailedEventArgs = (LMKitService.ModelLoadingFailedEventArgs)e;
 
-        if (Microsoft.Maui.ApplicationModel.MainThread.IsMainThread)
-        {
-            _popupService.DisplayAlert("Error loading model", $"The model failed to be loaded: {modelLoadingFailedEventArgs.Exception.Message}", "OK");
-        }
-        else
-        {
-            Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread(() =>
-            _popupService.DisplayAlert("Error loading model", $"The model failed to be loaded: {modelLoadingFailedEventArgs.Exception.Message}", "OK"));
-        }
+        _snackbarService!.Show("Error loading model", modelLoadingFailedEventArgs.Exception.Message!);
     }
 
     public void SaveAppSettings()

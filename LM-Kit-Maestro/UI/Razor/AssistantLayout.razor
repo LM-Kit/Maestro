@@ -4,7 +4,7 @@
 @inject ILLMFileManager FileManager
 @inject LMKitService LmKitService
 @inject ISnackbar Snackbar
-
+@inject Maestro.Services.ISnackbarService SnackbarService
 
 <div id="main-container">
 
@@ -49,11 +49,11 @@
 <MudSnackbarProvider />
 
 <MudDialogProvider FullWidth="true"
-                   CloseButton="false"
-                   BackdropClick="true"
-                   NoHeader="true"
-                   Position="DialogPosition.TopLeft"
-                   CloseOnEscapeKey="true" />
+CloseButton="false"
+BackdropClick="true"
+NoHeader="true"
+Position="DialogPosition.TopLeft"
+CloseOnEscapeKey="true" />
 
 @code {
     public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
@@ -75,11 +75,7 @@
 
         if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
         {
-            Snackbar.Clear();
-
-            Snackbar.Add($"Error with your model folder:\n{fileCollectingCompletedEventArgs.Exception.Message!}\n\nResetting to the default one.",
-            Severity.Error, config => { config.HideIcon = true; });
-
+            SnackbarService.Show("Error with your model folder", $"{fileCollectingCompletedEventArgs.Exception.Message!}");
         }
         // else
         // {
