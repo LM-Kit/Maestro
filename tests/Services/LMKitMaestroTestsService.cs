@@ -166,10 +166,9 @@ namespace Maestro.Tests
         private static ModelListViewModel GetNewModelListViewModel(LMKitService lmKitService,
             ILLMFileManager llmFileManager)
         {
-            var mainThread = new Mock<IMainThread>().Object;
             var launcher = new Mock<ILauncher>().Object;
 
-            return new ModelListViewModel(mainThread, llmFileManager, lmKitService, launcher);
+            return new ModelListViewModel(llmFileManager, lmKitService, launcher);
         }
 
         private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService,

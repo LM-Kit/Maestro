@@ -11,7 +11,6 @@ namespace LMKit.Maestro.ViewModels
 {
     public partial class ModelListViewModel : ViewModelBase
     {
-        private readonly IMainThread _mainThread;
         private readonly ILLMFileManager _fileManager;
         private readonly ILauncher _launcher;
         public LMKitService LMKitService { get; }
@@ -43,10 +42,9 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        public ModelListViewModel(IMainThread mainThread, ILLMFileManager fileManager, LMKitService lmKitService,
+        public ModelListViewModel(ILLMFileManager fileManager, LMKitService lmKitService,
             ILauncher launcher)
         {
-            _mainThread = mainThread;
             _fileManager = fileManager;
             LMKitService = lmKitService;
             _launcher = launcher;
@@ -201,7 +199,7 @@ namespace LMKit.Maestro.ViewModels
             ModelInfoViewModel modelCardViewModel = new ModelInfoViewModel(modelCard);
 #endif
 
-            _mainThread.BeginInvokeOnMainThread(() => AddModel(modelCardViewModel));
+            AddModel(modelCardViewModel);
         }
 
         private void AddModel(ModelInfoViewModel modelCardViewModel, bool sort = true)
@@ -240,7 +238,7 @@ namespace LMKit.Maestro.ViewModels
             if (modelCardViewModel != null)
             {
                 modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-                _mainThread.BeginInvokeOnMainThread(() => Models.Remove(modelCardViewModel));
+                Models.Remove(modelCardViewModel);
 
                 if (LMKitService.LMKitConfig.LoadedModelUri == modelCardViewModel.ModelInfo.ModelUri)
                 {
