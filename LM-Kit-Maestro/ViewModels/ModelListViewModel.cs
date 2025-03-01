@@ -11,6 +11,8 @@ namespace LMKit.Maestro.ViewModels
     {
         private readonly ILLMFileManager _fileManager;
         private readonly ILauncher _launcher;
+        private readonly ISnackbarService _snackbarService;
+
         public LMKitService LMKitService { get; }
 
         public ObservableCollection<ModelInfoViewModel> Models { get; }
@@ -41,11 +43,13 @@ namespace LMKit.Maestro.ViewModels
         }
 
         public ModelListViewModel(ILLMFileManager fileManager, LMKitService lmKitService,
-            ILauncher launcher)
+            ILauncher launcher, ISnackbarService snackbarService)
         {
             _fileManager = fileManager;
             LMKitService = lmKitService;
             _launcher = launcher;
+            _snackbarService = snackbarService;
+
             _fileManager.SortedModelCollectionChanged += OnModelCollectionChanged;
             Models = [];
 
@@ -95,10 +99,8 @@ namespace LMKit.Maestro.ViewModels
             }
             else
             {
-                //todo: display snackbar
-                //_popupService.DisplayAlert("Model not found",
-                //    $"This model was not found in your model folder.\nMake sure the path points to your current model folder and that the file exists on your disk: {fileUri.LocalPath}",
-                //    "OK");
+                _snackbarService.Show("Model file not found",
+                    $"Make sure the file path points to your current model folder and that it exists: {fileUri.LocalPath}");
             }
         }
 
@@ -138,9 +140,7 @@ namespace LMKit.Maestro.ViewModels
             }
             catch (Exception ex)
             {
-                //todo: show snackbar
-                //_popupService.DisplayAlert("Failure to delete model file",
-                //    $"{ex.Message}", "OK");
+                _snackbarService.Show("Could not delete model file", ex.Message);
             }
         }
 

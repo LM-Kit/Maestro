@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LMKit.Maestro.Services;
-using Mopups.Interfaces;
 
 namespace LMKit.Maestro.ViewModels
 {
