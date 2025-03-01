@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<shell:SimpleShell
+<Shell
     x:Class="LMKit.Maestro.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -29,13 +29,7 @@
         <ShellContent Title="Models" ContentTemplate="{DataTemplate ui:ModelsPage}"/>
     </Tab>
 
-    <shell:SimpleShell.RootPageContainer>
-        <Grid>
-            <shell:SimpleNavigationHost/>
-        </Grid>
-    </shell:SimpleShell.RootPageContainer>
-
-    <shell:SimpleShell.Content>
-        <shell:SimpleNavigationHost/>
-    </shell:SimpleShell.Content>
-</shell:SimpleShell>
+    <ShellContent
+        ContentTemplate="{DataTemplate ui:ChatPage}"
+        Route="ChatPage" />
+</Shell>

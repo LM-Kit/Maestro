@@ -3,7 +3,7 @@ using SimpleToolkit.SimpleShell;
 
 namespace LMKit.Maestro
 {
-    public partial class AppShell : SimpleShell
+    public partial class AppShell : Shell
     {
         public AppShellViewModel AppShellViewModel { get; }
 
@@ -38,13 +38,6 @@ namespace LMKit.Maestro
         {
             base.OnNavigated(args);
 
-            foreach (var tab in AppShellViewModel.Tabs)
-            {
-                if (tab.Route == CurrentShellSection.Route)
-                {
-                    AppShellViewModel.CurrentTab = tab;
-                }
-            }
         }
     }
 }

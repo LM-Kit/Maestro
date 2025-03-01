@@ -14,31 +14,6 @@
              x:DataType="vm:ChatPageViewModel"
              x:Name="chatPage">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style TargetType="Grid" x:Key="SidebarHeaderGrid">
-                <Setter Property="ColumnDefinitions" Value="32, *, 32"/>
-                <Setter Property="VerticalOptions" Value="Start"/>
-                <Setter Property="MinimumWidthRequest" Value="{x:Static ui:UIConstants.ChatPageSideTogglesWidth}"/>
-                <Setter Property="HeightRequest" Value="{x:Static ui:UIConstants.ModelSelectionButtonHeight}"/>
-                <Setter Property="IsVisible" Value="{Binding Source={x:Reference chatPage}, Path=ShowSidebarToggles, x:DataType=ui:ChatPage}"/>
-            </Style>
-
-            <Style TargetType="Grid" x:Key="TuckedSidebarUpperGridStyle">
-                <Setter Property="WidthRequest" Value="{x:Static ui:UIConstants.ChatPageSideTogglesWidth}"/>
-                <Setter Property="VerticalOptions" Value="Start"/>
-                <Setter Property="HeightRequest" Value="{x:Static ui:UIConstants.ModelSelectionButtonHeight}"/>
-            </Style>
-
-            <Style TargetType="Label" x:Key="SidebarTitleStyle">
-                <Setter Property="Grid.Column" Value="1"/>
-                <Setter Property="LineBreakMode" Value="NoWrap"/>
-                <Setter Property="VerticalOptions" Value="Center"/>
-                <Setter Property="HorizontalOptions" Value="Center"/>
-            </Style>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-
     <BlazorWebView
             x:Name="blazorWebView"
             HostPage="wwwroot/index.html"

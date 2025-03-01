@@ -24,7 +24,6 @@ namespace LMKit.Maestro
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
-                .UseSimpleShell()
                 .ConfigureMopups()
                 .ConfigureFonts(fonts =>
                 {

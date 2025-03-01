@@ -44,15 +44,9 @@ public partial class ChatPage : ContentPage
         private set => SetValue(SettingsSidebarAnimatingProperty, value);
     }
 
-    public ChatPage(ChatPageViewModel singleTurnChatViewModel)
+    public ChatPage()
     {
         InitializeComponent();
-        BindingContext = singleTurnChatViewModel;
-        _chatViewModel = singleTurnChatViewModel;
-
-        _chatViewModel.PropertyChanged += OnChatPageViewModelPropertyChanged;
-
-        SizeChanged += OnPageSizeChanged;
     }
 
     private void OnPageSizeChanged(object? sender, EventArgs e)

@@ -65,7 +65,7 @@ namespace LMKit.Maestro
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            Window window = new Window(new AppShell(_appShellViewModel));
+            Window window = new Window(new ChatPage());
 
 #if WINDOWS
             window.HandlerChanged += (sender, args) =>
