@@ -286,6 +286,8 @@ public partial class ChatPage : IDisposable
         if (args.Width < UIConstants.ChatWindowLayoutMinimumWidth)
         {
             ShowSidebarToggles &= false;
+            ViewModel.ChatsSidebarIsToggled &= false;
+            ViewModel.SettingsSidebarIsToggled &= false;
         }
         else
         {
