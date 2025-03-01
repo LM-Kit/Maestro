@@ -6,11 +6,10 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 
-namespace LMKit.Maestro.UI.Components;
+namespace LMKit.Maestro.UI.Pages;
 
-public partial class Chat : IDisposable
+public partial class ChatPage : IDisposable
 {
     private const int UIUpdateDelayMilliseconds = 200;
 
