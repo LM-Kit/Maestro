@@ -3,7 +3,7 @@ using Majorsoft.Blazor.Components.Common.JsInterop.ElementInfo;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
-namespace LMKit.Maestro.UI.Razor.Components;
+namespace LMKit.Maestro.UI.Components;
 
 public partial class ListItemWrapper<T> : ComponentBase where T : ViewModelBase
 {

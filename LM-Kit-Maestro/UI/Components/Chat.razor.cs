@@ -8,7 +8,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace LMKit.Maestro.UI.Razor.Components;
+namespace LMKit.Maestro.UI.Components;
 
 public partial class Chat : IDisposable
 {

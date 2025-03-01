@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System.ComponentModel;
 
-namespace LMKit.Maestro.UI.Razor.Components;
+namespace LMKit.Maestro.UI.Components;
 
 public partial class ModelSelectionButton
 {

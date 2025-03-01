@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Diagnostics;
 
-namespace LMKit.Maestro.UI.Razor.Components;
+namespace LMKit.Maestro.UI.Components;
 
 public partial class ConversationListItem : ComponentBase
 {
