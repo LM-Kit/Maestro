@@ -171,6 +171,11 @@ public static class FileHelpers
         {
             return true;
         }
+        catch (Exception)
+        {
+            // File is not locked but could not be opened.
+            return true;
+        }
 
         return false;
     }
