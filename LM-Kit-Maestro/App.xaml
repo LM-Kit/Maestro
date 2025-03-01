@@ -4,20 +4,4 @@
              xmlns:local="clr-namespace:LMKit.Maestro"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="LMKit.Maestro.App">
-    <Application.Resources>
-        <ResourceDictionary>
-            <!--<StyleSheet Source="Resources/CSS/LMKitMaestro.css"/>
-            <StyleSheet Source="Resources/CSS/font-awesome.css"/>-->
-            <mct:VariableMultiValueConverter x:Key="AllTrueConverter" ConditionType="All"/>
-            <mct:VariableMultiValueConverter x:Key="AllFalseConverter" ConditionType="None"/>
-            <mct:VariableMultiValueConverter x:Key="AnyTrueConverter" ConditionType="Any"/>
-
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary x:Name="colors" Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-                <ResourceDictionary Source="Resources/Styles/MaterialIcons.xaml"/>
-                <ResourceDictionary Source="Resources/Styles/FontAwesome.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
 </Application>

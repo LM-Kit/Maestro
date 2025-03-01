@@ -23,7 +23,5 @@ internal class PopupService : IPopupService
             Message = message,
             OkText = okText
         };
-
-        await _popupNavigation.PushAsync(new AlertPopup(_popupNavigation, viewModel));
     }
 }
