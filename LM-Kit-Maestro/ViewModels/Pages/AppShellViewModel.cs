@@ -19,34 +19,6 @@ public partial class AppShellViewModel : ViewModelBase
     [ObservableProperty]
     private bool _appIsInitialized = false;
 
-    [ObservableProperty]
-    List<MaestroTabViewModel> _tabs = [];
-
-    [ObservableProperty]
-    MaestroTabViewModel _chatTab = new MaestroTabViewModel("Chat", "ChatPage");
-
-    [ObservableProperty]
-    MaestroTabViewModel _modelsTab = new MaestroTabViewModel("Models", "ModelsPage");
-
-    // [ObservableProperty]
-    // MaestroTabViewModel _assistantsTab = new MaestroTabViewModel("Assistants", "AssistantsPage");
-
-    private MaestroTabViewModel? _currentTab;
-    public MaestroTabViewModel CurrentTab
-    {
-        get => _currentTab!;
-        set
-        {
-            if (_currentTab != null)
-            {
-                _currentTab.IsSelected = false;
-            }
-
-            _currentTab = value;
-            _currentTab.IsSelected = true;
-        }
-    }
-
     public AppShellViewModel(ISnackbarService snackbarService, ILogger<AppShellViewModel> logger,
         ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
         SettingsViewModel settingsViewModel, LMKitService lmKitService,
@@ -60,12 +32,6 @@ public partial class AppShellViewModel : ViewModelBase
         _lmKitService = lmKitService;
         _llmFileManager = llmFileManager;
         _appSettingsService = appSettingsService;
-
-        // Tabs.Add(AssistantsTab);
-        Tabs.Add(ChatTab);
-        Tabs.Add(ModelsTab);
-
-        CurrentTab = ChatTab;
     }
 
     public async Task Init()
@@ -121,14 +87,5 @@ public partial class AppShellViewModel : ViewModelBase
     public void SaveAppSettings()
     {
         _settingsViewModel.Save();
-    }
-
-    [RelayCommand]
-    private async Task Navigate(MaestroTabViewModel tab)
-    {
-        if (!tab.IsSelected)
-        {
-            await Shell.Current.GoToAsync($"//{tab.Route}", true);
-        }
     }
 }

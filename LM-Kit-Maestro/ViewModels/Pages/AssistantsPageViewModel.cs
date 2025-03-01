@@ -4,7 +4,7 @@ using Mopups.Interfaces;
 
 namespace LMKit.Maestro.ViewModels
 {
-    public partial class AssistantsPageViewModel : PageViewModelBase
+    public partial class AssistantsPageViewModel : ViewModelBase
     {
         [ObservableProperty]
         private TranslationViewModel _translationViewModel;

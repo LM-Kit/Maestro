@@ -6,7 +6,7 @@ using Mopups.Interfaces;
 
 namespace LMKit.Maestro.ViewModels;
 
-public partial class ModelsPageViewModel : PageViewModelBase
+public partial class ModelsPageViewModel : ViewModelBase
 {
     private readonly IFolderPicker _folderPicker;
     private readonly ILauncher _launcher;

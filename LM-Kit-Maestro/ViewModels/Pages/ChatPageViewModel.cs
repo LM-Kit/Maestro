@@ -7,7 +7,7 @@ using Mopups.Interfaces;
 
 namespace LMKit.Maestro.ViewModels;
 
-public partial class ChatPageViewModel : PageViewModelBase
+public partial class ChatPageViewModel : ViewModelBase
 {
     private readonly ILogger<ChatPageViewModel> _logger;
     private readonly IMaestroDatabase _database;
