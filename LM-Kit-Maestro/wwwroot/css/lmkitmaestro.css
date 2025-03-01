@@ -223,7 +223,7 @@
     }
 
 .width-transition {
-    transition: width 0.5s;
+    transition: width 0.3s ease-in;
 }
 
 /* Scrollbar */
