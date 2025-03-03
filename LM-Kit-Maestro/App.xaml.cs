@@ -25,7 +25,7 @@ namespace LMKit.Maestro
         {
             InitializeComponent();
 
-            Task.Run(() => Global.Runtime.Initialize()); //Initialize LM-Kit in the background to avoid blocking UI initialization.
+            Global.Runtime.Initialize();
 
             BlazorWebViewHandler.BlazorWebViewMapper.AppendToMapping("CustomBlazorWebView", (handler, view) =>
             {
