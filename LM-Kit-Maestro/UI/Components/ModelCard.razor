@@ -1,0 +1,196 @@
+﻿<div class="model-card-root @(GetClasses())" title="@ViewModel.ModelInfo.Description">
+    <MudGrid Justify="Justify.SpaceBetween" Spacing="@(Dense ? 1 : 3)">
+        <MudItem xs="@(Dense ? 5 : 12)" Class="d-flex align-center">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3" Class="overflow-hidden">
+                <div class="dot d-flex align-content-end @(GetScoreClass(ViewModel.CompatibilityLevel))"
+                     title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
+                </div>
+                <MudText Typo="Typo.subtitle2" Class="text-truncate">
+                    @ViewModel.ModelInfo.ShortModelName
+                </MudText>
+            </MudStack>
+        </MudItem>
+
+        @if (!Dense)
+        {
+            <MudItem xs="2">
+                <MudText Typo="Typo.overline" Class="outline text-truncate">
+                    @ViewModel.ModelInfo.Publisher
+                </MudText>
+            </MudItem>
+
+            <MudItem xs="2">
+                <MudStack Spacing="1" AlignItems="AlignItems.Center" Row="true">
+                    @if (ViewModel.IsChatModel)
+                    {
+                        <MudIcon title="@Locales.ChatModelOptimized" Color="Color.Secondary"
+                                 Icon="@Icons.Material.Outlined.Message"
+                                 Size="Size.Small"/>
+                    }
+
+                    @if (ViewModel.HasVisionCapability)
+                    {
+                        <MudIcon title="@Locales.VisionModelOptimized" Color="Color.Secondary"
+                                 Icon="@Icons.Material.Outlined.Visibility"
+                                 Size="Size.Small"/>
+                    }
+
+                    @if (ViewModel.IsCodeModel)
+                    {
+                        <MudIcon title="@Locales.CodeCompletionModelOptimized" Color="Color.Secondary"
+                                 Icon="@Icons.Material.Outlined.Code"
+                                 Size="Size.Small"/>
+                    }
+
+                    @if (ViewModel.IsMathModel)
+                    {
+                        <MudIcon title="@Locales.MathModelOptimized" Color="Color.Secondary"
+                                 Icon="@Icons.Material.Outlined.Calculate"
+                                 Size="Size.Small"/>
+                    }
+                </MudStack>
+            </MudItem>
+        }
+
+        <MudItem xs="@(Dense ? 4 : 6)" Class="d-flex align-center">
+            <MudGrid>
+                @if (!Dense)
+                {
+                    <MudItem xs="3">
+                        <MudText Class="outline text-truncate"
+                                 title="@string.Format("The architecture of this model is {0}", ViewModel.ModelInfo.Architecture)"
+                                 Typo="Typo.overline">
+                            @ViewModel.ModelInfo.Architecture
+                        </MudText>
+                    </MudItem>
+                }
+
+                <MudItem xs="@(Dense ? 4 : 3)">
+                    <MudText
+                        title="@string.Format("This model has {0:N0} parameters", ViewModel.ModelInfo.ParameterCount)"
+                        Typo="Typo.overline" Class="outline text-truncate">
+                        @ViewModel.ModelSize
+                    </MudText>
+                </MudItem>
+
+                <MudItem xs="@(Dense ? 4 : 3)">
+                    <MudText
+                        title="@string.Format("This model supports a maximum context length of {0:N0} tokens", ViewModel.ModelInfo.ContextLength)"
+                        Typo="Typo.overline" Class="outline text-truncate">
+                        @($"{ViewModel.MaxContextLengthKB}k")
+                    </MudText>
+                </MudItem>
+
+                <MudItem xs="@(Dense ? 4 : 3)">
+                    <MudText
+                        title="@string.Format("This model uses {0}-bit precision, which indicates the number of bits used for numerical representation", ViewModel.Precision)"
+                        Typo="Typo.overline" Class="outline text-truncate">
+                        @ViewModel.Precision
+                    </MudText>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+
+        <MudItem xs="@(Dense ? 3 : 2)" Class="d-flex align-center">
+            <MudGrid Class="d-flex align-items-center" Spacing="0">
+                <MudItem xs="8">
+                    <MudText Align="Align.Right" Typo="Typo.overline"
+                             Class="outline text-truncate flex-grow-1">
+                        @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
+                    </MudText>
+                </MudItem>
+
+                <MudItem xs="4">
+                    <div class="d-flex justify-end">
+                        @if (!ViewModel.IsLocallyAvailable)
+                        {
+                            <MudIcon Class="outline" title="@Locales.ModelDownloadAvailable"
+                                     Icon="@Icons.Material.Outlined.Cloud" Size="Size.Small" />
+                        }
+                    </div>
+                </MudItem>
+            </MudGrid>
+
+        </MudItem>
+    </MudGrid>
+</div>
+
+@code {
+    [Parameter] public required ModelInfoViewModel ViewModel { get; set; }
+
+    private bool _dense;
+
+    [Parameter]
+    public bool Dense
+    {
+        get => _dense;
+        set
+        {
+            if (value != _dense)
+            {
+                _dense = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
+    private bool _selectable;
+
+    [Parameter]
+    public bool Selectable
+    {
+        get => _selectable;
+        set
+        {
+            if (value != _selectable)
+            {
+                _selectable = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
+    private bool _isFocused;
+
+    [Parameter]
+    public bool IsFocused
+    {
+        get => _isFocused;
+        set
+        {
+            if (value != _isFocused)
+            {
+                _isFocused = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
+    private string GetClasses()
+    {
+        string classes = "";
+
+        if (Dense)
+        {
+            classes += "model-card-dense";
+        }
+
+        if (Selectable)
+        {
+            classes += " model-card-selectable";
+        }
+
+        if (IsFocused)
+        {
+            classes += " model-card-focused";
+        }
+
+        return classes.TrimStart();
+    }
+
+    private static string GetScoreClass(float score)
+    {
+        return score < 0.4 ? "score-1" : score < 0.7 ? "score-2" : "score-3";
+    }
+
+}

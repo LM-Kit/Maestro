@@ -1,0 +1,300 @@
+﻿@inherits ComponentBase
+
+@inject IClipboardHandler ClipboardHandler
+
+<div id="message-container"
+     class="@(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-container" : "user-message-container")">
+    <div class="message-content @(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-content" : "user-message-content")">
+        
+       <MudText Typo="Typo.body1">
+            @if (MessageViewModel.Sender == MessageSender.Assistant)
+            {
+                if (MessageHtml != null)
+                {
+                    @((MarkupString)MessageHtml)
+                }
+            }
+            else
+            {
+                @MessageViewModel.GetContent(responseIndex)
+            }
+           </MudText>
+    </div>
+
+    @if (MessageViewModel.Sender == MessageSender.User || (MessageViewModel.Sender == MessageSender.Assistant && !MessageViewModel.MessageInProgress))
+    {
+        <div class="message-footer @(MessageJustTerminated ? "show" : "hide")">
+            <div class="message-footer-content @(MessageViewModel.Sender == MessageSender.User ? "user-message-footer-content" : "")">
+                @if (MessageViewModel.GetResponseCount() > 1)
+                {
+                    <button title="@Locales.PreviousGeneratedResponse" @onclick="OnPreviousResponseButtonClicked"
+                            class="chat-action-button ">
+                        <i class="fas fa-chevron-left"/>
+                    </button>
+
+                    <MudText Class="mx-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
+                        @($"{responseIndex + 1} / {MessageViewModel.GetResponseCount()}")
+                        </MudText>
+
+                    <button title="@Locales.NextGeneratedResponse" @onclick="OnNextResponseButtonClicked"
+                            class="chat-action-button">
+                        <i class="fas fa-chevron-right" />
+                    </button>
+                }
+
+                <button title="@Locales.CopyMessage" @onclick="OnCopyMessageButtonClicked"
+                        class="chat-action-button">
+                    <i class="fas @(MessageJustCopied ? "fa-check" : "fa-copy")" />
+                </button>
+
+                @if (MessageViewModel.Sender == MessageSender.Assistant)
+                {
+                    if (MessageViewModel.IsLastAssistantMessage)
+                    {
+                        <button title="@Locales.RegenerateResponse" @onclick="OnRegenerateResponseButtonClicked"
+                                class="chat-action-button">
+                            <i class="fas fa-rotate" />
+                        </button>
+                    }
+
+                    @if (MessageViewModel.GetTerminationReason(responseIndex) != LMKit.TextGeneration.TextGenerationResult.StopReason.Unknown)
+                    {
+                        <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
+                            @($"{MessageViewModel.GetGeneratedTokens(responseIndex)} tokens • Termination reason: {MessageViewModel.GetTerminationReason(responseIndex)}")
+                        </MudText>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+
+    const string ProgressIndicatorHtml = "<span class=\"dot ml-1 d-inline-block\"></span>";
+
+    private int responseIndex;
+
+    private int ResponseIndex
+    {
+        get => responseIndex;
+        set
+        {
+            responseIndex = value;
+            MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(responseIndex), false);
+        }
+    }
+
+    bool messageJustCopied;
+
+    bool MessageJustCopied
+    {
+        get => messageJustCopied;
+        set
+        {
+            messageJustCopied = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
+    string? messageHtml;
+
+    string? MessageHtml
+    {
+        get => messageHtml;
+        set { messageHtml = value; }
+    }
+
+    bool messageJustTerminated;
+
+    bool MessageJustTerminated
+    {
+        get => messageJustTerminated;
+        set
+        {
+            messageJustTerminated = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
+    MessageViewModel? messageViewModel;
+    [Parameter]
+    [EditorRequired]
+#pragma warning disable BL0007
+    public MessageViewModel MessageViewModel
+    {
+        get => messageViewModel!;
+        set
+        {
+            if (messageViewModel != value)
+            {
+                if (messageViewModel != null)
+                {
+                    messageViewModel.PropertyChanged -= OnMessageViewModelPropertyChanged;
+                }
+
+                messageViewModel = value;
+                messageViewModel.PropertyChanged += OnMessageViewModelPropertyChanged;
+                messageViewModel.OnRegeneratedResponse += OnRegeneratedResponse;
+
+                if (MessageViewModel.GetResponseCount() > 1)
+                {
+                    responseIndex = MessageViewModel.GetResponseCount() - 1;
+                }
+                else
+                {
+                    responseIndex = 0;
+                }
+
+                if (messageViewModel.Sender == MessageSender.Assistant)
+                {
+                    messageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(responseIndex), messageViewModel.MessageInProgress);
+                }
+
+
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+#pragma warning restore BL0007
+
+    private void OnRegeneratedResponse(object? sender, EventArgs e)
+    {
+        ResponseIndex = MessageViewModel.GetResponseCount() - 1;
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    private void OnMessageViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (MessageViewModel.Sender == MessageSender.Assistant)
+        {
+            if (e.PropertyName == nameof(MessageViewModel.Content))
+            {
+                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.Content, MessageViewModel.MessageInProgress);
+            }
+            else if (e.PropertyName == nameof(MessageViewModel.MessageInProgress))
+            {
+                if (!MessageViewModel.MessageInProgress)
+                {
+                    OnAssistantMessageJustTerminated();
+
+                    if (MessageHtml != null && MessageHtml.Contains(ProgressIndicatorHtml))
+                    {
+                        MessageHtml = MessageHtml.Replace(ProgressIndicatorHtml, string.Empty);
+                    }
+                }
+            }
+        }
+
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    private void OnAssistantMessageJustTerminated()
+    {
+        var _ = Task.Run(async () =>
+        {
+            MessageJustTerminated = true;
+            try
+            {
+                await Task.Delay(5000);
+            }
+            catch (Exception)
+            {
+            }
+
+            MessageJustTerminated = false;
+        });
+    }
+
+    private async Task OnCopyMessageButtonClicked()
+    {
+        bool success = await ClipboardHandler.CopyTextToClipboardAsync(MessageViewModel.GetContent(responseIndex));
+
+        if (success)
+        {
+            if (!MessageJustCopied)
+            {
+                var _ = Task.Run(async () =>
+                {
+                    MessageJustCopied = true;
+                    await Task.Delay(3000);
+                    MessageJustCopied = false;
+                });
+            }
+        }
+    }
+
+    private void OnRegenerateResponseButtonClicked()
+    {
+        MessageViewModel.ParentConversation.RegenerateResponse(MessageViewModel);
+    }
+
+    private void OnPreviousResponseButtonClicked()
+    {
+        if (ResponseIndex > 0)
+        {
+            ResponseIndex--;
+        }
+    }
+
+    private void OnNextResponseButtonClicked()
+    {
+        if (ResponseIndex < MessageViewModel.GetResponseCount() - 1)
+        {
+            ResponseIndex++;
+        }
+    }
+
+    private static string GenerateAssistantResponseHtml(string content, bool messageInProgress)
+    {
+        string html = !string.IsNullOrEmpty(content) ? Markdig.Markdown.ToHtml(content) : string.Empty;
+
+        bool responseIsEmpty = html.Length == 0;
+
+        if (messageInProgress)
+        {
+            var closingTagIndex = Math.Max(0, html.LastIndexOf(@"</"));
+
+            if (closingTagIndex != -1)
+            {
+                html = html.Insert(closingTagIndex, ProgressIndicatorHtml);
+
+                if (responseIsEmpty)
+                {
+                    html = $"<p>{html}</p>";
+                }
+            }
+        }
+
+        if (!responseIsEmpty)
+        {
+            // Ensuring we don't insert an unwanted new-line at the end of the message.
+            if (html.EndsWith(">\n"))
+            {
+                html = html.Remove(html.Length - ">\n".Length);
+            }
+            else if (html == "\n")
+            {
+                html = string.Empty;
+            }
+        }
+
+        return html;
+    }
+
+    private static string GetStatusText(LMKitRequestStatus status)
+    {
+        switch (status)
+        {
+            default:
+                return string.Empty;
+
+            case LMKitRequestStatus.Cancelled:
+                return "Cancelled";
+
+            case LMKitRequestStatus.GenericError:
+                return "Unknown error";
+        }
+    }
+
+}

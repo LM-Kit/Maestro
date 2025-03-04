@@ -7,6 +7,7 @@ using Microsoft.UI.Windowing;
 using LMKit.Maestro.UI;
 using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components.WebView.Maui;
+using LMKit.Maestro.UI.Pages;
 #if MACCATALYST
 using UIKit;
 using WebKit;
@@ -18,30 +19,28 @@ namespace LMKit.Maestro
 {
     public partial class App : Application
     {
-        private readonly AppShellViewModel _appShellViewModel;
+        private readonly MaestroViewModel _appViewModel;
 
-        public App(AppShellViewModel appShellViewModel)
+        public App(MaestroViewModel appShellViewModel)
         {
             InitializeComponent();
 
-            Task.Run(() => Global.Runtime.Initialize()); //Initialize LM-Kit in the background to avoid blocking UI initialization.
+            Global.Runtime.Initialize();
 
             BlazorWebViewHandler.BlazorWebViewMapper.AppendToMapping("CustomBlazorWebView", (handler, view) =>
             {
                 // Setting background color of Blazor Web View to the page background color
                 // to avoid visual white flash while the view is loading.
-                if (App.Current != null && App.Current.Resources.TryGetValue("Background", out object value) && value is Color color)
-                {
-                    color.ToRgb(out byte r, out byte g, out byte b);
+                Color.FromArgb(UIConstants.Colors.Background).ToRgb(out byte r, out byte g, out byte b);
 #if WINDOWS
 
-                    handler.PlatformView.DefaultBackgroundColor = new Windows.UI.Color()
-                    {
-                        A = 255,
-                        R = r,
-                        G = g,
-                        B = b
-                    };
+                handler.PlatformView.DefaultBackgroundColor = new Windows.UI.Color()
+                {
+                    A = 255,
+                    R = r,
+                    G = g,
+                    B = b
+                };
 #elif MACCATALYST
                   if (handler.PlatformView is WKWebView wv)
                   {
@@ -49,10 +48,9 @@ namespace LMKit.Maestro
                       wv.BackgroundColor = UIColor.Clear;
                   }
 #endif
-                }
             });
 
-            _appShellViewModel = appShellViewModel;
+            _appViewModel = appShellViewModel;
         }
 
         protected override async void OnStart()
@@ -60,12 +58,12 @@ namespace LMKit.Maestro
             base.OnStart();
 
             Current!.UserAppTheme = AppTheme.Dark;
-            await _appShellViewModel.Init();
+            await _appViewModel.Init();
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            Window window = new Window(new AppShell(_appShellViewModel));
+            Window window = new Window(new MainPage());
 
 #if WINDOWS
             window.HandlerChanged += (sender, args) =>
@@ -88,7 +86,7 @@ namespace LMKit.Maestro
 
         private void OnAppWindowDestroying(object? sender, EventArgs e)
         {
-            _appShellViewModel.SaveAppSettings();
+            _appViewModel.SaveAppSettings();
         }
 
 #if WINDOWS

@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LMKit.Maestro.Services;
-using Mopups.Interfaces;
 
 namespace LMKit.Maestro.ViewModels
 {
-    public partial class AssistantsPageViewModel : PageViewModelBase
+    public partial class AssistantsPageViewModel : ViewModelBase
     {
         [ObservableProperty]
         private TranslationViewModel _translationViewModel;
@@ -13,9 +12,9 @@ namespace LMKit.Maestro.ViewModels
 
         public LMKitService LMKitService { get; }
 
-        public AssistantsPageViewModel(INavigationService navigationService, IPopupService popupService, IPopupNavigation popupNavigation, ModelListViewModel modelListViewModel, LMKitService lMKitService) : base(navigationService, popupService, popupNavigation)
+        public AssistantsPageViewModel(ModelListViewModel modelListViewModel, LMKitService lMKitService)
         {
-            TranslationViewModel = new TranslationViewModel(popupService, lMKitService);
+            TranslationViewModel = new TranslationViewModel(lMKitService);
             ModelListViewModel = modelListViewModel;
             LMKitService = lMKitService;
         }

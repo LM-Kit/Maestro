@@ -55,7 +55,7 @@ public static class UIConstants
         public const string PrimaryAccent = "#512BD4";
         public const string Error = "#FF5551";
         public const string Surface = "#06080A";
-        public const string Background = "#12181F";
+        public const string Background = "#0C1014";
         public const string OnSurface = "#FFFFFF";
         public const string Outline = "#9198A1";
         public const string OutlineVariant = "#2E3033";

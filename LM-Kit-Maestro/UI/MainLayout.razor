@@ -1,0 +1,96 @@
+﻿@inherits LayoutComponentBase
+
+@inject ModelListViewModel ModelListViewModel
+@inject ILLMFileManager FileManager
+@inject LMKitService LmKitService
+@inject ISnackbar Snackbar
+@inject Maestro.Services.ISnackbarService SnackbarService
+
+<div id="main-container">
+
+    <div id="top-bar">
+        <hr class="horizontal-divider" />
+
+        <nav id="nav-bar">
+            <div class="nav-item">
+                <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
+                    <MudText Typo="Typo.body1">
+                        Chat
+                    </MudText>
+
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink ActiveClass="nav-link-active" class="nav-link" href="models">
+                    <MudText Typo="Typo.body1">
+                        Models
+                    </MudText>
+                </NavLink>
+            </div>
+        </nav>
+
+        <div id="page-top-bar">
+            <div id="page-top-bar-wrapper">
+                <SectionOutlet SectionName="top-bar" />
+            </div>
+        </div>
+
+        <hr class="horizontal-divider" />
+    </div>
+
+    <div id="body-container">
+        @Body
+    </div>
+</div>
+
+<SnackbarComponent />
+<MudThemeProvider IsDarkMode="true" DefaultScrollbar="true" Theme="@CurrentTheme" />
+<MudPopoverProvider />
+<MudSnackbarProvider />
+
+<MudDialogProvider FullWidth="true"
+CloseButton="false"
+BackdropClick="true"
+NoHeader="true"
+Position="DialogPosition.TopLeft"
+CloseOnEscapeKey="true" />
+
+@code {
+    public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            FileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
+            LmKitService.ModelLoadingFailed += OnModelLoadingFailed;
+        }
+    }
+
+    private void OnFileManagerFileCollectingCompleted(object? sender, EventArgs e)
+    {
+        var fileCollectingCompletedEventArgs = (LLMFileManager.FileCollectingCompletedEventArgs)e;
+
+        if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
+        {
+            SnackbarService.Show("Error with your model folder", $"{fileCollectingCompletedEventArgs.Exception.Message!}");
+        }
+        // else
+        // {
+        //     Snackbar.Clear();
+        //     Snackbar.Add("Model scan completed.");
+        // }
+    }
+
+    private void OnModelLoadingFailed(object? sender, EventArgs e)
+    {
+        var modelLoadingFailedEventArgs = (LMKitService.ModelLoadingFailedEventArgs)e;
+
+        if (Microsoft.Maui.ApplicationModel.MainThread.IsMainThread)
+        {
+            // _popupService.DisplayAlert("Error loading model", $"The model failed to be loaded: {modelLoadingFailedEventArgs.Exception.Message}", "OK");
+        }
+    }
+}

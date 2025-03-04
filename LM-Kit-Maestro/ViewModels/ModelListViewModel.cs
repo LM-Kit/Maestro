@@ -3,20 +3,16 @@ using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Helpers;
 using LMKit.Maestro.Services;
 using LMKit.Model;
-using Mopups.Interfaces;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace LMKit.Maestro.ViewModels
 {
     public partial class ModelListViewModel : ViewModelBase
     {
-        private readonly IMainThread _mainThread;
         private readonly ILLMFileManager _fileManager;
-        private readonly IPopupService _popupService;
         private readonly ILauncher _launcher;
-        public IPopupNavigation PopupNavigation { get; }
-        public INavigationService NavigationService { get; }
+        private readonly ISnackbarService _snackbarService;
+
         public LMKitService LMKitService { get; }
 
         public ObservableCollection<ModelInfoViewModel> Models { get; }
@@ -46,17 +42,14 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        public ModelListViewModel(IMainThread mainThread, ILLMFileManager fileManager, LMKitService lmKitService,
-            IPopupService popupService, ILauncher launcher,
-            INavigationService navigationService, IPopupNavigation popupNavigation)
+        public ModelListViewModel(ILLMFileManager fileManager, LMKitService lmKitService,
+            ILauncher launcher, ISnackbarService snackbarService)
         {
-            _mainThread = mainThread;
             _fileManager = fileManager;
             LMKitService = lmKitService;
-            _popupService = popupService;
-            NavigationService = navigationService;
-            PopupNavigation = popupNavigation;
             _launcher = launcher;
+            _snackbarService = snackbarService;
+
             _fileManager.SortedModelCollectionChanged += OnModelCollectionChanged;
             Models = [];
 
@@ -106,9 +99,8 @@ namespace LMKit.Maestro.ViewModels
             }
             else
             {
-                _popupService.DisplayAlert("Model not found",
-                    $"This model was not found in your model folder.\nMake sure the path points to your current model folder and that the file exists on your disk: {fileUri.LocalPath}",
-                    "OK");
+                _snackbarService.Show("Model file not found",
+                    $"Make sure the file path points to your current model folder and that it exists: {fileUri.LocalPath}");
             }
         }
 
@@ -121,9 +113,9 @@ namespace LMKit.Maestro.ViewModels
                 Task.Run(() =>
                 {
 #if WINDOWS
-                    Process.Start("explorer.exe", $"/select,\"{filePath}\"");
+                    System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{filePath}\"");
 #elif MACCATALYST
-                    Process.Start("open", "-R " + filePath);
+                    System.Diagnostics.Process.Start("open", "-R " + filePath);
 #endif
                 });
             }
@@ -148,8 +140,7 @@ namespace LMKit.Maestro.ViewModels
             }
             catch (Exception ex)
             {
-                _popupService.DisplayAlert("Failure to delete model file",
-                    $"{ex.Message}", "OK");
+                _snackbarService.Show("Could not delete model file", ex.Message);
             }
         }
 
@@ -206,7 +197,7 @@ namespace LMKit.Maestro.ViewModels
             ModelInfoViewModel modelCardViewModel = new ModelInfoViewModel(modelCard);
 #endif
 
-            _mainThread.BeginInvokeOnMainThread(() => AddModel(modelCardViewModel));
+            AddModel(modelCardViewModel);
         }
 
         private void AddModel(ModelInfoViewModel modelCardViewModel, bool sort = true)
@@ -245,7 +236,7 @@ namespace LMKit.Maestro.ViewModels
             if (modelCardViewModel != null)
             {
                 modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-                _mainThread.BeginInvokeOnMainThread(() => Models.Remove(modelCardViewModel));
+                Models.Remove(modelCardViewModel);
 
                 if (LMKitService.LMKitConfig.LoadedModelUri == modelCardViewModel.ModelInfo.ModelUri)
                 {

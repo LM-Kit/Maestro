@@ -1,0 +1,24 @@
+﻿@inject Maestro.Services.ISnackbarService SnackbarService
+@inject ISnackbar Snackbar
+
+@code {
+    protected override void OnInitialized()
+    {
+        SnackbarService.OnShowSnackbar += ShowSnackbar;
+    }
+
+    private void ShowSnackbar(string title, string message, Severity severity)
+    {
+        Snackbar.Clear();
+        Snackbar.Add(
+            @<div>
+                <MudText Typo='Typo.subtitle2' Class='mb-1'>@title</MudText>
+                <MudText Typo='Typo.caption'>@message</MudText>
+            </div>, severity);
+    }
+
+    public void Dispose()
+    {
+        SnackbarService.OnShowSnackbar -= ShowSnackbar;
+    }
+}

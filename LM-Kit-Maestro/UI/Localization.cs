@@ -32,7 +32,7 @@
         public const string NoModelYetAvailable = "It looks like you don't have any model yet.";
         public const string ModelFilesWillAppearHere = "Model files added to your model folder will appear here.";
         public const string ModelDownloadAvailable = "This model is available for download";
-
+        public const string NoModelLoaded = "You need to load a model in order to submit a prompt";
         public const string SelectModel = "Load a model to start";
         public const string DownloadingModel = "Downloading model";
         public const string LoadingModel = "Loading model";

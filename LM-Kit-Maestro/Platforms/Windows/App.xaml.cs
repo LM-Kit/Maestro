@@ -21,8 +21,7 @@ namespace LMKit.Maestro.WinUI
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             base.OnLaunched(args);
-
-            Resources["AppNameWithVersion"] = AppConstants.AppNameWithVersion;
+            Resources["AppNameWithVersion"] = $"{AppConstants.AppNameWithVersion} ({LMKit.Global.Runtime.Backend})";
         }
 
 

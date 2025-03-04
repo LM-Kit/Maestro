@@ -13,11 +13,14 @@
     font-size: 0.75rem;
 }
 
+.nav-link {
+    font-size: 2rem;
+    color: var(--Outline);
+    transition: color 0.2s;
+}
 
-
-.xs-loader {
-    width: 0.85rem !important;
-    height: 0.85rem !important;
+.nav-link-active {
+    color: var(--OnSurface) !important;
 }
 
 #blazor-error-ui {
@@ -73,7 +76,7 @@
     --Primary: #512BD4;
     --PrimaryAccent: #3100AF;
     --Error: #FF5551;
-    --Background: #12181F;
+    --Background: #0C1014;
     --OnSurface: #FFFFFF;
     --Surface: #06080A;
     --Surface15: #0C1014;
@@ -177,9 +180,9 @@
 }
 
 .horizontal-divider {
-    width: 100%;
-    height: 1px;
-    background-color: var(--OutlineVariant);
+    border-width: 1px;
+    border-style: solid none none none;
+    border-color: var(--OutlineVariant);
 }
 
 .bottom-divider {
@@ -218,6 +221,10 @@
     .action-button:hover {
         background-color: var(--Surface15) !important;
     }
+
+.width-transition {
+    transition: width 0.3s ease-in;
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar {
@@ -280,4 +287,24 @@
 
 .mud-icon-size-large {
     font-size: 2rem !important;
+}
+
+.mud-snackbar {
+    background-color: var(--Surface15) !important;    
+    border: 1px solid var(--OutlineVariant) !important;
+    opacity: 1 !important;
+}
+
+.mud-snackbar-content-message {
+    padding-inline: 0 !important;
+    padding-block: 0.25rem !important;
+}
+
+.mud-snackbar-location-bottom-right {
+    bottom: 24px !important;
+    right: 8px !important;
+}
+
+.mud-snackbar .mud-snackbar-icon {
+    display: none;
 }
