@@ -1,5 +1,4 @@
-﻿
-namespace LMKit.Maestro.Models;
+﻿namespace LMKit.Maestro.ViewModels;
 
 public enum MessageSender
 {

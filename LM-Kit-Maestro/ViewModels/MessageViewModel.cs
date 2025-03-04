@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
 using LMKit.TextGeneration.Chat;
 using static LMKit.TextGeneration.TextGenerationResult;

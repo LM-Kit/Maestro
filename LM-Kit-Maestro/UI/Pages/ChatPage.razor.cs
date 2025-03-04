@@ -1,5 +1,4 @@
-﻿using LMKit.Maestro.Models;
-using LMKit.Maestro.Services;
+﻿using LMKit.Maestro.Services;
 using LMKit.Maestro.ViewModels;
 using Majorsoft.Blazor.Components.Common.JsInterop.GlobalMouseEvents;
 using Microsoft.JSInterop;
@@ -256,8 +255,6 @@ public partial class ChatPage : IDisposable
         if (e.Exception != null &&
             e.Status == LMKitRequestStatus.GenericError)
         {
-            Snackbar.Clear();
-            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
             Snackbar.Add($"Text generation failed unexpectedly:\n{e.Exception.Message}", Severity.Error);
         }
 
