@@ -1,6 +1,6 @@
 ﻿<div class="model-card-root @(GetClasses())" title="@ViewModel.ModelInfo.Description">
     <MudGrid Justify="Justify.SpaceBetween" Spacing="@(Dense ? 0 : 3)">
-        <MudItem xs="@(Dense ? 6 : 12)" Class="d-flex align-center">
+        <MudItem xs="@(Dense ? 5 : 12)" Class="d-flex align-center">
             <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3" Class="overflow-hidden">
                 <div class="dot d-flex align-content-end @(GetScoreClass(ViewModel.CompatibilityLevel))"
                      title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
@@ -91,23 +91,25 @@
             </MudGrid>
         </MudItem>
 
-        <MudItem xs="2" Class="d-flex align-center">
-            <MudGrid>
-                <MudItem xs="8">
-                    <MudText Typo="Typo.overline" Class="outline text-truncate">
+        <MudItem xs="@(Dense ? 3 : 2)" Class="d-flex align-center">
+            <MudGrid Class="d-flex align-items-center">
+                <MudItem  xs="8">
+                    <MudText Align="Align.Right" Typo="Typo.overline"
+                             Class="outline text-truncate flex-grow-1">
                         @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
                     </MudText>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem  xs="4">
                     <div class="d-flex justify-end">
                         @if (!ViewModel.IsLocallyAvailable)
                         {
                             <MudIcon Class="outline" title="@Locales.ModelDownloadAvailable"
-                                     Icon="@Icons.Material.Outlined.Cloud" Size="Size.Small"/>
+                                     Icon="@Icons.Material.Outlined.Cloud" Size="Size.Small" />
                         }
                     </div>
                 </MudItem>
             </MudGrid>
+
         </MudItem>
     </MudGrid>
 </div>
