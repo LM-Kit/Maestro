@@ -255,7 +255,7 @@ public partial class ChatPage : IDisposable
         if (e.Exception != null &&
             e.Status == LMKitRequestStatus.GenericError)
         {
-            Snackbar.Add($"Text generation failed unexpectedly:\n{e.Exception.Message}", Severity.Error);
+            SnackbarService.Show("Text generation failed", e.Exception.Message, Severity.Error);
         }
 
         RefreshUIAsync();
