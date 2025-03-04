@@ -31,18 +31,16 @@ namespace LMKit.Maestro
             {
                 // Setting background color of Blazor Web View to the page background color
                 // to avoid visual white flash while the view is loading.
-                if (App.Current != null && App.Current.Resources.TryGetValue("Background", out object value) && value is Color color)
-                {
-                    color.ToRgb(out byte r, out byte g, out byte b);
+                Color.FromArgb(UIConstants.Colors.Background).ToRgb(out byte r, out byte g, out byte b);
 #if WINDOWS
 
-                    handler.PlatformView.DefaultBackgroundColor = new Windows.UI.Color()
-                    {
-                        A = 255,
-                        R = r,
-                        G = g,
-                        B = b
-                    };
+                handler.PlatformView.DefaultBackgroundColor = new Windows.UI.Color()
+                {
+                    A = 255,
+                    R = r,
+                    G = g,
+                    B = b
+                };
 #elif MACCATALYST
                   if (handler.PlatformView is WKWebView wv)
                   {
@@ -50,7 +48,6 @@ namespace LMKit.Maestro
                       wv.BackgroundColor = UIColor.Clear;
                   }
 #endif
-                }
             });
 
             _appViewModel = appShellViewModel;

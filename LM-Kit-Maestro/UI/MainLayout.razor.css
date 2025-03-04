@@ -48,5 +48,5 @@
 #body-container {
     flex: 1;
     overflow: hidden;
-    background-color: var(--Surface15);
+    background-color: var(--Background);
 }
