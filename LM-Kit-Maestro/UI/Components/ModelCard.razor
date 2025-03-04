@@ -1,7 +1,7 @@
 ﻿<div class="model-card-root @(GetClasses())" title="@ViewModel.ModelInfo.Description">
     <MudGrid Justify="Justify.SpaceBetween" Spacing="@(Dense ? 0 : 3)">
         <MudItem xs="@(Dense ? 6 : 12)" Class="d-flex align-center">
-            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3" Class="overflow-hidden">
                 <div class="dot d-flex align-content-end @(GetScoreClass(ViewModel.CompatibilityLevel))"
                      title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
                 </div>
