@@ -1,7 +1,8 @@
 ﻿using LMKit.Maestro.Services;
-using LMKit.Maestro.UI.Components;
+using LMKit.Maestro.UI.Dialogs;
 using LMKit.Maestro.ViewModels;
 using Majorsoft.Blazor.Components.Common.JsInterop.GlobalMouseEvents;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using System.Collections.Specialized;
@@ -121,7 +122,6 @@ public partial class ChatPage : IDisposable
         await JS.InvokeVoidAsync("initializeScrollHandler", DotNetObjectReference.Create(this));
     }
 
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -132,7 +132,6 @@ public partial class ChatPage : IDisposable
             await ScrollToEnd();
         }
     }
-
 
     private Task RefreshUIAsync(bool forceRerender = false)
     {
@@ -387,17 +386,17 @@ public partial class ChatPage : IDisposable
 
     private async void OnConversationItemDeleteClicked(ConversationViewModel conversationViewModel)
     {
-        var dialog = await DialogService.ShowAsync<ActionDialog>();
-
-        var result = await dialog.Result;
-
         var parameters = new DialogParameters<ActionDialog>
         {
             { x => x.Title, "Delete chat ?" },
-            { x => x.Message, $"This will delete <b>{conversationViewModel.Title}</b>" },
-            { x => x.ActionColor, MudBlazor.Color.Error},
+            { x => x.Message, new MarkupString($"This will delete <b>{conversationViewModel.Title}</b>") },
+            { x => x.IsImportant, true },
             { x => x.ActionText, "Delete" }
         };
+
+        var dialog = await DialogService.ShowAsync<ActionDialog>(null, parameters);
+
+        var result = await dialog.Result;
 
         if (result != null && !result.Canceled && result.Data is bool confirmed && confirmed)
         {

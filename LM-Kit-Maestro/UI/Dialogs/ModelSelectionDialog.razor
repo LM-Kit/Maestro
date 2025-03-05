@@ -1,6 +1,6 @@
-﻿<MudDialog Class="dialog-root-container">
+﻿<MudDialog Class="dialog-root">
     <DialogContent>
-        <div class="dialog-content-root">
+        <div class="dialog-content-root width-50">
             <div @onclick="() => MudDialog.Cancel()" class="dialog-backdrop"></div>
             <div class="model-selection-dialog-container">
                 <MudStack Spacing="0">
@@ -8,6 +8,7 @@
                         <MudText Class="flex-grow-1" Typo="Typo.caption">
                             Available models
                         </MudText>
+
 
                         <div class="d-flex justify-end close-button">
                             <IconButton Style="IconButton.ButtonStyle.Icon"
@@ -24,7 +25,6 @@
             </div>
         </div>
     </DialogContent>
-
 </MudDialog>
 
 <style>
@@ -41,21 +41,13 @@
         background-color: transparent;
     }
 
-    .dialog-content-root {
-        width: 100%;
-        max-width: 50rem;
-        height: auto;
-        max-height: 100%;
-        display: flex;
-        justify-content: center;
-        margin-inline: auto;
-    }
+
 
     .model-selection-dialog-container {
         display: flex;
         flex-direction: column;
         border: 1px solid var(--Surface3);
-        border-radius: 8px;
+        border-radius: 2rem;
         background-color: var(--Surface);
         overflow: hidden;
         flex-grow: 1;
@@ -95,4 +87,14 @@
 @code {
     [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string Message { get; set; }
+
+    [Parameter] public string Title { get; set; }
+
+    [Parameter] public string ActionText { get; set; }
+
+    [Parameter] public Color ActionColor { get; set; }
+
+    [Parameter] public bool IsImportant { get; set; }
 }

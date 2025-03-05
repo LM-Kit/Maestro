@@ -9,6 +9,11 @@
 
 .icon-button {
     background-color: transparent;
+    color: var(--Outline);
+}
+
+.icon-button:hover{
+    color: var(--OnSurface);
 }
 
 .sidebar-toggle-button {

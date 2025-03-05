@@ -1,0 +1,111 @@
+﻿<MudDialog Class="dialog-root">
+    <DialogContent>
+        <div class="dialog-content-root">
+            <MudText Typo="Typo.subtitle2">
+                @Title
+            </MudText>
+
+            <MudText Typo="Typo.caption">
+                @((MarkupString)Message)
+            </MudText>
+        </div>    
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton @onclick="() => DialogInstance.Cancel()" Variant="Variant.Text">
+            <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">Delete</MudText>
+        </MudButton>
+        <MudButton @onclick="() => DialogInstance.Close(true)" Variant="Variant.Text">
+            <MudText  Typo="Typo.subtitle2">Cancel</MudText>
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Parameter] public MarkupString Message { get; set; } = default(MarkupString);
+
+    [Parameter] public string Title { get; set; } = string.Empty;
+
+    [Parameter] public string ActionText { get; set; } = string.Empty;
+
+    [Parameter] public bool IsImportant { get; set; }
+
+    [CascadingParameter] private IMudDialogInstance DialogInstance { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+
+}
+
+<style>
+    .dialog-root-container {
+        left: 0 !important;
+        top: 0 !important;
+        background-color: transparent !important;
+    }
+
+
+    .max-50{
+        max-width: 50rem
+    }
+
+    .action-dialog-root {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        background-color: red !important;
+        width: 32rem;
+    }
+
+
+
+/*     .model-selection-dialog-container {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--Surface3);
+        border-radius: 8px;
+        background-color: var(--Surface);
+        overflow: hidden;
+        flex-grow: 1;
+        flex-shrink: 1;
+    } */
+
+    .model-selection-dialog-header {
+        padding-inline: 4px;
+        padding-block: 4px;
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+        align-items: center;
+        background-color: var(--Surface3);
+    }
+
+    .model-selection-dialog-body {
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+    }
+
+    .model-selection-dialog-body::-webkit-scrollbar{
+        display: none;
+    }
+
+    .close-button {
+        color: var(--Outline) !important;
+    }
+
+        .close-button:hover {
+            color: var(--OnSurface) !important;
+        }
+
+</style>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+}

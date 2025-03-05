@@ -226,6 +226,22 @@
     transition: width 0.3s ease-in;
 }
 
+.width-50 {
+    max-width: 50rem;
+}
+
+.width-24 {
+    width: 24rem;
+}
+
+.icon-button {
+    color: var(--Outline);
+}
+
+.icon-button:hover{
+    color: var(--OnSurface);
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px !important;
@@ -290,7 +306,7 @@
 }
 
 .mud-snackbar {
-    background-color: var(--Surface15) !important;    
+    background-color: var(--Surface15) !important;
     border: 1px solid var(--OutlineVariant) !important;
     opacity: 1 !important;
 }
@@ -307,4 +323,21 @@
 
 .mud-snackbar .mud-snackbar-icon {
     display: none;
+}
+
+/* Dialogs */
+.dialog-root {
+    left: 0 !important;
+    top: 0 !important;
+    background-color: transparent !important;
+}
+
+.dialog-content-root {
+    height: auto;
+    max-height: 100%;
+    display: flex;
+    justify-content: center;
+    margin-inline: auto;
+
+
 }
