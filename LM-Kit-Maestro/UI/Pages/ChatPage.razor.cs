@@ -1,4 +1,5 @@
 ﻿using LMKit.Maestro.Services;
+using LMKit.Maestro.UI.Components;
 using LMKit.Maestro.ViewModels;
 using Majorsoft.Blazor.Components.Common.JsInterop.GlobalMouseEvents;
 using Microsoft.JSInterop;
@@ -384,8 +385,23 @@ public partial class ChatPage : IDisposable
     }
 
 
-    private void OnConversationItemDeleteClicked(ConversationViewModel conversationViewModel)
+    private async void OnConversationItemDeleteClicked(ConversationViewModel conversationViewModel)
     {
-        Task.Run(async () => await ViewModel.ConversationListViewModel.DeleteConversation(conversationViewModel));
+        var dialog = await DialogService.ShowAsync<ActionDialog>();
+
+        var result = await dialog.Result;
+
+        var parameters = new DialogParameters<ActionDialog>
+        {
+            { x => x.Title, "Delete chat ?" },
+            { x => x.Message, $"This will delete <b>{conversationViewModel.Title}</b>" },
+            { x => x.ActionColor, MudBlazor.Color.Error},
+            { x => x.ActionText, "Delete" }
+        };
+
+        if (result != null && !result.Canceled && result.Data is bool confirmed && confirmed)
+        {
+            await Task.Run(() =>  ViewModel.ConversationListViewModel.DeleteConversation(conversationViewModel));
+        }
     }
 }
