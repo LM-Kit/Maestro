@@ -227,19 +227,24 @@
 }
 
 .width-50 {
-    max-width: 50rem;
+    width: 50rem;
+    background-color: pink;
 }
 
 .width-24 {
     width: 24rem;
 }
 
-.icon-button {
-    color: var(--Outline);
+.radius-4 {
+    border-radius: 1rem;
 }
 
-.icon-button:hover{
-    color: var(--OnSurface);
+.radius-1 {
+    border-radius: 0.25rem;
+}
+
+.radius-2{
+    border-radius: 0.5rem;
 }
 
 /* Scrollbar */
@@ -333,11 +338,9 @@
 }
 
 .dialog-content-root {
-    height: auto;
-    max-height: 100%;
     display: flex;
     justify-content: center;
     margin-inline: auto;
-
-
+    background-color: var(--Surface);
+    border: 1px solid var(--Surface3);
 }
