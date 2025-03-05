@@ -90,7 +90,7 @@
 }
 
 .outline {
-    color: var(--Outline);
+    color: var(--Outline) !important;
 }
 
 .loading-section {
@@ -228,7 +228,6 @@
 
 .width-50 {
     width: 50rem;
-    background-color: pink;
 }
 
 .width-24 {
@@ -336,11 +335,31 @@
     top: 0 !important;
     background-color: transparent !important;
 }
-
+/*
 .dialog-content-root {
     display: flex;
     justify-content: center;
     margin-inline: auto;
     background-color: var(--Surface);
     border: 1px solid var(--Surface3);
+}
+*/
+.dialog-content-wrapper {
+    width: 100%;
+    max-width: 50rem;
+    height: auto;
+    max-height: 100%;
+    display: flex;
+    justify-content: center;
+    margin-inline: auto;
+}
+
+.dialog-content-root {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--Surface3);
+    background-color: var(--Surface);
+    overflow: hidden;
+    flex-grow: 1;
+    flex-shrink: 1;
 }

@@ -1,24 +1,27 @@
 ﻿<MudDialog Class="dialog-root">
     <DialogContent>
-        <div class="dialog-content-root width-24 radius-1 d-flex flex-column">
-            <MudText Typo="Typo.subtitle2">
-                @Title
-            </MudText>
+        <div class="dialog-content-wrapper width-24">
+            <div class="dialog-content-root radius-4">
+                <MudText Typo="Typo.subtitle2">
+                    @Title
+                </MudText>
 
-            <MudText Typo="Typo.caption">
-                @((MarkupString)Message)
-            </MudText>
-        </div>    
+                <MudText Typo="Typo.caption">
+                    @((MarkupString)Message)
+                </MudText>
+
+                <MudButtonGroup>
+                    <MudButton @onclick="() => DialogInstance.Cancel()" Variant="Variant.Text">
+                        <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">Delete</MudText>
+                    </MudButton>
+                    <MudButton @onclick="() => DialogInstance.Close(true)" Variant="Variant.Text">
+                        <MudText Typo="Typo.subtitle2">Cancel</MudText>
+                    </MudButton>
+                </MudButtonGroup>
+
+            </div>
+        </div>
     </DialogContent>
-
-    <DialogActions>
-        <MudButton @onclick="() => DialogInstance.Cancel()" Variant="Variant.Text">
-            <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">Delete</MudText>
-        </MudButton>
-        <MudButton @onclick="() => DialogInstance.Close(true)" Variant="Variant.Text">
-            <MudText  Typo="Typo.subtitle2">Cancel</MudText>
-        </MudButton>
-    </DialogActions>
 </MudDialog>
 
 @code {
@@ -50,7 +53,7 @@
     }
 
 
-    .max-50{
+    .max-50 {
         max-width: 50rem
     }
 
@@ -64,16 +67,16 @@
 
 
 
-/*     .model-selection-dialog-container {
-        display: flex;
-        flex-direction: column;
-        border: 1px solid var(--Surface3);
-        border-radius: 8px;
-        background-color: var(--Surface);
-        overflow: hidden;
-        flex-grow: 1;
-        flex-shrink: 1;
-    } */
+    /*     .model-selection-dialog-container {
+                display: flex;
+                flex-direction: column;
+                border: 1px solid var(--Surface3);
+                border-radius: 8px;
+                background-color: var(--Surface);
+                overflow: hidden;
+                flex-grow: 1;
+                flex-shrink: 1;
+            } */
 
     .model-selection-dialog-header {
         padding-inline: 4px;
@@ -91,9 +94,9 @@
         overflow-y: scroll;
     }
 
-    .model-selection-dialog-body::-webkit-scrollbar{
-        display: none;
-    }
+        .model-selection-dialog-body::-webkit-scrollbar {
+            display: none;
+        }
 
     .close-button {
         color: var(--Outline) !important;
