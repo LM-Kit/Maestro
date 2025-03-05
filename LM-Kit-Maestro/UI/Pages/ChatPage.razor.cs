@@ -386,6 +386,8 @@ public partial class ChatPage : IDisposable
 
     private async void OnConversationItemDeleteClicked(ConversationViewModel conversationViewModel)
     {
+        var options = new DialogOptions { CloseOnEscapeKey = true, FullScreen = true };
+
         var parameters = new DialogParameters<ActionDialog>
         {
             { x => x.Title, "Delete chat ?" },
@@ -394,7 +396,7 @@ public partial class ChatPage : IDisposable
             { x => x.ActionText, "Delete" }
         };
 
-        var dialog = await DialogService.ShowAsync<ActionDialog>(null, parameters);
+        var dialog = await DialogService.ShowAsync<ActionDialog>(null, parameters, options);
 
         var result = await dialog.Result;
 
