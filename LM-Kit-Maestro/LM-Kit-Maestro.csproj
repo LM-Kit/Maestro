@@ -29,6 +29,9 @@
 		<AssemblyName>Maestro</AssemblyName>
 		<OutputName>Maestro</OutputName>
 
+		<!-- Enable preview language version for ObservableProperty attribute usage. https://learn.microsoft.com/en-gb/dotnet/communitytoolkit/mvvm/generators/errors/mvvmtk0045 -->
+		<LangVersion>preview</LangVersion>
+
 		<!-- Display name -->
 		<ApplicationTitle>Maestro</ApplicationTitle>
 
@@ -87,9 +90,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="MainPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="MainPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 </Project>
