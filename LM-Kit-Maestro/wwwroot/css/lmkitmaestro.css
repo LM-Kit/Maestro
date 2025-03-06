@@ -93,6 +93,9 @@
     color: var(--Outline) !important;
 }
 
+.bg-surface-15{
+    background-color: var(--Surface15)
+}
 .loading-section {
     height: 100vh;
     display: flex;

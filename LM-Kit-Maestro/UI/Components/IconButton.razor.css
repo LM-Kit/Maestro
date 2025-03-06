@@ -25,16 +25,18 @@
 }
 
     .sidebar-toggle-button:hover {
-        background-color: var(--Primary);
+        background-color: var(--Surface3);
+        color: var(--OnSurface);
     }
 
 .secondary-action-button {
     border-radius: 50%;
-    color: var(--Outline);
+    color: var(--OnSurface);
     background-color: var(--Surface2);
 }
 
     .secondary-action-button:hover {
+        color: var(--OnSurface);
         background-color: var(--Surface3);
     }
 
