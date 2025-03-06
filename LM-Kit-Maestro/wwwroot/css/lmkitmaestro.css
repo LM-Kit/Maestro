@@ -227,11 +227,14 @@
 }
 
 .width-50 {
-    width: 50rem;
+    width: 100%;
+    max-width: 50rem;
 }
 
 .width-24 {
     width: 24rem;
+    width: 100%;
+    max-width: 24rem;
 }
 
 .radius-4 {
@@ -329,12 +332,11 @@
     display: none;
 }
 
-/* Dialogs */
-.dialog-root {
-    left: 0 !important;
-    top: 0 !important;
-    background-color: transparent !important;
+.mud-dialog{
+    background-color: red !important;
 }
+/* Dialogs */
+
 /*
 .dialog-content-root {
     display: flex;
@@ -344,15 +346,8 @@
     border: 1px solid var(--Surface3);
 }
 */
-.dialog-content-wrapper {
-    width: 100%;
-    max-width: 50rem;
-    height: auto;
-    max-height: 100%;
-    display: flex;
-    justify-content: center;
-    margin-inline: auto;
-}
+
+
 
 .dialog-content-root {
     display: flex;
@@ -362,4 +357,12 @@
     overflow: hidden;
     flex-grow: 1;
     flex-shrink: 1;
+}
+
+.center {
+    background-color: green;
+    display: flex;
+    padding: 100px;
+    align-self: center !important;
+    margin-block: auto !important;
 }
