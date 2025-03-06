@@ -5,47 +5,48 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: var(--OnSurface);
+    transition: all ease-out 0.1s;
 }
+
+    button:hover {
+    }
 
 .icon-button {
     background-color: transparent;
-    color: var(--Outline);
 }
 
-.icon-button:hover{
-    color: var(--OnSurface);
-}
+    .icon-button:hover {
+        color: var(--OnSurface);
+    }
 
 .sidebar-toggle-button {
     display: flex;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     text-align: center;
     background-color: var(--Surface2);
-    color: var(--OnSurface);
 }
 
     .sidebar-toggle-button:hover {
-        background-color: var(--Surface3);
-        color: var(--OnSurface);
+        background-color: var(--Primary);
     }
 
 .secondary-action-button {
     border-radius: 50%;
-    color: var(--OnSurface);
     background-color: var(--Surface2);
 }
 
     .secondary-action-button:hover {
-        color: var(--OnSurface);
         background-color: var(--Surface3);
     }
 
-    .icon-button-medium{
-        width: 1.75rem;
-        height: 1.75rem;
-    }
+.icon-button-medium {
+    width: 1.75rem;
+    height: 1.75rem;
+}
 
-    .icon-button-small{
-        width: 1.25rem;
-        height: 1.25rem;
-    }
+.icon-button-small {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
