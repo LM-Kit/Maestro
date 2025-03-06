@@ -2,7 +2,7 @@
     <DialogContent>
         <div class="model-selection-dialog-content-wrapper width-50 height-auto-100">
             <div @onclick="() => MudDialog.Cancel()" class="dialog-backdrop"></div>
-            <div class="dialog-content-root radius-4">
+            <div class="model-selection-dialog-content-root radius-4">
                 <MudStack Spacing="0">
                     <div class="model-selection-dialog-header">
                         <MudText Class="flex-grow-1 outline" Typo="Typo.caption">
@@ -36,10 +36,23 @@
         margin-block: auto;
     }
 
-    .model-selection-dialog-root{
+    .model-selection-dialog-content-root {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        flex-grow: 1;
+        flex-shrink: 1;
+        background-color: var(--Surface);
+        border-radius: 1rem;
+        border: 1px solid var(--Surface3);
+    }
+
+    .model-selection-dialog-root {
         left: 0 !important;
         top: 0 !important;
+        background-color: transparent !important;
     }
+
     .dialog-backdrop {
         width: 100%;
         height: 100%;
@@ -55,12 +68,12 @@
     }
 
     /*     .model-selection-dialog-container {
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
-                flex-grow: 1;
-                flex-shrink: 1;
-            } */
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+                    flex-grow: 1;
+                    flex-shrink: 1;
+                } */
     .model-selection-dialog-header {
         padding-inline: 4px;
         padding-block: 4px;

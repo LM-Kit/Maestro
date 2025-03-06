@@ -1,29 +1,37 @@
-﻿<MudDialog Class="width-24">
+﻿<MudDialog Class="action-dialog-root radius-1">
     <DialogContent>
-            <div class="dialog-content-root radius-1 pa-2">
-                <MudText Typo="Typo.subtitle2">
-                    @Title
-                </MudText>
+        <div class="d-flex flex-column gap-2">
 
-                <MudText Typo="Typo.caption">
-                    @((MarkupString)Message)
-                </MudText>
+            <MudText Typo="Typo.subtitle2">
+                @Title
+            </MudText>
 
-                <div class="d-flex justify-end mt-4">
-                    <MudButtonGroup>
-                        <MudButton @onclick="() => DialogInstance.Cancel()" Variant="Variant.Text">
-                            <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">Delete</MudText>
-                        </MudButton>
-                        <MudButton @onclick="() => DialogInstance.Close(true)" Variant="Variant.Text">
-                            <MudText Typo="Typo.subtitle2">Cancel</MudText>
-                        </MudButton>
-                    </MudButtonGroup>
-                 </div>
+            <MudText Typo="Typo.caption">
+                @((MarkupString)Message)
+            </MudText>
 
+            <div class="d-flex justify-end mt-4">
+                <MudButtonGroup>
+                    <MudButton @onclick="() => DialogInstance.Cancel()" Variant="Variant.Text">
+                        <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">Delete</MudText>
+                    </MudButton>
+                    <MudButton @onclick="() => DialogInstance.Close(true)" Variant="Variant.Text">
+                        <MudText Typo="Typo.subtitle2">Cancel</MudText>
+                    </MudButton>
+                </MudButtonGroup>
             </div>
+        </div>
+
     </DialogContent>
 </MudDialog>
 
+<style>
+    .action-dialog-root {
+        border: 1px solid var(--Surface3);
+        background-color: var(--Surface);
+    }
+
+</style>
 @code {
     [Parameter] public MarkupString Message { get; set; } = default(MarkupString);
 

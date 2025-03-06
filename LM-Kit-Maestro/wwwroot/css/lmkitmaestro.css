@@ -249,6 +249,15 @@
     border-radius: 0.5rem;
 }
 
+.center {
+    background-color: green;
+    display: flex;
+    padding: 100px;
+    align-self: center !important;
+    margin-block: auto !important;
+}
+
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px !important;
@@ -333,36 +342,8 @@
 }
 
 .mud-dialog{
-    background-color: red !important;
-}
-/* Dialogs */
-
-/*
-.dialog-content-root {
-    display: flex;
-    justify-content: center;
-    margin-inline: auto;
-    background-color: var(--Surface);
-    border: 1px solid var(--Surface3);
-}
-*/
-
-
-
-.dialog-content-root {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--Surface3);
-    background-color: var(--Surface);
-    overflow: hidden;
-    flex-grow: 1;
-    flex-shrink: 1;
+    background-color: var(--Surface) !important;
 }
 
-.center {
-    background-color: green;
-    display: flex;
-    padding: 100px;
-    align-self: center !important;
-    margin-block: auto !important;
-}
+
+
