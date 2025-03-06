@@ -211,16 +211,10 @@
     border-radius: 0.25rem;
     border: 1px solid var(--OutlineVariant);
     display: flex;
+    padding-inline: 0.25rem;
+    padding-block: 0.25rem;
     flex-direction: column;
 }
-
-.action-button {
-    border-radius: 0.25rem;
-}
-
-    .action-button:hover {
-        background-color: var(--Surface15) !important;
-    }
 
 .width-transition {
     transition: width 0.3s ease-in;
@@ -345,21 +339,23 @@
     background-color: var(--Surface) !important;
 }
 
+/* Buttons*/
+button {
+}
+
 .outlined-button {
     border: 1px solid var(--OutlineVariant) !important;
 }
-button {
-    padding-block: 2px !important;
+
+.text-button {
+    padding-block: 0.25rem !important;
     padding-inline: 0.5rem !important;
     border-radius: 0.25rem !important;
+    transition: background-color 0.3s !important;
     background-color: var(--Surface) !important;
-    transition: background-color 0.5s !important;
+    color: var(--OnSurface) !important;
 }
 
-button:hover{
-    background-color: var(--Surface15) !important;
-}
-
-mud-dialog-title{
-    background-color: red !important;
+.text-button:hover {
+    background-color: var(--Surface2) !important;
 }

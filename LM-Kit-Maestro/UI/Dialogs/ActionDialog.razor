@@ -13,10 +13,10 @@
             </MudText>
 
             <div class="dialog-actions">
-                    <button @onclick="() => DialogInstance.Cancel()">
+                    <button class="text-button" @onclick="() => DialogInstance.Cancel()">
                         <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">Delete</MudText>
                     </button>
-                    <button @onclick="() => DialogInstance.Close(true)">
+                <button class="text-button" @onclick="() => DialogInstance.Close(true)">
                         <MudText Typo="Typo.subtitle2">Cancel</MudText>
                     </button>
             </div>
@@ -29,14 +29,13 @@
     .dialog-actions{
         display: flex;
         justify-content: flex-end;
-        gap: 0.5rem;
-    }
-    .action-dialog-root {
-        width: 24rem;
-        border: 1px solid var(--Surface3);
-        background-color: var(--Surface);
     }
 
+    .action-dialog-root {
+        width: 24rem;
+        border: 1px solid var(--OutlineVariant);
+        background-color: var(--Surface);
+    }
 </style>
 @code {
     [Parameter] public MarkupString Message { get; set; } = default(MarkupString);

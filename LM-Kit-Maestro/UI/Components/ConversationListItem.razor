@@ -10,31 +10,31 @@
                   Typo="Typo.subtitle2"
                   Immediate="true"
                   TextUpdateSuppression="false"
-                  ReadOnly="@(!ViewModel.IsRenaming)"/>
+                  ReadOnly="@(!ViewModel.IsRenaming)" />
 
     <div>
         <div id="show-more-button" class="@(IsSelected ? "show" : "collapse")">
             <MudIconButton @onclick="OnShowMoreClicked"
                            Icon="@Icons.Material.Filled.MoreHoriz"
-                           Size="Size.Small"/>
+                           Size="Size.Small" />
         </div>
 
         <MudPopover Open="@ViewModel.IsShowingActionPopup" Fixed="true">
             <div class="action-sheet">
-                <MudButton Variant="Variant.Text" @onclick="OnSelected">
+                <button class="text-button" @onclick="OnSelected">
                     <MudText Typo="Typo.subtitle2">Select</MudText>
-                </MudButton>
-                <MudButton Class="action-button" Variant="Variant.Text" @onclick="OnRenameClicked">
+                </button>
+                <button class="text-button" @onclick="OnRenameClicked">
                     <MudText Typo="Typo.subtitle2">Rename</MudText>
-                </MudButton>
-                <MudButton  Variant="Variant.Text" @onclick="OnDeleteClicked">
-                    <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete</MudText>
-                </MudButton>
+                </button>
+                <button class="text-button" @onclick="OnDeleteClicked">
+                      <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete</MudText>
+                 </button>
             </div>
         </MudPopover>
 
         <MudOverlay @bind-Visible="ViewModel.IsShowingActionPopup"
                     @onclick="OnClickOutsideShowMore"
-                    AutoClose="true"/>
+                    AutoClose="true" />
     </div>
 </div>

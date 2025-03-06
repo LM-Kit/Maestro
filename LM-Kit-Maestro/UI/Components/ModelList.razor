@@ -19,23 +19,23 @@
                 <div class="d-flex flex-column">
                     @if (modelItem.ViewModel.IsLocallyAvailable)
                     {
-                        <MudButton Class="action-button" Variant="Variant.Text"
+                        <button class="text-button"
                                    @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelInExplorer(modelItem.ViewModel), modelItem)">
                             <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
-                        </MudButton>
+                        </button>
                     }
 
-                    <MudButton Class="action-button" Variant="Variant.Text"
+                    <button class="text-button"
                                @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelHfLink(modelItem.ViewModel), modelItem)">
                         <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
-                    </MudButton>
+                    </button>
 
                     @if (modelItem.ViewModel.IsLocallyAvailable)
                     {
-                        <MudButton Class="action-button" Variant="Variant.Text"
+                        <button class="text-button"
                                    @onclick="() => HandleActionButtonClick(() => ModelListViewModel.DeleteModel(modelItem.ViewModel), modelItem)">
                             <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
-                        </MudButton>
+                        </button>
                     }
                 </div>
             </ActionSheet>

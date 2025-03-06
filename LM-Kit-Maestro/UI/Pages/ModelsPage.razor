@@ -60,20 +60,20 @@
                             TransformOrigin="Origin.CenterLeft">
 
                     <div class="action-sheet">
-                        <MudButton Class="action-button" Variant="Variant.Text"
+                        <button class="text-button"
                                    @onclick="() => HandleActionButtonClick(() => ViewModel.OpenModelsFolder())">
                             <MudText Typo="Typo.subtitle2">@Locales.OpenInFileExplorer</MudText>
-                        </MudButton>
+                        </button>
 
-                        <MudButton Class="action-button" Variant="Variant.Text"
+                        <button class="text-button" Variant="Variant.Text"
                                    @onclick="() => HandleActionButtonClick(() => ViewModel.PickModelsFolder())">
                             <MudText Typo="Typo.subtitle2">@Locales.SelectAnotherFolder</MudText>
-                        </MudButton>
+                        </button>
 
-                        <MudButton Class="action-button" Variant="Variant.Text"
+                        <button class="text-button" Variant="Variant.Text"
                                    @onclick="() => HandleActionButtonClick(() => ViewModel.ResetModelsFolder())">
                             <MudText Typo="Typo.subtitle2">@Locales.ResetModelFolder</MudText>
-                        </MudButton>
+                            </button>
                     </div>
                 </MudPopover>
             </div>
