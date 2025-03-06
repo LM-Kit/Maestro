@@ -345,5 +345,21 @@
     background-color: var(--Surface) !important;
 }
 
+.outlined-button {
+    border: 1px solid var(--OutlineVariant) !important;
+}
+button {
+    padding-block: 2px !important;
+    padding-inline: 0.5rem !important;
+    border-radius: 0.25rem !important;
+    background-color: var(--Surface) !important;
+    transition: background-color 0.5s !important;
+}
 
+button:hover{
+    background-color: var(--Surface15) !important;
+}
 
+mud-dialog-title{
+    background-color: red !important;
+}

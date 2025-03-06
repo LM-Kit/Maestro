@@ -386,7 +386,7 @@ public partial class ChatPage : IDisposable
 
     private async void OnConversationItemDeleteClicked(ConversationViewModel conversationViewModel)
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Small, Position = DialogPosition.Center };
+        var options = new DialogOptions { CloseOnEscapeKey = true, FullWidth = false, Position = DialogPosition.Center };
 
         var parameters = new DialogParameters<ActionDialog>
         {

@@ -2,23 +2,23 @@
     <DialogContent>
         <div class="d-flex flex-column gap-2">
 
-            <MudText Typo="Typo.subtitle2">
-                @Title
-            </MudText>
+            <div class="mt-4">
+                <MudText Typo="Typo.subtitle2">
+                    @Title
+                </MudText>
+            </div>
 
             <MudText Typo="Typo.caption">
                 @((MarkupString)Message)
             </MudText>
 
-            <div class="d-flex justify-end mt-4">
-                <MudButtonGroup>
-                    <MudButton @onclick="() => DialogInstance.Cancel()" Variant="Variant.Text">
+            <div class="dialog-actions">
+                    <button @onclick="() => DialogInstance.Cancel()">
                         <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">Delete</MudText>
-                    </MudButton>
-                    <MudButton @onclick="() => DialogInstance.Close(true)" Variant="Variant.Text">
+                    </button>
+                    <button @onclick="() => DialogInstance.Close(true)">
                         <MudText Typo="Typo.subtitle2">Cancel</MudText>
-                    </MudButton>
-                </MudButtonGroup>
+                    </button>
             </div>
         </div>
 
@@ -26,7 +26,13 @@
 </MudDialog>
 
 <style>
+    .dialog-actions{
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+    }
     .action-dialog-root {
+        width: 24rem;
         border: 1px solid var(--Surface3);
         background-color: var(--Surface);
     }
