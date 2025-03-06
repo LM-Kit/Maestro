@@ -29,11 +29,14 @@
 		<AssemblyName>Maestro</AssemblyName>
 		<OutputName>Maestro</OutputName>
 
+		<!-- Enable preview language version for ObservableProperty attribute usage. https://learn.microsoft.com/en-gb/dotnet/communitytoolkit/mvvm/generators/errors/mvvmtk0045 -->
+		<LangVersion>preview</LangVersion>
+
 		<!-- Display name -->
 		<ApplicationTitle>Maestro</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.lm-kit-maestro</ApplicationId>
+		<ApplicationId>com.lm-kit.maestro</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

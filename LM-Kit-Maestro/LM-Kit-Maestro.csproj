@@ -36,7 +36,7 @@
 		<ApplicationTitle>Maestro</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.lm-kit-maestro</ApplicationId>
+		<ApplicationId>com.lm-kit.maestro</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
