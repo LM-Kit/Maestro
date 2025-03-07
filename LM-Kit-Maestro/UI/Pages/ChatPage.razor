@@ -16,8 +16,7 @@
     <div id="chat-top-bar">
         @if (ShowSidebarToggles)
         {
-            <div
-                class="top-bar-side width-transition"
+            <div class="top-bar-side @(!SettingSidebarIsResizing ? "width-transition" : "")"
                     style="@(ViewModel.ChatsSidebarIsToggled ? $"width: {ChatsSidebarWidth}px" : "")">
                 <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
 
@@ -85,9 +84,10 @@
 
 <div id="chat-container">
     <ChatSidebar ShowScrollbar="true"
-                 Position="ChatSidebar.SidebarPosition.Left"
-                 @bind-Width="ChatsSidebarWidth"
-                 @bind-IsToggled="ViewModel.ChatsSidebarIsToggled">
+        Resizable="true"
+        Position="ChatSidebar.SidebarPosition.Left"
+        @bind-Width="ChatsSidebarWidth"
+        @bind-IsToggled="ViewModel.ChatsSidebarIsToggled">
 
         <div class="d-flex flex-column flex-grow-1 pa-1">
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)

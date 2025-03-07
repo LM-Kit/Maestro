@@ -7,15 +7,15 @@ style="width: @(Width)px;"
 class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
-                <div @onmousedown="OnResizeHandlerMouseDown"
-                @onmousedown:preventDefault="true"
-                @onmousedown:stopPropagation="true"
-                class="@(Resizable ? "resize-handle" : "vertical-divider")">
+        <div @onmousedown="OnResizeHandlerMouseDown"
+        @onmousedown:preventDefault="true"
+        @onmousedown:stopPropagation="true"
+        class="resize-handle-left @(Resizable ? "resize-handle" : "vertical-divider")">
             @if (Resizable)
             {
-                                <div class="vertical-divider"></div>
+                <div class="vertical-divider"></div>
             }
-                </div>
+        </div>
     }
 
     <div class="sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
@@ -24,15 +24,15 @@ class="@GetClasses()">
 
     @if (Position == SidebarPosition.Left)
     {
-                <div @onmousedown="OnResizeHandlerMouseDown"
-                @onmousedown:preventDefault="true"
-                @onmousedown:stopPropagation="true"
-                class="@(Resizable ? "resize-handle" : "vertical-divider")">
+        <div @onmousedown="OnResizeHandlerMouseDown"
+        @onmousedown:preventDefault="true"
+        @onmousedown:stopPropagation="true"
+        class="resize-handle-right @(Resizable ? "resize-handle" : "vertical-divider")">
             @if (Resizable)
             {
-                                <div class="vertical-divider"></div>
+                <div class="vertical-divider"></div>
             }
-                </div>
+        </div>
     }
 </div>
 
@@ -130,6 +130,7 @@ class="@GetClasses()">
         {
             if (value != _isResizing)
             {
+                Trace.WriteLine(IsResizing);
                 _isResizing = value;
                 IsResizingChanged.InvokeAsync(value);
                 InvokeAsync(() => StateHasChanged());
@@ -205,9 +206,11 @@ class="@GetClasses()">
                 ComputeWidthWindowRatio();
             }
 
+            bool isResizing = IsResizing;
+
             IsResizing = false;
             Width = (int)(WidthPercentage * args.Width);
-            IsResizing = true;
+            IsResizing = isResizing;
         }
     }
 
@@ -245,7 +248,16 @@ class="@GetClasses()">
     {
         if (IsResizing)
         {
-            int requestedWidth = _resizeStartWidth + (int)(_resizeStartX - e.ClientX);
+            int requestedWidth;
+
+            if (Position == SidebarPosition.Right)
+            {
+                requestedWidth = _resizeStartWidth + (int)(_resizeStartX - e.ClientX);
+            }
+            else
+            {
+                requestedWidth = _resizeStartWidth + (int)(e.ClientX - _resizeStartX);
+            }
 
             if (requestedWidth < UIConstants.ChatSidebarMinimumWidth * 0.6)
             {

@@ -27,10 +27,16 @@
     bottom: 0;
     z-index: 10;
 }
-
     .resize-handle:hover {
-    }
 
+    }
+.resize-handle-left {
+    left: 0;
+}
+
+.resize-handle-right {
+    right: 0;
+}
 .fixed-sidebar {
     /*    min-width: 300px;
     max-width: 300px;
