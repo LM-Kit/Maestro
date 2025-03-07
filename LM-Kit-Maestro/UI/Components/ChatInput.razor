@@ -33,6 +33,14 @@
 </div>
 
 <script>
+
+      function setUserInputFocus() {
+        var inputText = document.getElementById('input-text');
+        if (inputText) {
+            inputText.focus();
+        }
+    }
+
     document.getElementById('input-text').addEventListener('keydown', function (e) {
     if (e.key == 'Enter' && !e.shiftKey) {
     // prevent default behavior
@@ -76,11 +84,10 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // if (firstRender)
-        // {
-        //     await inputTextArea.FocusAsync();
-        //     await JS.InvokeVoidAsync("setUserInputFocus");
-        // }
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("setUserInputFocus");
+        }
 
         if (_shouldResizeTextarea)
         {

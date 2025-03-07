@@ -34,11 +34,6 @@ function getConversationViewHeight() {
     return element.clientHeight;
 };
 
-function setUserInputFocus() {
-    const element = document.getElementById('conversation-content');
-
-    element.focus();
-}
 
 function scrollToEnd(smooth) {
     const element = document.getElementById('conversation-content');

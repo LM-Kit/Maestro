@@ -130,7 +130,6 @@ public partial class ChatPage : IDisposable
             OnConversationSet();
         }
 
-        
         ViewModel.ConversationListViewModel.ConversationPropertyChanged += OnConversationPropertyChanged;
         ViewModel.ConversationListViewModel.PropertyChanged += OnConversationListViewModelPropertyChanged;
 
@@ -139,6 +138,12 @@ public partial class ChatPage : IDisposable
 
         var windowWidth = await GetWindowWidth();
         ShowSidebarToggles = windowWidth >= UIConstants.ChatWindowLayoutMinimumWidth;
+
+        if (!ShowSidebarToggles)
+        {
+            ViewModel.ChatsSidebarIsToggled &= false;
+            ViewModel.SettingsSidebarIsToggled &= false;
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
