@@ -89,7 +89,14 @@ class="@GetClasses()">
 
                 if (IsToggled)
                 {
-                    _ = SetInitialWidth();
+                    if (Resizable)
+                    {
+                        _ = ComputeWidthWindowRatio();
+                    }
+                    else
+                    {
+                        Width = UIConstants.ChatSidebarInitialWidth;
+                    }
                 }
                 else
                 {
@@ -110,15 +117,9 @@ class="@GetClasses()">
         {
             if (value != _width)
             {
-                Trace.WriteLine("width " + _width);
                 _width = value;
                 WidthChanged.InvokeAsync(value);
                 InvokeAsync(() => StateHasChanged());
-
-                if (Resizable)
-                {
-                    _ = SetWidthRatio();
-                }
             }
         }
     }
@@ -153,34 +154,31 @@ class="@GetClasses()">
         }
     }
 
-    private async Task<int> GetWindowWidth()
-    {
-        var windowDimensions = await JS.InvokeAsync<BrowserDimension>("getDimensions");
-
-        return windowDimensions.Width;
-    }
-
-    private async Task SetWidthRatio()
+    private async Task ComputeWidthWindowRatio()
     {
         var windowWidth = await GetWindowWidth();
-        WidthPercentage = Width / windowWidth;
-        Trace.WriteLine("set setwidthratio " + Width + " " + WidthPercentage);
+
+        if (Width == 0)
+        {
+            WidthPercentage = UIConstants.ChatSidebarInitialRatio;
+            Width = (int)(WidthPercentage * windowWidth);
+        }
+        else
+        {
+            WidthPercentage = Width / windowWidth;
+        }
     }
 
-    private async Task SetInitialWidth()
-    {
-        var windowDimensions = await JS.InvokeAsync<BrowserDimension>("getDimensions");
-
-        Width = (int)(windowDimensions.Width * UIConstants.ChatSidebarInitialRatio);
-        Trace.WriteLine("set initialwidth " + Width + " " + WidthPercentage);
-    }
 
     protected override async void OnInitialized()
     {
-        _resizeEventId = await ResizeHandler.RegisterPageResizeAsync(OnPageResize);
+        if (Resizable)
+        {
+            _resizeEventId = await ResizeHandler.RegisterPageResizeAsync(OnPageResize);
 
-        var windowDimensions = await JS.InvokeAsync<BrowserDimension>("getDimensions");
-        MaxWidth = (int)(windowDimensions.Width * UIConstants.ChatSidebarMaxWidthPercents);
+            var windowWidth = await GetWindowWidth();
+            MaxWidth = (int)(windowWidth * UIConstants.ChatSidebarMaxWidthPercents);
+        }
     }
 
     private string GetClasses()
@@ -202,14 +200,26 @@ class="@GetClasses()">
     {
         MaxWidth = (int)(args.Width * UIConstants.ChatSidebarMaxWidthPercents);
 
-        Width = (int)(WidthPercentage * args.Width);
+        if (WidthPercentage == 0)
+        {
+            ComputeWidthWindowRatio();
+        }
 
-        // if (Width > MaxWidth)
-        // {
-        //     Width = MaxWidth;
-        // }
+        IsResizing = false;
+        Width = (int)(WidthPercentage * args.Width);
+        IsResizing = true;
+
     }
 
+ 
+    private async Task OnResizeHandlerMouseDown(MouseEventArgs e)
+    {
+        IsResizing = true;
+        _resizeStartX = (int)e.ClientX;
+        _resizeStartWidth = Width;
+
+        await JS.InvokeVoidAsync("attachResizeListeners", DotNetObjectReference.Create(this));
+    }
 
     [JSInvokable]
     public void ToggleSidebar(bool value)
@@ -225,15 +235,6 @@ class="@GetClasses()">
     }
 
 
-    private async Task OnResizeHandlerMouseDown(MouseEventArgs e)
-    {
-        IsResizing = true;
-        _resizeStartX = (int)e.ClientX;
-        _resizeStartWidth = Width;
-
-        await JS.InvokeVoidAsync("attachResizeListeners", DotNetObjectReference.Create(this));
-    }
-
     [JSInvokable]
     public void OnMouseMove(MouseEventArgs e)
     {
@@ -241,7 +242,7 @@ class="@GetClasses()">
         {
             int requestedWidth = _resizeStartWidth + (int)(_resizeStartX - e.ClientX);
 
-            if (requestedWidth < UIConstants.ChatSidebarMinimumWidth)
+            if (requestedWidth < UIConstants.ChatSidebarMinimumWidth * 0.6)
             {
                 IsToggled = false;
             }
@@ -249,6 +250,7 @@ class="@GetClasses()">
             {
                 IsToggled |= true;
                 Width = Math.Max(UIConstants.ChatSidebarMinimumWidth, Math.Min(MaxWidth, requestedWidth));
+                _ = ComputeWidthWindowRatio();
             }
         }
     }
@@ -271,6 +273,14 @@ class="@GetClasses()">
     {
         Left,
         Right
+    }
+
+
+    private async Task<int> GetWindowWidth()
+    {
+        var windowDimensions = await JS.InvokeAsync<BrowserDimension>("getDimensions");
+
+        return windowDimensions.Width;
     }
 
     public class BrowserDimension

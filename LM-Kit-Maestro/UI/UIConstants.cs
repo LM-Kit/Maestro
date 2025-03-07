@@ -36,7 +36,7 @@ public static class UIConstants
 
     public const float ChatSidebarMaxWidthPercents = 0.3f;
 
-    public const float ChatSidebarInitialRatio = 0.15f;
+    public const float ChatSidebarInitialRatio = 0.2f;
 
     public static class Colors
     {
