@@ -1,6 +1,7 @@
 #model-selection-button-root {
-    width: 100%;
-    max-width: 30rem;
+    max-width: 25vw;
+    min-width: 25vw;
+    max-width: 28rem;
     display: flex;
     flex-grow: 1;
     flex-shrink: 1;
@@ -30,7 +31,7 @@
 
 .button-model-unloaded {
     background-color: var(--Surface2);
-    border: 1px solid var(--Surface2);
+    border: 1px solid var(--OutlineVariant);
 }
 
 .button-model-unloaded:hover{
