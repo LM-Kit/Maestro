@@ -20,12 +20,11 @@
 }
 
 .resize-handle {
-    cursor: ew-resize;
-    width: 4px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 10;
+    border: none !important; 
+    background-color: transparent;
+    cursor: ew-resize; 
+    width: 40px; 
+    height: 100%;
 }
     .resize-handle:hover {
 

@@ -7,15 +7,19 @@ style="width: @(Width)px;"
 class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
-        <div @onmousedown="OnResizeHandlerMouseDown"
-        @onmousedown:preventDefault="true"
-        @onmousedown:stopPropagation="true"
-        class="resize-handle-left @(Resizable ? "resize-handle" : "vertical-divider")">
-            @if (Resizable)
-            {
-                <div class="vertical-divider"></div>
-            }
-        </div>
+        @if (Resizable)
+        {
+            <div @onmousedown="OnResizeHandlerMouseDown"
+                 @onmousedown:preventDefault="true"
+                 @onmousedown:stopPropagation="true"
+                 class="resize-handle-left resize-handle">
+                <hr class="vertical-divider">
+            </div>
+        }
+        else
+        {
+            <hr class="vertical-divider"/>
+        }
     }
 
     <div class="sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
@@ -24,15 +28,19 @@ class="@GetClasses()">
 
     @if (Position == SidebarPosition.Left)
     {
-        <div @onmousedown="OnResizeHandlerMouseDown"
-        @onmousedown:preventDefault="true"
-        @onmousedown:stopPropagation="true"
-        class="resize-handle-right @(Resizable ? "resize-handle" : "vertical-divider")">
-            @if (Resizable)
-            {
-                <div class="vertical-divider"></div>
-            }
-        </div>
+        @if (Resizable)
+        {
+            <div @onmousedown="OnResizeHandlerMouseDown"
+                 @onmousedown:preventDefault="true"
+                 @onmousedown:stopPropagation="true"
+                 class="resize-handle-right resize-handle">
+                <hr class="vertical-divider">
+            </div>
+        }
+        else
+        {
+            <hr class="vertical-divider" />
+        }
     }
 </div>
 
@@ -203,20 +211,19 @@ class="@GetClasses()">
 
             if (WidthPercentage == 0)
             {
-                ComputeWidthWindowRatio();
+                await ComputeWidthWindowRatio();
             }
 
-            bool isResizing = IsResizing;
-
-            IsResizing = false;
+            IsResizing = true;
             Width = (int)(WidthPercentage * args.Width);
-            IsResizing = isResizing;
         }
     }
 
 
     private async Task OnResizeHandlerMouseDown(MouseEventArgs e)
     {
+        Trace.WriteLine("mouse down");
+
         IsResizing = true;
         _resizeStartX = (int)e.ClientX;
         _resizeStartWidth = Width;
@@ -246,6 +253,8 @@ class="@GetClasses()">
     [JSInvokable]
     public void OnMouseMove(MouseEventArgs e)
     {
+        Trace.WriteLine($"mouse move: IsResizing={IsResizing}");
+
         if (IsResizing)
         {
             int requestedWidth;
@@ -275,7 +284,9 @@ class="@GetClasses()">
     [JSInvokable]
     public void OnMouseUp()
     {
+        Trace.WriteLine("mouse up");
         IsResizing = false;
+        InvokeAsync(StateHasChanged);
     }
 
     public async void Dispose()

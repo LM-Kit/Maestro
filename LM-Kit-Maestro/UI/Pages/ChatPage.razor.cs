@@ -78,6 +78,21 @@ public partial class ChatPage : IDisposable
         }
     }
 
+
+    private bool _chatsSidebarIsResizing;
+    private bool ChatsSidebarIsResizing
+    {
+        get => _chatsSidebarIsResizing;
+        set
+        {
+            if (_chatsSidebarIsResizing != value)
+            {
+                _chatsSidebarIsResizing = value;
+                RefreshUIAsync(forceRerender: true);
+            }
+        }
+    }
+
     private int _settingSidebarWidth;
     private int SettingSidebarWidth
     {

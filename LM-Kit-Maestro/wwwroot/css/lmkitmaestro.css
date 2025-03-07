@@ -188,18 +188,11 @@
     border-color: var(--OutlineVariant);
 }
 
-.bottom-divider {
-    width: 100%;
-    height: 1px;
-    background-color: var(--OutlineVariant);
-    position: absolute;
-    bottom: 0;
-}
-
 .vertical-divider {
-    height: 100%;
-    width: 1px;
-    background-color: var(--OutlineVariant);
+    border-width: 1px;
+    border-style: none none none solid;
+    border-color: var(--OutlineVariant);
+    height:100%;
 }
 
 .text-truncate {

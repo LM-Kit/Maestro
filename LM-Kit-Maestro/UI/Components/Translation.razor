@@ -56,14 +56,12 @@
         </div>
     </div>
 
-    <div class="horizontal-separator" />
-
     <div id="translation-body" class="translation-grid">
         <div id="translation-input">
             <InputBox @bind-InputText="TranslationViewModel.InputText" />
         </div>
 
-        <div class="vertical-divider"></div>
+        <hr class="vertical-divider"/>
 
         <div id="translation-output">
             <div class="loading-content @(!TranslationViewModel.AwaitingResponse ? "hide" :  "show")">
