@@ -3,14 +3,14 @@
 @inject IResizeHandler ResizeHandler
 
 <div @ref="_sidebarContainer"
-style="width: @(Width)px;"
-class="@GetClasses()">
+     style="width: @(Width)px;"
+     class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
         <div @onmousedown="OnResizeHandlerMouseDown"
-        @onmousedown:preventDefault="true"
-        @onmousedown:stopPropagation="true"
-        class="@(Resizable ? "resize-handle" : "vertical-divider")">
+             @onmousedown:preventDefault="true"
+             @onmousedown:stopPropagation="true"
+             class="@(Resizable ? "resize-handle" : "vertical-divider")">
             @if (Resizable)
             {
                 <div class="vertical-divider"></div>
@@ -25,9 +25,9 @@ class="@GetClasses()">
     @if (Position == SidebarPosition.Left)
     {
         <div @onmousedown="OnResizeHandlerMouseDown"
-        @onmousedown:preventDefault="true"
-        @onmousedown:stopPropagation="true"
-        class="@(Resizable ? "resize-handle" : "vertical-divider")">
+             @onmousedown:preventDefault="true"
+             @onmousedown:stopPropagation="true"
+             class="@(Resizable ? "resize-handle" : "vertical-divider")">
             @if (Resizable)
             {
                 <div class="vertical-divider"></div>
@@ -35,15 +35,6 @@ class="@GetClasses()">
         </div>
     }
 </div>
-
-<script>
-    window.getDimensions = function () {
-    return {
-    width: window.innerWidth,
-    height: window.innerHeight
-    };
-    };
-</script>
 
 @code
 {
@@ -62,6 +53,7 @@ class="@GetClasses()">
     [Parameter] public required SidebarPosition Position { get; set; }
 
     private int _maxWidth;
+
     private int MaxWidth
     {
         get => _maxWidth;
@@ -76,6 +68,7 @@ class="@GetClasses()">
     }
 
     private bool _isToggled;
+
     [Parameter]
     public bool IsToggled
     {
@@ -109,6 +102,7 @@ class="@GetClasses()">
     }
 
     private int _width;
+
     [Parameter]
     public int Width
     {
@@ -125,6 +119,7 @@ class="@GetClasses()">
     }
 
     private bool _isResizing;
+
     [Parameter]
     public bool IsResizing
     {
@@ -141,6 +136,7 @@ class="@GetClasses()">
     }
 
     private double _widthPercentage;
+
     private double WidthPercentage
     {
         get => _widthPercentage;
@@ -208,10 +204,9 @@ class="@GetClasses()">
         IsResizing = false;
         Width = (int)(WidthPercentage * args.Width);
         IsResizing = true;
-
     }
 
- 
+
     private async Task OnResizeHandlerMouseDown(MouseEventArgs e)
     {
         IsResizing = true;
@@ -219,6 +214,11 @@ class="@GetClasses()">
         _resizeStartWidth = Width;
 
         await JS.InvokeVoidAsync("attachResizeListeners", DotNetObjectReference.Create(this));
+    }
+
+    private async Task<int> GetWindowWidth()
+    {
+        return await JS.InvokeAsync<int>("eval", "window.innerWidth");
     }
 
     [JSInvokable]
@@ -273,19 +273,5 @@ class="@GetClasses()">
     {
         Left,
         Right
-    }
-
-
-    private async Task<int> GetWindowWidth()
-    {
-        var windowDimensions = await JS.InvokeAsync<BrowserDimension>("getDimensions");
-
-        return windowDimensions.Width;
-    }
-
-    public class BrowserDimension
-    {
-        public int Width { get; set; }
-        public int Height { get; set; }
     }
 }
