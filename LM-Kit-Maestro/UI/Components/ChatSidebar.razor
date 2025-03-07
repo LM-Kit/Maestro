@@ -10,9 +10,9 @@ class="@GetClasses()">
         @if (Resizable)
         {
             <div @onmousedown="OnResizeHandlerMouseDown"
-                 @onmousedown:preventDefault="true"
-                 @onmousedown:stopPropagation="true"
-                 class="resize-handle-left resize-handle d-flex">
+            @onmousedown:preventDefault="true"
+            @onmousedown:stopPropagation="true"
+            class="resize-handle-left resize-handle d-flex">
                 <hr class="vertical-divider">
             </div>
         }
@@ -31,9 +31,9 @@ class="@GetClasses()">
         @if (Resizable)
         {
             <div @onmousedown="OnResizeHandlerMouseDown"
-                 @onmousedown:preventDefault="true"
-                 @onmousedown:stopPropagation="true"
-                 class="resize-handle-right resize-handle d-flex justify-end">
+            @onmousedown:preventDefault="true"
+            @onmousedown:stopPropagation="true"
+            class="resize-handle-right resize-handle d-flex justify-end">
                 <hr class="vertical-divider">
             </div>
         }
@@ -70,6 +70,7 @@ class="@GetClasses()">
             if (value != _maxWidth)
             {
                 _maxWidth = value;
+                Trace.WriteLine(MaxWidth);
                 InvokeAsync(() => StateHasChanged());
             }
         }
@@ -93,7 +94,7 @@ class="@GetClasses()">
                     }
                     else
                     {
-                        Width = UIConstants.ChatSidebarInitialWidth;
+                        Width = UIConstants.ChatPageSidebarWidth;
                     }
                 }
                 else
@@ -168,7 +169,7 @@ class="@GetClasses()">
         if (Width == 0)
         {
             WidthPercentage = UIConstants.ChatSidebarInitialRatio;
-            Width = (int)(WidthPercentage * windowWidth);
+            Width = Math.Max(UIConstants.ChatSidebarMinimumWidth, (int)(WidthPercentage * windowWidth));
         }
         else
         {

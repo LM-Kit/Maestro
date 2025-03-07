@@ -13,12 +13,11 @@
 
 #expander-content {
     padding: 1rem;
-    background-color: var(--Surface2);
-    transition: all ease-out 0.4s;
+    background-color: var(--Surface);
+    /*transition: all ease-out 0.4s;*/
 }
 
 #expander-content:hover {
-    background-color: var(--Surface);
 }
 
 ::deep .mud-icon-size-small {
