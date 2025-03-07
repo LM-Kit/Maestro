@@ -5,18 +5,21 @@
     padding-inline: 1rem;
     padding-block: 0.5rem;
     cursor: pointer;
-    background-color: var(--Surface2);
+    background-color: var(--Surface15);
 }
 
     #expander-header:hover {
-        background-color: var(--Surface15);
     }
 
 #expander-content {
     padding: 1rem;
-    background-color: var(--Surface15);
+    background-color: var(--Surface2);
+    transition: all ease-out 0.4s;
 }
 
+#expander-content:hover {
+    background-color: var(--Surface);
+}
 
 ::deep .mud-icon-size-small {
     font-size: 0.7rem !important;
