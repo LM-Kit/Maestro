@@ -1,20 +1,25 @@
 ﻿@inherits ComponentBase
 @inject IJSRuntime JS
+@inject IResizeHandler ResizeHandler
 
 <div @ref="_sidebarContainer"
 style="width: @(Width)px;"
 class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
-        <div @onmousedown="OnResizeHandlerMouseDown"
-        @onmousedown:preventDefault="true"
-        @onmousedown:stopPropagation="true"
-        class="@(Resizable ? "resize-handle" : "vertical-divider")">
-            @if (Resizable)
-            {
-                <div class="vertical-divider"></div>
-            }
-        </div>
+        @if (Resizable)
+        {
+            <div @onmousedown="OnResizeHandlerMouseDown"
+            @onmousedown:preventDefault="true"
+            @onmousedown:stopPropagation="true"
+            class="resize-handle-left resize-handle d-flex">
+                <hr class="vertical-divider">
+            </div>
+        }
+        else
+        {
+            <hr class="vertical-divider"/>
+        }
     }
 
     <div class="sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
@@ -23,15 +28,19 @@ class="@GetClasses()">
 
     @if (Position == SidebarPosition.Left)
     {
-        <div @onmousedown="OnResizeHandlerMouseDown"
-        @onmousedown:preventDefault="true"
-        @onmousedown:stopPropagation="true"
-        class="@(Resizable ? "resize-handle" : "vertical-divider")">
-            @if (Resizable)
-            {
-                <div class="vertical-divider"></div>
-            }
-        </div>
+        @if (Resizable)
+        {
+            <div @onmousedown="OnResizeHandlerMouseDown"
+            @onmousedown:preventDefault="true"
+            @onmousedown:stopPropagation="true"
+            class="resize-handle-right resize-handle d-flex justify-end">
+                <hr class="vertical-divider">
+            </div>
+        }
+        else
+        {
+            <hr class="vertical-divider" />
+        }
     }
 </div>
 
@@ -40,6 +49,8 @@ class="@GetClasses()">
     private int _resizeStartX;
     private int _resizeStartWidth;
     private ElementReference _sidebarContainer;
+    private string _resizeEventId;
+
 
     [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
     [Parameter] public EventCallback<bool> IsResizingChanged { get; set; }
@@ -49,7 +60,24 @@ class="@GetClasses()">
     [Parameter] public bool Resizable { get; set; }
     [Parameter] public required SidebarPosition Position { get; set; }
 
+    private int _maxWidth;
+
+    private int MaxWidth
+    {
+        get => _maxWidth;
+        set
+        {
+            if (value != _maxWidth)
+            {
+                _maxWidth = value;
+                Trace.WriteLine(MaxWidth);
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
     private bool _isToggled;
+
     [Parameter]
     public bool IsToggled
     {
@@ -58,15 +86,34 @@ class="@GetClasses()">
         {
             if (value != _isToggled)
             {
+                if (value)
+                {
+                    if (Resizable)
+                    {
+                        _ = ComputeWidthWindowRatio();
+                    }
+                    else
+                    {
+                        Width = UIConstants.ChatPageSidebarWidth;
+                    }
+                }
+                else
+                {
+                    Width = 0;
+                }
+
                 _isToggled = value;
                 IsToggledChanged.InvokeAsync(value);
-                Width = IsToggled ? 300 : 0;
+
                 InvokeAsync(() => StateHasChanged());
             }
         }
     }
 
     private int _width;
+
+    bool _zero;
+
     [Parameter]
     public int Width
     {
@@ -83,6 +130,7 @@ class="@GetClasses()">
     }
 
     private bool _isResizing;
+
     [Parameter]
     public bool IsResizing
     {
@@ -91,6 +139,7 @@ class="@GetClasses()">
         {
             if (value != _isResizing)
             {
+                Trace.WriteLine(IsResizing);
                 _isResizing = value;
                 IsResizingChanged.InvokeAsync(value);
                 InvokeAsync(() => StateHasChanged());
@@ -98,11 +147,53 @@ class="@GetClasses()">
         }
     }
 
+    private double _widthPercentage;
+
+    private double WidthPercentage
+    {
+        get => _widthPercentage;
+        set
+        {
+            if (value != _widthPercentage)
+            {
+                _widthPercentage = value;
+                InvokeAsync(() => StateHasChanged());
+            }
+        }
+    }
+
+    private async Task ComputeWidthWindowRatio()
+    {
+        var windowWidth = await GetWindowWidth();
+
+        if (Width == 0)
+        {
+            WidthPercentage = UIConstants.ChatSidebarInitialRatio;
+            Width = Math.Max(UIConstants.ChatSidebarMinimumWidth, (int)(WidthPercentage * windowWidth));
+        }
+        else
+        {
+            WidthPercentage = Width / (float)windowWidth;
+        }
+    }
+
+
+    protected override async void OnInitialized()
+    {
+        if (Resizable)
+        {
+            _resizeEventId = await ResizeHandler.RegisterPageResizeAsync(OnPageResize);
+
+            var windowWidth = await GetWindowWidth();
+            MaxWidth = (int)(windowWidth * UIConstants.ChatSidebarMaxWidthPercents);
+        }
+    }
+
     private string GetClasses()
     {
         string classes = "sidebar-container";
 
-        classes += IsToggled ? " sidebar-toggled" : " sidebar-hidden";
+        // classes += IsToggled ? " sidebar-toggled" : " sidebar-hidden";
         classes += Resizable ? " resizable-sidebar" : " fixed-sidebar";
 
         if (!IsResizing)
@@ -111,6 +202,39 @@ class="@GetClasses()">
         }
 
         return classes;
+    }
+
+    private async Task OnPageResize(ResizeEventArgs args)
+    {
+        if (IsToggled)
+        {
+            MaxWidth = (int)(args.Width * UIConstants.ChatSidebarMaxWidthPercents);
+
+            if (WidthPercentage == 0)
+            {
+                await ComputeWidthWindowRatio();
+            }
+
+            IsResizing = true;
+            Width = (int)(WidthPercentage * args.Width);
+        }
+    }
+
+
+    private async Task OnResizeHandlerMouseDown(MouseEventArgs e)
+    {
+        Trace.WriteLine("mouse down");
+
+        IsResizing = true;
+        _resizeStartX = (int)e.ClientX;
+        _resizeStartWidth = Width;
+
+        await JS.InvokeVoidAsync("attachResizeListeners", DotNetObjectReference.Create(this));
+    }
+
+    private async Task<int> GetWindowWidth()
+    {
+        return await JS.InvokeAsync<int>("eval", "window.innerWidth");
     }
 
     [JSInvokable]
@@ -127,49 +251,49 @@ class="@GetClasses()">
     }
 
 
-    private async Task OnResizeHandlerMouseDown(MouseEventArgs e)
-    {
-        IsResizing = true;
-        _resizeStartX = (int)e.ClientX;
-        _resizeStartWidth = Width;
-        // Debug.WriteLine("[down]");
-
-        await JS.InvokeVoidAsync("attachResizeListeners", DotNetObjectReference.Create(this));
-    }
-
     [JSInvokable]
     public void OnMouseMove(MouseEventArgs e)
     {
+
         if (IsResizing)
         {
-            int requestedWidth = _resizeStartWidth + (int)(_resizeStartX - e.ClientX);
+            int requestedWidth;
 
-            if (requestedWidth < 80)
+            if (Position == SidebarPosition.Right)
+            {
+                requestedWidth = _resizeStartWidth + (int)(_resizeStartX - e.ClientX);
+            }
+            else
+            {
+                requestedWidth = _resizeStartWidth + (int)(e.ClientX - _resizeStartX);
+            }
+
+            if (requestedWidth < UIConstants.ChatSidebarMinimumWidth * 0.6)
             {
                 IsToggled = false;
             }
             else
             {
-                if (!IsToggled)
-                {
-                    IsToggled = requestedWidth > 80;
-                }
-
-                if (IsToggled)
-                {
-                    Width = Math.Max(150, Math.Min(400, requestedWidth));
-                }
+                IsToggled |= true;
+                Width = Math.Max(UIConstants.ChatSidebarMinimumWidth, Math.Min(MaxWidth, requestedWidth));
+                _ = ComputeWidthWindowRatio();
             }
         }
-
-        // Debug.WriteLine("[move] " + _isResizing);
     }
 
     [JSInvokable]
     public void OnMouseUp()
     {
-        // Debug.WriteLine("[released]");
         IsResizing = false;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public async void Dispose()
+    {
+        if (_resizeEventId != null)
+        {
+            await ResizeHandler.RemovePageResizeAsync(_resizeEventId);
+        }
     }
 
     public enum SidebarPosition

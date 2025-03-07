@@ -1,27 +1,25 @@
 ﻿@inherits ComponentBase
 
 <div id="expander-container">
-
     <div id="expander-header" @onclick="ToggleExpansion">
         <div class="d-flex justify-space-between flex-grow-1 align-center">
             <MudText Typo="Typo.caption">
                 @Title
             </MudText>
 
-            <MudIcon Class="@GetIconRotateClass()" Icon="fas fa-chevron-down" Size="Size.Small" Style="color: var(--Outline); font-size: 0.6rem !important" />
+            <MudIcon Class="@($"xs-icon outline expander-icon {GetIconRotateClass()}")" Icon="fas fa-chevron-down" Size="Size.Small"
+                     Style="font-size: 0.6rem !important; color: var(--Outline)" />
         </div>
     </div>
 
     @if (_isExpanded)
     {
         <MudDivider />
-
         <div id="expander-content">
             @ChildContent
         </div>
     }
 </div>
-
 
 @code {
     private bool _isExpanded;
@@ -33,7 +31,7 @@
             if (value != _isExpanded)
             {
                 _isExpanded = value;
-                InvokeAsync(() => StateHasChanged());
+                InvokeAsync(StateHasChanged);
             }
         }
     }
@@ -51,6 +49,6 @@
 
     private string GetIconRotateClass()
     {
-        return IsExpanded ? "rotate-180" : "";
+        return _isExpanded ? "rotate-180" : "rotate-0";
     }
 }

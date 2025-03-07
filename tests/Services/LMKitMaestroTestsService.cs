@@ -43,8 +43,7 @@ namespace Maestro.Tests
             SettingsViewModel = GetNewSettingsViewModel(LMKitService);
             ConversationListViewModel = GetNewConversationListViewModel(LMKitService, Database);
             ModelListViewModel = GetNewModelListViewModel(LMKitService, LLmFileManager);
-            ChatPageViewModel = GetNewChatPageViewModel(LMKitService, ConversationListViewModel, ModelListViewModel,
-                Database, LLmFileManager, SettingsViewModel);
+            ChatPageViewModel = GetNewChatPageViewModel(LMKitService, ConversationListViewModel, ModelListViewModel, SettingsViewModel);
             LMKitService.LMKitConfig.MaximumCompletionTokens = 200;
             LMKitService.LMKitConfig.RequestTimeout = 15;
         }
@@ -173,15 +172,12 @@ namespace Maestro.Tests
 
         private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService,
             ConversationListViewModel conversationListViewModel,
-            ModelListViewModel modelListViewModel, IMaestroDatabase database, ILLMFileManager llmFileManager,
-            SettingsViewModel settingsViewModel)
+            ModelListViewModel modelListViewModel, SettingsViewModel settingsViewModel)
         {
-            var mainThread = new Mock<IMainThread>().Object;
             var appSettingsService = new Mock<IAppSettingsService>().Object;
             var logger = new Mock<ILogger<ChatPageViewModel>>().Object;
 
-            return new ChatPageViewModel(conversationListViewModel, modelListViewModel,
-                logger, database, lmKitService, llmFileManager, settingsViewModel);
+            return new ChatPageViewModel(conversationListViewModel, modelListViewModel, lmKitService, settingsViewModel);
         }
     }
 }
