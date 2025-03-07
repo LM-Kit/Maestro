@@ -16,7 +16,7 @@
     }
 
     #item-container.item-selected:hover {
-        background-color: var(--Surface2);
+        background-color: var(--Surface15);
     }
 
     #item-container:hover #show-more-button {

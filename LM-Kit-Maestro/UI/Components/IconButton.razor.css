@@ -35,6 +35,7 @@
 .secondary-action-button {
     border-radius: 50%;
     background-color: var(--Surface2);
+    color: var(--Outline) !important;
 }
 
     .secondary-action-button:hover {
