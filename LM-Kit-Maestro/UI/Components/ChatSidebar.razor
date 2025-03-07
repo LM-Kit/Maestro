@@ -113,23 +113,9 @@ class="@GetClasses()">
         {
             if (value != _width)
             {
-                if (_zero)
-                {
-
-                }
                 _width = value;
                 WidthChanged.InvokeAsync(value);
                 InvokeAsync(() => StateHasChanged());
-                Trace.WriteLine(Width);
-
-                if (value == 0)
-                {
-                    _zero = true;
-                }
-                else
-                {
-                    _zero = false;
-                }
             }
         }
     }
