@@ -2,7 +2,8 @@
 }
 
 #expander-header {
-    padding: 12px;
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
     cursor: pointer;
     background-color: var(--Surface2);
 }
@@ -12,7 +13,7 @@
     }
 
 #expander-content {
-    padding: 12px;
+    padding: 1rem;
     background-color: var(--Surface15);
 }
 
@@ -21,7 +22,15 @@
     font-size: 0.7rem !important;
 }
 
+
+.expander-icon {
+    transition: transform 0.3s ease;
+}
+
+.rotate-0 {
+    transform: rotate(0deg);
+}
+
 .rotate-180 {
     transform: rotate(180deg);
-    transition: transform 0.3s ease;
 }

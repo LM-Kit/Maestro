@@ -5,6 +5,10 @@
     font-size: 1rem;
 }
 
+xs-icon {
+    font-size: 0.6rem !important;
+}
+
 .icon-button-small {
     font-size: 0.6rem;
 }

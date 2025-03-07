@@ -130,11 +130,15 @@ public partial class ChatPage : IDisposable
             OnConversationSet();
         }
 
+        
         ViewModel.ConversationListViewModel.ConversationPropertyChanged += OnConversationPropertyChanged;
         ViewModel.ConversationListViewModel.PropertyChanged += OnConversationListViewModelPropertyChanged;
 
         _pageResizeEventId = await ResizeHandler.RegisterPageResizeAsync(Resized);
         await JS.InvokeVoidAsync("initializeScrollHandler", DotNetObjectReference.Create(this));
+
+        var windowWidth = await GetWindowWidth();
+        ShowSidebarToggles = windowWidth >= UIConstants.ChatWindowLayoutMinimumWidth;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -340,6 +344,10 @@ public partial class ChatPage : IDisposable
         return 100 * used / total;
     }
 
+    private async Task<int> GetWindowWidth()
+    {
+        return await JS.InvokeAsync<int>("eval", "window.innerWidth");
+    }
 
     [JSInvokable]
     public async Task OnChatScrolled(double scrollTop)

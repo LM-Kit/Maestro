@@ -253,7 +253,6 @@ class="@GetClasses()">
     [JSInvokable]
     public void OnMouseMove(MouseEventArgs e)
     {
-        Trace.WriteLine($"mouse move: IsResizing={IsResizing}");
 
         if (IsResizing)
         {
@@ -284,7 +283,6 @@ class="@GetClasses()">
     [JSInvokable]
     public void OnMouseUp()
     {
-        Trace.WriteLine("mouse up");
         IsResizing = false;
         InvokeAsync(StateHasChanged);
     }
