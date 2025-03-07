@@ -1,18 +1,16 @@
 .sidebar-container {
     position: relative;
+    overflow-inline: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 0;
+    background-color: var(--Surface);
 }
 
 .sidebar-hidden .resize-handle {
     visibility: visible;
     display: block;
-}
-
-.sidebar-toggled {
-    flex-grow: 0;
-    flex-shrink: 0;
-    background-color: var(--Surface);
-    display: flex;
-    flex-direction: row;
 }
 
 .sidebar-content {

@@ -5,7 +5,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--OnSurface);
     transition: all ease-out 0.1s;
 }
 
@@ -14,6 +13,7 @@
 
 .icon-button {
     background-color: transparent;
+    color: var(--Outline);
 }
 
     .icon-button:hover {
@@ -24,6 +24,7 @@
     display: flex;
     border-radius: 0.25rem;
     text-align: center;
+    color: var(--OnSurface);
     background-color: var(--Surface2);
 }
 

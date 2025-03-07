@@ -100,6 +100,10 @@ xs-icon {
 .bg-surface-15{
     background-color: var(--Surface15)
 }
+
+.bg-surface-2 {
+    background-color: var(--Surface2)
+}
 .loading-section {
     height: 100vh;
     display: flex;
