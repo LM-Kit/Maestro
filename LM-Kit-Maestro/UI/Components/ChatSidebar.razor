@@ -3,14 +3,14 @@
 @inject IResizeHandler ResizeHandler
 
 <div @ref="_sidebarContainer"
-     style="width: @(Width)px;"
-     class="@GetClasses()">
+style="width: @(Width)px;"
+class="@GetClasses()">
     @if (Position == SidebarPosition.Right)
     {
         <div @onmousedown="OnResizeHandlerMouseDown"
-             @onmousedown:preventDefault="true"
-             @onmousedown:stopPropagation="true"
-             class="@(Resizable ? "resize-handle" : "vertical-divider")">
+        @onmousedown:preventDefault="true"
+        @onmousedown:stopPropagation="true"
+        class="@(Resizable ? "resize-handle" : "vertical-divider")">
             @if (Resizable)
             {
                 <div class="vertical-divider"></div>
@@ -25,9 +25,9 @@
     @if (Position == SidebarPosition.Left)
     {
         <div @onmousedown="OnResizeHandlerMouseDown"
-             @onmousedown:preventDefault="true"
-             @onmousedown:stopPropagation="true"
-             class="@(Resizable ? "resize-handle" : "vertical-divider")">
+        @onmousedown:preventDefault="true"
+        @onmousedown:stopPropagation="true"
+        class="@(Resizable ? "resize-handle" : "vertical-divider")">
             @if (Resizable)
             {
                 <div class="vertical-divider"></div>
@@ -161,7 +161,8 @@
         }
         else
         {
-            WidthPercentage = Width / windowWidth;
+            WidthPercentage = Width / (float)windowWidth;
+            Trace.WriteLine(WidthPercentage);
         }
     }
 
