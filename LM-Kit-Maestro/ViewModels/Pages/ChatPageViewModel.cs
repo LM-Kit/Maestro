@@ -7,12 +7,6 @@ public partial class ChatPageViewModel : ViewModelBase
 {
     public SettingsViewModel SettingsViewModel { get; }
 
-    [ObservableProperty]
-    public partial bool ChatsSidebarIsToggled { get; set; }
-
-    [ObservableProperty]
-    public partial bool SettingsSidebarIsToggled { get; set; }
-
     public LMKitService LmKitService { get; }
     public ConversationListViewModel ConversationListViewModel { get; }
     public ModelListViewModel ModelListViewModel { get; }
@@ -26,17 +20,6 @@ public partial class ChatPageViewModel : ViewModelBase
         SettingsViewModel = settingsViewModel;
     }
 
-    [RelayCommand]
-    public void ToggleChatsSidebar()
-    {
-        ChatsSidebarIsToggled = !ChatsSidebarIsToggled;
-    }
-
-    [RelayCommand]
-    public void ToggleSettingsSidebar()
-    {
-        SettingsSidebarIsToggled = !SettingsSidebarIsToggled;
-    }
 
     [RelayCommand]
     public void StartNewConversation()

@@ -17,17 +17,16 @@
         @if (ShowSidebarToggles)
         {
             <div class="top-bar-side @(!ChatsSidebarIsResizing ? "width-transition" : "")"
-                    style="@(ViewModel.ChatsSidebarIsToggled ? $"width: {ChatsSidebarWidth}px" : "")">
+                    style="@(ChatsSidebarIsToggled ? $"width: {ChatsSidebarWidth}px" : "")">
                 <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
 
                     <div class="d-flex flex-shrink-0">
-
                         <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
                                     Icon="fas fa-message"
-                                    OnClick="ViewModel.ToggleChatsSidebar"/>
+                                    OnClick="ToggleChatsSidebar"/>
                     </div>
 
-                    @if (ViewModel.ChatsSidebarIsToggled)
+                    @if (ChatsSidebarIsToggled)
                     {
                         <div class="top-bar-side-title">
                             <MudText Class="text-truncate" Align="Align.Center" Typo="Typo.body2">
@@ -37,7 +36,6 @@
                     }
 
                     <div class="d-flex flex-shrink-0">
-
                         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
                                     Icon="fas fa-add"
                                     OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
@@ -52,12 +50,12 @@
 
         @if (ShowSidebarToggles)
         {
-            <div class="top-bar-side @(!SettingSidebarIsResizing ? "width-transition" : "")"
-                 style="@(ViewModel.SettingsSidebarIsToggled ? $"width: {SettingSidebarWidth}px" : "")">
+            <div class="top-bar-side @(!SettingsSidebarIsResizing ? "width-transition" : "")"
+                 style="@(SettingsSidebarIsToggled ? $"width: {SettingsSidebarWidth}px" : "")">
 
                 <div
-                    class="d-flex flex-grow-1 flex-shrink-1 align-center gap-2 overflow-hidden @(ViewModel.SettingsSidebarIsToggled ? "justify-space-between" : "justify-end")">
-                    @if (ViewModel.SettingsSidebarIsToggled)
+                    class="d-flex flex-grow-1 flex-shrink-1 align-center gap-2 overflow-hidden @(SettingsSidebarIsToggled ? "justify-space-between" : "justify-end")">
+                    @if (SettingsSidebarIsToggled)
                     {
                         <div class="d-flex flex-shrink-0">
                             <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
@@ -75,7 +73,7 @@
                     <div class="d-flex flex-shrink-0">
                         <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
                                     Icon="fas fa-gears"
-                                    OnClick="ViewModel.ToggleSettingsSidebar"/>
+                                    OnClick="ToggleSettingsSidebar"/>
                     </div>
                 </div>
             </div>
@@ -89,7 +87,7 @@
         Position="ChatSidebar.SidebarPosition.Left"
         @bind-Width="ChatsSidebarWidth"
         @bind-IsResizing="ChatsSidebarIsResizing"
-        @bind-IsToggled="ViewModel.ChatsSidebarIsToggled">
+        @bind-IsToggled="ChatsSidebarIsToggled">
 
         <div class="d-flex flex-column flex-grow-1 pa-1">
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
@@ -190,9 +188,9 @@
     <ChatSidebar ShowScrollbar="false"
                  Resizable="true"
                  Position="ChatSidebar.SidebarPosition.Right"
-                 @bind-Width="SettingSidebarWidth"
-                 @bind-IsResizing="SettingSidebarIsResizing"
-                 @bind-IsToggled="ViewModel.SettingsSidebarIsToggled">
+                 @bind-Width="SettingsSidebarWidth"
+                 @bind-IsResizing="SettingsSidebarIsResizing"
+                 @bind-IsToggled="SettingsSidebarIsToggled">
         <div class="d-flex flex-column flex-grow-1">
             <ChatSettings ViewModel="ViewModel.SettingsViewModel"/>
         </div>

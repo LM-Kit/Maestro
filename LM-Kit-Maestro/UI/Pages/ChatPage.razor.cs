@@ -64,6 +64,20 @@ public partial class ChatPage : IDisposable
         }
     }
 
+    private bool _chatsSidebarIsToggled;
+    private bool ChatsSidebarIsToggled
+    {
+        get => _chatsSidebarIsToggled;
+        set
+        {
+            if (_chatsSidebarIsToggled != value)
+            {
+                _chatsSidebarIsToggled = value;
+                RefreshUIAsync(forceRerender: true);
+            }
+        }
+    }
+
     private int _chatsSidebarWidth;
     private int ChatsSidebarWidth
     {
@@ -93,29 +107,43 @@ public partial class ChatPage : IDisposable
         }
     }
 
-    private int _settingSidebarWidth;
-    private int SettingSidebarWidth
+    private bool _settingsSidebarIsToggled;
+    private bool SettingsSidebarIsToggled
     {
-        get => _settingSidebarWidth;
+        get => _settingsSidebarIsToggled;
         set
         {
-            if (_settingSidebarWidth != value)
+            if (_settingsSidebarIsToggled != value)
             {
-                _settingSidebarWidth = value;
+                _settingsSidebarIsToggled = value;
                 RefreshUIAsync(forceRerender: true);
             }
         }
     }
 
-    private bool _settingSidebarIsResizing;
-    private bool SettingSidebarIsResizing
+    private int _settingsSidebarWidth;
+    private int SettingsSidebarWidth
     {
-        get => _settingSidebarIsResizing;
+        get => _settingsSidebarWidth;
         set
         {
-            if (_settingSidebarIsResizing != value)
+            if (_settingsSidebarWidth != value)
             {
-                _settingSidebarIsResizing = value;
+                _settingsSidebarWidth = value;
+                RefreshUIAsync(forceRerender: true);
+            }
+        }
+    }
+
+    private bool _settingsSidebarIsResizing;
+    private bool SettingsSidebarIsResizing
+    {
+        get => _settingsSidebarIsResizing;
+        set
+        {
+            if (_settingsSidebarIsResizing != value)
+            {
+                _settingsSidebarIsResizing = value;
                 RefreshUIAsync(forceRerender: true);
             }
         }
@@ -138,12 +166,16 @@ public partial class ChatPage : IDisposable
 
         var windowWidth = await GetWindowWidth();
         ShowSidebarToggles = windowWidth >= UIConstants.ChatWindowLayoutMinimumWidth;
+    }
 
-        if (!ShowSidebarToggles)
-        {
-            ViewModel.ChatsSidebarIsToggled &= false;
-            ViewModel.SettingsSidebarIsToggled &= false;
-        }
+    public void ToggleChatsSidebar()
+    {
+        ChatsSidebarIsToggled = !ChatsSidebarIsToggled;
+    }
+
+    public void ToggleSettingsSidebar()
+    {
+        SettingsSidebarIsToggled = !SettingsSidebarIsToggled;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -307,8 +339,8 @@ public partial class ChatPage : IDisposable
         if (args.Width < UIConstants.ChatWindowLayoutMinimumWidth)
         {
             ShowSidebarToggles &= false;
-            ViewModel.ChatsSidebarIsToggled &= false;
-            ViewModel.SettingsSidebarIsToggled &= false;
+            ChatsSidebarIsToggled &= false;
+            SettingsSidebarIsToggled &= false;
         }
         else
         {
@@ -396,6 +428,8 @@ public partial class ChatPage : IDisposable
     {
         ViewModel.ConversationListViewModel.ConversationPropertyChanged -= OnConversationPropertyChanged;
         ViewModel.ConversationListViewModel.PropertyChanged -= OnConversationListViewModelPropertyChanged;
+        SettingsSidebarIsToggled &= false;
+        ChatsSidebarIsResizing &= false;
 
         if (_pageResizeEventId != null)
         {
@@ -430,7 +464,7 @@ public partial class ChatPage : IDisposable
 
         if (result != null && !result.Canceled && result.Data is bool confirmed && confirmed)
         {
-            await Task.Run(() =>  ViewModel.ConversationListViewModel.DeleteConversation(conversationViewModel));
+            await Task.Run(() => ViewModel.ConversationListViewModel.DeleteConversation(conversationViewModel));
         }
     }
 }
