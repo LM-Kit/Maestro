@@ -13,7 +13,7 @@
 
                     <div class="close-button">
                         <IconButton Style="IconButton.ButtonStyle.Icon" Icon="fas fa-close"
-                                    OnClick="DialogInstance.Cancel"/>
+                        OnClick="DialogInstance.Cancel"/>
                     </div>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                 {
                     <div class="d-flex align-center flex-column gap-4">
                         <MudIcon Icon="fas fa-download"
-                                 Style="font-size: 2rem !important; color: var(--Outline) !important"/>
+                        Style="font-size: 2rem !important; color: var(--Outline) !important"/>
 
                         <MudText Class="outline" Typo="Typo.caption" Align="Align.Center">
                             Models that you download will show up here
@@ -35,7 +35,9 @@
                     <div class="download-list">
                         @foreach (var model in ModelListViewModel.ModelDownloads)
                         {
-                            <DownloadItem ModelInfo="model"/>
+                            <DownloadItem 
+                                PauseRequested="() => OnPauseRequested(model)" 
+                                ModelInfo="model"/>
                         }
                     </div>
                 }
@@ -44,7 +46,7 @@
             <div class="model-download-header-footer model-download-footer justify-end">
                 <div class="open-directory-wrapper gap-2" @onclick="OpenModelDirectory">
                     <MudIcon Icon="fas fa-folder"
-                             Style="font-size: 0.7rem !important; color: var(--Outline) !important"/>
+                    Style="font-size: 0.7rem !important; color: var(--Outline) !important"/>
 
                     <MudText Class="outline" Typo="Typo.caption">
                         Open download directory
@@ -59,79 +61,74 @@
 <style>
 
     .header-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        width: 100%;
-        height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: 100%;
     }
 
     .model-download-root {
-        display: flex;
-        flex-direction: column;
-        width: 24rem;
-        border-radius: 1rem;
-        border: 1px solid var(--OutlineVariant);
+    display: flex;
+    flex-direction: column;
+    width: 32rem;
+    border-radius: 1rem;
+    border: 1px solid var(--OutlineVariant);
     }
 
     .model-download-body {
-        display: flex;
-        flex-direction: column;
-        align-content: center;
-        align-items: center;
-        justify-content: center;
-        height: 20rem;
-        background-color: var(--Surface);
-    }
-
-    .download-list {
-        gap: 0.5rem;
-
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: 20rem;
+    background-color: var(--Surface);
     }
 
     .open-directory-wrapper {
-        width: 50%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: all ease-out 0.3s;
-        background-color: var(--Surface) !important;
-        cursor: pointer;
-        margin-left: auto;
-        /* border-left: 1px solid var(--Surface); */
-        /* border-top: 1px solid var(--Surface); */
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all ease-out 0.3s;
+    background-color: var(--Surface) !important;
+    cursor: pointer;
+    margin-left: auto;
+    /* border-left: 1px solid var(--Surface); */
+    /* border-top: 1px solid var(--Surface); */
     }
 
     .open-directory-wrapper:hover {
-        background-color: var(--Surface2) !important;
-        /*             border-color: var(--OutlineVariant);
-        */
+    background-color: var(--Surface2) !important;
+    /*             border-color: var(--OutlineVariant);
+    */
     }
 
     .model-download-header-footer {
-        height: 2.5rem;
-        background-color: var(--Surface2);
-        display: flex;
+    height: 2.5rem;
+    background-color: var(--Surface2);
+    display: flex;
     }
 
     .model-download-footer {
-        background-color: var(--Surface) !important;
+    background-color: var(--Surface) !important;
     }
 
     .close-button {
-        position: absolute;
-        right: 0.5rem;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 1;
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
     }
 
     .model-download-item {
-        background-color: var(--Surface15);
-        display: flex;
-        flex-direction: row;
+    background-color: var(--Surface15);
+    display: flex;
+    flex-direction: row;
     }
 </style>
 
@@ -155,7 +152,12 @@
 
     private void OpenModelDirectory()
     {
-// ModelListViewModel
+        // ModelListViewModel
+    }
+
+    private void OnPauseRequested(ModelInfoViewModel modelInfoViewModel)
+    {
+        ModelListViewModel.PropertyChanged
     }
 
 }

@@ -1,4 +1,4 @@
-﻿<div class="download-item-root"> 
+﻿<div class="download-item-root">
     <div class="download-item-body">
         <MudText Typo="Typo.subtitle2">
             @ModelInfo.ModelCard.ShortModelName
@@ -6,46 +6,26 @@
         <MudProgressLinear Value="@(ModelInfo.DownloadInfo.Progress * 100)" />
 
         <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
-            @($"{ModelInfo.DownloadInfo.Progress * 100}% • {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.BytesRead)} /")
-            @* {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.ContentLength.Value)} *@
+            @($"{(int)ModelInfo.DownloadInfo.Progress * 100}% • {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.BytesRead)} / {FileHelpers.FormatFileSize(ModelInfo.FileSize)}")
         </MudText>
     </div>
+
     <div class="item-buttons">
-        <IconButton Icon="fas fa-pause" Style="IconButton.ButtonStyle.SecondaryAction" />
-        <IconButton Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
+        <IconButton OnClick="OnPauseResumeButtonClicked"
+                    Icon="@(ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused ?  "fas fa-play" : "fas fa-pause")"
+                    Style="IconButton.ButtonStyle.SecondaryAction" />
+        <IconButton OnClick="() => StopRequested.InvokeAsync()"
+                    Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
     </div>
 </div>
 
-<style>
-    .download-item-root {
-        display: flex;
-        flex-direction: row;
-        gap: 0.5rem;
-        width: 100%;
-        height: 100%;
-        background-color: var(--Surface15);
-        border-radius: 0.25rem;
-        padding-inline: 0.5rem;
-        padding-block: 0.5rem;
-        border: 1px solid var(--OutlineVariant);
-        flex-grow: 1;
-    }
 
-    .download-item-body {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        flew-grow: 1;
-    }
-
-    .download-item-buttons{
-        width: auto;
-        gap: 0.5rem;
-    }
-</style>
-s
 @code {
     [Parameter] public ModelInfoViewModel ModelInfo { get; set; }
+
+    [Parameter] public EventCallback PauseRequested { get; set; }
+    [Parameter] public EventCallback StopRequested { get; set; }
+    [Parameter] public EventCallback ResumeRequested { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -57,5 +37,17 @@ s
     private void OnDownloadInfoPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         InvokeAsync(StateHasChanged);
+    }
+
+    private void OnPauseResumeButtonClicked()
+    {
+        if (ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused)
+        {
+            ResumeRequested.InvokeAsync();
+        }
+        else
+        {
+            PauseRequested.InvokeAsync();
+        }
     }
 }

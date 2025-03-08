@@ -8,7 +8,7 @@ public partial class LLMFileManager : ObservableObject
 {
     internal sealed class FileDownloader : IDisposable
     {
-        private const int ProgressEventMinInterval = 500;
+        private const int ProgressEventMinInterval = 200;
 
         private readonly HttpClient _httpClient;
         private ModelCard _modelCard;

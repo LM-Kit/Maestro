@@ -390,3 +390,41 @@ button {
     padding: 0 !important;
     margin: 0 !important;
 }
+
+
+.download-list {
+    gap: 0.5rem;
+    background-color: pink;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    width: 100%;
+    padding-inline: 0.5rem;
+    padding-block: 1rem;
+}
+
+.download-item-root {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    width: 100%;
+    height: auto;
+    background-color: red;
+    border-radius: 0.25rem;
+    padding-inline: 0.5rem;
+    padding-block: 0.5rem;
+    border: 1px solid var(--OutlineVariant);
+}
+
+.download-item-body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.download-item-buttons {
+    width: auto;
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: row;
+}
