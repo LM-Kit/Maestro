@@ -6,7 +6,7 @@
             <div class="model-download-header-footer">
                 <div style="position: relative; width: 100%; height: 100%">
                     <div class="header-title">
-                        <MudText class="download-title" Typo="Typo.caption">
+                        <MudText class="download-title" Typo="Typo.overline">
                             Downloads
                         </MudText>
                     </div>
@@ -45,7 +45,7 @@
                 }
             </div>
 
-            <div class="model-download-header-footer justify-end">
+            <div class="model-download-header-footer model-download-footer justify-end">
                 <div class="open-directory-wrapper gap-2" @onclick="OpenModelDirectory">
                     <MudIcon Icon="fas fa-folder" Style="font-size: 0.7rem !important; color: var(--Outline) !important" />
 
@@ -91,23 +91,27 @@
     .open-directory-wrapper {
         width: 50%;
         height: 100%;
-        background-color: var(--Surface2);
         display: flex;
         justify-content: center;
         align-items: center;
         transition: background-color ease-out 0.3s;
+        background-color: var(--Surface) !important;
         cursor: pointer;
         margin-left: auto;
     }
 
         .open-directory-wrapper:hover {
-            background-color: var(--Surface);
+            background-color: var(--Surface2) !important;
         }
 
     .model-download-header-footer {
         height: 2.5rem;
         background-color: var(--Surface2);
         display: flex;
+    }
+
+    .model-download-footer {
+        background-color: var(--Surface) !important;
     }
 
     .close-button{
