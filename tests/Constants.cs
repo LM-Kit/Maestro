@@ -22,5 +22,7 @@ namespace Maestro.Tests
                 @"https://huggingface.co/lm-kit/falcon-3-10.3b-instruct-gguf/resolve/main/Falcon3-10B-Instruct-q4_k_m.gguf?download=true");
 
         public static readonly ModelCard ModelCard = new ModelCard(new Uri("https://huggingface.co/lm-kit/qwen-2.5-3.1b-instruct-gguf/resolve/main/Qwen-2.5-3.1B-Instruct-Q4_K_M.gguf"));
+
+        public static readonly HttpClient HttpClient = new HttpClient();
     }
 }

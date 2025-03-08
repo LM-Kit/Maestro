@@ -19,8 +19,9 @@ internal class DummyLLmFileManager : ILLMFileManager
     public long TotalModelSize { get; set; }
     public int DownloadedCount { get; set; }
 
-    public DummyLLmFileManager()
+    public DummyLLmFileManager(IAppSettingsService appSettingsService, HttpClient httpClient)
     {
+        LLMFileManager fileManager = new LLMFileManager(appSettingsService, httpClient);
         Models = new ReadOnlyObservableCollection<ModelCard>(_models);
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
     }
@@ -86,6 +87,7 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     public void DownloadModel(ModelCard modelCard)
     {
+        
     }
 
     public void CancelModelDownload(ModelCard modelCard)

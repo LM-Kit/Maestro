@@ -19,7 +19,8 @@ namespace Maestro.Tests
 
         public bool ProgressEventWasRaided { get; private set; }
 
-        public ILLMFileManager LLmFileManager { get; } = new DummyLLmFileManager();
+        public IAppSettingsService AppSettingsService { get; } = new DummyAppSettingsService();
+        public ILLMFileManager LLmFileManager { get; }
         public LMKitService LMKitService { get; } = new LMKitService();
         public IMaestroDatabase Database { get; } = new DummyMaestroDatabase();
 
@@ -30,6 +31,7 @@ namespace Maestro.Tests
 
         public MaestroTestsService()
         {
+            LLmFileManager = new DummyLLmFileManager(AppSettingsService, Constants.HttpClient);
             SettingsViewModel = GetNewSettingsViewModel(LMKitService);
             ConversationListViewModel = GetNewConversationListViewModel(LMKitService, Database);
             ModelListViewModel = GetNewModelListViewModel(LMKitService, LLmFileManager);
