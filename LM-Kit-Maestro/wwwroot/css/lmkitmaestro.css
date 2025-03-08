@@ -1,8 +1,8 @@
 ﻿html, body {
-    background-color: #12181F;
-    color: var(--OnSurface);
+    background-color: #0C1014;
+    color: #FFFFFF;
     font-family: system-ui, sans-serif;
-    font-size: 1rem;
+    font-size: 16px;
 }
 
 .icon-button-small {
@@ -226,6 +226,29 @@
     transition: width 0.3s ease-in;
 }
 
+
+/* Buttons*/
+button {
+}
+
+.outlined-button {
+    border: 1px solid var(--OutlineVariant) !important;
+}
+
+.text-button {
+    padding-block: 0.25rem !important;
+    padding-inline: 0.5rem !important;
+    border-radius: 0.25rem !important;
+    transition: background-color 0.3s !important;
+    background-color: var(--Surface) !important;
+    color: var(--OnSurface) !important;
+}
+
+    .text-button:hover {
+        background-color: var(--Surface2) !important;
+    }
+
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px !important;
@@ -307,4 +330,13 @@
 
 .mud-snackbar .mud-snackbar-icon {
     display: none;
+}
+
+.mud-dialog{
+    background-color: var(--Surface) !important;
+}
+
+.mud-dialog-content {
+    padding: 0 !important;
+    margin: 0 !important;
 }

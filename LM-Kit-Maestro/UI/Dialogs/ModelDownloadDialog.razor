@@ -1,0 +1,95 @@
+﻿@inject ModelListViewModel ModelListViewModel
+
+<MudDialog Class="model-download-root">
+    <DialogContent>
+        <div class="model-download-body">
+            <div class="model-download-header-footer">
+                    <MudIcon Icon="fas fa-download" Size="Size.Small" />
+                    <MudText Align="Align.Center" Typo="Typo.subtitle1">
+                        Downloads
+                    </MudText>
+            </div>
+
+            <div class="model-download-body">
+               <MudText Typo="Typo.caption">
+                   Models that you download will appear here.
+                </MudText>
+            </div>
+            <div class="model-download-header-footer">
+
+                <button class="text-button">Open models directory</button>
+            </div>
+        </div>
+    </DialogContent>
+</MudDialog>
+
+<style>
+
+    .model-download-body{
+        display: flex;
+        flex-direction: column;
+        background-color: green;
+    }
+    .model-download-root{
+        width: 24rem;
+   /*      display: flex;
+        border: solid 1px var(--OutlineVariant);
+        background-color: red;
+        flex-direction: column;
+        border-radius: 0.5rem;
+
+ */
+
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        flex-grow: 1;
+        flex-shrink: 1;
+        background-color: var(--Surface);
+        border-radius: 1rem;
+        border: 1px solid var(--OutlineVariant);
+        border-radius: 0.5rem;
+    }
+
+
+    .model-download-body{
+        max-height: 40rem;
+        height: auto;
+        min-height: 20rem;
+        flex-grow: 1;
+        flex-shrink: 1;
+        background-color: var(--Surface2);
+    }
+
+    .model-download-header-footer{
+        height: 2rem;
+        background-color: var(--Surface15);
+        display: flex;
+        flex-direction: row;
+    }
+</style>
+@code {
+    [Parameter] public MarkupString Message { get; set; } = default(MarkupString);
+
+    [Parameter] public string Title { get; set; } = string.Empty;
+
+    [Parameter] public string ActionText { get; set; } = string.Empty;
+
+    [Parameter] public bool IsImportant { get; set; }
+
+    [CascadingParameter] private IMudDialogInstance DialogInstance { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+
+}
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+}
