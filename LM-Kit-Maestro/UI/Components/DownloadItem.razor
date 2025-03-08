@@ -3,6 +3,7 @@
         <MudText Typo="Typo.subtitle2">
             @ModelInfo.ModelCard.ShortModelName
         </MudText>
+
         <MudProgressLinear Value="@(ModelInfo.DownloadInfo.Progress * 100)" />
 
         <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
@@ -10,7 +11,7 @@
         </MudText>
     </div>
 
-    <div class="item-buttons">
+    <div class="download-item-buttons">
         <IconButton OnClick="OnPauseResumeButtonClicked"
                     Icon="@(ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused ?  "fas fa-play" : "fas fa-pause")"
                     Style="IconButton.ButtonStyle.SecondaryAction" />

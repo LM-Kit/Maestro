@@ -105,7 +105,7 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        public void PausemodelDownload(ModelInfoViewModel modelInfoViewModel)
+        public void PauseModelDownload(ModelInfoViewModel modelInfoViewModel)
         {
             ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, modelInfoViewModel.ModelCard);
 
@@ -114,6 +114,30 @@ namespace LMKit.Maestro.ViewModels
                 _fileManager.PauseModelDownload(modelInfoViewModel.ModelCard);
                 modelCardViewModel.DownloadInfo.Status = DownloadStatus.DownloadPaused;
             }
+        }
+
+        public void ResumeModelDownload(ModelInfoViewModel modelInfoViewModel)
+        {
+            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, modelInfoViewModel.ModelCard);
+            
+            if (modelCardViewModel != null)
+            {
+                _fileManager.ResumeModelDownload(modelInfoViewModel.ModelCard);
+                modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
+            }
+        }
+
+        public void CancelModelDownload(ModelInfoViewModel modelInfoViewModel)
+        {
+            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, modelInfoViewModel.ModelCard);
+
+            if (modelCardViewModel != null)
+            {
+                _fileManager.CancelModelDownload(modelInfoViewModel.ModelCard);
+                modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
+                ModelDownloads.Remove(modelCardViewModel);
+            }
+
         }
 
         public void OpenModelInExplorer(ModelInfoViewModel modelInfoViewModel)
