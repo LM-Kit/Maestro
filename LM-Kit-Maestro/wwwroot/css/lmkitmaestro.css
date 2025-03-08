@@ -460,6 +460,7 @@ button {
     flex-direction: column;
     justify-content: space-between;
     padding-block: 1rem;
+    background-color: var(--Surface);
 }
 
 #main-container {
@@ -467,11 +468,9 @@ button {
     flex-direction: column;
     height: 100vh;
     width: 100%;
-    background-color: red;
 }
 
 #top-bar {
-    background-color: var(--Surface);
     display: flex;
     flex-direction: column;
     height: auto;
@@ -481,7 +480,6 @@ button {
     display: flex;
     flex-direction: column;
     width: 5rem;
-    background-color: var(--Surface15);
     justify-content: start;
     align-items: center;
     flex-shrink: 0;
@@ -492,7 +490,6 @@ button {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    background-color: red;
     flex-grow: 1;
     overflow: hidden;
 }
@@ -510,9 +507,12 @@ button {
 
 .nav-link-active {
     color: var(--OnSurface) !important;
-    background-color: var(--Surface) !important;
+    background-color: var(--Surface2) !important;
 }
 
+.nav-link:hover{
+    background-color: var(--Surface2);
+}
     .nav-link-active.nav-item {
     }
 
@@ -520,8 +520,6 @@ button {
     display: flex;
     flex-direction: column;
     height: 4.5rem;
-    padding-bottom: 0.75rem;
-    /*background-color: green;*/
 }
 
 #page-top-bar-wrapper {
