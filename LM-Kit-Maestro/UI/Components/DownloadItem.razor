@@ -50,10 +50,11 @@ s
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        ModelInfo.PropertyChanged += OnModelInfoViewModelPropertyChanged;
+
+        ModelInfo.DownloadInfo.PropertyChanged += OnDownloadInfoPropertyChanged;
     }
 
-    private void OnModelInfoViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnDownloadInfoPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         InvokeAsync(StateHasChanged);
     }

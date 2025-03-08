@@ -33,13 +33,8 @@ public partial class ModelsPageViewModel : ViewModelBase
         ModelListViewModel = modelListViewModel;
         AppSettingsService = appSettingsService;
 
-#if BETA_DOWNLOAD_MODELS
-        //llmFileManager.ModelDownloadingProgressed += OnModelDownloadingProgressed;
-        //llmFileManager.ModelDownloadingCompleted += OnModelDownloadingCompleted;
-#endif
     }
 
-#if BETA_DOWNLOAD_MODELS
     public void DownloadModel(ModelInfoViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
@@ -64,10 +59,8 @@ public partial class ModelsPageViewModel : ViewModelBase
     public void ResumeDownload(ModelInfoViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
-
         //FileManager.ResumeModelDownload(modelCardViewModel.ModelInfo);
     }
-#endif
 
     public void PickModelsFolder()
     {
@@ -104,7 +97,6 @@ public partial class ModelsPageViewModel : ViewModelBase
         _ = _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
     }
 
-#if BETA_DOWNLOAD_MODELS
     private void OnModelDownloadingProgressed(object? sender, EventArgs e)
     {
         var downloadOperationStateChangedEventArgs = (DownloadOperationStateChangedEventArgs)e;
@@ -143,5 +135,4 @@ public partial class ModelsPageViewModel : ViewModelBase
         modelViewModel.DownloadInfo.Progress = 0;
         modelViewModel.DownloadInfo.BytesRead = 0;
     }
-#endif
 }
