@@ -310,7 +310,7 @@ button {
 }
 
     .model-downloads-button:hover {
-        background-color: var(--Surface2);
+        color: var(--OnSurface);
     }
 
 /* Scrollbar */
@@ -485,6 +485,7 @@ button {
     justify-content: start;
     align-items: center;
     flex-shrink: 0;
+    gap: 0.5rem;
 }
 
 #body-container {
@@ -497,18 +498,23 @@ button {
 }
 
 .nav-item {
-    color: pink;
 }
 
 .nav-link {
+    border-radius: 0.5rem;
+    padding-inline: 1rem;
     font-size: 2rem !important;
     color: var(--Outline) !important;
-    transition: color 0.2s;
+    transition: all ease-out 0.3s;
 }
 
 .nav-link-active {
     color: var(--OnSurface) !important;
+    background-color: var(--Surface) !important;
 }
+
+    .nav-link-active.nav-item {
+    }
 
 #page-top-bar {
     display: flex;

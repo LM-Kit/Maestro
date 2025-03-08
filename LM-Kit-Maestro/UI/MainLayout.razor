@@ -12,23 +12,32 @@
         <nav id="nav-bar">
             <div class="nav-item">
                 <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
-                    <MudIcon Icon="@Icons.Material.Filled.Chat" />
+                    <MudIcon Icon="@Icons.Material.Filled.ChatBubbleOutline" />
                 </NavLink>
             </div>
             <div class="nav-item">
                 <NavLink ActiveClass="nav-link-active" class="nav-link" href="models">
-                    <MudIcon Icon="@Icons.Material.Filled.ModelTraining" />
+                    <MudIcon Icon="@Icons.Material.Filled.FolderOpen" />
                 </NavLink>
             </div>
         </nav>
 
         <div class="d-flex justify-center">
             <button class="model-downloads-button" @onclick="ModelDownloadButtonClicked">
-                <MudBadge Dot="true" Color="Color.Info" Class="mx-6 my-4">
+                @if (ModelListViewModel.IsDownloading)
+                {
+                    <MudBadge Dot="true" Color="Color.Info" Class="mx-6 my-4">
+                        <span>
+                            <i class="fas fa-download"></i>
+                        </span>
+                    </MudBadge>
+                }
+                else
+                {
                     <span>
                         <i class="fas fa-download"></i>
                     </span>
-                </MudBadge>
+                }
             </button>
         </div>
     </div>
@@ -60,11 +69,11 @@
 <MudSnackbarProvider />
 
 <MudDialogProvider FullWidth="true"
-                   CloseButton="false"
-                   BackdropClick="true"
-                   NoHeader="true"
-                   Position="DialogPosition.TopLeft"
-                   CloseOnEscapeKey="true" />
+CloseButton="false"
+BackdropClick="true"
+NoHeader="true"
+Position="DialogPosition.TopLeft"
+CloseOnEscapeKey="true" />
 
 @code {
     public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
@@ -77,6 +86,15 @@
         {
             FileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
             LmKitService.ModelLoadingFailed += OnModelLoadingFailed;
+            ModelListViewModel.PropertyChanged += OnModelListViewModelPropertyChanged;
+        }
+    }
+
+    private void OnModelListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName ==nameof(ModelListViewModel.IsDownloading))
+        {
+            InvokeAsync(() => StateHasChanged());
         }
     }
 
@@ -115,7 +133,7 @@
                 Position = DialogPosition.BottomLeft
             };
 
-        var dialog = await DialogService.ShowAsync<ModelSelectionDialog>(null, options);
+        var dialog = await DialogService.ShowAsync<ModelDownloadDialog>(null, options);
 
         var result = await dialog.Result;
     }

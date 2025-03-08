@@ -4,6 +4,7 @@ using LMKit.Maestro.Helpers;
 using LMKit.Maestro.Services;
 using LMKit.Model;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using static LMKit.Maestro.Services.LLMFileManager;
 
 namespace LMKit.Maestro.ViewModels
@@ -20,9 +21,11 @@ namespace LMKit.Maestro.ViewModels
 
         public ObservableCollection<ModelInfoViewModel> Models { get; }
 
-        [ObservableProperty] public ModelLoadingState _loadingState;
+        [ObservableProperty] ModelLoadingState _loadingState;
 
-        [ObservableProperty] private double? _loadingProgress;
+        [ObservableProperty] double? _loadingProgress;
+
+        [ObservableProperty] bool _isDownloading;
 
         private ModelInfoViewModel? _selectedModel;
 
@@ -60,8 +63,13 @@ namespace LMKit.Maestro.ViewModels
             LMKitService.ModelLoadingFailed += OnModelLoadingFailed;
             LMKitService.ModelLoaded += OnModelLoadingCompleted;
             LMKitService.PropertyChanged += OnLmKitServicePropertyChanged;
+            ModelDownloads.CollectionChanged += OnModelDownloadsCollectionChanged;
         }
 
+        private void OnModelDownloadsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            IsDownloading = ModelDownloads.Count > 0;
+        }
 
         public void Initialize()
         {

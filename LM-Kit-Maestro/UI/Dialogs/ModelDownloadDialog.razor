@@ -1,4 +1,6 @@
 ﻿@inject ModelListViewModel ModelListViewModel
+@inject ILauncher Launcher
+@inject IAppSettingsService AppSettingsService
 
 <MudDialog Class="model-download-root">
     <DialogContent>
@@ -52,7 +54,7 @@
                     <MudIcon Icon="fas fa-folder"
                              Style="font-size: 0.7rem !important; color: var(--Outline) !important" />
 
-                    <MudText Class="outline" Typo="Typo.caption">
+                    <MudText Typo="Typo.caption">
                         Open download directory
                     </MudText>
                 </div>
@@ -95,29 +97,32 @@
         width: 50%;
         height: 100%;
         display: flex;
-        justify-content: center;
+        justify-content: start;
         align-items: center;
         transition: all ease-out 0.3s;
         background-color: var(--Surface) !important;
         cursor: pointer;
-        margin-left: auto;
+        margin-right: auto;
+        color: var(--Outline);
         /* border-left: 1px solid var(--Surface); */
         /* border-top: 1px solid var(--Surface); */
     }
 
         .open-directory-wrapper:hover {
-            background-color: var(--Surface2) !important;
+            color: var(--OnSurface) !important;
             /*             border-color: var(--OutlineVariant);
             */
         }
 
     .model-download-header-footer {
-        height: 2.5rem;
+        height: 2rem;
         background-color: var(--Surface2);
         display: flex;
     }
 
     .model-download-footer {
+        height: 2rem;
+        padding-inline: 1rem;
         background-color: var(--Surface) !important;
     }
 
@@ -156,7 +161,7 @@
 
     private void OpenModelDirectory()
     {
-        // ModelListViewModel
+        _ = Launcher.OpenAsync(new Uri($"file://{AppSettingsService.ModelStorageDirectory}"));
     }
 
     private void OnPauseRequested(ModelInfoViewModel modelInfoViewModel)
