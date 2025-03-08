@@ -7,16 +7,16 @@
         <MudProgressLinear Value="@(ModelInfo.DownloadInfo.Progress * 100)" />
 
         <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
-            @($"{(int)ModelInfo.DownloadInfo.Progress * 100}% • {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.BytesRead)} / {FileHelpers.FormatFileSize(ModelInfo.FileSize)}")
+            @($"{Math.Round(ModelInfo.DownloadInfo.Progress * 100, 1)}% • {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.BytesRead)} / {FileHelpers.FormatFileSize(ModelInfo.FileSize)}")
         </MudText>
     </div>
 
     <div class="download-item-buttons">
         <IconButton OnClick="OnPauseResumeButtonClicked"
-                    Icon="@(ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused ?  "fas fa-play" : "fas fa-pause")"
-                    Style="IconButton.ButtonStyle.SecondaryAction" />
+        Icon="@(ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused ?  "fas fa-play" : "fas fa-pause")"
+        Style="IconButton.ButtonStyle.SecondaryAction" />
         <IconButton OnClick="() => StopRequested.InvokeAsync()"
-                    Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
+        Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
     </div>
 </div>
 
@@ -37,6 +37,10 @@
 
     private void OnDownloadInfoPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        if (e.PropertyName == nameof(DownloadInfo.Progress))
+        {
+            
+        }
         InvokeAsync(StateHasChanged);
     }
 
