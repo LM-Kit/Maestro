@@ -429,3 +429,86 @@ button {
     flex-direction: row;
     align-items: center;
 }
+
+
+
+/* MainLayout */
+
+
+#app-root {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+}
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    background-color: red;
+}
+
+#top-bar {
+    background-color: var(--Surface);
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+#nav-bar {
+    display: flex;
+    flex-direction: column;
+    width: 5rem;
+    background-color: var(--Surface15);
+    justify-content: start;
+    align-items: center;
+    flex-shrink: 0;
+    padding-block: 1rem;
+}
+
+#body-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: red;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.nav-item {
+    color: pink;
+}
+
+.nav-link {
+    font-size: 2rem !important;
+    color: var(--Outline) !important;
+    transition: color 0.2s;
+}
+
+.nav-link-active {
+    color: var(--OnSurface) !important;
+}
+
+#page-top-bar {
+    display: flex;
+    flex-direction: column;
+    height: 4.5rem;
+    padding-bottom: 0.75rem;
+    /*background-color: green;*/
+}
+
+#page-top-bar-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
+}
+
+#body-container {
+    flex: 1;
+    overflow: hidden;
+    background-color: var(--Background);
+}

@@ -5,46 +5,39 @@
 @inject LMKitService LmKitService
 @inject ISnackbar Snackbar
 @inject Maestro.Services.ISnackbarService SnackbarService
-@inject IDialogService DialogService
 
-<div id="main-container">
-
-    <div id="top-bar">
-        <hr class="horizontal-divider" />
-
-        <div class="d-flex flex-row justify-around">
-            <nav id="nav-bar">
-                <div class="nav-item">
-                    <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
-                        <MudText Typo="Typo.body1">
-                            Chat
-                        </MudText>
-
-                    </NavLink>
-                </div>
-                <div class="nav-item px-3">
-                    <NavLink ActiveClass="nav-link-active" class="nav-link" href="models">
-                        <MudText Typo="Typo.body1">
-                            Models
-                        </MudText>
-                    </NavLink>
-                </div>
-            </nav>
-
-            <IconButton Icon="fas fa-cloud-arrow-down" OnClick="OnDownadsButtonClicked" Style="IconButton.ButtonStyle.SecondaryAction" />
+<div id="app-root">
+    <nav id="nav-bar">
+        <div class="nav-item">
+            <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
+                <MudIcon Icon="@Icons.Material.Filled.Chat" />
+            </NavLink>
         </div>
+        <div class="nav-item">
+            <NavLink ActiveClass="nav-link-active" class="nav-link" href="models">
+                <MudIcon Icon="@Icons.Material.Filled.ModelTraining" />
+            </NavLink>
+        </div>
+    </nav>
 
-        <div id="page-top-bar">
-            <div id="page-top-bar-wrapper">
-                <SectionOutlet SectionName="top-bar" />
+    <hr class="vertical-divider" />
+    <div id="main-container">
+        <div id="top-bar">
+            <hr class="horizontal-divider" />
+
+
+            <div id="page-top-bar">
+                <div id="page-top-bar-wrapper">
+                    <SectionOutlet SectionName="top-bar" />
+                </div>
             </div>
+
+            <hr class="horizontal-divider" />
         </div>
 
-        <hr class="horizontal-divider" />
-    </div>
-
-    <div id="body-container">
-        @Body
+        <div id="body-container">
+            @Body
+        </div>
     </div>
 </div>
 
@@ -98,14 +91,7 @@
             // _popupService.DisplayAlert("Error loading model", $"The model failed to be loaded: {modelLoadingFailedEventArgs.Exception.Message}", "OK");
         }
     }
-
-    private async Task OnDownadsButtonClicked()
-    {
-
-        var options = new DialogOptions { CloseOnEscapeKey = true, FullScreen = false, FullWidth = true, Position = DialogPosition.TopRight };
-
-        var dialog = await DialogService.ShowAsync<ModelDownloadDialog>(null, options);
-
-        var result = await dialog.Result;
-    }
 }
+
+
+
