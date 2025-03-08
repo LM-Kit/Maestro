@@ -9,7 +9,7 @@ namespace LMKit.Maestro.Helpers
         {
             foreach (var modelCardViewModel in modelCardViewModels)
             {
-                if (modelCardViewModel.ModelInfo == modelCard)
+                if (modelCardViewModel.ModelCard == modelCard)
                 {
                     return modelCardViewModel;
                 }
@@ -22,7 +22,7 @@ namespace LMKit.Maestro.Helpers
         {
             foreach (var modelCardViewModel in modelCardViewModels)
             {
-                if (modelCardViewModel.ModelInfo.ModelUri == modelFileUri)
+                if (modelCardViewModel.ModelCard.ModelUri == modelFileUri)
                 {
                     return modelCardViewModel;
                 }

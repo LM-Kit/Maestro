@@ -6,7 +6,7 @@ namespace LMKit.Maestro.ViewModels
     public partial class ModelInfoViewModel : ViewModelBase
     {
         private ModelCard _modelCard;
-        public ModelCard ModelInfo
+        public ModelCard ModelCard
         {
             get => _modelCard;
             set

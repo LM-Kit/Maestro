@@ -34,7 +34,7 @@ namespace LMKit.Maestro.ViewModels
                     OnPropertyChanged();
 
                     if (_selectedModel != null &&
-                        _selectedModel.ModelInfo.ModelUri != LMKitService.LMKitConfig.LoadedModelUri)
+                        _selectedModel.ModelCard.ModelUri != LMKitService.LMKitConfig.LoadedModelUri)
                     {
                         HandleModelSelectionChanged(_selectedModel);
                     }
@@ -85,9 +85,9 @@ namespace LMKit.Maestro.ViewModels
 
             foreach (var model in Models)
             {
-                if (model.ModelInfo.ModelUri == fileUri)
+                if (model.ModelCard.ModelUri == fileUri)
                 {
-                    modelCard = model.ModelInfo;
+                    modelCard = model.ModelCard;
                     break;
                 }
             }
@@ -105,7 +105,7 @@ namespace LMKit.Maestro.ViewModels
 
         public void OpenModelInExplorer(ModelInfoViewModel modelInfoViewModel)
         {
-            string filePath = modelInfoViewModel.ModelInfo.LocalPath;
+            string filePath = modelInfoViewModel.ModelCard.LocalPath;
 
             if (File.Exists(filePath))
             {
@@ -125,7 +125,7 @@ namespace LMKit.Maestro.ViewModels
         {
             Task.Run(() =>
             {
-                _ = _launcher.OpenAsync(FileHelpers.GetModelFileHuggingFaceLink(modelInfoViewModel.ModelInfo));
+                _ = _launcher.OpenAsync(FileHelpers.GetModelFileHuggingFaceLink(modelInfoViewModel.ModelCard));
             });
         }
 
@@ -133,7 +133,7 @@ namespace LMKit.Maestro.ViewModels
         {
             try
             {
-                _fileManager.DeleteModel(modelCardViewModel.ModelInfo);
+                _fileManager.DeleteModel(modelCardViewModel.ModelCard);
                 modelCardViewModel.OnLocalModelRemoved();
             }
             catch (Exception ex)
@@ -148,12 +148,12 @@ namespace LMKit.Maestro.ViewModels
         {
                 if (modelCardViewModel.IsLocallyAvailable)
                 {
-                    LoadModel(modelCardViewModel.ModelInfo.ModelUri);
+                    LoadModel(modelCardViewModel.ModelCard.ModelUri);
                 }
                 else
                 {
                     // todo: DialogService.ConfirmDownload
-                    StartModelDownload(modelCardViewModel.ModelInfo);
+                    StartModelDownload(modelCardViewModel.ModelCard);
                 }
 
                 SelectedModel = modelCardViewModel;
@@ -242,7 +242,7 @@ namespace LMKit.Maestro.ViewModels
                 modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
                 Models.Remove(modelCardViewModel);
 
-                if (LMKitService.LMKitConfig.LoadedModelUri == modelCardViewModel.ModelInfo.ModelUri)
+                if (LMKitService.LMKitConfig.LoadedModelUri == modelCardViewModel.ModelCard.ModelUri)
                 {
                     LMKitService.UnloadModel();
                 }
@@ -253,7 +253,7 @@ namespace LMKit.Maestro.ViewModels
         {
             ModelInfoViewModel modelCardViewModel = Models[index];
 
-            modelCardViewModel.ModelInfo = modelCard;
+            modelCardViewModel.ModelCard = modelCard;
         }
 
         private void ClearUserModelList()
@@ -279,10 +279,10 @@ namespace LMKit.Maestro.ViewModels
 
                 foreach (var userModel in Models)
                 {
-                    if (userModel.ModelInfo.ModelUri == modeUri)
+                    if (userModel.ModelCard.ModelUri == modeUri)
                     {
                         userModel.OnLocalModelCreated();
-                        _fileManager.OnModelDownloaded(userModel.ModelInfo);
+                        _fileManager.OnModelDownloaded(userModel.ModelCard);
                         break;
                     }
                 }

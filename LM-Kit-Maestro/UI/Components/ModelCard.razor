@@ -1,4 +1,4 @@
-﻿<div class="model-card-root @(GetClasses())" title="@ViewModel.ModelInfo.Description">
+﻿<div class="model-card-root @(GetClasses())" title="@ViewModel.ModelCard.Description">
     <MudGrid Justify="Justify.SpaceBetween" Spacing="@(Dense ? 1 : 3)">
         <MudItem xs="@(Dense ? 5 : 12)" Class="d-flex align-center">
             <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3" Class="overflow-hidden">
@@ -6,7 +6,7 @@
                      title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
                 </div>
                 <MudText Typo="Typo.subtitle2" Class="text-truncate">
-                    @ViewModel.ModelInfo.ShortModelName
+                    @ViewModel.ModelCard.ShortModelName
                 </MudText>
             </MudStack>
         </MudItem>
@@ -15,7 +15,7 @@
         {
             <MudItem xs="2">
                 <MudText Typo="Typo.overline" Class="outline text-truncate">
-                    @ViewModel.ModelInfo.Publisher
+                    @ViewModel.ModelCard.Publisher
                 </MudText>
             </MudItem>
 
@@ -58,16 +58,16 @@
                 {
                     <MudItem xs="3">
                         <MudText Class="outline text-truncate"
-                                 title="@string.Format("The architecture of this model is {0}", ViewModel.ModelInfo.Architecture)"
+                                 title="@string.Format("The architecture of this model is {0}", ViewModel.ModelCard.Architecture)"
                                  Typo="Typo.overline">
-                            @ViewModel.ModelInfo.Architecture
+                            @ViewModel.ModelCard.Architecture
                         </MudText>
                     </MudItem>
                 }
 
                 <MudItem xs="@(Dense ? 4 : 3)">
                     <MudText
-                        title="@string.Format("This model has {0:N0} parameters", ViewModel.ModelInfo.ParameterCount)"
+                        title="@string.Format("This model has {0:N0} parameters", ViewModel.ModelCard.ParameterCount)"
                         Typo="Typo.overline" Class="outline text-truncate">
                         @ViewModel.ModelSize
                     </MudText>
@@ -75,7 +75,7 @@
 
                 <MudItem xs="@(Dense ? 4 : 3)">
                     <MudText
-                        title="@string.Format("This model supports a maximum context length of {0:N0} tokens", ViewModel.ModelInfo.ContextLength)"
+                        title="@string.Format("This model supports a maximum context length of {0:N0} tokens", ViewModel.ModelCard.ContextLength)"
                         Typo="Typo.overline" Class="outline text-truncate">
                         @($"{ViewModel.MaxContextLengthKB}k")
                     </MudText>
@@ -96,7 +96,7 @@
                 <MudItem xs="8">
                     <MudText Align="Align.Right" Typo="Typo.overline"
                              Class="outline text-truncate flex-grow-1">
-                        @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelInfo.FileSize)
+                        @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelCard.FileSize)
                     </MudText>
                 </MudItem>
 
