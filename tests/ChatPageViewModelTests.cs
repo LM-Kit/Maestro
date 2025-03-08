@@ -45,7 +45,7 @@ public class ChatPageViewModelTests
 
         var chatPageViewModel = testService.ChatPageViewModel;
 
-        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
+        bool loadingSuccess = await testService.LoadModel(Constants.Model2);
         Assert.True(loadingSuccess);
 
         testService.ChatPageViewModel.StartNewConversation();

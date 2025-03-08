@@ -6,7 +6,8 @@
         <MudProgressLinear Value="@(ModelInfo.DownloadInfo.Progress * 100)" />
 
         <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
-            @($"{ModelInfo.DownloadInfo.Progress * 100}% • {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.BytesRead)} / {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.ContentLength!.Value)}")
+            @($"{ModelInfo.DownloadInfo.Progress * 100}% • {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.BytesRead)} /")
+            @* {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.ContentLength.Value)} *@
         </MudText>
     </div>
     <div class="item-buttons">
@@ -27,6 +28,7 @@
         padding-inline: 0.5rem;
         padding-block: 0.5rem;
         border: 1px solid var(--OutlineVariant);
+        flex-grow: 1;
     }
 
     .download-item-body {
@@ -41,6 +43,7 @@
         gap: 0.5rem;
     }
 </style>
+s
 @code {
     [Parameter] public ModelInfoViewModel ModelInfo { get; set; }
 

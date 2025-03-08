@@ -15,7 +15,7 @@ public class TranslationTests
     {
         var testService = new MaestroTestsService();
         testService.LMKitService.LMKitConfig.RequestTimeout = 60;
-        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
+        bool loadingSuccess = await testService.LoadModel(Constants.Model2);
         Assert.True(loadingSuccess);
 
         var result = await testService.LMKitService.Translation.Translate("moitié route sur mon défunt père ???", LMKit.TextGeneration.Language.French);
@@ -27,7 +27,7 @@ public class TranslationTests
     {
         var testService = new MaestroTestsService();
         testService.LMKitService.LMKitConfig.RequestTimeout = 60;
-        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.TranslationModel);
+        bool loadingSuccess = await testService.LoadModel(Constants.TranslationModel);
         Assert.True(loadingSuccess);
 
         var result = await testService.LMKitService.Translation.DetectLanguage("l'existence du véhicule précède l'essence, qu'en est-il donc du pédoncule dans la question du sens de cette phrase ?");

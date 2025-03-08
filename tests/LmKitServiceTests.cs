@@ -8,10 +8,19 @@ namespace Maestro.Tests;
 public class LMKitServiceTests
 {
     [Fact]
+    public async Task DownloadModel()
+    {
+        MaestroTestsService testService = new();
+        var startsModelDownload = await testService.StartModelDownload(Constants.ModelCard);
+
+        Assert.True(startsModelDownload);
+    }
+
+    [Fact]
     public async Task LoadModel()
     {
         MaestroTestsService testService = new();
-        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model1);
+        bool loadingSuccess = await testService.LoadModel(Constants.Model1);
         Assert.True(loadingSuccess);
     }
 
@@ -19,13 +28,13 @@ public class LMKitServiceTests
     public async Task LoadUnload()
     {
         MaestroTestsService testService = new();
-        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model1);
+        bool loadingSuccess = await testService.LoadModel(Constants.Model1);
         Assert.True(loadingSuccess);
 
         bool unloadingSuccess = await testService.UnloadModel();
         Assert.True(unloadingSuccess);
 
-        loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
+        loadingSuccess = await testService.LoadModel(Constants.Model2);
         Assert.True(loadingSuccess);
     }
 
@@ -33,10 +42,10 @@ public class LMKitServiceTests
     public async Task Load2Models()
     {
         MaestroTestsService testService = new();
-        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model1);
+        bool loadingSuccess = await testService.LoadModel(Constants.Model1);
         Assert.True(loadingSuccess);
 
-        loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
+        loadingSuccess = await testService.LoadModel(Constants.Model2);
         Assert.True(loadingSuccess);
     }
 
@@ -121,7 +130,7 @@ public class LMKitServiceTests
     private async Task Submit1ChangeModelSubmit1()
     {
         MaestroTestsService testService = new();
-        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model1);
+        bool loadingSuccess = await testService.LoadModel(Constants.Model1);
         Assert.True(loadingSuccess);
 
         var conversation = testService.GetNewLMKitConversation();
@@ -129,7 +138,7 @@ public class LMKitServiceTests
         var response = await testService.LMKitService.Chat.SubmitPrompt(conversation, "2+2");
         TestsHelpers.AssertPromptResponseIsSuccessful(response);
 
-        loadingSuccess = await testService.LoadModel(MaestroTestsService.Model2);
+        loadingSuccess = await testService.LoadModel(Constants.Model2);
         Assert.True(loadingSuccess);
 
         response = await testService.LMKitService.Chat.SubmitPrompt(conversation, "1+1");
@@ -143,14 +152,14 @@ public class LMKitServiceTests
     {
         MaestroTestsService testService = new();
         testService.LMKitService.LMKitConfig.RequestTimeout = 30;
-        bool loadingSuccess = await testService.LoadModel(MaestroTestsService.Model1);
+        bool loadingSuccess = await testService.LoadModel(Constants.Model1);
         Assert.True(loadingSuccess);
 
         var conversation = testService.GetNewLMKitConversation();
 
         var firstResponseTask = testService.LMKitService.Chat.SubmitPrompt(conversation, "tell me a story");
 
-        var secondModelLoadingTask = testService.LoadModel(MaestroTestsService.Model2);
+        var secondModelLoadingTask = testService.LoadModel(Constants.Model2);
 
         var firstPromptResult = await firstResponseTask;
 
@@ -228,6 +237,5 @@ public class LMKitServiceTests
         var response = await testService.LMKitService.Chat.RegenerateResponse(conversation.LMKitConversation, lastMessage!);
 
         TestsHelpers.AssertPromptResponseIsSuccessful(response);
-
     }
 }
