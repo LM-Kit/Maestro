@@ -18,7 +18,7 @@
         {
             <div class="top-bar-side top-bar-side-left @(!ChatsSidebarIsResizing ? "width-transition" : "")"
                     style="@(ChatsSidebarIsToggled ? $"width: {ChatsSidebarWidth}px" : "")">
-                <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
+                <div class="d-flex flex-grow-1 align-center gap-2 @(ChatsSidebarIsToggled ? "justify-space-between" : "justify-start")">
 
                     <div class="d-flex flex-shrink-0">
                         <IconButton Style="IconButton.ButtonStyle.SidebarToggle"

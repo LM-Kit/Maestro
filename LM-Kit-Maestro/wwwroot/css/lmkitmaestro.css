@@ -473,7 +473,7 @@ button {
 #top-bar {
     display: flex;
     flex-direction: column;
-    height: auto;
+    height: 5rem;
 }
 
 #nav-bar {
@@ -503,15 +503,17 @@ button {
     font-size: 2rem !important;
     color: var(--Outline) !important;
     transition: all ease-out 0.3s;
+    border: 1px solid transparent;
 }
 
 .nav-link-active {
-    color: var(--OnSurface) !important;
-    background-color: var(--Surface2) !important;
+    color: var(--Primary) !important;
+    background-color: var(--Surface15) !important;
+    border: 1px solid var(--OutlineVariant);
 }
 
 .nav-link:hover{
-    background-color: var(--Surface2);
+    background-color: var(--Surface15);
 }
     .nav-link-active.nav-item {
     }
@@ -519,7 +521,7 @@ button {
 #page-top-bar {
     display: flex;
     flex-direction: column;
-    height: 4.5rem;
+    height: 12rem;
 }
 
 #page-top-bar-wrapper {
