@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LMKit.Model;
+using System.Diagnostics;
 
 namespace LMKit.Maestro.Services;
 
@@ -7,6 +8,8 @@ public partial class LLMFileManager : ObservableObject
 {
     internal sealed class FileDownloader : IDisposable
     {
+        private const int ProgressEventMinInterval = 500;
+
         private readonly HttpClient _httpClient;
         private ModelCard _modelCard;
         private readonly string _downloadUrl;
@@ -91,6 +94,9 @@ public partial class LLMFileManager : ObservableObject
                 long totalBytesRead = 0L;
                 byte[] buffer = new byte[downloadChunkSize];
 
+                Stopwatch stopwatch = new();
+                stopwatch.Start();
+
                 while (true)
                 {
                     if (_paused)
@@ -111,7 +117,11 @@ public partial class LLMFileManager : ObservableObject
 
                     totalBytesRead += bytesRead;
 
-                    DownloadProgressedEventHandler?.Invoke(_modelCard, totalBytes, totalBytesRead);
+                    if (stopwatch.ElapsedMilliseconds >= ProgressEventMinInterval)
+                    {
+                        DownloadProgressedEventHandler?.Invoke(_modelCard, totalBytes, totalBytesRead);
+                        stopwatch.Restart();
+                    }
                 }
 
                 destination.Dispose();
