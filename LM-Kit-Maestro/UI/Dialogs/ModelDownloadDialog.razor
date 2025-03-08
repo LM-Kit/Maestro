@@ -2,22 +2,48 @@
 
 <MudDialog Class="model-download-root">
     <DialogContent>
-        <div class="model-download-body">
-            <div class="model-download-header-footer">
-                    <MudIcon Icon="fas fa-download" Size="Size.Small" />
-                    <MudText Align="Align.Center" Typo="Typo.subtitle1">
-                        Downloads
-                    </MudText>
+        <div class="d-flex flex-column">
+            <div class="model-download-header-footer justify-center align-center gap-2">
+                <MudIcon Icon="fas fa-download" Style="font-size: 0.8rem !important; color: var(--Outline)" />
+                <MudText Align="Align.Center" Style="color: var(--Outline)" Typo="Typo.caption">
+                    Downloads
+                </MudText>
             </div>
 
             <div class="model-download-body">
-               <MudText Typo="Typo.caption">
-                   Models that you download will appear here.
-                </MudText>
-            </div>
-            <div class="model-download-header-footer">
+                @if (ModelListViewModel.ModelDownloads.Count == 0)
+                {
+                    <div class="d-flex align-center">
+                        <MudText Typo="Typo.caption" Align="Align.Center">
+                            Models that you download will appear here.
+                        </MudText>
 
-                <button class="text-button">Open models directory</button>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var model in ModelListViewModel.ModelDownloads)
+                    {
+                        <div class="model-download-item">
+                            <MudText Typo="Typo.body2">
+                                @model.Name
+                            </MudText>
+
+                            <MudText Typo="Typo.caption">
+                                @model.DownloadInfo.Progress
+                            </MudText>
+                        </div>
+                    }
+                }
+            </div>
+
+            <div class="model-download-header-footer justify-end">
+                <div class="open-directory-wrapper" @onclick="OpenModelDirectory">
+                    <MudText Typo="Typo.caption">
+                        Open download directory
+                    </MudText>
+                </div>
+
             </div>
         </div>
     </DialogContent>
@@ -25,48 +51,51 @@
 
 <style>
 
-    .model-download-body{
+    .model-download-root {
         display: flex;
         flex-direction: column;
-        background-color: green;
-    }
-    .model-download-root{
         width: 24rem;
-   /*      display: flex;
-        border: solid 1px var(--OutlineVariant);
-        background-color: red;
-        flex-direction: column;
-        border-radius: 0.5rem;
-
- */
-
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        flex-grow: 1;
-        flex-shrink: 1;
-        background-color: var(--Surface);
         border-radius: 1rem;
         border: 1px solid var(--OutlineVariant);
-        border-radius: 0.5rem;
     }
 
+    .model-download-body {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+        height: 20rem;
+        background-color: var(--Surface);
+    }
 
-    .model-download-body{
-        max-height: 40rem;
-        height: auto;
-        min-height: 20rem;
-        flex-grow: 1;
-        flex-shrink: 1;
+    .open-directory-wrapper {
+        width: 50%;
         background-color: var(--Surface2);
+        display: flex;
+        justify-content: center;
+        transition: all ease-out 0.3s;
     }
 
-    .model-download-header-footer{
-        height: 2rem;
-        background-color: var(--Surface15);
+        .open-directory-wrapper:hover {
+            background-color: var(--Surface);
+        }
+
+    .model-download-header-footer {
+        height: 3rem;
+        background-color: var(--Surface2);
         display: flex;
         flex-direction: row;
     }
+
+    .open-directory-button {
+        border-radius: 0 important;
+        background-color: var(--Surface2) !important;
+    }
+
+        .open-directory-button:hover {
+            background-color: var(--Surface) !important;
+        }
 </style>
 @code {
     [Parameter] public MarkupString Message { get; set; } = default(MarkupString);
@@ -86,7 +115,10 @@
         await InvokeAsync(() => StateHasChanged());
     }
 
-
+    private void OpenModelDirectory()
+    {
+        // ModelListViewModel
+    }
 }
 
 @code {

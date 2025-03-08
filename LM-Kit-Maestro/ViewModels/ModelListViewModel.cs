@@ -15,7 +15,7 @@ namespace LMKit.Maestro.ViewModels
 
         public LMKitService LMKitService { get; }
 
-        public ObservableCollection<ModelInfoViewModel> ModelDownlooads { get; } = new ObservableCollection<ModelInfoViewModel>();
+        public ObservableCollection<ModelInfoViewModel> ModelDownloads { get; } = new ObservableCollection<ModelInfoViewModel>();
 
         public ObservableCollection<ModelInfoViewModel> Models { get; }
 
@@ -156,7 +156,7 @@ namespace LMKit.Maestro.ViewModels
             {
                 // todo: DialogService.ConfirmDownload
                 _fileManager.DownloadModel(modelCardViewModel.ModelCard);
-                ModelDownlooads.Add(modelCardViewModel);
+                ModelDownloads.Add(modelCardViewModel);
             }
 
             LoadModel(modelCardViewModel.ModelCard.ModelUri);
