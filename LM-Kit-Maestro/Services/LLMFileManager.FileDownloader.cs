@@ -7,7 +7,6 @@ public partial class LLMFileManager : ObservableObject
 {
     internal sealed class FileDownloader : IDisposable
     {
-#if BETA_DOWNLOAD_MODELS
         private readonly HttpClient _httpClient;
         private ModelCard _modelCard;
         private readonly string _downloadUrl;
@@ -131,7 +130,6 @@ public partial class LLMFileManager : ObservableObject
                 ErrorEventHandler?.Invoke(_modelCard, exception);
             }
         }
-#endif
 
         public void Dispose()
         {

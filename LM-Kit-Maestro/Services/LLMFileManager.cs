@@ -76,10 +76,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 
     public event EventHandler? FileCollectingCompleted;
-#if BETA_DOWNLOAD_MODELS
     public event EventHandler? ModelDownloadingProgressed;
     public event EventHandler? ModelDownloadingCompleted;
-#endif
 
     public LLMFileManager(IAppSettingsService appSettingsService, HttpClient httpClient)
     {
@@ -132,7 +130,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         _ = CollectModelsAsync();
     }
 
-#if BETA_DOWNLOAD_MODELS
+
+    #region Models download
+
     public void DownloadModel(ModelCard modelCard)
     {
         var filePath = Path.Combine(ModelStorageDirectory, modelCard.Publisher, modelCard.Repository, modelCard.FileName);
@@ -152,6 +152,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             }
         }
     }
+
 
     private void ReleaseFileDownloader(ModelCard modelCard)
     {
@@ -221,13 +222,13 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             fileDownloader!.Resume();
         }
     }
-#endif
 
     public void OnModelDownloaded(ModelCard modelCard)
     {
         TotalModelSize += modelCard.FileSize;
         DownloadedCount++;
     }
+    #endregion
 
     public void DeleteModel(ModelCard modelCard)
     {
@@ -562,8 +563,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 #endif
 
-#if BETA_DOWNLOAD_MODELS
-    private void OnModelDownloadingProgressed(string path, long? contentLength, long bytesRead)
+    private void OnModelDownloadingProgressed(string filePath, long? contentLength, long bytesRead)
     {
         double progress = 0;
 
@@ -581,11 +581,10 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         if (ModelDownloadingProgressed != null)
         {
-            ModelDownloadingProgressedEventArgs eventArgs = new ModelDownloadingProgressedEventArgs(path, bytesRead, contentLength, progress);
+            ModelDownloadingProgressedEventArgs eventArgs = new ModelDownloadingProgressedEventArgs(filePath, bytesRead, contentLength, progress);
             ModelDownloadingProgressed.Invoke(this, eventArgs);
         }
     }
-#endif
 
 
     private void OnModelCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

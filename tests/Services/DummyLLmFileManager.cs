@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace Maestro.Tests.Services;
-
 internal class DummyLLmFileManager : ILLMFileManager
 {
     private ObservableCollection<ModelCard> _models = new ObservableCollection<ModelCard>();
@@ -54,15 +52,16 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     bool ILLMFileManager.FileCollectingInProgress { get; }
 
-    string ILLMFileManager.ModelStorageDirectory { get; set ; }
+    string ILLMFileManager.ModelStorageDirectory { get; set; }
 
     long ILLMFileManager.TotalModelSize { get; }
 
     int ILLMFileManager.DownloadedCount { get; }
 
-
 #pragma warning disable 67
     public event EventHandler? FileCollectingCompleted;
+    public event EventHandler? ModelDownloadingProgressed;
+    public event EventHandler? ModelDownloadingCompleted;
     public event PropertyChangedEventHandler PropertyChanged;
     public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
 #pragma warning restore 67
@@ -82,6 +81,22 @@ internal class DummyLLmFileManager : ILLMFileManager
     }
 
     public void OnModelDownloaded(ModelCard modelInfo)
+    {
+    }
+
+    public void DownloadModel(ModelCard modelCard)
+    {
+    }
+
+    public void CancelModelDownload(ModelCard modelCard)
+    {
+    }
+
+    public void PauseModelDownload(ModelCard modelCard)
+    {
+    }
+
+    public void ResumeModelDownload(ModelCard modelCard)
     {
     }
 }
