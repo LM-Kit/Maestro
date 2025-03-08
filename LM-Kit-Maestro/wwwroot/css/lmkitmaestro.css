@@ -299,6 +299,20 @@ button {
     background-color: var(--Surface2) !important;
 }
 
+.model-downloads-button {
+    background-color: transparent;
+    height: 2.8rem;
+    width: 2.8rem;
+    border-radius: 50%;
+    border: 1px solid var(--OutlineVariant);
+    color: var(--Outline);
+    transition: all ease-out 0.3s;
+}
+
+    .model-downloads-button:hover {
+        background-color: var(--Surface2);
+    }
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px !important;
@@ -434,12 +448,18 @@ button {
 
 /* MainLayout */
 
-
 #app-root {
     display: flex;
     flex-direction: row;
     height: 100vh;
     width: 100vw;
+}
+
+#app-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-block: 1rem;
 }
 
 #main-container {
@@ -465,7 +485,6 @@ button {
     justify-content: start;
     align-items: center;
     flex-shrink: 0;
-    padding-block: 1rem;
 }
 
 #body-container {
