@@ -3,18 +3,15 @@
 <MudDialog Class="model-download-root">
     <DialogContent>
         <div class="d-flex flex-column">
-            <div class="model-download-header-footer justify-center align-center gap-2">
-                <div class="d-flex justify-between align-center">
-                    <div class="justify-center grow-1 gap-2">
-                        <MudIcon Icon="fas fa-download" Style="font-size: 0.7rem !important; color: var(--Outline)" />
-                        <MudText Align="Align.Center" Style="color: var(--Outline)" Typo="Typo.caption">
-                            Downloads
-                        </MudText>
-                    </div>
+            <div class="model-download-header-footer">
+                <MudIcon Icon="fas fa-download" Style="font-size: 0.7rem !important; color: var(--Outline); visibility: hidden;" />
 
-                    <div>
-                        <IconButton Style="IconButton.ButtonStyle.Icon" Icon="fas fa-close" OnClick="DialogInstance.Cancel" />
-                    </div>
+                <MudText class="download-title" Align="Align.Center" Typo="Typo.caption">
+                    Downloads
+                </MudText>
+
+                <div class="close-button">
+                    <IconButton Style="IconButton.ButtonStyle.Icon" Icon="fas fa-close" OnClick="DialogInstance.Cancel" />
                 </div>
             </div>
 
@@ -59,7 +56,6 @@
 </MudDialog>
 
 <style>
-
     .model-download-root {
         display: flex;
         flex-direction: column;
@@ -96,6 +92,12 @@
         height: 2.5rem;
         background-color: var(--Surface2);
         display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .close-button {
+        margin-left: auto;
     }
 </style>
 
