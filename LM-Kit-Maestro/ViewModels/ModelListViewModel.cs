@@ -57,7 +57,6 @@ namespace LMKit.Maestro.ViewModels
             Models = [];
 
             _fileManager.ModelDownloadingProgressed += OnModelDownloadingProgressed;
-            LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
             LMKitService.ModelLoadingFailed += OnModelLoadingFailed;
             LMKitService.ModelLoaded += OnModelLoadingCompleted;
             LMKitService.PropertyChanged += OnLmKitServicePropertyChanged;
@@ -103,6 +102,17 @@ namespace LMKit.Maestro.ViewModels
             {
                 _snackbarService.Show("Model file not found",
                     $"Make sure the file path points to your current model folder and that it exists: {fileUri.LocalPath}");
+            }
+        }
+
+        public void PausemodelDownload(ModelInfoViewModel modelInfoViewModel)
+        {
+            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, modelInfoViewModel.ModelCard);
+
+            if (modelCardViewModel != null)
+            {
+                _fileManager.PauseModelDownload(modelInfoViewModel.ModelCard);
+                modelCardViewModel.DownloadInfo.Status = DownloadStatus.DownloadPaused;
             }
         }
 
