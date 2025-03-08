@@ -36,7 +36,7 @@ namespace LMKit.Maestro.ViewModels
                     if (_selectedModel != null &&
                         _selectedModel.ModelInfo.ModelUri != LMKitService.LMKitConfig.LoadedModelUri)
                     {
-                        LoadModel(_selectedModel.ModelInfo.ModelUri);
+                        HandleModelSelectionChanged(_selectedModel);
                     }
                 }
             }
@@ -60,6 +60,7 @@ namespace LMKit.Maestro.ViewModels
             LMKitService.PropertyChanged += OnLmKitServicePropertyChanged;
         }
 
+        
         public void Initialize()
         {
             if (LMKitService.LMKitConfig.LoadedModelUri != null)
@@ -69,7 +70,6 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        [RelayCommand]
         public void EjectModel()
         {
             if (SelectedModel != null)
@@ -79,7 +79,6 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        [RelayCommand]
         public void LoadModel(Uri fileUri)
         {
             ModelCard? modelCard = null;
@@ -130,12 +129,11 @@ namespace LMKit.Maestro.ViewModels
             });
         }
 
-        [RelayCommand]
         public void DeleteModel(ModelInfoViewModel modelCardViewModel)
         {
             try
             {
-                //_fileManager.DeleteModel(modelCardViewModel.ModelInfo);
+                _fileManager.DeleteModel(modelCardViewModel.ModelInfo);
                 modelCardViewModel.OnLocalModelRemoved();
             }
             catch (Exception ex)
@@ -145,6 +143,21 @@ namespace LMKit.Maestro.ViewModels
         }
 
         #region Private methods
+
+        private void HandleModelSelectionChanged(ModelInfoViewModel modelCardViewModel)
+        {
+                if (modelCardViewModel.IsLocallyAvailable)
+                {
+                    LoadModel(modelCardViewModel.ModelInfo.ModelUri);
+                }
+                else
+                {
+                    // todo: DialogService.ConfirmDownload
+                    StartModelDownload(modelCardViewModel.ModelInfo);
+                }
+
+                SelectedModel = modelCardViewModel;
+        }
 
         private void OnModelCollectionChanged(object? sender,
             System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -179,6 +192,11 @@ namespace LMKit.Maestro.ViewModels
                     index++;
                 }
             }
+        }
+
+        private void StartModelDownload(ModelCard modedlCard)
+        {
+            _fileManager.DownloadModel(modedlCard);
         }
 
         private void AddNewModel(ModelCard modelCard)
@@ -264,7 +282,7 @@ namespace LMKit.Maestro.ViewModels
                     if (userModel.ModelInfo.ModelUri == modeUri)
                     {
                         userModel.OnLocalModelCreated();
-                        //_fileManager.OnModelDownloaded(userModel.ModelInfo);
+                        _fileManager.OnModelDownloaded(userModel.ModelInfo);
                         break;
                     }
                 }
