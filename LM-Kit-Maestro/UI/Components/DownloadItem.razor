@@ -1,20 +1,24 @@
 ﻿<div class="download-item-root"> 
-    <div>
-
+    <div class="download-item-body">
         <MudText Typo="Typo.subtitle2">
             @ModelInfo.ModelCard.ShortModelName
         </MudText>
+        <MudProgressLinear Value="@(ModelInfo.DownloadInfo.Progress * 100)" />
+
+        <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
+            @($"{ModelInfo.DownloadInfo.Progress * 100}% • {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.BytesRead)} / {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.ContentLength!.Value)}")
+        </MudText>
     </div>
-        <div class="item-buttons">
-            <IconButton Icon="fas fa-pause" Style="IconButton.ButtonStyle.SecondaryAction" />
-            <IconButton Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
-        </div>
+    <div class="item-buttons">
+        <IconButton Icon="fas fa-pause" Style="IconButton.ButtonStyle.SecondaryAction" />
+        <IconButton Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
+    </div>
 </div>
 
 <style>
     .download-item-root {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         gap: 0.5rem;
         width: 100%;
         height: 100%;
@@ -22,13 +26,32 @@
         border-radius: 0.25rem;
         padding-inline: 0.5rem;
         padding-block: 0.5rem;
+        border: 1px solid var(--OutlineVariant);
     }
 
-    .item-buttons{
+    .download-item-body {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        flew-grow: 1;
+    }
+
+    .download-item-buttons{
         width: auto;
         gap: 0.5rem;
     }
 </style>
 @code {
     [Parameter] public ModelInfoViewModel ModelInfo { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        ModelInfo.PropertyChanged += OnModelInfoViewModelPropertyChanged;
+    }
+
+    private void OnModelInfoViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
 }

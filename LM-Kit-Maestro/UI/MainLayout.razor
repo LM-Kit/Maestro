@@ -37,10 +37,13 @@
         <div id="page-top-bar">
             <div id="page-top-bar-wrapper">
                 <SectionOutlet SectionName="top-bar" />
+                <div style="width: 400px; margin-block: 40px; background-color: var(--Surface2)">
+
                 @foreach (var model in ModelListViewModel.ModelDownloads)
                 {
                     <DownloadItem ModelInfo="model"/>
                 }
+                </div>
             </div>
         </div>
 
