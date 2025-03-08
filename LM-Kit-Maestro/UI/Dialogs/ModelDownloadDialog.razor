@@ -3,11 +3,19 @@
 <MudDialog Class="model-download-root">
     <DialogContent>
         <div class="d-flex flex-column">
-            <div class="model-download-header-footer justify-center align-center gap-1">
-                <MudIcon Icon="fas fa-download" Style="font-size: 0.7rem !important; color: var(--Outline)" />
-                <MudText Align="Align.Center" Style="color: var(--Outline)" Typo="Typo.caption">
-                    Downloads
-                </MudText>
+            <div class="model-download-header-footer justify-center align-center gap-2">
+                <div class="d-flex justify-between align-center">
+                    <div class="justify-center grow-1 gap-2">
+                        <MudIcon Icon="fas fa-download" Style="font-size: 0.7rem !important; color: var(--Outline)" />
+                        <MudText Align="Align.Center" Style="color: var(--Outline)" Typo="Typo.caption">
+                            Downloads
+                        </MudText>
+                    </div>
+
+                    <div>
+                        <IconButton Style="IconButton.ButtonStyle.Icon" Icon="fas fa-close" OnClick="DialogInstance.Cancel" />
+                    </div>
+                </div>
             </div>
 
             <div class="model-download-body">
@@ -17,7 +25,6 @@
                         <MudText Typo="Typo.caption" Align="Align.Center">
                             Models that you download will appear here.
                         </MudText>
-
                     </div>
                 }
                 else
@@ -38,12 +45,12 @@
             </div>
 
             <div class="model-download-header-footer justify-end">
-                <div class="open-directory-wrapper gap-1" @onclick="OpenModelDirectory">
-                        <MudIcon Icon="fas fa-folder" Style="font-size: 0.7rem !important; color: var(--Outline)" />
+                <div class="open-directory-wrapper gap-2" @onclick="OpenModelDirectory">
+                    <MudIcon Icon="fas fa-folder" Style="font-size: 0.7rem !important; color: var(--Outline)" />
 
-                        <MudText style="color: var(--Outline)" Typo="Typo.caption">
-                            Open download directory
-                        </MudText>
+                    <MudText style="color: var(--Outline)" Typo="Typo.caption">
+                        Open download directory
+                    </MudText>
                 </div>
 
             </div>
