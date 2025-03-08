@@ -8,7 +8,7 @@ internal class DummyLLmFileManager : ILLMFileManager
 {
     private ObservableCollection<ModelCard> _models = new ObservableCollection<ModelCard>();
     private ObservableCollection<ModelCard> _unsortedModels = new ObservableCollection<ModelCard>();
-
+    private LLMFileManager _fileManager;
     public ReadOnlyObservableCollection<ModelCard> Models { get; }
 
     public ReadOnlyObservableCollection<ModelCard> UnsortedModels { get; }
@@ -19,33 +19,26 @@ internal class DummyLLmFileManager : ILLMFileManager
     public long TotalModelSize { get; set; }
     public int DownloadedCount { get; set; }
 
+
+    public event EventHandler? FileCollectingCompleted;
+    public event EventHandler? ModelDownloadingProgressed;
+    public event EventHandler? ModelDownloadingCompleted;
+    public event PropertyChangedEventHandler PropertyChanged;
+    public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
+
     public DummyLLmFileManager(IAppSettingsService appSettingsService, HttpClient httpClient)
     {
-        LLMFileManager fileManager = new LLMFileManager(appSettingsService, httpClient);
+        _fileManager = new LLMFileManager(appSettingsService, httpClient);
+        _fileManager.ModelDownloadingProgressed += _fileManager_ModelDownloadingProgressed;
         Models = new ReadOnlyObservableCollection<ModelCard>(_models);
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
     }
 
-    event PropertyChangedEventHandler ILLMFileManager.PropertyChanged
+    private void _fileManager_ModelDownloadingProgressed(object? sender, EventArgs e)
     {
-        add
-        {
-        }
-
-        remove
-        {
-        }
+        this.ModelDownloadingProgressed?.Invoke(this, e);
     }
 
-    event NotifyCollectionChangedEventHandler? ILLMFileManager.SortedModelCollectionChanged
-    {
-        add
-        {
-        }
-        remove
-        {
-        }
-    }
 
     ReadOnlyObservableCollection<ModelCard> ILLMFileManager.Models { get; }
 
@@ -58,14 +51,6 @@ internal class DummyLLmFileManager : ILLMFileManager
     long ILLMFileManager.TotalModelSize { get; }
 
     int ILLMFileManager.DownloadedCount { get; }
-
-#pragma warning disable 67
-    public event EventHandler? FileCollectingCompleted;
-    public event EventHandler? ModelDownloadingProgressed;
-    public event EventHandler? ModelDownloadingCompleted;
-    public event PropertyChangedEventHandler PropertyChanged;
-    public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
-#pragma warning restore 67
 
     public void DeleteModel(ModelCard modelInfo)
     {
@@ -87,7 +72,7 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     public void DownloadModel(ModelCard modelCard)
     {
-        
+        _fileManager.DownloadModel(modelCard);
     }
 
     public void CancelModelDownload(ModelCard modelCard)

@@ -109,19 +109,13 @@ namespace Maestro.Tests
 
         private void OnModelDownloadingProgressed(object? sender, EventArgs e)
         {
-            var args = (LMKitService.ModelLoadingProgressedEventArgs)e;
+            var args = (LMKitService.ModelDownloadingProgressedEventArgs)e;
 
-            if (args.Progress == 0)
+            if (args.BytesRead > 0)
             {
-                Trace.WriteLine("Downloading model...");
+                ProgressEventWasRaided = true;
+                _downloadProgressTask!.SetResult(true);
             }
-            else if (args.Progress % 10 == 0)
-            {
-                Trace.WriteLine(args.Progress);
-            }
-
-            ProgressEventWasRaided = true;
-            _downloadProgressTask!.SetResult(true);
         }
 
         private void LMKitService_ModelLoadingCompleted(object? sender, EventArgs e)
