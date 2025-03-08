@@ -159,8 +159,6 @@ namespace LMKit.Maestro.ViewModels
                 ModelDownloads.Add(modelCardViewModel);
             }
 
-            LoadModel(modelCardViewModel.ModelCard.ModelUri);
-
             SelectedModel = modelCardViewModel;
         }
 
