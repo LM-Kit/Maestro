@@ -26,11 +26,11 @@ public partial class LLMFileManager : ObservableObject
         public DownloadProgressDelegate? DownloadProgressedEventHandler;
         public DownloadErrorDelegate? ErrorEventHandler;
 
-        public FileDownloader(HttpClient client, ModelCard modelCard, string downloadUrl, string filePath)
+        public FileDownloader(HttpClient client, ModelCard modelCard, string filePath)
         {
             _modelCard = modelCard;
             _httpClient = client;
-            _downloadUrl = downloadUrl;
+            _downloadUrl = modelCard.ModelUri.ToString();
             _filePath = filePath;
             _manualResetEvent = new ManualResetEvent(false);
             _cancellationTokenSource = new CancellationTokenSource();

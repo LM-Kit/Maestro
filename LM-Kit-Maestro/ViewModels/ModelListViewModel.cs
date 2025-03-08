@@ -15,6 +15,8 @@ namespace LMKit.Maestro.ViewModels
 
         public LMKitService LMKitService { get; }
 
+        public ObservableCollection<ModelInfoViewModel> ModelDownlooads { get; } = new ObservableCollection<ModelInfoViewModel>();
+
         public ObservableCollection<ModelInfoViewModel> Models { get; }
 
         [ObservableProperty] public ModelLoadingState _loadingState;
@@ -146,17 +148,20 @@ namespace LMKit.Maestro.ViewModels
 
         private void HandleModelSelectionChanged(ModelInfoViewModel modelCardViewModel)
         {
-                if (modelCardViewModel.IsLocallyAvailable)
-                {
-                    LoadModel(modelCardViewModel.ModelCard.ModelUri);
-                }
-                else
-                {
-                    // todo: DialogService.ConfirmDownload
-                    StartModelDownload(modelCardViewModel.ModelCard);
-                }
+            if (modelCardViewModel.IsLocallyAvailable)
+            {
+                LoadModel(modelCardViewModel.ModelCard.ModelUri);
+            }
+            else
+            {
+                // todo: DialogService.ConfirmDownload
+                _fileManager.DownloadModel(modelCardViewModel.ModelCard);
+                ModelDownlooads.Add(modelCardViewModel);
+            }
 
-                SelectedModel = modelCardViewModel;
+            LoadModel(modelCardViewModel.ModelCard.ModelUri);
+
+            SelectedModel = modelCardViewModel;
         }
 
         private void OnModelCollectionChanged(object? sender,
@@ -192,11 +197,6 @@ namespace LMKit.Maestro.ViewModels
                     index++;
                 }
             }
-        }
-
-        private void StartModelDownload(ModelCard modedlCard)
-        {
-            _fileManager.DownloadModel(modedlCard);
         }
 
         private void AddNewModel(ModelCard modelCard)

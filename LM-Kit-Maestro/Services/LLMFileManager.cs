@@ -139,8 +139,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         if (!_fileDownloads.ContainsKey(modelCard.ModelID!))
         {
-            string downloadUrl = "todo";
-            FileDownloader fileDownloader = new FileDownloader(_httpClient, modelCard, downloadUrl, filePath);
+            FileDownloader fileDownloader = new FileDownloader(_httpClient, modelCard, filePath);
 
             fileDownloader.ErrorEventHandler += OnDownloadExceptionThrown;
             fileDownloader.DownloadProgressedEventHandler += OnDownloadProgressed;
