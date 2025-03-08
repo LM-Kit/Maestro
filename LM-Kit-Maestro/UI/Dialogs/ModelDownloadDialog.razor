@@ -3,8 +3,8 @@
 <MudDialog Class="model-download-root">
     <DialogContent>
         <div class="d-flex flex-column">
-            <div class="model-download-header-footer justify-center align-center gap-2">
-                <MudIcon Icon="fas fa-download" Style="font-size: 0.8rem !important; color: var(--Outline)" />
+            <div class="model-download-header-footer justify-center align-center gap-1">
+                <MudIcon Icon="fas fa-download" Style="font-size: 0.7rem !important; color: var(--Outline)" />
                 <MudText Align="Align.Center" Style="color: var(--Outline)" Typo="Typo.caption">
                     Downloads
                 </MudText>
@@ -38,10 +38,12 @@
             </div>
 
             <div class="model-download-header-footer justify-end">
-                <div class="open-directory-wrapper" @onclick="OpenModelDirectory">
-                    <MudText Typo="Typo.caption">
-                        Open download directory
-                    </MudText>
+                <div class="open-directory-wrapper gap-1" @onclick="OpenModelDirectory">
+                        <MudIcon Icon="fas fa-folder" Style="font-size: 0.7rem !important; color: var(--Outline)" />
+
+                        <MudText style="color: var(--Outline)" Typo="Typo.caption">
+                            Open download directory
+                        </MudText>
                 </div>
 
             </div>
@@ -74,7 +76,9 @@
         background-color: var(--Surface2);
         display: flex;
         justify-content: center;
-        transition: all ease-out 0.3s;
+        align-items: center;
+        transition: background-color ease-out 0.3s;
+        cursor: pointer;
     }
 
         .open-directory-wrapper:hover {
@@ -82,21 +86,12 @@
         }
 
     .model-download-header-footer {
-        height: 3rem;
+        height: 2.5rem;
         background-color: var(--Surface2);
         display: flex;
-        flex-direction: row;
     }
-
-    .open-directory-button {
-        border-radius: 0 important;
-        background-color: var(--Surface2) !important;
-    }
-
-        .open-directory-button:hover {
-            background-color: var(--Surface) !important;
-        }
 </style>
+
 @code {
     [Parameter] public MarkupString Message { get; set; } = default(MarkupString);
 
