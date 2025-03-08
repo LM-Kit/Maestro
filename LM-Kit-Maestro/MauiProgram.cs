@@ -47,7 +47,7 @@ namespace LMKit.Maestro
             builder.Services.AddMudServices(config =>
             {
                 config.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomRight;
-                config.SnackbarConfiguration.ShowCloseIcon = true;
+                config.SnackbarConfiguration.ShowCloseIcon = false;
                 config.SnackbarConfiguration.SnackbarVariant = MudBlazor.Variant.Filled;
             });
 

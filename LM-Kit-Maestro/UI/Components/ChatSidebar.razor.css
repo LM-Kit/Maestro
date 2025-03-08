@@ -1,5 +1,11 @@
 .sidebar-container {
     position: relative;
+    overflow-inline: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 0;
+    background-color: var(--Surface);
 }
 
 .sidebar-hidden .resize-handle {
@@ -7,30 +13,27 @@
     display: block;
 }
 
-.sidebar-toggled {
-    flex-grow: 0;
-    flex-shrink: 0;
-    background-color: var(--Surface);
-    display: flex;
-    flex-direction: row;
-}
-
 .sidebar-content {
     flex-grow: 1;
 }
 
 .resize-handle {
-    cursor: ew-resize;
-    width: 4px;
+    background-color: transparent;
+    cursor: ew-resize; 
+    width: 0.5rem; 
+    height: 100%;
     position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 10;
+}
+    .resize-handle:hover {
+
+    }
+.resize-handle-left {
+    left: 0;
 }
 
-    .resize-handle:hover {
-    }
-
+.resize-handle-right {
+    right: 0;
+}
 .fixed-sidebar {
     /*    min-width: 300px;
     max-width: 300px;

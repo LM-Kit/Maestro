@@ -152,12 +152,18 @@ namespace LMKit.Maestro.ViewModels
                 {
                     ((ConversationViewModel)item).PropertyChanged += OnConversationPropertyChanged;
                 }
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                foreach (var item in e.OldItems)
+
+                if (Conversations.Count == 1)
                 {
-                    (item as ConversationViewModel).PropertyChanged -= OnConversationPropertyChanged;
+                    CurrentConversation = Conversations[0];
+
+                }
+                else if (e.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    foreach (var item in e.OldItems)
+                    {
+                        ((ConversationViewModel)item).PropertyChanged -= OnConversationPropertyChanged;
+                    }
                 }
             }
         }

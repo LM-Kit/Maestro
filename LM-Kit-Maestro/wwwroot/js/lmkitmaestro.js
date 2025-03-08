@@ -1,6 +1,3 @@
-// This is a JavaScript module that is loaded on demand. It can export any number of
-// functions, and may import other JavaScript modules if required.
-
 document.addEventListener("DOMContentLoaded", function () {
     const platform = window.navigator.userAgent;
     let platformClass = "";
@@ -13,8 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (platformClass) {
         document.body.classList.add(platformClass);
-    }
+    }   
 });
+
 
 /* 
     Chat 
@@ -36,11 +34,6 @@ function getConversationViewHeight() {
     return element.clientHeight;
 };
 
-function setUserInputFocus() {
-    const element = document.getElementById('conversation-content');
-
-    element.focus();
-}
 
 function scrollToEnd(smooth) {
     const element = document.getElementById('conversation-content');

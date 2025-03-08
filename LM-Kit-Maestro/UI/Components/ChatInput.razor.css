@@ -7,7 +7,7 @@
     grid-template-columns: 1fr auto;
     position: relative;
     width: 100%;
-    transition: background-color 0.5s, border-color 0.5s;
+    transition: all ease-out 0.3s;
     background-color: var(--Surface2);
     border-radius: 1rem;
     border: 1px solid transparent;
@@ -52,7 +52,7 @@
 .send-button {
     height: 1.75rem;
     width: 1.75rem;
-    transition: color 0.3s, background-color 0.3s, border-color 0.3s;
+    transition: all ease-out 0.3s;
     cursor: pointer;
     font-size: 0.75rem;
     border-radius: 50%;

@@ -19,23 +19,23 @@
                 <div class="d-flex flex-column">
                     @if (modelItem.ViewModel.IsLocallyAvailable)
                     {
-                        <MudButton Class="action-button" Variant="Variant.Text"
+                        <button class="text-button"
                                    @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelInExplorer(modelItem.ViewModel), modelItem)">
                             <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
-                        </MudButton>
+                        </button>
                     }
 
-                    <MudButton Class="action-button" Variant="Variant.Text"
+                    <button class="text-button"
                                @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelHfLink(modelItem.ViewModel), modelItem)">
                         <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
-                    </MudButton>
+                    </button>
 
                     @if (modelItem.ViewModel.IsLocallyAvailable)
                     {
-                        <MudButton Class="action-button" Variant="Variant.Text"
+                        <button class="text-button"
                                    @onclick="() => HandleActionButtonClick(() => ModelListViewModel.DeleteModel(modelItem.ViewModel), modelItem)">
                             <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
-                        </MudButton>
+                        </button>
                     }
                 </div>
             </ActionSheet>
@@ -45,7 +45,7 @@
 
 <style>
     .model-card-divider {
-        border-color: var(--Surface3);
+        border-color: var(--OutlineVariant);
         border-width: 1px;
         border-style: solid none none none;
         margin-left: 1rem;
@@ -54,7 +54,6 @@
     .model-card-dense-wrapper {
         display: flex;
         flex-direction: column;
-        min-height: 70px; 
     }
 </style>
 

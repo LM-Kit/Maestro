@@ -31,12 +31,6 @@
     display: grid;
 }
 
-.horizontal-separator {
-    height: 1px;
-    background-color: var(--OutlineVariant);
-    width: 100%;
-}
-
 .language-select {
     margin-block: 8px;
     margin-inline: 20px;

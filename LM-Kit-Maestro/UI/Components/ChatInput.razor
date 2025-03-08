@@ -5,10 +5,10 @@
     <div id="input-textarea-wrapper" class="input-textarea-initial">
 
         <textarea rows="1"
-        id="input-text"
-        @bind="ViewModel.InputText"
-        @onkeydown="OnKeyDown"
-        @bind:event="oninput" />
+            id="input-text"
+            @bind="ViewModel.InputText"
+            @onkeydown="OnKeyDown"
+            @bind:event="oninput" />
 
     </div>
     <div class="send-button-container">
@@ -33,6 +33,14 @@
 </div>
 
 <script>
+
+      function setUserInputFocus() {
+        var inputText = document.getElementById('input-text');
+        if (inputText) {
+            inputText.focus();
+        }
+    }
+
     document.getElementById('input-text').addEventListener('keydown', function (e) {
     if (e.key == 'Enter' && !e.shiftKey) {
     // prevent default behavior
@@ -76,11 +84,10 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // if (firstRender)
-        // {
-        //     await inputTextArea.FocusAsync();
-        //     await JS.InvokeVoidAsync("setUserInputFocus");
-        // }
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("setUserInputFocus");
+        }
 
         if (_shouldResizeTextarea)
         {

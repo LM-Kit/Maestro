@@ -5,6 +5,10 @@
     font-size: 16px;
 }
 
+xs-icon {
+    font-size: 0.6rem !important;
+}
+
 .icon-button-small {
     font-size: 0.6rem;
 }
@@ -90,9 +94,16 @@
 }
 
 .outline {
-    color: var(--Outline);
+    color: var(--Outline) !important;
 }
 
+.bg-surface-15{
+    background-color: var(--Surface15)
+}
+
+.bg-surface-2 {
+    background-color: var(--Surface2)
+}
 .loading-section {
     height: 100vh;
     display: flex;
@@ -185,18 +196,11 @@
     border-color: var(--OutlineVariant);
 }
 
-.bottom-divider {
-    width: 100%;
-    height: 1px;
-    background-color: var(--OutlineVariant);
-    position: absolute;
-    bottom: 0;
-}
-
 .vertical-divider {
-    height: 100%;
-    width: 1px;
-    background-color: var(--OutlineVariant);
+    border-width: 1px;
+    border-style: none none none solid;
+    border-color: var(--OutlineVariant);
+    height:100%;
 }
 
 .text-truncate {
@@ -211,16 +215,10 @@
     border-radius: 0.25rem;
     border: 1px solid var(--OutlineVariant);
     display: flex;
+    padding-inline: 0.25rem;
+    padding-block: 0.25rem;
     flex-direction: column;
 }
-
-.action-button {
-    border-radius: 0.25rem;
-}
-
-    .action-button:hover {
-        background-color: var(--Surface15) !important;
-    }
 
 .width-transition {
     transition: width 0.3s ease-in;
@@ -247,7 +245,59 @@ button {
     .text-button:hover {
         background-color: var(--Surface2) !important;
     }
+    
+.width-50 {
+    width: 100%;
+    max-width: 50rem;
+}
 
+.width-24 {
+    width: 24rem;
+    width: 100%;
+    max-width: 24rem;
+}
+
+.radius-4 {
+    border-radius: 1rem;
+}
+
+.radius-1 {
+    border-radius: 0.25rem;
+}
+
+.radius-2{
+    border-radius: 0.5rem;
+}
+
+.center {
+    background-color: green;
+    display: flex;
+    padding: 100px;
+    align-self: center !important;
+    margin-block: auto !important;
+}
+
+
+/* Buttons*/
+button {
+}
+
+.outlined-button {
+    border: 1px solid var(--OutlineVariant) !important;
+}
+
+.text-button {
+    padding-block: 0.25rem !important;
+    padding-inline: 0.5rem !important;
+    border-radius: 0.25rem !important;
+    transition: background-color 0.3s !important;
+    background-color: var(--Surface) !important;
+    color: var(--OnSurface) !important;
+}
+
+.text-button:hover {
+    background-color: var(--Surface2) !important;
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar {
@@ -313,7 +363,7 @@ button {
 }
 
 .mud-snackbar {
-    background-color: var(--Surface15) !important;    
+    background-color: var(--Surface15) !important;
     border: 1px solid var(--OutlineVariant) !important;
     opacity: 1 !important;
 }
@@ -334,9 +384,4 @@ button {
 
 .mud-dialog{
     background-color: var(--Surface) !important;
-}
-
-.mud-dialog-content {
-    padding: 0 !important;
-    margin: 0 !important;
 }
