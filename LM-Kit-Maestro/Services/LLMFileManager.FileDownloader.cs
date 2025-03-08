@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using LMKit.Model;
 
 namespace LMKit.Maestro.Services;
 
@@ -6,18 +7,19 @@ public partial class LLMFileManager : ObservableObject
 {
     internal sealed class FileDownloader : IDisposable
     {
-#if BETA_DOWNLOAD
+#if BETA_DOWNLOAD_MODELS
         private readonly HttpClient _httpClient;
-        private readonly Uri _downloadUrl;
+        private ModelCard _modelCard;
+        private readonly string _downloadUrl;
         private readonly string _filePath;
         private readonly ManualResetEvent _manualResetEvent;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
         private bool _paused;
 
-        public delegate void DownloadProgressDelegate(Uri downloadUrl, long? totalDownloadSize, long totalBytesRead);
-        public delegate void DownloadStateChangeDelegate(Uri downloadUrl);
-        public delegate void DownloadErrorDelegate(Uri downloadUrl, Exception exception);
+        public delegate void DownloadProgressDelegate(ModelCard modelCard, long? totalDownloadSize, long totalBytesRead);
+        public delegate void DownloadStateChangeDelegate(ModelCard modelCard);
+        public delegate void DownloadErrorDelegate(ModelCard modelCard, Exception exception);
 
         public DownloadStateChangeDelegate? DownloadStartedEventHandler;
         public DownloadStateChangeDelegate? DownloadPausedEventHandler;
@@ -25,8 +27,9 @@ public partial class LLMFileManager : ObservableObject
         public DownloadProgressDelegate? DownloadProgressedEventHandler;
         public DownloadErrorDelegate? ErrorEventHandler;
 
-        public FileDownloader(HttpClient client, Uri downloadUrl, string filePath)
+        public FileDownloader(HttpClient client, ModelCard modelCard, string downloadUrl, string filePath)
         {
+            _modelCard = modelCard;
             _httpClient = client;
             _downloadUrl = downloadUrl;
             _filePath = filePath;
@@ -109,7 +112,7 @@ public partial class LLMFileManager : ObservableObject
 
                     totalBytesRead += bytesRead;
 
-                    DownloadProgressedEventHandler?.Invoke(_downloadUrl, totalBytes, totalBytesRead);
+                    DownloadProgressedEventHandler?.Invoke(_modelCard, totalBytes, totalBytesRead);
                 }
 
                 destination.Dispose();
@@ -121,11 +124,11 @@ public partial class LLMFileManager : ObservableObject
 
                 File.Move(downloadFilePath, _filePath);
 
-                DownloadCompletedEventHandler?.Invoke(_downloadUrl);
+                DownloadCompletedEventHandler?.Invoke(_modelCard);
             }
             catch (Exception exception)
             {
-                ErrorEventHandler?.Invoke(_downloadUrl, exception);
+                ErrorEventHandler?.Invoke(_modelCard, exception);
             }
         }
 #endif

@@ -13,11 +13,20 @@ public interface ILLMFileManager
     string ModelStorageDirectory { get; set; }
     long TotalModelSize { get; }
     int DownloadedCount { get; }
-    event EventHandler? FileCollectingCompleted;
-    void Initialize();
-    void DeleteModel(ModelCard modelCard);
-    void OnModelDownloaded(ModelCard modelInfo);
 
-    public event PropertyChangedEventHandler PropertyChanged;
-    public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
+    event EventHandler? FileCollectingCompleted;
+
+    void Initialize();
+
+    //event EventHandler? ModelDownloadingProgressed;
+    //event EventHandler? ModelDownloadingCompleted;
+    //void DeleteModel(ModelCard modelCard);
+    //void DownloadModel(ModelCard modelCard);
+    //void CancelModelDownload(ModelCard modelCard);
+    //void PauseModelDownload(ModelCard modelCard);
+    //void ResumeModelDownload(ModelCard modelCard);
+    //void OnModelDownloaded(ModelCard modelInfo);
+
+    event PropertyChangedEventHandler PropertyChanged;
+     event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
 }

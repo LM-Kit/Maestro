@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LMKit.Maestro.Helpers;
 using LMKit.Maestro.Services;
+using static LMKit.Maestro.Services.LLMFileManager;
 
 namespace LMKit.Maestro.ViewModels;
 
@@ -31,49 +33,42 @@ public partial class ModelsPageViewModel : ViewModelBase
         ModelListViewModel = modelListViewModel;
         AppSettingsService = appSettingsService;
 
-#if MODEL_DOWNLOAD
-        llmFileManager.ModelDownloadingProgressed += OnModelDownloadingProgressed;
-        llmFileManager.ModelDownloadingCompleted += OnModelDownloadingCompleted;
+#if BETA_DOWNLOAD_MODELS
+        //llmFileManager.ModelDownloadingProgressed += OnModelDownloadingProgressed;
+        //llmFileManager.ModelDownloadingCompleted += OnModelDownloadingCompleted;
 #endif
     }
 
-#if MODEL_DOWNLOAD
-    [RelayCommand]
+#if BETA_DOWNLOAD_MODELS
     public void DownloadModel(ModelInfoViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
-        modelCardViewModel.ModelInfo.Metadata.FileUri =
- FileHelpers.GetModelFileUri(modelCardViewModel.ModelInfo, AppSettingsService.ModelStorageDirectory);
 
-        FileManager.DownloadModel(modelCardViewModel.ModelInfo);
+        //FileManager.DownloadModel(modelCardViewModel.ModelInfo);
     }
 
-    [RelayCommand]
     public void CancelDownload(ModelInfoViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
 
-        FileManager.CancelModelDownload(modelCardViewModel.ModelInfo);
+        //FileManager.CancelModelDownload(modelCardViewModel.ModelInfo);
     }
 
-    [RelayCommand]
     public void PauseDownload(ModelInfoViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.DownloadPaused;
 
-        FileManager.PauseModelDownload(modelCardViewModel.ModelInfo);
+        //FileManager.PauseModelDownload(modelCardViewModel.ModelInfo);
     }
 
-    [RelayCommand]
     public void ResumeDownload(ModelInfoViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
 
-        FileManager.ResumeModelDownload(modelCardViewModel.ModelInfo);
+        //FileManager.ResumeModelDownload(modelCardViewModel.ModelInfo);
     }
 #endif
 
-    [RelayCommand]
     public void PickModelsFolder()
     {
 #if MACCATALYST  || WINDOWS
@@ -94,19 +89,16 @@ public partial class ModelsPageViewModel : ViewModelBase
 #endif
     }
 
-    [RelayCommand]
     public void OpenModelsFolder()
     {
         _ = _launcher.OpenAsync(new Uri($"file://{AppSettingsService.ModelStorageDirectory}"));
     }
 
-    [RelayCommand]
     public void ResetModelsFolder()
     {
         AppSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
     }
 
-    [RelayCommand]
     public void OpenHuggingFaceLink()
     {
         _ = _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
@@ -117,8 +109,8 @@ public partial class ModelsPageViewModel : ViewModelBase
     {
         var downloadOperationStateChangedEventArgs = (DownloadOperationStateChangedEventArgs)e;
 
-        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.AvailableModels,
-            downloadOperationStateChangedEventArgs.DownloadUrl)!;
+        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.Models,
+            downloadOperationStateChangedEventArgs.ModelCard)!;
 
         modelViewModel!.DownloadInfo.Progress = downloadOperationStateChangedEventArgs.Progress;
         modelViewModel.DownloadInfo.BytesRead = downloadOperationStateChangedEventArgs.BytesRead;
@@ -129,14 +121,15 @@ public partial class ModelsPageViewModel : ViewModelBase
     {
         var downloadOperationStateChangedEventArgs = (DownloadOperationStateChangedEventArgs)e;
 
-        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.AvailableModels,
-            downloadOperationStateChangedEventArgs.DownloadUrl)!;
+        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.Models,
+            downloadOperationStateChangedEventArgs.ModelCard)!;
 
         if (downloadOperationStateChangedEventArgs.Exception != null)
         {
             modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-            await MaestroHelpers.DisplayError("Model download failure",
-                $"Download of model '{modelViewModel.Name}' failed:\n{downloadOperationStateChangedEventArgs.Exception.Message}");
+            //    await MaestroHelpers.DisplayError("Model download failure",
+            //        $"Download of model '{modelViewModel.Name}' failed:\n{downloadOperationStateChangedEventArgs.Exception.Message}");
+            //}
         }
         else if (downloadOperationStateChangedEventArgs.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled)
         {

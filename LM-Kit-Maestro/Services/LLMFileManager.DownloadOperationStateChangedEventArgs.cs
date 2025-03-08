@@ -1,10 +1,12 @@
-﻿namespace LMKit.Maestro.Services;
+﻿using LMKit.Model;
+
+namespace LMKit.Maestro.Services;
 
 public partial class LLMFileManager
 {
     public class DownloadOperationStateChangedEventArgs : EventArgs
     {
-        public Uri DownloadUrl { get; }
+        public ModelCard ModelCard { get; }
 
         public DownloadOperationStateChangedType Type { get; }
 
@@ -26,13 +28,13 @@ public partial class LLMFileManager
             Completed
         }
 
-        public DownloadOperationStateChangedEventArgs(Uri downloadUrl, DownloadOperationStateChangedType type)
+        public DownloadOperationStateChangedEventArgs(ModelCard modelCard, DownloadOperationStateChangedType type)
         {
-            DownloadUrl = downloadUrl;
+            ModelCard = modelCard;
             Type = type;
         }
 
-        public DownloadOperationStateChangedEventArgs(Uri downloadUrl, DownloadOperationStateChangedType type, long bytesRead, long? contentLength, double progress, Exception? exception) : this(downloadUrl, type)
+        public DownloadOperationStateChangedEventArgs(ModelCard modelCard, DownloadOperationStateChangedType type, long bytesRead, long? contentLength, double progress, Exception? exception) : this(modelCard, type)
         {
             BytesRead = bytesRead;
             ContentLength = contentLength;
@@ -40,7 +42,7 @@ public partial class LLMFileManager
             Exception = exception;
         }
 
-        public DownloadOperationStateChangedEventArgs(Uri downloadUrl, long bytesRead, long? contentLength, double progress) : this(downloadUrl, DownloadOperationStateChangedType.Progressed)
+        public DownloadOperationStateChangedEventArgs(ModelCard modelCard, long bytesRead, long? contentLength, double progress) : this(modelCard, DownloadOperationStateChangedType.Progressed)
         {
             Type = DownloadOperationStateChangedType.Progressed;
             BytesRead = bytesRead;
@@ -48,7 +50,7 @@ public partial class LLMFileManager
             Progress = progress;
         }
 
-        public DownloadOperationStateChangedEventArgs(Uri downloadUrl, Exception? exception) : this(downloadUrl, DownloadOperationStateChangedType.Completed)
+        public DownloadOperationStateChangedEventArgs(ModelCard modelCard, Exception? exception) : this(modelCard, DownloadOperationStateChangedType.Completed)
         {
             Exception = exception;
         }

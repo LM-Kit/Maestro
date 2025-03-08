@@ -2,6 +2,7 @@
 using LMKit.Maestro.Helpers;
 using LMKit.Maestro.UI;
 using LMKit.Model;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -34,7 +35,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly bool _enableCustomModels = true;
     private readonly bool _isLoaded = false;
 
-    private readonly Dictionary<Uri, FileDownloader> _fileDownloads = [];
+    private readonly Dictionary<string, FileDownloader> _fileDownloads = [];
 
     private delegate bool ModelDownloadingProgressCallback(string path, long? contentLength, long bytesRead);
     public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
@@ -136,24 +137,25 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         var filePath = Path.Combine(ModelStorageDirectory, modelCard.Publisher, modelCard.Repository, modelCard.FileName);
 
-        if (!_fileDownloads.ContainsKey(modelCard.Metadata.DownloadUrl!))
+        if (!_fileDownloads.ContainsKey(modelCard.ModelID!))
         {
-            FileDownloader fileDownloader = new FileDownloader(_httpClient, modelCard.Metadata.DownloadUrl!, filePath);
+            string downloadUrl = "todo";
+            FileDownloader fileDownloader = new FileDownloader(_httpClient, modelCard, downloadUrl, filePath);
 
             fileDownloader.ErrorEventHandler += OnDownloadExceptionThrown;
             fileDownloader.DownloadProgressedEventHandler += OnDownloadProgressed;
             fileDownloader.DownloadCompletedEventHandler += OnDownloadCompleted;
 
-            if (_fileDownloads.TryAdd(modelCard.Metadata.DownloadUrl!, fileDownloader))
+            if (_fileDownloads.TryAdd(modelCard.ModelID, fileDownloader))
             {
                 fileDownloader.Start();
             }
         }
     }
 
-    private void ReleaseFileDownloader(Uri downloadUrl)
+    private void ReleaseFileDownloader(ModelCard modelCard)
     {
-        if (_fileDownloads.ContainsKey(downloadUrl) && _fileDownloads.Remove(downloadUrl, out FileDownloader? fileDownloader))
+        if (_fileDownloads.ContainsKey(modelCard.ModelID) && _fileDownloads.Remove(modelCard.ModelID, out FileDownloader? fileDownloader))
         {
             fileDownloader.ErrorEventHandler -= OnDownloadExceptionThrown;
             fileDownloader.DownloadProgressedEventHandler -= OnDownloadProgressed;
@@ -163,21 +165,21 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
-    private void OnDownloadExceptionThrown(Uri downloadUrl, Exception exception)
+    private void OnDownloadExceptionThrown(ModelCard modelCard, Exception exception)
     {
-        ReleaseFileDownloader(downloadUrl);
+        ReleaseFileDownloader(modelCard);
 
         if (exception is OperationCanceledException)
         {
-            ModelDownloadingCompleted?.Invoke(this, new DownloadOperationStateChangedEventArgs(downloadUrl, DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled));
+            ModelDownloadingCompleted?.Invoke(this, new DownloadOperationStateChangedEventArgs(modelCard, DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled));
         }
         else
         {
-            ModelDownloadingCompleted?.Invoke(this, new DownloadOperationStateChangedEventArgs(downloadUrl, exception));
+            ModelDownloadingCompleted?.Invoke(this, new DownloadOperationStateChangedEventArgs(modelCard, exception));
         }
     }
 
-    private void OnDownloadProgressed(Uri downloadUrl, long? totalDownloadSize, long byteRead)
+    private void OnDownloadProgressed(ModelCard modelCard, long? totalDownloadSize, long byteRead)
     {
         double progress = 0;
 
@@ -186,19 +188,19 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             progress = (double)byteRead / totalDownloadSize.Value;
         }
 
-        ModelDownloadingProgressed?.Invoke(this, new DownloadOperationStateChangedEventArgs(downloadUrl, byteRead, totalDownloadSize, progress));
+        ModelDownloadingProgressed?.Invoke(this, new DownloadOperationStateChangedEventArgs(modelCard, byteRead, totalDownloadSize, progress));
     }
 
-    private void OnDownloadCompleted(Uri downloadUrl)
+    private void OnDownloadCompleted(ModelCard modelCard)
     {
-        ReleaseFileDownloader(downloadUrl);
+        ReleaseFileDownloader(modelCard);
 
-        ModelDownloadingCompleted?.Invoke(this, new DownloadOperationStateChangedEventArgs(downloadUrl, DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed));
+        ModelDownloadingCompleted?.Invoke(this, new DownloadOperationStateChangedEventArgs(modelCard, DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed));
     }
 
     public void CancelModelDownload(ModelCard modelCard)
     {
-        if (_fileDownloads.TryGetValue(modelCard.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
+        if (_fileDownloads.TryGetValue(modelCard.ModelID, out FileDownloader? fileDownloader))
         {
             fileDownloader!.Stop();
         }
@@ -206,7 +208,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     public void PauseModelDownload(ModelCard modelCard)
     {
-        if (_fileDownloads.TryGetValue(modelCard.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
+        if (_fileDownloads.TryGetValue(modelCard.ModelID!, out FileDownloader? fileDownloader))
         {
             fileDownloader!.Pause();
         }
@@ -214,7 +216,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     public void ResumeModelDownload(ModelCard modelCard)
     {
-        if (_fileDownloads.TryGetValue(modelCard.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
+        if (_fileDownloads.TryGetValue(modelCard.ModelID, out FileDownloader? fileDownloader))
         {
             fileDownloader!.Resume();
         }
@@ -759,21 +761,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 out string publisher, out string repository, out string fileName))
             {
                 isSorted = true;
-#if BETA_DOWNLOAD_MODELS
-                modelCard = TryGetExistingModelInfo(fileName, repository, publisher);
-                if (modelCard == null)
-                {
-                    modelCard = new ModelInfo(publisher, repository, fileName);
-                    modelCard.Metadata.FileSize = FileHelpers.GetFileSize(filePath);
-                }
-
-                modelCard.Metadata.FileUri = new Uri(filePath);
-
-#else
-                modelCard.Publisher = publisher;
-                modelCard.Repository = repository;
-
-#endif
             }
             else
             {
@@ -786,23 +773,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         return false;
     }
-
-#if BETA_DOWNLOAD_MODELS
-    private static ModelInfo? TryGetExistingModelInfo(string fileName, string repository, string publisher)
-    {
-        foreach (var modelCard in AppConstants.AvailableModels)
-        {
-            if (string.CompareOrdinal(modelCard.FileName, fileName) == 0 &&
-                string.CompareOrdinal(modelCard.Repository, repository) == 0 &&
-                string.CompareOrdinal(modelCard.Publisher, publisher) == 0)
-            {
-                return modelCard;
-            }
-        }
-
-        return null;
-    }
-#endif
 
     private static bool ShouldCheckFile(string filePath)
     {

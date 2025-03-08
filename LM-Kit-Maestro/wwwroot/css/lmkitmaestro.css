@@ -385,3 +385,7 @@ button {
 .mud-dialog{
     background-color: var(--Surface) !important;
 }
+
+.mud-dialog-content{
+    padding: 0 !important;
+}

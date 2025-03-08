@@ -135,7 +135,7 @@ namespace LMKit.Maestro.ViewModels
         {
             try
             {
-                _fileManager.DeleteModel(modelCardViewModel.ModelInfo);
+                //_fileManager.DeleteModel(modelCardViewModel.ModelInfo);
                 modelCardViewModel.OnLocalModelRemoved();
             }
             catch (Exception ex)
@@ -183,21 +183,7 @@ namespace LMKit.Maestro.ViewModels
 
         private void AddNewModel(ModelCard modelCard)
         {
-#if BETA_DOWNLOAD_MODELS
-            ModelInfoViewModel? modelCardViewModel =
- MaestroHelpers.TryGetExistingModelInfoViewModel(AvailableModels, modelCard);
-
-            if (modelCardViewModel == null)
-            {
-                modelCardViewModel = new ModelInfoViewModel(modelCard);
-            }
-
-            modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloaded;
-#else
-            ModelInfoViewModel modelCardViewModel = new ModelInfoViewModel(modelCard);
-#endif
-
-            AddModel(modelCardViewModel);
+            AddModel(new ModelInfoViewModel(modelCard));
         }
 
         private void AddModel(ModelInfoViewModel modelCardViewModel, bool sort = true)
@@ -255,18 +241,6 @@ namespace LMKit.Maestro.ViewModels
         private void ClearUserModelList()
         {
             Models.Clear();
-
-#if BETA_DOWNLOAD_MODELS
-            foreach (var model in AvailableModels)
-            {
-                model.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-            }
-
-            if (_lmKitService.ModelLoadingState == LMKitModelLoadingState.Loaded)
-            {
-                _lmKitService.UnloadModel();
-            }
-#endif
         }
 
         private void OnModelLoadingCompleted(object? sender, EventArgs e)
@@ -290,7 +264,7 @@ namespace LMKit.Maestro.ViewModels
                     if (userModel.ModelInfo.ModelUri == modeUri)
                     {
                         userModel.OnLocalModelCreated();
-                        _fileManager.OnModelDownloaded(userModel.ModelInfo);
+                        //_fileManager.OnModelDownloaded(userModel.ModelInfo);
                         break;
                     }
                 }
@@ -337,7 +311,6 @@ namespace LMKit.Maestro.ViewModels
                 }
             }
         }
-
         #endregion
     }
 }
