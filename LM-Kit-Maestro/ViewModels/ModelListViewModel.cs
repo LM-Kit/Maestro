@@ -113,6 +113,17 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
+        public void SartModelDownload(ModelInfoViewModel modelInfoViewModel)
+        {
+            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, modelInfoViewModel.ModelCard);
+
+            if (modelCardViewModel != null)
+            {
+                _fileManager.DownloadModel(modelInfoViewModel.ModelCard);
+                modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
+            }
+        }
+
         public void PauseModelDownload(ModelInfoViewModel modelInfoViewModel)
         {
             ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, modelInfoViewModel.ModelCard);

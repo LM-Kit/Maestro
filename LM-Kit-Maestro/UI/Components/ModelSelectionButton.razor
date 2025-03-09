@@ -36,12 +36,14 @@
             }
         </div>
 
-        @if (ModelListViewModel.LoadingState is ModelListViewModel.ModelLoadingState.Loading or
-        ModelListViewModel.ModelLoadingState.Downloading && ModelListViewModel.LoadingProgress != null)
+        @if (ModelListViewModel.LoadingState is ModelListViewModel.ModelLoadingState.Loading
+        && ModelListViewModel.LoadingProgress != null)
         {
             <div id="progress-bar">
                 <MudProgressLinear Value="@(ModelListViewModel.LoadingProgress.Value * 100)" />
             </div>
+            <p>
+            </p>
         }
     </div>
 </div>
