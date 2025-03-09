@@ -102,14 +102,14 @@
 
                 <MudItem xs="4">
                     <div class="d-flex justify-end">
-                        @if (!ViewModel.IsLocallyAvailable)
-                        {
-                            <MudIcon Class="outline" title="@Locales.ModelDownloadAvailable"
-                                 Icon="@Icons.Material.Outlined.Cloud" Size="Size.Small" />
-                        }
-                        else if (ViewModel.DownloadInfo.Status == DownloadStatus.Downloading)
+                        @if (ViewModel.DownloadInfo.Status == DownloadStatus.Downloading)
                         {
                             <MudProgressCircular Style="width: 0.85rem; height: 0.85rem; color: var(--Outline)" Indeterminate="true" />
+                        }
+                        else if (!ViewModel.IsLocallyAvailable)
+                        {
+                            <MudIcon Class="outline" title="@Locales.ModelDownloadAvailable"
+                                     Icon="@Icons.Material.Outlined.Cloud" Size="Size.Small" />
                         }
                     </div>
                 </MudItem>
@@ -123,7 +123,6 @@
     [Parameter] public required ModelInfoViewModel ViewModel { get; set; }
 
     private bool _dense;
-
     [Parameter]
     public bool Dense
     {
@@ -139,7 +138,6 @@
     }
 
     private bool _selectable;
-
     [Parameter]
     public bool Selectable
     {
@@ -155,7 +153,6 @@
     }
 
     private bool _isFocused;
-
     [Parameter]
     public bool IsFocused
     {
@@ -168,6 +165,18 @@
                 InvokeAsync(() => StateHasChanged());
             }
         }
+    }
+
+    private void OnDownloadInfoPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        ViewModel.DownloadInfo.PropertyChanged += OnDownloadInfoPropertyChanged;
     }
 
     private string GetClasses()
@@ -191,6 +200,7 @@
 
         return classes.TrimStart();
     }
+
 
     private static string GetScoreClass(float score)
     {

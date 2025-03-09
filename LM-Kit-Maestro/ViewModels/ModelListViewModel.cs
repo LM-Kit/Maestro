@@ -115,7 +115,7 @@ namespace LMKit.Maestro.ViewModels
 
         public void SartModelDownload(ModelInfoViewModel modelInfoViewModel)
         {
-            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, modelInfoViewModel.ModelCard);
+            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(Models, modelInfoViewModel.ModelCard);
 
             if (modelCardViewModel != null)
             {
@@ -138,7 +138,7 @@ namespace LMKit.Maestro.ViewModels
         public void ResumeModelDownload(ModelInfoViewModel modelInfoViewModel)
         {
             ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, modelInfoViewModel.ModelCard);
-            
+
             if (modelCardViewModel != null)
             {
                 _fileManager.ResumeModelDownload(modelInfoViewModel.ModelCard);
@@ -344,23 +344,21 @@ namespace LMKit.Maestro.ViewModels
             LoadingProgress = loadingEventArgs.Progress;
         }
 
-        private void OnModelDownloadingProgressed(object? sender, EventArgs e)
+        private void OnModelDownloadingProgressed(object? sender, ModelDownloadingProgressedEventArgs e)
         {
-            var downloadingEventArgs = (DownloadOperationStateChangedEventArgs)e;
-
-            ModelInfoViewModel? modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, downloadingEventArgs.ModelCard);
+            ModelInfoViewModel? modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, e.ModelCard);
 
             if (modelViewModel != null)
             {
-                if (downloadingEventArgs.Progress != 1)
+                if (e.Progress != 1)
                 {
                     if (modelViewModel.DownloadInfo.Status != DownloadStatus.Downloading)
                     {
                         modelViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
                     }
 
-                    modelViewModel.DownloadInfo.BytesRead = downloadingEventArgs.BytesRead;
-                    modelViewModel.DownloadInfo.Progress = downloadingEventArgs.Progress;
+                    modelViewModel.DownloadInfo.BytesRead = e.BytesRead;
+                    modelViewModel.DownloadInfo.Progress = e.Progress;
                 }
                 else
                 {
