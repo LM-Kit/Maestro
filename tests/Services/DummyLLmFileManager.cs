@@ -25,6 +25,7 @@ internal class DummyLLmFileManager : ILLMFileManager
     public event EventHandler? ModelDownloadingCompleted;
     public event PropertyChangedEventHandler PropertyChanged;
     public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
+    public event EventHandler<LLMFileManager.DownloadOperationStateChangedEventArgs>? ModelDownloadingStarted;
 
     public DummyLLmFileManager(IAppSettingsService appSettingsService, HttpClient httpClient)
     {
@@ -32,6 +33,32 @@ internal class DummyLLmFileManager : ILLMFileManager
         _fileManager.ModelDownloadingProgressed += _fileManager_ModelDownloadingProgressed;
         Models = new ReadOnlyObservableCollection<ModelCard>(_models);
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
+    }
+
+    event EventHandler<LLMFileManager.ModelDownloadingProgressedEventArgs>? ILLMFileManager.ModelDownloadingProgressed
+    {
+        add
+        {
+            throw new NotImplementedException();
+        }
+
+        remove
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    event EventHandler<LLMFileManager.DownloadOperationStateChangedEventArgs>? ILLMFileManager.ModelDownloadingCompleted
+    {
+        add
+        {
+            throw new NotImplementedException();
+        }
+
+        remove
+        {
+            throw new NotImplementedException();
+        }
     }
 
     private void _fileManager_ModelDownloadingProgressed(object? sender, EventArgs e)

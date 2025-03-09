@@ -76,8 +76,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 
     public event EventHandler? FileCollectingCompleted;
-    public event EventHandler? ModelDownloadingProgressed;
-    public event EventHandler? ModelDownloadingCompleted;
+    public event EventHandler<DownloadOperationStateChangedEventArgs>? ModelDownloadingStarted;
+    public event EventHandler<ModelDownloadingProgressedEventArgs>? ModelDownloadingProgressed;
+    public event EventHandler<DownloadOperationStateChangedEventArgs>? ModelDownloadingCompleted;
 
     public LLMFileManager(IAppSettingsService appSettingsService, HttpClient httpClient)
     {
@@ -149,6 +150,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             {
                 fileDownloader.Start();
             }
+
+            ModelDownloadingStarted?.Invoke(this, new DownloadOperationStateChangedEventArgs(modelCard, DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Started));
         }
     }
 
@@ -188,7 +191,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             progress = (double)byteRead / totalDownloadSize.Value;
         }
 
-        ModelDownloadingProgressed?.Invoke(this, new DownloadOperationStateChangedEventArgs(modelCard, byteRead, totalDownloadSize, progress));
+        ModelDownloadingProgressed?.Invoke(this, new ModelDownloadingProgressedEventArgs(modelCard, byteRead, totalDownloadSize, progress));
     }
 
     private void OnDownloadCompleted(ModelCard modelCard)
@@ -561,30 +564,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     }
 #endif
-
-    private void OnModelDownloadingProgressed(string filePath, long? contentLength, long bytesRead)
-    {
-        double progress = 0;
-
-        if (contentLength.HasValue)
-        {
-            double progressPercentage = Math.Round((double)bytesRead / contentLength.Value * 100, 2);
-
-            progress = (double)bytesRead / contentLength.Value;
-            //Console.Write($"\rDownloading model {progressPercentage:0.00}%");
-        }
-        else
-        {
-            //Console.Write($"\rDownloading model {bytesRead} bytes");
-        }
-
-        if (ModelDownloadingProgressed != null)
-        {
-            ModelDownloadingProgressedEventArgs eventArgs = new ModelDownloadingProgressedEventArgs(filePath, bytesRead, contentLength, progress);
-            ModelDownloadingProgressed.Invoke(this, eventArgs);
-        }
-    }
-
 
     private void OnModelCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {

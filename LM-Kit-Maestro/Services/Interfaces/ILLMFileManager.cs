@@ -19,8 +19,10 @@ public interface ILLMFileManager
     void Initialize();
 
     void DownloadModel(ModelCard modelCard);
-    event EventHandler? ModelDownloadingProgressed;
-    event EventHandler? ModelDownloadingCompleted;
+
+    event EventHandler<LLMFileManager.DownloadOperationStateChangedEventArgs>? ModelDownloadingStarted;
+    event EventHandler<LLMFileManager.ModelDownloadingProgressedEventArgs>? ModelDownloadingProgressed;
+    event EventHandler<LLMFileManager.DownloadOperationStateChangedEventArgs>? ModelDownloadingCompleted;
 
     void DeleteModel(ModelCard modelCard);
     void CancelModelDownload(ModelCard modelCard);

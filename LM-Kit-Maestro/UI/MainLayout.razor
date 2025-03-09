@@ -84,8 +84,6 @@ CloseOnEscapeKey="true" />
 
         if (firstRender)
         {
-            FileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
-            LmKitService.ModelLoadingFailed += OnModelLoadingFailed;
             ModelListViewModel.PropertyChanged += OnModelListViewModelPropertyChanged;
         }
     }
@@ -95,31 +93,6 @@ CloseOnEscapeKey="true" />
         if (e.PropertyName ==nameof(ModelListViewModel.IsDownloading))
         {
             InvokeAsync(() => StateHasChanged());
-        }
-    }
-
-    private void OnFileManagerFileCollectingCompleted(object? sender, EventArgs e)
-    {
-        var fileCollectingCompletedEventArgs = (LLMFileManager.FileCollectingCompletedEventArgs)e;
-
-        if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
-        {
-            SnackbarService.Show("Error with your model folder", $"{fileCollectingCompletedEventArgs.Exception.Message!}");
-        }
-        // else
-        // {
-        //     Snackbar.Clear();
-        //     Snackbar.Add("Model scan completed.");
-        // }
-    }
-
-    private void OnModelLoadingFailed(object? sender, EventArgs e)
-    {
-        var modelLoadingFailedEventArgs = (LMKitService.ModelLoadingFailedEventArgs)e;
-
-        if (Microsoft.Maui.ApplicationModel.MainThread.IsMainThread)
-        {
-            // _popupService.DisplayAlert("Error loading model", $"The model failed to be loaded: {modelLoadingFailedEventArgs.Exception.Message}", "OK");
         }
     }
 

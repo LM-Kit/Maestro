@@ -19,6 +19,8 @@ public partial class MaestroViewModel : ViewModelBase
     [ObservableProperty]
     private bool _appIsInitialized = false;
 
+    public int OnModelDownloadingStarted { get; private set; }
+
     public MaestroViewModel(ISnackbarService snackbarService, ILogger<MaestroViewModel> logger,
         ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
         SettingsViewModel settingsViewModel, LMKitService lmKitService,
@@ -41,6 +43,9 @@ public partial class MaestroViewModel : ViewModelBase
         await _conversationListViewModel.LoadConversationLogs();
 
         _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
+        _llmFileManager.ModelDownloadingStarted += _llmFileManager_ModelDownloadingStarted; ;
+        _llmFileManager.ModelDownloadingCompleted += OnModelDownloadingCompleted;
+
         _llmFileManager.Initialize();
 
         _lmKitService.ModelLoadingFailed += OnModelLoadingFailed;
@@ -54,6 +59,19 @@ public partial class MaestroViewModel : ViewModelBase
         _modelListViewModel.Initialize();
 
         AppIsInitialized = true;
+    }
+
+    private void _llmFileManager_ModelDownloadingStarted(object? sender, LLMFileManager.DownloadOperationStateChangedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnModelDownloadingCompleted(object? sender, LLMFileManager.DownloadOperationStateChangedEventArgs e)
+    {
+        if (e.Progress == 100)
+        {
+
+        }
     }
 
     private void TryLoadLastUsedModel()
