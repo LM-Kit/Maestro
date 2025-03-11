@@ -41,8 +41,6 @@ public partial class MaestroViewModel : ViewModelBase
         await _conversationListViewModel.LoadConversationLogs();
 
         _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
-        _llmFileManager.ModelDownloadingStarted += OnModelDownloadingStarted;
-        _llmFileManager.ModelDownloadingCompleted += OnModelDownloadingCompleted;
 
         _llmFileManager.Initialize();
 
@@ -59,15 +57,7 @@ public partial class MaestroViewModel : ViewModelBase
         AppIsInitialized = true;
     }
 
-    private void OnModelDownloadingStarted(object? sender, LLMFileManager.DownloadOperationStateChangedEventArgs e)
-    {
-        _snackbarService.Show("", $"Starting downloading <b>{e.ModelCard.ShortModelName}<b/>");
-    }
 
-    private void OnModelDownloadingCompleted(object? sender, LLMFileManager.DownloadOperationStateChangedEventArgs e)
-    {
-        _snackbarService.Show("", $"Finished downloading <b>{e.ModelCard.ShortModelName}<b/>");
-    }
 
     private void TryLoadLastUsedModel()
     {

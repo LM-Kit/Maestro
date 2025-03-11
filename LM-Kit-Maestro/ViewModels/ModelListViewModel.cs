@@ -59,7 +59,10 @@ namespace LMKit.Maestro.ViewModels
             _fileManager.SortedModelCollectionChanged += OnModelCollectionChanged;
             Models = [];
 
+
+            _fileManager.ModelDownloadingStarted += OnModelDownloadingStarted;
             _fileManager.ModelDownloadingProgressed += OnModelDownloadingProgressed;
+            _fileManager.ModelDownloadingCompleted += OnModelDownloadingCompleted;
             LMKitService.ModelLoadingFailed += OnModelLoadingFailed;
             LMKitService.ModelLoaded += OnModelLoadingCompleted;
             LMKitService.PropertyChanged += OnLmKitServicePropertyChanged;
@@ -315,8 +318,7 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnModelLoadingCompleted(object? sender, EventArgs e)
         {
-            SelectedModel =
-                MaestroHelpers.TryGetExistingModelInfoViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri!);
+            SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri!);
             LoadingProgress = 0;
             LoadingState = ModelLoadingState.FinishinUp;
         }
@@ -344,6 +346,43 @@ namespace LMKit.Maestro.ViewModels
             LoadingProgress = loadingEventArgs.Progress;
         }
 
+        private void OnModelDownloadingStarted(object? sender, LLMFileManager.DownloadOperationStateChangedEventArgs e)
+        {
+            _snackbarService.Show("", $"Starting downloading <b>{e.ModelCard.ShortModelName}<b/>");
+
+
+        }
+
+        private void OnModelDownloadingCompleted(object? sender, LLMFileManager.DownloadOperationStateChangedEventArgs e)
+        {
+            ModelInfoViewModel? modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, e.ModelCard);
+
+            if (e.Exception == null)
+            {
+                _snackbarService.Show("", $"Finished downloading <b>{e.ModelCard.ShortModelName}<b/>");
+            }
+            else
+            {
+                _snackbarService.Show("Model download failed", $"<b>{e.ModelCard.ShortModelName}</b> download failed: <i>{e.Exception.Message}<i/>");
+            }
+
+            if (modelViewModel != null)
+            {
+                if (e.Exception != null)
+                {
+                    modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
+                }
+                else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled)
+                {
+                    modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
+                }
+                else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed)
+                {
+                    modelViewModel.DownloadInfo.Status = DownloadStatus.Downloaded;
+                }
+            }
+        }
+
         private void OnModelDownloadingProgressed(object? sender, ModelDownloadingProgressedEventArgs e)
         {
             ModelInfoViewModel? modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, e.ModelCard);
@@ -358,6 +397,7 @@ namespace LMKit.Maestro.ViewModels
                     }
 
                     modelViewModel.DownloadInfo.BytesRead = e.BytesRead;
+                    modelViewModel.DownloadInfo.ContentLength = e.ContentLength;
                     modelViewModel.DownloadInfo.Progress = e.Progress;
                 }
                 else

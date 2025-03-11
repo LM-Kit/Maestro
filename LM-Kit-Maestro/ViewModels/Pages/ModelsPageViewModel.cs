@@ -96,43 +96,4 @@ public partial class ModelsPageViewModel : ViewModelBase
     {
         _ = _launcher.OpenAsync(new Uri("https://huggingface.co/lm-kit"));
     }
-
-    private void OnModelDownloadingProgressed(object? sender, EventArgs e)
-    {
-        var downloadOperationStateChangedEventArgs = (DownloadOperationStateChangedEventArgs)e;
-
-        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.Models,
-            downloadOperationStateChangedEventArgs.ModelCard)!;
-
-        modelViewModel!.DownloadInfo.Progress = downloadOperationStateChangedEventArgs.Progress;
-        modelViewModel.DownloadInfo.BytesRead = downloadOperationStateChangedEventArgs.BytesRead;
-        modelViewModel.DownloadInfo.ContentLength = downloadOperationStateChangedEventArgs.ContentLength;
-    }
-
-    private async void OnModelDownloadingCompleted(object? sender, EventArgs e)
-    {
-        var downloadOperationStateChangedEventArgs = (DownloadOperationStateChangedEventArgs)e;
-
-        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.Models,
-            downloadOperationStateChangedEventArgs.ModelCard)!;
-
-        if (downloadOperationStateChangedEventArgs.Exception != null)
-        {
-            modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-            //    await MaestroHelpers.DisplayError("Model download failure",
-            //        $"Download of model '{modelViewModel.Name}' failed:\n{downloadOperationStateChangedEventArgs.Exception.Message}");
-            //}
-        }
-        else if (downloadOperationStateChangedEventArgs.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled)
-        {
-            modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-        }
-        else if (downloadOperationStateChangedEventArgs.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed)
-        {
-            modelViewModel.DownloadInfo.Status = DownloadStatus.Downloaded;
-        }
-
-        modelViewModel.DownloadInfo.Progress = 0;
-        modelViewModel.DownloadInfo.BytesRead = 0;
-    }
 }
