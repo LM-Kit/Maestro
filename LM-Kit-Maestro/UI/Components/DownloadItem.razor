@@ -6,27 +6,62 @@
 
         <MudProgressLinear Value="@(ModelInfo.DownloadInfo.Progress * 100)" />
 
-        <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
-            @($"{Math.Round(ModelInfo.DownloadInfo.Progress * 100, 1)}% • {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.BytesRead)} / {FileHelpers.FormatFileSize(ModelInfo.FileSize)}")
-        </MudText>
+        @if (ModelInfo.DownloadInfo.Status == DownloadStatus.Downloading || ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused)
+        {
+            <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
+                @($"{Math.Round(ModelInfo.DownloadInfo.Progress * 100, 1)}% • {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.BytesRead)} / {FileHelpers.FormatFileSize(ModelInfo.FileSize)}")
+            </MudText>
+        }
+        else if (ModelInfo.DownloadInfo.Status == DownloadStatus.Downloaded)
+        {
+            <div class="text-button" @onclick="() => LoadRequested.InvokeAsync()">
+                <MudIcon Icon="fas fa-play"
+                         Style="font-size: 0.7rem !important; color: var(--Outline) !important" />
+
+                <MudText Typo="Typo.caption">
+                    Load
+                </MudText>
+            </div>
+        }
     </div>
 
     <div class="download-item-buttons">
-        <IconButton OnClick="OnPauseResumeButtonClicked"
-        Icon="@(ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused ?  "fas fa-play" : "fas fa-pause")"
-        Style="IconButton.ButtonStyle.SecondaryAction" />
-        <IconButton OnClick="() => StopRequested.InvokeAsync()"
-        Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
+        @if (ModelInfo.DownloadInfo.Status == DownloadStatus.Downloading || ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused)
+        {
+            <IconButton OnClick="OnPauseResumeButtonClicked"
+            Icon="@(ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused ?  "fas fa-play" : "fas fa-pause")"
+            Style="IconButton.ButtonStyle.SecondaryAction" />
+
+            <IconButton OnClick="() => StopRequested.InvokeAsync()"
+            Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
+        }
+        else
+        {
+            <IconButton OnClick="() => DeleteRequested.InvokeAsync()"
+                Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
+        }
     </div>
 </div>
 
+<style>
+    .text-button{
+        gap: 0.25rem;
+        color: var(--Outline);
+        transition: all 0.3s;
+    }
 
+    .text-button:hover{
+        color: var(--OnSurface);
+    }
+</style>
 @code {
     [Parameter] public ModelInfoViewModel ModelInfo { get; set; }
 
     [Parameter] public EventCallback PauseRequested { get; set; }
     [Parameter] public EventCallback StopRequested { get; set; }
     [Parameter] public EventCallback ResumeRequested { get; set; }
+    [Parameter] public EventCallback DeleteRequested { get; set; }
+    [Parameter] public EventCallback LoadRequested { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -39,8 +74,13 @@
     {
         if (e.PropertyName == nameof(DownloadInfo.Progress))
         {
+
+        }
+        else if (e.PropertyName == nameof(DownloadInfo.Status))
+        {
             
         }
+
         InvokeAsync(StateHasChanged);
     }
 
