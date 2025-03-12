@@ -211,7 +211,6 @@ namespace LMKit.Maestro.ViewModels
             }
             else
             {
-                // todo: DialogService.ConfirmDownload
                 _fileManager.DownloadModel(modelCardViewModel.ModelCard);
                 ModelDownloads.Add(modelCardViewModel);
             }
