@@ -41,6 +41,7 @@ public partial class MaestroViewModel : ViewModelBase
         await _conversationListViewModel.LoadConversationLogs();
 
         _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
+
         _llmFileManager.Initialize();
 
         _lmKitService.ModelLoadingFailed += OnModelLoadingFailed;
@@ -55,6 +56,8 @@ public partial class MaestroViewModel : ViewModelBase
 
         AppIsInitialized = true;
     }
+
+
 
     private void TryLoadLastUsedModel()
     {

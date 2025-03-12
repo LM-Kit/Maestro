@@ -3,7 +3,7 @@
         <MudItem xs="@(Dense ? 5 : 12)" Class="d-flex align-center">
             <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3" Class="overflow-hidden">
                 <div class="dot d-flex align-content-end @(GetScoreClass(ViewModel.CompatibilityLevel))"
-                     title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
+                title="@string.Format("Estimated performance level of the model on this machine is {0:P0}", ViewModel.CompatibilityLevel)">
                 </div>
                 <MudText Typo="Typo.subtitle2" Class="text-truncate">
                     @ViewModel.ModelCard.ShortModelName
@@ -24,29 +24,29 @@
                     @if (ViewModel.IsChatModel)
                     {
                         <MudIcon title="@Locales.ChatModelOptimized" Color="Color.Secondary"
-                                 Icon="@Icons.Material.Outlined.Message"
-                                 Size="Size.Small"/>
+                        Icon="@Icons.Material.Outlined.Message"
+                        Size="Size.Small"/>
                     }
 
                     @if (ViewModel.HasVisionCapability)
                     {
                         <MudIcon title="@Locales.VisionModelOptimized" Color="Color.Secondary"
-                                 Icon="@Icons.Material.Outlined.Visibility"
-                                 Size="Size.Small"/>
+                        Icon="@Icons.Material.Outlined.Visibility"
+                        Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsCodeModel)
                     {
                         <MudIcon title="@Locales.CodeCompletionModelOptimized" Color="Color.Secondary"
-                                 Icon="@Icons.Material.Outlined.Code"
-                                 Size="Size.Small"/>
+                        Icon="@Icons.Material.Outlined.Code"
+                        Size="Size.Small"/>
                     }
 
                     @if (ViewModel.IsMathModel)
                     {
                         <MudIcon title="@Locales.MathModelOptimized" Color="Color.Secondary"
-                                 Icon="@Icons.Material.Outlined.Calculate"
-                                 Size="Size.Small"/>
+                        Icon="@Icons.Material.Outlined.Calculate"
+                        Size="Size.Small"/>
                     }
                 </MudStack>
             </MudItem>
@@ -58,8 +58,8 @@
                 {
                     <MudItem xs="3">
                         <MudText Class="outline text-truncate"
-                                 title="@string.Format("The architecture of this model is {0}", ViewModel.ModelCard.Architecture)"
-                                 Typo="Typo.overline">
+                        title="@string.Format("The architecture of this model is {0}", ViewModel.ModelCard.Architecture)"
+                        Typo="Typo.overline">
                             @ViewModel.ModelCard.Architecture
                         </MudText>
                     </MudItem>
@@ -67,24 +67,24 @@
 
                 <MudItem xs="@(Dense ? 4 : 3)">
                     <MudText
-                        title="@string.Format("This model has {0:N0} parameters", ViewModel.ModelCard.ParameterCount)"
-                        Typo="Typo.overline" Class="outline text-truncate">
+                    title="@string.Format("This model has {0:N0} parameters", ViewModel.ModelCard.ParameterCount)"
+                    Typo="Typo.overline" Class="outline text-truncate">
                         @ViewModel.ModelSize
                     </MudText>
                 </MudItem>
 
                 <MudItem xs="@(Dense ? 4 : 3)">
                     <MudText
-                        title="@string.Format("This model supports a maximum context length of {0:N0} tokens", ViewModel.ModelCard.ContextLength)"
-                        Typo="Typo.overline" Class="outline text-truncate">
+                    title="@string.Format("This model supports a maximum context length of {0:N0} tokens", ViewModel.ModelCard.ContextLength)"
+                    Typo="Typo.overline" Class="outline text-truncate">
                         @($"{ViewModel.MaxContextLengthKB}k")
                     </MudText>
                 </MudItem>
 
                 <MudItem xs="@(Dense ? 4 : 3)">
                     <MudText
-                        title="@string.Format("This model uses {0}-bit precision, which indicates the number of bits used for numerical representation", ViewModel.Precision)"
-                        Typo="Typo.overline" Class="outline text-truncate">
+                    title="@string.Format("This model uses {0}-bit precision, which indicates the number of bits used for numerical representation", ViewModel.Precision)"
+                    Typo="Typo.overline" Class="outline text-truncate">
                         @ViewModel.Precision
                     </MudText>
                 </MudItem>
@@ -95,14 +95,18 @@
             <MudGrid Class="d-flex align-items-center" Spacing="0">
                 <MudItem xs="8">
                     <MudText Align="Align.Right" Typo="Typo.overline"
-                             Class="outline text-truncate flex-grow-1">
+                    Class="outline text-truncate flex-grow-1">
                         @Helpers.FileHelpers.FormatFileSize(ViewModel.ModelCard.FileSize)
                     </MudText>
                 </MudItem>
 
                 <MudItem xs="4">
                     <div class="d-flex justify-end">
-                        @if (!ViewModel.IsLocallyAvailable)
+                        @if (ViewModel.DownloadInfo.Status == DownloadStatus.Downloading)
+                        {
+                            <MudProgressCircular Style="width: 0.85rem; height: 0.85rem; color: var(--Outline)" Indeterminate="true" />
+                        }
+                        else if (!ViewModel.IsLocallyAvailable)
                         {
                             <MudIcon Class="outline" title="@Locales.ModelDownloadAvailable"
                                      Icon="@Icons.Material.Outlined.Cloud" Size="Size.Small" />
@@ -119,7 +123,6 @@
     [Parameter] public required ModelInfoViewModel ViewModel { get; set; }
 
     private bool _dense;
-
     [Parameter]
     public bool Dense
     {
@@ -135,7 +138,6 @@
     }
 
     private bool _selectable;
-
     [Parameter]
     public bool Selectable
     {
@@ -151,7 +153,6 @@
     }
 
     private bool _isFocused;
-
     [Parameter]
     public bool IsFocused
     {
@@ -164,6 +165,18 @@
                 InvokeAsync(() => StateHasChanged());
             }
         }
+    }
+
+    private void OnDownloadInfoPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        ViewModel.DownloadInfo.PropertyChanged += OnDownloadInfoPropertyChanged;
     }
 
     private string GetClasses()
@@ -187,6 +200,7 @@
 
         return classes.TrimStart();
     }
+
 
     private static string GetScoreClass(float score)
     {

@@ -16,14 +16,14 @@
     <div id="chat-top-bar">
         @if (ShowSidebarToggles)
         {
-            <div class="top-bar-side @(!ChatsSidebarIsResizing ? "width-transition" : "")"
+            <div class="top-bar-side top-bar-side-left @(!ChatsSidebarIsResizing ? "width-transition" : "")"
                     style="@(ChatsSidebarIsToggled ? $"width: {ChatsSidebarWidth}px" : "")">
-                <div class="d-flex justify-space-between flex-grow-1 align-center gap-2">
+                <div class="d-flex flex-grow-1 align-center gap-2 @(ChatsSidebarIsToggled ? "justify-space-between" : "justify-start")">
 
                     <div class="d-flex flex-shrink-0">
                         <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
-                                    Icon="fas fa-message"
-                                    OnClick="ToggleChatsSidebar"/>
+                        Icon="fas fa-message"
+                        OnClick="ToggleChatsSidebar" />
                     </div>
 
                     @if (ChatsSidebarIsToggled)
@@ -37,30 +37,39 @@
 
                     <div class="d-flex flex-shrink-0">
                         <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
-                                    Icon="fas fa-add"
-                                    OnClick="ViewModel.ConversationListViewModel.AddNewConversation"/>
+                        Icon="fas fa-add"
+                        OnClick="ViewModel.ConversationListViewModel.AddNewConversation" />
                     </div>
                 </div>
+
+                @if (ChatsSidebarIsToggled)
+                {
+                    <hr class="vertical-divider" style="margin-left: 1rem; height: 100%"/>
+                }
             </div>
         }
 
         <div id="top-bar-center">
-            <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel"/>
+            <ModelSelectionButton ModelListViewModel="ViewModel.ModelListViewModel" />
         </div>
 
         @if (ShowSidebarToggles)
         {
-            <div class="top-bar-side @(!SettingsSidebarIsResizing ? "width-transition" : "")"
+            <div class="top-bar-side top-bar-side-right @(!SettingsSidebarIsResizing ? "width-transition" : "")"
                  style="@(SettingsSidebarIsToggled ? $"width: {SettingsSidebarWidth}px" : "")">
 
-                <div
-                    class="d-flex flex-grow-1 flex-shrink-1 align-center gap-2 overflow-hidden @(SettingsSidebarIsToggled ? "justify-space-between" : "justify-end")">
+                @if (SettingsSidebarIsToggled)
+                {
+                    <hr class="vertical-divider" style="margin-right: 1rem; height: 100%" />
+                }
+
+                <div class="d-flex flex-grow-1 flex-shrink-1 align-center gap-2 overflow-hidden @(SettingsSidebarIsToggled ? "justify-space-between" : "justify-end")">
                     @if (SettingsSidebarIsToggled)
                     {
                         <div class="d-flex flex-shrink-0">
                             <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
                                         Icon="fas fa-arrow-rotate-left"
-                                        OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
+                                        OnClick="ViewModel.SettingsViewModel.ResetDefaultValues" />
                         </div>
 
                         <div class="top-bar-side-title">
@@ -73,7 +82,7 @@
                     <div class="d-flex flex-shrink-0">
                         <IconButton Style="IconButton.ButtonStyle.SidebarToggle"
                                     Icon="fas fa-gears"
-                                    OnClick="ToggleSettingsSidebar"/>
+                                    OnClick="ToggleSettingsSidebar" />
                     </div>
                 </div>
             </div>
@@ -83,19 +92,18 @@
 
 <div id="chat-container">
     <ChatSidebar ShowScrollbar="true"
-        Resizable="true"
-        Position="ChatSidebar.SidebarPosition.Left"
-        @bind-Width="ChatsSidebarWidth"
-        @bind-IsResizing="ChatsSidebarIsResizing"
-        @bind-IsToggled="ChatsSidebarIsToggled">
+                 Resizable="true"
+                 Position="ChatSidebar.SidebarPosition.Left"
+                 @bind-Width="ChatsSidebarWidth"
+                 @bind-IsResizing="ChatsSidebarIsResizing"
+                 @bind-IsToggled="ChatsSidebarIsToggled">
 
         <div class="d-flex flex-column flex-grow-1 pa-1">
             @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
             {
                 <ConversationListItem OnSelect="OnConversationItemSelected"
-                                      OnDelete="OnConversationItemDeleteClicked"
                                       IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
-                                      ViewModel="conversation"/>
+                                      ViewModel="conversation" />
             }
         </div>
     </ChatSidebar>
@@ -147,7 +155,7 @@
                     <div id="chat-messages" class="chat-element">
                         @foreach (var message in ViewModel.ConversationListViewModel.CurrentConversation.Messages)
                         {
-                            <ChatMessage MessageViewModel="message"/>
+                            <ChatMessage MessageViewModel="message" />
                         }
 
                         <div id="chat-messages-bottom-space">
@@ -156,9 +164,9 @@
                                 {
                                     <button @onclick="OnScrollToEndButtonClicked"
                                             class="scroll-to-end-button">
-                                                                                                    <span>
-                                                                                                        <i class="fas fa-arrow-down"></i>
-                                                                                                    </span>
+                                        <span>
+                                            <i class="fas fa-arrow-down"></i>
+                                        </span>
                                     </button>
                                 }
                             </div>
@@ -169,7 +177,7 @@
         </div>
 
         <div id="user-input" class="chat-element">
-            <ChatInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation"/>
+            <ChatInput ViewModel="ViewModel!.ConversationListViewModel.CurrentConversation" />
         </div>
 
         <div id="bottom-space">
@@ -179,7 +187,7 @@
                     Tokens: @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace /
                     @ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize
                     (@CalculateUsagePercentage(ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextUsedSpace,
-                             ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
+                            ViewModel.ConversationListViewModel.CurrentConversation.LMKitConversation.ContextSize)%)
                 </MudText>
             }
         </div>
@@ -192,7 +200,7 @@
                  @bind-IsResizing="SettingsSidebarIsResizing"
                  @bind-IsToggled="SettingsSidebarIsToggled">
         <div class="d-flex flex-column flex-grow-1">
-            <ChatSettings ViewModel="ViewModel.SettingsViewModel"/>
+            <ChatSettings ViewModel="ViewModel.SettingsViewModel" />
         </div>
     </ChatSidebar>
 </div>

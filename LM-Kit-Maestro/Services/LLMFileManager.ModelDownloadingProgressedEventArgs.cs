@@ -1,10 +1,12 @@
-﻿namespace LMKit.Maestro.Services;
+﻿using LMKit.Model;
+
+namespace LMKit.Maestro.Services;
 
 public partial class LLMFileManager
 {
     public class ModelDownloadingProgressedEventArgs : EventArgs
     {
-        public string ModelFilePath { get; }
+        public ModelCard ModelCard { get; }
 
         public long BytesRead { get; }
 
@@ -12,9 +14,9 @@ public partial class LLMFileManager
 
         public double Progress { get; }
 
-        public ModelDownloadingProgressedEventArgs(string modelFilePath, long bytesRead, long? contentLength, double progress)
+        public ModelDownloadingProgressedEventArgs(ModelCard modelCard, long bytesRead, long? contentLength, double progress)
         {
-            ModelFilePath = modelFilePath;
+            ModelCard = modelCard;
             BytesRead = bytesRead;
             ContentLength = contentLength;
             Progress = progress;

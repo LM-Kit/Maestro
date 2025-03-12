@@ -299,6 +299,20 @@ button {
     background-color: var(--Surface2) !important;
 }
 
+.model-downloads-button {
+    background-color: transparent;
+    height: 2.8rem;
+    width: 2.8rem;
+    border-radius: 50%;
+    border: 1px solid var(--OutlineVariant);
+    color: var(--Outline);
+    transition: all ease-out 0.3s;
+}
+
+    .model-downloads-button:hover {
+        color: var(--OnSurface);
+    }
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px !important;
@@ -389,4 +403,137 @@ button {
 .mud-dialog-content{
     padding: 0 !important;
     margin: 0 !important;
+}
+
+
+.download-list {
+    gap: 0.5rem;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    width: 100%;
+    padding-inline: 0.5rem;
+    padding-block: 1rem;
+    overflow-y: scroll;
+}
+
+.download-item-root {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+    padding-inline: 0.5rem;
+    padding-block: 0.5rem;
+    border: 1px solid var(--OutlineVariant);
+}
+
+.download-item-body {
+    width: auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.download-item-buttons {
+    gap: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+
+/* MainLayout */
+
+#app-root {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+}
+
+#app-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-block: 1rem;
+    background-color: var(--Surface);
+}
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+}
+
+#top-bar {
+    display: flex;
+    flex-direction: column;
+    height: 5rem;
+}
+
+#nav-bar {
+    display: flex;
+    flex-direction: column;
+    width: 5rem;
+    justify-content: start;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 0.5rem;
+}
+
+#body-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.nav-item {
+}
+
+.nav-link {
+    border-radius: 0.5rem;
+    padding-inline: 1rem;
+    font-size: 2rem !important;
+    color: var(--Outline) !important;
+    transition: all ease-out 0.3s;
+    border: 1px solid transparent;
+}
+
+.nav-link-active {
+    color: var(--Primary) !important;
+    background-color: var(--Surface15) !important;
+    border: 1px solid var(--OutlineVariant);
+}
+
+.nav-link:hover{
+    background-color: var(--Surface15);
+}
+    .nav-link-active.nav-item {
+    }
+
+#page-top-bar {
+    display: flex;
+    flex-direction: column;
+    height: 12rem;
+}
+
+#page-top-bar-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
+}
+
+#body-container {
+    flex: 1;
+    overflow: hidden;
+    background-color: var(--Background);
 }

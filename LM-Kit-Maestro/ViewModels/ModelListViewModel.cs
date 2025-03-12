@@ -4,6 +4,8 @@ using LMKit.Maestro.Helpers;
 using LMKit.Maestro.Services;
 using LMKit.Model;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using static LMKit.Maestro.Services.LLMFileManager;
 
 namespace LMKit.Maestro.ViewModels
 {
@@ -19,9 +21,11 @@ namespace LMKit.Maestro.ViewModels
 
         public ObservableCollection<ModelInfoViewModel> Models { get; }
 
-        [ObservableProperty] public ModelLoadingState _loadingState;
+        [ObservableProperty] ModelLoadingState _loadingState;
 
-        [ObservableProperty] private double? _loadingProgress;
+        [ObservableProperty] double? _loadingProgress;
+
+        [ObservableProperty] bool _isDownloading;
 
         private ModelInfoViewModel? _selectedModel;
 
@@ -55,14 +59,21 @@ namespace LMKit.Maestro.ViewModels
             _fileManager.SortedModelCollectionChanged += OnModelCollectionChanged;
             Models = [];
 
-            LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
-            LMKitService.ModelLoadingProgressed += OnModelLoadingProgressed;
+
+            _fileManager.ModelDownloadingStarted += OnModelDownloadingStarted;
+            _fileManager.ModelDownloadingProgressed += OnModelDownloadingProgressed;
+            _fileManager.ModelDownloadingCompleted += OnModelDownloadingCompleted;
             LMKitService.ModelLoadingFailed += OnModelLoadingFailed;
             LMKitService.ModelLoaded += OnModelLoadingCompleted;
             LMKitService.PropertyChanged += OnLmKitServicePropertyChanged;
+            ModelDownloads.CollectionChanged += OnModelDownloadsCollectionChanged;
         }
 
-        
+        private void OnModelDownloadsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            IsDownloading = ModelDownloads.Count > 0;
+        }
+
         public void Initialize()
         {
             if (LMKitService.LMKitConfig.LoadedModelUri != null)
@@ -103,6 +114,52 @@ namespace LMKit.Maestro.ViewModels
                 _snackbarService.Show("Model file not found",
                     $"Make sure the file path points to your current model folder and that it exists: {fileUri.LocalPath}");
             }
+        }
+
+        public void SartModelDownload(ModelInfoViewModel modelInfoViewModel)
+        {
+            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(Models, modelInfoViewModel.ModelCard);
+
+            if (modelCardViewModel != null)
+            {
+                _fileManager.DownloadModel(modelInfoViewModel.ModelCard);
+                modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
+            }
+        }
+
+        public void PauseModelDownload(ModelInfoViewModel modelInfoViewModel)
+        {
+            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, modelInfoViewModel.ModelCard);
+
+            if (modelCardViewModel != null)
+            {
+                _fileManager.PauseModelDownload(modelInfoViewModel.ModelCard);
+                modelCardViewModel.DownloadInfo.Status = DownloadStatus.DownloadPaused;
+            }
+        }
+
+        public void ResumeModelDownload(ModelInfoViewModel modelInfoViewModel)
+        {
+            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, modelInfoViewModel.ModelCard);
+
+            if (modelCardViewModel != null)
+            {
+                _fileManager.ResumeModelDownload(modelInfoViewModel.ModelCard);
+                modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
+            }
+        }
+
+        public void CancelModelDownload(ModelInfoViewModel modelInfoViewModel)
+        {
+            ModelInfoViewModel? modelCardViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, modelInfoViewModel.ModelCard);
+
+            if (modelCardViewModel != null)
+            {
+                _fileManager.CancelModelDownload(modelInfoViewModel.ModelCard);
+                modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
+                ModelDownloads.Remove(modelCardViewModel);
+            }
+
         }
 
         public void OpenModelInExplorer(ModelInfoViewModel modelInfoViewModel)
@@ -154,7 +211,6 @@ namespace LMKit.Maestro.ViewModels
             }
             else
             {
-                // todo: DialogService.ConfirmDownload
                 _fileManager.DownloadModel(modelCardViewModel.ModelCard);
                 ModelDownloads.Add(modelCardViewModel);
             }
@@ -261,8 +317,7 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnModelLoadingCompleted(object? sender, EventArgs e)
         {
-            SelectedModel =
-                MaestroHelpers.TryGetExistingModelInfoViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri!);
+            SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri!);
             LoadingProgress = 0;
             LoadingState = ModelLoadingState.FinishinUp;
         }
@@ -290,15 +345,64 @@ namespace LMKit.Maestro.ViewModels
             LoadingProgress = loadingEventArgs.Progress;
         }
 
-        private void OnModelDownloadingProgressed(object? sender, EventArgs e)
+        private void OnModelDownloadingStarted(object? sender, LLMFileManager.DownloadOperationStateChangedEventArgs e)
         {
-            LoadingState = ModelLoadingState.Downloading;
+            _snackbarService.Show("", $"Starting downloading <b>{e.ModelCard.ShortModelName}<b/>");
 
-            var downloadingEventArgs = (LMKitService.ModelDownloadingProgressedEventArgs)e;
 
-            if (downloadingEventArgs.ContentLength != null)
+        }
+
+        private void OnModelDownloadingCompleted(object? sender, LLMFileManager.DownloadOperationStateChangedEventArgs e)
+        {
+            ModelInfoViewModel? modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, e.ModelCard);
+
+            if (e.Exception == null)
             {
-                LoadingProgress = (float)downloadingEventArgs.BytesRead / downloadingEventArgs.ContentLength.Value;
+                _snackbarService.Show("", $"Finished downloading <b>{e.ModelCard.ShortModelName}<b/>");
+            }
+            else
+            {
+                _snackbarService.Show("Model download failed", $"<b>{e.ModelCard.ShortModelName}</b> download failed: <i>{e.Exception.Message}<i/>");
+            }
+
+            if (modelViewModel != null)
+            {
+                if (e.Exception != null)
+                {
+                    modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
+                }
+                else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled)
+                {
+                    modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
+                }
+                else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed)
+                {
+                    modelViewModel.DownloadInfo.Status = DownloadStatus.Downloaded;
+                }
+            }
+        }
+
+        private void OnModelDownloadingProgressed(object? sender, ModelDownloadingProgressedEventArgs e)
+        {
+            ModelInfoViewModel? modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, e.ModelCard);
+
+            if (modelViewModel != null)
+            {
+                if (e.Progress != 1)
+                {
+                    if (modelViewModel.DownloadInfo.Status != DownloadStatus.Downloading)
+                    {
+                        modelViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
+                    }
+
+                    modelViewModel.DownloadInfo.BytesRead = e.BytesRead;
+                    modelViewModel.DownloadInfo.ContentLength = e.ContentLength;
+                    modelViewModel.DownloadInfo.Progress = e.Progress;
+                }
+                else
+                {
+                    modelViewModel.DownloadInfo.Status = DownloadStatus.Downloaded;
+                }
             }
         }
 

@@ -12,13 +12,13 @@
 }
 
     #item-container:hover {
-        background-color: var(--Surface15);
+        background-color: var(--Surface);
     }
 
-    #item-container.item-selected:hover {
-        background-color: var(--Surface15);
+ /*   #item-container.item-selected:hover {
+        background-color: var(--Surface);
     }
-
+*/
     #item-container:hover #show-more-button {
         visibility: visible;
     }

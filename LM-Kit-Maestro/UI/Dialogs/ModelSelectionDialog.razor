@@ -11,83 +11,111 @@
 
                     <div class="d-flex justify-end close-button align-center">
                         <IconButton Style="IconButton.ButtonStyle.Icon"
-                                    Icon="fas fa-close"
-                                    Size="IconButton.ButtonSize.Small"
-                                    OnClick="() => MudDialog.Cancel()" />
+                        Icon="fas fa-close"
+                        Size="IconButton.ButtonSize.Small"
+                        OnClick="() => MudDialog.Cancel()"/>
                     </div>
                 </div>
 
                 <div class="model-selection-dialog-body">
-                    <ModelList OnClick="(model) => MudDialog.Close(model)" LimitWidth="false" Selectable="true" Dense="true" />
+                    <ModelList OnModelSelected="OnModelSelected" LimitWidth="false" Selectable="true" Dense="true"/>
                 </div>
             </div>
         </div>
+
+        <MudDialog @bind-Visible="ShowingConfirmationDialog">
+            <DialogContent>
+                <MudText Typo="Typo.caption">
+                    Start downloading <b>@_confirmingViewModel!.ShortName</b> ? 
+                </MudText>
+            </DialogContent>
+            <DialogActions>
+                <button class="text-button" @onclick="() => CloseConfirmationDialog(false)">Cancel</button>
+                <button class="text-button primary" @onclick="() => CloseConfirmationDialog(true)">Download</button>
+            </DialogActions>
+        </MudDialog>
     </DialogContent>
 </MudDialog>
 
 <style>
     .model-selection-dialog-content-wrapper {
-        display: flex;
-        justify-content: center;
-        margin-inline: auto;
-        margin-block: auto;
+    display: flex;
+    justify-content: center;
+    margin-inline: auto;
+    margin-block: auto;
     }
 
     .model-selection-dialog-content-root {
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        flex-grow: 1;
-        flex-shrink: 1;
-        background-color: var(--Surface);
-        border-radius: 1rem;
-        border: 1px solid var(--OutlineVariant);
-        border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-grow: 1;
+    flex-shrink: 1;
+    background-color: var(--Surface);
+    border-radius: 1rem;
+    border: 1px solid var(--OutlineVariant);
+    border-radius: 0.5rem;
     }
 
     .model-selection-dialog-root {
-        left: 0 !important;
-        top: 0 !important;
-        background-color: transparent !important;
+    left: 0 !important;
+    top: 0 !important;
+    background-color: transparent !important;
+    padding: 1rem !important;
     }
 
     .dialog-backdrop {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        background-color: transparent;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: transparent;
     }
 
     .height-auto-100 {
-        height: auto;
-        max-height: 100%;
-        flex-grow: 1;
-        flex-shrink: 1;
+    height: auto;
+    max-height: 100%;
+    flex-grow: 1;
+    flex-shrink: 1;
     }
 
     .model-selection-dialog-body {
-        display: flex;
-        flex-direction: column;
-        overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
     }
 
-        .model-selection-dialog-body::-webkit-scrollbar {
-            display: none;
-        }
+    .model-selection-dialog-body::-webkit-scrollbar {
+    display: none;
+    }
 
     .close-button {
-        color: var(--Outline) !important;
+    color: var(--Outline) !important;
     }
 
-        .close-button:hover {
-            color: var(--OnSurface) !important;
-        }
+    .close-button:hover {
+    color: var(--OnSurface) !important;
+    }
 
 </style>
 
 @code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+    private bool _showingConfirmationDialog;
+
+    private bool ShowingConfirmationDialog
+    {
+        get => _showingConfirmationDialog;
+        set
+        {
+            _showingConfirmationDialog = value;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private ModelInfoViewModel? _confirmingViewModel;
+
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+
+    [CascadingParameter] private ModelListViewModel ModelListViewModel { get; set; }
 
     [Parameter] public string Message { get; set; }
 
@@ -98,4 +126,28 @@
     [Parameter] public Color ActionColor { get; set; }
 
     [Parameter] public bool IsImportant { get; set; }
+
+    private void OnModelSelected(ModelInfoViewModel viewModel)
+    {
+        if (viewModel.DownloadInfo.Status == DownloadStatus.NotDownloaded)
+        {
+            _confirmingViewModel = viewModel;
+            ShowingConfirmationDialog = true;
+        }
+        else
+        {
+            MudDialog.Close(viewModel);
+        }
+    }
+
+    private void CloseConfirmationDialog(bool result)
+    {
+        ShowingConfirmationDialog = false;
+        
+        // if (result && _confirmingViewModel != null)
+        // {
+        //     ModelListViewModel.SartModelDownload(_confirmingViewModel!);
+        //     _confirmingViewModel = null;
+        // }
+    }
 }

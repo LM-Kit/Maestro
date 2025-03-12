@@ -45,7 +45,6 @@ public partial class LMKitService : INotifyPropertyChanged
     }
 
     public event NotifyModelStateChangedEventHandler? ModelLoadingProgressed;
-    public event NotifyModelStateChangedEventHandler? ModelDownloadingProgressed;
     public event NotifyModelStateChangedEventHandler? ModelLoaded;
     public event NotifyModelStateChangedEventHandler? ModelLoadingFailed;
     public event NotifyModelStateChangedEventHandler? ModelUnloaded;
@@ -79,7 +78,7 @@ public partial class LMKitService : INotifyPropertyChanged
 
             try
             {
-                _state.LoadedModel = new LM(modelUri, downloadingProgress: OnModelDownloadingProgressed, loadingProgress: OnModelLoadingProgressed);
+                _state.LoadedModel = new LM(modelUri, loadingProgress: OnModelLoadingProgressed);
 
                 modelLoadingSuccess = true;
             }
@@ -145,12 +144,6 @@ public partial class LMKitService : INotifyPropertyChanged
         return true;
     }
 
-    private bool OnModelDownloadingProgressed(string path, long? contentLength, long bytesRead)
-    {
-        ModelDownloadingProgressed?.Invoke(this, new ModelDownloadingProgressedEventArgs(_state.LoadedModelUri!, path, contentLength, bytesRead));
-
-        return true;
-    }
 
     private static TokenSampling GetTokenSampling(LMKitConfig config)
     {

@@ -25,7 +25,7 @@
     border-radius: 0.25rem;
     text-align: center;
     color: var(--OnSurface);
-    background-color: var(--Surface2);
+    background-color: transparent;
 }
 
     .sidebar-toggle-button:hover {

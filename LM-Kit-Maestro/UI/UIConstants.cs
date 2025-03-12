@@ -38,6 +38,7 @@ public static class UIConstants
             Error = Colors.Error,
             Secondary = Colors.Secondary,
             TextSecondary = Colors.Outline,
+            Info = Colors.Secondary,
             //AppbarText = "#92929f",
             //AppbarBackground = "rgba(26,26,39,0.8)",
             //DrawerBackground = "#1a1a27",

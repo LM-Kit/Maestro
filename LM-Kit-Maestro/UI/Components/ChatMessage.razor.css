@@ -4,6 +4,7 @@
     flex-direction: column;
     margin-block: 1.25rem;
     margin-inline: 0.5rem;
+    border-radius: 0.25rem;
 }
 
     #message-container:hover > div {

@@ -5,7 +5,7 @@
     flex-direction: row;
     flex-grow: 0;
     flex-shrink: 0;
-    background-color: var(--Surface);
+    background-color: var(--Surface15);
 }
 
 .sidebar-hidden .resize-handle {

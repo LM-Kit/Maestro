@@ -109,16 +109,22 @@ body.windows .chat-element {
     flex-direction: row;
     flex-grow: 1;
     justify-content: space-around;
-    /*background-color: yellow;*/
+    height: 100%;
+}
+
+.top-bar-side-left{
+    padding-left: 1rem;
+}
+
+.top-bar-side-right{
+    padding-right: 1rem;
 }
 
 .top-bar-side {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding-inline: 1rem;
     flex-shrink: 0;
-    /*background-color: red;*/
     width: 6rem;
 }
 
