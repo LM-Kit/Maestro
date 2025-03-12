@@ -102,7 +102,7 @@
 
                 <MudItem xs="4">
                     <div class="d-flex justify-end">
-                        @if (ViewModel.DownloadInfo.Status == DownloadStatus.Downloading)
+                        @if (ViewModel.DownloadInfo.IsDownloading)
                         {
                             <MudProgressCircular Style="width: 0.85rem; height: 0.85rem; color: var(--Outline)" Indeterminate="true" />
                         }

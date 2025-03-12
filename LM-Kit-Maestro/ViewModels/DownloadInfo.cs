@@ -13,7 +13,32 @@ namespace LMKit.Maestro.ViewModels
         [ObservableProperty]
         double _progress;
 
-        [ObservableProperty]
-        DownloadStatus _status;
+        private bool _isDownloading;
+        public bool IsDownloading
+        {
+            get => _isDownloading;
+            set
+            {
+                if (_isDownloading != value)
+                {
+                    _isDownloading = value;
+                    OnPropertyChanged(nameof(IsDownloading));
+                }
+            }
+        }
+
+        private bool _isDownloadPaused;
+        public bool IsDownloadPaused
+        {
+            get => _isDownloadPaused;
+            set
+            {
+                if (_isDownloadPaused != value)
+                {
+                    _isDownloading = value;
+                    OnPropertyChanged(nameof(IsDownloadPaused));
+                }
+            }
+        }
     }
 }

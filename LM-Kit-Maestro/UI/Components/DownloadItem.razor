@@ -6,13 +6,13 @@
 
         <MudProgressLinear Value="@(ModelInfo.DownloadInfo.Progress * 100)" />
 
-        @if (ModelInfo.DownloadInfo.Status == DownloadStatus.Downloading || ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused)
+        @if (ModelInfo.DownloadInfo.IsDownloading)
         {
             <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
                 @($"{Math.Round(ModelInfo.DownloadInfo.Progress * 100, 1)}% • {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.BytesRead)} / {FileHelpers.FormatFileSize(ModelInfo.FileSize)}")
             </MudText>
         }
-        else if (ModelInfo.DownloadInfo.Status == DownloadStatus.Downloaded)
+        else if (ModelInfo.ModelCard.IsLocallyAvailable)
         {
             <div class="text-button" @onclick="() => LoadRequested.InvokeAsync()">
                 <MudIcon Icon="fas fa-play"
@@ -26,10 +26,10 @@
     </div>
 
     <div class="download-item-buttons">
-        @if (ModelInfo.DownloadInfo.Status == DownloadStatus.Downloading || ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused)
+        @if (ModelInfo.DownloadInfo.IsDownloading)
         {
             <IconButton OnClick="OnPauseResumeButtonClicked"
-            Icon="@(ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused ?  "fas fa-play" : "fas fa-pause")"
+            Icon="@(ModelInfo.DownloadInfo.IsDownloadPaused ?  "fas fa-play" : "fas fa-pause")"
             Style="IconButton.ButtonStyle.SecondaryAction" />
 
             <IconButton OnClick="() => StopRequested.InvokeAsync()"
@@ -72,21 +72,12 @@
 
     private void OnDownloadInfoPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(DownloadInfo.Progress))
-        {
-
-        }
-        else if (e.PropertyName == nameof(DownloadInfo.Status))
-        {
-            
-        }
-
         InvokeAsync(StateHasChanged);
     }
 
     private void OnPauseResumeButtonClicked()
     {
-        if (ModelInfo.DownloadInfo.Status == DownloadStatus.DownloadPaused)
+        if (ModelInfo.DownloadInfo.IsDownloadPaused)
         {
             ResumeRequested.InvokeAsync();
         }

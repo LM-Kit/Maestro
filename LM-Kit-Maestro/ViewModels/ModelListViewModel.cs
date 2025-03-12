@@ -123,7 +123,7 @@ namespace LMKit.Maestro.ViewModels
             if (modelCardViewModel != null)
             {
                 _fileManager.DownloadModel(modelInfoViewModel.ModelCard);
-                modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
+                modelCardViewModel.DownloadInfo.IsDownloading = true;
             }
         }
 
@@ -134,7 +134,7 @@ namespace LMKit.Maestro.ViewModels
             if (modelCardViewModel != null)
             {
                 _fileManager.PauseModelDownload(modelInfoViewModel.ModelCard);
-                modelCardViewModel.DownloadInfo.Status = DownloadStatus.DownloadPaused;
+                modelCardViewModel.DownloadInfo.IsDownloadPaused = true;
             }
         }
 
@@ -145,7 +145,7 @@ namespace LMKit.Maestro.ViewModels
             if (modelCardViewModel != null)
             {
                 _fileManager.ResumeModelDownload(modelInfoViewModel.ModelCard);
-                modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
+                modelCardViewModel.DownloadInfo.IsDownloading = true;
             }
         }
 
@@ -156,7 +156,7 @@ namespace LMKit.Maestro.ViewModels
             if (modelCardViewModel != null)
             {
                 _fileManager.CancelModelDownload(modelInfoViewModel.ModelCard);
-                modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
+                modelCardViewModel.DownloadInfo.IsDownloading = false;
                 ModelDownloads.Remove(modelCardViewModel);
             }
 
@@ -293,7 +293,6 @@ namespace LMKit.Maestro.ViewModels
 
             if (modelCardViewModel != null)
             {
-                modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
                 Models.Remove(modelCardViewModel);
 
                 if (LMKitService.LMKitConfig.LoadedModelUri == modelCardViewModel.ModelCard.ModelUri)
@@ -349,7 +348,12 @@ namespace LMKit.Maestro.ViewModels
         {
             _snackbarService.Show("", $"Starting downloading <b>{e.ModelCard.ShortModelName}<b/>");
 
+            ModelInfoViewModel? modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(Models, e.ModelCard);
 
+            if (modelViewModel != null)
+            {
+                ModelDownloads.Add(modelViewModel);
+            }
         }
 
         private void OnModelDownloadingCompleted(object? sender, LLMFileManager.DownloadOperationStateChangedEventArgs e)
@@ -367,18 +371,18 @@ namespace LMKit.Maestro.ViewModels
 
             if (modelViewModel != null)
             {
-                if (e.Exception != null)
-                {
-                    modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-                }
-                else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled)
-                {
-                    modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-                }
-                else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed)
-                {
-                    modelViewModel.DownloadInfo.Status = DownloadStatus.Downloaded;
-                }
+                //if (e.Exception != null)
+                //{
+                //    modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
+                //}
+                //else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled)
+                //{
+                //    modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
+                //}
+                //else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed)
+                //{
+                //    modelViewModel.DownloadInfo.Status = DownloadStatus.Downloaded;
+                //}
             }
         }
 
@@ -390,10 +394,7 @@ namespace LMKit.Maestro.ViewModels
             {
                 if (e.Progress != 1)
                 {
-                    if (modelViewModel.DownloadInfo.Status != DownloadStatus.Downloading)
-                    {
-                        modelViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
-                    }
+                    modelViewModel.DownloadInfo.IsDownloading |= true;
 
                     modelViewModel.DownloadInfo.BytesRead = e.BytesRead;
                     modelViewModel.DownloadInfo.ContentLength = e.ContentLength;
@@ -401,7 +402,7 @@ namespace LMKit.Maestro.ViewModels
                 }
                 else
                 {
-                    modelViewModel.DownloadInfo.Status = DownloadStatus.Downloaded;
+                    //modelViewModel.DownloadInfo.Status = DownloadStatus.Downloaded;
                 }
             }
         }

@@ -1,4 +1,7 @@
-﻿<MudDialog Class="model-selection-dialog-root">
+﻿@inject IDialogService DialogService
+@inject ModelListViewModel ModelListViewModel
+
+<MudDialog Class="model-selection-dialog-root">
     <DialogContent>
         <div class="model-selection-dialog-content-wrapper width-50 height-auto-100">
             <div @onclick="() => MudDialog.Cancel()" class="dialog-backdrop"></div>
@@ -8,33 +11,20 @@
                         Available models
                     </MudText>
 
-
                     <div class="d-flex justify-end close-button align-center">
                         <IconButton Style="IconButton.ButtonStyle.Icon"
                         Icon="fas fa-close"
                         Size="IconButton.ButtonSize.Small"
-                        OnClick="() => MudDialog.Cancel()"/>
+                        OnClick="() => MudDialog.Cancel()" />
                     </div>
                 </div>
 
                 <div class="model-selection-dialog-body">
-                    <ModelList OnModelSelected="OnModelSelected" LimitWidth="false" Selectable="true" Dense="true"/>
+                    <ModelList OnModelSelected="OnModelSelected" LimitWidth="false" Selectable="true" Dense="true" />
                 </div>
             </div>
         </div>
-
-        <MudDialog @bind-Visible="ShowingConfirmationDialog">
-            <DialogContent>
-                <MudText Typo="Typo.caption">
-                    Start downloading <b>@_confirmingViewModel!.ShortName</b> ? 
-                </MudText>
-            </DialogContent>
-            <DialogActions>
-                <button class="text-button" @onclick="() => CloseConfirmationDialog(false)">Cancel</button>
-                <button class="text-button primary" @onclick="() => CloseConfirmationDialog(true)">Download</button>
-            </DialogActions>
-        </MudDialog>
-    </DialogContent>
+        </DialogContent>
 </MudDialog>
 
 <style>
@@ -95,27 +85,11 @@
     .close-button:hover {
     color: var(--OnSurface) !important;
     }
-
 </style>
 
 @code {
-    private bool _showingConfirmationDialog;
-
-    private bool ShowingConfirmationDialog
-    {
-        get => _showingConfirmationDialog;
-        set
-        {
-            _showingConfirmationDialog = value;
-            InvokeAsync(StateHasChanged);
-        }
-    }
-
-    private ModelInfoViewModel? _confirmingViewModel;
-
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
 
-    [CascadingParameter] private ModelListViewModel ModelListViewModel { get; set; }
 
     [Parameter] public string Message { get; set; }
 
@@ -129,25 +103,40 @@
 
     private void OnModelSelected(ModelInfoViewModel viewModel)
     {
-        if (viewModel.DownloadInfo.Status == DownloadStatus.NotDownloaded)
+        if (!viewModel.ModelCard.IsLocallyAvailable)
         {
-            _confirmingViewModel = viewModel;
-            ShowingConfirmationDialog = true;
+            Task.Run(async () =>
+            {
+                var confirmed = await PromptConfirmation(viewModel);
+
+                if (confirmed)
+                {
+                    ModelListViewModel.SartModelDownload(viewModel);
+                }
+            });
         }
         else
         {
-            MudDialog.Close(viewModel);
+            MudDialog.Close(viewModel);  // Close the model selection dialog
         }
     }
 
-    private void CloseConfirmationDialog(bool result)
+    private async Task<bool> PromptConfirmation(ModelInfoViewModel modelInfoViewModel)
     {
-        ShowingConfirmationDialog = false;
-        
-        // if (result && _confirmingViewModel != null)
-        // {
-        //     ModelListViewModel.SartModelDownload(_confirmingViewModel!);
-        //     _confirmingViewModel = null;
-        // }
+        var options = new DialogOptions { CloseOnEscapeKey = true, FullWidth = false, Position = DialogPosition.Center };
+
+        var parameters = new DialogParameters<ActionDialog>
+        {
+            { x => x.Title, "Model needs to be downloaded" },
+            { x => x.Message, new MarkupString($"Start downloading <b>{modelInfoViewModel.ShortName}</b>?") },
+            { x => x.IsImportant, false },
+            { x => x.ActionText, "Download" }
+        };
+
+        var dialog = await DialogService.ShowAsync<ActionDialog>(null, parameters, options);
+
+        var result = await dialog.Result;
+
+        return result != null && !result.Canceled && result.Data is bool confirmed && confirmed ? true : false;
     }
 }

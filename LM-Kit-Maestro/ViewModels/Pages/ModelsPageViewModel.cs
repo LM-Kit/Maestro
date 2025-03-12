@@ -35,33 +35,6 @@ public partial class ModelsPageViewModel : ViewModelBase
 
     }
 
-    public void DownloadModel(ModelInfoViewModel modelCardViewModel)
-    {
-        modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
-
-        //FileManager.DownloadModel(modelCardViewModel.ModelInfo);
-    }
-
-    public void CancelDownload(ModelInfoViewModel modelCardViewModel)
-    {
-        modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-
-        //FileManager.CancelModelDownload(modelCardViewModel.ModelInfo);
-    }
-
-    public void PauseDownload(ModelInfoViewModel modelCardViewModel)
-    {
-        modelCardViewModel.DownloadInfo.Status = DownloadStatus.DownloadPaused;
-
-        //FileManager.PauseModelDownload(modelCardViewModel.ModelInfo);
-    }
-
-    public void ResumeDownload(ModelInfoViewModel modelCardViewModel)
-    {
-        modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
-        //FileManager.ResumeModelDownload(modelCardViewModel.ModelInfo);
-    }
-
     public void PickModelsFolder()
     {
 #if MACCATALYST  || WINDOWS

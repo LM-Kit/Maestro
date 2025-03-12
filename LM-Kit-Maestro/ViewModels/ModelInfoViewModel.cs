@@ -62,8 +62,7 @@ namespace LMKit.Maestro.ViewModels
         [ObservableProperty]
         int _maxContextLengthKB;
 
-        [ObservableProperty]
-        DownloadInfo _downloadInfo = new DownloadInfo();
+        public DownloadInfo DownloadInfo { get; } = new DownloadInfo();
 
         internal void OnLocalModelRemoved()
         {

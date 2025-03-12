@@ -537,3 +537,15 @@ button {
     overflow: hidden;
     background-color: var(--Background);
 }
+
+
+.download-confirmation-dialog-root {
+    background-color: var(--Surface);
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 24rem !important;
+    border: 1px solid var(--OutlineVariant) !important;
+    padding-inline: 0.5rem;
+    padding-block: 0.5rem;
+}
