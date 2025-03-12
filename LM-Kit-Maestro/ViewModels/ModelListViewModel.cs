@@ -369,8 +369,9 @@ namespace LMKit.Maestro.ViewModels
                 _snackbarService.Show("Model download failed", $"<b>{e.ModelCard.ShortModelName}</b> download failed: <i>{e.Exception.Message}<i/>");
             }
 
-            if (modelViewModel != null)
+            if (modelViewModel != null && modelViewModel.ModelCard.IsLocallyAvailable)
             {
+                modelViewModel.OnLocalModelCreated();
                 //if (e.Exception != null)
                 //{
                 //    modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;

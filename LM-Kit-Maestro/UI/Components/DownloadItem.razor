@@ -8,36 +8,36 @@
 
         @if (ModelInfo.DownloadInfo.IsDownloading)
         {
-            <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
+                <MudText Class="ml-1 outline" Typo="Typo.overline" Style="font-size: 0.7rem">
                 @($"{Math.Round(ModelInfo.DownloadInfo.Progress * 100, 1)}% • {FileHelpers.FormatFileSize(ModelInfo.DownloadInfo.BytesRead)} / {FileHelpers.FormatFileSize(ModelInfo.FileSize)}")
-            </MudText>
+                </MudText>
         }
         else if (ModelInfo.ModelCard.IsLocallyAvailable)
         {
-            <div class="text-button" @onclick="() => LoadRequested.InvokeAsync()">
-                <MudIcon Icon="fas fa-play"
-                         Style="font-size: 0.7rem !important; color: var(--Outline) !important" />
+                <div class="text-button" @onclick="() => LoadRequested.InvokeAsync()">
+                    <MudIcon Icon="fas fa-play"
+                    Style="font-size: 0.7rem !important; color: var(--Outline) !important" />
 
-                <MudText Typo="Typo.caption">
-                    Load
-                </MudText>
-            </div>
+                    <MudText Typo="Typo.caption">
+                        Load
+                    </MudText>
+                </div>
         }
     </div>
 
     <div class="download-item-buttons">
         @if (ModelInfo.DownloadInfo.IsDownloading)
         {
-            <IconButton OnClick="OnPauseResumeButtonClicked"
-            Icon="@(ModelInfo.DownloadInfo.IsDownloadPaused ?  "fas fa-play" : "fas fa-pause")"
-            Style="IconButton.ButtonStyle.SecondaryAction" />
+                <IconButton OnClick="OnPauseResumeButtonClicked"
+                Icon="@(ModelInfo.DownloadInfo.IsDownloadPaused ?  "fas fa-play" : "fas fa-pause")"
+                Style="IconButton.ButtonStyle.SecondaryAction" />
 
-            <IconButton OnClick="() => StopRequested.InvokeAsync()"
-            Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
+                <IconButton OnClick="() => StopRequested.InvokeAsync()"
+                Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
         }
         else
         {
-            <IconButton OnClick="() => DeleteRequested.InvokeAsync()"
+                <IconButton OnClick="() => DeleteRequested.InvokeAsync()"
                 Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
         }
     </div>
@@ -45,13 +45,13 @@
 
 <style>
     .text-button{
-        gap: 0.25rem;
-        color: var(--Outline);
-        transition: all 0.3s;
+    gap: 0.25rem;
+    color: var(--Outline);
+    transition: all 0.3s;
     }
 
     .text-button:hover{
-        color: var(--OnSurface);
+    color: var(--OnSurface);
     }
 </style>
 @code {
@@ -67,7 +67,16 @@
     {
         base.OnParametersSet();
 
+        ModelInfo.PropertyChanged += OnModelInfoPropertyChanged;
         ModelInfo.DownloadInfo.PropertyChanged += OnDownloadInfoPropertyChanged;
+    }
+
+    private void OnModelInfoPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ModelInfoViewModel.IsLocallyAvailable))
+        {
+            InvokeAsync(StateHasChanged);
+        }
     }
 
     private void OnDownloadInfoPropertyChanged(object? sender, PropertyChangedEventArgs e)

@@ -109,7 +109,7 @@
                         else if (!ViewModel.IsLocallyAvailable)
                         {
                             <MudIcon Class="outline" title="@Locales.ModelDownloadAvailable"
-                                     Icon="@Icons.Material.Outlined.Cloud" Size="Size.Small" />
+                            Icon="@Icons.Material.Outlined.Cloud" Size="Size.Small" />
                         }
                     </div>
                 </MudItem>
@@ -172,11 +172,20 @@
         InvokeAsync(() => StateHasChanged());
     }
 
+    private void OnModelInfoViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ModelInfoViewModel.IsLocallyAvailable))
+        {
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
         ViewModel.DownloadInfo.PropertyChanged += OnDownloadInfoPropertyChanged;
+        ViewModel.PropertyChanged += OnModelInfoViewModelPropertyChanged;
     }
 
     private string GetClasses()

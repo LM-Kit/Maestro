@@ -145,7 +145,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             fileDownloader.ErrorEventHandler += OnDownloadExceptionThrown;
             fileDownloader.DownloadProgressedEventHandler += OnDownloadProgressed;
             fileDownloader.DownloadCompletedEventHandler += OnDownloadCompleted;
-
+            
             if (_fileDownloads.TryAdd(modelCard.ModelID, fileDownloader))
             {
                 fileDownloader.Start();
