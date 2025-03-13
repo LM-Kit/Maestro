@@ -5,21 +5,20 @@
 <MudDialog Class="model-download-root">
     <DialogContent>
         <div class="d-flex flex-column">
-            <div class="model-download-header-footer">
-                <div style="position: relative; width: 100%; height: 100%">
-                    <div class="header-title">
-                        <MudText class="download-title" Typo="Typo.overline">
-                            Downloads
-                        </MudText>
-                    </div>
+            <div class="d-flex flex-row space-between align-center px-1 py-1 bg-surface-2">
+                <MudText Align="Align.Center" Class="flex-grow-1" Typo="Typo.caption">
+                    Downloads
+                </MudText>
 
-                    <div class="close-button">
-                        <IconButton Style="IconButton.ButtonStyle.Icon"
-                        Icon="fas fa-close"
-                        OnClick="DialogInstance.Cancel" />
-                    </div>
+                <div class="d-flex justify-end close-button align-center">
+                    <IconButton Style="IconButton.ButtonStyle.Icon"
+                                Icon="fas fa-close"
+                                Size="IconButton.ButtonSize.Small"
+                                OnClick="() => MudDialog.Cancel()" />
                 </div>
             </div>
+
+
 
             <div class="model-download-body">
                 @if (ModelListViewModel.ModelDownloads.Count == 0)
@@ -117,16 +116,14 @@
     */
     }
 
-    .model-download-header-footer {
-    height: 2rem;
-    background-color: var(--Surface2);
-    display: flex;
+    .model-download-header {
+        background-color: var(--Surface2);
+        display: flex;
     }
 
     .model-download-footer {
-    height: 2rem;
-    padding-inline: 1rem;
-    background-color: var(--Surface) !important;
+        padding-inline: 1rem;
+        background-color: var(--Surface) !important;
     }
 
     .close-button {

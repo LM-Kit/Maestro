@@ -1,8 +1,7 @@
 ﻿<MudDialog Class="action-dialog-root radius-1">
     <DialogContent>
         <div class="d-flex flex-column gap-2">
-
-            <div class="mt-4">
+            <div>
                 <MudText Typo="Typo.subtitle2">
                     @Title
                 </MudText>
@@ -13,30 +12,20 @@
             </MudText>
 
             <div class="dialog-actions">
-                    <button class="text-button" @onclick="() => DialogInstance.Close(true)">
-                        <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">@ActionText</MudText>
-                    </button>
-                <button class="text-button" @onclick="() => DialogInstance.Cancel()">
-                        <MudText Typo="Typo.subtitle2">Cancel</MudText>
-                    </button>
+                <button class="text-button-root" @onclick="() => DialogInstance.Close(true)">
+                    <MudText Color="@(ActionColor != null ? ActionColor.Value : (IsImportant ? Color.Error : Color.Default))" Typo="Typo.subtitle2">
+                        @ActionText
+                    </MudText>
+                </button>
+                <button class="text-button-root" @onclick="() => DialogInstance.Cancel()">
+                    <MudText Typo="Typo.subtitle2">Cancel</MudText>
+                </button>
             </div>
         </div>
 
     </DialogContent>
 </MudDialog>
 
-<style>
-    .dialog-actions{
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .action-dialog-root {
-        width: 24rem;
-        border: 1px solid var(--OutlineVariant);
-        background-color: var(--Surface);
-    }
-</style>
 @code {
     [Parameter] public MarkupString Message { get; set; } = default(MarkupString);
 
@@ -45,6 +34,8 @@
     [Parameter] public string ActionText { get; set; } = string.Empty;
 
     [Parameter] public bool IsImportant { get; set; }
+
+    [Parameter] public Color? ActionColor { get; set; }
 
     [CascadingParameter] private IMudDialogInstance DialogInstance { get; set; }
 

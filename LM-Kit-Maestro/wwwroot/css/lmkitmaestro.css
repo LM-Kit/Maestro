@@ -233,17 +233,21 @@ button {
     border: 1px solid var(--OutlineVariant) !important;
 }
 
-.text-button {
+.text-button-root {
     padding-block: 0.25rem !important;
     padding-inline: 0.5rem !important;
     border-radius: 0.25rem !important;
-    transition: background-color 0.3s !important;
-    background-color: var(--Surface) !important;
+    transition: all 0.3s !important;
+    background-color: transparent !important;
+    /*border: 1px solid transparent !important;*/
     color: var(--OnSurface) !important;
 }
 
-    .text-button:hover {
-        background-color: var(--Surface2) !important;
+    .text-button-root:hover {
+        color: var(--OnSurface) !important;
+        background-color: var(--Surface3) !important;
+        border-color: var(--OutlineVariant) !important;
+        /*background-color: var(--Surface2) !important;*/
     }
     
 .width-50 {
@@ -397,7 +401,7 @@ button {
 }
 
 .mud-dialog{
-    background-color: var(--Surface) !important;
+    background-color: var(--Surface2) !important;
 }
 
 .mud-dialog-content{
@@ -445,9 +449,7 @@ button {
 }
 
 
-
 /* MainLayout */
-
 #app-root {
     display: flex;
     flex-direction: row;
@@ -538,6 +540,19 @@ button {
     background-color: var(--Background);
 }
 
+
+/* Dialogs */
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.action-dialog-root {
+    width: 24rem;
+    border: 1px solid var(--OutlineVariant);
+    padding-block: 0.5rem;
+    padding-inline: 0.75rem;
+}
 
 .download-confirmation-dialog-root {
     background-color: var(--Surface);

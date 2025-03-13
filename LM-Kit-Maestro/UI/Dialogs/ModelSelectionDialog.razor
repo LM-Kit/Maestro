@@ -103,7 +103,7 @@
 
     private void OnModelSelected(ModelInfoViewModel viewModel)
     {
-        if (!viewModel.ModelCard.IsLocallyAvailable)
+        if (!viewModel.IsLocallyAvailable)
         {
             Task.Run(async () =>
             {
@@ -127,10 +127,11 @@
 
         var parameters = new DialogParameters<ActionDialog>
         {
-            { x => x.Title, "Model needs to be downloaded" },
-            { x => x.Message, new MarkupString($"Start downloading <b>{modelInfoViewModel.ShortName}</b>?") },
+            { x => x.Title, "Start model download ?" },
+            { x => x.Message, new MarkupString($"This will start downloading <b>{modelInfoViewModel.ShortName}</b>") },
             { x => x.IsImportant, false },
-            { x => x.ActionText, "Download" }
+            { x => x.ActionText, "Download" },
+            { x => x.ActionColor, Color.Primary }
         };
 
         var dialog = await DialogService.ShowAsync<ActionDialog>(null, parameters, options);

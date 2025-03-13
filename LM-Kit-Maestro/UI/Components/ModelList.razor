@@ -21,14 +21,14 @@
                     {
                         @if (modelItem.ViewModel.IsLocallyAvailable)
                         {
-                            <button class="text-button"
+                            <button 
                                     @onclick="() => HandleActionButtonClick(() => OnModelSelected.InvokeAsync(modelItem.ViewModel), modelItem)">
                                 <MudText Color="Color.Primary" Typo="Typo.subtitle2">Load </MudText>
                             </button>
                         }
                         else if (!modelItem.ViewModel.DownloadInfo.IsDownloading)
                         {
-                            <button class="text-button"
+                            <button
                                     @onclick="() => HandleActionButtonClick(() => ModelListViewModel.SartModelDownload(modelItem.ViewModel), modelItem)">
                                 <MudText Color="Color.Primary" Typo="Typo.subtitle2">Download </MudText>
                             </button>
@@ -38,20 +38,20 @@
                     
                     @if (modelItem.ViewModel.IsLocallyAvailable)
                     {
-                        <button class="text-button"
+                        <button 
                                 @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelInExplorer(modelItem.ViewModel), modelItem)">
                             <MudText Typo="Typo.subtitle2">Reveal in explorer</MudText>
                         </button>
                     }
 
-                    <button class="text-button"
+                    <button
                             @onclick="() => HandleActionButtonClick(() => ModelListViewModel.OpenModelHfLink(modelItem.ViewModel), modelItem)">
                         <MudText Typo="Typo.subtitle2">Open on Hugging Face</MudText>
                     </button>
 
                     @if (modelItem.ViewModel.IsLocallyAvailable)
                     {
-                        <button class="text-button"
+                        <button
                                 @onclick="() => HandleActionButtonClick(() => ModelListViewModel.DeleteModel(modelItem.ViewModel), modelItem)">
                             <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete from disk</MudText>
                         </button>

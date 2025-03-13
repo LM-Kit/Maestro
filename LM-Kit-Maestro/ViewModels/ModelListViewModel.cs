@@ -371,6 +371,7 @@ namespace LMKit.Maestro.ViewModels
 
             if (modelViewModel != null && modelViewModel.ModelCard.IsLocallyAvailable)
             {
+                modelViewModel.DownloadInfo.IsDownloading = false;
                 modelViewModel.OnLocalModelCreated();
                 //if (e.Exception != null)
                 //{
