@@ -12,12 +12,12 @@
             </MudText>
 
             <div class="dialog-actions">
-                <button class="text-button-root" @onclick="() => DialogInstance.Close(true)">
+                <button class="text-button" @onclick="() => DialogInstance.Close(true)">
                     <MudText Color="@(ActionColor != null ? ActionColor.Value : (IsImportant ? Color.Error : Color.Default))" Typo="Typo.subtitle2">
                         @ActionText
                     </MudText>
                 </button>
-                <button class="text-button-root" @onclick="() => DialogInstance.Cancel()">
+                <button class="text-button" @onclick="() => DialogInstance.Cancel()">
                     <MudText Typo="Typo.subtitle2">Cancel</MudText>
                 </button>
             </div>
@@ -45,9 +45,4 @@
 
         await InvokeAsync(() => StateHasChanged());
     }
-}
-
-@code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
 }
