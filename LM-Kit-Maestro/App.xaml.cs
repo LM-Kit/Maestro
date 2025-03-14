@@ -33,7 +33,6 @@ namespace LMKit.Maestro
                 // to avoid visual white flash while the view is loading.
                 Color.FromArgb(UIConstants.Colors.Background).ToRgb(out byte r, out byte g, out byte b);
 #if WINDOWS
-
                 handler.PlatformView.DefaultBackgroundColor = new Windows.UI.Color()
                 {
                     A = 255,
@@ -42,11 +41,12 @@ namespace LMKit.Maestro
                     B = b
                 };
 #elif MACCATALYST
-                  if (handler.PlatformView is WKWebView wv)
-                  {
-                      wv.Opaque = false;
-                      wv.BackgroundColor = UIColor.Clear;
-                  }
+                handler.PlatformView.ScrollView.Bounces = false;
+                if (handler.PlatformView is WKWebView wv)
+                {
+                    wv.Opaque = false;
+                    wv.BackgroundColor = UIColor.Clear;
+                }
 #endif
             });
 
