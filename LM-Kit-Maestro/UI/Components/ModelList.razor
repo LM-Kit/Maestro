@@ -28,7 +28,7 @@
                     else if (!modelItem.ViewModel.DownloadInfo.IsDownloading)
                     {
                         <button class="text-button"
-                                @onclick="() => HandleActionButtonClick(() => ModelListViewModel.SartModelDownload(modelItem.ViewModel), modelItem)">
+                            @onclick="() => HandleActionButtonClick(() => OnModelSelected.InvokeAsync(modelItem.ViewModel), modelItem)">
                             <MudText Color="Color.Primary" Typo="Typo.subtitle2">Download </MudText>
                         </button>
                     }

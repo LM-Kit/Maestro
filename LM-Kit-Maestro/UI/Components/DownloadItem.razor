@@ -16,7 +16,7 @@
         {
             <div class="load-model-button" @onclick="() => LoadRequested.InvokeAsync()">
                 <MudIcon Icon="fas fa-play"
-                         Style="font-size: 0.7rem !important; color: var(--Outline) !important" />
+                         Style="font-size: 0.7rem !important;" />
 
                 <MudText Typo="Typo.caption">
                     Load
@@ -45,18 +45,15 @@
 
 <style>
     .load-model-button {
-    }
-
-    .text-button {
-        gap: 0.25rem;
         color: var(--Outline);
-        transition: all 0.3s;
+        cursor: pointer;
     }
 
-        .text-button:hover {
-            color: var(--OnSurface);
-        }
+    .load-model-button:hover{
+        color: var(--OnSurface);
+    }
 </style>
+
 @code {
     [Parameter] public ModelInfoViewModel ModelInfo { get; set; }
 
