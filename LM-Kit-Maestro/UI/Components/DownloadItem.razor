@@ -4,7 +4,7 @@
             @ModelInfo.ModelCard.ShortModelName
         </MudText>
 
-        <MudProgressLinear Value="@(ModelInfo.DownloadInfo.Progress * 100)" />
+        <MudProgressLinear Value="@(ModelInfo.DownloadInfo.IsDownloading ? ModelInfo.DownloadInfo.Progress * 100 : 100)" />
 
         @if (ModelInfo.DownloadInfo.IsDownloading)
         {

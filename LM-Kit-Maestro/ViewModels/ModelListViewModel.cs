@@ -145,7 +145,7 @@ namespace LMKit.Maestro.ViewModels
             if (modelCardViewModel != null)
             {
                 _fileManager.ResumeModelDownload(modelInfoViewModel.ModelCard);
-                modelCardViewModel.DownloadInfo.IsDownloading = true;
+                modelCardViewModel.DownloadInfo.IsDownloadPaused = false;
             }
         }
 
@@ -360,31 +360,23 @@ namespace LMKit.Maestro.ViewModels
         {
             ModelInfoViewModel? modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, e.ModelCard);
 
-            if (e.Exception == null)
-            {
-                _snackbarService.Show("", $"Finished downloading <b>{e.ModelCard.ShortModelName}<b/>");
-            }
-            else
+            if (e.Exception != null)
             {
                 _snackbarService.Show("Model download failed", $"<b>{e.ModelCard.ShortModelName}</b> download failed: <i>{e.Exception.Message}<i/>");
             }
+            else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed)
+            {
+                _snackbarService.Show("", $"Finished downloading <b>{e.ModelCard.ShortModelName}<b/>");
+            }
 
-            if (modelViewModel != null && modelViewModel.ModelCard.IsLocallyAvailable)
+            if (modelViewModel != null)
             {
                 modelViewModel.DownloadInfo.IsDownloading = false;
-                modelViewModel.OnLocalModelCreated();
-                //if (e.Exception != null)
-                //{
-                //    modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-                //}
-                //else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled)
-                //{
-                //    modelViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-                //}
-                //else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed)
-                //{
-                //    modelViewModel.DownloadInfo.Status = DownloadStatus.Downloaded;
-                //}
+
+                if (modelViewModel.ModelCard.IsLocallyAvailable)
+                {
+                    modelViewModel.OnLocalModelCreated();
+                }
             }
         }
 

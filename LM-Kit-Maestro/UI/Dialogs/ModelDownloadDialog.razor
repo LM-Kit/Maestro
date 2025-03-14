@@ -14,7 +14,7 @@
                     <IconButton Style="IconButton.ButtonStyle.Icon"
                                 Icon="fas fa-close"
                                 Size="IconButton.ButtonSize.Small"
-                                OnClick="() => MudDialog.Cancel()" />
+                                OnClick="() => DialogInstance.Cancel()" />
                 </div>
             </div>
 
@@ -137,13 +137,6 @@
 </style>
 
 @code {
-    [Parameter] public MarkupString Message { get; set; } = default(MarkupString);
-
-    [Parameter] public string Title { get; set; } = string.Empty;
-
-    [Parameter] public string ActionText { get; set; } = string.Empty;
-
-    [Parameter] public bool IsImportant { get; set; }
 
     [CascadingParameter] private IMudDialogInstance DialogInstance { get; set; }
 
@@ -183,8 +176,4 @@
     {
         ModelListViewModel.LMKitService.LoadModel(modelInfoViewModel.ModelCard.ModelUri);
     }
-}
-
-@code {
-    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
 }

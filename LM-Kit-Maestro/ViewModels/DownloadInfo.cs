@@ -35,7 +35,7 @@ namespace LMKit.Maestro.ViewModels
             {
                 if (_isDownloadPaused != value)
                 {
-                    _isDownloading = value;
+                    _isDownloadPaused = value;
                     OnPropertyChanged(nameof(IsDownloadPaused));
                 }
             }
