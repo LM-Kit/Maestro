@@ -276,14 +276,6 @@ xs-icon {
     border-radius: 0.5rem;
 }
 
-.center {
-    background-color: green;
-    display: flex;
-    padding: 100px;
-    align-self: center !important;
-    margin-block: auto !important;
-}
-
 .download-list {
     gap: 0.5rem;
     display: flex;
@@ -302,9 +294,8 @@ xs-icon {
     width: 100%;
     border-radius: 0.25rem;
     padding-inline: 0.5rem;
-    border: 1px solid var(--OutlineVariant);
     padding-block: 0.25rem;
-    background-color: var(--Surface);
+    border: 1px solid var(--OutlineVariant);
 }
 
 .download-item-body {
@@ -329,6 +320,7 @@ xs-icon {
     justify-content: space-between;
     align-items: center;
     height: 1.5rem;
+
 }
 
 /* Buttons*/

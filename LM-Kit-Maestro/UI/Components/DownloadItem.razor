@@ -6,7 +6,7 @@
 
         @if (!ModelInfo.DownloadInfo.IsDownloading)
         {
-            <button class="basic-button">
+            <button class="basic-button" @onclick="() => DeleteRequested.InvokeAsync()">
                 <span class="fas fa-close"/>
             </button>
         }
@@ -46,7 +46,7 @@
         }
         else if (ModelInfo.ModelCard.IsLocallyAvailable)
         {
-            <MudText Typo="Typo.overline">
+            <MudText Class="outline" Typo="Typo.overline">
                 Download completed
             </MudText>
 
@@ -81,12 +81,12 @@
 
 <style>
     .load-model-button {
-        color: var(--Outline);
+        color: var(--Primary);
         cursor: pointer;
     }
 
     .load-model-button:hover {
-        color: var(--Primary);
+        color: var(--PrimaryAccent);
     }
 </style>
 
