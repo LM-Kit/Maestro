@@ -215,7 +215,7 @@ xs-icon {
 }
 
 .action-sheet {
-    background-color: var(--Surface2);
+    background-color: var(--Background);
     border-radius: 0.25rem;
     border: 1px solid var(--OutlineVariant);
     display: flex;
@@ -341,7 +341,7 @@ button {
 }
 
     .text-button:hover {
-        background-color: var(--Surface3) !important;
+        background-color: var(--Surface2) !important;
     }
 
 .model-downloads-button {
@@ -422,7 +422,7 @@ button {
 }
 
 .mud-snackbar {
-    background-color: var(--Surface2) !important;
+    background-color: var(--Background) !important;
     border: 1px solid var(--OutlineVariant) !important;
     opacity: 1 !important;
 }
@@ -442,7 +442,7 @@ button {
 }
 
 .mud-dialog {
-    background-color: var(--Surface15) !important;
+    background-color: var(--Background) !important;
 }
 
 .mud-dialog-content {

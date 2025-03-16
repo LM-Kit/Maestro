@@ -60,17 +60,17 @@
                             TransformOrigin="Origin.CenterLeft">
 
                     <div class="action-sheet">
-                        <button
+                        <button class="text-button"
                                  @onclick="() => HandleActionButtonClick(() => ViewModel.OpenModelsFolder())">
                             <MudText Typo="Typo.subtitle2">@Locales.OpenInFileExplorer</MudText>
                         </button>
 
-                        <button
+                        <button class="text-button"
                                 @onclick="() => HandleActionButtonClick(() => ViewModel.PickModelsFolder())">
                             <MudText Typo="Typo.subtitle2">@Locales.SelectAnotherFolder</MudText>
                         </button>
 
-                        <button
+                        <button class="text-button"
                                 @onclick="() => HandleActionButtonClick(() => ViewModel.ResetModelsFolder())">
                             <MudText Typo="Typo.subtitle2">@Locales.ResetModelFolder</MudText>
                             </button>
