@@ -241,13 +241,13 @@ xs-icon {
 .icon-button {
 }
 
-.icon-button{
+.icon-button {
     color: var(--Outline);
 }
 
-.icon-button:hover{
-    color: var(--OnSurface);
-}
+    .icon-button:hover {
+        color: var(--OnSurface);
+    }
 
 .outlined-button {
     border: 1px solid var(--OutlineVariant) !important;
@@ -284,6 +284,52 @@ xs-icon {
     margin-block: auto !important;
 }
 
+.download-list {
+    gap: 0.5rem;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    width: 100%;
+    padding-inline: 0.5rem;
+    padding-block: 1rem;
+    overflow-y: scroll;
+}
+
+.download-item-root {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    border-radius: 0.25rem;
+    padding-inline: 0.5rem;
+    border: 1px solid var(--OutlineVariant);
+    padding-block: 0.25rem;
+    background-color: var(--Surface);
+}
+
+.download-item-body {
+    width: auto;
+    flex-grow: 1;
+    display: grid;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 1rem;
+}
+
+.download-item-buttons {
+    gap: 0.25rem;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+}
+
+.download-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 1.5rem;
+}
 
 /* Buttons*/
 button {
@@ -404,7 +450,7 @@ button {
 }
 
 .mud-dialog {
-    background-color: var(--Surface2) !important;
+    background-color: var(--Surface15) !important;
 }
 
 .mud-dialog-content {
@@ -412,46 +458,17 @@ button {
     margin: 0 !important;
 }
 
-
-.download-list {
-    gap: 0.5rem;
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    width: 100%;
-    padding-inline: 0.5rem;
-    padding-block: 1rem;
-    overflow-y: scroll;
-}
-
-.download-item-root {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    width: 100%;
+.basic-button{
+    cursor: pointer;
+    color: var(--Outline);
     height: auto;
-    border-radius: 0.25rem;
-    padding-inline: 0.5rem;
-    padding-block: 0.5rem;
-    border: 1px solid var(--OutlineVariant);
-}
-
-.download-item-body {
     width: auto;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    font-size: 0.75rem;
 }
 
-.download-item-buttons {
-    gap: 0.25rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.basic-button:hover{
+    color: var(--OnSurface);
 }
-
-
 /* MainLayout */
 #app-root {
     display: flex;

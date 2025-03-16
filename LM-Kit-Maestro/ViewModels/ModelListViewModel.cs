@@ -157,6 +157,7 @@ namespace LMKit.Maestro.ViewModels
             {
                 _fileManager.CancelModelDownload(modelInfoViewModel.ModelCard);
                 modelCardViewModel.DownloadInfo.IsDownloading = false;
+                modelCardViewModel.DownloadInfo.TerminationReason = DownloadInfo.DownloadTerminationReason.DownloadCanceled;
                 ModelDownloads.Remove(modelCardViewModel);
             }
 
@@ -360,18 +361,25 @@ namespace LMKit.Maestro.ViewModels
         {
             ModelInfoViewModel? modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelDownloads, e.ModelCard);
 
-            if (e.Exception != null)
-            {
-                _snackbarService.Show("Model download failed", $"<b>{e.ModelCard.ShortModelName}</b> download failed: <i>{e.Exception.Message}<i/>");
-            }
-            else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed)
-            {
-                _snackbarService.Show("", $"Finished downloading <b>{e.ModelCard.ShortModelName}<b/>");
-            }
-
             if (modelViewModel != null)
             {
                 modelViewModel.DownloadInfo.IsDownloading = false;
+
+                if (e.Exception != null)
+                {
+                    _snackbarService.Show("Model download failed", $"<b>{e.ModelCard.ShortModelName}</b> download failed: <i>{e.Exception.Message}<i/>");
+                    modelViewModel!.DownloadInfo.TerminationReason = DownloadInfo.DownloadTerminationReason.DownloadError;
+                }
+                else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed)
+                {
+                    modelViewModel.DownloadInfo.Progress = 1;
+                    _snackbarService.Show("", $"Finished downloading <b>{e.ModelCard.ShortModelName}<b/>");
+                    modelViewModel!.DownloadInfo.TerminationReason = DownloadInfo.DownloadTerminationReason.DownloadCompleted;
+                }
+                else if (e.Type == DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled)
+                {
+                    modelViewModel!.DownloadInfo.TerminationReason = DownloadInfo.DownloadTerminationReason.DownloadCanceled;
+                }
 
                 if (modelViewModel.ModelCard.IsLocallyAvailable)
                 {
@@ -426,6 +434,7 @@ namespace LMKit.Maestro.ViewModels
                 }
             }
         }
+
         #endregion
     }
 }

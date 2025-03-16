@@ -6,7 +6,7 @@
     <DialogContent>
         <div class="d-flex flex-column">
             <div class="d-flex flex-row space-between align-center px-1 py-1 bg-surface-2">
-                <MudText Align="Align.Center" Class="flex-grow-1" Typo="Typo.caption">
+                <MudText Align="Align.Center" Class="flex-grow-1 outline" Typo="Typo.caption">
                     Downloads
                 </MudText>
 
@@ -25,11 +25,11 @@
                 {
                     <div class="d-flex align-center flex-column gap-4">
                         <MudIcon Icon="fas fa-download"
-                        Style="font-size: 2rem !important; color: var(--Outline) !important" />
+                                 Style="font-size: 2rem !important; color: var(--Outline) !important" />
 
                         <MudText Class="outline"
-                        Typo="Typo.caption"
-                        Align="Align.Center">
+                                 Typo="Typo.caption"
+                                 Align="Align.Center">
                             @Locales.NoModelDownloading
                         </MudText>
                     </div>
@@ -40,25 +40,24 @@
                         @foreach (var model in ModelListViewModel.ModelDownloads)
                         {
                             <DownloadItem ModelInfo="model"
-                            StopRequested="() => OnStopRequested(model)"
-                            PauseRequested="() => OnPauseRequested(model)"
-                            ResumeRequested="() => OnResumeRequested(model)" 
-                            DeleteRequested="() => OnDeleteRequested(model)"
-                            LoadRequested="() => OnLoadRequested(model)"
-                            />
+                                          StopRequested="() => OnStopRequested(model)"
+                                          PauseRequested="() => OnPauseRequested(model)"
+                                          ResumeRequested="() => OnResumeRequested(model)"
+                                          DeleteRequested="() => OnDeleteRequested(model)"
+                                          LoadRequested="() => OnLoadRequested(model)" />
                         }
                     </div>
                 }
             </div>
 
-            <div class="model-download-header-footer model-download-footer justify-end">
-                <div class="open-directory-wrapper gap-2" @onclick="OpenModelDirectory">
+            <div class="d-flex px-4 pb-1 justify-end">
+                <button class="open-directory-button gap-2" @onclick="OpenModelDirectory">
                     <MudIcon Icon="fas fa-folder" Style="font-size: 0.7rem !important;" />
 
                     <MudText Typo="Typo.caption">
                         Open download directory
                     </MudText>
-                </div>
+                </button>
 
             </div>
         </div>
@@ -68,71 +67,59 @@
 <style>
 
     .header-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        height: 100%;
     }
 
     .model-download-root {
-    display: flex;
-    flex-direction: column;
-    width: 32rem;
-    border-radius: 1rem;
-    border: 1px solid var(--OutlineVariant);
+        display: flex;
+        flex-direction: column;
+        width: 32rem;
+        border-radius: 1rem;
+        border: 1px solid var(--OutlineVariant);
     }
 
     .model-download-body {
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    height: 20rem;
-    background-color: var(--Surface);
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+        height: 20rem;
     }
 
-    .open-directory-wrapper {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    transition: all ease-out 0.3s;
-    background-color: var(--Surface) !important;
-    cursor: pointer;
-    margin-right: auto;
-    color: var(--Outline);
-    /* border-left: 1px solid var(--Surface); */
-    /* border-top: 1px solid var(--Surface); */
+    .open-directory-button {
+        width: auto;
+        height: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        transition: all ease-out 0.3s;
+        cursor: pointer;
+        color: var(--Outline);
     }
 
-    .open-directory-wrapper:hover {
-    color: var(--OnSurface) !important;
-    /*             border-color: var(--OutlineVariant);
-    */
-    }
+        .open-directory-button:hover {
+            color: var(--OnSurface) !important;
+        }
 
-    .model-download-footer {
-        padding-inline: 1rem;
-        padding-bottom: 0.25rem;
-        background-color: var(--Surface) !important;
-    }
-/* 
-    .close-button {
-    position: absolute;
-    right: 0.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
-    } */
+    /*
+            .close-button {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            } */
 
     .model-download-item {
-    background-color: var(--Surface15);
-    display: flex;
-    flex-direction: row;
+        background-color: var(--Surface15);
+        display: flex;
+        flex-direction: row;
     }
 </style>
 

@@ -1,10 +1,42 @@
 ﻿<div class="download-item-root">
-    <div class="download-item-body">
+    <div class="download-item-header">
         <MudText Typo="Typo.subtitle2">
             @ModelInfo.ModelCard.ShortModelName
         </MudText>
 
-        <MudProgressLinear Value="@(ModelInfo.DownloadInfo.IsDownloading ? ModelInfo.DownloadInfo.Progress * 100 : 100)" />
+        @if (!ModelInfo.DownloadInfo.IsDownloading)
+        {
+            <button class="basic-button">
+                <span class="fas fa-close"/>
+            </button>
+        }
+
+    </div>
+
+    <div class="download-item-body">
+        @if (ModelInfo.DownloadInfo.IsDownloading)
+        {
+            <MudProgressLinear Class="d-flex align-center" Rounded="true" Color="Color.Primary"
+                               Value="@(ModelInfo.DownloadInfo.IsDownloading ? ModelInfo.DownloadInfo.Progress * 100 : 100)"/>
+        }
+        else
+        {
+            <MudDivider/>
+        }
+
+        <div class="download-item-buttons">
+            @if (ModelInfo.DownloadInfo.IsDownloading)
+            {
+                <IconButton OnClick="OnPauseResumeButtonClicked"
+                            Icon="@(ModelInfo.DownloadInfo.IsDownloadPaused ? "fas fa-play" : "fas fa-pause")"
+                            Style="IconButton.ButtonStyle.SecondaryAction"/>
+
+                <IconButton OnClick="() => StopRequested.InvokeAsync()"
+                            Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction"/>
+            }
+        </div>
+    </div>
+    <div class="download-item-header">
 
         @if (ModelInfo.DownloadInfo.IsDownloading)
         {
@@ -14,32 +46,36 @@
         }
         else if (ModelInfo.ModelCard.IsLocallyAvailable)
         {
+            <MudText Typo="Typo.overline">
+                Download completed
+            </MudText>
+
             <div class="load-model-button" @onclick="() => LoadRequested.InvokeAsync()">
                 <MudIcon Icon="fas fa-play"
-                         Style="font-size: 0.7rem !important;" />
+                         Style="font-size: 0.7rem !important;"/>
 
-                <MudText Typo="Typo.caption">
+                <MudText Typo="Typo.overline">
                     Load
                 </MudText>
             </div>
         }
+        else if (ModelInfo.DownloadInfo.TerminationReason != null)
+        {
+            if (ModelInfo.DownloadInfo.TerminationReason == DownloadInfo.DownloadTerminationReason.DownloadCanceled)
+            {
+                <MudText Typo="Typo.overline">
+                    Download canceled
+                </MudText>
+            }
+            else if (ModelInfo.DownloadInfo.TerminationReason == DownloadInfo.DownloadTerminationReason.DownloadError)
+            {
+                <MudText Typo="Typo.overline" Color="Color.Error">
+                    Download failed
+                </MudText>
+            }
+        }
     </div>
-
-    <div class="download-item-buttons">
-        @if (ModelInfo.DownloadInfo.IsDownloading)
-        {
-            <IconButton OnClick="OnPauseResumeButtonClicked"
-                        Icon="@(ModelInfo.DownloadInfo.IsDownloadPaused ?  "fas fa-play" : "fas fa-pause")"
-                        Style="IconButton.ButtonStyle.SecondaryAction" />
-
-            <IconButton OnClick="() => StopRequested.InvokeAsync()"
-                        Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
-        }
-        else
-        {
-            <IconButton OnClick="() => DeleteRequested.InvokeAsync()"
-                        Icon="fas fa-close" Style="IconButton.ButtonStyle.SecondaryAction" />
-        }
+    <div>
     </div>
 </div>
 
@@ -49,8 +85,8 @@
         cursor: pointer;
     }
 
-    .load-model-button:hover{
-        color: var(--OnSurface);
+    .load-model-button:hover {
+        color: var(--Primary);
     }
 </style>
 
@@ -96,4 +132,5 @@
             PauseRequested.InvokeAsync();
         }
     }
+
 }
