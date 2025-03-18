@@ -5,41 +5,36 @@
 @inject LMKitService LmKitService
 @inject ISnackbar Snackbar
 @inject Maestro.Services.ISnackbarService SnackbarService
+@inject IDialogService DialogService
 
-<div id="main-container">
-
-    <div id="top-bar">
-        <hr class="horizontal-divider" />
-
+<div id="app-root">
+    <div id="app-bar">
         <nav id="nav-bar">
-            <div class="nav-item">
+            <div class="nav-item" title="Chat">
                 <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
-                    <MudText Typo="Typo.body1">
-                        Chat
-                    </MudText>
-
+                    <MudIcon Icon="@Icons.Material.Filled.ChatBubbleOutline" />
                 </NavLink>
             </div>
-            <div class="nav-item px-3">
+
+            <div class="nav-item" title="Models">
                 <NavLink ActiveClass="nav-link-active" class="nav-link" href="models">
-                    <MudText Typo="Typo.body1">
-                        Models
-                    </MudText>
+                    <MudIcon Icon="@Icons.Material.Filled.FolderOpen" />
                 </NavLink>
             </div>
         </nav>
-
-        <div id="page-top-bar">
-            <div id="page-top-bar-wrapper">
-                <SectionOutlet SectionName="top-bar" />
-            </div>
-        </div>
-
-        <hr class="horizontal-divider" />
     </div>
 
-    <div id="body-container">
-        @Body
+    <hr class="vertical-divider" />
+    <div id="main-container">
+        <hr class="horizontal-divider" />
+        <div id="top-bar">
+            <SectionOutlet SectionName="top-bar" />
+        </div>
+        <hr class="horizontal-divider" />
+
+        <div id="body-container">
+            @Body
+        </div>
     </div>
 </div>
 
@@ -57,40 +52,4 @@
 
 @code {
     public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            FileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
-            LmKitService.ModelLoadingFailed += OnModelLoadingFailed;
-        }
-    }
-
-    private void OnFileManagerFileCollectingCompleted(object? sender, EventArgs e)
-    {
-        var fileCollectingCompletedEventArgs = (LLMFileManager.FileCollectingCompletedEventArgs)e;
-
-        if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
-        {
-            SnackbarService.Show("Error with your model folder", $"{fileCollectingCompletedEventArgs.Exception.Message!}");
-        }
-        // else
-        // {
-        //     Snackbar.Clear();
-        //     Snackbar.Add("Model scan completed.");
-        // }
-    }
-
-    private void OnModelLoadingFailed(object? sender, EventArgs e)
-    {
-        var modelLoadingFailedEventArgs = (LMKitService.ModelLoadingFailedEventArgs)e;
-
-        if (Microsoft.Maui.ApplicationModel.MainThread.IsMainThread)
-        {
-            // _popupService.DisplayAlert("Error loading model", $"The model failed to be loaded: {modelLoadingFailedEventArgs.Exception.Message}", "OK");
-        }
-    }
 }
