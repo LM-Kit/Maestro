@@ -53,34 +53,3 @@
 @code {
     public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
 }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            FileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
-            LmKitService.ModelLoadingFailed += OnModelLoadingFailed;
-        }
-    }
-
-    private void OnFileManagerFileCollectingCompleted(object? sender, EventArgs e)
-    {
-        var fileCollectingCompletedEventArgs = (LLMFileManager.FileCollectingCompletedEventArgs)e;
-
-        if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
-        {
-            SnackbarService.Show("Error with your model folder", $"{fileCollectingCompletedEventArgs.Exception.Message!}");
-        }
-        // else
-        // {
-        //     Snackbar.Clear();
-        //     Snackbar.Add("Model scan completed.");
-        // }
-    }
-
-    private void OnModelLoadingFailed(object? sender, EventArgs e)
-    {
-        var modelLoadingFailedEventArgs = (LMKitService.ModelLoadingFailedEventArgs)e;
-
