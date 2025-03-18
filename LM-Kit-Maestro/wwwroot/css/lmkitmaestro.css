@@ -363,3 +363,83 @@ button {
 .text-button:hover {
     background-color: var(--Surface2) !important;
 }
+
+/* MainLayout */
+#app-root {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+#app-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-block: 1rem;
+    background-color: var(--Surface);
+}
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+#top-bar {
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#nav-bar {
+    display: flex;
+    flex-direction: column;
+    width: 5rem;
+    justify-content: start;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 0.5rem;
+}
+
+#body-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.nav-item {
+}
+
+.nav-link {
+    border-radius: 0.5rem;
+    padding-inline: 1rem;
+    font-size: 2rem !important;
+    color: var(--Outline) !important;
+    transition: all ease-out 0.3s;
+    border: 1px solid transparent;
+}
+
+.nav-link-active {
+    color: var(--Primary) !important;
+    background-color: var(--Surface15) !important;
+    border: 1px solid var(--OutlineVariant);
+}
+
+.nav-link:hover {
+    background-color: var(--Surface15);
+}
+
+.nav-link-active.nav-item {
+}
+
+#body-container {
+    flex: 1;
+    overflow: hidden;
+    background-color: var(--Background);
+}

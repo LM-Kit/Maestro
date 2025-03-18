@@ -5,41 +5,36 @@
 @inject LMKitService LmKitService
 @inject ISnackbar Snackbar
 @inject Maestro.Services.ISnackbarService SnackbarService
+@inject IDialogService DialogService
 
-<div id="main-container">
-
-    <div id="top-bar">
-        <hr class="horizontal-divider" />
-
+<div id="app-root">
+    <div id="app-bar">
         <nav id="nav-bar">
-            <div class="nav-item">
+            <div class="nav-item" title="Chat">
                 <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
-                    <MudText Typo="Typo.body1">
-                        Chat
-                    </MudText>
-
+                    <MudIcon Icon="@Icons.Material.Filled.ChatBubbleOutline" />
                 </NavLink>
             </div>
-            <div class="nav-item px-3">
+
+            <div class="nav-item" title="Models">
                 <NavLink ActiveClass="nav-link-active" class="nav-link" href="models">
-                    <MudText Typo="Typo.body1">
-                        Models
-                    </MudText>
+                    <MudIcon Icon="@Icons.Material.Filled.FolderOpen" />
                 </NavLink>
             </div>
         </nav>
-
-        <div id="page-top-bar">
-            <div id="page-top-bar-wrapper">
-                <SectionOutlet SectionName="top-bar" />
-            </div>
-        </div>
-
-        <hr class="horizontal-divider" />
     </div>
 
-    <div id="body-container">
-        @Body
+    <hr class="vertical-divider" />
+    <div id="main-container">
+        <hr class="horizontal-divider" />
+        <div id="top-bar">
+            <SectionOutlet SectionName="top-bar" />
+        </div>
+        <hr class="horizontal-divider" />
+
+        <div id="body-container">
+            @Body
+        </div>
     </div>
 </div>
 
@@ -57,6 +52,7 @@
 
 @code {
     public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
+}
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -88,9 +84,3 @@
     {
         var modelLoadingFailedEventArgs = (LMKitService.ModelLoadingFailedEventArgs)e;
 
-        if (Microsoft.Maui.ApplicationModel.MainThread.IsMainThread)
-        {
-            // _popupService.DisplayAlert("Error loading model", $"The model failed to be loaded: {modelLoadingFailedEventArgs.Exception.Message}", "OK");
-        }
-    }
-}
