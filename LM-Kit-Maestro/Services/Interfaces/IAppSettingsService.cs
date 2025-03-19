@@ -13,4 +13,6 @@ public interface IAppSettingsService
     public Mirostat2SamplingConfig Mirostat2SamplingConfig { get; set; }
     public TopNSigmaSamplingConfig TopNSigmaSamplingConfig { get; set; }
     public bool EnableLowPerformanceModels { get; set; }
+
+    public bool ShowOnlyLocalModels { get; set; }
 }

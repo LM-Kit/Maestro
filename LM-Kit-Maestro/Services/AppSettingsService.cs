@@ -68,6 +68,19 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         }
     }
 
+    public bool ShowOnlyLocalModels
+    {
+        get
+        {
+            return Settings.Get(nameof(ShowOnlyLocalModels), LMKitDefaultSettings.DefaultEnableLowPerformanceModels);
+        }
+        set
+        {
+            Settings.Set(nameof(ShowOnlyLocalModels), value);
+            OnPropertyChanged();
+        }
+    }
+
     public string SystemPrompt
     {
         get

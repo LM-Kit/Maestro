@@ -89,6 +89,14 @@
                 @Locales.DisplayLowPerformingModels
                 </MudText>
             </div>
+
+        <div class="d-flex flex-row gap-1 align-center my-4">
+            <MudCheckBox Size="Size.Small" @bind-Value="ViewModel.AppSettingsService.ShowOnlyLocalModels" />
+            <MudText Typo="Typo.overline">
+                @Locales.DisplayOnlyLocalModels
+            </MudText>
+        </div>
+
     </div>
 
     <div id="model-list-container" class="hover-scrollable">
