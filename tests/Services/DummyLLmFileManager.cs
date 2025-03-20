@@ -38,7 +38,7 @@ internal class DummyLLmFileManager : ILLMFileManager
         }
     }
 
-    event NotifyCollectionChangedEventHandler? ILLMFileManager.SortedModelCollectionChanged
+    event NotifyCollectionChangedEventHandler? ILLMFileManager.ModelsCollectionChanged
     {
         add
         {

@@ -37,7 +37,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = [];
 
     private delegate bool ModelDownloadingProgressCallback(string path, long? contentLength, long bytesRead);
-    public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
+    public event NotifyCollectionChangedEventHandler? ModelsCollectionChanged;
 
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _collectModelFilesTask;
@@ -624,7 +624,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             DownloadedCount = 0;
         }
 
-        SortedModelCollectionChanged?.Invoke(sender, e);
+        ModelsCollectionChanged?.Invoke(sender, e);
     }
 
     private void OnUnsortedModelCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

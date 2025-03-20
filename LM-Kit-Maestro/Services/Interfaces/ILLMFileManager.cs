@@ -19,5 +19,5 @@ public interface ILLMFileManager
     void OnModelDownloaded(ModelCard modelInfo);
 
     public event PropertyChangedEventHandler PropertyChanged;
-    public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
+    public event NotifyCollectionChangedEventHandler? ModelsCollectionChanged;
 }

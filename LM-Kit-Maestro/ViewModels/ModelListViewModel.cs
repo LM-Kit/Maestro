@@ -4,11 +4,13 @@ using LMKit.Maestro.Helpers;
 using LMKit.Maestro.Services;
 using LMKit.Model;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace LMKit.Maestro.ViewModels
 {
     public partial class ModelListViewModel : ViewModelBase
     {
+        private readonly IAppSettingsService _appSettingsService;
         private readonly ILLMFileManager _fileManager;
         private readonly ILauncher _launcher;
         private readonly ISnackbarService _snackbarService;
@@ -42,15 +44,22 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        public ModelListViewModel(ILLMFileManager fileManager, LMKitService lmKitService,
+        public ModelListViewModel(IAppSettingsService appSettingsService, ILLMFileManager fileManager, LMKitService lmKitService,
             ILauncher launcher, ISnackbarService snackbarService)
         {
+            _appSettingsService = appSettingsService;
+
+            if (_appSettingsService is INotifyPropertyChanged notifyPropertyChanged)
+            {
+                notifyPropertyChanged.PropertyChanged += OnAppSettingsServicePropertyChanged;
+            }
+
             _fileManager = fileManager;
             LMKitService = lmKitService;
             _launcher = launcher;
             _snackbarService = snackbarService;
 
-            _fileManager.SortedModelCollectionChanged += OnModelCollectionChanged;
+            _fileManager.ModelsCollectionChanged += OnModelCollectionChanged;
             Models = [];
 
             LMKitService.ModelDownloadingProgressed += OnModelDownloadingProgressed;
@@ -146,6 +155,19 @@ namespace LMKit.Maestro.ViewModels
 
         #region Private methods
 
+        private void OnAppSettingsServicePropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            //if (e.PropertyName == nameof(IAppSettingsService.EnableLowPerformanceModels))
+            //{
+                
+            //    _ = CollectModelsAsync();
+            //}
+            //else if (e.PropertyName == nameof(IAppSettingsService.ShowOnlyLocalModels))
+            //{
+
+            //}
+        }
+
         private void OnModelCollectionChanged(object? sender,
             System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -181,6 +203,20 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
+        private void FilterModelsList()
+        {
+            List<ModelInfoViewModel> filteredList = new List<ModelInfoViewModel>();
+
+            foreach (var model in Models)
+            {
+                if (!model.IsLocallyAvailable && !_appSettingsService.ShowOnlyLocalModels)
+                {
+                    filteredList.Add(model);
+                }
+            }
+
+
+        }
         private void AddNewModel(ModelCard modelCard)
         {
 #if BETA_DOWNLOAD_MODELS
