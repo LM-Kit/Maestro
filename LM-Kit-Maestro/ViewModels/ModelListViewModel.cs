@@ -130,7 +130,6 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-
         public void OpenModelHfLink(ModelInfoViewModel modelInfoViewModel)
         {
             Task.Run(() =>

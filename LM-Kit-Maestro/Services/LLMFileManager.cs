@@ -315,36 +315,39 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         _collectModelFilesTask = null;
     }
 
+    private void UpdatePredefinedModelCards()
+    {
+        var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !_appSettingsService.EnableLowPerformanceModels);
+
+        if (_models.Count > 0)
+        {
+            for (int index = 0; index < _models.Count; index++)
+            {
+                if (_models[index].IsPredefined && !predefinedModels.Contains(_models[index]))
+                {
+                    _models.RemoveAt(index);
+                    index--;
+                }
+            }
+        }
+
+        foreach (var modelCard in predefinedModels)
+        {
+            if (!string.IsNullOrWhiteSpace(modelCard.ReplacementModel) &&
+                !modelCard.IsLocallyAvailable)
+            {//ignoring models marked as legacy.
+                continue;
+            }
+
+            TryRegisterChatModel(modelCard, isSorted: true);
+        }
+    }
+
     private void CollectModels()
     {
         if (_config.EnablePredefinedModels)
         {
-            var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !_appSettingsService.EnableLowPerformanceModels);
-
-            if (_models.Count > 0)
-            {
-                for (int index = 0; index < _models.Count; index++)
-                {
-                    if (_models[index].IsPredefined && !predefinedModels.Contains(_models[index]))
-                    {
-                        _models.RemoveAt(index);
-                        index--;
-                    }
-                }
-            }
-
-            foreach (var modelCard in predefinedModels)
-            {
-                if (!string.IsNullOrWhiteSpace(modelCard.ReplacementModel) &&
-                    !modelCard.IsLocallyAvailable)
-                {//ignoring models marked as legacy.
-                    continue;
-                }
-
-                TryRegisterChatModel(modelCard, isSorted: true);
-
-                _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
-            }
+            UpdatePredefinedModelCards();
         }
 
         if (_config.EnableCustomModels)
@@ -448,7 +451,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     #region Event handlers
 
-    private async void OnModelStorageDirectoryChanged()
+    private void OnModelStorageDirectoryChanged()
     {
         if (FileCollectingInProgress)
         {
@@ -460,7 +463,12 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         _unsortedModels.Clear();
         _models.Clear();
 
-        await CollectModelsAsync();
+        UpdatePredefinedModelCards();
+
+        if (_config.EnableCustomModels)
+        {
+            Task.Run(CollectModelsAsync);
+        }
     }
 
     private void OnAppSettingsServicePropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -471,7 +479,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
         else if (e.PropertyName == nameof(IAppSettingsService.EnableLowPerformanceModels))
         {
-            _ = CollectModelsAsync();
+            UpdatePredefinedModelCards();
         }
     }
 
