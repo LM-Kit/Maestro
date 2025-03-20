@@ -26,14 +26,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly FileSystemEntryRecorder _fileSystemEntryRecorder;
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
-    private readonly bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
-    //todo: make this user-configurable is some way.
-    private readonly List<ModelCapabilities> _filteredCapabilities = [ ModelCapabilities.Chat,
-                                                                                            ModelCapabilities.Math,
-                                                                                            ModelCapabilities.CodeCompletion ];
-    private readonly bool _enableCustomModels = true;
     private readonly bool _isLoaded = false;
 
+    private readonly LLMFileManagerConfig _config = new LLMFileManagerConfig();
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = [];
 
     private delegate bool ModelDownloadingProgressCallback(string path, long? contentLength, long bytesRead);
@@ -334,7 +329,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void CollectModels()
     {
-        if (_enablePredefinedModels)
+        if (_config.EnablePredefinedModels)
         {
             var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !_appSettingsService.EnableLowPerformanceModels);
 
@@ -364,7 +359,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             }
         }
 
-        if (_enableCustomModels)
+        if (_config.EnableCustomModels)
         {
             var files = Directory.GetFileSystemEntries(ModelStorageDirectory, "*", SearchOption.AllDirectories);
 
@@ -391,7 +386,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             bool hasAnyFilteredCap = false;
 
-            foreach (var cap in _filteredCapabilities)
+            foreach (var cap in _config.FilteredCapabilities)
             {
                 if (modelCard.Capabilities.HasFlag(cap))
                 {
