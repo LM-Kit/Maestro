@@ -209,7 +209,7 @@ namespace LMKit.Maestro.ViewModels
 
             foreach (var model in Models)
             {
-                if (!model.IsLocallyAvailable && !_appSettingsService.ShowOnlyLocalModels)
+                if (!model.IsLocallyAvailable && !_appSettingsService.EnablePredefinedModels)
                 {
                     filteredList.Add(model);
                 }

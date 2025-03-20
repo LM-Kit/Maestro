@@ -10,6 +10,7 @@ public static class LMKitDefaultSettings
     public const int DefaultRequestTimeout = 120;
     public const SamplingMode DefaultSamplingMode = SamplingMode.Random;
     public const bool DefaultEnableLowPerformanceModels = false;
+    public const bool DefaultEnablePredefinedModels = true;
 
     public static SamplingMode[] AvailableSamplingModes { get; } = (SamplingMode[])Enum.GetValues(typeof(SamplingMode));
 
@@ -25,4 +26,5 @@ public static class LMKitDefaultSettings
     public const float DefaultMirostat2SamplingTemperature = 0.8f;
     public const float DefaultMirostat2SamplingTargetEntropy = 5.0f;
     public const float DefaultMirostat2SamplingLearningRate = 0.1f;
+
 }

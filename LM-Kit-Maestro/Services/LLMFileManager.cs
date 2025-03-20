@@ -91,20 +91,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         _httpClient = httpClient;
         _models.CollectionChanged += OnModelCollectionChanged;
         _unsortedModels.CollectionChanged += OnUnsortedModelCollectionChanged;
-
-        if (_appSettingsService is INotifyPropertyChanged notifyPropertyChanged)
-        {
-            notifyPropertyChanged.PropertyChanged += OnAppSettingsServicePropertyChanged;
-        }
-
-        try
-        {
-            EnsureModelDirectoryExists();
-        }
-        catch (Exception)
-        {
-            // todo
-        }
+        _appSettingsService.PropertyChanged += OnAppSettingsServicePropertyChanged;
 
         ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
         _fileSystemEntryRecorder = new FileSystemEntryRecorder(new Uri(ModelStorageDirectory));
