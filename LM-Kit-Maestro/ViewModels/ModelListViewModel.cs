@@ -71,6 +71,11 @@ namespace LMKit.Maestro.ViewModels
 
         public void Initialize()
         {
+            foreach (var model in _fileManager.Models)
+            {
+                AddModel(new ModelInfoViewModel(model));
+            }
+
             if (LMKitService.LMKitConfig.LoadedModelUri != null)
             {
                 SelectedModel =
@@ -158,7 +163,7 @@ namespace LMKit.Maestro.ViewModels
         {
             //if (e.PropertyName == nameof(IAppSettingsService.EnableLowPerformanceModels))
             //{
-                
+
             //    _ = CollectModelsAsync();
             //}
             //else if (e.PropertyName == nameof(IAppSettingsService.ShowOnlyLocalModels))
@@ -216,6 +221,7 @@ namespace LMKit.Maestro.ViewModels
 
 
         }
+
         private void AddNewModel(ModelCard modelCard)
         {
 #if BETA_DOWNLOAD_MODELS

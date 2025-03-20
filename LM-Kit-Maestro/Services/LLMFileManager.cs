@@ -323,7 +323,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             for (int index = 0; index < _models.Count; index++)
             {
-                if (_models[index].IsPredefined && !predefinedModels.Contains(_models[index]))
+                if (_models[index].IsPredefined && !_models[index].IsLocallyAvailable)
                 {
                     _models.RemoveAt(index);
                     index--;
@@ -331,15 +331,18 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             }
         }
 
-        foreach (var modelCard in predefinedModels)
+        if (_appSettingsService.EnablePredefinedModels)
         {
-            if (!string.IsNullOrWhiteSpace(modelCard.ReplacementModel) &&
-                !modelCard.IsLocallyAvailable)
-            {//ignoring models marked as legacy.
-                continue;
-            }
+            foreach (var modelCard in predefinedModels)
+            {
+                if (!string.IsNullOrWhiteSpace(modelCard.ReplacementModel) &&
+                    !modelCard.IsLocallyAvailable)
+                {//ignoring models marked as legacy.
+                    continue;
+                }
 
-            TryRegisterChatModel(modelCard, isSorted: true);
+                TryRegisterChatModel(modelCard, isSorted: true);
+            }
         }
     }
 
@@ -470,6 +473,10 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
         }
         else if (e.PropertyName == nameof(IAppSettingsService.EnableLowPerformanceModels))
+        {
+            UpdatePredefinedModelCards();
+        }
+        else if (e.PropertyName == nameof(IAppSettingsService.EnablePredefinedModels))
         {
             UpdatePredefinedModelCards();
         }

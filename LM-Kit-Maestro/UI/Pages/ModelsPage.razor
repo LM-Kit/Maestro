@@ -4,7 +4,7 @@
 
 <SectionContent SectionName="top-bar">
     <div id="model-page-top-bar">
-        <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
+        <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-4">
             @if (ViewModel.FileManager.FileCollectingInProgress)
             {
                 <MudProgressCircular Style="width: 0.85rem; height: 0.85rem; color: var(--Outline)" Indeterminate="true"/>
@@ -93,7 +93,7 @@
         <div class="d-flex flex-row gap-1 align-center my-4">
             <MudCheckBox Size="Size.Small" @bind-Value="ViewModel.AppSettingsService.EnablePredefinedModels" />
             <MudText Typo="Typo.overline">
-                @Locales.DisplayOnlyLocalModels
+                @Locales.DisplayPredefinedModels
             </MudText>
         </div>
 

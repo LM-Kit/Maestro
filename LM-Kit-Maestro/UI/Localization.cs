@@ -29,7 +29,7 @@
         public const string MathModelOptimized = "This model is optimized for solving mathematical problems";
         public const string DeleteLocalModel = "Delete the model file from local storage";
         public const string DisplayLowPerformingModels = "Show low-performing models";
-        public const string DisplayOnlyLocalModels = "Show only local models";
+        public const string DisplayPredefinedModels = "Show predefined models";
         public const string NoModelYetAvailable = "It looks like you don't have any model yet.";
         public const string ModelFilesWillAppearHere = "Model files added to your model folder will appear here.";
         public const string ModelDownloadAvailable = "This model is available for download";
