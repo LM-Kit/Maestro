@@ -15,10 +15,6 @@ namespace LMKit.Maestro.Services;
 /// </summary>
 public partial class LLMFileManager : ObservableObject, ILLMFileManager
 {
-#if WINDOWS
-    private readonly FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
-#endif
-
 #if DEBUG
     private static int InstanceCount = 0;
 #endif
@@ -33,6 +29,10 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private delegate bool ModelDownloadingProgressCallback(string path, long? contentLength, long bytesRead);
     public event NotifyCollectionChangedEventHandler? ModelsCollectionChanged;
+
+#if WINDOWS
+    private FileSystemWatcher? _fileSystemWatcher;
+#endif
 
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _collectModelFilesTask;
@@ -62,12 +62,18 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             {
                 _modelStorageDirectory = value;
 #if WINDOWS
-                _fileSystemWatcher.Path = value;
+                if (_fileSystemWatcher != null)
+                {
+                    DisposeFileSystemWatcher();
+                }
+
+                InitializeFileSystemWatcher(value);
 #endif
                 OnModelStorageDirectoryChanged();
             }
         }
     }
+
 
     public event EventHandler? FileCollectingCompleted;
 #if BETA_DOWNLOAD_MODELS
@@ -100,18 +106,39 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     public void Initialize()
     {
+        _ = CollectModelsAsync();
+    }
+
 #if WINDOWS
+    //todo: move code to Windows specific service and implement one for Mac as well. 
+    private void InitializeFileSystemWatcher(string directoryPath)
+    {
+        _fileSystemWatcher = new FileSystemWatcher
+        {
+            Path = _modelStorageDirectory,
+            IncludeSubdirectories = true,
+            EnableRaisingEvents = true
+        };
+
         _fileSystemWatcher.Changed += OnFileChanged;
         _fileSystemWatcher.Deleted += OnFileDeleted;
         _fileSystemWatcher.Renamed += OnFileRenamed;
         _fileSystemWatcher.Created += OnFileCreated;
-
-        _fileSystemWatcher.IncludeSubdirectories = true;
-        _fileSystemWatcher.EnableRaisingEvents = true;
-#endif
-
-        _ = CollectModelsAsync();
     }
+
+    private void DisposeFileSystemWatcher()
+    {
+        _fileSystemWatcher!.EnableRaisingEvents = false;
+
+        _fileSystemWatcher.Changed -= OnFileChanged;
+        _fileSystemWatcher.Deleted -= OnFileDeleted;
+        _fileSystemWatcher.Renamed -= OnFileRenamed;
+        _fileSystemWatcher.Created -= OnFileCreated;
+
+        _fileSystemWatcher.Dispose();
+        _fileSystemWatcher = null;
+    }
+#endif
 
 #if BETA_DOWNLOAD_MODELS
     public void DownloadModel(ModelCard modelCard)
