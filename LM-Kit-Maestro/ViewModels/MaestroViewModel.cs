@@ -40,8 +40,8 @@ public partial class MaestroViewModel : ViewModelBase
 
         await _conversationListViewModel.LoadConversationLogs();
 
+        EnsureModelDirectoryExists();
         _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
-        _llmFileManager.Initialize();
 
         _lmKitService.ModelLoadingFailed += OnModelLoadingFailed;
 
@@ -56,6 +56,23 @@ public partial class MaestroViewModel : ViewModelBase
         AppIsInitialized = true;
     }
 
+    private void EnsureModelDirectoryExists()
+    {
+        if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
+        {
+            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
+
+            if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
+            {
+                if (File.Exists(_appSettingsService.ModelStorageDirectory))
+                {
+                    File.Delete(_appSettingsService.ModelStorageDirectory);
+                }
+
+                Directory.CreateDirectory(_appSettingsService.ModelStorageDirectory);
+            }
+        }
+    }
     private void TryLoadLastUsedModel()
     {
         if (_appSettingsService.LastLoadedModelUri != null)
@@ -73,7 +90,7 @@ public partial class MaestroViewModel : ViewModelBase
         {
             _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
 
-            _snackbarService!.Show("Error with your model folder", fileCollectingCompletedEventArgs.Exception.Message!);
+            _snackbarService!.Show("Error with your model folder", fileCollectingCompletedEventArgs.Exception.Message + $"<br/><b>Model folder has been reset to the default one</b>");
         }
     }
 

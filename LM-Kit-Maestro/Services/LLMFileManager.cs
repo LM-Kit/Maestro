@@ -22,7 +22,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private readonly FileSystemEntryRecorder _fileSystemEntryRecorder;
     private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
-    private readonly bool _isLoaded = false;
 
     private readonly LLMFileManagerConfig _config = new LLMFileManagerConfig();
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = [];
@@ -98,16 +97,10 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         _models.CollectionChanged += OnModelCollectionChanged;
         _unsortedModels.CollectionChanged += OnUnsortedModelCollectionChanged;
         _appSettingsService.PropertyChanged += OnAppSettingsServicePropertyChanged;
-
+        _fileSystemEntryRecorder = new FileSystemEntryRecorder(new Uri(_appSettingsService.ModelStorageDirectory));
         ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
-        _fileSystemEntryRecorder = new FileSystemEntryRecorder(new Uri(ModelStorageDirectory));
-        _isLoaded = true;
     }
 
-    public void Initialize()
-    {
-        _ = CollectModelsAsync();
-    }
 
 #if WINDOWS
     //todo: move code to Windows specific service and implement one for Mac as well. 
@@ -262,25 +255,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         else
         {
             throw new Exception(Locales.ModelFileNotAvailableLocally);
-        }
-    }
-
-
-    private void EnsureModelDirectoryExists()
-    {
-        if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
-        {
-            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
-
-            if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
-            {
-                if (File.Exists(_appSettingsService.ModelStorageDirectory))
-                {
-                    File.Delete(_appSettingsService.ModelStorageDirectory);
-                }
-
-                Directory.CreateDirectory(_appSettingsService.ModelStorageDirectory);
-            }
         }
     }
 
@@ -481,15 +455,12 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             _cancellationTokenSource?.Cancel();
         }
 
-        if (_isLoaded)
-        {
-            _fileSystemEntryRecorder.Update(new Uri(_modelStorageDirectory));
+        _fileSystemEntryRecorder.Update(new Uri(_modelStorageDirectory));
 
-            _unsortedModels.Clear();
-            _models.Clear();
+        _unsortedModels.Clear();
+        _models.Clear();
 
-            await CollectModelsAsync();
-        }
+        await CollectModelsAsync();
     }
 
     private void OnAppSettingsServicePropertyChanged(object? sender, PropertyChangedEventArgs e)
