@@ -345,29 +345,21 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void CollectModels()
     {
-        if (_config.EnablePredefinedModels)
-        {
-            UpdatePredefinedModelCards();
-        }
+        var files = Directory.GetFileSystemEntries(ModelStorageDirectory, "*", SearchOption.AllDirectories);
 
-        if (_config.EnableCustomModels)
+        foreach (var filePath in files)
         {
-            var files = Directory.GetFileSystemEntries(ModelStorageDirectory, "*", SearchOption.AllDirectories);
-
-            foreach (var filePath in files)
+            if (ContainsModel(_models, filePath))
             {
-                if (ContainsModel(_models, filePath))
-                {
-                    continue;
-                }
-
-                if (ShouldCheckFile(filePath))
-                {
-                    HandleFile(filePath);
-                }
-
-                _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
+                continue;
             }
+
+            if (ShouldCheckFile(filePath))
+            {
+                HandleFile(filePath);
+            }
+
+            _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
         }
     }
 
