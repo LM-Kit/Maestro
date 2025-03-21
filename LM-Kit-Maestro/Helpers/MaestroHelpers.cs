@@ -15,7 +15,7 @@ namespace LMKit.Maestro.Helpers
                 }
             }
 
-            return null;
+            return new ModelInfoViewModel(modelCard);
         }
 
         public static ModelInfoViewModel? TryGetExistingModelInfoViewModel(ICollection<ModelInfoViewModel> modelCardViewModels, Uri modelFileUri)
@@ -28,7 +28,7 @@ namespace LMKit.Maestro.Helpers
                 }
             }
 
-            return null;
+            return new ModelInfoViewModel(new ModelCard(modelFileUri));
         }
     }
 }

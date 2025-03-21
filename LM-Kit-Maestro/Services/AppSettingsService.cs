@@ -275,46 +275,4 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
             }
         }
     }
-
-    public LLMFileManagerConfig LLMFileManagerConfig
-    {
-        get
-        {
-            LLMFileManagerConfig? fileManagerConfig = null;
-
-            try
-            {
-                string? json = Settings.Get(nameof(fileManagerConfig), default(string?));
-
-                if (!string.IsNullOrEmpty(json))
-                {
-                    fileManagerConfig = JsonSerializer.Deserialize<LLMFileManagerConfig>(json);
-                }
-            }
-            catch
-            {
-            }
-
-            return fileManagerConfig != null ? fileManagerConfig : new LLMFileManagerConfig();
-        }
-        set
-        {
-            string? json;
-
-            try
-            {
-                json = JsonSerializer.Serialize(value);
-            }
-            catch
-            {
-                json = null;
-            }
-
-            if (!string.IsNullOrEmpty(json))
-            {
-                Settings.Set(nameof(LLMFileManagerConfig), json);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LLMFileManagerConfig)));
-            }
-        }
-    }
 }

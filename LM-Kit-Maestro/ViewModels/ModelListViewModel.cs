@@ -15,11 +15,10 @@ namespace LMKit.Maestro.ViewModels
         private readonly ISnackbarService _snackbarService;
 
         public LMKitService LMKitService { get; }
-
+        public ModelsSettingsViewModel ModelsSettings { get; }
         public ObservableCollection<ModelInfoViewModel> Models { get; }
 
         [ObservableProperty] public ModelLoadingState _loadingState;
-
         [ObservableProperty] private double? _loadingProgress;
 
         private ModelInfoViewModel? _selectedModel;
@@ -41,8 +40,6 @@ namespace LMKit.Maestro.ViewModels
                 }
             }
         }
-
-        public ModelsSettingsViewModel ModelsSettings { get; }
 
         public ModelListViewModel(ModelsSettingsViewModel modelsSettingsViewModel, ILLMFileManager fileManager, LMKitService lmKitService,
             ILauncher launcher, ISnackbarService snackbarService)

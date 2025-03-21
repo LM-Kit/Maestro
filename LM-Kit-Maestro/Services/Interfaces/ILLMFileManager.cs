@@ -12,7 +12,6 @@ public interface ILLMFileManager
     LLMFileManagerConfig Config { get; }
 
     bool FileCollectingInProgress { get; }
-    string ModelStorageDirectory { get; set; }
     long TotalModelSize { get; }
     int LocalModelsCount { get; }
     event EventHandler? FileCollectingCompleted;

@@ -1,14 +1,58 @@
-﻿using LMKit.Model;
+﻿using LMKit.Maestro.Services;
+using LMKit.Model;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-namespace LMKit.Maestro.Services;
-
-public class LLMFileManagerConfig
+public class LLMFileManagerConfig : INotifyPropertyChanged
 {
-    public List<ModelCapabilities> FilteredCapabilities { get; set; } = [ModelCapabilities.Chat, ModelCapabilities.Math, ModelCapabilities.CodeCompletion];
+    private List<ModelCapabilities> _filteredCapabilities = new() { ModelCapabilities.Chat, ModelCapabilities.Math, ModelCapabilities.CodeCompletion };
+    public List<ModelCapabilities> FilteredCapabilities
+    {
+        get => _filteredCapabilities;
+        set => SetProperty(ref _filteredCapabilities, value);
+    }
 
-    public bool EnablePredefinedModels { get; set; } = true;
+    private bool _enableCustomModels = LMKitDefaultSettings.DefaultEnablePredefinedModels;
+    public bool DefaultEnableCustomModels
+    {
+        get => _enableCustomModels;
+        set => SetProperty(ref _enableCustomModels, value);
+    }
 
-    public bool EnableCustomModels { get; set; } = true;
+    private bool _enablePredefinedModels = LMKitDefaultSettings.DefaultEnablePredefinedModels;
+    public bool EnablePredefinedModels
+    {
+        get => _enablePredefinedModels;
+        set => SetProperty(ref _enablePredefinedModels, value);
+    }
 
-    public bool EnableLowPerformanceModels { get; set; } = false;
+    private bool _enableLowPerformanceModels = LMKitDefaultSettings.DefaultEnableLowPerformanceModels;
+    public bool EnableLowPerformanceModels
+    {
+        get => _enableLowPerformanceModels;
+        set => SetProperty(ref _enableLowPerformanceModels, value);
+    }
+
+    private string _modelsStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
+    public string ModelStorageDirectory
+    {
+        get => _modelsStorageDirectory;
+        set => SetProperty(ref _modelsStorageDirectory, value);
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private void SetProperty<T>(ref T previousValue, T newValue, [CallerMemberName] string? propertyName = null)
+    {
+        if (!EqualityComparer<T>.Default.Equals(previousValue, newValue))
+        {
+            previousValue = newValue;
+            OnPropertyChanged(propertyName);
+        }
+    }
 }

@@ -54,8 +54,6 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     bool ILLMFileManager.FileCollectingInProgress { get; }
 
-    string ILLMFileManager.ModelStorageDirectory { get; set ; }
-
     long ILLMFileManager.TotalModelSize { get; }
 
     int ILLMFileManager.LocalModelsCount { get; }
