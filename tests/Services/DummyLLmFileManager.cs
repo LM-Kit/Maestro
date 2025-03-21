@@ -60,6 +60,8 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     int ILLMFileManager.LocalModelsCount { get; }
 
+    public LLMFileManagerConfig Config => throw new NotImplementedException();
+
 
 #pragma warning disable 67
     public event EventHandler? FileCollectingCompleted;

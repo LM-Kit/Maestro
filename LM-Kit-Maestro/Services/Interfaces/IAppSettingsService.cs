@@ -14,8 +14,9 @@ public interface IAppSettingsService
     RandomSamplingConfig RandomSamplingConfig { get; set; }
     Mirostat2SamplingConfig Mirostat2SamplingConfig { get; set; }
     TopNSigmaSamplingConfig TopNSigmaSamplingConfig { get; set; }
-    LLMFileManagerConfig LLMFileManagerConfig { get; set; }
     bool EnablePredefinedModels { get; set; }
+    bool EnableLowPerformanceModels { get; set; }
+
 
     event PropertyChangedEventHandler? PropertyChanged;
 }

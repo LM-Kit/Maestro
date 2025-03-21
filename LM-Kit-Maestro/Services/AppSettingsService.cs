@@ -59,18 +59,18 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         }
     }
 
-    //public bool EnableLowPerformanceModels
-    //{
-    //    get
-    //    {
-    //        return Settings.Get(nameof(EnableLowPerformanceModels), LMKitDefaultSettings.DefaultEnableLowPerformanceModels);
-    //    }
-    //    set
-    //    {
-    //        Settings.Set(nameof(EnableLowPerformanceModels), value);
-    //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableLowPerformanceModels)));
-    //    }
-    //}
+    public bool EnableLowPerformanceModels
+    {
+        get
+        {
+            return Settings.Get(nameof(EnableLowPerformanceModels), LMKitDefaultSettings.DefaultEnableLowPerformanceModels);
+        }
+        set
+        {
+            Settings.Set(nameof(EnableLowPerformanceModels), value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableLowPerformanceModels)));
+        }
+    }
 
     public bool EnablePredefinedModels
     {

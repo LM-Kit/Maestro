@@ -168,8 +168,8 @@ namespace Maestro.Tests
             var snackbarService = new Mock<ISnackbarService>().Object;
             var fileManager = new Mock<ILLMFileManager>().Object;
             var appSettingsService = new Mock<IAppSettingsService>().Object;
-            var settingsViewModel = new Mock<SettingsViewModel>().Object;
-            return new ModelListViewModel(settingsViewModel, llmFileManager, lmKitService, launcher, snackbarService);
+
+            return new ModelListViewModel(llmFileManager, lmKitService, launcher, snackbarService);
         }
 
         private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService,

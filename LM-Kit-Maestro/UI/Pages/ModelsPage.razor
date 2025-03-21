@@ -84,14 +84,14 @@
 <div id="model-page-container">
     <div class="d-flex justify-center">
         <div class="d-flex flex-row gap-1 align-center my-4">
-            <MudCheckBox Size="Size.Small" @bind-Value="ViewModel.ModelListViewModel.EnableLowPerformanceModels"/>
+            <MudCheckBox Size="Size.Small" @bind-Value="ViewModel.ModelListViewModel.ModelsSettings.EnableLowPerformanceModels"/>
             <MudText Typo="Typo.overline">
                 @Locales.DisplayLowPerformingModels
                 </MudText>
             </div>
 
         <div class="d-flex flex-row gap-1 align-center my-4">
-            <MudCheckBox Size="Size.Small" @bind-Value="ViewModel.ModelListViewModel.EnablePredefinedModels" />
+            <MudCheckBox Size="Size.Small" @bind-Value="ViewModel.ModelListViewModel.ModelsSettings.EnablePredefinedModels" />
             <MudText Typo="Typo.overline">
                 @Locales.DisplayPredefinedModels
             </MudText>

@@ -73,6 +73,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
+    public LLMFileManagerConfig Config => _config;
 
     public event EventHandler? FileCollectingCompleted;
 #if BETA_DOWNLOAD_MODELS
@@ -472,7 +473,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
         }
-        else if (e.PropertyName == nameof(IAppSettingsService.LLMFileManagerConfig))
+        else if (e.PropertyName == nameof(IAppSettingsService.EnableLowPerformanceModels))
         {
             UpdatePredefinedModelCards();
         }

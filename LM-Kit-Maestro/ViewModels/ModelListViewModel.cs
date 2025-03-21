@@ -13,7 +13,7 @@ namespace LMKit.Maestro.ViewModels
         private readonly ILLMFileManager _fileManager;
         private readonly ILauncher _launcher;
         private readonly ISnackbarService _snackbarService;
-        private readonly ChatSettingsViewModel _settingsViewModel;
+        private readonly ModelsSettingsViewModel _modelsSettingsViewModel;
 
         public LMKitService LMKitService { get; }
 
@@ -43,8 +43,7 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        [ObservableProperty] bool _enableLowPerformanceModels;
-        [ObservableProperty] bool _enablePredefinedModels;
+        public ModelsSettingsViewModel ModelsSettings { get;  }
 
         public ModelListViewModel(ILLMFileManager fileManager, LMKitService lmKitService,
             ILauncher launcher, ISnackbarService snackbarService)
