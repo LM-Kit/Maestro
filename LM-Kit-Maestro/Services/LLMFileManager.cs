@@ -18,6 +18,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private static int InstanceCount = 0;
 #endif
 
+    private readonly object _modelsLock = new();
     private readonly FileSystemEntryRecorder _fileSystemEntryRecorder;
     private readonly HttpClient _httpClient;
 
@@ -294,31 +295,34 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void UpdatePredefinedModelCards()
     {
-        var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !Config.EnableLowPerformanceModels);
-
-        if (_models.Count > 0)
+        lock (_modelsLock)
         {
-            for (int index = 0; index < _models.Count; index++)
+            var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !Config.EnableLowPerformanceModels);
+
+            if (_models.Count > 0)
             {
-                if (_models[index].IsPredefined && !_models[index].IsLocallyAvailable)
+                for (int index = 0; index < _models.Count; index++)
                 {
-                    _models.RemoveAt(index);
-                    index--;
+                    if (_models[index].IsPredefined && !_models[index].IsLocallyAvailable)
+                    {
+                        _models.RemoveAt(index);
+                        index--;
+                    }
                 }
             }
-        }
 
-        if (Config.EnablePredefinedModels)
-        {
-            foreach (var modelCard in predefinedModels)
+            if (Config.EnablePredefinedModels)
             {
-                if (!string.IsNullOrWhiteSpace(modelCard.ReplacementModel) &&
-                    !modelCard.IsLocallyAvailable)
-                {//ignoring models marked as legacy.
-                    continue;
-                }
+                foreach (var modelCard in predefinedModels)
+                {
+                    if (!string.IsNullOrWhiteSpace(modelCard.ReplacementModel) &&
+                        !modelCard.IsLocallyAvailable)
+                    {//ignoring models marked as legacy.
+                        continue;
+                    }
 
-                TryRegisterChatModel(modelCard, isSorted: true);
+                    TryRegisterChatModel(modelCard, isSorted: true);
+                }
             }
         }
     }
@@ -329,15 +333,20 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         foreach (var filePath in files)
         {
-            if (ContainsModel(_models, filePath))
+            lock (_modelsLock)
             {
-                continue;
+                if (ContainsModel(_models, filePath))
+                {
+                    continue;
+                }
+
+                if (ShouldCheckFile(filePath))
+                {
+                    HandleFile(filePath);
+                }
             }
 
-            if (ShouldCheckFile(filePath))
-            {
-                HandleFile(filePath);
-            }
+
 
             _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
         }
