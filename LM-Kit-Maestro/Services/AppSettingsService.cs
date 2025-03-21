@@ -59,6 +59,32 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         }
     }
 
+    //public bool EnableLowPerformanceModels
+    //{
+    //    get
+    //    {
+    //        return Settings.Get(nameof(EnableLowPerformanceModels), LMKitDefaultSettings.DefaultEnableLowPerformanceModels);
+    //    }
+    //    set
+    //    {
+    //        Settings.Set(nameof(EnableLowPerformanceModels), value);
+    //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableLowPerformanceModels)));
+    //    }
+    //}
+
+    public bool EnablePredefinedModels
+    {
+        get
+        {
+            return Settings.Get(nameof(EnablePredefinedModels), LMKitDefaultSettings.DefaultEnablePredefinedModels);
+        }
+        set
+        {
+            Settings.Set(nameof(EnablePredefinedModels), value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnablePredefinedModels)));
+        }
+    }
+
     public string SystemPrompt
     {
         get
@@ -250,29 +276,45 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         }
     }
 
-    public bool EnableLowPerformanceModels
+    public LLMFileManagerConfig LLMFileManagerConfig
     {
         get
         {
-            return Settings.Get(nameof(EnableLowPerformanceModels), LMKitDefaultSettings.DefaultEnableLowPerformanceModels);
-        }
-        set
-        {
-            Settings.Set(nameof(EnableLowPerformanceModels), value);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableLowPerformanceModels)));
-        }
-    }
+            LLMFileManagerConfig? fileManagerConfig = null;
 
-    public bool EnablePredefinedModels
-    {
-        get
-        {
-            return Settings.Get(nameof(EnablePredefinedModels), LMKitDefaultSettings.DefaultEnablePredefinedModels);
+            try
+            {
+                string? json = Settings.Get(nameof(fileManagerConfig), default(string?));
+
+                if (!string.IsNullOrEmpty(json))
+                {
+                    fileManagerConfig = JsonSerializer.Deserialize<LLMFileManagerConfig>(json);
+                }
+            }
+            catch
+            {
+            }
+
+            return fileManagerConfig != null ? fileManagerConfig : new LLMFileManagerConfig();
         }
         set
         {
-            Settings.Set(nameof(EnablePredefinedModels), value);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnablePredefinedModels)));
+            string? json;
+
+            try
+            {
+                json = JsonSerializer.Serialize(value);
+            }
+            catch
+            {
+                json = null;
+            }
+
+            if (!string.IsNullOrEmpty(json))
+            {
+                Settings.Set(nameof(LLMFileManagerConfig), json);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LLMFileManagerConfig)));
+            }
         }
     }
 }

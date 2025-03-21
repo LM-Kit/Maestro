@@ -19,7 +19,7 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     public string ModelStorageDirectory { get; set; }
     public long TotalModelSize { get; set; }
-    public int DownloadedCount { get; set; }
+    public int LocalModelsCount { get; set; }
 
     public DummyLLmFileManager()
     {
@@ -58,7 +58,7 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     long ILLMFileManager.TotalModelSize { get; }
 
-    int ILLMFileManager.DownloadedCount { get; }
+    int ILLMFileManager.LocalModelsCount { get; }
 
 
 #pragma warning disable 67

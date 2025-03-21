@@ -12,7 +12,7 @@ public interface ILLMFileManager
     bool FileCollectingInProgress { get; }
     string ModelStorageDirectory { get; set; }
     long TotalModelSize { get; }
-    int DownloadedCount { get; }
+    int LocalModelsCount { get; }
     event EventHandler? FileCollectingCompleted;
     void DeleteModel(ModelCard modelCard);
     void OnModelDownloaded(ModelCard modelInfo);

@@ -16,9 +16,6 @@ public partial class MaestroViewModel : ViewModelBase
     private readonly ILLMFileManager _llmFileManager;
     private readonly IAppSettingsService _appSettingsService;
 
-    [ObservableProperty]
-    private bool _appIsInitialized = false;
-
     public MaestroViewModel(ISnackbarService snackbarService, ILogger<MaestroViewModel> logger,
         ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
         ChatSettingsViewModel chatSettingsViewModel, LMKitService lmKitService,
@@ -41,19 +38,17 @@ public partial class MaestroViewModel : ViewModelBase
         await _conversationListViewModel.LoadConversationLogs();
 
         EnsureModelDirectoryExists();
-        _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
 
+        _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
         _lmKitService.ModelLoadingFailed += OnModelLoadingFailed;
 
         if (_appSettingsService.LastLoadedModelUri != null)
         {
-            _ = Task.Run(TryLoadLastUsedModel); //Loading model in the background to avoid blocking UI initialization.
+            //Loading model in the background to avoid blocking UI initialization.
+            _ = Task.Run(TryLoadLastUsedModel);
         }
 
-        // todo: we should ensure UI is loaded before starting loading a model with this call.
         _modelListViewModel.Initialize();
-
-        AppIsInitialized = true;
     }
 
     private void EnsureModelDirectoryExists()

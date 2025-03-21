@@ -72,7 +72,6 @@ namespace LMKit.Maestro
             builder.Services.AddSingleton<ConversationListViewModel>();
             builder.Services.AddSingleton<ModelListViewModel>();
             builder.Services.AddSingleton<ChatSettingsViewModel>();
-
             builder.Services.AddSingleton<ChatPageViewModel>();
             builder.Services.AddTransient<ModelsPageViewModel>();
             builder.Services.AddSingleton<AssistantsPageViewModel>();

@@ -46,7 +46,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private long _totalModelSize;
 
     [ObservableProperty]
-    private int _downloadedCount;
+    private int _localModelsCount;
 
     [ObservableProperty]
     private bool _fileCollectingInProgress;
@@ -226,7 +226,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     public void OnModelDownloaded(ModelCard modelCard)
     {
         TotalModelSize += modelCard.FileSize;
-        DownloadedCount++;
+        LocalModelsCount++;
     }
 
     public void DeleteModel(ModelCard modelCard)
@@ -234,7 +234,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         if (modelCard.IsLocallyAvailable)
         {
             File.Delete(modelCard.LocalPath);
-            DownloadedCount--;
+            LocalModelsCount--;
             TotalModelSize -= modelCard.FileSize;
 
 #if !WINDOWS
@@ -317,7 +317,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void UpdatePredefinedModelCards()
     {
-        var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !_appSettingsService.EnableLowPerformanceModels);
+        var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !_config.EnableLowPerformanceModels);
 
         if (_models.Count > 0)
         {
@@ -390,7 +390,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
             if (!ContainsModel(_models, modelCard))
             {
-                if (isSlowModel && !_appSettingsService.EnableLowPerformanceModels)
+                if (isSlowModel && !_config.EnableCustomModels)
                 {
                     return false;
                 }
@@ -404,7 +404,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
                 return true;
             }
-            else if (isSlowModel && !_appSettingsService.EnableLowPerformanceModels)
+            else if (isSlowModel && !_config.EnableLowPerformanceModels)
             {
                 _models.Remove(modelCard);
             }
@@ -472,7 +472,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
         }
-        else if (e.PropertyName == nameof(IAppSettingsService.EnableLowPerformanceModels))
+        else if (e.PropertyName == nameof(IAppSettingsService.LLMFileManagerConfig))
         {
             UpdatePredefinedModelCards();
         }
@@ -584,7 +584,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 if (card.IsLocallyAvailable)
                 {
                     TotalModelSize += card.FileSize;
-                    DownloadedCount++;
+                    LocalModelsCount++;
                 }
 
                 HandleFileRecording(card.ModelUri!);
@@ -599,7 +599,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 if (card.IsLocallyAvailable)
                 {
                     TotalModelSize -= card.FileSize;
-                    DownloadedCount--;
+                    LocalModelsCount--;
                 }
 
                 HandleFileRecordDeletion(card.ModelUri!);
@@ -608,7 +608,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         else if (e.Action == NotifyCollectionChangedAction.Reset)
         {
             TotalModelSize = 0;
-            DownloadedCount = 0;
+            LocalModelsCount = 0;
         }
 
         ModelsCollectionChanged?.Invoke(sender, e);

@@ -10,10 +10,10 @@ namespace LMKit.Maestro.ViewModels
 {
     public partial class ModelListViewModel : ViewModelBase
     {
-        private readonly IAppSettingsService _appSettingsService;
         private readonly ILLMFileManager _fileManager;
         private readonly ILauncher _launcher;
         private readonly ISnackbarService _snackbarService;
+        private readonly ChatSettingsViewModel _settingsViewModel;
 
         public LMKitService LMKitService { get; }
 
@@ -24,7 +24,6 @@ namespace LMKit.Maestro.ViewModels
         [ObservableProperty] private double? _loadingProgress;
 
         private ModelInfoViewModel? _selectedModel;
-
         public ModelInfoViewModel? SelectedModel
         {
             get => _selectedModel;
@@ -44,15 +43,12 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        public ModelListViewModel(IAppSettingsService appSettingsService, ILLMFileManager fileManager, LMKitService lmKitService,
+        [ObservableProperty] bool _enableLowPerformanceModels;
+        [ObservableProperty] bool _enablePredefinedModels;
+
+        public ModelListViewModel(ILLMFileManager fileManager, LMKitService lmKitService,
             ILauncher launcher, ISnackbarService snackbarService)
         {
-            _appSettingsService = appSettingsService;
-
-            if (_appSettingsService is INotifyPropertyChanged notifyPropertyChanged)
-            {
-                notifyPropertyChanged.PropertyChanged += OnAppSettingsServicePropertyChanged;
-            }
 
             _fileManager = fileManager;
             LMKitService = lmKitService;
@@ -210,20 +206,18 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        private void FilterModelsList()
-        {
-            List<ModelInfoViewModel> filteredList = new List<ModelInfoViewModel>();
+        //private void FilterModelsList()
+        //{
+        //    List<ModelInfoViewModel> filteredList = new List<ModelInfoViewModel>();
 
-            foreach (var model in Models)
-            {
-                if (!model.IsLocallyAvailable && !_appSettingsService.EnablePredefinedModels)
-                {
-                    filteredList.Add(model);
-                }
-            }
-
-
-        }
+        //    foreach (var model in Models)
+        //    {
+        //        if (!model.IsLocallyAvailable && !_settingsViewModel)
+        //        {
+        //            filteredList.Add(model);
+        //        }
+        //    }
+        //}
 
         private void AddNewModel(ModelCard modelCard)
         {
@@ -315,8 +309,7 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnModelLoadingCompleted(object? sender, EventArgs e)
         {
-            SelectedModel =
-                MaestroHelpers.TryGetExistingModelInfoViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri!);
+            SelectedModel = MaestroHelpers.TryGetExistingModelInfoViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri!);
             LoadingProgress = 0;
             LoadingState = ModelLoadingState.FinishinUp;
         }
