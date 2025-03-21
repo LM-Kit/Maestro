@@ -13,7 +13,6 @@ namespace LMKit.Maestro.ViewModels
         private readonly ILLMFileManager _fileManager;
         private readonly ILauncher _launcher;
         private readonly ISnackbarService _snackbarService;
-        private readonly ModelsSettingsViewModel _modelsSettingsViewModel;
 
         public LMKitService LMKitService { get; }
 
@@ -43,12 +42,12 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
-        public ModelsSettingsViewModel ModelsSettings { get;  }
+        public ModelsSettingsViewModel ModelsSettings { get; }
 
-        public ModelListViewModel(ILLMFileManager fileManager, LMKitService lmKitService,
+        public ModelListViewModel(ModelsSettingsViewModel modelsSettingsViewModel, ILLMFileManager fileManager, LMKitService lmKitService,
             ILauncher launcher, ISnackbarService snackbarService)
         {
-
+            ModelsSettings = modelsSettingsViewModel;
             _fileManager = fileManager;
             LMKitService = lmKitService;
             _launcher = launcher;
