@@ -38,13 +38,27 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
+        public string ModelsDirectory
+        {
+            get => _config.ModelsDirectory;
+            set
+            {
+                if (_config.ModelsDirectory != value)
+                {
+                    _config.ModelsDirectory = value;
+                    DebounceSave(nameof(ModelsDirectory), value);
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ModelsSettingsViewModel(IAppSettingsService appSettingsService, ILLMFileManager fileManager)
         {
             _config = fileManager.Config;
             _appSettingsService = appSettingsService;
         }
 
-        private void DebounceSave(string propertyName, bool value)
+        private void DebounceSave(string propertyName, object value)
         {
             _debounceCts?.Cancel();
             _debounceCts = new CancellationTokenSource();
@@ -65,15 +79,19 @@ namespace LMKit.Maestro.ViewModels
             }, token);
         }
 
-        private void SaveToSettings(string propertyName, bool value)
+        private void SaveToSettings(string propertyName, object value)
         {
             if (propertyName == nameof(EnableLowPerformanceModels))
             {
-                _appSettingsService.EnableLowPerformanceModels = value;
+                _appSettingsService.EnableLowPerformanceModels = (bool)value;
             }
             else if (propertyName == nameof(EnablePredefinedModels))
             {
-                _appSettingsService.EnablePredefinedModels = value;
+                _appSettingsService.EnablePredefinedModels = (bool)value;
+            }
+            else if (propertyName == nameof(ModelsDirectory))
+            {
+                _appSettingsService.ModelStorageDirectory = (string)value;
             }
         }
     }

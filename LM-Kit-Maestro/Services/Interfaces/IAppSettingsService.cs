@@ -16,7 +16,4 @@ public interface IAppSettingsService
     TopNSigmaSamplingConfig TopNSigmaSamplingConfig { get; set; }
     bool EnablePredefinedModels { get; set; }
     bool EnableLowPerformanceModels { get; set; }
-
-
-    event PropertyChangedEventHandler? PropertyChanged;
 }

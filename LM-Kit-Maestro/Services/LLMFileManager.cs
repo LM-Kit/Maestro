@@ -71,7 +71,13 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         _httpClient = httpClient;
         _models.CollectionChanged += OnModelCollectionChanged;
         _unsortedModels.CollectionChanged += OnUnsortedModelCollectionChanged;
-        _fileSystemEntryRecorder = new FileSystemEntryRecorder(new Uri(Config.ModelStorageDirectory));
+        _fileSystemEntryRecorder = new FileSystemEntryRecorder(new Uri(Config.ModelsDirectory));
+#if WINDOWS
+        InitializeFileSystemWatcher(Config.ModelsDirectory);
+#endif
+        Config.PropertyChanged += OnConfigPropertyChanged;
+
+        OnModelStorageDirectorySet();
     }
 
 
@@ -81,7 +87,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     {
         _fileSystemWatcher = new FileSystemWatcher
         {
-            Path = Config.ModelStorageDirectory,
+            Path = Config.ModelsDirectory,
             IncludeSubdirectories = true,
             EnableRaisingEvents = true
         };
@@ -321,7 +327,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void CollectModels()
     {
-        var files = Directory.GetFileSystemEntries(Config.ModelStorageDirectory, "*", SearchOption.AllDirectories);
+        var files = Directory.GetFileSystemEntries(Config.ModelsDirectory, "*", SearchOption.AllDirectories);
 
         foreach (var filePath in files)
         {
@@ -388,7 +394,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void HandleFile(string filePath)
     {
-        if (!TryValidateModelFile(filePath, Config.ModelStorageDirectory, out ModelCard? modelCard, out bool isSorted))
+        if (!TryValidateModelFile(filePath, Config.ModelsDirectory, out ModelCard? modelCard, out bool isSorted))
         {
             //todo: Add feedback to indicate that a model of a supported format could not be loaded
             return;
@@ -419,14 +425,14 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     #region Event handlers
 
-    private void OnModelStorageDirectoryChanged()
+    private void OnModelStorageDirectorySet()
     {
         if (FileCollectingInProgress)
         {
             _cancellationTokenSource?.Cancel();
         }
 
-        _fileSystemEntryRecorder.Update(new Uri(Config.ModelStorageDirectory));
+        _fileSystemEntryRecorder.Update(new Uri(Config.ModelsDirectory));
 
         _unsortedModels.Clear();
         _models.Clear();
@@ -439,9 +445,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
-    private void OnModelsConfigPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnConfigPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(LLMFileManagerConfig.ModelStorageDirectory))
+        if (e.PropertyName == nameof(LLMFileManagerConfig.ModelsDirectory))
         {
 #if WINDOWS
             if (_fileSystemWatcher != null)
@@ -449,9 +455,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 DisposeFileSystemWatcher();
             }
 
-            InitializeFileSystemWatcher(Config.ModelStorageDirectory);
+            InitializeFileSystemWatcher(Config.ModelsDirectory);
 #endif
-            OnModelStorageDirectoryChanged();
+            OnModelStorageDirectorySet();
         }
         else if (e.PropertyName == nameof(LLMFileManagerConfig.EnableLowPerformanceModels))
         {
@@ -620,7 +626,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         if (ContainsModel(_models, fileRecordPathChangedEventArgs.OldPath, out int index) &&
             FileHelpers.GetModelInfoFromFileUri(fileRecordPathChangedEventArgs.NewPath,
-                                                Config.ModelStorageDirectory,
+                                                Config.ModelsDirectory,
                                                 out string publisher,
                                                 out string repository,
                                                 out string fileName))

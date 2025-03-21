@@ -53,18 +53,18 @@ public partial class MaestroViewModel : ViewModelBase
 
     private void EnsureModelDirectoryExists()
     {
-        if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
+        if (!Directory.Exists(_modelListViewModel.ModelsSettings.ModelsDirectory))
         {
-            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
-
-            if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
+            if (!Directory.Exists(LMKitDefaultSettings.DefaultModelStorageDirectory))
             {
-                if (File.Exists(_appSettingsService.ModelStorageDirectory))
+                if (File.Exists(LMKitDefaultSettings.DefaultModelStorageDirectory))
                 {
-                    File.Delete(_appSettingsService.ModelStorageDirectory);
+                    File.Delete(LMKitDefaultSettings.DefaultModelStorageDirectory);
                 }
 
-                Directory.CreateDirectory(_appSettingsService.ModelStorageDirectory);
+                Directory.CreateDirectory(LMKitDefaultSettings.DefaultModelStorageDirectory);
+
+                _modelListViewModel.ModelsSettings.ModelsDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
             }
         }
     }

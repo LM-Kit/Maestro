@@ -2,6 +2,7 @@
 using LMKit.Model;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using static MudBlazor.Colors;
 
 public class LLMFileManagerConfig : INotifyPropertyChanged
 {
@@ -34,7 +35,7 @@ public class LLMFileManagerConfig : INotifyPropertyChanged
     }
 
     private string _modelsStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
-    public string ModelStorageDirectory
+    public string ModelsDirectory
     {
         get => _modelsStorageDirectory;
         set => SetProperty(ref _modelsStorageDirectory, value);
@@ -44,6 +45,11 @@ public class LLMFileManagerConfig : INotifyPropertyChanged
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
+        if (propertyName == nameof(ModelsDirectory))
+        {
+            LMKit.Global.Configuration.ModelStorageDirectory = ModelsDirectory;
+        }
+
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 

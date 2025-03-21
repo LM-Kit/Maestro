@@ -5,10 +5,8 @@ using System.Text.Json;
 
 namespace LMKit.Maestro.Services;
 
-public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsService
+public partial class AppSettingsService : IAppSettingsService
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
-
     protected IPreferences Settings { get; }
 
     public AppSettingsService(IPreferences settings)
@@ -34,7 +32,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         set
         {
             Settings.Set(nameof(LastLoadedModelUri), value?.ToString());
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastLoadedModelUri)));
         }
     }
 
@@ -54,8 +51,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         set
         {
             Settings.Set(nameof(ModelStorageDirectory), value);
-            LMKit.Global.Configuration.ModelStorageDirectory = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ModelStorageDirectory)));
         }
     }
 
@@ -68,7 +63,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         set
         {
             Settings.Set(nameof(EnableLowPerformanceModels), value);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableLowPerformanceModels)));
         }
     }
 
@@ -81,7 +75,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         set
         {
             Settings.Set(nameof(EnablePredefinedModels), value);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnablePredefinedModels)));
         }
     }
 
@@ -94,7 +87,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         set
         {
             Settings.Set(nameof(SystemPrompt), value);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SystemPrompt)));
         }
     }
 
@@ -107,7 +99,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         set
         {
             Settings.Set(nameof(MaximumCompletionTokens), value);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaximumCompletionTokens)));
         }
     }
 
@@ -120,7 +111,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         set
         {
             Settings.Set(nameof(RequestTimeout), value);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RequestTimeout)));
         }
     }
 
@@ -133,7 +123,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         set
         {
             Settings.Set(nameof(ContextSize), value);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ContextSize)));
         }
     }
 
@@ -146,7 +135,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         set
         {
             Settings.Set(nameof(SamplingMode), (int)value);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SamplingMode)));
         }
     }
 
@@ -187,7 +175,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
             if (!string.IsNullOrEmpty(json))
             {
                 Settings.Set(nameof(RandomSamplingConfig), json);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RandomSamplingConfig)));
             }
         }
     }
@@ -229,7 +216,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
             if (!string.IsNullOrEmpty(json))
             {
                 Settings.Set(nameof(TopNSigmaSamplingConfig), json);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TopNSigmaSamplingConfig)));
             }
         }
     }
@@ -271,7 +257,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
             if (!string.IsNullOrEmpty(json))
             {
                 Settings.Set(nameof(Mirostat2SamplingConfig), json);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Mirostat2SamplingConfig)));
             }
         }
     }
