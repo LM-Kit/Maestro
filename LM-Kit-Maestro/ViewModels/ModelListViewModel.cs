@@ -73,7 +73,10 @@ namespace LMKit.Maestro.ViewModels
         {
             foreach (var model in _fileManager.Models)
             {
-                AddModel(new ModelInfoViewModel(model));
+                if (MaestroHelpers.TryGetExistingModelInfoViewModel(Models, model) == null)
+                {
+                    AddModel(new ModelInfoViewModel(model));
+                }
             }
 
             if (LMKitService.LMKitConfig.LoadedModelUri != null)
