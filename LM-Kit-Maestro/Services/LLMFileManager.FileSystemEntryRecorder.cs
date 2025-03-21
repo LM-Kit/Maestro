@@ -10,25 +10,30 @@ public partial class LLMFileManager
         private DirectoryRecord? _rootDirectoryRecord;
         private Uri _rootDirectoryUri;
 
-        public FileSystemEntryRecorder(Uri rootDirectoryUri)
+        public Uri RootDirectory
         {
-            Update(rootDirectoryUri);
+            get => _rootDirectoryUri;
+            set
+            {
+                if (value == _rootDirectoryUri)
+                {
+                    return;
+                }
+
+                if (_rootDirectoryRecord != null)
+                {
+                    Clear();
+                }
+
+                _rootDirectoryUri = value;
+                _rootDirectoryRecord = new DirectoryRecord(value.LocalPath, null);
+
+            }
         }
 
-        public void Update(Uri rootDirectoryUri)
+        public FileSystemEntryRecorder(Uri rootDirectoryUri)
         {
-            if (rootDirectoryUri == _rootDirectoryUri)
-            {
-                return;
-            }
-
-            if (_rootDirectoryRecord != null)
-            {
-                Clear();
-            }
-
-            _rootDirectoryUri = rootDirectoryUri;
-            _rootDirectoryRecord = new DirectoryRecord(rootDirectoryUri.LocalPath, null);
+            RootDirectory = rootDirectoryUri;
         }
 
         public void Clear()
@@ -39,8 +44,8 @@ public partial class LLMFileManager
         public FileRecord? RecordFile(Uri fileUri)
         {
             string fileBaseName = FileHelpers.GetFileBaseName(fileUri);
-            DirectoryRecord directParentDirectory = TryGetDirectParentDirectory(fileUri, true)!;
-            FileRecord? file = directParentDirectory!.TryGetChildFile(fileBaseName);
+            DirectoryRecord? directParentDirectory = TryGetDirectParentDirectory(fileUri, true)!;
+            FileRecord? file = directParentDirectory != null ? directParentDirectory.TryGetChildFile(fileBaseName) : null;
 
             if (file != null)
             {

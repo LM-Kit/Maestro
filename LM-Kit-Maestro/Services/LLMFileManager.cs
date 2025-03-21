@@ -56,7 +56,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     public event EventHandler? ModelDownloadingCompleted;
 #endif
 
-    public LLMFileManager(HttpClient httpClient)
+    public LLMFileManager(IAppSettingsService appSettingsService, HttpClient httpClient)
     {
 #if DEBUG
         if (InstanceCount > 0)
@@ -71,11 +71,9 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         _httpClient = httpClient;
         _models.CollectionChanged += OnModelCollectionChanged;
         _unsortedModels.CollectionChanged += OnUnsortedModelCollectionChanged;
-        _fileSystemEntryRecorder = new FileSystemEntryRecorder(new Uri(Config.ModelsDirectory));
-#if WINDOWS
-        InitializeFileSystemWatcher(Config.ModelsDirectory);
-#endif
+        Config.ModelsDirectory = appSettingsService.ModelStorageDirectory;
         Config.PropertyChanged += OnConfigPropertyChanged;
+        _fileSystemEntryRecorder = new FileSystemEntryRecorder(new Uri(Config.ModelsDirectory));
 
         OnModelStorageDirectorySet();
     }
@@ -432,7 +430,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
             _cancellationTokenSource?.Cancel();
         }
 
-        _fileSystemEntryRecorder.Update(new Uri(Config.ModelsDirectory));
+        _fileSystemEntryRecorder.RootDirectory = new Uri(Config.ModelsDirectory);
 
         _unsortedModels.Clear();
         _models.Clear();

@@ -56,6 +56,10 @@ namespace LMKit.Maestro.ViewModels
         {
             _config = fileManager.Config;
             _appSettingsService = appSettingsService;
+
+            EnableLowPerformanceModels = appSettingsService.EnableLowPerformanceModels;
+            EnablePredefinedModels = appSettingsService.EnablePredefinedModels;
+            ModelsDirectory = appSettingsService.ModelStorageDirectory;
         }
 
         private void DebounceSave(string propertyName, object value)

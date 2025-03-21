@@ -34,7 +34,7 @@ public partial class MaestroViewModel : ViewModelBase
     public async Task Init()
     {
         _chatSettingsViewModel.Init();
-
+        
         await _conversationListViewModel.LoadConversationLogs();
 
         EnsureModelDirectoryExists();
@@ -83,7 +83,7 @@ public partial class MaestroViewModel : ViewModelBase
 
         if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
         {
-            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
+           _modelListViewModel.ModelsSettings.ModelsDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
 
             _snackbarService!.Show("Error with your model folder", fileCollectingCompletedEventArgs.Exception.Message + $"<br/><b>Model folder has been reset to the default one</b>");
         }

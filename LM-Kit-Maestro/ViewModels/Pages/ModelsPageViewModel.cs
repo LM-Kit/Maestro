@@ -13,7 +13,6 @@ public partial class ModelsPageViewModel : ViewModelBase
     private readonly IMainThread _mainThread;
 
     public ILLMFileManager FileManager { get; }
-    public IAppSettingsService AppSettingsService { get; }
     public ModelListViewModel ModelListViewModel { get; }
 
     [ObservableProperty] long _totalModelSize;
@@ -29,7 +28,6 @@ public partial class ModelsPageViewModel : ViewModelBase
         _lmKitService = lmKitService;
         FileManager = llmFileManager;
         ModelListViewModel = modelListViewModel;
-        AppSettingsService = appSettingsService;
 
 #if MODEL_DOWNLOAD
         llmFileManager.ModelDownloadingProgressed += OnModelDownloadingProgressed;
@@ -79,7 +77,7 @@ public partial class ModelsPageViewModel : ViewModelBase
 #if MACCATALYST  || WINDOWS
         _mainThread.BeginInvokeOnMainThread(async () =>
         {
-            var result = await _folderPicker.PickAsync(AppSettingsService.ModelStorageDirectory);
+            var result = await _folderPicker.PickAsync(ModelListViewModel.ModelsSettings.ModelsDirectory);
 
             if (result.IsSuccessful)
             {
@@ -88,7 +86,7 @@ public partial class ModelsPageViewModel : ViewModelBase
                     _lmKitService.UnloadModel();
                 }
 
-                AppSettingsService.ModelStorageDirectory = result.Folder.Path!;
+                ModelListViewModel.ModelsSettings.ModelsDirectory = result.Folder.Path!;
             }
         });
 #endif
@@ -97,13 +95,13 @@ public partial class ModelsPageViewModel : ViewModelBase
     [RelayCommand]
     public void OpenModelsFolder()
     {
-        _ = _launcher.OpenAsync(new Uri($"file://{AppSettingsService.ModelStorageDirectory}"));
+        _ = _launcher.OpenAsync(new Uri($"file://{ModelListViewModel.ModelsSettings.ModelsDirectory}"));
     }
 
     [RelayCommand]
     public void ResetModelsFolder()
     {
-        AppSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
+        ModelListViewModel.ModelsSettings.ModelsDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
     }
 
     [RelayCommand]
