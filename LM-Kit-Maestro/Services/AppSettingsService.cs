@@ -59,32 +59,6 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
         }
     }
 
-    public bool EnableLowPerformanceModels
-    {
-        get
-        {
-            return Settings.Get(nameof(EnableLowPerformanceModels), LMKitDefaultSettings.DefaultEnableLowPerformanceModels);
-        }
-        set
-        {
-            Settings.Set(nameof(EnableLowPerformanceModels), value);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableLowPerformanceModels)));
-        }
-    }
-
-    public bool EnablePredefinedModels
-    {
-        get
-        {
-            return Settings.Get(nameof(EnablePredefinedModels), LMKitDefaultSettings.DefaultEnablePredefinedModels);
-        }
-        set
-        {
-            Settings.Set(nameof(EnablePredefinedModels), value);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnablePredefinedModels)));
-        }
-    }
-
     public string SystemPrompt
     {
         get
@@ -273,6 +247,32 @@ public partial class AppSettingsService : INotifyPropertyChanged, IAppSettingsSe
                 Settings.Set(nameof(Mirostat2SamplingConfig), json);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Mirostat2SamplingConfig)));
             }
+        }
+    }
+
+    public bool EnableLowPerformanceModels
+    {
+        get
+        {
+            return Settings.Get(nameof(EnableLowPerformanceModels), LMKitDefaultSettings.DefaultEnableLowPerformanceModels);
+        }
+        set
+        {
+            Settings.Set(nameof(EnableLowPerformanceModels), value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableLowPerformanceModels)));
+        }
+    }
+
+    public bool EnablePredefinedModels
+    {
+        get
+        {
+            return Settings.Get(nameof(EnablePredefinedModels), LMKitDefaultSettings.DefaultEnablePredefinedModels);
+        }
+        set
+        {
+            Settings.Set(nameof(EnablePredefinedModels), value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnablePredefinedModels)));
         }
     }
 }

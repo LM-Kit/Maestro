@@ -5,19 +5,19 @@ namespace LMKit.Maestro.ViewModels;
 
 public partial class ChatPageViewModel : ViewModelBase
 {
-    public SettingsViewModel SettingsViewModel { get; }
+    public ChatSettingsViewModel ChatSettingsViewModel { get; }
 
     public LMKitService LmKitService { get; }
     public ConversationListViewModel ConversationListViewModel { get; }
     public ModelListViewModel ModelListViewModel { get; }
 
     public ChatPageViewModel(ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
-        LMKitService lmKitService, SettingsViewModel settingsViewModel)
+        LMKitService lmKitService, ChatSettingsViewModel chatSettingsViewModel)
     {
         ConversationListViewModel = conversationListViewModel;
         ModelListViewModel = modelListViewModel;
         LmKitService = lmKitService;
-        SettingsViewModel = settingsViewModel;
+        ChatSettingsViewModel = chatSettingsViewModel;
     }
 
 

@@ -33,17 +33,17 @@ namespace Maestro.Tests
         public LMKitService LMKitService { get; } = new LMKitService();
         public IMaestroDatabase Database { get; } = new DummyMaestroDatabase();
 
-        public SettingsViewModel SettingsViewModel { get; }
+        public ChatSettingsViewModel ChatSettingsViewModel { get; }
         public ConversationListViewModel ConversationListViewModel { get; }
         public ModelListViewModel ModelListViewModel { get; }
         public ChatPageViewModel ChatPageViewModel { get; }
 
         public MaestroTestsService()
         {
-            SettingsViewModel = GetNewSettingsViewModel(LMKitService);
+            ChatSettingsViewModel = GetNewSettingsViewModel(LMKitService);
             ConversationListViewModel = GetNewConversationListViewModel(LMKitService, Database);
             ModelListViewModel = GetNewModelListViewModel(LMKitService, LLmFileManager);
-            ChatPageViewModel = GetNewChatPageViewModel(LMKitService, ConversationListViewModel, ModelListViewModel, SettingsViewModel);
+            ChatPageViewModel = GetNewChatPageViewModel(LMKitService, ConversationListViewModel, ModelListViewModel, ChatSettingsViewModel);
             LMKitService.LMKitConfig.MaximumCompletionTokens = 200;
             LMKitService.LMKitConfig.RequestTimeout = 15;
         }
@@ -143,11 +143,11 @@ namespace Maestro.Tests
             return new ConversationViewModel(lmKitService, database);
         }
 
-        private static SettingsViewModel GetNewSettingsViewModel(LMKitService lmKitService)
+        private static ChatSettingsViewModel GetNewSettingsViewModel(LMKitService lmKitService)
         {
             var appSettingsService = new Mock<IAppSettingsService>().Object;
 
-            return new SettingsViewModel(appSettingsService, lmKitService);
+            return new ChatSettingsViewModel(appSettingsService, lmKitService);
         }
 
         private static ConversationListViewModel GetNewConversationListViewModel(LMKitService lmKitService,
@@ -174,12 +174,12 @@ namespace Maestro.Tests
 
         private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService,
             ConversationListViewModel conversationListViewModel,
-            ModelListViewModel modelListViewModel, SettingsViewModel settingsViewModel)
+            ModelListViewModel modelListViewModel, ChatSettingsViewModel chatSettingsViewModel)
         {
             var appSettingsService = new Mock<IAppSettingsService>().Object;
             var logger = new Mock<ILogger<ChatPageViewModel>>().Object;
 
-            return new ChatPageViewModel(conversationListViewModel, modelListViewModel, lmKitService, settingsViewModel);
+            return new ChatPageViewModel(conversationListViewModel, modelListViewModel, lmKitService, chatSettingsViewModel);
         }
     }
 }

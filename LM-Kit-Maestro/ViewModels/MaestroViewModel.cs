@@ -9,7 +9,7 @@ public partial class MaestroViewModel : ViewModelBase
 {
     private readonly ISnackbarService _snackbarService;
     private readonly ILogger<MaestroViewModel> _logger;
-    private readonly SettingsViewModel _settingsViewModel;
+    private readonly ChatSettingsViewModel _chatSettingsViewModel;
     private readonly ModelListViewModel _modelListViewModel;
     private readonly ConversationListViewModel _conversationListViewModel;
     private readonly LMKitService _lmKitService;
@@ -21,14 +21,14 @@ public partial class MaestroViewModel : ViewModelBase
 
     public MaestroViewModel(ISnackbarService snackbarService, ILogger<MaestroViewModel> logger,
         ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
-        SettingsViewModel settingsViewModel, LMKitService lmKitService,
+        ChatSettingsViewModel chatSettingsViewModel, LMKitService lmKitService,
         ILLMFileManager llmFileManager, IAppSettingsService appSettingsService)
     {
         _snackbarService = snackbarService;
         _logger = logger;
         _conversationListViewModel = conversationListViewModel;
         _modelListViewModel = modelListViewModel;
-        _settingsViewModel = settingsViewModel;
+        _chatSettingsViewModel = chatSettingsViewModel;
         _lmKitService = lmKitService;
         _llmFileManager = llmFileManager;
         _appSettingsService = appSettingsService;
@@ -36,7 +36,7 @@ public partial class MaestroViewModel : ViewModelBase
 
     public async Task Init()
     {
-        _settingsViewModel.Init();
+        _chatSettingsViewModel.Init();
 
         await _conversationListViewModel.LoadConversationLogs();
 
@@ -103,6 +103,6 @@ public partial class MaestroViewModel : ViewModelBase
 
     public void SaveAppSettings()
     {
-        _settingsViewModel.Save();
+        _chatSettingsViewModel.Save();
     }
 }
