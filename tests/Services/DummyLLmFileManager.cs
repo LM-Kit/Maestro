@@ -17,7 +17,6 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     public bool FileCollectingInProgress { get; private set; }
 
-    public string ModelStorageDirectory { get; set; }
     public long TotalModelSize { get; set; }
     public int LocalModelsCount { get; set; }
 
@@ -58,7 +57,7 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     int ILLMFileManager.LocalModelsCount { get; }
 
-    public LLMFileManagerConfig Config => throw new NotImplementedException();
+    public LLMFileManagerConfig Config => new LLMFileManagerConfig();
 
 
 #pragma warning disable 67
@@ -72,9 +71,6 @@ internal class DummyLLmFileManager : ILLMFileManager
         _models.Remove(modelInfo);
     }
 
-    public void Initialize()
-    {
-    }
 
     public bool IsPredefinedModel(ModelCard modelCard)
     {
