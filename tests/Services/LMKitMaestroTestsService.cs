@@ -47,7 +47,7 @@ namespace Maestro.Tests
 
             ChatSettingsViewModel = new ChatSettingsViewModel(AppSettingsService, LMKitService);
             ModelsSettingsViewModel = new ModelsSettingsViewModel(AppSettingsService, LLmFileManager);
-            ConversationListViewModel = new ConversationListViewModel(mainThread, new Mock<ILogger<ConversationListViewModel>>().Object, Database, LMKitService, AppSettingsService);
+            ConversationListViewModel = new ConversationListViewModel(new Mock<ILogger<ConversationListViewModel>>().Object, Database, LMKitService);
             ModelListViewModel = new ModelListViewModel(ModelsSettingsViewModel, LLmFileManager, LMKitService, new Mock<ILauncher>().Object, new Mock<ISnackbarService>().Object);
             ChatPageViewModel = new ChatPageViewModel(ConversationListViewModel, ModelListViewModel, LMKitService, ChatSettingsViewModel);
             LMKitService.LMKitConfig.MaximumCompletionTokens = 200;

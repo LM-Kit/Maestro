@@ -2,7 +2,6 @@
 using LMKit.Model;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using static MudBlazor.Colors;
 
 public class LLMFileManagerConfig : INotifyPropertyChanged
 {

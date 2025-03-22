@@ -20,7 +20,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     public ModelsPageViewModel(IFolderPicker folderPicker,
         ILauncher launcher, IMainThread mainThread, ILLMFileManager llmFileManager,
         LMKitService lmKitService,
-        IAppSettingsService appSettingsService, ModelListViewModel modelListViewModel)
+        ModelListViewModel modelListViewModel)
     {
         _folderPicker = folderPicker;
         _launcher = launcher;
