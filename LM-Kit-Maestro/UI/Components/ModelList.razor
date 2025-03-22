@@ -58,8 +58,8 @@
 </style>
 
 @code {
-    private ObservableCollection<ListItemViewModel<ModelInfoViewModel>> _modelItems = new();
-    [Parameter] public EventCallback<ModelInfoViewModel> OnClick { get; set; }
+    private ObservableCollection<ListItemViewModel<ModelCardViewModel>> _modelItems = new();
+    [Parameter] public EventCallback<ModelCardViewModel> OnClick { get; set; }
 
     private bool _dense;
     [Parameter]
@@ -127,13 +127,13 @@
         foreach (var model in ModelListViewModel.Models)
         {
             _modelItems.Add(new ListItemViewModel
-                <ModelInfoViewModel>(model));
+                <ModelCardViewModel>(model));
         }
 
         InvokeAsync(StateHasChanged);
     }
 
-    private void HandleActionButtonClick(Action action, ListItemViewModel<ModelInfoViewModel> modelItem)
+    private void HandleActionButtonClick(Action action, ListItemViewModel<ModelCardViewModel> modelItem)
     {
         action.Invoke();
         modelItem.IsShowingActionSheet = false;

@@ -197,19 +197,19 @@
         }
     }
 
-    private void OnDeleteClicked(ModelInfoViewModel modelInfoViewModel)
+    private void OnDeleteClicked(ModelCardViewModel modelCardViewModel)
     {
-        ViewModel.ModelListViewModel.DeleteModel(modelInfoViewModel);
+        ViewModel.ModelListViewModel.DeleteModel(modelCardViewModel);
     }
 
-    private void OnModelOpenInExplorerClicked(ModelInfoViewModel modelInfoViewModel)
+    private void OnModelOpenInExplorerClicked(ModelCardViewModel modelCardViewModel)
     {
-        ViewModel.ModelListViewModel.OpenModelInExplorer(modelInfoViewModel);
+        ViewModel.ModelListViewModel.OpenModelInExplorer(modelCardViewModel);
     }
 
-    private void OnModelOpenHfLinkClicked(ModelInfoViewModel modelInfoViewModel)
+    private void OnModelOpenHfLinkClicked(ModelCardViewModel modelCardViewModel)
     {
-        ViewModel.ModelListViewModel.OpenModelInExplorer(modelInfoViewModel);
+        ViewModel.ModelListViewModel.OpenModelInExplorer(modelCardViewModel);
     }
 
     protected override void OnAfterRender(bool firstRender)

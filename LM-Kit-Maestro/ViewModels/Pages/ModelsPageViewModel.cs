@@ -37,7 +37,7 @@ public partial class ModelsPageViewModel : ViewModelBase
 
 #if MODEL_DOWNLOAD
     [RelayCommand]
-    public void DownloadModel(ModelInfoViewModel modelCardViewModel)
+    public void DownloadModel(ModelCardViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
         modelCardViewModel.ModelInfo.Metadata.FileUri =
@@ -47,7 +47,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public void CancelDownload(ModelInfoViewModel modelCardViewModel)
+    public void CancelDownload(ModelCardViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
 
@@ -55,7 +55,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public void PauseDownload(ModelInfoViewModel modelCardViewModel)
+    public void PauseDownload(ModelCardViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.DownloadPaused;
 
@@ -63,7 +63,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public void ResumeDownload(ModelInfoViewModel modelCardViewModel)
+    public void ResumeDownload(ModelCardViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
 
@@ -115,7 +115,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     {
         var downloadOperationStateChangedEventArgs = (DownloadOperationStateChangedEventArgs)e;
 
-        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.AvailableModels,
+        var modelViewModel = MaestroHelpers.TryGetExistingModelCardViewModel(ModelListViewModel.AvailableModels,
             downloadOperationStateChangedEventArgs.DownloadUrl)!;
 
         modelViewModel!.DownloadInfo.Progress = downloadOperationStateChangedEventArgs.Progress;
@@ -127,7 +127,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     {
         var downloadOperationStateChangedEventArgs = (DownloadOperationStateChangedEventArgs)e;
 
-        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.AvailableModels,
+        var modelViewModel = MaestroHelpers.TryGetExistingModelCardViewModel(ModelListViewModel.AvailableModels,
             downloadOperationStateChangedEventArgs.DownloadUrl)!;
 
         if (downloadOperationStateChangedEventArgs.Exception != null)
