@@ -4,7 +4,6 @@ using LMKit.Maestro.Helpers;
 using LMKit.Maestro.Services;
 using LMKit.Model;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace LMKit.Maestro.ViewModels
 {
@@ -152,19 +151,6 @@ namespace LMKit.Maestro.ViewModels
 
         #region Private methods
 
-        private void OnAppSettingsServicePropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            //if (e.PropertyName == nameof(IAppSettingsService.EnableLowPerformanceModels))
-            //{
-
-            //    _ = CollectModelsAsync();
-            //}
-            //else if (e.PropertyName == nameof(IAppSettingsService.ShowOnlyLocalModels))
-            //{
-
-            //}
-        }
-
         private void OnModelCollectionChanged(object? sender,
             System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -199,19 +185,6 @@ namespace LMKit.Maestro.ViewModels
                 }
             }
         }
-
-        //private void FilterModelsList()
-        //{
-        //    List<ModelCardViewModel> filteredList = new List<ModelCardViewModel>();
-
-        //    foreach (var model in Models)
-        //    {
-        //        if (!model.IsLocallyAvailable && !_settingsViewModel)
-        //        {
-        //            filteredList.Add(model);
-        //        }
-        //    }
-        //}
 
         private void AddNewModel(ModelCard modelCard)
         {
