@@ -376,7 +376,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
             if (!ContainsModel(_models, modelCard))
             {
-                if (isSlowModel && !Config.DefaultEnableCustomModels)
+                if (isSlowModel && !Config.EnableLowPerformanceModels)
                 {
                     return false;
                 }
