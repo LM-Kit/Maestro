@@ -1,16 +1,19 @@
-﻿namespace LMKit.Maestro.Services;
+﻿using System.ComponentModel;
+
+namespace LMKit.Maestro.Services;
 
 public interface IAppSettingsService
 {
-    public Uri? LastLoadedModelUri { get; set; }
-    public string ModelStorageDirectory { get; set; }
-    public string SystemPrompt { get; set; }
-    public int MaximumCompletionTokens { get; set; }
-    public int RequestTimeout { get; set; }
-    public int ContextSize { get; set; }
-    public SamplingMode SamplingMode { get; set; }
-    public RandomSamplingConfig RandomSamplingConfig { get; set; }
-    public Mirostat2SamplingConfig Mirostat2SamplingConfig { get; set; }
-    public TopNSigmaSamplingConfig TopNSigmaSamplingConfig { get; set; }
-    public bool EnableLowPerformanceModels { get; set; }
+    Uri? LastLoadedModelUri { get; set; }
+    string ModelStorageDirectory { get; set; }
+    string SystemPrompt { get; set; }
+    int MaximumCompletionTokens { get; set; }
+    int RequestTimeout { get; set; }
+    int ContextSize { get; set; }
+    SamplingMode SamplingMode { get; set; }
+    RandomSamplingConfig RandomSamplingConfig { get; set; }
+    Mirostat2SamplingConfig Mirostat2SamplingConfig { get; set; }
+    TopNSigmaSamplingConfig TopNSigmaSamplingConfig { get; set; }
+    bool EnablePredefinedModels { get; set; }
+    bool EnableLowPerformanceModels { get; set; }
 }

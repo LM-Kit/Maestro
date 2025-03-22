@@ -4,18 +4,18 @@
 
 <SectionContent SectionName="top-bar">
     <div id="model-page-top-bar">
-        <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-2">
+        <div class="d-flex flex-row justify-center align-center align-content-center px-4 gap-4">
             @if (ViewModel.FileManager.FileCollectingInProgress)
             {
                 <MudProgressCircular Style="width: 0.85rem; height: 0.85rem; color: var(--Outline)" Indeterminate="true"/>
             }
 
-            @if (ViewModel.FileManager.DownloadedCount > 0)
+            @if (ViewModel.FileManager.LocalModelsCount > 0)
             {
                 <MudText Typo="Typo.overline">
                     <span>You have</span>
-                    <span><b> @(ViewModel.FileManager.DownloadedCount) </b></span>
-                    <span> @(ViewModel.FileManager.DownloadedCount > 1 ? "models" : "model") </span>
+                    <span><b> @(ViewModel.FileManager.LocalModelsCount) </b></span>
+                    <span> @(ViewModel.FileManager.LocalModelsCount > 1 ? "models" : "model") </span>
                     <span> taking up </span>
                     <span><b> @(FileHelpers.FormatFileSize(ViewModel.FileManager.TotalModelSize))</b></span>
                 </MudText>
@@ -44,7 +44,7 @@
 
             <div id="model-folder-container">
                 <MudText Typo="Typo.caption" Class="text-truncate">
-                    @ViewModel.AppSettingsService.ModelStorageDirectory
+                    @ViewModel.ModelListViewModel.ModelsSettings.ModelsDirectory
                 </MudText>
             </div>
 
@@ -84,11 +84,18 @@
 <div id="model-page-container">
     <div class="d-flex justify-center">
         <div class="d-flex flex-row gap-1 align-center my-4">
-            <MudCheckBox Size="Size.Small" @bind-Value="ViewModel.AppSettingsService.EnableLowPerformanceModels"/>
+            <MudCheckBox Size="Size.Small" @bind-Value="ViewModel.ModelListViewModel.ModelsSettings.EnableLowPerformanceModels"/>
             <MudText Typo="Typo.overline">
                 @Locales.DisplayLowPerformingModels
                 </MudText>
             </div>
+
+@*         <div class="d-flex flex-row gap-1 align-center my-4">
+            <MudCheckBox Size="Size.Small" @bind-Value="ViewModel.ModelListViewModel.ModelsSettings.EnablePredefinedModels" />
+            <MudText Typo="Typo.overline">
+                @Locales.DisplayPredefinedModels
+            </MudText>
+        </div> *@
     </div>
 
     <div id="model-list-container" class="hover-scrollable">
@@ -190,19 +197,19 @@
         }
     }
 
-    private void OnDeleteClicked(ModelInfoViewModel modelInfoViewModel)
+    private void OnDeleteClicked(ModelCardViewModel modelCardViewModel)
     {
-        ViewModel.ModelListViewModel.DeleteModel(modelInfoViewModel);
+        ViewModel.ModelListViewModel.DeleteModel(modelCardViewModel);
     }
 
-    private void OnModelOpenInExplorerClicked(ModelInfoViewModel modelInfoViewModel)
+    private void OnModelOpenInExplorerClicked(ModelCardViewModel modelCardViewModel)
     {
-        ViewModel.ModelListViewModel.OpenModelInExplorer(modelInfoViewModel);
+        ViewModel.ModelListViewModel.OpenModelInExplorer(modelCardViewModel);
     }
 
-    private void OnModelOpenHfLinkClicked(ModelInfoViewModel modelInfoViewModel)
+    private void OnModelOpenHfLinkClicked(ModelCardViewModel modelCardViewModel)
     {
-        ViewModel.ModelListViewModel.OpenModelInExplorer(modelInfoViewModel);
+        ViewModel.ModelListViewModel.OpenModelInExplorer(modelCardViewModel);
     }
 
     protected override void OnAfterRender(bool firstRender)

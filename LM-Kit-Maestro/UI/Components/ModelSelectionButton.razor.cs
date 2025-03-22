@@ -45,9 +45,9 @@ public partial class ModelSelectionButton
 
         var result = await dialog.Result;
 
-        if (result != null && !result.Canceled && result.Data is ModelInfoViewModel modelInfoViewModel)
+        if (result != null && !result.Canceled && result.Data is ModelCardViewModel modelCardViewModel)
         {
-            ModelListViewModel.SelectedModel = modelInfoViewModel;
+            ModelListViewModel.SelectedModel = modelCardViewModel;
         }
     }
 

@@ -6,6 +6,7 @@ using LMKit.Maestro.ViewModels;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Diagnostics;
+using Microsoft.Maui.ApplicationModel;
 
 namespace Maestro.Tests
 {
@@ -29,21 +30,26 @@ namespace Maestro.Tests
 
         public bool ProgressEventWasRaided { get; private set; }
 
+        public IAppSettingsService AppSettingsService = new DummyAppSettingsService();
         public ILLMFileManager LLmFileManager { get; } = new DummyLLmFileManager();
         public LMKitService LMKitService { get; } = new LMKitService();
         public IMaestroDatabase Database { get; } = new DummyMaestroDatabase();
 
-        public SettingsViewModel SettingsViewModel { get; }
+        public ChatSettingsViewModel ChatSettingsViewModel { get; }
         public ConversationListViewModel ConversationListViewModel { get; }
         public ModelListViewModel ModelListViewModel { get; }
         public ChatPageViewModel ChatPageViewModel { get; }
+        public ModelsSettingsViewModel ModelsSettingsViewModel { get; }
 
         public MaestroTestsService()
         {
-            SettingsViewModel = GetNewSettingsViewModel(LMKitService);
-            ConversationListViewModel = GetNewConversationListViewModel(LMKitService, Database);
-            ModelListViewModel = GetNewModelListViewModel(LMKitService, LLmFileManager);
-            ChatPageViewModel = GetNewChatPageViewModel(LMKitService, ConversationListViewModel, ModelListViewModel, SettingsViewModel);
+            var mainThread = new Mock<IMainThread>().Object;
+
+            ChatSettingsViewModel = new ChatSettingsViewModel(AppSettingsService, LMKitService);
+            ModelsSettingsViewModel = new ModelsSettingsViewModel(AppSettingsService, LLmFileManager);
+            ConversationListViewModel = new ConversationListViewModel(new Mock<ILogger<ConversationListViewModel>>().Object, Database, LMKitService);
+            ModelListViewModel = new ModelListViewModel(ModelsSettingsViewModel, LLmFileManager, LMKitService, new Mock<ILauncher>().Object, new Mock<ISnackbarService>().Object);
+            ChatPageViewModel = new ChatPageViewModel(ConversationListViewModel, ModelListViewModel, LMKitService, ChatSettingsViewModel);
             LMKitService.LMKitConfig.MaximumCompletionTokens = 200;
             LMKitService.LMKitConfig.RequestTimeout = 15;
         }
@@ -141,43 +147,6 @@ namespace Maestro.Tests
             var mainThread = new Mock<IMainThread>().Object;
 
             return new ConversationViewModel(lmKitService, database);
-        }
-
-        private static SettingsViewModel GetNewSettingsViewModel(LMKitService lmKitService)
-        {
-            var appSettingsService = new Mock<IAppSettingsService>().Object;
-
-            return new SettingsViewModel(appSettingsService, lmKitService);
-        }
-
-        private static ConversationListViewModel GetNewConversationListViewModel(LMKitService lmKitService,
-            IMaestroDatabase database)
-        {
-            var mainThread = new Mock<IMainThread>().Object;
-            var appSettingsService = new Mock<IAppSettingsService>().Object;
-            var logger = new Mock<ILogger<ConversationListViewModel>>().Object;
-
-            return new ConversationListViewModel(mainThread, logger, database, lmKitService,
-                appSettingsService);
-        }
-
-        private static ModelListViewModel GetNewModelListViewModel(LMKitService lmKitService,
-            ILLMFileManager llmFileManager)
-        {
-            var launcher = new Mock<ILauncher>().Object;
-            var snackbarService = new Mock<ISnackbarService>().Object;
-
-            return new ModelListViewModel(llmFileManager, lmKitService, launcher, snackbarService);
-        }
-
-        private static ChatPageViewModel GetNewChatPageViewModel(LMKitService lmKitService,
-            ConversationListViewModel conversationListViewModel,
-            ModelListViewModel modelListViewModel, SettingsViewModel settingsViewModel)
-        {
-            var appSettingsService = new Mock<IAppSettingsService>().Object;
-            var logger = new Mock<ILogger<ChatPageViewModel>>().Object;
-
-            return new ChatPageViewModel(conversationListViewModel, modelListViewModel, lmKitService, settingsViewModel);
         }
     }
 }

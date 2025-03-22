@@ -13,7 +13,7 @@
         Snackbar.Add(
             @<div>
                 <MudText Typo='Typo.subtitle2' Class='mb-1'>@title</MudText>
-                <MudText Typo='Typo.caption'>@message</MudText>
+        <MudText Typo='Typo.caption'>@((MarkupString)message)</MudText>
             </div>, severity);
     }
 

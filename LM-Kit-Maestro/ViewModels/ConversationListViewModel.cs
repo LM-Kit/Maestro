@@ -10,11 +10,9 @@ namespace LMKit.Maestro.ViewModels
 {
     public partial class ConversationListViewModel : ViewModelBase
     {
-        private readonly IMainThread _mainThread;
         private readonly ILogger<ConversationListViewModel> _logger;
         private readonly IMaestroDatabase _database;
         private readonly LMKitService _lmKitService;
-        private readonly IAppSettingsService _appSettingsService;
 
         private ConversationViewModel? _currentConversation;
 
@@ -44,15 +42,11 @@ namespace LMKit.Maestro.ViewModels
         public ObservableCollection<ConversationViewModel> Conversations { get; } =
             [];
 
-        public ConversationListViewModel(IMainThread mainThread,
-            ILogger<ConversationListViewModel> logger, IMaestroDatabase database, LMKitService lmKitService,
-            IAppSettingsService appSettingsService)
+        public ConversationListViewModel(ILogger<ConversationListViewModel> logger, IMaestroDatabase database, LMKitService lmKitService)
         {
-            _mainThread = mainThread;
             _logger = logger;
             _database = database;
             _lmKitService = lmKitService;
-            _appSettingsService = appSettingsService;
 
             Conversations.CollectionChanged += OnConversationCollectionChanged;
         }

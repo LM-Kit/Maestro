@@ -8,36 +8,28 @@ using System.ComponentModel;
 
 namespace LMKit.Maestro.Services;
 
-
 /// <summary>
 /// This service is intended to be used as a singleton via Dependency Injection. 
 /// Please register with <c>services.AddSingleton&lt;LLMFileManager&gt;()</c>.
 /// </summary>
 public partial class LLMFileManager : ObservableObject, ILLMFileManager
 {
-#if WINDOWS
-    private readonly FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
-#endif
-
 #if DEBUG
     private static int InstanceCount = 0;
 #endif
 
+    private readonly object _modelsLock = new();
     private readonly FileSystemEntryRecorder _fileSystemEntryRecorder;
-    private readonly IAppSettingsService _appSettingsService;
     private readonly HttpClient _httpClient;
-    private readonly bool _enablePredefinedModels = true; //todo: Implement this as a configurable option in the configuration panel 
-    //todo: make this user-configurable is some way.
-    private readonly List<ModelCapabilities> _filteredCapabilities = [ ModelCapabilities.Chat,
-                                                                                            ModelCapabilities.Math,
-                                                                                            ModelCapabilities.CodeCompletion ];
-    private readonly bool _enableCustomModels = true;
-    private readonly bool _isLoaded = false;
 
     private readonly Dictionary<Uri, FileDownloader> _fileDownloads = [];
 
     private delegate bool ModelDownloadingProgressCallback(string path, long? contentLength, long bytesRead);
-    public event NotifyCollectionChangedEventHandler? SortedModelCollectionChanged;
+    public event NotifyCollectionChangedEventHandler? ModelsCollectionChanged;
+
+#if WINDOWS
+    private FileSystemWatcher? _fileSystemWatcher;
+#endif
 
     private CancellationTokenSource? _cancellationTokenSource;
     private Task? _collectModelFilesTask;
@@ -52,27 +44,12 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     private long _totalModelSize;
 
     [ObservableProperty]
-    private int _downloadedCount;
+    private int _localModelsCount;
 
     [ObservableProperty]
     private bool _fileCollectingInProgress;
 
-    private string _modelStorageDirectory = string.Empty;
-    public string ModelStorageDirectory
-    {
-        get => _modelStorageDirectory;
-        set
-        {
-            if (string.CompareOrdinal(_modelStorageDirectory, value) != 0)
-            {
-                _modelStorageDirectory = value;
-#if WINDOWS
-                _fileSystemWatcher.Path = value;
-#endif
-                OnModelStorageDirectoryChanged();
-            }
-        }
-    }
+    public LLMFileManagerConfig Config { get; } = new LLMFileManagerConfig();
 
     public event EventHandler? FileCollectingCompleted;
 #if BETA_DOWNLOAD_MODELS
@@ -92,44 +69,47 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 #endif
         Models = new ReadOnlyObservableCollection<ModelCard>(_models);
         UnsortedModels = new ReadOnlyObservableCollection<ModelCard>(_unsortedModels);
-        _appSettingsService = appSettingsService;
         _httpClient = httpClient;
         _models.CollectionChanged += OnModelCollectionChanged;
         _unsortedModels.CollectionChanged += OnUnsortedModelCollectionChanged;
+        Config.ModelsDirectory = appSettingsService.ModelStorageDirectory;
+        Config.PropertyChanged += OnConfigPropertyChanged;
+        _fileSystemEntryRecorder = new FileSystemEntryRecorder(new Uri(Config.ModelsDirectory));
 
-        if (_appSettingsService is INotifyPropertyChanged notifyPropertyChanged)
-        {
-            notifyPropertyChanged.PropertyChanged += OnAppSettingsServicePropertyChanged;
-        }
-
-        try
-        {
-            EnsureModelDirectoryExists();
-        }
-        catch (Exception)
-        {
-            // todo
-        }
-
-        ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
-        _fileSystemEntryRecorder = new FileSystemEntryRecorder(new Uri(ModelStorageDirectory));
-        _isLoaded = true;
+        OnModelStorageDirectorySet();
     }
 
-    public void Initialize()
-    {
+
 #if WINDOWS
+    //todo: move code to Windows specific service and implement one for Mac as well. 
+    private void InitializeFileSystemWatcher(string directoryPath)
+    {
+        _fileSystemWatcher = new FileSystemWatcher
+        {
+            Path = Config.ModelsDirectory,
+            IncludeSubdirectories = true,
+            EnableRaisingEvents = true
+        };
+
         _fileSystemWatcher.Changed += OnFileChanged;
         _fileSystemWatcher.Deleted += OnFileDeleted;
         _fileSystemWatcher.Renamed += OnFileRenamed;
         _fileSystemWatcher.Created += OnFileCreated;
-
-        _fileSystemWatcher.IncludeSubdirectories = true;
-        _fileSystemWatcher.EnableRaisingEvents = true;
-#endif
-
-        _ = CollectModelsAsync();
     }
+
+    private void DisposeFileSystemWatcher()
+    {
+        _fileSystemWatcher!.EnableRaisingEvents = false;
+
+        _fileSystemWatcher.Changed -= OnFileChanged;
+        _fileSystemWatcher.Deleted -= OnFileDeleted;
+        _fileSystemWatcher.Renamed -= OnFileRenamed;
+        _fileSystemWatcher.Created -= OnFileCreated;
+
+        _fileSystemWatcher.Dispose();
+        _fileSystemWatcher = null;
+    }
+#endif
 
 #if BETA_DOWNLOAD_MODELS
     public void DownloadModel(ModelCard modelCard)
@@ -224,7 +204,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     public void OnModelDownloaded(ModelCard modelCard)
     {
         TotalModelSize += modelCard.FileSize;
-        DownloadedCount++;
+        LocalModelsCount++;
     }
 
     public void DeleteModel(ModelCard modelCard)
@@ -232,7 +212,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         if (modelCard.IsLocallyAvailable)
         {
             File.Delete(modelCard.LocalPath);
-            DownloadedCount--;
+            LocalModelsCount--;
             TotalModelSize -= modelCard.FileSize;
 
 #if !WINDOWS
@@ -253,25 +233,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         else
         {
             throw new Exception(Locales.ModelFileNotAvailableLocally);
-        }
-    }
-
-
-    private void EnsureModelDirectoryExists()
-    {
-        if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
-        {
-            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
-
-            if (!Directory.Exists(_appSettingsService.ModelStorageDirectory))
-            {
-                if (File.Exists(_appSettingsService.ModelStorageDirectory))
-                {
-                    File.Delete(_appSettingsService.ModelStorageDirectory);
-                }
-
-                Directory.CreateDirectory(_appSettingsService.ModelStorageDirectory);
-            }
         }
     }
 
@@ -332,17 +293,17 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         _collectModelFilesTask = null;
     }
 
-    private void CollectModels()
+    private void UpdatePredefinedModelCards()
     {
-        if (_enablePredefinedModels)
+        lock (_modelsLock)
         {
-            var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !_appSettingsService.EnableLowPerformanceModels);
+            var predefinedModels = ModelCard.GetPredefinedModelCards(dropSmallerModels: !Config.EnableLowPerformanceModels);
 
             if (_models.Count > 0)
             {
                 for (int index = 0; index < _models.Count; index++)
                 {
-                    if (_models[index].IsPredefined && !predefinedModels.Contains(_models[index]))
+                    if (_models[index].IsPredefined && !_models[index].IsLocallyAvailable)
                     {
                         _models.RemoveAt(index);
                         index--;
@@ -350,25 +311,29 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 }
             }
 
-            foreach (var modelCard in predefinedModels)
+            if (Config.EnablePredefinedModels)
             {
-                if (!string.IsNullOrWhiteSpace(modelCard.ReplacementModel) &&
-                    !modelCard.IsLocallyAvailable)
-                {//ignoring models marked as legacy.
-                    continue;
+                foreach (var modelCard in predefinedModels)
+                {
+                    if (!string.IsNullOrWhiteSpace(modelCard.ReplacementModel) &&
+                        !modelCard.IsLocallyAvailable)
+                    {//ignoring models marked as legacy.
+                        continue;
+                    }
+
+                    TryRegisterChatModel(modelCard, isSorted: true);
                 }
-
-                TryRegisterChatModel(modelCard, isSorted: true);
-
-                _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
             }
         }
+    }
 
-        if (_enableCustomModels)
+    private void CollectModels()
+    {
+        var files = Directory.GetFileSystemEntries(Config.ModelsDirectory, "*", SearchOption.AllDirectories);
+
+        foreach (var filePath in files)
         {
-            var files = Directory.GetFileSystemEntries(ModelStorageDirectory, "*", SearchOption.AllDirectories);
-
-            foreach (var filePath in files)
+            lock (_modelsLock)
             {
                 if (ContainsModel(_models, filePath))
                 {
@@ -379,9 +344,11 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 {
                     HandleFile(filePath);
                 }
-
-                _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
             }
+
+
+
+            _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
         }
     }
 
@@ -391,7 +358,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         {
             bool hasAnyFilteredCap = false;
 
-            foreach (var cap in _filteredCapabilities)
+            foreach (var cap in Config.FilteredCapabilities)
             {
                 if (modelCard.Capabilities.HasFlag(cap))
                 {
@@ -409,7 +376,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
             if (!ContainsModel(_models, modelCard))
             {
-                if (isSlowModel && !_appSettingsService.EnableLowPerformanceModels)
+                if (isSlowModel && !Config.EnableLowPerformanceModels)
                 {
                     return false;
                 }
@@ -423,7 +390,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
                 return true;
             }
-            else if (isSlowModel && !_appSettingsService.EnableLowPerformanceModels)
+            else if (isSlowModel && !Config.EnableLowPerformanceModels)
             {
                 _models.Remove(modelCard);
             }
@@ -434,7 +401,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     private void HandleFile(string filePath)
     {
-        if (!TryValidateModelFile(filePath, ModelStorageDirectory, out ModelCard? modelCard, out bool isSorted))
+        if (!TryValidateModelFile(filePath, Config.ModelsDirectory, out ModelCard? modelCard, out bool isSorted))
         {
             //todo: Add feedback to indicate that a model of a supported format could not be loaded
             return;
@@ -465,33 +432,47 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
     #region Event handlers
 
-    private async void OnModelStorageDirectoryChanged()
+    private void OnModelStorageDirectorySet()
     {
         if (FileCollectingInProgress)
         {
             _cancellationTokenSource?.Cancel();
         }
 
-        if (_isLoaded)
+        _fileSystemEntryRecorder.RootDirectory = new Uri(Config.ModelsDirectory);
+
+        _unsortedModels.Clear();
+        _models.Clear();
+
+        UpdatePredefinedModelCards();
+
+        if (Config.EnablePredefinedModels)
         {
-            _fileSystemEntryRecorder.Update(new Uri(_modelStorageDirectory));
-
-            _unsortedModels.Clear();
-            _models.Clear();
-
-            await CollectModelsAsync();
+            Task.Run(CollectModelsAsync);
         }
     }
 
-    private void OnAppSettingsServicePropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnConfigPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(IAppSettingsService.ModelStorageDirectory))
+        if (e.PropertyName == nameof(LLMFileManagerConfig.ModelsDirectory))
         {
-            ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
+#if WINDOWS
+            if (_fileSystemWatcher != null)
+            {
+                DisposeFileSystemWatcher();
+            }
+
+            InitializeFileSystemWatcher(Config.ModelsDirectory);
+#endif
+            OnModelStorageDirectorySet();
         }
-        else if (e.PropertyName == nameof(IAppSettingsService.EnableLowPerformanceModels))
+        else if (e.PropertyName == nameof(LLMFileManagerConfig.EnableLowPerformanceModels))
         {
-            _ = CollectModelsAsync();
+            UpdatePredefinedModelCards();
+        }
+        else if (e.PropertyName == nameof(LLMFileManagerConfig.EnablePredefinedModels))
+        {
+            UpdatePredefinedModelCards();
         }
     }
 
@@ -597,7 +578,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 if (card.IsLocallyAvailable)
                 {
                     TotalModelSize += card.FileSize;
-                    DownloadedCount++;
+                    LocalModelsCount++;
                 }
 
                 HandleFileRecording(card.ModelUri!);
@@ -612,7 +593,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 if (card.IsLocallyAvailable)
                 {
                     TotalModelSize -= card.FileSize;
-                    DownloadedCount--;
+                    LocalModelsCount--;
                 }
 
                 HandleFileRecordDeletion(card.ModelUri!);
@@ -621,10 +602,10 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         else if (e.Action == NotifyCollectionChangedAction.Reset)
         {
             TotalModelSize = 0;
-            DownloadedCount = 0;
+            LocalModelsCount = 0;
         }
 
-        SortedModelCollectionChanged?.Invoke(sender, e);
+        ModelsCollectionChanged?.Invoke(sender, e);
     }
 
     private void OnUnsortedModelCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -652,7 +633,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         if (ContainsModel(_models, fileRecordPathChangedEventArgs.OldPath, out int index) &&
             FileHelpers.GetModelInfoFromFileUri(fileRecordPathChangedEventArgs.NewPath,
-                                                ModelStorageDirectory,
+                                                Config.ModelsDirectory,
                                                 out string publisher,
                                                 out string repository,
                                                 out string fileName))

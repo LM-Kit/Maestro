@@ -60,7 +60,7 @@
                         <div class="d-flex flex-shrink-0">
                             <IconButton Style="IconButton.ButtonStyle.SecondaryAction"
                                         Icon="fas fa-arrow-rotate-left"
-                                        OnClick="ViewModel.SettingsViewModel.ResetDefaultValues"/>
+                                        OnClick="ViewModel.ChatSettingsViewModel.ResetDefaultValues"/>
                         </div>
 
                         <div class="top-bar-side-title">
@@ -192,7 +192,7 @@
                  @bind-IsResizing="SettingsSidebarIsResizing"
                  @bind-IsToggled="SettingsSidebarIsToggled">
         <div class="d-flex flex-column flex-grow-1">
-            <ChatSettings ViewModel="ViewModel.SettingsViewModel"/>
+            <ChatSettings ViewModel="ViewModel.ChatSettingsViewModel"/>
         </div>
     </ChatSidebar>
 </div>

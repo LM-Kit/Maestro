@@ -17,9 +17,8 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     public bool FileCollectingInProgress { get; private set; }
 
-    public string ModelStorageDirectory { get; set; }
     public long TotalModelSize { get; set; }
-    public int DownloadedCount { get; set; }
+    public int LocalModelsCount { get; set; }
 
     public DummyLLmFileManager()
     {
@@ -38,7 +37,7 @@ internal class DummyLLmFileManager : ILLMFileManager
         }
     }
 
-    event NotifyCollectionChangedEventHandler? ILLMFileManager.SortedModelCollectionChanged
+    event NotifyCollectionChangedEventHandler? ILLMFileManager.ModelsCollectionChanged
     {
         add
         {
@@ -54,11 +53,11 @@ internal class DummyLLmFileManager : ILLMFileManager
 
     bool ILLMFileManager.FileCollectingInProgress { get; }
 
-    string ILLMFileManager.ModelStorageDirectory { get; set ; }
-
     long ILLMFileManager.TotalModelSize { get; }
 
-    int ILLMFileManager.DownloadedCount { get; }
+    int ILLMFileManager.LocalModelsCount { get; }
+
+    public LLMFileManagerConfig Config => new LLMFileManagerConfig();
 
 
 #pragma warning disable 67
@@ -72,9 +71,6 @@ internal class DummyLLmFileManager : ILLMFileManager
         _models.Remove(modelInfo);
     }
 
-    public void Initialize()
-    {
-    }
 
     public bool IsPredefinedModel(ModelCard modelCard)
     {

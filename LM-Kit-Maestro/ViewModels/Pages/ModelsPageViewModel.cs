@@ -13,7 +13,6 @@ public partial class ModelsPageViewModel : ViewModelBase
     private readonly IMainThread _mainThread;
 
     public ILLMFileManager FileManager { get; }
-    public IAppSettingsService AppSettingsService { get; }
     public ModelListViewModel ModelListViewModel { get; }
 
     [ObservableProperty] long _totalModelSize;
@@ -21,7 +20,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     public ModelsPageViewModel(IFolderPicker folderPicker,
         ILauncher launcher, IMainThread mainThread, ILLMFileManager llmFileManager,
         LMKitService lmKitService,
-        IAppSettingsService appSettingsService, ModelListViewModel modelListViewModel)
+        ModelListViewModel modelListViewModel)
     {
         _folderPicker = folderPicker;
         _launcher = launcher;
@@ -29,7 +28,6 @@ public partial class ModelsPageViewModel : ViewModelBase
         _lmKitService = lmKitService;
         FileManager = llmFileManager;
         ModelListViewModel = modelListViewModel;
-        AppSettingsService = appSettingsService;
 
 #if MODEL_DOWNLOAD
         llmFileManager.ModelDownloadingProgressed += OnModelDownloadingProgressed;
@@ -39,7 +37,7 @@ public partial class ModelsPageViewModel : ViewModelBase
 
 #if MODEL_DOWNLOAD
     [RelayCommand]
-    public void DownloadModel(ModelInfoViewModel modelCardViewModel)
+    public void DownloadModel(ModelCardViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
         modelCardViewModel.ModelInfo.Metadata.FileUri =
@@ -49,7 +47,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public void CancelDownload(ModelInfoViewModel modelCardViewModel)
+    public void CancelDownload(ModelCardViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.NotDownloaded;
 
@@ -57,7 +55,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public void PauseDownload(ModelInfoViewModel modelCardViewModel)
+    public void PauseDownload(ModelCardViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.DownloadPaused;
 
@@ -65,7 +63,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public void ResumeDownload(ModelInfoViewModel modelCardViewModel)
+    public void ResumeDownload(ModelCardViewModel modelCardViewModel)
     {
         modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloading;
 
@@ -79,7 +77,7 @@ public partial class ModelsPageViewModel : ViewModelBase
 #if MACCATALYST  || WINDOWS
         _mainThread.BeginInvokeOnMainThread(async () =>
         {
-            var result = await _folderPicker.PickAsync(AppSettingsService.ModelStorageDirectory);
+            var result = await _folderPicker.PickAsync(ModelListViewModel.ModelsSettings.ModelsDirectory);
 
             if (result.IsSuccessful)
             {
@@ -88,7 +86,7 @@ public partial class ModelsPageViewModel : ViewModelBase
                     _lmKitService.UnloadModel();
                 }
 
-                AppSettingsService.ModelStorageDirectory = result.Folder.Path!;
+                ModelListViewModel.ModelsSettings.ModelsDirectory = result.Folder.Path!;
             }
         });
 #endif
@@ -97,13 +95,13 @@ public partial class ModelsPageViewModel : ViewModelBase
     [RelayCommand]
     public void OpenModelsFolder()
     {
-        _ = _launcher.OpenAsync(new Uri($"file://{AppSettingsService.ModelStorageDirectory}"));
+        _ = _launcher.OpenAsync(new Uri($"file://{ModelListViewModel.ModelsSettings.ModelsDirectory}"));
     }
 
     [RelayCommand]
     public void ResetModelsFolder()
     {
-        AppSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
+        ModelListViewModel.ModelsSettings.ModelsDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
     }
 
     [RelayCommand]
@@ -117,7 +115,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     {
         var downloadOperationStateChangedEventArgs = (DownloadOperationStateChangedEventArgs)e;
 
-        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.AvailableModels,
+        var modelViewModel = MaestroHelpers.TryGetExistingModelCardViewModel(ModelListViewModel.AvailableModels,
             downloadOperationStateChangedEventArgs.DownloadUrl)!;
 
         modelViewModel!.DownloadInfo.Progress = downloadOperationStateChangedEventArgs.Progress;
@@ -129,7 +127,7 @@ public partial class ModelsPageViewModel : ViewModelBase
     {
         var downloadOperationStateChangedEventArgs = (DownloadOperationStateChangedEventArgs)e;
 
-        var modelViewModel = MaestroHelpers.TryGetExistingModelInfoViewModel(ModelListViewModel.AvailableModels,
+        var modelViewModel = MaestroHelpers.TryGetExistingModelCardViewModel(ModelListViewModel.AvailableModels,
             downloadOperationStateChangedEventArgs.DownloadUrl)!;
 
         if (downloadOperationStateChangedEventArgs.Exception != null)

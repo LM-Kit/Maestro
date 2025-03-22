@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using LMKit.TextGeneration.Chat;
+using System.ComponentModel;
 using System.Text.Json;
 
 namespace LMKit.Maestro.Services;
 
-public partial class AppSettingsService : ObservableObject, IAppSettingsService
+public partial class AppSettingsService : IAppSettingsService
 {
     protected IPreferences Settings { get; }
 
@@ -30,7 +32,6 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         set
         {
             Settings.Set(nameof(LastLoadedModelUri), value?.ToString());
-            OnPropertyChanged();
         }
     }
 
@@ -50,8 +51,6 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         set
         {
             Settings.Set(nameof(ModelStorageDirectory), value);
-            LMKit.Global.Configuration.ModelStorageDirectory = value;
-            OnPropertyChanged();
         }
     }
 
@@ -64,7 +63,18 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         set
         {
             Settings.Set(nameof(EnableLowPerformanceModels), value);
-            OnPropertyChanged();
+        }
+    }
+
+    public bool EnablePredefinedModels
+    {
+        get
+        {
+            return Settings.Get(nameof(EnablePredefinedModels), LMKitDefaultSettings.DefaultEnablePredefinedModels);
+        }
+        set
+        {
+            Settings.Set(nameof(EnablePredefinedModels), value);
         }
     }
 
@@ -77,7 +87,6 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         set
         {
             Settings.Set(nameof(SystemPrompt), value);
-            OnPropertyChanged();
         }
     }
 
@@ -90,7 +99,6 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         set
         {
             Settings.Set(nameof(MaximumCompletionTokens), value);
-            OnPropertyChanged();
         }
     }
 
@@ -103,7 +111,6 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         set
         {
             Settings.Set(nameof(RequestTimeout), value);
-            OnPropertyChanged();
         }
     }
 
@@ -116,7 +123,6 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         set
         {
             Settings.Set(nameof(ContextSize), value);
-            OnPropertyChanged();
         }
     }
 
@@ -129,7 +135,6 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
         set
         {
             Settings.Set(nameof(SamplingMode), (int)value);
-            OnPropertyChanged();
         }
     }
 
@@ -170,7 +175,6 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
             if (!string.IsNullOrEmpty(json))
             {
                 Settings.Set(nameof(RandomSamplingConfig), json);
-                OnPropertyChanged();
             }
         }
     }
@@ -211,8 +215,7 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
 
             if (!string.IsNullOrEmpty(json))
             {
-                Settings.Set(nameof(RandomSamplingConfig), json);
-                OnPropertyChanged();
+                Settings.Set(nameof(TopNSigmaSamplingConfig), json);
             }
         }
     }
@@ -254,7 +257,6 @@ public partial class AppSettingsService : ObservableObject, IAppSettingsService
             if (!string.IsNullOrEmpty(json))
             {
                 Settings.Set(nameof(Mirostat2SamplingConfig), json);
-                OnPropertyChanged();
             }
         }
     }

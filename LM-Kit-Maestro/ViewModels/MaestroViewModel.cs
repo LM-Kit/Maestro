@@ -9,26 +9,23 @@ public partial class MaestroViewModel : ViewModelBase
 {
     private readonly ISnackbarService _snackbarService;
     private readonly ILogger<MaestroViewModel> _logger;
-    private readonly SettingsViewModel _settingsViewModel;
+    private readonly ChatSettingsViewModel _chatSettingsViewModel;
     private readonly ModelListViewModel _modelListViewModel;
     private readonly ConversationListViewModel _conversationListViewModel;
     private readonly LMKitService _lmKitService;
     private readonly ILLMFileManager _llmFileManager;
     private readonly IAppSettingsService _appSettingsService;
 
-    [ObservableProperty]
-    private bool _appIsInitialized = false;
-
     public MaestroViewModel(ISnackbarService snackbarService, ILogger<MaestroViewModel> logger,
         ConversationListViewModel conversationListViewModel, ModelListViewModel modelListViewModel,
-        SettingsViewModel settingsViewModel, LMKitService lmKitService,
+        ChatSettingsViewModel chatSettingsViewModel, LMKitService lmKitService,
         ILLMFileManager llmFileManager, IAppSettingsService appSettingsService)
     {
         _snackbarService = snackbarService;
         _logger = logger;
         _conversationListViewModel = conversationListViewModel;
         _modelListViewModel = modelListViewModel;
-        _settingsViewModel = settingsViewModel;
+        _chatSettingsViewModel = chatSettingsViewModel;
         _lmKitService = lmKitService;
         _llmFileManager = llmFileManager;
         _appSettingsService = appSettingsService;
@@ -36,26 +33,41 @@ public partial class MaestroViewModel : ViewModelBase
 
     public async Task Init()
     {
-        _settingsViewModel.Init();
-
+        _chatSettingsViewModel.Init();
+        
         await _conversationListViewModel.LoadConversationLogs();
 
-        _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
-        _llmFileManager.Initialize();
+        EnsureModelDirectoryExists();
 
+        _llmFileManager.FileCollectingCompleted += OnFileManagerFileCollectingCompleted;
         _lmKitService.ModelLoadingFailed += OnModelLoadingFailed;
 
         if (_appSettingsService.LastLoadedModelUri != null)
         {
-            _ = Task.Run(TryLoadLastUsedModel); //Loading model in the background to avoid blocking UI initialization.
+            //Loading model in the background to avoid blocking UI initialization.
+            _ = Task.Run(TryLoadLastUsedModel);
         }
 
-        // todo: we should ensure UI is loaded before starting loading a model with this call.
         _modelListViewModel.Initialize();
-
-        AppIsInitialized = true;
     }
 
+    private void EnsureModelDirectoryExists()
+    {
+        if (!Directory.Exists(_modelListViewModel.ModelsSettings.ModelsDirectory))
+        {
+            if (!Directory.Exists(LMKitDefaultSettings.DefaultModelStorageDirectory))
+            {
+                if (File.Exists(LMKitDefaultSettings.DefaultModelStorageDirectory))
+                {
+                    File.Delete(LMKitDefaultSettings.DefaultModelStorageDirectory);
+                }
+
+                Directory.CreateDirectory(LMKitDefaultSettings.DefaultModelStorageDirectory);
+
+                _modelListViewModel.ModelsSettings.ModelsDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
+            }
+        }
+    }
     private void TryLoadLastUsedModel()
     {
         if (_appSettingsService.LastLoadedModelUri != null)
@@ -71,9 +83,9 @@ public partial class MaestroViewModel : ViewModelBase
 
         if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
         {
-            _appSettingsService.ModelStorageDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
+           _modelListViewModel.ModelsSettings.ModelsDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
 
-            _snackbarService!.Show("Error with your model folder", fileCollectingCompletedEventArgs.Exception.Message!);
+            _snackbarService!.Show("Error with your model folder", fileCollectingCompletedEventArgs.Exception.Message + $"<br/><b>Model folder has been reset to the default one</b>");
         }
     }
 
@@ -86,6 +98,6 @@ public partial class MaestroViewModel : ViewModelBase
 
     public void SaveAppSettings()
     {
-        _settingsViewModel.Save();
+        _chatSettingsViewModel.Save();
     }
 }

@@ -3,7 +3,7 @@ using LMKit.Model;
 
 namespace LMKit.Maestro.ViewModels
 {
-    public partial class ModelInfoViewModel : ViewModelBase
+    public partial class ModelCardViewModel : ViewModelBase
     {
         private ModelCard _modelCard;
         public ModelCard ModelInfo
@@ -75,7 +75,7 @@ namespace LMKit.Maestro.ViewModels
             OnPropertyChanged(nameof(IsLocallyAvailable));
         }
 
-        public ModelInfoViewModel(ModelCard modelCard)
+        public ModelCardViewModel(ModelCard modelCard)
         {
             _modelCard = modelCard;
             Name = modelCard.ModelName;
