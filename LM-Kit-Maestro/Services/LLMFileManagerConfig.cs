@@ -12,13 +12,6 @@ public class LLMFileManagerConfig : INotifyPropertyChanged
         set => SetProperty(ref _filteredCapabilities, value);
     }
 
-    private bool _enableCustomModels = LMKitDefaultSettings.DefaultEnablePredefinedModels;
-    public bool DefaultEnableCustomModels
-    {
-        get => _enableCustomModels;
-        set => SetProperty(ref _enableCustomModels, value);
-    }
-
     private bool _enablePredefinedModels = LMKitDefaultSettings.DefaultEnablePredefinedModels;
     public bool EnablePredefinedModels
     {
