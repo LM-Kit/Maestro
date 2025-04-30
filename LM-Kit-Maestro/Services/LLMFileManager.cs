@@ -236,7 +236,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
-    private async Task CollectModelsAsync()
+    private async Task CollectCustomModelsAsync()
     {
         FileCollectingInProgress = true;
 
@@ -253,7 +253,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         try
         {
-            await (_collectModelFilesTask = Task.Run(() => CollectModels()));
+            await (_collectModelFilesTask = Task.Run(() => CollectCustomModels()));
         }
         catch (OperationCanceledException)
         {
@@ -327,7 +327,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
         }
     }
 
-    private void CollectModels()
+    private void CollectCustomModels()
     {
         var files = Directory.GetFileSystemEntries(Config.ModelsDirectory, "*", SearchOption.AllDirectories);
 
@@ -345,8 +345,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                     HandleFile(filePath);
                 }
             }
-
-
 
             _cancellationTokenSource!.Token.ThrowIfCancellationRequested();
         }
@@ -448,7 +446,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         if (Config.EnablePredefinedModels)
         {
-            Task.Run(CollectModelsAsync);
+            Task.Run(CollectCustomModelsAsync);
         }
     }
 

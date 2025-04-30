@@ -96,7 +96,7 @@
 	<ItemGroup>
 	
 		<PackageReference Include="Majorsoft.Blazor.Components.Common.JsInterop" Version="1.5.0" />
-		<PackageReference Include="Markdig" Version="0.41.0" />
+		<PackageReference Include="Markdig" Version="0.41.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.60" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.60" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="9.0.60" />
@@ -105,7 +105,7 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="MetroLog.Maui" Version="2.1.0" />
 		<PackageReference Include="Mopups" Version="1.3.2" />
-		<PackageReference Include="MudBlazor" Version="8.5.1" />
+		<PackageReference Include="MudBlazor" Version="8.6.0" />
 		<PackageReference Include="SimpleToolkit.SimpleShell" Version="5.0.1" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="System.Text.Json" Version="9.0.4" />

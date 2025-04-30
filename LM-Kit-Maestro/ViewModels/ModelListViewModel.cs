@@ -274,8 +274,15 @@ namespace LMKit.Maestro.ViewModels
 #endif
         }
 
-        private void OnModelLoadingCompleted(object? sender, EventArgs e)
+        private async void OnModelLoadingCompleted(object? sender, EventArgs e)
         {
+            // Loïc: dirty hack to ensure the file manager has collected the model from LMKitService.LMKitConfig.LoadedModelUri.
+            //todo: refactor this to avoid the need for a sleep
+            while (_fileManager.FileCollectingInProgress)
+            {
+                Thread.Sleep(100);
+            }
+
             SelectedModel = TryGetExistingModelCardViewModel(Models, LMKitService.LMKitConfig.LoadedModelUri!);
             LoadingProgress = 0;
             LoadingState = ModelLoadingState.FinishinUp;
