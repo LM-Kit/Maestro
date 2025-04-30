@@ -15,7 +15,6 @@ public interface ILLMFileManager
     long TotalModelSize { get; }
     int LocalModelsCount { get; }
     event EventHandler? FileCollectingCompleted;
-
     void DeleteModel(ModelCard modelCard);
     void OnModelDownloaded(ModelCard modelInfo);
 
