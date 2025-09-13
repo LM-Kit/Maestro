@@ -370,7 +370,7 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 return false;
             }
 
-            bool isSlowModel = Graphics.DeviceConfiguration.GetPerformanceScore(modelCard) < 0.3;
+            bool isSlowModel = Hardware.DeviceConfiguration.GetPerformanceScore(modelCard) < 0.3;
 
             if (!ContainsModel(_models, modelCard))
             {

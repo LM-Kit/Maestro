@@ -88,7 +88,7 @@ namespace LMKit.Maestro.ViewModels
             IsCodeModel = modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion);
             IsMathModel = modelCard.Capabilities.HasFlag(ModelCapabilities.Math);
             ModelPath = modelCard.IsLocallyAvailable ? modelCard.LocalPath : modelCard.ModelUri.ToString();
-            CompatibilityLevel = LMKit.Graphics.DeviceConfiguration.GetPerformanceScore(modelCard);
+            CompatibilityLevel = Hardware.DeviceConfiguration.GetPerformanceScore(modelCard);
             MaxContextLengthKB = modelCard.ContextLength / 1024;
         }
     }
