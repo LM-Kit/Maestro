@@ -179,7 +179,7 @@ public partial class LMKitService
 
             var firstUserMessage = ChatHistory!.Messages.FirstOrDefault(message => message.AuthorRole == AuthorRole.User);
 
-            GeneratedTitleSummary = !string.IsNullOrWhiteSpace(conversationTopic) ? conversationTopic : firstUserMessage?.Content ?? "Untitled conversation";
+            GeneratedTitleSummary = !string.IsNullOrWhiteSpace(conversationTopic) ? conversationTopic : firstUserMessage?.Text ?? "Untitled conversation";
         }
 
         internal void AfterTokenSampling(object? sender, TextGeneration.Events.AfterTokenSamplingEventArgs e)

@@ -216,7 +216,7 @@ public partial class LMKitService
 
         private void GenerateConversationSummaryTitle(Conversation conversation)
         {
-            string firstMessage = conversation.ChatHistory!.Messages.First(message => message.AuthorRole == AuthorRole.User).Content;
+            string firstMessage = conversation.ChatHistory!.Messages.First(message => message.AuthorRole == AuthorRole.User).Text;
             ChatRequest titleGenerationRequest = new ChatRequest(conversation, ChatRequest.ChatRequestType.GenerateTitle, firstMessage, 60);
 
             _titleGenerationSchedule.Schedule(titleGenerationRequest);

@@ -58,7 +58,7 @@ public partial class MessageViewModel : ViewModelBase
 
     public string GetContent(int messageIndex)
     {
-        return GetMessageByIndex(messageIndex).Content;
+        return GetMessageByIndex(messageIndex).Text;
     }
 
     public int GetResponseCount()
@@ -106,7 +106,7 @@ public partial class MessageViewModel : ViewModelBase
         LMKitMessage = message;
         MessageInProgress = !LMKitMessage.IsProcessed;
         Sender = AuthorRoleToMessageSender(LMKitMessage.AuthorRole);
-        Content = LMKitMessage.Content;
+        Content = LMKitMessage.Text;
     }
 
     public MessageViewModel(ConversationViewModel parentConversation, MessageSender sender, string content = "")
@@ -133,9 +133,9 @@ public partial class MessageViewModel : ViewModelBase
         {
             Sender = AuthorRoleToMessageSender(LMKitMessage!.AuthorRole);
         }
-        else if (e.PropertyName == nameof(ChatHistory.Message.Content))
+        else if (e.PropertyName == nameof(ChatHistory.Message.Text))
         {
-            Content = LMKitMessage!.Content;
+            Content = LMKitMessage!.Text;
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.PreviousContent))
         {
