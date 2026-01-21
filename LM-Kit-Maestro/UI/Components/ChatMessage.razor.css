@@ -190,3 +190,47 @@
     white-space: pre-wrap;
     font-family: inherit;
 }
+
+/* Message Attachments */
+.message-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.message-attachment-item {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.message-attachment-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    display: block;
+}
+
+.message-attachment-pdf {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(239, 68, 68, 0.15);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+}
+
+    .message-attachment-pdf i {
+        font-size: 1.25rem;
+        color: #EF4444;
+    }
+
+.message-attachment-name {
+    font-size: 0.75rem;
+    color: #ECECEC;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

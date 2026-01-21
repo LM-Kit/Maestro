@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
 using LMKit.TextGeneration.Chat;
-using LMKit.TextProcessing;
 using static LMKit.TextGeneration.TextGenerationResult;
 
 namespace LMKit.Maestro.ViewModels;
@@ -45,6 +45,16 @@ public partial class MessageViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isLastAssistantMessage;
 
+    /// <summary>
+    /// Attachments associated with this message (images, PDFs, etc.)
+    /// </summary>
+    public IReadOnlyList<ChatAttachment> Attachments { get; private set; } = Array.Empty<ChatAttachment>();
+
+    /// <summary>
+    /// Whether this message has any attachments.
+    /// </summary>
+    public bool HasAttachments => Attachments != null && Attachments.Count > 0;
+
     public event EventHandler? OnRegeneratedResponse;
 
     public StopReason GetTerminationReason(int messageIndex)
@@ -82,7 +92,11 @@ public partial class MessageViewModel : ViewModelBase
     {
         get
         {
-            if (LMKitMessage?.Segments == null) return false;
+            if (LMKitMessage?.Segments == null)
+            {
+                return false;
+            }
+
             return LMKitMessage.Segments.Any(s => s.SegmentType == TextSegmentType.InternalReasoning);
         }
     }
@@ -95,7 +109,10 @@ public partial class MessageViewModel : ViewModelBase
         get
         {
             if (!MessageInProgress || LMKitMessage?.Segments == null || LMKitMessage.Segments.Count == 0)
+            {
                 return false;
+            }
+
             return LMKitMessage.Segments.Last().SegmentType == TextSegmentType.InternalReasoning;
         }
     }
@@ -146,14 +163,32 @@ public partial class MessageViewModel : ViewModelBase
         MessageInProgress = !LMKitMessage.IsProcessed;
         Sender = AuthorRoleToMessageSender(LMKitMessage.AuthorRole);
         Content = LMKitMessage.Text;
+
+        // Extract attachments from LMKit message
+        if (message.Attachments != null && message.Attachments.Count > 0)
+        {
+            List<ChatAttachment> chatAttachments = new List<ChatAttachment>();
+            foreach (var attachment in message.Attachments)
+            {
+                ChatAttachment chatAttachment = ChatAttachment.FromBytes(attachment.Target.Name, attachment.Target.Mime, attachment.Target.GetData());
+            }
+
+            Attachments = chatAttachments;
+        }
     }
 
-    public MessageViewModel(ConversationViewModel parentConversation, MessageSender sender, string content = "")
+    public MessageViewModel(ConversationViewModel parentConversation, MessageSender sender, string content = "", IList<ChatAttachment>? attachments = null)
     {
         ParentConversation = parentConversation;
         Sender = sender;
         Content = content;
         LMKitMessage = new ChatHistory.Message(sender == MessageSender.User ? AuthorRole.User : AuthorRole.Assistant, content);
+
+        // Store attachments for display
+        if (attachments != null && attachments.Count > 0)
+        {
+            Attachments = attachments.ToList();
+        }
     }
 
     [RelayCommand]

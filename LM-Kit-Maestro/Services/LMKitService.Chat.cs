@@ -1,4 +1,6 @@
-﻿using LMKit.TextGeneration;
+using LMKit.Data;
+using LMKit.Maestro.Models;
+using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
 using System.ComponentModel;
 
@@ -24,10 +26,22 @@ public partial class LMKitService
             _state = state;
         }
 
+        /// <summary>
+        /// Submits a text-only prompt.
+        /// </summary>
         public async Task<LMKitResult> SubmitPrompt(Conversation conversation, string prompt)
         {
+            return await SubmitPrompt(conversation, prompt, null);
+        }
+
+        /// <summary>
+        /// Submits a prompt with optional attachments (images, PDFs).
+        /// </summary>
+        public async Task<LMKitResult> SubmitPrompt(Conversation conversation, string prompt, IEnumerable<ChatAttachment>? attachments)
+        {
+            var submission = new PromptSubmission(prompt, attachments);
             var promptRequest = new ChatRequest(conversation, ChatRequest.ChatRequestType.Prompt,
-                prompt, _state.Config.RequestTimeout);
+                submission, _state.Config.RequestTimeout);
 
             ScheduleRequest(promptRequest);
 
@@ -167,7 +181,29 @@ public partial class LMKitService
                 {
                     if (request.RequestType == ChatRequest.ChatRequestType.Prompt)
                     {
-                        result.Result = await _multiTurnConversation!.SubmitAsync((string)request.Parameters!, request.CancellationTokenSource.Token);
+                        var submission = (PromptSubmission)request.Parameters!;
+
+                        if (submission.HasAttachments)
+                        {
+                            // Create a message with attachments
+                            List<Attachment> attachments = new List<Attachment>();
+                            foreach (var chatAttachment in submission.Attachments)
+                            {
+                                // Convert our ChatAttachment to LMKit.Data.Attachment
+                                var lmkitAttachment = new Attachment(
+                                    chatAttachment.Content,
+                                    chatAttachment.FileName
+                                );
+                                attachments.Add(lmkitAttachment);
+                            }
+                            var message = new ChatHistory.Message(AuthorRole.User, submission.Text, attachments);
+                            result.Result = await _multiTurnConversation!.SubmitAsync(message, request.CancellationTokenSource.Token);
+                        }
+                        else
+                        {
+                            // Text-only prompt
+                            result.Result = await _multiTurnConversation!.SubmitAsync(submission.Text, request.CancellationTokenSource.Token);
+                        }
                     }
                     else if (request.RequestType == ChatRequest.ChatRequestType.RegenerateResponse)
                     {

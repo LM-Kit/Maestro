@@ -17,12 +17,17 @@
         border-radius: 1rem;
     }
 
-/* Input row containing attach button, textarea, and send button */
+/* Input row - default layout without attach button */
 .input-row {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: 1fr auto;
     align-items: end;
     width: 100%;
+}
+
+/* Input row with attach button */
+.input-row.with-attach {
+    grid-template-columns: auto 1fr auto;
 }
 
 /* Attachment Button */

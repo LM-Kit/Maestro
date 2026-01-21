@@ -46,7 +46,7 @@ public partial class ModelSelectionButton
         {
             return;
         }
-        
+
         var options = new DialogOptions { CloseOnEscapeKey = true, FullScreen = true };
 
         var dialog = await DialogService.ShowAsync<ModelSelectionDialog>(null, options);

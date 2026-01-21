@@ -34,7 +34,7 @@
         </div>
     }
 
-    <div class="input-row">
+    <div class="input-row @(ViewModel.SupportsVision ? "with-attach" : "")">
         @* Attachment Button - only visible when model supports vision *@
         @if (ViewModel.SupportsVision)
         {

@@ -186,7 +186,7 @@ public partial class ChatPage : IDisposable
         {
             ViewModel.ConversationListViewModel.AddNewConversation();
         }
-        
+
         // Focus the input text area
         await Task.Delay(50); // Small delay to ensure UI is updated
         await JS.InvokeVoidAsync("setUserInputFocus");
@@ -484,13 +484,13 @@ public partial class ChatPage : IDisposable
 
     private async Task OnResetSettingsClicked()
     {
-        var options = new DialogOptions 
-        { 
-            CloseOnEscapeKey = true, 
+        var options = new DialogOptions
+        {
+            CloseOnEscapeKey = true,
             Position = DialogPosition.Center,
             MaxWidth = MaxWidth.Small
         };
-        
+
         var confirmed = await DialogService.ShowMessageBox(
             "Reset Settings",
             "Are you sure you want to reset all settings to their default values?",

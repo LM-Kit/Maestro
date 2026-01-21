@@ -32,12 +32,12 @@ public class ChatAttachment : INotifyPropertyChanged
     public string MimeType
     {
         get => _mimeType;
-        set 
-        { 
-            _mimeType = value; 
+        set
+        {
+            _mimeType = value;
             IsImage = value?.StartsWith("image/") == true;
             IsPdf = value == "application/pdf";
-            OnPropertyChanged(); 
+            OnPropertyChanged();
         }
     }
 
@@ -92,8 +92,16 @@ public class ChatAttachment : INotifyPropertyChanged
         get
         {
             var size = FileSize;
-            if (size < 1024) return $"{size} B";
-            if (size < 1024 * 1024) return $"{size / 1024.0:F1} KB";
+            if (size < 1024)
+            {
+                return $"{size} B";
+            }
+
+            if (size < 1024 * 1024)
+            {
+                return $"{size / 1024.0:F1} KB";
+            }
+
             return $"{size / (1024.0 * 1024.0):F1} MB";
         }
     }
@@ -140,7 +148,10 @@ public class ChatAttachment : INotifyPropertyChanged
     /// </summary>
     public static bool IsSupportedMimeType(string mimeType)
     {
-        if (string.IsNullOrEmpty(mimeType)) return false;
+        if (string.IsNullOrEmpty(mimeType))
+        {
+            return false;
+        }
 
         var supportedTypes = new[]
         {

@@ -140,7 +140,7 @@ public partial class LMKitService : INotifyPropertyChanged
     }
 
     private bool _cancelModelLoading;
-    
+
     public bool WasLoadingCancelled { get; private set; }
 
     public void CancelModelLoading()

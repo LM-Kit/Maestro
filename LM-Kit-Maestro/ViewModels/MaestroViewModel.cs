@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using LMKit.Maestro.Services;
+﻿using LMKit.Maestro.Services;
 using Microsoft.Extensions.Logging;
 
 namespace LMKit.Maestro.ViewModels;
@@ -34,7 +32,7 @@ public partial class MaestroViewModel : ViewModelBase
     public async Task Init()
     {
         _chatSettingsViewModel.Init();
-        
+
         await _conversationListViewModel.LoadConversationLogs();
 
         EnsureModelDirectoryExists();
@@ -83,7 +81,7 @@ public partial class MaestroViewModel : ViewModelBase
 
         if (!fileCollectingCompletedEventArgs.Success && fileCollectingCompletedEventArgs.Exception != null)
         {
-           _modelListViewModel.ModelsSettings.ModelsDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
+            _modelListViewModel.ModelsSettings.ModelsDirectory = LMKitDefaultSettings.DefaultModelStorageDirectory;
 
             _snackbarService!.Show("Error with your model folder", fileCollectingCompletedEventArgs.Exception.Message + $"<br/><b>Model folder has been reset to the default one</b>");
         }
@@ -96,7 +94,7 @@ public partial class MaestroViewModel : ViewModelBase
         {
             return;
         }
-        
+
         var modelLoadingFailedEventArgs = (LMKitService.ModelLoadingFailedEventArgs)e;
 
         _snackbarService!.Show("Error loading model", modelLoadingFailedEventArgs.Exception.Message!);

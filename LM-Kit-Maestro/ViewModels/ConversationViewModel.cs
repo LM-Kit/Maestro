@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Data;
 using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
@@ -170,8 +169,9 @@ public partial class ConversationViewModel : AssistantViewModelBase
     protected override void HandleSubmit()
     {
         string prompt = InputText;
+        var attachments = PendingAttachments.ToList(); // Capture before clearing
 
-        OnNewlySubmittedPrompt();
+        OnNewlySubmittedPrompt(attachments);
 
         LMKitService.LMKitResult? promptResult = null;
 
@@ -179,7 +179,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
         {
             try
             {
-                promptResult = await LmKitService.Chat.SubmitPrompt(LMKitConversation, prompt);
+                promptResult = await LmKitService.Chat.SubmitPrompt(LMKitConversation, prompt, attachments);
                 OnTextGenerationResult(promptResult);
             }
             catch (Exception ex)
@@ -211,14 +211,15 @@ public partial class ConversationViewModel : AssistantViewModelBase
         AwaitingResponse = true;
     }
 
-    private void OnNewlySubmittedPrompt()
+    private void OnNewlySubmittedPrompt(IList<ChatAttachment>? attachments = null)
     {
-        _pendingPrompt = new MessageViewModel(this, MessageSender.User, InputText);
+        _pendingPrompt = new MessageViewModel(this, MessageSender.User, InputText, attachments);
         _pendingResponse = new MessageViewModel(this, MessageSender.Assistant) { MessageInProgress = true };
         Messages.Add(_pendingPrompt);
         Messages.Add(_pendingResponse);
 
         InputText = string.Empty;
+        ClearAttachments(); // Clear pending attachments after capturing them
         UsedDifferentModel &= false;
         LatestPromptStatus = LMKitRequestStatus.OK;
         AwaitingResponse = true;
