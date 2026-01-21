@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Services;
 using LMKit.TextGeneration.Chat;
+using LMKit.TextProcessing;
 using static LMKit.TextGeneration.TextGenerationResult;
 
 namespace LMKit.Maestro.ViewModels;
@@ -59,6 +60,44 @@ public partial class MessageViewModel : ViewModelBase
     public string GetContent(int messageIndex)
     {
         return GetMessageByIndex(messageIndex).Text;
+    }
+
+    /// <summary>
+    /// Gets the segments for the message at the specified index.
+    /// </summary>
+    public IReadOnlyList<ChatHistory.Message.MessageSegment> GetSegments(int messageIndex)
+    {
+        return GetMessageByIndex(messageIndex).Segments;
+    }
+
+    /// <summary>
+    /// Gets the segments for the current message.
+    /// </summary>
+    public IReadOnlyList<ChatHistory.Message.MessageSegment> Segments => LMKitMessage?.Segments ?? Array.Empty<ChatHistory.Message.MessageSegment>();
+
+    /// <summary>
+    /// Checks if the message has any internal reasoning (thinking) content.
+    /// </summary>
+    public bool HasThinkingContent
+    {
+        get
+        {
+            if (LMKitMessage?.Segments == null) return false;
+            return LMKitMessage.Segments.Any(s => s.SegmentType == TextSegmentType.InternalReasoning);
+        }
+    }
+
+    /// <summary>
+    /// Checks if the message is currently in thinking mode (last segment is InternalReasoning and message is in progress).
+    /// </summary>
+    public bool IsCurrentlyThinking
+    {
+        get
+        {
+            if (!MessageInProgress || LMKitMessage?.Segments == null || LMKitMessage.Segments.Count == 0)
+                return false;
+            return LMKitMessage.Segments.Last().SegmentType == TextSegmentType.InternalReasoning;
+        }
     }
 
     public int GetResponseCount()
@@ -128,6 +167,7 @@ public partial class MessageViewModel : ViewModelBase
         if (e.PropertyName == nameof(ChatHistory.Message.IsProcessed))
         {
             MessageInProgress = !LMKitMessage!.IsProcessed;
+            OnPropertyChanged(nameof(IsCurrentlyThinking));
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.AuthorRole))
         {
@@ -136,6 +176,15 @@ public partial class MessageViewModel : ViewModelBase
         else if (e.PropertyName == nameof(ChatHistory.Message.Text))
         {
             Content = LMKitMessage!.Text;
+            OnPropertyChanged(nameof(Segments));
+            OnPropertyChanged(nameof(HasThinkingContent));
+            OnPropertyChanged(nameof(IsCurrentlyThinking));
+        }
+        else if (e.PropertyName == nameof(ChatHistory.Message.Segments))
+        {
+            OnPropertyChanged(nameof(Segments));
+            OnPropertyChanged(nameof(HasThinkingContent));
+            OnPropertyChanged(nameof(IsCurrentlyThinking));
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.PreviousContent))
         {

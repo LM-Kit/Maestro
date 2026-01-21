@@ -1,4 +1,6 @@
-﻿@inherits ComponentBase
+@inherits ComponentBase
+@using LMKit.TextGeneration.Chat
+@using LMKit.TextProcessing
 
 @inject IClipboardHandler ClipboardHandler
 
@@ -6,19 +8,80 @@
      class="@(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-container" : "user-message-container")">
     <div class="message-content @(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-content" : "user-message-content")">
         
-       <MudText Typo="Typo.body1">
-            @if (MessageViewModel.Sender == MessageSender.Assistant)
-            {
-                if (MessageHtml != null)
-                {
-                    @((MarkupString)MessageHtml)
-                }
-            }
-            else
-            {
-                @MessageViewModel.GetContent(responseIndex)
-            }
+       @if (MessageViewModel.Sender == MessageSender.Assistant)
+       {
+           @if (SegmentedContent != null && SegmentedContent.Count > 0)
+           {
+               @foreach (var segment in SegmentedContent)
+               {
+                   @if (segment.SegmentType == TextSegmentType.InternalReasoning)
+                   {
+                       <div class="thinking-block @(segment.IsActive ? "thinking-active" : "")">
+                           <div class="thinking-header" @onclick="() => ToggleThinkingBlock(segment)">
+                               <div class="thinking-header-left">
+                                   <span class="thinking-icon">
+                                       @if (segment.IsActive)
+                                       {
+                                           <span class="thinking-spinner"></span>
+                                       }
+                                       else
+                                       {
+                                           <i class="fas fa-brain"></i>
+                                       }
+                                   </span>
+                                   <span class="thinking-title">
+                                       @if (segment.IsActive)
+                                       {
+                                           <span>Thinking...</span>
+                                       }
+                                       else
+                                       {
+                                           <span>Thought for @FormatThinkingDuration(segment.Content)</span>
+                                       }
+                                   </span>
+                               </div>
+                               <span class="thinking-toggle">
+                                   <i class="fas @(segment.IsExpanded ? "fa-chevron-up" : "fa-chevron-down")"></i>
+                               </span>
+                           </div>
+                           @if (segment.IsExpanded || segment.IsActive)
+                           {
+                               <div class="thinking-content">
+                                   <MudText Typo="Typo.body2" Class="thinking-text">
+                                       @segment.Content
+                                       @if (segment.IsActive)
+                                       {
+                                           <span class="dot ml-1 d-inline-block"></span>
+                                       }
+                                   </MudText>
+                               </div>
+                           }
+                       </div>
+                   }
+                   else
+                   {
+                       <MudText Typo="Typo.body1">
+                           @if (!string.IsNullOrEmpty(segment.Html))
+                           {
+                               @((MarkupString)segment.Html)
+                           }
+                       </MudText>
+                   }
+               }
+           }
+           else if (MessageHtml != null)
+           {
+               <MudText Typo="Typo.body1">
+                   @((MarkupString)MessageHtml)
+               </MudText>
+           }
+       }
+       else
+       {
+           <MudText Typo="Typo.body1">
+               @MessageViewModel.GetContent(responseIndex)
            </MudText>
+       }
     </div>
 
     @if (MessageViewModel.Sender == MessageSender.User || (MessageViewModel.Sender == MessageSender.Assistant && !MessageViewModel.MessageInProgress))
@@ -81,8 +144,39 @@
         set
         {
             responseIndex = value;
-            MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(responseIndex), false);
+            UpdateSegmentedContent();
         }
+    }
+
+    // Segmented content for rendering
+    private List<SegmentRenderInfo> SegmentedContent { get; set; } = new();
+
+    public class SegmentRenderInfo
+    {
+        public TextSegmentType SegmentType { get; set; }
+        public string Content { get; set; } = "";
+        public string Html { get; set; } = "";
+        public bool IsExpanded { get; set; } = false;
+        public bool IsActive { get; set; } = false;
+    }
+
+    private void ToggleThinkingBlock(SegmentRenderInfo segment)
+    {
+        if (!segment.IsActive)
+        {
+            segment.IsExpanded = !segment.IsExpanded;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private string FormatThinkingDuration(string content)
+    {
+        // Estimate thinking duration based on content length (rough approximation)
+        int wordCount = content?.Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length ?? 0;
+        if (wordCount < 50) return "a moment";
+        if (wordCount < 150) return "a few seconds";
+        if (wordCount < 500) return "several seconds";
+        return "a while";
     }
 
     bool messageJustCopied;
@@ -148,15 +242,67 @@
 
                 if (messageViewModel.Sender == MessageSender.Assistant)
                 {
-                    messageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(responseIndex), messageViewModel.MessageInProgress);
+                    UpdateSegmentedContent();
                 }
-
 
                 InvokeAsync(() => StateHasChanged());
             }
         }
     }
 #pragma warning restore BL0007
+
+    private void UpdateSegmentedContent()
+    {
+        var segments = MessageViewModel.GetSegments(responseIndex);
+        var newContent = new List<SegmentRenderInfo>();
+
+        if (segments != null && segments.Count > 0)
+        {
+            bool hasMultipleSegmentTypes = segments.Select(s => s.SegmentType).Distinct().Count() > 1;
+            
+            for (int i = 0; i < segments.Count; i++)
+            {
+                var segment = segments[i];
+                var content = segment.Content;
+                bool isLastSegment = i == segments.Count - 1;
+                bool isActive = isLastSegment && MessageViewModel.MessageInProgress;
+
+                var renderInfo = new SegmentRenderInfo
+                {
+                    SegmentType = segment.SegmentType,
+                    Content = content,
+                    IsActive = isActive,
+                    IsExpanded = isActive // Auto-expand active thinking blocks
+                };
+
+                if (segment.SegmentType == TextSegmentType.UserVisible ||
+                    segment.SegmentType == TextSegmentType.Undefined)
+                {
+                    renderInfo.Html = GenerateAssistantResponseHtml(content, isActive);
+                }
+
+                newContent.Add(renderInfo);
+            }
+        }
+
+        // Preserve expansion state for existing segments
+        for (int i = 0; i < newContent.Count && i < SegmentedContent.Count; i++)
+        {
+            if (newContent[i].SegmentType == SegmentedContent[i].SegmentType &&
+                newContent[i].SegmentType == TextSegmentType.InternalReasoning)
+            {
+                newContent[i].IsExpanded = SegmentedContent[i].IsExpanded || newContent[i].IsActive;
+            }
+        }
+
+        SegmentedContent = newContent;
+
+        // Fallback to simple HTML if no segments
+        if (SegmentedContent.Count == 0)
+        {
+            MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(responseIndex), MessageViewModel.MessageInProgress);
+        }
+    }
 
     private void OnRegeneratedResponse(object? sender, EventArgs e)
     {
@@ -168,20 +314,17 @@
     {
         if (MessageViewModel.Sender == MessageSender.Assistant)
         {
-            if (e.PropertyName == nameof(MessageViewModel.Content))
+            if (e.PropertyName == nameof(MessageViewModel.Content) || 
+                e.PropertyName == nameof(MessageViewModel.Segments))
             {
-                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.Content, MessageViewModel.MessageInProgress);
+                UpdateSegmentedContent();
             }
             else if (e.PropertyName == nameof(MessageViewModel.MessageInProgress))
             {
                 if (!MessageViewModel.MessageInProgress)
                 {
                     OnAssistantMessageJustTerminated();
-
-                    if (MessageHtml != null && MessageHtml.Contains(ProgressIndicatorHtml))
-                    {
-                        MessageHtml = MessageHtml.Replace(ProgressIndicatorHtml, string.Empty);
-                    }
+                    UpdateSegmentedContent(); // Update to mark segments as no longer active
                 }
             }
         }
