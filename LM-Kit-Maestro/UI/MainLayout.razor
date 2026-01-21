@@ -1,4 +1,4 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
 @inject ModelListViewModel ModelListViewModel
 @inject ILLMFileManager FileManager
@@ -10,31 +10,21 @@
 <div id="app-root">
     <div id="app-bar">
         <nav id="nav-bar">
-            <div class="nav-item" title="Chat">
-                <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
-                    <MudIcon Icon="@Icons.Material.Filled.ChatBubbleOutline" />
-                </NavLink>
+            <div class="nav-section-top">
+                <SectionOutlet SectionName="nav-bar-top" />
+            </div>
+            
+            <div class="nav-section-main">
             </div>
 
-            <div class="nav-item" title="Models">
-                <NavLink ActiveClass="nav-link-active" class="nav-link" href="models">
-                    <MudIcon Icon="@Icons.Material.Filled.FolderOpen" />
-                </NavLink>
+            <div class="nav-section-bottom">
+                <SectionOutlet SectionName="nav-bar-bottom" />
             </div>
         </nav>
     </div>
 
-    <hr class="vertical-divider" />
-    <div id="main-container">
-        <hr class="horizontal-divider" />
-        <div id="top-bar">
-            <SectionOutlet SectionName="top-bar" />
-        </div>
-        <hr class="horizontal-divider" />
-
-        <div id="body-container">
-            @Body
-        </div>
+    <div id="body-container">
+        @Body
     </div>
 </div>
 

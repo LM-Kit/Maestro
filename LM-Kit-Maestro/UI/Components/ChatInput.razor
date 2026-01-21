@@ -1,4 +1,4 @@
-﻿@inject IJSRuntime JS
+@inject IJSRuntime JS
 @inject Maestro.Services.ISnackbarService SnackbarService
 
 <div id="input-border">
@@ -6,6 +6,7 @@
 
         <textarea rows="1"
             id="input-text"
+            placeholder="Ask anything"
             @bind="ViewModel.InputText"
             @onkeydown="OnKeyDown"
             @bind:event="oninput" />
@@ -18,13 +19,13 @@
 
             @if (!ViewModel.AwaitingResponse)
             {
-                <span>
-                    <i class="fas fa-paper-plane"></i>
+                <span class="send-icon">
+                    <i class="fas fa-arrow-up"></i>
                 </span>
             }
             else
             {
-                <span>
+                <span class="stop-icon">
                     <i class="fas fa-stop"></i>
                 </span>
             }

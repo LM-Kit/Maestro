@@ -1,37 +1,45 @@
-﻿#message-container {
+#message-container {
     display: flex;
     position: relative;
     flex-direction: column;
-    margin-block: 1.25rem;
-    margin-inline: 0.5rem;
+    margin-block: 0.5rem;
+    margin-inline: 0;
 }
 
     #message-container:hover > div {
         visibility: visible;
     }
 
-.assistant-message-container:hover {
-    transition: background-color 0.2s;
-    background-color: var(--Surface);
+.assistant-message-container {
+    border-radius: 0;
+    transition: background-color 0.15s ease;
 }
 
+    .assistant-message-container:hover {
+        background-color: transparent;
+    }
+
 .user-message-container {
-    max-width: 75%;
+    max-width: 70%;
     align-self: flex-end;
 }
 
 .message-content {
-    padding-inline: 1rem;
-    word-break: break-word; /* Ensures long words break and wrap */
-    overflow-wrap: break-word; /* Allows wrapping long words */
-    max-width: 100%; /* Prevents the div from exceeding the width of its container */
-    padding-block: 1rem;
+    padding-inline: 0.25rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    padding-block: 0.625rem;
+    font-size: 1rem;
+    line-height: 1.6;
 }
 
 .user-message-content {
     display: block;
-    background-color: var(--Surface2);
-    border-radius: 2rem;
+    background-color: #2F2F2F;
+    border-radius: 1.5rem;
+    border: none;
+    padding: 0.75rem 1.25rem;
 }
 
 .chat-action-button {
@@ -40,46 +48,31 @@
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    color: var(--Outline);
-    font-size: 0.7rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 0.25rem;
+    color: #8E8E8E;
+    font-size: 0.75rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.12s ease, color 0.12s ease;
 }
 
     .chat-action-button:hover {
-        background-color: var(--Surface2);
+        background-color: #3A3A3A;
+        color: #ECECEC;
     }
 
 .message-footer {
-    margin: 0.5rem;
+    margin: 0.25rem 0.25rem;
     display: flex;
     align-items: center;
+    gap: 0.125rem;
 }
-
-
-/*.message-footer-text {
-    color: var(--Outline) !important;
-    display: inline-block;
-    align-self: center;
-    margin-inline: 4px;
-    background-color: red;
-}
-*/
 
 .user-message-footer-content {
     margin-left: auto;
 }
 
-/*.eject-button {
-    font-size: 0.6rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    color: var(--Primary);
-    background-color: var(--Surface2);
-    border-radius: 50%;
-}*/
-
-.message-footer-content{
-    /*padding-block: 0.5rem;*/
+.message-footer-content {
 }

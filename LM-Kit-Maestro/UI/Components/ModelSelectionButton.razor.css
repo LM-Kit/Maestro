@@ -1,54 +1,60 @@
 #model-selection-button-root {
     max-width: 25vw;
-    min-width: 25vw;
-    max-width: 28rem;
+    min-width: 20vw;
+    max-width: 24rem;
     display: flex;
     flex-grow: 1;
     flex-shrink: 1;
-    margin-inline: 1rem;
+    margin-inline: 0.5rem;
 }
 
 #model-selection-button-container {
     width: 100%;
-    height: 2.5rem;
-    border-radius: 4px;
-    transition: all 0.4s ease-out;
+    height: 2.25rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.15s ease;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    background-color: transparent;
+    border: none;
 }
 
     #model-selection-button-container:hover {
-        background-color: var(--Surface);
+        background-color: #2F2F2F;
         cursor: pointer;
     }
 
 .button-model-loaded {
-    background-color: var(--Surface2);
-    border: 1px solid var(--Primary);
+    background-color: transparent;
+    border: none;
 }
+
+    .button-model-loaded:hover {
+        background-color: #2F2F2F;
+    }
 
 .button-model-unloaded {
-    background-color: var(--Surface2);
-    border: 1px solid var(--OutlineVariant);
+    background-color: transparent;
+    border: none;
 }
 
-.button-model-unloaded:hover{
-    border-color: var(--OutlineVariant);
-}
+    .button-model-unloaded:hover {
+        background-color: #2F2F2F;
+    }
 
 .button-model-loading {
     pointer-events: none;
-    background-color: var(--Surface);
-    border: 1px solid var(--Surface3);
+    background-color: transparent;
+    border: none;
 }
 
 #button-body {
     width: 100%;
     display: grid;
     align-items: center;
-    grid-template-columns: 40px 1fr 40px;
+    grid-template-columns: 32px 1fr 32px;
     flex: 1;
 }
 
@@ -63,6 +69,9 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ECECEC;
 }
 
 .text-wrapper {
@@ -78,19 +87,31 @@
     width: 100%;
 }
 
+::deep .mud-progress-linear {
+    background-color: rgba(16, 163, 127, 0.2) !important;
+}
+
 ::deep .mud-progress-linear-bar {
-    background-color: var(--Primary) !important;
+    background-color: #10A37F !important;
+}
+
+::deep .mud-progress-circular-svg circle {
+    stroke: #10A37F !important;
 }
 
 .eject-button {
-    font-size: 0.6rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    color: var(--Primary);
-    background-color: var(--Surface2);
-    border-radius: 50%;
+    font-size: 0.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #8E8E8E;
+    background-color: transparent;
+    border-radius: 0.25rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
 }
 
     .eject-button:hover {
-        background-color: var(--Surface3);
+        background-color: rgba(239, 68, 68, 0.15);
+        color: #EF4444;
     }

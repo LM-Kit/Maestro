@@ -20,9 +20,18 @@
 
             <div id="button-text">
                 <div class="text-wrapper">
-                    <MudText Align="Align.Center" Typo="Typo.caption">
-                        @Text
-                    </MudText>
+                    @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Downloading && ModelListViewModel.LoadingProgress != null)
+                    {
+                        <MudText Align="Align.Center" Typo="Typo.caption">
+                            Downloading @((ModelListViewModel.LoadingProgress.Value * 100).ToString("0"))%
+                        </MudText>
+                    }
+                    else
+                    {
+                        <MudText Align="Align.Center" Typo="Typo.caption">
+                            @Text
+                        </MudText>
+                    }
                 </div>
 
             </div>
@@ -34,13 +43,20 @@
                     <MudIcon Class="xs-icon outline" Icon="fas fa-chevron-down" Size="Size.Small" Style="font-size: 0.6rem !important; color: var(--Outline)" />
                 </div>
             }
+            else if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Downloading ||
+                     ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading)
+            {
+                <div class="d-flex justify-center align-center">
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Style="width: 14px; height: 14px;" Color="Color.Primary" />
+                </div>
+            }
         </div>
 
         @if (ModelListViewModel.LoadingState is ModelListViewModel.ModelLoadingState.Loading or
         ModelListViewModel.ModelLoadingState.Downloading && ModelListViewModel.LoadingProgress != null)
         {
             <div id="progress-bar">
-                <MudProgressLinear Value="@(ModelListViewModel.LoadingProgress.Value * 100)" />
+                <MudProgressLinear Value="@(ModelListViewModel.LoadingProgress.Value * 100)" Color="Color.Primary" />
             </div>
         }
     </div>

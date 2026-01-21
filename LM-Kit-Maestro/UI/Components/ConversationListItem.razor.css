@@ -1,51 +1,65 @@
 #item-container {
-    border-radius: 8px;
-    border: 0 solid transparent;
+    border-radius: 0.5rem;
+    border: none;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding-block: 8px;
-    padding-inline: 8px;
+    padding: 0.5rem 0.625rem;
     cursor: pointer !important;
     align-items: center;
-
+    transition: all 0.15s ease;
+    position: relative;
+    margin: 0.0625rem 0;
 }
 
     #item-container:hover {
-        background-color: var(--Surface15);
+        background-color: rgba(255, 255, 255, 0.06);
     }
 
     #item-container.item-selected:hover {
-        background-color: var(--Surface15);
+        background-color: rgba(255, 255, 255, 0.1);
     }
 
     #item-container:hover #show-more-button {
         visibility: visible;
+        opacity: 1;
     }
 
     #item-container.item-selected {
-        background-color: var(--Surface2);
+        background-color: rgba(255, 255, 255, 0.08);
     }
+
+    #item-container:active {
+        transform: scale(0.99);
+    }
+
+#show-more-button {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
 
 ::deep .mud-button-label {
     text-transform: initial !important;
 }
 
 ::deep .mud-input {
-    color: var(--OnSurface) !important;
+    color: #ECECEC !important;
     cursor: pointer !important;
     pointer-events: none !important;
+    font-size: 0.875rem;
 }
 
 ::deep .mud-input-slot {
     cursor: pointer !important;
 }
 
-::deep .mud-icon-button{
-    color: var(--Outline);
+::deep .mud-icon-button {
+    color: #6E6E6E;
+    transition: all 0.15s ease;
 }
 
-::deep .mud-icon-button:hover {
-    color: var(--OnSurface) !important;
-    background-color: transparent !important;
-}
+    ::deep .mud-icon-button:hover {
+        color: #ECECEC !important;
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        transform: scale(1.05);
+    }

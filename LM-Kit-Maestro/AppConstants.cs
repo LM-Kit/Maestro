@@ -2,7 +2,7 @@
 
 internal static class AppConstants
 {
-    public const string AppVersion = "0.1.5";
+    public const string AppVersion = "2016.1.1";
     public const string AppName = "LM-Kit Maestro";
     public static string AppNameWithVersion => $"{AppName} {AppVersion}";
 

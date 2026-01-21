@@ -178,6 +178,20 @@ public partial class ChatPage : IDisposable
         SettingsSidebarIsToggled = !SettingsSidebarIsToggled;
     }
 
+    private async void OnNewChatClicked()
+    {
+        // Don't create new chat if current chat is empty
+        if (ViewModel.ConversationListViewModel.CurrentConversation == null ||
+            !ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
+        {
+            ViewModel.ConversationListViewModel.AddNewConversation();
+        }
+        
+        // Focus the input text area
+        await Task.Delay(50); // Small delay to ensure UI is updated
+        await JS.InvokeVoidAsync("setUserInputFocus");
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -465,6 +479,20 @@ public partial class ChatPage : IDisposable
         if (result != null && !result.Canceled && result.Data is bool confirmed && confirmed)
         {
             await Task.Run(() => ViewModel.ConversationListViewModel.DeleteConversation(conversationViewModel));
+        }
+    }
+
+    private async Task OnResetSettingsClicked()
+    {
+        var confirmed = await DialogService.ShowMessageBox(
+            "Reset Settings",
+            "Are you sure you want to reset all settings to their default values?",
+            yesText: "Reset",
+            cancelText: "Cancel");
+
+        if (confirmed == true)
+        {
+            ViewModel.ChatSettingsViewModel.ResetDefaultValues();
         }
     }
 }
