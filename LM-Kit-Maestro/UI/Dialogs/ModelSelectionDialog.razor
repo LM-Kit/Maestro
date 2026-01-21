@@ -190,7 +190,7 @@
                                     <div class="model-name-container">
                                         <div class="model-name-row">
                                             <span class="model-name">@model.ModelInfo.ModelName</span>
-                                            <MudTooltip Placement="Placement.Bottom" Arrow="false" Class="model-card-tooltip">
+                                            <MudTooltip Placement="Placement.Right" Arrow="false" Class="model-card-tooltip" Delay="200" Duration="0">
                                                 <ChildContent>
                                                     <span class="info-icon" @onclick:stopPropagation="true">
                                                         <MudIcon Icon="@Icons.Material.Outlined.Info" Size="Size.Small" />
@@ -198,13 +198,15 @@
                                                 </ChildContent>
                                                 <TooltipContent>
                                                     <div class="model-card-popup">
-                                                        <!-- Header -->
+                                                        <!-- Header Row -->
                                                         <div class="mcp-header">
-                                                            <div class="mcp-title">@model.ModelInfo.ModelName</div>
-                                                            <div class="mcp-subtitle">
-                                                                <span class="mcp-publisher">@model.ModelInfo.Publisher</span>
-                                                                <span class="mcp-dot">•</span>
-                                                                <span class="mcp-arch">@model.ModelInfo.Architecture</span>
+                                                            <div class="mcp-header-left">
+                                                                <div class="mcp-title">@model.ModelInfo.ModelName</div>
+                                                                <div class="mcp-subtitle">@model.ModelInfo.Publisher • @model.ModelInfo.Architecture</div>
+                                                            </div>
+                                                            <div class="mcp-perf @GetPerformanceClass(model.CompatibilityLevel)">
+                                                                <MudIcon Icon="@Icons.Material.Outlined.Speed" Size="Size.Small" />
+                                                                <span>@((model.CompatibilityLevel * 100).ToString("F0"))%</span>
                                                             </div>
                                                         </div>
                                                         
@@ -214,79 +216,70 @@
                                                             <div class="mcp-description">@model.ModelInfo.Description</div>
                                                         }
 
-                                                        <!-- Specs Grid -->
-                                                        <div class="mcp-specs-grid">
-                                                            <div class="mcp-spec-card">
-                                                                <div class="mcp-spec-value">@model.ModelSize</div>
-                                                                <div class="mcp-spec-label">Parameters</div>
+                                                        <!-- Specs Row - All in one line -->
+                                                        <div class="mcp-specs-row">
+                                                            <div class="mcp-spec">
+                                                                <span class="mcp-spec-value">@model.ModelSize</span>
+                                                                <span class="mcp-spec-label">Params</span>
                                                             </div>
-                                                            <div class="mcp-spec-card">
-                                                                <div class="mcp-spec-value">@($"{model.MaxContextLengthKB}K")</div>
-                                                                <div class="mcp-spec-label">Context</div>
+                                                            <div class="mcp-spec-divider"></div>
+                                                            <div class="mcp-spec">
+                                                                <span class="mcp-spec-value">@($"{model.MaxContextLengthKB}K")</span>
+                                                                <span class="mcp-spec-label">Context</span>
                                                             </div>
-                                                            <div class="mcp-spec-card">
-                                                                <div class="mcp-spec-value">@model.Precision</div>
-                                                                <div class="mcp-spec-label">Quantization</div>
+                                                            <div class="mcp-spec-divider"></div>
+                                                            <div class="mcp-spec">
+                                                                <span class="mcp-spec-value">@model.Precision</span>
+                                                                <span class="mcp-spec-label">Quant</span>
                                                             </div>
-                                                            <div class="mcp-spec-card">
-                                                                <div class="mcp-spec-value">@FormatSize(model.ModelInfo.FileSize)</div>
-                                                                <div class="mcp-spec-label">File Size</div>
+                                                            <div class="mcp-spec-divider"></div>
+                                                            <div class="mcp-spec">
+                                                                <span class="mcp-spec-value">@FormatSize(model.ModelInfo.FileSize)</span>
+                                                                <span class="mcp-spec-label">Size</span>
                                                             </div>
                                                         </div>
 
-                                                        <!-- Capabilities -->
+                                                        <!-- Capabilities Row -->
                                                         @if (model.HasReasoningCapability || model.HasVisionCapability || model.IsCodeModel || model.IsMathModel || model.HasToolsCallCapability)
                                                         {
-                                                            <div class="mcp-caps-section">
-                                                                <div class="mcp-caps-title">Capabilities</div>
-                                                                <div class="mcp-caps-row">
-                                                                    @if (model.HasReasoningCapability)
-                                                                    {
-                                                                        <span class="mcp-cap-pill mcp-cap-reasoning">
-                                                                            <MudIcon Icon="@Icons.Material.Outlined.Psychology" Size="Size.Small" />
-                                                                            <span>Reasoning</span>
-                                                                        </span>
-                                                                    }
-                                                                    @if (model.HasVisionCapability)
-                                                                    {
-                                                                        <span class="mcp-cap-pill mcp-cap-vision">
-                                                                            <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
-                                                                            <span>Vision</span>
-                                                                        </span>
-                                                                    }
-                                                                    @if (model.IsCodeModel)
-                                                                    {
-                                                                        <span class="mcp-cap-pill mcp-cap-code">
-                                                                            <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
-                                                                            <span>Code</span>
-                                                                        </span>
-                                                                    }
-                                                                    @if (model.IsMathModel)
-                                                                    {
-                                                                        <span class="mcp-cap-pill mcp-cap-math">
-                                                                            <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
-                                                                            <span>Math</span>
-                                                                        </span>
-                                                                    }
-                                                                    @if (model.HasToolsCallCapability)
-                                                                    {
-                                                                        <span class="mcp-cap-pill mcp-cap-tools">
-                                                                            <MudIcon Icon="@Icons.Material.Outlined.Build" Size="Size.Small" />
-                                                                            <span>Tools</span>
-                                                                        </span>
-                                                                    }
-                                                                </div>
+                                                            <div class="mcp-caps-row">
+                                                                @if (model.HasReasoningCapability)
+                                                                {
+                                                                    <span class="mcp-cap-pill mcp-cap-reasoning">
+                                                                        <MudIcon Icon="@Icons.Material.Outlined.Psychology" Size="Size.Small" />
+                                                                        <span>Reasoning</span>
+                                                                    </span>
+                                                                }
+                                                                @if (model.HasVisionCapability)
+                                                                {
+                                                                    <span class="mcp-cap-pill mcp-cap-vision">
+                                                                        <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
+                                                                        <span>Vision</span>
+                                                                    </span>
+                                                                }
+                                                                @if (model.IsCodeModel)
+                                                                {
+                                                                    <span class="mcp-cap-pill mcp-cap-code">
+                                                                        <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
+                                                                        <span>Code</span>
+                                                                    </span>
+                                                                }
+                                                                @if (model.IsMathModel)
+                                                                {
+                                                                    <span class="mcp-cap-pill mcp-cap-math">
+                                                                        <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
+                                                                        <span>Math</span>
+                                                                    </span>
+                                                                }
+                                                                @if (model.HasToolsCallCapability)
+                                                                {
+                                                                    <span class="mcp-cap-pill mcp-cap-tools">
+                                                                        <MudIcon Icon="@Icons.Material.Outlined.Build" Size="Size.Small" />
+                                                                        <span>Tools</span>
+                                                                    </span>
+                                                                }
                                                             </div>
                                                         }
-
-                                                        <!-- Footer with Performance -->
-                                                        <div class="mcp-footer">
-                                                            <div class="mcp-perf @GetPerformanceClass(model.CompatibilityLevel)">
-                                                                <MudIcon Icon="@Icons.Material.Outlined.Speed" Size="Size.Small" />
-                                                                <span class="mcp-perf-value">@((model.CompatibilityLevel * 100).ToString("F0"))%</span>
-                                                                <span class="mcp-perf-label">compatible with your hardware</span>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </TooltipContent>
                                             </MudTooltip>

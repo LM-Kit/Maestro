@@ -805,126 +805,154 @@ button {
     padding: 0 !important;
 }
 
-/* New spacious model card design */
+/* Compact wide model card design */
 .model-card-popup {
     background: linear-gradient(165deg, #2A2A2A 0%, #1C1C1C 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 1rem;
-    padding: 1.25rem;
-    width: 400px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    width: 520px;
+    max-width: 90vw;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
 }
 
-/* Header */
+/* Header with perf badge */
 .mcp-header {
-    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.mcp-header-left {
+    flex: 1;
+    min-width: 0;
 }
 
 .mcp-title {
     color: #FFFFFF;
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 600;
     line-height: 1.3;
-    margin-bottom: 0.375rem;
+    margin-bottom: 0.125rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .mcp-subtitle {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
     color: #6B6B6B;
-    font-size: 0.8125rem;
-}
-
-.mcp-publisher {
-    color: #8E8E8E;
-}
-
-.mcp-dot {
-    color: #4A4A4A;
-}
-
-.mcp-arch {
-    color: #6B6B6B;
-    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
     font-size: 0.75rem;
 }
 
-/* Description */
-.mcp-description {
-    color: #A0A0A0;
+/* Performance badge in header */
+.mcp-perf {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.375rem 0.625rem;
+    border-radius: 2rem;
     font-size: 0.8125rem;
-    line-height: 1.6;
-    margin-bottom: 1.25rem;
-    padding: 0.875rem 1rem;
-    background-color: rgba(255, 255, 255, 0.03);
-    border-radius: 0.625rem;
-    border-left: 3px solid rgba(16, 163, 127, 0.5);
+    font-weight: 600;
+    flex-shrink: 0;
 }
 
-/* Specs Grid - 2x2 layout */
-.mcp-specs-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
+.mcp-perf .mud-icon-root {
+    font-size: 0.875rem !important;
 }
 
-.mcp-spec-card {
+.mcp-perf.perf-high {
+    background-color: rgba(16, 163, 127, 0.15);
+    color: #10A37F;
+}
+.mcp-perf.perf-high .mud-icon-root { color: #10A37F !important; }
+
+.mcp-perf.perf-medium {
+    background-color: rgba(245, 158, 11, 0.15);
+    color: #F59E0B;
+}
+.mcp-perf.perf-medium .mud-icon-root { color: #F59E0B !important; }
+
+.mcp-perf.perf-low {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+}
+.mcp-perf.perf-low .mud-icon-root { color: #EF4444 !important; }
+
+/* Description - compact */
+.mcp-description {
+    color: #9CA3AF;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    margin-bottom: 0.875rem;
+    padding: 0.625rem 0.75rem;
     background-color: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 0.5rem;
-    padding: 0.75rem;
-    text-align: center;
+    border-left: 3px solid rgba(16, 163, 127, 0.4);
+    max-height: 4.5rem;
+    overflow: hidden;
+}
+
+/* Specs Row - horizontal */
+.mcp-specs-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 0.5rem;
+    padding: 0.625rem 0.875rem;
+    margin-bottom: 0.75rem;
+}
+
+.mcp-spec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+    flex: 1;
 }
 
 .mcp-spec-value {
     color: #FFFFFF;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 600;
     font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-    margin-bottom: 0.25rem;
 }
 
 .mcp-spec-label {
-    color: #6B6B6B;
-    font-size: 0.6875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-/* Capabilities Section */
-.mcp-caps-section {
-    margin-bottom: 1rem;
-}
-
-.mcp-caps-title {
     color: #5A5A5A;
     font-size: 0.625rem;
-    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.03em;
 }
 
+.mcp-spec-divider {
+    width: 1px;
+    height: 2rem;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Capabilities Row */
 .mcp-caps-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.375rem;
 }
 
 .mcp-cap-pill {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    padding: 0.375rem 0.75rem;
-    border-radius: 2rem;
-    font-size: 0.75rem;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.6875rem;
     font-weight: 500;
 }
 
 .mcp-cap-pill .mud-icon-root {
-    font-size: 0.875rem !important;
+    font-size: 0.75rem !important;
 }
 
 .mcp-cap-reasoning {
@@ -956,50 +984,3 @@ button {
     color: #F472B6;
 }
 .mcp-cap-tools .mud-icon-root { color: #F472B6 !important; }
-
-/* Footer with Performance */
-.mcp-footer {
-    padding-top: 0.875rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.mcp-perf {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.625rem 0.875rem;
-    border-radius: 0.5rem;
-}
-
-.mcp-perf .mud-icon-root {
-    font-size: 1rem !important;
-}
-
-.mcp-perf-value {
-    font-size: 1rem;
-    font-weight: 700;
-    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-}
-
-.mcp-perf-label {
-    font-size: 0.75rem;
-    opacity: 0.8;
-}
-
-.mcp-perf.perf-high {
-    background-color: rgba(16, 163, 127, 0.1);
-    color: #10A37F;
-}
-.mcp-perf.perf-high .mud-icon-root { color: #10A37F !important; }
-
-.mcp-perf.perf-medium {
-    background-color: rgba(245, 158, 11, 0.1);
-    color: #F59E0B;
-}
-.mcp-perf.perf-medium .mud-icon-root { color: #F59E0B !important; }
-
-.mcp-perf.perf-low {
-    background-color: rgba(239, 68, 68, 0.1);
-    color: #EF4444;
-}
-.mcp-perf.perf-low .mud-icon-root { color: #EF4444 !important; }
