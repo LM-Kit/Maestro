@@ -351,7 +351,9 @@
 
     private async Task OnCopyMessageButtonClicked()
     {
-        bool success = await ClipboardHandler.CopyTextToClipboardAsync(MessageViewModel.GetContent(responseIndex));
+        // Copy only visible content (excluding thinking/reasoning segments)
+        string contentToCopy = GetVisibleContent(responseIndex);
+        bool success = await ClipboardHandler.CopyTextToClipboardAsync(contentToCopy);
 
         if (success)
         {
@@ -365,6 +367,32 @@
                 });
             }
         }
+    }
+
+    /// <summary>
+    /// Gets the visible content (excluding InternalReasoning segments) for clipboard copy.
+    /// </summary>
+    private string GetVisibleContent(int messageIndex)
+    {
+        var segments = MessageViewModel.GetSegments(messageIndex);
+        
+        if (segments == null || segments.Count == 0)
+        {
+            return MessageViewModel.GetContent(messageIndex);
+        }
+
+        // Only include UserVisible, ToolResponse, and Undefined segments (not InternalReasoning)
+        var visibleParts = segments
+            .Where(s => s.SegmentType != TextSegmentType.InternalReasoning)
+            .Select(s => s.Content)
+            .ToList();
+
+        if (visibleParts.Count == 0)
+        {
+            return MessageViewModel.GetContent(messageIndex);
+        }
+
+        return string.Join("", visibleParts).Trim();
     }
 
     private void OnRegenerateResponseButtonClicked()

@@ -26,6 +26,14 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
+        public bool IsLegacyModel
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(_modelCard.ReplacementModel);
+            }
+        }
+
         [ObservableProperty]
         long _fileSize;
 

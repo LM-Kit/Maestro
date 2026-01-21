@@ -52,10 +52,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     public LLMFileManagerConfig Config { get; } = new LLMFileManagerConfig();
 
     public event EventHandler? FileCollectingCompleted;
-#if BETA_DOWNLOAD_MODELS
-    public event EventHandler? ModelDownloadingProgressed;
-    public event EventHandler? ModelDownloadingCompleted;
-#endif
 
     public LLMFileManager(IAppSettingsService appSettingsService, HttpClient httpClient)
     {
@@ -108,96 +104,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         _fileSystemWatcher.Dispose();
         _fileSystemWatcher = null;
-    }
-#endif
-
-#if BETA_DOWNLOAD_MODELS
-    public void DownloadModel(ModelCard modelCard)
-    {
-        var filePath = Path.Combine(ModelStorageDirectory, modelCard.Publisher, modelCard.Repository, modelCard.FileName);
-
-        if (!_fileDownloads.ContainsKey(modelCard.Metadata.DownloadUrl!))
-        {
-            FileDownloader fileDownloader = new FileDownloader(_httpClient, modelCard.Metadata.DownloadUrl!, filePath);
-
-            fileDownloader.ErrorEventHandler += OnDownloadExceptionThrown;
-            fileDownloader.DownloadProgressedEventHandler += OnDownloadProgressed;
-            fileDownloader.DownloadCompletedEventHandler += OnDownloadCompleted;
-
-            if (_fileDownloads.TryAdd(modelCard.Metadata.DownloadUrl!, fileDownloader))
-            {
-                fileDownloader.Start();
-            }
-        }
-    }
-
-    private void ReleaseFileDownloader(Uri downloadUrl)
-    {
-        if (_fileDownloads.ContainsKey(downloadUrl) && _fileDownloads.Remove(downloadUrl, out FileDownloader? fileDownloader))
-        {
-            fileDownloader.ErrorEventHandler -= OnDownloadExceptionThrown;
-            fileDownloader.DownloadProgressedEventHandler -= OnDownloadProgressed;
-            fileDownloader.DownloadCompletedEventHandler -= OnDownloadCompleted;
-
-            fileDownloader.Dispose();
-        }
-    }
-
-    private void OnDownloadExceptionThrown(Uri downloadUrl, Exception exception)
-    {
-        ReleaseFileDownloader(downloadUrl);
-
-        if (exception is OperationCanceledException)
-        {
-            ModelDownloadingCompleted?.Invoke(this, new DownloadOperationStateChangedEventArgs(downloadUrl, DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Canceled));
-        }
-        else
-        {
-            ModelDownloadingCompleted?.Invoke(this, new DownloadOperationStateChangedEventArgs(downloadUrl, exception));
-        }
-    }
-
-    private void OnDownloadProgressed(Uri downloadUrl, long? totalDownloadSize, long byteRead)
-    {
-        double progress = 0;
-
-        if (totalDownloadSize.HasValue)
-        {
-            progress = (double)byteRead / totalDownloadSize.Value;
-        }
-
-        ModelDownloadingProgressed?.Invoke(this, new DownloadOperationStateChangedEventArgs(downloadUrl, byteRead, totalDownloadSize, progress));
-    }
-
-    private void OnDownloadCompleted(Uri downloadUrl)
-    {
-        ReleaseFileDownloader(downloadUrl);
-
-        ModelDownloadingCompleted?.Invoke(this, new DownloadOperationStateChangedEventArgs(downloadUrl, DownloadOperationStateChangedEventArgs.DownloadOperationStateChangedType.Completed));
-    }
-
-    public void CancelModelDownload(ModelCard modelCard)
-    {
-        if (_fileDownloads.TryGetValue(modelCard.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
-        {
-            fileDownloader!.Stop();
-        }
-    }
-
-    public void PauseModelDownload(ModelCard modelCard)
-    {
-        if (_fileDownloads.TryGetValue(modelCard.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
-        {
-            fileDownloader!.Pause();
-        }
-    }
-
-    public void ResumeModelDownload(ModelCard modelCard)
-    {
-        if (_fileDownloads.TryGetValue(modelCard.Metadata.DownloadUrl!, out FileDownloader? fileDownloader))
-        {
-            fileDownloader!.Resume();
-        }
     }
 #endif
 
@@ -539,31 +445,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
     }
 #endif
 
-#if BETA_DOWNLOAD_MODELS
-    private void OnModelDownloadingProgressed(string path, long? contentLength, long bytesRead)
-    {
-        double progress = 0;
-
-        if (contentLength.HasValue)
-        {
-            double progressPercentage = Math.Round((double)bytesRead / contentLength.Value * 100, 2);
-
-            progress = (double)bytesRead / contentLength.Value;
-            //Console.Write($"\rDownloading model {progressPercentage:0.00}%");
-        }
-        else
-        {
-            //Console.Write($"\rDownloading model {bytesRead} bytes");
-        }
-
-        if (ModelDownloadingProgressed != null)
-        {
-            ModelDownloadingProgressedEventArgs eventArgs = new ModelDownloadingProgressedEventArgs(path, bytesRead, contentLength, progress);
-            ModelDownloadingProgressed.Invoke(this, eventArgs);
-        }
-    }
-#endif
-
 
     private void OnModelCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
@@ -738,21 +619,8 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
                 out string publisher, out string repository, out string fileName))
             {
                 isSorted = true;
-#if BETA_DOWNLOAD_MODELS
-                modelCard = TryGetExistingModelInfo(fileName, repository, publisher);
-                if (modelCard == null)
-                {
-                    modelCard = new ModelInfo(publisher, repository, fileName);
-                    modelCard.Metadata.FileSize = FileHelpers.GetFileSize(filePath);
-                }
-
-                modelCard.Metadata.FileUri = new Uri(filePath);
-
-#else
                 modelCard.Publisher = publisher;
                 modelCard.Repository = repository;
-
-#endif
             }
             else
             {
@@ -765,23 +633,6 @@ public partial class LLMFileManager : ObservableObject, ILLMFileManager
 
         return false;
     }
-
-#if BETA_DOWNLOAD_MODELS
-    private static ModelInfo? TryGetExistingModelInfo(string fileName, string repository, string publisher)
-    {
-        foreach (var modelCard in AppConstants.AvailableModels)
-        {
-            if (string.CompareOrdinal(modelCard.FileName, fileName) == 0 &&
-                string.CompareOrdinal(modelCard.Repository, repository) == 0 &&
-                string.CompareOrdinal(modelCard.Publisher, publisher) == 0)
-            {
-                return modelCard;
-            }
-        }
-
-        return null;
-    }
-#endif
 
     private static bool ShouldCheckFile(string filePath)
     {
