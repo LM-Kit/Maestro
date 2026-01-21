@@ -54,6 +54,12 @@ namespace LMKit.Maestro.ViewModels
         bool _isMathModel;
 
         [ObservableProperty]
+        bool _hasReasoningCapability;
+
+        [ObservableProperty]
+        bool _hasToolsCallCapability;
+
+        [ObservableProperty]
         string _modelSize;
 
         [ObservableProperty]
@@ -87,6 +93,8 @@ namespace LMKit.Maestro.ViewModels
             HasVisionCapability = modelCard.Capabilities.HasFlag(ModelCapabilities.Vision);
             IsCodeModel = modelCard.Capabilities.HasFlag(ModelCapabilities.CodeCompletion);
             IsMathModel = modelCard.Capabilities.HasFlag(ModelCapabilities.Math);
+            HasReasoningCapability = modelCard.Capabilities.HasFlag(ModelCapabilities.Reasoning);
+            HasToolsCallCapability = modelCard.Capabilities.HasFlag(ModelCapabilities.ToolsCall);
             ModelPath = modelCard.IsLocallyAvailable ? modelCard.LocalPath : modelCard.ModelUri.ToString();
             CompatibilityLevel = Hardware.DeviceConfiguration.GetPerformanceScore(modelCard);
             MaxContextLengthKB = modelCard.ContextLength / 1024;

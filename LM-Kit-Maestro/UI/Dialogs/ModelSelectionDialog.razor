@@ -13,11 +13,9 @@
                         </MudText>
                     </div>
 
-                    <MudTooltip Text="Close" Placement="Placement.Bottom" Class="custom-tooltip">
-                        <button class="close-button" @onclick="() => MudDialog.Cancel()">
-                            <span class="fas fa-xmark"></span>
-                        </button>
-                    </MudTooltip>
+                    <button class="close-button" @onclick="() => MudDialog.Cancel()">
+                        <span class="fas fa-xmark"></span>
+                    </button>
                 </div>
 
                 <div class="search-container">
@@ -35,139 +33,130 @@
                     }
                 </div>
 
-                <div class="model-selection-dialog-body">
-                    @if (FilteredModels.Any())
-                    {
-                        @foreach (var model in FilteredModels)
+                <!-- Column Headers with Sorting -->
+                <div class="column-headers">
+                    <div class="col-header col-name @(SortColumn == "name" ? "active" : "")" @onclick='() => SetSort("name")'>
+                        <span>Model</span>
+                        @if (SortColumn == "name")
                         {
-                            <div class="model-item @(model.IsLocallyAvailable ? "" : "model-cloud")" 
+                            <span class="sort-icon fas @(SortAscending ? "fa-arrow-up" : "fa-arrow-down")"></span>
+                        }
+                    </div>
+                    <div class="col-header col-caps">
+                        <span>Capabilities</span>
+                    </div>
+                    <div class="col-header col-params @(SortColumn == "params" ? "active" : "")" @onclick='() => SetSort("params")'>
+                        <span>Params</span>
+                        @if (SortColumn == "params")
+                        {
+                            <span class="sort-icon fas @(SortAscending ? "fa-arrow-up" : "fa-arrow-down")"></span>
+                        }
+                    </div>
+                    <div class="col-header col-context @(SortColumn == "context" ? "active" : "")" @onclick='() => SetSort("context")'>
+                        <span>Context</span>
+                        @if (SortColumn == "context")
+                        {
+                            <span class="sort-icon fas @(SortAscending ? "fa-arrow-up" : "fa-arrow-down")"></span>
+                        }
+                    </div>
+                    <div class="col-header col-quant">
+                        <span>Quant</span>
+                    </div>
+                    <div class="col-header col-size @(SortColumn == "size" ? "active" : "")" @onclick='() => SetSort("size")'>
+                        <span>Size</span>
+                        @if (SortColumn == "size")
+                        {
+                            <span class="sort-icon fas @(SortAscending ? "fa-arrow-up" : "fa-arrow-down")"></span>
+                        }
+                    </div>
+                </div>
+
+                <div class="model-selection-dialog-body">
+                    @if (SortedFilteredModels.Any())
+                    {
+                        @foreach (var model in SortedFilteredModels)
+                        {
+                            <div class="model-item" 
+                                 title="@model.ModelInfo.Description"
                                  @onclick="() => SelectModel(model)">
-                                <div class="model-main">
-                                    <MudTooltip Placement="Placement.Right" Class="custom-tooltip">
-                                        <ChildContent>
-                                            <div class="model-indicator">
-                                                <div class="indicator-dot @GetPerformanceClass(model.CompatibilityLevel)"></div>
-                                            </div>
-                                        </ChildContent>
-                                        <TooltipContent>
-                                            <div class="tooltip-content">
-                                                <div class="tooltip-header">
-                                                    <span class="tooltip-icon @GetPerformanceClass(model.CompatibilityLevel)"></span>
-                                                    <span class="tooltip-title">@GetPerformanceLabel(model.CompatibilityLevel)</span>
-                                                </div>
-                                                <div class="tooltip-score">Score: @((model.CompatibilityLevel * 100).ToString("0"))%</div>
-                                                <div class="tooltip-desc">Estimated performance based on your hardware capabilities and model requirements.</div>
-                                            </div>
-                                        </TooltipContent>
-                                    </MudTooltip>
-                                    
-                                    <div class="model-info">
-                                        <div class="model-name-row">
-                                            <MudTooltip Placement="Placement.Top" Class="custom-tooltip">
-                                                <ChildContent>
-                                                    <span class="model-name">@model.ModelInfo.ShortModelName</span>
-                                                </ChildContent>
-                                                <TooltipContent>
-                                                    <div class="tooltip-content tooltip-wide">
-                                                        <div class="tooltip-model-name">@model.ModelInfo.ShortModelName</div>
-                                                        <div class="tooltip-model-desc">@(string.IsNullOrEmpty(model.ModelInfo.Description) ? "A large language model optimized for chat and instruction following." : model.ModelInfo.Description)</div>
-                                                        @if (model.IsChatModel || model.HasVisionCapability || model.IsCodeModel || model.IsMathModel)
-                                                        {
-                                                            <div class="tooltip-capabilities">
-                                                                @if (model.IsChatModel)
-                                                                {
-                                                                    <span class="capability-tag"><span class="fas fa-message"></span> Chat</span>
-                                                                }
-                                                                @if (model.HasVisionCapability)
-                                                                {
-                                                                    <span class="capability-tag"><span class="fas fa-eye"></span> Vision</span>
-                                                                }
-                                                                @if (model.IsCodeModel)
-                                                                {
-                                                                    <span class="capability-tag"><span class="fas fa-code"></span> Code</span>
-                                                                }
-                                                                @if (model.IsMathModel)
-                                                                {
-                                                                    <span class="capability-tag"><span class="fas fa-calculator"></span> Math</span>
-                                                                }
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                </TooltipContent>
-                                            </MudTooltip>
-                                            @if (!model.IsLocallyAvailable)
-                                            {
-                                                <MudTooltip Text="Download required - this model will be downloaded when selected" Placement="Placement.Top" Class="custom-tooltip">
-                                                    <span class="cloud-badge">
-                                                        <span class="fas fa-cloud-arrow-down"></span>
-                                                    </span>
-                                                </MudTooltip>
-                                            }
-                                        </div>
-                                        <div class="model-publisher">@model.ModelInfo.Publisher</div>
+                                
+                                <!-- Performance Indicator -->
+                                <div class="model-perf" title="@($"Estimated performance: {model.CompatibilityLevel:P0}")">
+                                    <div class="perf-dot @GetPerformanceClass(model.CompatibilityLevel)"></div>
+                                </div>
+
+                                <!-- Model Name & Publisher -->
+                                <div class="model-info">
+                                    <div class="model-name-row">
+                                        <span class="model-name" title="@model.ModelInfo.ModelName">@model.ModelInfo.ShortModelName</span>
+                                        @if (!model.IsLocallyAvailable)
+                                        {
+                                            <span class="cloud-icon" title="Download required - model not on disk">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Cloud" Size="Size.Small" />
+                                            </span>
+                                        }
                                     </div>
+                                    <span class="model-publisher">@model.ModelInfo.Publisher</span>
                                 </div>
-                                <div class="model-specs">
-                                    <MudTooltip Placement="Placement.Top" Class="custom-tooltip">
-                                        <ChildContent>
-                                            <div class="spec-item spec-params">
-                                                <span class="spec-value">@model.ModelSize</span>
-                                                <span class="spec-label">params</span>
-                                            </div>
-                                        </ChildContent>
-                                        <TooltipContent>
-                                            <div class="tooltip-content">
-                                                <div class="tooltip-title">Parameters: @model.ModelInfo.ParameterCount.ToString("N0")</div>
-                                                <div class="tooltip-desc">The number of trainable parameters. Larger models are generally more capable but require more resources.</div>
-                                            </div>
-                                        </TooltipContent>
-                                    </MudTooltip>
-                                    
-                                    <MudTooltip Placement="Placement.Top" Class="custom-tooltip">
-                                        <ChildContent>
-                                            <div class="spec-item spec-context">
-                                                <span class="spec-value">@($"{model.MaxContextLengthKB}k")</span>
-                                                <span class="spec-label">context</span>
-                                            </div>
-                                        </ChildContent>
-                                        <TooltipContent>
-                                            <div class="tooltip-content">
-                                                <div class="tooltip-title">Context: @model.ModelInfo.ContextLength.ToString("N0") tokens</div>
-                                                <div class="tooltip-desc">Maximum conversation length the model can process. Longer context allows for more extended conversations and documents.</div>
-                                            </div>
-                                        </TooltipContent>
-                                    </MudTooltip>
-                                    
-                                    <MudTooltip Placement="Placement.Top" Class="custom-tooltip">
-                                        <ChildContent>
-                                            <div class="spec-item spec-quant">
-                                                <span class="spec-value">@model.Precision</span>
-                                            </div>
-                                        </ChildContent>
-                                        <TooltipContent>
-                                            <div class="tooltip-content">
-                                                <div class="tooltip-title">Quantization: @model.Precision</div>
-                                                <div class="tooltip-desc">Bit precision for model weights. Lower values reduce memory usage and increase speed with minimal quality loss.</div>
-                                            </div>
-                                        </TooltipContent>
-                                    </MudTooltip>
-                                    
-                                    <MudTooltip Placement="Placement.Top" Class="custom-tooltip">
-                                        <ChildContent>
-                                            <div class="spec-item spec-size">
-                                                <span class="spec-value">@FormatSize(model.ModelInfo.FileSize)</span>
-                                            </div>
-                                        </ChildContent>
-                                        <TooltipContent>
-                                            <div class="tooltip-content">
-                                                <div class="tooltip-title">Size: @FormatSizeExact(model.ModelInfo.FileSize)</div>
-                                                <div class="tooltip-desc">Disk space required. The model must fit in your available RAM/VRAM for optimal performance.</div>
-                                            </div>
-                                        </TooltipContent>
-                                    </MudTooltip>
+
+                                <!-- Capabilities -->
+                                <div class="model-caps">
+                                    @if (model.HasReasoningCapability)
+                                    {
+                                        <div class="cap-pill cap-reasoning" title="Advanced Reasoning - Multi-step problem solving and complex instruction following">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Psychology" Size="Size.Small" />
+                                            <span>Reasoning</span>
+                                        </div>
+                                    }
+                                    @if (model.HasVisionCapability)
+                                    {
+                                        <div class="cap-pill cap-vision" title="Vision - Image understanding and multimodal reasoning">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
+                                            <span>Vision</span>
+                                        </div>
+                                    }
+                                    @if (model.IsCodeModel)
+                                    {
+                                        <div class="cap-pill cap-code" title="Code - Code generation and completion">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
+                                            <span>Code</span>
+                                        </div>
+                                    }
+                                    @if (model.IsMathModel)
+                                    {
+                                        <div class="cap-pill cap-math" title="Math - Mathematical reasoning and calculations">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
+                                            <span>Math</span>
+                                        </div>
+                                    }
+                                    @if (model.HasToolsCallCapability)
+                                    {
+                                        <div class="cap-pill cap-tools" title="Tools - Function and tool calling support">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Build" Size="Size.Small" />
+                                            <span>Tools</span>
+                                        </div>
+                                    }
+                                    @if (model.IsChatModel && !model.HasReasoningCapability && !model.HasVisionCapability && !model.IsCodeModel && !model.IsMathModel && !model.HasToolsCallCapability)
+                                    {
+                                        <div class="cap-pill cap-chat" title="Chat - Optimized for conversation">
+                                            <MudIcon Icon="@Icons.Material.Outlined.Chat" Size="Size.Small" />
+                                            <span>Chat</span>
+                                        </div>
+                                    }
                                 </div>
-                                <div class="model-arrow">
-                                    <span class="fas fa-chevron-right"></span>
+
+                                <!-- Specs -->
+                                <div class="model-param" title="@($"Parameter count: {model.ModelInfo.ParameterCount:N0}")">
+                                    @model.ModelSize
+                                </div>
+                                <div class="model-context" title="@($"Maximum context length: {model.ModelInfo.ContextLength:N0} tokens")">
+                                    @($"{model.MaxContextLengthKB}k")
+                                </div>
+                                <div class="model-quant" title="@($"Quantization: {model.Precision} precision")">
+                                    @model.Precision
+                                </div>
+                                <div class="model-size" title="@($"File size: {model.ModelInfo.FileSize:N0} bytes")">
+                                    @FormatSize(model.ModelInfo.FileSize)
                                 </div>
                             </div>
                         }
@@ -175,7 +164,7 @@
                     else
                     {
                         <div class="no-results">
-                            <span class="fas fa-search no-results-icon"></span>
+                            <MudIcon Icon="@Icons.Material.Outlined.SearchOff" Size="Size.Large" Class="no-results-icon" />
                             <MudText Typo="Typo.body1" Class="no-results-text">No models found</MudText>
                             <MudText Typo="Typo.body2" Class="no-results-hint">Try a different search term</MudText>
                         </div>
@@ -203,12 +192,10 @@
         flex-direction: column;
         overflow: hidden;
         background-color: #1A1A1A;
-        border-radius: 1.25rem;
+        border-radius: 1rem;
         border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3),
-                    0 24px 80px rgba(0, 0, 0, 0.5),
-                    0 0 120px rgba(16, 163, 127, 0.03);
-        width: 780px;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+        width: 900px;
         max-width: 95vw;
         max-height: 85vh;
         position: relative;
@@ -228,7 +215,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        background-color: rgba(0, 0, 0, 0.75);
+        background-color: rgba(0, 0, 0, 0.7);
         backdrop-filter: blur(4px);
     }
 
@@ -236,40 +223,38 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        padding: 1.75rem 1.75rem 1.25rem;
-        position: relative;
+        padding: 1.5rem 1.5rem 1rem;
     }
 
     .header-content {
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: 0.125rem;
     }
 
     .header-text {
         color: #FFFFFF !important;
         font-weight: 600 !important;
-        font-size: 1.375rem !important;
-        letter-spacing: -0.02em !important;
+        font-size: 1.25rem !important;
     }
 
     .header-subtitle {
         color: #6B6B6B !important;
-        font-size: 0.875rem !important;
+        font-size: 0.8125rem !important;
     }
 
     .close-button {
-        width: 2.25rem;
-        height: 2.25rem;
+        width: 2rem;
+        height: 2rem;
         border: none;
         background-color: rgba(255, 255, 255, 0.05);
         color: #6B6B6B;
-        border-radius: 0.625rem;
+        border-radius: 0.5rem;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
         transition: all 0.15s ease;
     }
 
@@ -280,27 +265,26 @@
 
     .search-container {
         position: relative;
-        margin: 0 1.75rem 1rem;
+        margin: 0 1.5rem 0.75rem;
     }
 
     .search-icon {
         position: absolute;
-        left: 1rem;
+        left: 0.875rem;
         top: 50%;
         transform: translateY(-50%);
         color: #4A4A4A;
-        font-size: 0.875rem;
-        pointer-events: none;
+        font-size: 0.8125rem;
     }
 
     .search-input {
         width: 100%;
         background-color: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 0.75rem;
-        padding: 0.875rem 2.5rem 0.875rem 2.75rem;
+        border-radius: 0.625rem;
+        padding: 0.75rem 2.25rem 0.75rem 2.5rem;
         color: #FFFFFF;
-        font-size: 0.9375rem;
+        font-size: 0.875rem;
         outline: none;
         transition: all 0.15s ease;
     }
@@ -312,12 +296,11 @@
     .search-input:focus {
         border-color: rgba(16, 163, 127, 0.4);
         background-color: rgba(255, 255, 255, 0.05);
-        box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
     }
 
     .search-clear {
         position: absolute;
-        right: 0.75rem;
+        right: 0.625rem;
         top: 50%;
         transform: translateY(-50%);
         background: none;
@@ -325,24 +308,61 @@
         color: #4A4A4A;
         cursor: pointer;
         padding: 0.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0.25rem;
-        transition: color 0.15s ease;
+        font-size: 0.75rem;
     }
 
     .search-clear:hover {
         color: #FFFFFF;
     }
 
+    /* Column Headers */
+    .column-headers {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        gap: 0.75rem;
+    }
+
+    .col-header {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #5A5A5A;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.15s ease;
+    }
+
+    .col-header:hover {
+        color: #8E8E8E;
+    }
+
+    .col-header.active {
+        color: #10A37F;
+    }
+
+    .sort-icon {
+        font-size: 0.5625rem;
+    }
+
+    .col-name { flex: 1; min-width: 180px; }
+    .col-caps { width: 200px; }
+    .col-params { width: 60px; justify-content: flex-end; }
+    .col-context { width: 60px; justify-content: flex-end; }
+    .col-quant { width: 50px; justify-content: flex-end; }
+    .col-size { width: 70px; justify-content: flex-end; }
+
     .model-selection-dialog-body {
         display: flex;
         flex-direction: column;
         overflow-y: auto;
-        padding: 0 0.75rem 1rem;
+        padding: 0.25rem 0.5rem 1rem;
         flex: 1;
-        gap: 0.25rem;
     }
 
     .model-selection-dialog-body::-webkit-scrollbar {
@@ -358,175 +378,159 @@
         border-radius: 3px;
     }
 
-    .model-selection-dialog-body::-webkit-scrollbar-thumb:hover {
-        background-color: rgba(255, 255, 255, 0.15);
-    }
-
+    /* Model Item Row */
     .model-item {
         display: flex;
         align-items: center;
-        padding: 1rem 1.25rem;
-        border-radius: 0.875rem;
+        padding: 0.625rem 1rem;
+        border-radius: 0.5rem;
         cursor: pointer;
-        transition: all 0.15s ease;
-        gap: 1rem;
-        border: 1px solid transparent;
+        transition: all 0.12s ease;
+        gap: 0.75rem;
     }
 
     .model-item:hover {
         background-color: rgba(255, 255, 255, 0.04);
-        border-color: rgba(255, 255, 255, 0.06);
     }
 
     .model-item:active {
         background-color: rgba(16, 163, 127, 0.08);
-        border-color: rgba(16, 163, 127, 0.15);
     }
 
-    .model-main {
+    /* Performance Dot */
+    .model-perf {
+        width: 24px;
         display: flex;
-        align-items: center;
-        gap: 0.875rem;
-        flex: 1;
-        min-width: 0;
-    }
-
-    .model-indicator {
-        display: flex;
-        align-items: center;
         justify-content: center;
-        width: 2.5rem;
-        height: 2.5rem;
-        background-color: rgba(255, 255, 255, 0.03);
-        border-radius: 0.625rem;
-        flex-shrink: 0;
-        cursor: help;
-        transition: all 0.15s ease;
     }
 
-    .model-indicator:hover {
-        background-color: rgba(255, 255, 255, 0.06);
-    }
-
-    .indicator-dot {
-        width: 10px;
-        height: 10px;
+    .perf-dot {
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
     }
 
-    .indicator-dot.perf-high {
+    .perf-dot.perf-high {
         background-color: #10A37F;
-        box-shadow: 0 0 12px rgba(16, 163, 127, 0.5);
+        box-shadow: 0 0 8px rgba(16, 163, 127, 0.5);
     }
 
-    .indicator-dot.perf-medium {
+    .perf-dot.perf-medium {
         background-color: #F59E0B;
-        box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+        box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
     }
 
-    .indicator-dot.perf-low {
+    .perf-dot.perf-low {
         background-color: #EF4444;
-        box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+        box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
     }
 
+    /* Model Info */
     .model-info {
+        flex: 1;
+        min-width: 180px;
         display: flex;
         flex-direction: column;
         gap: 0.125rem;
-        min-width: 0;
-        flex: 1;
+        overflow: hidden;
     }
 
     .model-name-row {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.375rem;
     }
 
     .model-name {
         color: #FFFFFF;
-        font-size: 0.9375rem;
+        font-size: 0.875rem;
         font-weight: 500;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        cursor: help;
     }
 
-    .model-name:hover {
-        color: #10A37F;
-    }
-
-    .cloud-badge {
+    .cloud-icon {
+        color: #5A5A5A;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #6B6B6B;
-        font-size: 0.75rem;
-        cursor: help;
     }
 
-    .cloud-badge:hover {
-        color: #10A37F;
+    .cloud-icon .mud-icon-root {
+        font-size: 1rem !important;
     }
 
     .model-publisher {
         color: #5A5A5A;
-        font-size: 0.8125rem;
+        font-size: 0.75rem;
     }
 
-    .model-specs {
+    /* Capabilities */
+    .model-caps {
+        width: 200px;
         display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+
+    .cap-pill {
+        display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
-    }
-
-    .spec-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 0.375rem 0.625rem;
-        background-color: rgba(255, 255, 255, 0.03);
-        border-radius: 0.5rem;
-        min-width: 3.5rem;
-        cursor: help;
-        transition: all 0.15s ease;
-    }
-
-    .spec-item:hover {
-        background-color: rgba(255, 255, 255, 0.06);
-    }
-
-    .spec-value {
-        color: #CDCDCD;
-        font-size: 0.8125rem;
+        gap: 0.25rem;
+        padding: 0.1875rem 0.5rem;
+        border-radius: 1rem;
+        font-size: 0.6875rem;
         font-weight: 500;
-        font-family: 'SF Mono', 'Consolas', monospace;
+        white-space: nowrap;
     }
 
-    .spec-label {
-        color: #4A4A4A;
-        font-size: 0.625rem;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
+    .cap-pill .mud-icon-root {
+        font-size: 0.75rem !important;
     }
 
-    .spec-size .spec-value {
-        color: #6B6B6B;
+    .cap-reasoning {
+        background-color: rgba(168, 85, 247, 0.12);
+        color: #C084FC;
+    }
+
+    .cap-vision {
+        background-color: rgba(59, 130, 246, 0.12);
+        color: #60A5FA;
+    }
+
+    .cap-code {
+        background-color: rgba(16, 163, 127, 0.12);
+        color: #34D399;
+    }
+
+    .cap-math {
+        background-color: rgba(245, 158, 11, 0.12);
+        color: #FBBF24;
+    }
+
+    .cap-tools {
+        background-color: rgba(236, 72, 153, 0.12);
+        color: #F472B6;
+    }
+
+    .cap-chat {
+        background-color: rgba(107, 114, 128, 0.12);
+        color: #9CA3AF;
+    }
+
+    /* Specs */
+    .model-param, .model-context, .model-quant, .model-size {
+        font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
         font-size: 0.75rem;
+        color: #9E9E9E;
+        text-align: right;
     }
 
-    .model-arrow {
-        color: #3A3A3A;
-        font-size: 0.75rem;
-        transition: all 0.15s ease;
-    }
+    .model-param { width: 60px; }
+    .model-context { width: 60px; }
+    .model-quant { width: 50px; color: #6B6B6B; }
+    .model-size { width: 70px; color: #6B6B6B; }
 
-    .model-item:hover .model-arrow {
-        color: #6B6B6B;
-        transform: translateX(2px);
-    }
-
+    /* No Results */
     .no-results {
         display: flex;
         flex-direction: column;
@@ -537,9 +541,8 @@
     }
 
     .no-results-icon {
-        font-size: 2rem;
-        color: #3A3A3A;
-        margin-bottom: 0.5rem;
+        color: #3A3A3A !important;
+        font-size: 2.5rem !important;
     }
 
     .no-results-text {
@@ -548,102 +551,6 @@
 
     .no-results-hint {
         color: #5A5A5A !important;
-    }
-
-    /* Custom Tooltip Styles */
-    .tooltip-content {
-        padding: 0.25rem 0;
-        max-width: 280px;
-    }
-
-    .tooltip-wide {
-        max-width: 320px;
-    }
-
-    .tooltip-header {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .tooltip-icon {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-    }
-
-    .tooltip-icon.perf-high {
-        background-color: #10A37F;
-        box-shadow: 0 0 8px rgba(16, 163, 127, 0.6);
-    }
-
-    .tooltip-icon.perf-medium {
-        background-color: #F59E0B;
-        box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
-    }
-
-    .tooltip-icon.perf-low {
-        background-color: #EF4444;
-        box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
-    }
-
-    .tooltip-title {
-        color: #FFFFFF;
-        font-weight: 600;
-        font-size: 0.875rem;
-    }
-
-    .tooltip-score {
-        color: #10A37F;
-        font-size: 0.8125rem;
-        font-weight: 500;
-        margin-bottom: 0.375rem;
-    }
-
-    .tooltip-desc {
-        color: #9E9E9E;
-        font-size: 0.8125rem;
-        line-height: 1.4;
-    }
-
-    .tooltip-model-name {
-        color: #FFFFFF;
-        font-weight: 600;
-        font-size: 0.9375rem;
-        margin-bottom: 0.375rem;
-    }
-
-    .tooltip-model-desc {
-        color: #9E9E9E;
-        font-size: 0.8125rem;
-        line-height: 1.5;
-        margin-bottom: 0.5rem;
-    }
-
-    .tooltip-capabilities {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.375rem;
-        margin-top: 0.5rem;
-        padding-top: 0.5rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .capability-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-        padding: 0.25rem 0.5rem;
-        background-color: rgba(16, 163, 127, 0.15);
-        color: #10A37F;
-        border-radius: 0.375rem;
-        font-size: 0.75rem;
-        font-weight: 500;
-    }
-
-    .capability-tag .fas {
-        font-size: 0.625rem;
     }
 </style>
 
@@ -664,12 +571,53 @@
         }
     }
 
+    private string SortColumn { get; set; } = "name";
+    private bool SortAscending { get; set; } = true;
+
+    private void SetSort(string column)
+    {
+        if (SortColumn == column)
+        {
+            SortAscending = !SortAscending;
+        }
+        else
+        {
+            SortColumn = column;
+            SortAscending = column == "name"; // Default ascending for name, descending for numbers
+        }
+        InvokeAsync(StateHasChanged);
+    }
+
     private IEnumerable<ModelCardViewModel> FilteredModels =>
         string.IsNullOrWhiteSpace(SearchQuery)
             ? ModelListViewModel.Models
             : ModelListViewModel.Models.Where(m =>
                 m.ModelInfo.ShortModelName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                 m.ModelInfo.Publisher.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
+
+    private IEnumerable<ModelCardViewModel> SortedFilteredModels
+    {
+        get
+        {
+            var models = FilteredModels;
+            return SortColumn switch
+            {
+                "name" => SortAscending 
+                    ? models.OrderBy(m => m.ModelInfo.ShortModelName)
+                    : models.OrderByDescending(m => m.ModelInfo.ShortModelName),
+                "params" => SortAscending 
+                    ? models.OrderBy(m => m.ModelInfo.ParameterCount)
+                    : models.OrderByDescending(m => m.ModelInfo.ParameterCount),
+                "context" => SortAscending 
+                    ? models.OrderBy(m => m.ModelInfo.ContextLength)
+                    : models.OrderByDescending(m => m.ModelInfo.ContextLength),
+                "size" => SortAscending 
+                    ? models.OrderBy(m => m.ModelInfo.FileSize)
+                    : models.OrderByDescending(m => m.ModelInfo.FileSize),
+                _ => models
+            };
+        }
+    }
 
     private void SelectModel(ModelCardViewModel model)
     {
@@ -681,27 +629,13 @@
         return level >= 0.7f ? "perf-high" : level >= 0.4f ? "perf-medium" : "perf-low";
     }
 
-    private string GetPerformanceLabel(float level)
-    {
-        return level >= 0.7f ? "Excellent Performance" : level >= 0.4f ? "Moderate Performance" : "May Run Slowly";
-    }
-
     private string FormatSize(long bytes)
     {
         if (bytes >= 1_000_000_000)
-            return $"{bytes / 1_000_000_000.0:F1} GB";
+            return $"{bytes / 1_000_000_000.0:F2} GB";
         if (bytes >= 1_000_000)
             return $"{bytes / 1_000_000.0:F0} MB";
         return $"{bytes / 1_000.0:F0} KB";
-    }
-
-    private string FormatSizeExact(long bytes)
-    {
-        if (bytes >= 1_000_000_000)
-            return $"{bytes / 1_000_000_000.0:F2} GB ({bytes:N0} bytes)";
-        if (bytes >= 1_000_000)
-            return $"{bytes / 1_000_000.0:F2} MB ({bytes:N0} bytes)";
-        return $"{bytes / 1_000.0:F2} KB ({bytes:N0} bytes)";
     }
 
     [Parameter] public string Message { get; set; }
