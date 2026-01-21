@@ -383,3 +383,31 @@ body.windows .chat-element {
     #conversation-bottom:hover {
         background-color: #4A4A4A;
     }
+
+/* Beautiful animated heart for Maestro */
+.maestro-heart {
+    color: #FF1744;
+    margin-left: 0.35rem;
+    display: inline-block;
+    font-size: 0.9em;
+    animation: heartbeat 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 3px rgba(255, 23, 68, 0.6));
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    15% {
+        transform: scale(1.15);
+    }
+    30% {
+        transform: scale(1);
+    }
+    45% {
+        transform: scale(1.1);
+    }
+    60% {
+        transform: scale(1);
+    }
+}
