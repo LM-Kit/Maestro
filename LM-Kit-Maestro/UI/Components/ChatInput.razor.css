@@ -1,10 +1,7 @@
 #input-border {
     max-width: 800px;
-}
-
-#input-border {
-    display: grid;
-    grid-template-columns: 1fr auto;
+    display: flex;
+    flex-direction: column;
     position: relative;
     width: 100%;
     background-color: #2F2F2F;
@@ -16,7 +13,154 @@
         background-color: #3A3A3A;
     }
 
+    #input-border.has-attachments {
+        border-radius: 1rem;
+    }
 
+/* Input row containing attach button, textarea, and send button */
+.input-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: end;
+    width: 100%;
+}
+
+/* Attachment Button */
+.attach-button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0.5rem;
+    padding-right: 0;
+}
+
+.attach-button {
+    height: 2rem;
+    width: 2rem;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8E8E8E;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+    .attach-button:hover:not(:disabled) {
+        color: #ECECEC;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .attach-button:disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+
+    .attach-button i {
+        font-size: 1rem;
+    }
+
+/* Attachment Preview Area */
+.attachment-preview-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.attachment-preview-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    max-width: 200px;
+    position: relative;
+}
+
+    .attachment-preview-item:hover {
+        background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .attachment-preview-item:hover .attachment-remove-btn {
+        opacity: 1;
+    }
+
+.attachment-thumbnail {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+    flex-shrink: 0;
+}
+
+.attachment-pdf-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(239, 68, 68, 0.2);
+    border-radius: 0.25rem;
+    flex-shrink: 0;
+}
+
+    .attachment-pdf-icon i {
+        font-size: 1.25rem;
+        color: #EF4444;
+    }
+
+.attachment-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.attachment-name {
+    font-size: 0.75rem;
+    color: #ECECEC;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.attachment-size {
+    font-size: 0.625rem;
+    color: #8E8E8E;
+}
+
+.attachment-remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: none;
+    background-color: #EF4444;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+    .attachment-remove-btn:hover {
+        background-color: #DC2626;
+    }
+
+    .attachment-remove-btn i {
+        font-size: 0.625rem;
+    }
+
+/* Textarea */
 #input-text {
     width: 100%;
     box-sizing: border-box;
@@ -54,7 +198,6 @@
     justify-content: flex-end;
     padding: 0.5rem;
     padding-left: 0.75rem;
-    grid-column: 2;
 }
 
 .send-button {
@@ -96,7 +239,6 @@
     align-items: center;
     padding: 0.875rem 0 0.875rem 1.25rem;
 }
-
 
 .input-textarea-initial {
 }

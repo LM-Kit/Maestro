@@ -42,6 +42,11 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Whether the currently loaded model supports vision (image analysis).
+    /// </summary>
+    public bool SupportsVision => _state.LoadedModel != null && _state.LoadedModel.HasVision;
+
     public event NotifyModelStateChangedEventHandler? ModelLoadingProgressed;
     public event NotifyModelStateChangedEventHandler? ModelDownloadingProgressed;
     public event NotifyModelStateChangedEventHandler? ModelLoaded;

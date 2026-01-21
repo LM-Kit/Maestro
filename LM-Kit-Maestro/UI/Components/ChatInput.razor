@@ -1,59 +1,112 @@
+@using LMKit.Maestro.Models
 @inject IJSRuntime JS
 @inject Maestro.Services.ISnackbarService SnackbarService
 
-<div id="input-border">
-    <div id="input-textarea-wrapper" class="input-textarea-initial">
-
-        <textarea rows="1"
-            id="input-text"
-            placeholder="Ask anything"
-            @bind="ViewModel.InputText"
-            @onkeydown="OnKeyDown"
-            @bind:event="oninput" />
-
-    </div>
-    <div class="send-button-container">
-
-        <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
-        class="send-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
-
-            @if (!ViewModel.AwaitingResponse)
+<div id="input-border" class="@(HasAttachments ? "has-attachments" : "")">
+    @* Attachment Preview Area *@
+    @if (HasAttachments)
+    {
+        <div class="attachment-preview-area">
+            @foreach (var attachment in ViewModel.PendingAttachments)
             {
-                <span class="send-icon">
-                    <i class="fas fa-arrow-up"></i>
-                </span>
+                <div class="attachment-preview-item">
+                    @if (attachment.IsImage && !string.IsNullOrEmpty(attachment.ThumbnailBase64))
+                    {
+                        <img src="data:@attachment.MimeType;base64,@attachment.ThumbnailBase64" 
+                             alt="@attachment.FileName" 
+                             class="attachment-thumbnail" />
+                    }
+                    else if (attachment.IsPdf)
+                    {
+                        <div class="attachment-pdf-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                    }
+                    <div class="attachment-info">
+                        <span class="attachment-name" title="@attachment.FileName">@TruncateFileName(attachment.FileName)</span>
+                        <span class="attachment-size">@attachment.FileSizeDisplay</span>
+                    </div>
+                    <button class="attachment-remove-btn" @onclick="() => RemoveAttachment(attachment)" title="Remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             }
-            else
-            {
-                <span class="stop-icon">
-                    <i class="fas fa-stop"></i>
-                </span>
-            }
-        </button>
+        </div>
+    }
+
+    <div class="input-row">
+        @* Attachment Button - only visible when model supports vision *@
+        @if (ViewModel.SupportsVision)
+        {
+            <div class="attach-button-container">
+                <button class="attach-button" @onclick="TriggerFileInput" title="Attach image or PDF" disabled="@ViewModel.AwaitingResponse">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <InputFile id="file-input" 
+                           OnChange="OnFilesSelected" 
+                           accept="@ChatAttachment.AcceptedFileTypes"
+                           multiple
+                           style="display: none;" />
+            </div>
+        }
+
+        <div id="input-textarea-wrapper" class="input-textarea-initial">
+            <textarea rows="1"
+                id="input-text"
+                placeholder="@GetPlaceholder()"
+                @bind="ViewModel.InputText"
+                @onkeydown="OnKeyDown"
+                @bind:event="oninput" />
+        </div>
+
+        <div class="send-button-container">
+            <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
+            class="send-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
+
+                @if (!ViewModel.AwaitingResponse)
+                {
+                    <span class="send-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </span>
+                }
+                else
+                {
+                    <span class="stop-icon">
+                        <i class="fas fa-stop"></i>
+                    </span>
+                }
+            </button>
+        </div>
     </div>
 </div>
 
 <script>
-
-      function setUserInputFocus() {
+    function setUserInputFocus() {
         var inputText = document.getElementById('input-text');
         if (inputText) {
             inputText.focus();
         }
     }
 
-    document.getElementById('input-text').addEventListener('keydown', function (e) {
-    if (e.key == 'Enter' && !e.shiftKey) {
-    // prevent default behavior
-    e.preventDefault();
-    return false;
+    function triggerFileInput() {
+        var fileInput = document.getElementById('file-input');
+        if (fileInput) {
+            fileInput.click();
+        }
     }
+
+    document.getElementById('input-text')?.addEventListener('keydown', function (e) {
+        if (e.key == 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            return false;
+        }
     }, false);
 </script>
 
 @code
 {
     private bool _shouldResizeTextarea;
+    private const long MaxFileSizeBytes = 20 * 1024 * 1024; // 20MB max
 
     bool _canSubmit;
 
@@ -70,6 +123,8 @@
         }
     }
 
+    private bool HasAttachments => ViewModel?.PendingAttachments?.Count > 0;
+
     [Parameter] public EventCallback OnSubmit { get; set; }
 
     [Parameter] public required AssistantViewModelBase ViewModel { get; set; }
@@ -79,8 +134,8 @@
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-
         ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+        ViewModel.PendingAttachments.CollectionChanged += OnAttachmentsChanged;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -95,6 +150,55 @@
             _shouldResizeTextarea = false;
             await JS.InvokeVoidAsync("resizeUserInput");
         }
+    }
+
+    private async Task TriggerFileInput()
+    {
+        await JS.InvokeVoidAsync("triggerFileInput");
+    }
+
+    private async Task OnFilesSelected(InputFileChangeEventArgs e)
+    {
+        foreach (var file in e.GetMultipleFiles(maximumFileCount: 5))
+        {
+            try
+            {
+                if (file.Size > MaxFileSizeBytes)
+                {
+                    SnackbarService.Show("File too large", $"{file.Name} exceeds 20MB limit", Severity.Warning);
+                    continue;
+                }
+
+                if (!ChatAttachment.IsSupportedMimeType(file.ContentType))
+                {
+                    SnackbarService.Show("Unsupported file type", $"{file.Name} is not a supported image or PDF", Severity.Warning);
+                    continue;
+                }
+
+                // Read file content
+                using var stream = file.OpenReadStream(MaxFileSizeBytes);
+                using var memoryStream = new MemoryStream();
+                await stream.CopyToAsync(memoryStream);
+                var content = memoryStream.ToArray();
+
+                var attachment = ChatAttachment.FromBytes(file.Name, file.ContentType, content);
+                ViewModel.AddAttachment(attachment);
+            }
+            catch (Exception ex)
+            {
+                SnackbarService.Show("Error reading file", $"Could not read {file.Name}", Severity.Error);
+            }
+        }
+
+        UpdateCanSubmit();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void RemoveAttachment(ChatAttachment attachment)
+    {
+        ViewModel.RemoveAttachment(attachment);
+        UpdateCanSubmit();
+        InvokeAsync(StateHasChanged);
     }
 
     private async Task OnSubmitButtonClicked()
@@ -140,10 +244,49 @@
     {
         if (e.PropertyName == nameof(AssistantViewModelBase.InputText))
         {
-            // Resize the textarea whenever the input text changes.
             _shouldResizeTextarea = true;
         }
 
-        CanSubmit = !string.IsNullOrWhiteSpace(ViewModel.InputText) && !ViewModel.AwaitingResponse;
+        if (e.PropertyName == nameof(AssistantViewModelBase.SupportsVision))
+        {
+            InvokeAsync(StateHasChanged);
+        }
+
+        UpdateCanSubmit();
+    }
+
+    private void OnAttachmentsChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        UpdateCanSubmit();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void UpdateCanSubmit()
+    {
+        // Can submit if there's text OR attachments, and not currently waiting
+        var hasContent = !string.IsNullOrWhiteSpace(ViewModel.InputText) || HasAttachments;
+        CanSubmit = hasContent && !ViewModel.AwaitingResponse;
+    }
+
+    private string GetPlaceholder()
+    {
+        if (ViewModel.SupportsVision)
+            return "Ask anything or attach an image...";
+        return "Ask anything";
+    }
+
+    private string TruncateFileName(string fileName, int maxLength = 20)
+    {
+        if (string.IsNullOrEmpty(fileName) || fileName.Length <= maxLength)
+            return fileName;
+
+        var extension = Path.GetExtension(fileName);
+        var nameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
+        var availableLength = maxLength - extension.Length - 3; // 3 for "..."
+
+        if (availableLength <= 0)
+            return fileName.Substring(0, maxLength - 3) + "...";
+
+        return nameWithoutExt.Substring(0, Math.Min(availableLength, nameWithoutExt.Length)) + "..." + extension;
     }
 }
