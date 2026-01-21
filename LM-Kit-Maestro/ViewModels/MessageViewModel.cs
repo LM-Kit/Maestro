@@ -170,7 +170,11 @@ public partial class MessageViewModel : ViewModelBase
             List<ChatAttachment> chatAttachments = new List<ChatAttachment>();
             foreach (var attachment in message.Attachments)
             {
-                ChatAttachment chatAttachment = ChatAttachment.FromBytes(attachment.Target.Name, attachment.Target.Mime, attachment.Target.GetData());
+                ChatAttachment chatAttachment = ChatAttachment.FromBytes(
+                    attachment.Target.Name, 
+                    attachment.Target.Mime, 
+                    attachment.Target.GetData());
+                chatAttachments.Add(chatAttachment);
             }
 
             Attachments = chatAttachments;

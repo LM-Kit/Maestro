@@ -90,7 +90,9 @@
                            {
                                <img src="data:@attachment.MimeType;base64,@attachment.ThumbnailBase64" 
                                     alt="@attachment.FileName" 
-                                    class="message-attachment-image" />
+                                    class="message-attachment-image"
+                                    @ondblclick="() => OpenLightbox(attachment)"
+                                    title="Double-click to zoom" />
                            }
                            else if (attachment.IsPdf)
                            {
@@ -157,9 +159,40 @@
     }
 </div>
 
+@* Image Lightbox Overlay *@
+@if (_lightboxAttachment != null)
+{
+    <div class="lightbox-overlay" @onclick="CloseLightbox">
+        <div class="lightbox-content" @onclick:stopPropagation="true">
+            <img src="data:@_lightboxAttachment.MimeType;base64,@_lightboxAttachment.ThumbnailBase64" 
+                 alt="@_lightboxAttachment.FileName" 
+                 class="lightbox-image" />
+            <div class="lightbox-filename">@_lightboxAttachment.FileName</div>
+        </div>
+        <button class="lightbox-close" @onclick="CloseLightbox" title="Close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+}
+
 @code {
 
     const string ProgressIndicatorHtml = "<span class=\"dot ml-1 d-inline-block\"></span>";
+
+    // Lightbox state
+    private ChatAttachment? _lightboxAttachment = null;
+
+    private void OpenLightbox(ChatAttachment attachment)
+    {
+        _lightboxAttachment = attachment;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void CloseLightbox()
+    {
+        _lightboxAttachment = null;
+        InvokeAsync(StateHasChanged);
+    }
 
     private int responseIndex;
 

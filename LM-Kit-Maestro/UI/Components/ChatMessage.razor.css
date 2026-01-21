@@ -210,7 +210,13 @@
     border-radius: 0.5rem;
     object-fit: cover;
     display: block;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
 }
+
+    .message-attachment-image:hover {
+        opacity: 0.85;
+    }
 
 .message-attachment-pdf {
     display: flex;
@@ -234,3 +240,76 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+/* Lightbox Overlay */
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: lightbox-fade-in 0.2s ease;
+}
+
+@keyframes lightbox-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.lightbox-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.lightbox-image {
+    max-width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-filename {
+    margin-top: 1rem;
+    color: #ECECEC;
+    font-size: 0.875rem;
+    text-align: center;
+    max-width: 90vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ECECEC;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    transition: background-color 0.15s ease;
+}
+
+    .lightbox-close:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
