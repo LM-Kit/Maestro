@@ -39,6 +39,14 @@ public partial class ModelSelectionButton
 
     private async Task OnButtonClicked()
     {
+        // Don't allow selecting another model while loading/downloading
+        if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading ||
+            ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Downloading ||
+            ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.FinishinUp)
+        {
+            return;
+        }
+        
         var options = new DialogOptions { CloseOnEscapeKey = true, FullScreen = true };
 
         var dialog = await DialogService.ShowAsync<ModelSelectionDialog>(null, options);

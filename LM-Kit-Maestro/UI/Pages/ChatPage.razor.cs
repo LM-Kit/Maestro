@@ -484,11 +484,19 @@ public partial class ChatPage : IDisposable
 
     private async Task OnResetSettingsClicked()
     {
+        var options = new DialogOptions 
+        { 
+            CloseOnEscapeKey = true, 
+            Position = DialogPosition.Center,
+            MaxWidth = MaxWidth.Small
+        };
+        
         var confirmed = await DialogService.ShowMessageBox(
             "Reset Settings",
             "Are you sure you want to reset all settings to their default values?",
             yesText: "Reset",
-            cancelText: "Cancel");
+            cancelText: "Cancel",
+            options: options);
 
         if (confirmed == true)
         {

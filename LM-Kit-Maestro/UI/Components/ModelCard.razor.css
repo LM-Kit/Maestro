@@ -7,22 +7,24 @@
     flex-shrink: 1;
     display: flex;
     padding: 0.75rem 1rem;
-    transition: background-color 0.15s ease;
+    transition: all 0.15s ease;
 }
 
 .model-card-focused {
-    background-color: #2F2F2F;
+    background-color: #2A2A2A;
 }
 
 .model-card-dense.model-card-focused {
-    background-color: #2F2F2F;
+    background-color: #2A2A2A;
 }
 
 .model-card-dense {
-    padding: 0.625rem 1rem;
+    padding: 0.75rem 1.25rem;
     border: none;
     border-radius: 0;
     background-color: transparent;
+    margin: 0 0.5rem;
+    border-radius: 0.5rem;
 }
 
 .model-card-selectable {
@@ -30,11 +32,15 @@
 }
 
 .model-card-selectable:hover {
-    background-color: #2F2F2F;
+    background-color: #2A2A2A;
 }
 
 .model-card-dense.model-card-selectable:hover {
-    background-color: #2F2F2F;
+    background-color: rgba(16, 163, 127, 0.1);
+}
+
+.model-card-dense.model-card-selectable:active {
+    background-color: rgba(16, 163, 127, 0.15);
 }
 
 .primary {
@@ -49,17 +55,27 @@
     color: #FF8A65;
 }
 
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
 .score-1 {
     background-color: #EF5350;
     color: #EF5350;
+    box-shadow: 0 0 6px rgba(239, 83, 80, 0.4);
 }
 
 .score-2 {
     background-color: #FFC107;
     color: #FFC107;
+    box-shadow: 0 0 6px rgba(255, 193, 7, 0.4);
 }
 
 .score-3 {
-    background-color: #4CAF50;
-    color: #4CAF50;
+    background-color: #10A37F;
+    color: #10A37F;
+    box-shadow: 0 0 6px rgba(16, 163, 127, 0.4);
 }
