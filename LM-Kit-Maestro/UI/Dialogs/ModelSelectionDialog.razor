@@ -13,9 +13,11 @@
                         </MudText>
                     </div>
 
-                    <button class="close-button" @onclick="() => MudDialog.Cancel()">
-                        <span class="fas fa-xmark"></span>
-                    </button>
+                    <MudTooltip Text="Close" Placement="Placement.Bottom" Class="custom-tooltip">
+                        <button class="close-button" @onclick="() => MudDialog.Cancel()">
+                            <span class="fas fa-xmark"></span>
+                        </button>
+                    </MudTooltip>
                 </div>
 
                 <div class="search-container">
@@ -41,37 +43,128 @@
                             <div class="model-item @(model.IsLocallyAvailable ? "" : "model-cloud")" 
                                  @onclick="() => SelectModel(model)">
                                 <div class="model-main">
-                                    <div class="model-indicator">
-                                        <div class="indicator-dot @GetPerformanceClass(model.CompatibilityLevel)"></div>
-                                    </div>
+                                    <MudTooltip Placement="Placement.Right" Class="custom-tooltip">
+                                        <ChildContent>
+                                            <div class="model-indicator">
+                                                <div class="indicator-dot @GetPerformanceClass(model.CompatibilityLevel)"></div>
+                                            </div>
+                                        </ChildContent>
+                                        <TooltipContent>
+                                            <div class="tooltip-content">
+                                                <div class="tooltip-header">
+                                                    <span class="tooltip-icon @GetPerformanceClass(model.CompatibilityLevel)"></span>
+                                                    <span class="tooltip-title">@GetPerformanceLabel(model.CompatibilityLevel)</span>
+                                                </div>
+                                                <div class="tooltip-score">Score: @((model.CompatibilityLevel * 100).ToString("0"))%</div>
+                                                <div class="tooltip-desc">Estimated performance based on your hardware capabilities and model requirements.</div>
+                                            </div>
+                                        </TooltipContent>
+                                    </MudTooltip>
+                                    
                                     <div class="model-info">
                                         <div class="model-name-row">
-                                            <span class="model-name">@model.ModelInfo.ShortModelName</span>
+                                            <MudTooltip Placement="Placement.Top" Class="custom-tooltip">
+                                                <ChildContent>
+                                                    <span class="model-name">@model.ModelInfo.ShortModelName</span>
+                                                </ChildContent>
+                                                <TooltipContent>
+                                                    <div class="tooltip-content tooltip-wide">
+                                                        <div class="tooltip-model-name">@model.ModelInfo.ShortModelName</div>
+                                                        <div class="tooltip-model-desc">@(string.IsNullOrEmpty(model.ModelInfo.Description) ? "A large language model optimized for chat and instruction following." : model.ModelInfo.Description)</div>
+                                                        @if (model.IsChatModel || model.HasVisionCapability || model.IsCodeModel || model.IsMathModel)
+                                                        {
+                                                            <div class="tooltip-capabilities">
+                                                                @if (model.IsChatModel)
+                                                                {
+                                                                    <span class="capability-tag"><span class="fas fa-message"></span> Chat</span>
+                                                                }
+                                                                @if (model.HasVisionCapability)
+                                                                {
+                                                                    <span class="capability-tag"><span class="fas fa-eye"></span> Vision</span>
+                                                                }
+                                                                @if (model.IsCodeModel)
+                                                                {
+                                                                    <span class="capability-tag"><span class="fas fa-code"></span> Code</span>
+                                                                }
+                                                                @if (model.IsMathModel)
+                                                                {
+                                                                    <span class="capability-tag"><span class="fas fa-calculator"></span> Math</span>
+                                                                }
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </TooltipContent>
+                                            </MudTooltip>
                                             @if (!model.IsLocallyAvailable)
                                             {
-                                                <span class="cloud-badge">
-                                                    <span class="fas fa-cloud-arrow-down"></span>
-                                                </span>
+                                                <MudTooltip Text="Download required - this model will be downloaded when selected" Placement="Placement.Top" Class="custom-tooltip">
+                                                    <span class="cloud-badge">
+                                                        <span class="fas fa-cloud-arrow-down"></span>
+                                                    </span>
+                                                </MudTooltip>
                                             }
                                         </div>
                                         <div class="model-publisher">@model.ModelInfo.Publisher</div>
                                     </div>
                                 </div>
                                 <div class="model-specs">
-                                    <div class="spec-item spec-params">
-                                        <span class="spec-value">@model.ModelSize</span>
-                                        <span class="spec-label">params</span>
-                                    </div>
-                                    <div class="spec-item spec-context">
-                                        <span class="spec-value">@($"{model.MaxContextLengthKB}k")</span>
-                                        <span class="spec-label">context</span>
-                                    </div>
-                                    <div class="spec-item spec-quant">
-                                        <span class="spec-value">@model.Precision</span>
-                                    </div>
-                                    <div class="spec-item spec-size">
-                                        <span class="spec-value">@FormatSize(model.ModelInfo.FileSize)</span>
-                                    </div>
+                                    <MudTooltip Placement="Placement.Top" Class="custom-tooltip">
+                                        <ChildContent>
+                                            <div class="spec-item spec-params">
+                                                <span class="spec-value">@model.ModelSize</span>
+                                                <span class="spec-label">params</span>
+                                            </div>
+                                        </ChildContent>
+                                        <TooltipContent>
+                                            <div class="tooltip-content">
+                                                <div class="tooltip-title">Parameters: @model.ModelInfo.ParameterCount.ToString("N0")</div>
+                                                <div class="tooltip-desc">The number of trainable parameters. Larger models are generally more capable but require more resources.</div>
+                                            </div>
+                                        </TooltipContent>
+                                    </MudTooltip>
+                                    
+                                    <MudTooltip Placement="Placement.Top" Class="custom-tooltip">
+                                        <ChildContent>
+                                            <div class="spec-item spec-context">
+                                                <span class="spec-value">@($"{model.MaxContextLengthKB}k")</span>
+                                                <span class="spec-label">context</span>
+                                            </div>
+                                        </ChildContent>
+                                        <TooltipContent>
+                                            <div class="tooltip-content">
+                                                <div class="tooltip-title">Context: @model.ModelInfo.ContextLength.ToString("N0") tokens</div>
+                                                <div class="tooltip-desc">Maximum conversation length the model can process. Longer context allows for more extended conversations and documents.</div>
+                                            </div>
+                                        </TooltipContent>
+                                    </MudTooltip>
+                                    
+                                    <MudTooltip Placement="Placement.Top" Class="custom-tooltip">
+                                        <ChildContent>
+                                            <div class="spec-item spec-quant">
+                                                <span class="spec-value">@model.Precision</span>
+                                            </div>
+                                        </ChildContent>
+                                        <TooltipContent>
+                                            <div class="tooltip-content">
+                                                <div class="tooltip-title">Quantization: @model.Precision</div>
+                                                <div class="tooltip-desc">Bit precision for model weights. Lower values reduce memory usage and increase speed with minimal quality loss.</div>
+                                            </div>
+                                        </TooltipContent>
+                                    </MudTooltip>
+                                    
+                                    <MudTooltip Placement="Placement.Top" Class="custom-tooltip">
+                                        <ChildContent>
+                                            <div class="spec-item spec-size">
+                                                <span class="spec-value">@FormatSize(model.ModelInfo.FileSize)</span>
+                                            </div>
+                                        </ChildContent>
+                                        <TooltipContent>
+                                            <div class="tooltip-content">
+                                                <div class="tooltip-title">Size: @FormatSizeExact(model.ModelInfo.FileSize)</div>
+                                                <div class="tooltip-desc">Disk space required. The model must fit in your available RAM/VRAM for optimal performance.</div>
+                                            </div>
+                                        </TooltipContent>
+                                    </MudTooltip>
                                 </div>
                                 <div class="model-arrow">
                                     <span class="fas fa-chevron-right"></span>
@@ -115,7 +208,7 @@
         box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3),
                     0 24px 80px rgba(0, 0, 0, 0.5),
                     0 0 120px rgba(16, 163, 127, 0.03);
-        width: 720px;
+        width: 780px;
         max-width: 95vw;
         max-height: 85vh;
         position: relative;
@@ -307,6 +400,12 @@
         background-color: rgba(255, 255, 255, 0.03);
         border-radius: 0.625rem;
         flex-shrink: 0;
+        cursor: help;
+        transition: all 0.15s ease;
+    }
+
+    .model-indicator:hover {
+        background-color: rgba(255, 255, 255, 0.06);
     }
 
     .indicator-dot {
@@ -351,6 +450,11 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        cursor: help;
+    }
+
+    .model-name:hover {
+        color: #10A37F;
     }
 
     .cloud-badge {
@@ -359,6 +463,11 @@
         justify-content: center;
         color: #6B6B6B;
         font-size: 0.75rem;
+        cursor: help;
+    }
+
+    .cloud-badge:hover {
+        color: #10A37F;
     }
 
     .model-publisher {
@@ -380,6 +489,12 @@
         background-color: rgba(255, 255, 255, 0.03);
         border-radius: 0.5rem;
         min-width: 3.5rem;
+        cursor: help;
+        transition: all 0.15s ease;
+    }
+
+    .spec-item:hover {
+        background-color: rgba(255, 255, 255, 0.06);
     }
 
     .spec-value {
@@ -434,6 +549,102 @@
     .no-results-hint {
         color: #5A5A5A !important;
     }
+
+    /* Custom Tooltip Styles */
+    .tooltip-content {
+        padding: 0.25rem 0;
+        max-width: 280px;
+    }
+
+    .tooltip-wide {
+        max-width: 320px;
+    }
+
+    .tooltip-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .tooltip-icon {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    .tooltip-icon.perf-high {
+        background-color: #10A37F;
+        box-shadow: 0 0 8px rgba(16, 163, 127, 0.6);
+    }
+
+    .tooltip-icon.perf-medium {
+        background-color: #F59E0B;
+        box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+    }
+
+    .tooltip-icon.perf-low {
+        background-color: #EF4444;
+        box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+    }
+
+    .tooltip-title {
+        color: #FFFFFF;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    .tooltip-score {
+        color: #10A37F;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        margin-bottom: 0.375rem;
+    }
+
+    .tooltip-desc {
+        color: #9E9E9E;
+        font-size: 0.8125rem;
+        line-height: 1.4;
+    }
+
+    .tooltip-model-name {
+        color: #FFFFFF;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        margin-bottom: 0.375rem;
+    }
+
+    .tooltip-model-desc {
+        color: #9E9E9E;
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        margin-bottom: 0.5rem;
+    }
+
+    .tooltip-capabilities {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .capability-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        background-color: rgba(16, 163, 127, 0.15);
+        color: #10A37F;
+        border-radius: 0.375rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .capability-tag .fas {
+        font-size: 0.625rem;
+    }
 </style>
 
 @code {
@@ -470,6 +681,11 @@
         return level >= 0.7f ? "perf-high" : level >= 0.4f ? "perf-medium" : "perf-low";
     }
 
+    private string GetPerformanceLabel(float level)
+    {
+        return level >= 0.7f ? "Excellent Performance" : level >= 0.4f ? "Moderate Performance" : "May Run Slowly";
+    }
+
     private string FormatSize(long bytes)
     {
         if (bytes >= 1_000_000_000)
@@ -477,6 +693,15 @@
         if (bytes >= 1_000_000)
             return $"{bytes / 1_000_000.0:F0} MB";
         return $"{bytes / 1_000.0:F0} KB";
+    }
+
+    private string FormatSizeExact(long bytes)
+    {
+        if (bytes >= 1_000_000_000)
+            return $"{bytes / 1_000_000_000.0:F2} GB ({bytes:N0} bytes)";
+        if (bytes >= 1_000_000)
+            return $"{bytes / 1_000_000.0:F2} MB ({bytes:N0} bytes)";
+        return $"{bytes / 1_000.0:F2} KB ({bytes:N0} bytes)";
     }
 
     [Parameter] public string Message { get; set; }
