@@ -4,6 +4,7 @@
 @using LMKit.TextProcessing
 
 @inject IClipboardHandler ClipboardHandler
+@inject IJSRuntime JS
 
 <div id="message-container"
      class="@(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-container" : "user-message-container")">
@@ -61,20 +62,21 @@
                    }
                    else
                    {
-                       <MudText Typo="Typo.body1">
-                           @if (!string.IsNullOrEmpty(segment.Html))
-                           {
-                               @((MarkupString)segment.Html)
-                           }
-                       </MudText>
+                       @if (!string.IsNullOrEmpty(segment.Content))
+                       {
+                           <div class="markdown-content" data-markdown="true">@segment.Content</div>
+                       }
                    }
                }
            }
-           else if (MessageHtml != null)
+           else
            {
-               <MudText Typo="Typo.body1">
-                   @((MarkupString)MessageHtml)
-               </MudText>
+               @* Fallback: render content directly *@
+               var content = MessageViewModel.GetContent(responseIndex);
+               @if (!string.IsNullOrEmpty(content))
+               {
+                   <div class="markdown-content" data-markdown="true">@content</div>
+               }
            }
        }
        else
@@ -177,8 +179,6 @@
 
 @code {
 
-    const string ProgressIndicatorHtml = "<span class=\"dot ml-1 d-inline-block\"></span>";
-
     // Lightbox state
     private ChatAttachment? _lightboxAttachment = null;
 
@@ -213,7 +213,6 @@
     {
         public TextSegmentType SegmentType { get; set; }
         public string Content { get; set; } = "";
-        public string Html { get; set; } = "";
         public bool IsExpanded { get; set; } = false;
         public bool IsActive { get; set; } = false;
     }
@@ -224,6 +223,24 @@
         {
             segment.IsExpanded = !segment.IsExpanded;
             InvokeAsync(StateHasChanged);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        
+        // Render markdown content via JavaScript
+        if (MessageViewModel.Sender == MessageSender.Assistant)
+        {
+            try
+            {
+                await JS.InvokeVoidAsync("renderMarkdown");
+            }
+            catch
+            {
+                // Ignore JS interop errors
+            }
         }
     }
 
@@ -247,14 +264,6 @@
             messageJustCopied = value;
             InvokeAsync(() => StateHasChanged());
         }
-    }
-
-    string? messageHtml;
-
-    string? MessageHtml
-    {
-        get => messageHtml;
-        set { messageHtml = value; }
     }
 
     bool messageJustTerminated;
@@ -316,28 +325,19 @@
 
         if (segments != null && segments.Count > 0)
         {
-            bool hasMultipleSegmentTypes = segments.Select(s => s.SegmentType).Distinct().Count() > 1;
-            
             for (int i = 0; i < segments.Count; i++)
             {
                 var segment = segments[i];
-                var content = segment.Content;
                 bool isLastSegment = i == segments.Count - 1;
                 bool isActive = isLastSegment && MessageViewModel.MessageInProgress;
 
                 var renderInfo = new SegmentRenderInfo
                 {
                     SegmentType = segment.SegmentType,
-                    Content = content,
+                    Content = segment.Content,
                     IsActive = isActive,
                     IsExpanded = isActive // Auto-expand active thinking blocks
                 };
-
-                if (segment.SegmentType == TextSegmentType.UserVisible ||
-                    segment.SegmentType == TextSegmentType.Undefined)
-                {
-                    renderInfo.Html = GenerateAssistantResponseHtml(content, isActive);
-                }
 
                 newContent.Add(renderInfo);
             }
@@ -354,12 +354,6 @@
         }
 
         SegmentedContent = newContent;
-
-        // Fallback to simple HTML if no segments
-        if (SegmentedContent.Count == 0)
-        {
-            MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(responseIndex), MessageViewModel.MessageInProgress);
-        }
     }
 
     private void OnRegeneratedResponse(object? sender, EventArgs e)
@@ -472,43 +466,6 @@
         {
             ResponseIndex++;
         }
-    }
-
-    private static string GenerateAssistantResponseHtml(string content, bool messageInProgress)
-    {
-        string html = !string.IsNullOrEmpty(content) ? Markdig.Markdown.ToHtml(content) : string.Empty;
-
-        bool responseIsEmpty = html.Length == 0;
-
-        if (messageInProgress)
-        {
-            var closingTagIndex = Math.Max(0, html.LastIndexOf(@"</"));
-
-            if (closingTagIndex != -1)
-            {
-                html = html.Insert(closingTagIndex, ProgressIndicatorHtml);
-
-                if (responseIsEmpty)
-                {
-                    html = $"<p>{html}</p>";
-                }
-            }
-        }
-
-        if (!responseIsEmpty)
-        {
-            // Ensuring we don't insert an unwanted new-line at the end of the message.
-            if (html.EndsWith(">\n"))
-            {
-                html = html.Remove(html.Length - ">\n".Length);
-            }
-            else if (html == "\n")
-            {
-                html = string.Empty;
-            }
-        }
-
-        return html;
     }
 
     private static string GetStatusText(LMKitRequestStatus status)

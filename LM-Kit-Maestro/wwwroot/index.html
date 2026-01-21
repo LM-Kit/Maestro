@@ -34,6 +34,168 @@
     <script src="js/lmkitmaestro.js"></script>
     <script src="_framework/blazor.webview.js" autostart="false"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    
+    <!-- Simple Markdown renderer -->
+    <script>
+        // Simple markdown parser for tables, bold, italic, code, lists
+        function parseMarkdown(text) {
+            if (!text) return '';
+            
+            let html = text;
+            
+            // Escape HTML first
+            html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            
+            // Code blocks (``` ... ```)
+            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>');
+            
+            // Inline code (`code`)
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // Tables
+            html = parseMarkdownTables(html);
+            
+            // Bold (**text** or __text__)
+            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+            
+            // Italic (*text* or _text_)
+            html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+            html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
+            
+            // Headings
+            html = html.replace(/^##### (.+)$/gm, '<h5>$1</h5>');
+            html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+            html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+            html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+            
+            // Horizontal rule
+            html = html.replace(/^---+$/gm, '<hr>');
+            
+            // Unordered lists
+            html = html.replace(/^\s*[-*+] (.+)$/gm, '<li>$1</li>');
+            html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+            
+            // Ordered lists
+            html = html.replace(/^\s*\d+\. (.+)$/gm, '<li>$1</li>');
+            
+            // Links [text](url)
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            
+            // Line breaks - convert double newlines to paragraphs
+            html = html.split(/\n\n+/).map(p => {
+                p = p.trim();
+                if (p && !p.startsWith('<h') && !p.startsWith('<ul') && !p.startsWith('<ol') && 
+                    !p.startsWith('<pre') && !p.startsWith('<table') && !p.startsWith('<hr')) {
+                    return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
+                }
+                return p;
+            }).join('\n');
+            
+            return html;
+        }
+        
+        function parseMarkdownTables(text) {
+            const lines = text.split('\n');
+            let result = [];
+            let inTable = false;
+            let tableRows = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                // Check if this is a table row (starts and ends with |, or has | in middle)
+                if (line.match(/^\|.*\|$/)) {
+                    // Check if next line is separator (|---|---|)
+                    const nextLine = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
+                    const isSeparator = line.match(/^\|[\s-:|]+\|$/);
+                    
+                    if (isSeparator) {
+                        // Skip separator rows
+                        continue;
+                    }
+                    
+                    if (!inTable) {
+                        inTable = true;
+                        tableRows = [];
+                    }
+                    
+                    // Parse cells
+                    const cells = line.split('|').filter((c, idx, arr) => idx > 0 && idx < arr.length - 1);
+                    tableRows.push(cells.map(c => c.trim()));
+                } else {
+                    if (inTable && tableRows.length > 0) {
+                        // End of table, render it
+                        result.push(renderTable(tableRows));
+                        tableRows = [];
+                        inTable = false;
+                    }
+                    result.push(line);
+                }
+            }
+            
+            // Handle table at end of text
+            if (inTable && tableRows.length > 0) {
+                result.push(renderTable(tableRows));
+            }
+            
+            return result.join('\n');
+        }
+        
+        function renderTable(rows) {
+            if (rows.length === 0) return '';
+            
+            let html = '<table>';
+            
+            // First row is header
+            html += '<thead><tr>';
+            rows[0].forEach(cell => {
+                html += '<th>' + cell + '</th>';
+            });
+            html += '</tr></thead>';
+            
+            // Rest are body rows
+            if (rows.length > 1) {
+                html += '<tbody>';
+                for (let i = 1; i < rows.length; i++) {
+                    html += '<tr>';
+                    rows[i].forEach(cell => {
+                        html += '<td>' + cell + '</td>';
+                    });
+                    html += '</tr>';
+                }
+                html += '</tbody>';
+            }
+            
+            html += '</table>';
+            return html;
+        }
+
+        // Render all markdown elements
+        function renderMarkdown() {
+            const elements = document.querySelectorAll('[data-markdown="true"]');
+            elements.forEach(el => {
+                const raw = el.textContent;
+                if (raw && raw.trim()) {
+                    el.innerHTML = parseMarkdown(raw);
+                    el.removeAttribute('data-markdown');
+                }
+            });
+        }
+
+        // Run on DOM changes for streaming content
+        let renderTimeout;
+        const observer = new MutationObserver(() => {
+            clearTimeout(renderTimeout);
+            renderTimeout = setTimeout(renderMarkdown, 100);
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+            renderMarkdown();
+        });
+    </script>
 </body>
 
 </html>

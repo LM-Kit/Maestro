@@ -71,6 +71,7 @@ public partial class LMKitService : INotifyPropertyChanged
             UnloadModel();
         }
 
+
         _state.Semaphore.Wait();
         LoadedModelUri = modelUri;
         ModelLoadingState = LMKitModelLoadingState.Loading;
