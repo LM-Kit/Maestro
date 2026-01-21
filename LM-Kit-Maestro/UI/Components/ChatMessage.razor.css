@@ -34,7 +34,7 @@
 
 .message-content {
     word-break: break-word;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
     max-width: 100%;
     min-width: 0;
     font-size: 1rem;
@@ -44,6 +44,9 @@
 .assistant-message-content {
     padding-inline: 0.25rem;
     padding-block: 0.625rem;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .user-message-content {

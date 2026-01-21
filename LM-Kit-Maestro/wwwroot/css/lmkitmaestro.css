@@ -996,18 +996,39 @@ button {
     font-size: 1rem;
     line-height: 1.6;
     word-wrap: break-word;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     white-space: normal;
     max-width: 100%;
+    display: block;
 }
 
-/* Ensure paragraphs wrap properly */
-.markdown-content p,
-.markdown-content li,
-.markdown-content blockquote,
-.markdown-content strong {
+/* Force paragraphs to wrap text */
+.markdown-content p {
+    display: block;
+    width: 100%;
+    max-width: 100%;
     word-wrap: break-word;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
+    margin: 0 0 1em 0;
+}
+
+/* Ensure inline elements don't break wrapping */
+.markdown-content strong,
+.markdown-content em,
+.markdown-content code,
+.markdown-content a {
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+}
+
+.markdown-content li,
+.markdown-content blockquote {
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 /* Tables */
@@ -1279,6 +1300,11 @@ button {
     display: block;
     width: 100%;
     max-width: 100%;
-    overflow-x: auto;
-    overflow-y: visible;
+    overflow: hidden;
+    min-width: 0;
+}
+
+/* Hidden source for streaming */
+.markdown-wrapper .md-source {
+    display: none !important;
 }
