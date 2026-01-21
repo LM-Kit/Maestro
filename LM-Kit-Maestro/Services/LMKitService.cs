@@ -14,8 +14,6 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public LMKitConfig LMKitConfig => _state.Config;
 
-    public LMKitTranslation Translation { get; }
-
     public LMKitChat Chat { get; }
 
     public LMKitModelLoadingState ModelLoadingState
@@ -59,7 +57,6 @@ public partial class LMKitService : INotifyPropertyChanged
     {
         _state = new LMKitServiceState();
         Chat = new LMKitChat(_state);
-        Translation = new LMKitTranslation(_state);
     }
 
     public void LoadModel(Uri modelUri, string? localFilePath = null)

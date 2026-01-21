@@ -74,7 +74,6 @@ namespace LMKit.Maestro
             builder.Services.AddSingleton<ModelsSettingsViewModel>();
             builder.Services.AddSingleton<ChatSettingsViewModel>();
             builder.Services.AddSingleton<ChatPageViewModel>();
-            builder.Services.AddSingleton<AssistantsPageViewModel>();
         }
 
         private static void RegisterViews(this MauiAppBuilder builder)
