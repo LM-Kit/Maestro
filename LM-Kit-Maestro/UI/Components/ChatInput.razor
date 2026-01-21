@@ -159,39 +159,85 @@
 
     private async Task OnFilesSelected(InputFileChangeEventArgs e)
     {
-        foreach (var file in e.GetMultipleFiles(maximumFileCount: 5))
+        try
         {
-            try
+            var files = e.GetMultipleFiles(maximumFileCount: 5);
+            
+            if (files == null || files.Count == 0)
+                return;
+
+            foreach (var file in files)
             {
-                if (file.Size > MaxFileSizeBytes)
+                try
                 {
-                    SnackbarService.Show("File too large", $"{file.Name} exceeds 20MB limit", Severity.Warning);
-                    continue;
-                }
+                    if (file == null)
+                        continue;
 
-                if (!ChatAttachment.IsSupportedMimeType(file.ContentType))
+                    if (file.Size > MaxFileSizeBytes)
+                    {
+                        SnackbarService.Show("File too large", $"{file.Name} exceeds 20MB limit", Severity.Warning);
+                        continue;
+                    }
+
+                    // Handle empty or null content type
+                    var contentType = file.ContentType;
+                    if (string.IsNullOrEmpty(contentType))
+                    {
+                        // Try to infer from extension
+                        contentType = GetMimeTypeFromExtension(file.Name);
+                    }
+
+                    if (!ChatAttachment.IsSupportedMimeType(contentType))
+                    {
+                        SnackbarService.Show("Unsupported file type", $"{file.Name} is not a supported image or PDF", Severity.Warning);
+                        continue;
+                    }
+
+                    // Read file content
+                    using var stream = file.OpenReadStream(MaxFileSizeBytes);
+                    using var memoryStream = new MemoryStream();
+                    await stream.CopyToAsync(memoryStream);
+                    var content = memoryStream.ToArray();
+
+                    if (content == null || content.Length == 0)
+                    {
+                        SnackbarService.Show("Empty file", $"{file.Name} appears to be empty", Severity.Warning);
+                        continue;
+                    }
+
+                    var attachment = ChatAttachment.FromBytes(file.Name, contentType, content);
+                    ViewModel.AddAttachment(attachment);
+                }
+                catch (Exception ex)
                 {
-                    SnackbarService.Show("Unsupported file type", $"{file.Name} is not a supported image or PDF", Severity.Warning);
-                    continue;
+                    SnackbarService.Show("Error reading file", $"Could not read {file?.Name ?? "file"}", Severity.Error);
                 }
-
-                // Read file content
-                using var stream = file.OpenReadStream(MaxFileSizeBytes);
-                using var memoryStream = new MemoryStream();
-                await stream.CopyToAsync(memoryStream);
-                var content = memoryStream.ToArray();
-
-                var attachment = ChatAttachment.FromBytes(file.Name, file.ContentType, content);
-                ViewModel.AddAttachment(attachment);
             }
-            catch (Exception ex)
-            {
-                SnackbarService.Show("Error reading file", $"Could not read {file.Name}", Severity.Error);
-            }
+
+            UpdateCanSubmit();
+            await InvokeAsync(StateHasChanged);
         }
+        catch (Exception ex)
+        {
+            // Catch any outer exceptions (e.g., dialog canceled, threading issues)
+            System.Diagnostics.Debug.WriteLine($"File selection error: {ex.Message}");
+        }
+    }
 
-        UpdateCanSubmit();
-        await InvokeAsync(StateHasChanged);
+    private static string GetMimeTypeFromExtension(string fileName)
+    {
+        var ext = Path.GetExtension(fileName)?.ToLowerInvariant();
+        return ext switch
+        {
+            ".png" => "image/png",
+            ".jpg" or ".jpeg" => "image/jpeg",
+            ".gif" => "image/gif",
+            ".webp" => "image/webp",
+            ".bmp" => "image/bmp",
+            ".tiff" or ".tif" => "image/tiff",
+            ".pdf" => "application/pdf",
+            _ => "application/octet-stream"
+        };
     }
 
     private void RemoveAttachment(ChatAttachment attachment)
