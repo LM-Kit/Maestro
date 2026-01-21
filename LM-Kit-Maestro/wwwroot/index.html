@@ -41,9 +41,15 @@
         function parseMarkdown(text) {
             if (!text) return '';
             
-            let html = text;
+            // Normalize line endings, remove BOM and other invisible chars, then trim
+            let html = text
+                .replace(/^\uFEFF/, '')           // Remove BOM
+                .replace(/\r\n/g, '\n')           // Normalize Windows line endings
+                .replace(/\r/g, '\n')             // Normalize old Mac line endings
+                .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove zero-width chars
+                .trim();
             
-            // Escape HTML first
+            // Escape HTML first (but preserve newlines for processing)
             html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             
             // Code blocks (``` ... ```)
@@ -55,39 +61,52 @@
             // Tables
             html = parseMarkdownTables(html);
             
-            // Bold (**text** or __text__)
-            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-            html = html.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+            // Process headings line by line for reliability
+            html = html.split('\n').map(line => {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('######')) return '<h6>' + trimmed.slice(6).trim() + '</h6>';
+                if (trimmed.startsWith('#####')) return '<h5>' + trimmed.slice(5).trim() + '</h5>';
+                if (trimmed.startsWith('####')) return '<h4>' + trimmed.slice(4).trim() + '</h4>';
+                if (trimmed.startsWith('###')) return '<h3>' + trimmed.slice(3).trim() + '</h3>';
+                if (trimmed.startsWith('##')) return '<h2>' + trimmed.slice(2).trim() + '</h2>';
+                if (trimmed.startsWith('#') && trimmed.charAt(1) === ' ') return '<h1>' + trimmed.slice(1).trim() + '</h1>';
+                return line;
+            }).join('\n');
             
-            // Italic (*text* or _text_)
+            // Bold (**text** or __text__) - must be before italic
+            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
+            
+            // Italic (*text* or _text_) - non-greedy, single asterisks only
             html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-            html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
-            
-            // Headings
-            html = html.replace(/^##### (.+)$/gm, '<h5>$1</h5>');
-            html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
-            html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-            html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-            html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+            html = html.replace(/\b_([^_]+)_\b/g, '<em>$1</em>');
             
             // Horizontal rule
             html = html.replace(/^---+$/gm, '<hr>');
+            html = html.replace(/^\*\*\*+$/gm, '<hr>');
             
             // Unordered lists
-            html = html.replace(/^\s*[-*+] (.+)$/gm, '<li>$1</li>');
+            html = html.replace(/^[ \t]*[-*+][ \t]+(.+)$/gm, '<li>$1</li>');
             html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
             
             // Ordered lists
-            html = html.replace(/^\s*\d+\. (.+)$/gm, '<li>$1</li>');
+            html = html.replace(/^[ \t]*\d+\.[ \t]+(.+)$/gm, '<li>$1</li>');
             
             // Links [text](url)
             html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            
+            // LaTeX blocks \[ ... \] - wrap in a styled div
+            html = html.replace(/\\\[([\s\S]*?)\\\]/g, '<div class="math-block"><code>$1</code></div>');
+            
+            // Inline LaTeX \( ... \)
+            html = html.replace(/\\\(([^)]+)\\\)/g, '<code class="math-inline">$1</code>');
             
             // Line breaks - convert double newlines to paragraphs
             html = html.split(/\n\n+/).map(p => {
                 p = p.trim();
                 if (p && !p.startsWith('<h') && !p.startsWith('<ul') && !p.startsWith('<ol') && 
-                    !p.startsWith('<pre') && !p.startsWith('<table') && !p.startsWith('<hr')) {
+                    !p.startsWith('<pre') && !p.startsWith('<table') && !p.startsWith('<hr') &&
+                    !p.startsWith('<div class="math')) {
                     return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
                 }
                 return p;
@@ -171,46 +190,52 @@
             return html;
         }
 
-        // Decode base64 with proper UTF-8 support
-        function decodeBase64UTF8(base64) {
-            try {
-                const binaryString = atob(base64);
-                const bytes = new Uint8Array(binaryString.length);
-                for (let i = 0; i < binaryString.length; i++) {
-                    bytes[i] = binaryString.charCodeAt(i);
-                }
-                return new TextDecoder('utf-8').decode(bytes);
-            } catch (e) {
-                return '';
-            }
-        }
-
-        // Render markdown from base64-encoded source
+        // Render markdown from hidden source span to content div
         function renderMarkdown() {
-            const elements = document.querySelectorAll('[data-md-source]');
-            elements.forEach(el => {
-                try {
-                    const source = decodeBase64UTF8(el.dataset.mdSource);
-                    // Only re-render if source changed
-                    if (source && el.dataset.lastRendered !== el.dataset.mdSource) {
-                        el.innerHTML = parseMarkdown(source);
-                        el.dataset.lastRendered = el.dataset.mdSource;
+            const wrappers = document.querySelectorAll('.markdown-wrapper');
+            wrappers.forEach(wrapper => {
+                const sourceEl = wrapper.querySelector('.md-source');
+                const contentEl = wrapper.querySelector('.markdown-content');
+                
+                if (sourceEl && contentEl) {
+                    const raw = sourceEl.textContent;
+                    const hash = hashCode(raw);
+                    
+                    // Only render if content changed
+                    if (raw && wrapper.dataset.lastHash !== String(hash)) {
+                        contentEl.innerHTML = parseMarkdown(raw);
+                        wrapper.dataset.lastHash = String(hash);
                     }
-                } catch (e) {
-                    // Invalid base64, skip
                 }
             });
         }
+        
+        // Simple hash function for change detection
+        function hashCode(str) {
+            if (!str) return 0;
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash;
+        }
 
-        // Run on DOM changes for streaming content
-        let renderTimeout;
+        // Run frequently during streaming
+        let renderInterval;
         const observer = new MutationObserver(() => {
-            clearTimeout(renderTimeout);
-            renderTimeout = setTimeout(renderMarkdown, 50);
+            renderMarkdown();
         });
         
         document.addEventListener('DOMContentLoaded', () => {
-            observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-md-source'] });
+            observer.observe(document.body, { 
+                childList: true, 
+                subtree: true, 
+                characterData: true
+            });
+            // Also poll for streaming updates
+            renderInterval = setInterval(renderMarkdown, 100);
             renderMarkdown();
         });
     </script>

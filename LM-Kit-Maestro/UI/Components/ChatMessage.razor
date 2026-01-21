@@ -63,7 +63,10 @@
                    {
                        @if (!string.IsNullOrEmpty(segment.Content))
                        {
-                           <div class="markdown-content" data-md-source="@Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(segment.Content))"></div>
+                           <div class="markdown-wrapper">
+                               <span class="md-source" style="display:none;">@segment.Content</span>
+                               <div class="markdown-content"></div>
+                           </div>
                        }
                    }
                }
@@ -74,7 +77,10 @@
                var content = MessageViewModel.GetContent(responseIndex);
                @if (!string.IsNullOrEmpty(content))
                {
-                   <div class="markdown-content" data-md-source="@Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(content))"></div>
+                   <div class="markdown-wrapper">
+                       <span class="md-source" style="display:none;">@content</span>
+                       <div class="markdown-content"></div>
+                   </div>
                }
            }
        }
