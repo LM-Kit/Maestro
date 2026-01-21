@@ -201,13 +201,20 @@
             // Links [text](url)
             html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
             
-            // LaTeX blocks \[ ... \] - render with KaTeX if available
+            // LaTeX blocks: \[ ... \] or $$ ... $$
             html = html.replace(/\\\[([\s\S]*?)\\\]/g, (match, latex) => {
                 return renderLatex(latex.trim(), true);
             });
+            html = html.replace(/\$\$([\s\S]*?)\$\$/g, (match, latex) => {
+                return renderLatex(latex.trim(), true);
+            });
             
-            // Inline LaTeX \( ... \)
+            // Inline LaTeX: \( ... \) or $ ... $ (single $)
             html = html.replace(/\\\(([^)]+)\\\)/g, (match, latex) => {
+                return renderLatex(latex.trim(), false);
+            });
+            // Single $ for inline math (be careful not to match $$)
+            html = html.replace(/\$([^$\n]+)\$/g, (match, latex) => {
                 return renderLatex(latex.trim(), false);
             });
             

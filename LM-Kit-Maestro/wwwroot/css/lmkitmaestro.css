@@ -995,6 +995,19 @@ button {
     color: #ECECEC;
     font-size: 1rem;
     line-height: 1.6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+}
+
+/* Ensure paragraphs wrap properly */
+.markdown-content p,
+.markdown-content li,
+.markdown-content blockquote,
+.markdown-content strong {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Tables */
@@ -1263,5 +1276,9 @@ button {
 
 /* Markdown wrapper for streaming support */
 .markdown-wrapper {
-    display: contents;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
 }
