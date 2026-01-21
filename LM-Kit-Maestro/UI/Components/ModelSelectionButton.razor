@@ -6,7 +6,7 @@
          class="@(GetButtonContainerClasses(ModelListViewModel))"
          @onclick="() => OnButtonClicked()">
         <div id="button-body">
-            <div class="d-flex justify-center">
+            <div class="d-flex justify-center align-center">
                 @if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loaded)
                 {
                     <button title="@Locales.EjectModel"
@@ -16,6 +16,11 @@
                         <span class="fas fa-eject" />
                     </button>
                 }
+                else if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Downloading ||
+                         ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading)
+                {
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Style="width: 18px; height: 18px;" Color="Color.Primary" />
+                }
             </div>
 
             <div id="button-text">
@@ -24,6 +29,12 @@
                     {
                         <MudText Align="Align.Center" Typo="Typo.caption">
                             Downloading @((ModelListViewModel.LoadingProgress.Value * 100).ToString("0"))%
+                        </MudText>
+                    }
+                    else if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading)
+                    {
+                        <MudText Align="Align.Center" Typo="Typo.caption">
+                            Loading...
                         </MudText>
                     }
                     else
@@ -47,7 +58,12 @@
                      ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading)
             {
                 <div class="d-flex justify-center align-center">
-                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Style="width: 14px; height: 14px;" Color="Color.Primary" />
+                    <button title="Cancel download"
+                            class="cancel-button"
+                            @onclick:stopPropagation="true"
+                            @onclick="OnCancelButtonClicked">
+                        <span class="fas fa-xmark" />
+                    </button>
                 </div>
             }
         </div>

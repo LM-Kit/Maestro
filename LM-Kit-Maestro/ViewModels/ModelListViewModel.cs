@@ -86,6 +86,14 @@ namespace LMKit.Maestro.ViewModels
         }
 
         [RelayCommand]
+        public void CancelModelLoading()
+        {
+            LMKitService.CancelModelLoading();
+            LoadingState = ModelLoadingState.NotLoaded;
+            LoadingProgress = null;
+        }
+
+        [RelayCommand]
         public void LoadModel(Uri fileUri)
         {
             ModelCard? modelCard = null;

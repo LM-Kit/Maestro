@@ -56,6 +56,11 @@ public partial class ModelSelectionButton
         ModelListViewModel.EjectModel();
     }
 
+    private void OnCancelButtonClicked()
+    {
+        ModelListViewModel.CancelModelLoading();
+    }
+
     private static string GetModelStateText(ModelListViewModel modelListViewModel)
     {
         switch (modelListViewModel.LoadingState)

@@ -91,6 +91,12 @@ public partial class MaestroViewModel : ViewModelBase
 
     private void OnModelLoadingFailed(object? sender, EventArgs e)
     {
+        // Don't show error if user cancelled the download
+        if (_lmKitService.WasLoadingCancelled)
+        {
+            return;
+        }
+        
         var modelLoadingFailedEventArgs = (LMKitService.ModelLoadingFailedEventArgs)e;
 
         _snackbarService!.Show("Error loading model", modelLoadingFailedEventArgs.Exception.Message!);
