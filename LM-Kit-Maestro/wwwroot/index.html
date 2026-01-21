@@ -107,8 +107,7 @@
                 
                 // Check if this is a table row (starts and ends with |, or has | in middle)
                 if (line.match(/^\|.*\|$/)) {
-                    // Check if next line is separator (|---|---|)
-                    const nextLine = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
+                    // Check if this is a separator row (|---|---|)
                     const isSeparator = line.match(/^\|[\s-:|]+\|$/);
                     
                     if (isSeparator) {
@@ -172,14 +171,19 @@
             return html;
         }
 
-        // Render all markdown elements
+        // Render markdown from base64-encoded source
         function renderMarkdown() {
-            const elements = document.querySelectorAll('[data-markdown="true"]');
+            const elements = document.querySelectorAll('[data-md-source]');
             elements.forEach(el => {
-                const raw = el.textContent;
-                if (raw && raw.trim()) {
-                    el.innerHTML = parseMarkdown(raw);
-                    el.removeAttribute('data-markdown');
+                try {
+                    const source = atob(el.dataset.mdSource);
+                    // Only re-render if source changed
+                    if (source && el.dataset.lastRendered !== el.dataset.mdSource) {
+                        el.innerHTML = parseMarkdown(source);
+                        el.dataset.lastRendered = el.dataset.mdSource;
+                    }
+                } catch (e) {
+                    // Invalid base64, skip
                 }
             });
         }
@@ -188,11 +192,11 @@
         let renderTimeout;
         const observer = new MutationObserver(() => {
             clearTimeout(renderTimeout);
-            renderTimeout = setTimeout(renderMarkdown, 100);
+            renderTimeout = setTimeout(renderMarkdown, 50);
         });
         
         document.addEventListener('DOMContentLoaded', () => {
-            observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+            observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-md-source'] });
             renderMarkdown();
         });
     </script>

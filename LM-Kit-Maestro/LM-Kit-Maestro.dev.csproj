@@ -96,7 +96,6 @@
 	<ItemGroup>
 	
 		<PackageReference Include="Majorsoft.Blazor.Components.Common.JsInterop" Version="1.5.0" />
-		<PackageReference Include="Markdig" Version="0.44.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.30" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.30" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.30" />

@@ -4,7 +4,6 @@
 @using LMKit.TextProcessing
 
 @inject IClipboardHandler ClipboardHandler
-@inject IJSRuntime JS
 
 <div id="message-container"
      class="@(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-container" : "user-message-container")">
@@ -64,7 +63,7 @@
                    {
                        @if (!string.IsNullOrEmpty(segment.Content))
                        {
-                           <div class="markdown-content" data-markdown="true">@segment.Content</div>
+                           <div class="markdown-content" data-md-source="@Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(segment.Content))"></div>
                        }
                    }
                }
@@ -75,7 +74,7 @@
                var content = MessageViewModel.GetContent(responseIndex);
                @if (!string.IsNullOrEmpty(content))
                {
-                   <div class="markdown-content" data-markdown="true">@content</div>
+                   <div class="markdown-content" data-md-source="@Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(content))"></div>
                }
            }
        }
@@ -223,24 +222,6 @@
         {
             segment.IsExpanded = !segment.IsExpanded;
             InvokeAsync(StateHasChanged);
-        }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-        
-        // Render markdown content via JavaScript
-        if (MessageViewModel.Sender == MessageSender.Assistant)
-        {
-            try
-            {
-                await JS.InvokeVoidAsync("renderMarkdown");
-            }
-            catch
-            {
-                // Ignore JS interop errors
-            }
         }
     }
 
