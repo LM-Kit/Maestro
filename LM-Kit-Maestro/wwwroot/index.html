@@ -49,8 +49,27 @@
                 .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove zero-width chars
                 .trim();
             
-            // Escape HTML first (but preserve newlines for processing)
-            html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            // Process headings FIRST (before HTML escaping) - line by line
+            // This ensures ## at line start is detected properly
+            html = html.split('\n').map(line => {
+                // Check for headings (must have space after #)
+                const match = line.match(/^(#{1,6})\s+(.*)$/);
+                if (match) {
+                    const level = match[1].length;
+                    const content = match[2].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    return `<h${level}>${content}</h${level}>`;
+                }
+                return line;
+            }).join('\n');
+            
+            // Now escape HTML in non-heading content
+            // We need to be careful not to escape the <h> tags we just created
+            html = html.split('\n').map(line => {
+                if (line.match(/^<h[1-6]>.*<\/h[1-6]>$/)) {
+                    return line; // Don't escape heading lines
+                }
+                return line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            }).join('\n');
             
             // Code blocks (``` ... ```)
             html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>');
@@ -60,18 +79,6 @@
             
             // Tables
             html = parseMarkdownTables(html);
-            
-            // Process headings line by line for reliability
-            html = html.split('\n').map(line => {
-                const trimmed = line.trim();
-                if (trimmed.startsWith('######')) return '<h6>' + trimmed.slice(6).trim() + '</h6>';
-                if (trimmed.startsWith('#####')) return '<h5>' + trimmed.slice(5).trim() + '</h5>';
-                if (trimmed.startsWith('####')) return '<h4>' + trimmed.slice(4).trim() + '</h4>';
-                if (trimmed.startsWith('###')) return '<h3>' + trimmed.slice(3).trim() + '</h3>';
-                if (trimmed.startsWith('##')) return '<h2>' + trimmed.slice(2).trim() + '</h2>';
-                if (trimmed.startsWith('#') && trimmed.charAt(1) === ' ') return '<h1>' + trimmed.slice(1).trim() + '</h1>';
-                return line;
-            }).join('\n');
             
             // Bold (**text** or __text__) - must be before italic
             html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
@@ -102,6 +109,9 @@
             html = html.replace(/\\\(([^)]+)\\\)/g, '<code class="math-inline">$1</code>');
             
             // Line breaks - convert double newlines to paragraphs
+            // First, ensure headings are separated from following content
+            html = html.replace(/(<\/h[1-6]>)\n(?!\n)/g, '$1\n\n');
+            
             html = html.split(/\n\n+/).map(p => {
                 p = p.trim();
                 if (p && !p.startsWith('<h') && !p.startsWith('<ul') && !p.startsWith('<ol') && 
