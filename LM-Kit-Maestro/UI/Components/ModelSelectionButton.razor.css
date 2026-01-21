@@ -45,13 +45,13 @@
     }
 
 .button-model-loading {
-    background-color: rgba(16, 163, 127, 0.08);
-    border: 1px solid rgba(16, 163, 127, 0.2);
+    background-color: var(--Primary-08);
+    border: 1px solid var(--Primary-20);
     cursor: default;
 }
 
     .button-model-loading:hover {
-        background-color: rgba(16, 163, 127, 0.08);
+        background-color: var(--Primary-08);
     }
 
 #button-body {
@@ -92,16 +92,16 @@
 }
 
 ::deep .mud-progress-linear {
-    background-color: rgba(16, 163, 127, 0.2) !important;
+    background-color: var(--Primary-20) !important;
     height: 4px !important;
 }
 
 ::deep .mud-progress-linear-bar {
-    background-color: #10A37F !important;
+    background-color: var(--Primary) !important;
 }
 
 ::deep .mud-progress-circular-svg circle {
-    stroke: #10A37F !important;
+    stroke: var(--Primary) !important;
 }
 
 .eject-button {

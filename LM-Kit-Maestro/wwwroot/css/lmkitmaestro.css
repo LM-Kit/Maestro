@@ -72,7 +72,17 @@ xs-icon {
 .dark {
     --Primary: #10A37F;
     --PrimaryAccent: #0D8A6F;
-    --PrimaryMuted: rgba(16, 163, 127, 0.15);
+    --PrimaryMuted: var(--Primary-15);
+    --PrimaryRgb: 16, 163, 127;
+    --PrimaryAccentRgb: 13, 138, 111;
+    --Primary-08: var(--Primary-08);
+    --Primary-10: var(--Primary-10);
+    --Primary-12: var(--Primary-12);
+    --Primary-15: var(--Primary-15);
+    --Primary-18: var(--Primary-18);
+    --Primary-20: var(--Primary-20);
+    --Primary-30: var(--Primary-30);
+    --Primary-40: var(--Primary-40);
     --Error: #EF4444;
     --Background: #212121;
     --OnSurface: #ECECEC;
@@ -391,11 +401,11 @@ xs-icon {
 
 .mud-message-box .mud-button-text-primary {
     color: #FFFFFF !important;
-    background-color: #10A37F !important;
+    background-color: var(--Primary) !important;
 }
 
 .mud-message-box .mud-button-text-primary:hover {
-    background-color: #0D8A6A !important;
+    background-color: var(--PrimaryAccent) !important;
 }
 
 .mud-message-box .mud-button-text-default {
@@ -547,8 +557,8 @@ button {
 }
 
 .nav-link-active {
-    color: #10A37F !important;
-    background-color: rgba(16, 163, 127, 0.12) !important;
+    color: var(--Primary) !important;
+    background-color: var(--Primary-12) !important;
 }
 
 .nav-link:hover {
@@ -575,13 +585,13 @@ button {
     width: 2.25rem !important;
     height: 2.25rem !important;
     border-radius: 0.5rem !important;
-    color: #10A37F !important;
+    color: var(--Primary) !important;
 }
 
 .nav-link-bordered:hover {
-    border-color: #10A37F !important;
-    background-color: rgba(16, 163, 127, 0.1) !important;
-    color: #10A37F !important;
+    border-color: var(--Primary) !important;
+    background-color: var(--Primary-10) !important;
+    color: var(--Primary) !important;
 }
 
 .nav-link-bordered .mud-icon-root {
@@ -890,7 +900,7 @@ button {
     padding: 0.625rem 0.75rem;
     background-color: rgba(255, 255, 255, 0.03);
     border-radius: 0.5rem;
-    border-left: 3px solid rgba(16, 163, 127, 0.4);
+    border-left: 3px solid var(--Primary-40);
     max-height: 4.5rem;
     overflow: hidden;
 }
@@ -968,7 +978,7 @@ button {
 .mcp-cap-vision .mud-icon-root { color: #60A5FA !important; }
 
 .mcp-cap-code {
-    background-color: rgba(16, 163, 127, 0.12);
+    background-color: var(--Primary-12);
     color: #34D399;
 }
 .mcp-cap-code .mud-icon-root { color: #34D399 !important; }

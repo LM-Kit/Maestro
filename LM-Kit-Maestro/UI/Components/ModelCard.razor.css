@@ -36,11 +36,11 @@
 }
 
 .model-card-dense.model-card-selectable:hover {
-    background-color: rgba(16, 163, 127, 0.1);
+    background-color: var(--Primary-10);
 }
 
 .model-card-dense.model-card-selectable:active {
-    background-color: rgba(16, 163, 127, 0.15);
+    background-color: var(--Primary-15);
 }
 
 .primary {
@@ -75,7 +75,7 @@
 }
 
 .score-3 {
-    background-color: #10A37F;
-    color: #10A37F;
-    box-shadow: 0 0 6px rgba(16, 163, 127, 0.4);
+    background-color: var(--Primary);
+    color: var(--Primary);
+    box-shadow: 0 0 6px var(--Primary-40);
 }

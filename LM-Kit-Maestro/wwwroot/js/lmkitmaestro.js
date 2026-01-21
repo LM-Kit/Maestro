@@ -146,13 +146,38 @@ function handleMouseUp() {
     window.detachResizeListeners();
 }
 
+// Helper function to convert hex to RGB
+function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
 // Theme management
 window.applyTheme = function(primary, accent) {
+    const rgb = hexToRgb(primary);
+    const accentRgb = hexToRgb(accent);
+    
     const props = {
         '--Primary': primary,
         '--PrimaryAccent': accent,
         '--PrimaryMuted': primary + '26',
-        '--Secondary': primary
+        '--Secondary': primary,
+        // RGB values for use with rgba()
+        '--PrimaryRgb': rgb ? `${rgb.r}, ${rgb.g}, ${rgb.b}` : '16, 163, 127',
+        '--PrimaryAccentRgb': accentRgb ? `${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}` : '13, 138, 111',
+        // Pre-computed opacity variants
+        '--Primary-08': rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.08)` : 'rgba(16, 163, 127, 0.08)',
+        '--Primary-10': rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)` : 'rgba(16, 163, 127, 0.1)',
+        '--Primary-12': rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.12)` : 'rgba(16, 163, 127, 0.12)',
+        '--Primary-15': rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.15)` : 'rgba(16, 163, 127, 0.15)',
+        '--Primary-18': rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.18)` : 'rgba(16, 163, 127, 0.18)',
+        '--Primary-20': rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2)` : 'rgba(16, 163, 127, 0.2)',
+        '--Primary-30': rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)` : 'rgba(16, 163, 127, 0.3)',
+        '--Primary-40': rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.4)` : 'rgba(16, 163, 127, 0.4)'
     };
     
     const root = document.documentElement;
