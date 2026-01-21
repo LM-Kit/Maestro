@@ -37,6 +37,105 @@
     
     <!-- Simple Markdown renderer -->
     <script>
+        // Convert basic LaTeX to HTML (no external library needed)
+        function latexToHtml(latex) {
+            let html = latex.trim();
+            
+            // Remove spacing commands first
+            html = html.replace(/\\;/g, ' ');
+            html = html.replace(/\\,/g, ' ');
+            html = html.replace(/\\!/g, '');
+            html = html.replace(/\\quad/g, '  ');
+            html = html.replace(/\\qquad/g, '    ');
+            html = html.replace(/\\ /g, ' ');
+            
+            // Greek letters
+            html = html.replace(/\\alpha/g, 'α');
+            html = html.replace(/\\beta/g, 'β');
+            html = html.replace(/\\gamma/g, 'γ');
+            html = html.replace(/\\delta/g, 'δ');
+            html = html.replace(/\\epsilon/g, 'ε');
+            html = html.replace(/\\theta/g, 'θ');
+            html = html.replace(/\\lambda/g, 'λ');
+            html = html.replace(/\\mu/g, 'μ');
+            html = html.replace(/\\pi/g, 'π');
+            html = html.replace(/\\sigma/g, 'σ');
+            html = html.replace(/\\phi/g, 'φ');
+            html = html.replace(/\\omega/g, 'ω');
+            html = html.replace(/\\Sigma/g, 'Σ');
+            html = html.replace(/\\Pi/g, 'Π');
+            html = html.replace(/\\Omega/g, 'Ω');
+            html = html.replace(/\\Delta/g, 'Δ');
+            
+            // Math symbols
+            html = html.replace(/\\times/g, '×');
+            html = html.replace(/\\div/g, '÷');
+            html = html.replace(/\\pm/g, '±');
+            html = html.replace(/\\mp/g, '∓');
+            html = html.replace(/\\cdot/g, '·');
+            html = html.replace(/\\leq/g, '≤');
+            html = html.replace(/\\geq/g, '≥');
+            html = html.replace(/\\neq/g, '≠');
+            html = html.replace(/\\approx/g, '≈');
+            html = html.replace(/\\equiv/g, '≡');
+            html = html.replace(/\\infty/g, '∞');
+            html = html.replace(/\\sqrt\{([^}]+)\}/g, '√($1)');
+            html = html.replace(/\\sqrt/g, '√');
+            html = html.replace(/\\sum/g, 'Σ');
+            html = html.replace(/\\prod/g, 'Π');
+            html = html.replace(/\\int/g, '∫');
+            html = html.replace(/\\partial/g, '∂');
+            html = html.replace(/\\nabla/g, '∇');
+            html = html.replace(/\\rightarrow/g, '→');
+            html = html.replace(/\\leftarrow/g, '←');
+            html = html.replace(/\\Rightarrow/g, '⇒');
+            html = html.replace(/\\Leftarrow/g, '⇐');
+            html = html.replace(/\\forall/g, '∀');
+            html = html.replace(/\\exists/g, '∃');
+            html = html.replace(/\\in/g, '∈');
+            html = html.replace(/\\notin/g, '∉');
+            html = html.replace(/\\subset/g, '⊂');
+            html = html.replace(/\\supset/g, '⊃');
+            html = html.replace(/\\cup/g, '∪');
+            html = html.replace(/\\cap/g, '∩');
+            
+            // Fractions: \frac{a}{b} → a/b or (a)/(b)
+            html = html.replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '<span class="math-frac"><span class="math-num">$1</span><span class="math-denom">$2</span></span>');
+            
+            // Superscripts: ^{...} or ^x
+            html = html.replace(/\^\{([^}]+)\}/g, '<sup>$1</sup>');
+            html = html.replace(/\^(\w)/g, '<sup>$1</sup>');
+            
+            // Subscripts: _{...} or _x
+            html = html.replace(/_\{([^}]+)\}/g, '<sub>$1</sub>');
+            html = html.replace(/_(\w)/g, '<sub>$1</sub>');
+            
+            // Text in math: \text{...}
+            html = html.replace(/\\text\{([^}]+)\}/g, '<span class="math-text">$1</span>');
+            
+            // Bold/italic
+            html = html.replace(/\\mathbf\{([^}]+)\}/g, '<strong>$1</strong>');
+            html = html.replace(/\\mathit\{([^}]+)\}/g, '<em>$1</em>');
+            
+            // Clean up remaining braces
+            html = html.replace(/\{/g, '');
+            html = html.replace(/\}/g, '');
+            
+            // Clean up any remaining backslashes before letters (unknown commands)
+            html = html.replace(/\\([a-zA-Z]+)/g, '$1');
+            
+            return html;
+        }
+        
+        // Render LaTeX - uses latexToHtml converter
+        function renderLatex(latex, displayMode) {
+            const html = latexToHtml(latex);
+            if (displayMode) {
+                return '<div class="math-block">' + html + '</div>';
+            }
+            return '<span class="math-inline">' + html + '</span>';
+        }
+        
         // Simple markdown parser for tables, bold, italic, code, lists
         function parseMarkdown(text) {
             if (!text) return '';
@@ -102,11 +201,15 @@
             // Links [text](url)
             html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
             
-            // LaTeX blocks \[ ... \] - wrap in a styled div
-            html = html.replace(/\\\[([\s\S]*?)\\\]/g, '<div class="math-block"><code>$1</code></div>');
+            // LaTeX blocks \[ ... \] - render with KaTeX if available
+            html = html.replace(/\\\[([\s\S]*?)\\\]/g, (match, latex) => {
+                return renderLatex(latex.trim(), true);
+            });
             
             // Inline LaTeX \( ... \)
-            html = html.replace(/\\\(([^)]+)\\\)/g, '<code class="math-inline">$1</code>');
+            html = html.replace(/\\\(([^)]+)\\\)/g, (match, latex) => {
+                return renderLatex(latex.trim(), false);
+            });
             
             // Line breaks - convert double newlines to paragraphs
             // First, ensure headings are separated from following content
