@@ -145,3 +145,21 @@ function handleMouseUp() {
     }
     window.detachResizeListeners();
 }
+
+// Theme management
+window.applyTheme = function(primary, accent) {
+    const props = {
+        '--Primary': primary,
+        '--PrimaryAccent': accent,
+        '--PrimaryMuted': primary + '26',
+        '--Secondary': primary
+    };
+    
+    const root = document.documentElement;
+    const darkEl = document.querySelector('.dark');
+    
+    for (const [key, val] of Object.entries(props)) {
+        root.style.setProperty(key, val);
+        if (darkEl) darkEl.style.setProperty(key, val);
+    }
+};

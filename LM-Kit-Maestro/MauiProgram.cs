@@ -89,6 +89,7 @@ namespace LMKit.Maestro
             builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
             builder.Services.AddSingleton<IMainThread, Services.MainThread>();
             builder.Services.AddSingleton<ISnackbarService, SnackbarService>();
+            builder.Services.AddSingleton<ThemeService>();
 
             builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
 

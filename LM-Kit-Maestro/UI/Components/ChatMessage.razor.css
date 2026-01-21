@@ -103,19 +103,19 @@
 .thinking-block {
     margin: 0.75rem 0;
     border-radius: 0.75rem;
-    border: 1px solid rgba(168, 85, 247, 0.2);
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.05) 0%, rgba(139, 92, 246, 0.03) 100%);
+    border: 1px solid color-mix(in srgb, var(--Primary) 20%, transparent);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--Primary) 5%, transparent) 0%, color-mix(in srgb, var(--Primary) 3%, transparent) 100%);
     overflow: hidden;
     transition: all 0.2s ease;
 }
 
 .thinking-block:hover {
-    border-color: rgba(168, 85, 247, 0.3);
+    border-color: color-mix(in srgb, var(--Primary) 30%, transparent);
 }
 
 .thinking-block.thinking-active {
-    border-color: rgba(168, 85, 247, 0.4);
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);
+    border-color: color-mix(in srgb, var(--Primary) 40%, transparent);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--Primary) 10%, transparent);
 }
 
 .thinking-header {
@@ -129,7 +129,7 @@
 }
 
 .thinking-header:hover {
-    background-color: rgba(168, 85, 247, 0.05);
+    background-color: color-mix(in srgb, var(--Primary) 5%, transparent);
 }
 
 .thinking-header-left {
@@ -144,15 +144,15 @@
     justify-content: center;
     width: 1.5rem;
     height: 1.5rem;
-    color: #A855F7;
+    color: var(--Primary);
     font-size: 0.875rem;
 }
 
 .thinking-spinner {
     width: 1rem;
     height: 1rem;
-    border: 2px solid rgba(168, 85, 247, 0.2);
-    border-top-color: #A855F7;
+    border: 2px solid color-mix(in srgb, var(--Primary) 20%, transparent);
+    border-top-color: var(--Primary);
     border-radius: 50%;
     animation: thinking-spin 1s linear infinite;
 }
@@ -166,18 +166,18 @@
 .thinking-title {
     font-size: 0.8125rem;
     font-weight: 500;
-    color: #C084FC;
+    color: var(--Primary);
 }
 
 .thinking-toggle {
-    color: #8B5CF6;
+    color: var(--Primary);
     font-size: 0.75rem;
     transition: transform 0.2s ease;
 }
 
 .thinking-content {
     padding: 0 1rem 1rem;
-    border-top: 1px solid rgba(168, 85, 247, 0.1);
+    border-top: 1px solid color-mix(in srgb, var(--Primary) 10%, transparent);
     animation: thinking-expand 0.2s ease;
 }
 

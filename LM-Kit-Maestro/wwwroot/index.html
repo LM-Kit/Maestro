@@ -11,6 +11,29 @@
     <link rel="stylesheet" href="css/font-awesome/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <script>
+        // Apply saved theme immediately to prevent flash of default colors
+        (function() {
+            var themes = {
+                'Emerald': { p: '#10A37F', a: '#0D8A6F' },
+                'Ocean': { p: '#0EA5E9', a: '#0284C7' },
+                'Violet': { p: '#8B5CF6', a: '#7C3AED' },
+                'Rose': { p: '#F43F5E', a: '#E11D48' },
+                'Amber': { p: '#F59E0B', a: '#D97706' },
+                'Cyan': { p: '#06B6D4', a: '#0891B2' },
+                'Pink': { p: '#EC4899', a: '#DB2777' },
+                'Indigo': { p: '#6366F1', a: '#4F46E5' }
+            };
+            var saved = localStorage.getItem('maestro-theme');
+            if (saved && themes[saved]) {
+                var t = themes[saved];
+                var css = ':root,.dark{--Primary:'+t.p+';--PrimaryAccent:'+t.a+';--PrimaryMuted:'+t.p+'26;--Secondary:'+t.p+';}';
+                var style = document.createElement('style');
+                style.textContent = css;
+                document.head.appendChild(style);
+            }
+        })();
+    </script>
 </head>
 
 <body>
