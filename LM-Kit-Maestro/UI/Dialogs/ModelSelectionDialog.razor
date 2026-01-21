@@ -18,23 +18,63 @@
                     </button>
                 </div>
 
-                <div class="search-container">
-                    <span class="fas fa-search search-icon"></span>
-                    <input type="text" 
-                           class="search-input" 
-                           placeholder="Search models..." 
-                           @bind="SearchQuery" 
-                           @bind:event="oninput" />
-                    @if (!string.IsNullOrEmpty(SearchQuery))
-                    {
-                        <button class="search-clear" @onclick="() => SearchQuery = string.Empty">
-                            <span class="fas fa-xmark"></span>
+                <div class="search-filter-container">
+                    <div class="search-container">
+                        <span class="fas fa-search search-icon"></span>
+                        <input type="text" 
+                               class="search-input" 
+                               placeholder="Search models..." 
+                               @bind="SearchQuery" 
+                               @bind:event="oninput" />
+                        @if (!string.IsNullOrEmpty(SearchQuery))
+                        {
+                            <button class="search-clear" @onclick="() => SearchQuery = string.Empty">
+                                <span class="fas fa-xmark"></span>
+                            </button>
+                        }
+                    </div>
+
+                    <!-- Filter Chips -->
+                    <div class="filter-chips">
+                        <button class="filter-chip @(FilterReasoning ? "active" : "")" @onclick="() => FilterReasoning = !FilterReasoning">
+                            <MudIcon Icon="@Icons.Material.Outlined.Psychology" Size="Size.Small" />
+                            <span>Reasoning</span>
                         </button>
-                    }
+                        <button class="filter-chip @(FilterVision ? "active" : "")" @onclick="() => FilterVision = !FilterVision">
+                            <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
+                            <span>Vision</span>
+                        </button>
+                        <button class="filter-chip @(FilterCode ? "active" : "")" @onclick="() => FilterCode = !FilterCode">
+                            <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
+                            <span>Code</span>
+                        </button>
+                        <button class="filter-chip @(FilterMath ? "active" : "")" @onclick="() => FilterMath = !FilterMath">
+                            <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
+                            <span>Math</span>
+                        </button>
+                        <button class="filter-chip @(FilterTools ? "active" : "")" @onclick="() => FilterTools = !FilterTools">
+                            <MudIcon Icon="@Icons.Material.Outlined.Build" Size="Size.Small" />
+                            <span>Tools</span>
+                        </button>
+                        @if (HasActiveFilters)
+                        {
+                            <button class="filter-clear" @onclick="ClearFilters">
+                                <span class="fas fa-xmark"></span>
+                                <span>Clear</span>
+                            </button>
+                        }
+                    </div>
                 </div>
 
                 <!-- Column Headers with Sorting -->
                 <div class="column-headers">
+                    <div class="col-header col-perf @(SortColumn == "perf" ? "active" : "")" @onclick='() => SetSort("perf")'>
+                        <span>Perf</span>
+                        @if (SortColumn == "perf")
+                        {
+                            <span class="sort-icon fas @(SortAscending ? "fa-arrow-up" : "fa-arrow-down")"></span>
+                        }
+                    </div>
                     <div class="col-header col-name @(SortColumn == "name" ? "active" : "")" @onclick='() => SetSort("name")'>
                         <span>Model</span>
                         @if (SortColumn == "name")
@@ -76,86 +116,181 @@
                     {
                         @foreach (var model in SortedFilteredModels)
                         {
-                            <div class="model-item" 
-                                 title="@model.ModelInfo.Description"
-                                 @onclick="() => SelectModel(model)">
+                            <div class="model-item" @onclick="() => SelectModel(model)">
                                 
-                                <!-- Performance Indicator -->
-                                <div class="model-perf" title="@($"Estimated performance: {model.CompatibilityLevel:P0}")">
-                                    <div class="perf-dot @GetPerformanceClass(model.CompatibilityLevel)"></div>
+                                <!-- Performance Gauge -->
+                                <div class="model-perf-gauge">
+                                    <MudTooltip Placement="Placement.Right" Arrow="true" Class="perf-tooltip">
+                                        <ChildContent>
+                                            <div class="gauge-container">
+                                                <svg viewBox="0 0 36 36" class="gauge-svg">
+                                                    <path class="gauge-bg"
+                                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                        fill="none" stroke-width="3" />
+                                                    <path class="gauge-fill @GetPerformanceClass(model.CompatibilityLevel)"
+                                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                        fill="none" stroke-width="3"
+                                                        stroke-dasharray="@((model.CompatibilityLevel * 100).ToString("F0")), 100" />
+                                                </svg>
+                                                <span class="gauge-value">@((model.CompatibilityLevel * 100).ToString("F0"))</span>
+                                            </div>
+                                        </ChildContent>
+                                        <TooltipContent>
+                                            <div class="perf-card">
+                                                <div class="perf-card-header">Performance Score</div>
+                                                <div class="perf-card-score @GetPerformanceClass(model.CompatibilityLevel)">
+                                                    @((model.CompatibilityLevel * 100).ToString("F0"))%
+                                                </div>
+                                                <div class="perf-card-meters">
+                                                    <div class="perf-meter">
+                                                        <span class="meter-label">Speed</span>
+                                                        <div class="meter-bar">
+                                                            <div class="meter-fill @GetPerformanceClass(model.CompatibilityLevel)" style="width: @((model.CompatibilityLevel * 100).ToString("F0"))%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="perf-meter">
+                                                        <span class="meter-label">Memory</span>
+                                                        <div class="meter-bar">
+                                                            <div class="meter-fill @GetMemoryClass(model.ModelInfo.FileSize)" style="width: @GetMemoryScore(model.ModelInfo.FileSize)%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="perf-meter">
+                                                        <span class="meter-label">Efficiency</span>
+                                                        <div class="meter-bar">
+                                                            <div class="meter-fill @GetPerformanceClass(model.CompatibilityLevel)" style="width: @((model.CompatibilityLevel * 90 + 10).ToString("F0"))%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="perf-card-hint">Based on your hardware</div>
+                                            </div>
+                                        </TooltipContent>
+                                    </MudTooltip>
                                 </div>
 
-                                <!-- Model Name & Publisher -->
+                                <!-- Model Name & Publisher with Hover Card -->
                                 <div class="model-info">
-                                    <div class="model-name-row">
-                                        <span class="model-name" title="@model.ModelInfo.ModelName">@model.ModelInfo.ShortModelName</span>
-                                        @if (!model.IsLocallyAvailable)
+                                    <MudTooltip Placement="Placement.Bottom" Arrow="true" Class="model-tooltip">
+                                        <ChildContent>
+                                            <div class="model-name-container">
+                                                <div class="model-name-row">
+                                                    <span class="model-name">@model.ModelInfo.ModelName</span>
+                                                    @if (!model.IsLocallyAvailable)
+                                                    {
+                                                        <span class="cloud-icon">
+                                                            <MudIcon Icon="@Icons.Material.Outlined.Cloud" Size="Size.Small" />
+                                                        </span>
+                                                    }
+                                                </div>
+                                                <span class="model-publisher">@model.ModelInfo.Publisher</span>
+                                            </div>
+                                        </ChildContent>
+                                        <TooltipContent>
+                                            <div class="model-card-tooltip">
+                                                <div class="mct-header">
+                                                    <span class="mct-name">@model.ModelInfo.ModelName</span>
+                                                </div>
+                                                <span class="mct-publisher">by @model.ModelInfo.Publisher</span>
+                                                @if (!string.IsNullOrEmpty(model.ModelInfo.Description))
+                                                {
+                                                    <div class="mct-description">@model.ModelInfo.Description</div>
+                                                }
+                                                <div class="mct-specs">
+                                                    <div class="mct-spec">
+                                                        <span class="mct-spec-label">Architecture</span>
+                                                        <span class="mct-spec-value">@model.ModelInfo.Architecture</span>
+                                                    </div>
+                                                    <div class="mct-spec">
+                                                        <span class="mct-spec-label">Parameters</span>
+                                                        <span class="mct-spec-value">@($"{model.ModelInfo.ParameterCount:N0}")</span>
+                                                    </div>
+                                                    <div class="mct-spec">
+                                                        <span class="mct-spec-label">Context Length</span>
+                                                        <span class="mct-spec-value">@($"{model.ModelInfo.ContextLength:N0}") tokens</span>
+                                                    </div>
+                                                    <div class="mct-spec">
+                                                        <span class="mct-spec-label">Quantization</span>
+                                                        <span class="mct-spec-value">@model.Precision</span>
+                                                    </div>
+                                                    <div class="mct-spec">
+                                                        <span class="mct-spec-label">File Size</span>
+                                                        <span class="mct-spec-value">@FormatSize(model.ModelInfo.FileSize)</span>
+                                                    </div>
+                                                </div>
+                                                @if (model.HasReasoningCapability || model.HasVisionCapability || model.IsCodeModel || model.IsMathModel || model.HasToolsCallCapability)
+                                                {
+                                                    <div class="mct-caps">
+                                                        <div class="mct-caps-title">Capabilities</div>
+                                                        @if (model.HasReasoningCapability) { <div class="mct-cap"><MudIcon Icon="@Icons.Material.Outlined.Psychology" Size="Size.Small" /> Advanced Reasoning</div> }
+                                                        @if (model.HasVisionCapability) { <div class="mct-cap"><MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" /> Image Understanding</div> }
+                                                        @if (model.IsCodeModel) { <div class="mct-cap"><MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" /> Code Generation</div> }
+                                                        @if (model.IsMathModel) { <div class="mct-cap"><MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" /> Math & Calculations</div> }
+                                                        @if (model.HasToolsCallCapability) { <div class="mct-cap"><MudIcon Icon="@Icons.Material.Outlined.Build" Size="Size.Small" /> Function Calling</div> }
+                                                    </div>
+                                                }
+                                            </div>
+                                        </TooltipContent>
+                                    </MudTooltip>
+                                </div>
+
+                                <!-- Capabilities Pills -->
+                                <div class="model-caps">
+                                    <div class="caps-container">
+                                        @if (model.HasReasoningCapability)
                                         {
-                                            <span class="cloud-icon" title="Download required - model not on disk">
-                                                <MudIcon Icon="@Icons.Material.Outlined.Cloud" Size="Size.Small" />
-                                            </span>
+                                            <div class="cap-pill cap-reasoning" title="Advanced Reasoning">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Psychology" Size="Size.Small" />
+                                                <span>Reasoning</span>
+                                            </div>
+                                        }
+                                        @if (model.HasVisionCapability)
+                                        {
+                                            <div class="cap-pill cap-vision" title="Vision / Image Understanding">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
+                                                <span>Vision</span>
+                                            </div>
+                                        }
+                                        @if (model.IsCodeModel)
+                                        {
+                                            <div class="cap-pill cap-code" title="Code Generation">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
+                                                <span>Code</span>
+                                            </div>
+                                        }
+                                        @if (model.IsMathModel)
+                                        {
+                                            <div class="cap-pill cap-math" title="Math & Calculations">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
+                                                <span>Math</span>
+                                            </div>
+                                        }
+                                        @if (model.HasToolsCallCapability)
+                                        {
+                                            <div class="cap-pill cap-tools" title="Function / Tool Calling">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Build" Size="Size.Small" />
+                                                <span>Tools</span>
+                                            </div>
+                                        }
+                                        @if (model.IsChatModel && !model.HasReasoningCapability && !model.HasVisionCapability && !model.IsCodeModel && !model.IsMathModel && !model.HasToolsCallCapability)
+                                        {
+                                            <div class="cap-pill cap-chat" title="Chat Optimized">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Chat" Size="Size.Small" />
+                                                <span>Chat</span>
+                                            </div>
                                         }
                                     </div>
-                                    <span class="model-publisher">@model.ModelInfo.Publisher</span>
-                                </div>
-
-                                <!-- Capabilities -->
-                                <div class="model-caps">
-                                    @if (model.HasReasoningCapability)
-                                    {
-                                        <div class="cap-pill cap-reasoning" title="Advanced Reasoning - Multi-step problem solving and complex instruction following">
-                                            <MudIcon Icon="@Icons.Material.Outlined.Psychology" Size="Size.Small" />
-                                            <span>Reasoning</span>
-                                        </div>
-                                    }
-                                    @if (model.HasVisionCapability)
-                                    {
-                                        <div class="cap-pill cap-vision" title="Vision - Image understanding and multimodal reasoning">
-                                            <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
-                                            <span>Vision</span>
-                                        </div>
-                                    }
-                                    @if (model.IsCodeModel)
-                                    {
-                                        <div class="cap-pill cap-code" title="Code - Code generation and completion">
-                                            <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
-                                            <span>Code</span>
-                                        </div>
-                                    }
-                                    @if (model.IsMathModel)
-                                    {
-                                        <div class="cap-pill cap-math" title="Math - Mathematical reasoning and calculations">
-                                            <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
-                                            <span>Math</span>
-                                        </div>
-                                    }
-                                    @if (model.HasToolsCallCapability)
-                                    {
-                                        <div class="cap-pill cap-tools" title="Tools - Function and tool calling support">
-                                            <MudIcon Icon="@Icons.Material.Outlined.Build" Size="Size.Small" />
-                                            <span>Tools</span>
-                                        </div>
-                                    }
-                                    @if (model.IsChatModel && !model.HasReasoningCapability && !model.HasVisionCapability && !model.IsCodeModel && !model.IsMathModel && !model.HasToolsCallCapability)
-                                    {
-                                        <div class="cap-pill cap-chat" title="Chat - Optimized for conversation">
-                                            <MudIcon Icon="@Icons.Material.Outlined.Chat" Size="Size.Small" />
-                                            <span>Chat</span>
-                                        </div>
-                                    }
                                 </div>
 
                                 <!-- Specs -->
-                                <div class="model-param" title="@($"Parameter count: {model.ModelInfo.ParameterCount:N0}")">
+                                <div class="model-param" title="@($"{model.ModelInfo.ParameterCount:N0} parameters")">
                                     @model.ModelSize
                                 </div>
-                                <div class="model-context" title="@($"Maximum context length: {model.ModelInfo.ContextLength:N0} tokens")">
+                                <div class="model-context" title="@($"{model.ModelInfo.ContextLength:N0} tokens")">
                                     @($"{model.MaxContextLengthKB}k")
                                 </div>
-                                <div class="model-quant" title="@($"Quantization: {model.Precision} precision")">
+                                <div class="model-quant" title="@($"{model.Precision} quantization")">
                                     @model.Precision
                                 </div>
-                                <div class="model-size" title="@($"File size: {model.ModelInfo.FileSize:N0} bytes")">
+                                <div class="model-size" title="@($"{model.ModelInfo.FileSize:N0} bytes")">
                                     @FormatSize(model.ModelInfo.FileSize)
                                 </div>
                             </div>
@@ -166,7 +301,7 @@
                         <div class="no-results">
                             <MudIcon Icon="@Icons.Material.Outlined.SearchOff" Size="Size.Large" Class="no-results-icon" />
                             <MudText Typo="Typo.body1" Class="no-results-text">No models found</MudText>
-                            <MudText Typo="Typo.body2" Class="no-results-hint">Try a different search term</MudText>
+                            <MudText Typo="Typo.body2" Class="no-results-hint">Try adjusting your search or filters</MudText>
                         </div>
                     }
                 </div>
@@ -195,7 +330,7 @@
         border-radius: 1rem;
         border: 1px solid rgba(255, 255, 255, 0.08);
         box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
-        width: 900px;
+        width: 960px;
         max-width: 95vw;
         max-height: 85vh;
         position: relative;
@@ -223,7 +358,7 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        padding: 1.5rem 1.5rem 1rem;
+        padding: 1.25rem 1.5rem 1rem;
     }
 
     .header-content {
@@ -263,9 +398,16 @@
         color: #FFFFFF;
     }
 
+    /* Search and Filters */
+    .search-filter-container {
+        padding: 0 1.5rem 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+    }
+
     .search-container {
         position: relative;
-        margin: 0 1.5rem 0.75rem;
     }
 
     .search-icon {
@@ -281,8 +423,8 @@
         width: 100%;
         background-color: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 0.625rem;
-        padding: 0.75rem 2.25rem 0.75rem 2.5rem;
+        border-radius: 0.5rem;
+        padding: 0.625rem 2rem 0.625rem 2.25rem;
         color: #FFFFFF;
         font-size: 0.875rem;
         outline: none;
@@ -300,7 +442,7 @@
 
     .search-clear {
         position: absolute;
-        right: 0.625rem;
+        right: 0.5rem;
         top: 50%;
         transform: translateY(-50%);
         background: none;
@@ -315,20 +457,77 @@
         color: #FFFFFF;
     }
 
+    /* Filter Chips */
+    .filter-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        align-items: center;
+    }
+
+    .filter-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.3125rem 0.625rem;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background-color: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #8E8E8E;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .filter-chip .mud-icon-root {
+        font-size: 0.875rem !important;
+    }
+
+    .filter-chip:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.12);
+        color: #FFFFFF;
+    }
+
+    .filter-chip.active {
+        background-color: rgba(16, 163, 127, 0.15);
+        border-color: rgba(16, 163, 127, 0.3);
+        color: #10A37F;
+    }
+
+    .filter-clear {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.6875rem;
+        background: none;
+        border: none;
+        color: #6B6B6B;
+        cursor: pointer;
+        margin-left: 0.25rem;
+    }
+
+    .filter-clear:hover {
+        color: #EF4444;
+    }
+
     /* Column Headers */
     .column-headers {
         display: flex;
         align-items: center;
-        padding: 0.5rem 1.5rem;
+        padding: 0.375rem 1.5rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        gap: 0.75rem;
+        gap: 0.5rem;
     }
 
     .col-header {
         display: flex;
         align-items: center;
         gap: 0.25rem;
-        font-size: 0.6875rem;
+        font-size: 0.625rem;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -347,15 +546,16 @@
     }
 
     .sort-icon {
-        font-size: 0.5625rem;
+        font-size: 0.5rem;
     }
 
+    .col-perf { width: 48px; justify-content: center; }
     .col-name { flex: 1; min-width: 180px; }
-    .col-caps { width: 200px; }
-    .col-params { width: 60px; justify-content: flex-end; }
-    .col-context { width: 60px; justify-content: flex-end; }
-    .col-quant { width: 50px; justify-content: flex-end; }
-    .col-size { width: 70px; justify-content: flex-end; }
+    .col-caps { width: 180px; cursor: default; }
+    .col-params { width: 55px; justify-content: flex-end; }
+    .col-context { width: 55px; justify-content: flex-end; }
+    .col-quant { width: 50px; justify-content: flex-end; cursor: default; }
+    .col-size { width: 65px; justify-content: flex-end; }
 
     .model-selection-dialog-body {
         display: flex;
@@ -382,11 +582,11 @@
     .model-item {
         display: flex;
         align-items: center;
-        padding: 0.625rem 1rem;
+        padding: 0.5rem 1rem;
         border-radius: 0.5rem;
         cursor: pointer;
         transition: all 0.12s ease;
-        gap: 0.75rem;
+        gap: 0.5rem;
     }
 
     .model-item:hover {
@@ -397,42 +597,59 @@
         background-color: rgba(16, 163, 127, 0.08);
     }
 
-    /* Performance Dot */
-    .model-perf {
-        width: 24px;
+    /* Performance Gauge */
+    .model-perf-gauge {
+        width: 48px;
         display: flex;
         justify-content: center;
     }
 
-    .perf-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
+    .gauge-container {
+        position: relative;
+        width: 32px;
+        height: 32px;
     }
 
-    .perf-dot.perf-high {
-        background-color: #10A37F;
-        box-shadow: 0 0 8px rgba(16, 163, 127, 0.5);
+    .gauge-svg {
+        transform: rotate(-90deg);
+        width: 100%;
+        height: 100%;
     }
 
-    .perf-dot.perf-medium {
-        background-color: #F59E0B;
-        box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+    .gauge-bg {
+        stroke: rgba(255, 255, 255, 0.08);
     }
 
-    .perf-dot.perf-low {
-        background-color: #EF4444;
-        box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+    .gauge-fill {
+        stroke-linecap: round;
+        transition: stroke-dasharray 0.3s ease;
+    }
+
+    .gauge-fill.perf-high { stroke: #10A37F; }
+    .gauge-fill.perf-medium { stroke: #F59E0B; }
+    .gauge-fill.perf-low { stroke: #EF4444; }
+
+    .gauge-value {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.5625rem;
+        font-weight: 600;
+        color: #9E9E9E;
     }
 
     /* Model Info */
     .model-info {
         flex: 1;
         min-width: 180px;
+        overflow: hidden;
+    }
+
+    .model-name-container {
         display: flex;
         flex-direction: column;
-        gap: 0.125rem;
-        overflow: hidden;
+        gap: 0.0625rem;
     }
 
     .model-name-row {
@@ -443,7 +660,7 @@
 
     .model-name {
         color: #FFFFFF;
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
         font-weight: 500;
         white-space: nowrap;
         overflow: hidden;
@@ -453,82 +670,63 @@
     .cloud-icon {
         color: #5A5A5A;
         display: flex;
+        flex-shrink: 0;
     }
 
     .cloud-icon .mud-icon-root {
-        font-size: 1rem !important;
+        font-size: 0.875rem !important;
     }
 
     .model-publisher {
         color: #5A5A5A;
-        font-size: 0.75rem;
+        font-size: 0.6875rem;
     }
 
     /* Capabilities */
     .model-caps {
-        width: 200px;
+        width: 180px;
+    }
+
+    .caps-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.25rem;
+        gap: 0.1875rem;
     }
 
     .cap-pill {
         display: inline-flex;
         align-items: center;
-        gap: 0.25rem;
-        padding: 0.1875rem 0.5rem;
-        border-radius: 1rem;
-        font-size: 0.6875rem;
+        gap: 0.1875rem;
+        padding: 0.125rem 0.375rem;
+        border-radius: 0.75rem;
+        font-size: 0.625rem;
         font-weight: 500;
         white-space: nowrap;
     }
 
     .cap-pill .mud-icon-root {
-        font-size: 0.75rem !important;
+        font-size: 0.6875rem !important;
     }
 
-    .cap-reasoning {
-        background-color: rgba(168, 85, 247, 0.12);
-        color: #C084FC;
-    }
-
-    .cap-vision {
-        background-color: rgba(59, 130, 246, 0.12);
-        color: #60A5FA;
-    }
-
-    .cap-code {
-        background-color: rgba(16, 163, 127, 0.12);
-        color: #34D399;
-    }
-
-    .cap-math {
-        background-color: rgba(245, 158, 11, 0.12);
-        color: #FBBF24;
-    }
-
-    .cap-tools {
-        background-color: rgba(236, 72, 153, 0.12);
-        color: #F472B6;
-    }
-
-    .cap-chat {
-        background-color: rgba(107, 114, 128, 0.12);
-        color: #9CA3AF;
-    }
+    .cap-reasoning { background-color: rgba(168, 85, 247, 0.12); color: #C084FC; }
+    .cap-vision { background-color: rgba(59, 130, 246, 0.12); color: #60A5FA; }
+    .cap-code { background-color: rgba(16, 163, 127, 0.12); color: #34D399; }
+    .cap-math { background-color: rgba(245, 158, 11, 0.12); color: #FBBF24; }
+    .cap-tools { background-color: rgba(236, 72, 153, 0.12); color: #F472B6; }
+    .cap-chat { background-color: rgba(107, 114, 128, 0.12); color: #9CA3AF; }
 
     /* Specs */
     .model-param, .model-context, .model-quant, .model-size {
         font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-        font-size: 0.75rem;
+        font-size: 0.6875rem;
         color: #9E9E9E;
         text-align: right;
     }
 
-    .model-param { width: 60px; }
-    .model-context { width: 60px; }
+    .model-param { width: 55px; }
+    .model-context { width: 55px; }
     .model-quant { width: 50px; color: #6B6B6B; }
-    .model-size { width: 70px; color: #6B6B6B; }
+    .model-size { width: 65px; color: #6B6B6B; }
 
     /* No Results */
     .no-results {
@@ -536,21 +734,23 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 3rem 1rem;
-        gap: 0.5rem;
+        padding: 2.5rem 1rem;
+        gap: 0.375rem;
     }
 
     .no-results-icon {
         color: #3A3A3A !important;
-        font-size: 2.5rem !important;
+        font-size: 2rem !important;
     }
 
     .no-results-text {
         color: #8E8E8E !important;
+        font-size: 0.875rem !important;
     }
 
     .no-results-hint {
         color: #5A5A5A !important;
+        font-size: 0.75rem !important;
     }
 </style>
 
@@ -564,79 +764,79 @@
     private string SearchQuery
     {
         get => _searchQuery;
-        set
-        {
-            _searchQuery = value;
-            InvokeAsync(StateHasChanged);
-        }
+        set { _searchQuery = value; InvokeAsync(StateHasChanged); }
     }
 
-    private string SortColumn { get; set; } = "name";
-    private bool SortAscending { get; set; } = true;
+    // Filters
+    private bool FilterReasoning { get; set; }
+    private bool FilterVision { get; set; }
+    private bool FilterCode { get; set; }
+    private bool FilterMath { get; set; }
+    private bool FilterTools { get; set; }
 
-    private void SetSort(string column)
+    private bool HasActiveFilters => FilterReasoning || FilterVision || FilterCode || FilterMath || FilterTools;
+
+    private void ClearFilters()
     {
-        if (SortColumn == column)
-        {
-            SortAscending = !SortAscending;
-        }
-        else
-        {
-            SortColumn = column;
-            SortAscending = column == "name"; // Default ascending for name, descending for numbers
-        }
+        FilterReasoning = FilterVision = FilterCode = FilterMath = FilterTools = false;
         InvokeAsync(StateHasChanged);
     }
 
-    private IEnumerable<ModelCardViewModel> FilteredModels =>
-        string.IsNullOrWhiteSpace(SearchQuery)
-            ? ModelListViewModel.Models
-            : ModelListViewModel.Models.Where(m =>
-                m.ModelInfo.ShortModelName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                m.ModelInfo.Publisher.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
+    // Sorting
+    private string SortColumn { get; set; } = "perf";
+    private bool SortAscending { get; set; } = false; // Default: highest perf first
 
-    private IEnumerable<ModelCardViewModel> SortedFilteredModels
+    private void SetSort(string column)
+    {
+        if (SortColumn == column) SortAscending = !SortAscending;
+        else { SortColumn = column; SortAscending = column == "name"; } // Descending by default for numbers
+        InvokeAsync(StateHasChanged);
+    }
+
+    private IEnumerable<ModelCardViewModel> FilteredModels
     {
         get
         {
-            var models = FilteredModels;
-            return SortColumn switch
+            var models = ModelListViewModel.Models.AsEnumerable();
+
+            // Text search
+            if (!string.IsNullOrWhiteSpace(SearchQuery))
             {
-                "name" => SortAscending 
-                    ? models.OrderBy(m => m.ModelInfo.ShortModelName)
-                    : models.OrderByDescending(m => m.ModelInfo.ShortModelName),
-                "params" => SortAscending 
-                    ? models.OrderBy(m => m.ModelInfo.ParameterCount)
-                    : models.OrderByDescending(m => m.ModelInfo.ParameterCount),
-                "context" => SortAscending 
-                    ? models.OrderBy(m => m.ModelInfo.ContextLength)
-                    : models.OrderByDescending(m => m.ModelInfo.ContextLength),
-                "size" => SortAscending 
-                    ? models.OrderBy(m => m.ModelInfo.FileSize)
-                    : models.OrderByDescending(m => m.ModelInfo.FileSize),
-                _ => models
-            };
+                models = models.Where(m =>
+                    m.ModelInfo.ModelName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                    m.ModelInfo.Publisher.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Capability filters (AND logic - must have ALL selected capabilities)
+            if (FilterReasoning) models = models.Where(m => m.HasReasoningCapability);
+            if (FilterVision) models = models.Where(m => m.HasVisionCapability);
+            if (FilterCode) models = models.Where(m => m.IsCodeModel);
+            if (FilterMath) models = models.Where(m => m.IsMathModel);
+            if (FilterTools) models = models.Where(m => m.HasToolsCallCapability);
+
+            return models;
         }
     }
 
-    private void SelectModel(ModelCardViewModel model)
+    private IEnumerable<ModelCardViewModel> SortedFilteredModels => SortColumn switch
     {
-        MudDialog.Close(model);
-    }
+        "perf" => SortAscending ? FilteredModels.OrderBy(m => m.CompatibilityLevel) : FilteredModels.OrderByDescending(m => m.CompatibilityLevel),
+        "name" => SortAscending ? FilteredModels.OrderBy(m => m.ModelInfo.ModelName) : FilteredModels.OrderByDescending(m => m.ModelInfo.ModelName),
+        "params" => SortAscending ? FilteredModels.OrderBy(m => m.ModelInfo.ParameterCount) : FilteredModels.OrderByDescending(m => m.ModelInfo.ParameterCount),
+        "context" => SortAscending ? FilteredModels.OrderBy(m => m.ModelInfo.ContextLength) : FilteredModels.OrderByDescending(m => m.ModelInfo.ContextLength),
+        "size" => SortAscending ? FilteredModels.OrderBy(m => m.ModelInfo.FileSize) : FilteredModels.OrderByDescending(m => m.ModelInfo.FileSize),
+        _ => FilteredModels
+    };
 
-    private string GetPerformanceClass(float level)
-    {
-        return level >= 0.7f ? "perf-high" : level >= 0.4f ? "perf-medium" : "perf-low";
-    }
+    private void SelectModel(ModelCardViewModel model) => MudDialog.Close(model);
 
-    private string FormatSize(long bytes)
-    {
-        if (bytes >= 1_000_000_000)
-            return $"{bytes / 1_000_000_000.0:F2} GB";
-        if (bytes >= 1_000_000)
-            return $"{bytes / 1_000_000.0:F0} MB";
-        return $"{bytes / 1_000.0:F0} KB";
-    }
+    private string GetPerformanceClass(float level) => level >= 0.7f ? "perf-high" : level >= 0.4f ? "perf-medium" : "perf-low";
+
+    private string GetMemoryClass(long size) => size < 3_000_000_000 ? "perf-high" : size < 8_000_000_000 ? "perf-medium" : "perf-low";
+    
+    private int GetMemoryScore(long size) => size < 2_000_000_000 ? 95 : size < 5_000_000_000 ? 70 : size < 10_000_000_000 ? 45 : 25;
+
+    private string FormatSize(long bytes) => bytes >= 1_000_000_000 ? $"{bytes / 1_000_000_000.0:F2} GB" : bytes >= 1_000_000 ? $"{bytes / 1_000_000.0:F0} MB" : $"{bytes / 1_000.0:F0} KB";
 
     [Parameter] public string Message { get; set; }
     [Parameter] public string Title { get; set; }
