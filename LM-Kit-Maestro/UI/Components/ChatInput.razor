@@ -1,58 +1,111 @@
-﻿@inject IJSRuntime JS
+@using LMKit.Maestro.Models
+@inject IJSRuntime JS
 @inject Maestro.Services.ISnackbarService SnackbarService
 
-<div id="input-border">
-    <div id="input-textarea-wrapper" class="input-textarea-initial">
-
-        <textarea rows="1"
-            id="input-text"
-            @bind="ViewModel.InputText"
-            @onkeydown="OnKeyDown"
-            @bind:event="oninput" />
-
-    </div>
-    <div class="send-button-container">
-
-        <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
-        class="send-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
-
-            @if (!ViewModel.AwaitingResponse)
+<div id="input-border" class="@(HasAttachments ? "has-attachments" : "")">
+    @* Attachment Preview Area *@
+    @if (HasAttachments)
+    {
+        <div class="attachment-preview-area">
+            @foreach (var attachment in ViewModel.PendingAttachments)
             {
-                <span>
-                    <i class="fas fa-paper-plane"></i>
-                </span>
+                <div class="attachment-preview-item">
+                    @if (attachment.IsImage && !string.IsNullOrEmpty(attachment.ThumbnailBase64))
+                    {
+                        <img src="data:@attachment.MimeType;base64,@attachment.ThumbnailBase64" 
+                             alt="@attachment.FileName" 
+                             class="attachment-thumbnail" />
+                    }
+                    else if (attachment.IsPdf)
+                    {
+                        <div class="attachment-pdf-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                    }
+                    <div class="attachment-info">
+                        <span class="attachment-name" title="@attachment.FileName">@TruncateFileName(attachment.FileName)</span>
+                        <span class="attachment-size">@attachment.FileSizeDisplay</span>
+                    </div>
+                    <button class="attachment-remove-btn" @onclick="() => RemoveAttachment(attachment)" title="Remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             }
-            else
-            {
-                <span>
-                    <i class="fas fa-stop"></i>
-                </span>
-            }
-        </button>
+        </div>
+    }
+
+    <div class="input-row @(ViewModel.SupportsVision ? "with-attach" : "")">
+        @* Attachment Button - only visible when model supports vision *@
+        @if (ViewModel.SupportsVision)
+        {
+            <div class="attach-button-container">
+                <button class="attach-button" @onclick="PickFilesAsync" title="Attach image or PDF" disabled="@(ViewModel.AwaitingResponse || _isPickingFile)">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+            </div>
+        }
+
+        <div id="input-textarea-wrapper" class="input-textarea-initial">
+            <textarea rows="1"
+                id="input-text"
+                placeholder="@GetPlaceholder()"
+                @bind="ViewModel.InputText"
+                @onkeydown="OnKeyDown"
+                @bind:event="oninput" />
+        </div>
+
+        <div class="send-button-container">
+            <button disabled="@(!ViewModel.AwaitingResponse && !CanSubmit)" @onclick="OnSubmitButtonClicked"
+            class="send-button @(CanSubmit || ViewModel.AwaitingResponse ? "enabled-button" : "disabled-button")">
+
+                @if (!ViewModel.AwaitingResponse)
+                {
+                    <span class="send-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </span>
+                }
+                else
+                {
+                    <span class="stop-icon">
+                        <i class="fas fa-stop"></i>
+                    </span>
+                }
+            </button>
+        </div>
     </div>
 </div>
 
 <script>
-
-      function setUserInputFocus() {
+    function setUserInputFocus() {
         var inputText = document.getElementById('input-text');
         if (inputText) {
             inputText.focus();
         }
     }
 
-    document.getElementById('input-text').addEventListener('keydown', function (e) {
-    if (e.key == 'Enter' && !e.shiftKey) {
-    // prevent default behavior
-    e.preventDefault();
-    return false;
-    }
+    document.getElementById('input-text')?.addEventListener('keydown', function (e) {
+        if (e.key == 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            return false;
+        }
     }, false);
 </script>
 
 @code
 {
     private bool _shouldResizeTextarea;
+    private bool _isPickingFile;
+    private const long MaxFileSizeBytes = 20 * 1024 * 1024; // 20MB max
+
+    // Supported file types for MAUI FilePicker
+    private static readonly FilePickerFileType SupportedFileTypes = new FilePickerFileType(
+        new Dictionary<DevicePlatform, IEnumerable<string>>
+        {
+            { DevicePlatform.WinUI, new[] { ".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".tiff", ".tif", ".pdf" } },
+            { DevicePlatform.macOS, new[] { "png", "jpg", "jpeg", "gif", "webp", "bmp", "tiff", "tif", "pdf" } },
+            { DevicePlatform.iOS, new[] { "public.png", "public.jpeg", "public.gif", "com.microsoft.bmp", "public.tiff", "com.adobe.pdf" } },
+            { DevicePlatform.Android, new[] { "image/png", "image/jpeg", "image/gif", "image/webp", "image/bmp", "image/tiff", "application/pdf" } }
+        });
 
     bool _canSubmit;
 
@@ -69,6 +122,8 @@
         }
     }
 
+    private bool HasAttachments => ViewModel?.PendingAttachments?.Count > 0;
+
     [Parameter] public EventCallback OnSubmit { get; set; }
 
     [Parameter] public required AssistantViewModelBase ViewModel { get; set; }
@@ -78,8 +133,8 @@
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-
         ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+        ViewModel.PendingAttachments.CollectionChanged += OnAttachmentsChanged;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -94,6 +149,120 @@
             _shouldResizeTextarea = false;
             await JS.InvokeVoidAsync("resizeUserInput");
         }
+    }
+
+    private async Task PickFilesAsync()
+    {
+        if (_isPickingFile)
+            return;
+
+        try
+        {
+            _isPickingFile = true;
+            await InvokeAsync(StateHasChanged);
+
+            var options = new PickOptions
+            {
+                PickerTitle = "Select images or PDF files",
+                FileTypes = SupportedFileTypes
+            };
+
+            var results = await FilePicker.Default.PickMultipleAsync(options);
+
+            if (results == null || !results.Any())
+                return;
+
+            foreach (var file in results.Take(5))
+            {
+                await ProcessPickedFileAsync(file);
+            }
+
+            UpdateCanSubmit();
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"File picker error: {ex.Message}");
+        }
+        finally
+        {
+            _isPickingFile = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task ProcessPickedFileAsync(FileResult? file)
+    {
+        try
+        {
+            if (file == null)
+                return;
+
+            // Get file info
+            var fileName = file.FileName;
+            var contentType = file.ContentType;
+
+            // Infer MIME type if not provided
+            if (string.IsNullOrEmpty(contentType))
+            {
+                contentType = GetMimeTypeFromExtension(fileName);
+            }
+
+            if (!ChatAttachment.IsSupportedMimeType(contentType))
+            {
+                SnackbarService.Show("Unsupported file type", $"{fileName} is not a supported image or PDF", Severity.Warning);
+                return;
+            }
+
+            // Read file content
+            using var stream = await file.OpenReadAsync();
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
+            var content = memoryStream.ToArray();
+
+            if (content.Length > MaxFileSizeBytes)
+            {
+                SnackbarService.Show("File too large", $"{fileName} exceeds 20MB limit", Severity.Warning);
+                return;
+            }
+
+            if (content.Length == 0)
+            {
+                SnackbarService.Show("Empty file", $"{fileName} appears to be empty", Severity.Warning);
+                return;
+            }
+
+            var attachment = ChatAttachment.FromBytes(fileName, contentType, content);
+            ViewModel.AddAttachment(attachment);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error processing file: {ex.Message}");
+            SnackbarService.Show("Error reading file", $"Could not read {file?.FileName ?? "file"}", Severity.Error);
+        }
+    }
+
+    private static string GetMimeTypeFromExtension(string fileName)
+    {
+        var ext = Path.GetExtension(fileName)?.ToLowerInvariant();
+        return ext switch
+        {
+            ".png" => "image/png",
+            ".jpg" or ".jpeg" => "image/jpeg",
+            ".gif" => "image/gif",
+            ".webp" => "image/webp",
+            ".bmp" => "image/bmp",
+            ".tiff" or ".tif" => "image/tiff",
+            ".pdf" => "application/pdf",
+            _ => "application/octet-stream"
+        };
+    }
+
+    private void RemoveAttachment(ChatAttachment attachment)
+    {
+        ViewModel.RemoveAttachment(attachment);
+        UpdateCanSubmit();
+        InvokeAsync(StateHasChanged);
     }
 
     private async Task OnSubmitButtonClicked()
@@ -139,10 +308,49 @@
     {
         if (e.PropertyName == nameof(AssistantViewModelBase.InputText))
         {
-            // Resize the textarea whenever the input text changes.
             _shouldResizeTextarea = true;
         }
 
-        CanSubmit = !string.IsNullOrWhiteSpace(ViewModel.InputText) && !ViewModel.AwaitingResponse;
+        if (e.PropertyName == nameof(AssistantViewModelBase.SupportsVision))
+        {
+            InvokeAsync(StateHasChanged);
+        }
+
+        UpdateCanSubmit();
+    }
+
+    private void OnAttachmentsChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        UpdateCanSubmit();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void UpdateCanSubmit()
+    {
+        // Can submit if there's text OR attachments, and not currently waiting
+        var hasContent = !string.IsNullOrWhiteSpace(ViewModel.InputText) || HasAttachments;
+        CanSubmit = hasContent && !ViewModel.AwaitingResponse;
+    }
+
+    private string GetPlaceholder()
+    {
+        if (ViewModel.SupportsVision)
+            return "Ask anything or attach an image...";
+        return "Ask anything";
+    }
+
+    private string TruncateFileName(string fileName, int maxLength = 20)
+    {
+        if (string.IsNullOrEmpty(fileName) || fileName.Length <= maxLength)
+            return fileName;
+
+        var extension = Path.GetExtension(fileName);
+        var nameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
+        var availableLength = maxLength - extension.Length - 3; // 3 for "..."
+
+        if (availableLength <= 0)
+            return fileName.Substring(0, maxLength - 3) + "...";
+
+        return nameWithoutExt.Substring(0, Math.Min(availableLength, nameWithoutExt.Length)) + "..." + extension;
     }
 }

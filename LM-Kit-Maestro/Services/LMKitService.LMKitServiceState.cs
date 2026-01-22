@@ -15,5 +15,7 @@ public partial class LMKitService
         public Uri? LoadedModelUri { get; set; }
 
         public LMKitModelLoadingState ModelLoadingState { get; set; }
+
+        public CancellationTokenSource? ModelLoadingCancellation { get; set; }
     }
 }

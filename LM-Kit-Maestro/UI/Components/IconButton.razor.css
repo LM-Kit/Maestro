@@ -1,54 +1,57 @@
-﻿button {
+button {
     cursor: pointer;
     justify-content: center;
     align-items: center;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all ease-out 0.1s;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
-
-    button:hover {
-    }
 
 .icon-button {
     background-color: transparent;
-    color: var(--Outline);
+    color: #B4B4B4;
+    border: none;
+    border-radius: 0.5rem;
 }
 
     .icon-button:hover {
-        color: var(--OnSurface);
+        color: #ECECEC;
+        background-color: #2F2F2F;
     }
 
 .sidebar-toggle-button {
     display: flex;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     text-align: center;
-    color: var(--OnSurface);
-    background-color: var(--Surface2);
+    color: #B4B4B4;
+    background-color: transparent;
+    border: none;
 }
 
     .sidebar-toggle-button:hover {
-        background-color: var(--Primary);
+        background-color: #2F2F2F;
+        color: #ECECEC;
     }
 
 .secondary-action-button {
-    border-radius: 50%;
-    background-color: var(--Surface2);
-    color: var(--Outline) !important;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: #B4B4B4 !important;
+    border: none;
 }
 
     .secondary-action-button:hover {
-        background-color: var(--Surface3);
+        background-color: #2F2F2F;
+        color: #ECECEC !important;
     }
 
 .icon-button-medium {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.125rem;
 }
 
 .icon-button-small {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.9375rem;
 }
-

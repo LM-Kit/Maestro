@@ -1,11 +1,10 @@
-﻿using System.ComponentModel;
-
 namespace LMKit.Maestro.Services;
 
 public interface IAppSettingsService
 {
     Uri? LastLoadedModelUri { get; set; }
     string ModelStorageDirectory { get; set; }
+    string ChatHistoryDirectory { get; set; }
     string SystemPrompt { get; set; }
     int MaximumCompletionTokens { get; set; }
     int RequestTimeout { get; set; }

@@ -1,13 +1,26 @@
-﻿using LMKit.Maestro.Models;
+using LMKit.Maestro.Models;
+using LMKit.Maestro.Services;
 using SQLite;
 
 namespace LMKit.Maestro.Data
 {
     public sealed class MaestroDatabase : IMaestroDatabase
     {
-        public static string DatabasePath => Path.Combine(FileSystem.AppDataDirectory, "MaestroSQLite.db3");
+        // Static fallback for legacy access
+        public static string DefaultDatabasePath => Path.Combine(FileSystem.AppDataDirectory, "MaestroSQLite.db3");
+        
+        private readonly string _databasePath;
+        
+        public string DatabasePath => _databasePath;
 
         private SQLiteAsyncConnection? _sqlDatabase;
+
+        public MaestroDatabase(IAppSettingsService appSettingsService)
+        {
+            // Read path once at construction - changes require restart
+            var historyDir = appSettingsService.ChatHistoryDirectory;
+            _databasePath = Path.Combine(historyDir, "MaestroSQLite.db3");
+        }
 
         private async Task Init()
         {
@@ -18,7 +31,14 @@ namespace LMKit.Maestro.Data
 
             try
             {
-                _sqlDatabase = new SQLiteAsyncConnection(DatabasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.SharedCache);
+                // Ensure directory exists
+                var directory = Path.GetDirectoryName(_databasePath);
+                if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                _sqlDatabase = new SQLiteAsyncConnection(_databasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.SharedCache);
 
                 await _sqlDatabase.CreateTableAsync<ConversationLog>();
             }

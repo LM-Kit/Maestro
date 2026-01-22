@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
 using LMKit.Maestro.Data;
 using LMKit.Maestro.Services;
@@ -74,8 +74,6 @@ namespace LMKit.Maestro
             builder.Services.AddSingleton<ModelsSettingsViewModel>();
             builder.Services.AddSingleton<ChatSettingsViewModel>();
             builder.Services.AddSingleton<ChatPageViewModel>();
-            builder.Services.AddTransient<ModelsPageViewModel>();
-            builder.Services.AddSingleton<AssistantsPageViewModel>();
         }
 
         private static void RegisterViews(this MauiAppBuilder builder)
@@ -85,20 +83,33 @@ namespace LMKit.Maestro
 
         private static void RegisterServices(this MauiAppBuilder builder)
         {
+            // Core services (register first as they have no dependencies)
+            builder.Services.AddSingleton(Preferences.Default);
+            builder.Services.AddSingleton(Launcher.Default);
+            builder.Services.AddSingleton<HttpClient>();
+            
+            // Settings service (depends on Preferences)
             builder.Services.AddSingleton<AppSettingsService>();
+            builder.Services.AddSingleton<IAppSettingsService>(sp => sp.GetRequiredService<AppSettingsService>());
+            
+            // Database (depends on IAppSettingsService)
             builder.Services.AddSingleton<IMaestroDatabase, MaestroDatabase>();
+            
+            // Folder picker service (platform-specific)
+#if WINDOWS
+            builder.Services.AddSingleton<IFolderPickerService, WindowsFolderPickerService>();
+#else
+            builder.Services.AddSingleton<IFolderPickerService, DefaultFolderPickerService>();
+#endif
+            
+            // Other services
             builder.Services.AddSingleton<ILLMFileManager, LLMFileManager>();
-            builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
             builder.Services.AddSingleton<IMainThread, Services.MainThread>();
             builder.Services.AddSingleton<ISnackbarService, SnackbarService>();
-
+            builder.Services.AddSingleton<ThemeService>();
             builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
-
-            builder.Services.AddSingleton(Launcher.Default);
-            builder.Services.AddSingleton(Preferences.Default);
             builder.Services.AddSingleton<LMKitService>();
             builder.Services.AddSingleton<LLMFileManager>();
-            builder.Services.AddSingleton<HttpClient>();
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

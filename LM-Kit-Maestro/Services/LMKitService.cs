@@ -14,8 +14,6 @@ public partial class LMKitService : INotifyPropertyChanged
 
     public LMKitConfig LMKitConfig => _state.Config;
 
-    public LMKitTranslation Translation { get; }
-
     public LMKitChat Chat { get; }
 
     public LMKitModelLoadingState ModelLoadingState
@@ -44,6 +42,11 @@ public partial class LMKitService : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Whether the currently loaded model supports vision (image analysis).
+    /// </summary>
+    public bool SupportsVision => _state.LoadedModel != null && _state.LoadedModel.HasVision;
+
     public event NotifyModelStateChangedEventHandler? ModelLoadingProgressed;
     public event NotifyModelStateChangedEventHandler? ModelDownloadingProgressed;
     public event NotifyModelStateChangedEventHandler? ModelLoaded;
@@ -59,7 +62,6 @@ public partial class LMKitService : INotifyPropertyChanged
     {
         _state = new LMKitServiceState();
         Chat = new LMKitChat(_state);
-        Translation = new LMKitTranslation(_state);
     }
 
     public void LoadModel(Uri modelUri, string? localFilePath = null)
@@ -69,9 +71,11 @@ public partial class LMKitService : INotifyPropertyChanged
             UnloadModel();
         }
 
+
         _state.Semaphore.Wait();
         LoadedModelUri = modelUri;
         ModelLoadingState = LMKitModelLoadingState.Loading;
+        WasLoadingCancelled = false;
 
         var modelLoadingTask = new Task(() =>
         {
@@ -136,10 +140,29 @@ public partial class LMKitService : INotifyPropertyChanged
         ModelUnloaded?.Invoke(this, new NotifyModelStateChangedEventArgs(unloadedModelUri));
     }
 
+    private bool _cancelModelLoading;
+
+    public bool WasLoadingCancelled { get; private set; }
+
+    public void CancelModelLoading()
+    {
+        // Cancel if model is currently being loaded (includes downloading)
+        if (ModelLoadingState == LMKitModelLoadingState.Loading)
+        {
+            _cancelModelLoading = true;
+            WasLoadingCancelled = true;
+        }
+    }
 
 
     private bool OnModelLoadingProgressed(float progress)
     {
+        if (_cancelModelLoading)
+        {
+            _cancelModelLoading = false;
+            return false;
+        }
+
         ModelLoadingProgressed?.Invoke(this, new ModelLoadingProgressedEventArgs(_state.LoadedModelUri!, progress));
 
         return true;
@@ -147,6 +170,12 @@ public partial class LMKitService : INotifyPropertyChanged
 
     private bool OnModelDownloadingProgressed(string path, long? contentLength, long bytesRead)
     {
+        if (_cancelModelLoading)
+        {
+            _cancelModelLoading = false;
+            return false;
+        }
+
         ModelDownloadingProgressed?.Invoke(this, new ModelDownloadingProgressedEventArgs(_state.LoadedModelUri!, path, contentLength, bytesRead));
 
         return true;

@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
+@implements IDisposable
 
 @inject ModelListViewModel ModelListViewModel
 @inject ILLMFileManager FileManager
@@ -6,40 +7,32 @@
 @inject ISnackbar Snackbar
 @inject Maestro.Services.ISnackbarService SnackbarService
 @inject IDialogService DialogService
+@inject ThemeService ThemeService
+@inject IJSRuntime JS
 
 <div id="app-root">
     <div id="app-bar">
         <nav id="nav-bar">
-            <div class="nav-item" title="Chat">
-                <NavLink ActiveClass="nav-link-active" class="nav-link" href="chat" Match="NavLinkMatch.All">
-                    <MudIcon Icon="@Icons.Material.Filled.ChatBubbleOutline" />
-                </NavLink>
+            <div class="nav-section-top">
+                <SectionOutlet SectionName="nav-bar-top" />
+            </div>
+            
+            <div class="nav-section-main">
             </div>
 
-            <div class="nav-item" title="Models">
-                <NavLink ActiveClass="nav-link-active" class="nav-link" href="models">
-                    <MudIcon Icon="@Icons.Material.Filled.FolderOpen" />
-                </NavLink>
+            <div class="nav-section-bottom">
+                <SectionOutlet SectionName="nav-bar-bottom" />
             </div>
         </nav>
     </div>
 
-    <hr class="vertical-divider" />
-    <div id="main-container">
-        <hr class="horizontal-divider" />
-        <div id="top-bar">
-            <SectionOutlet SectionName="top-bar" />
-        </div>
-        <hr class="horizontal-divider" />
-
-        <div id="body-container">
-            @Body
-        </div>
+    <div id="body-container">
+        @Body
     </div>
 </div>
 
 <SnackbarComponent />
-<MudThemeProvider IsDarkMode="true" DefaultScrollbar="true" Theme="@CurrentTheme" />
+<MudThemeProvider IsDarkMode="true" DefaultScrollbar="true" Theme="@_currentMudTheme" />
 <MudPopoverProvider />
 <MudSnackbarProvider />
 
@@ -51,5 +44,60 @@
                    CloseOnEscapeKey="true" />
 
 @code {
-    public MudTheme CurrentTheme { get; private set; } = UIConstants.MaestroTheme;
+    private MudTheme _currentMudTheme = null!;
+    
+    protected override void OnInitialized()
+    {
+        _currentMudTheme = ThemeService.MudTheme;
+        ThemeService.OnThemeChanged += OnThemeChanged;
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Load saved theme from localStorage
+            var savedTheme = await JS.InvokeAsync<string>("localStorage.getItem", "maestro-theme");
+            if (!string.IsNullOrEmpty(savedTheme))
+            {
+                ThemeService.SetTheme(savedTheme);
+            }
+            else
+            {
+                // Apply default theme CSS
+                await ApplyCssTheme(ThemeService.CurrentTheme);
+            }
+        }
+    }
+    
+    private async void OnThemeChanged()
+    {
+        try
+        {
+            _currentMudTheme = ThemeService.MudTheme;
+            await ApplyCssTheme(ThemeService.CurrentTheme);
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Theme change error: {ex.Message}");
+        }
+    }
+    
+    private async Task ApplyCssTheme(ThemePreset theme)
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("applyTheme", theme.Primary, theme.Accent);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Apply CSS theme error: {ex.Message}");
+        }
+    }
+    
+    public void Dispose()
+    {
+        ThemeService.OnThemeChanged -= OnThemeChanged;
+    }
 }

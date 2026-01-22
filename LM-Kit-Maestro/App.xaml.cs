@@ -5,9 +5,9 @@ using Microsoft.UI.Windowing;
 
 
 using LMKit.Maestro.UI;
+using LMKit.Maestro.UI.Pages;
 using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components.WebView.Maui;
-using LMKit.Maestro.UI.Pages;
 #if MACCATALYST
 using UIKit;
 using WebKit;

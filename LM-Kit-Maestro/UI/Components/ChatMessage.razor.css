@@ -1,37 +1,61 @@
-﻿#message-container {
+#message-container {
     display: flex;
     position: relative;
     flex-direction: column;
-    margin-block: 1.25rem;
-    margin-inline: 0.5rem;
+    margin-block: 0.5rem;
+    margin-inline: 0;
+    min-width: 0;
+    max-width: 100%;
 }
 
     #message-container:hover > div {
         visibility: visible;
     }
 
-.assistant-message-container:hover {
-    transition: background-color 0.2s;
-    background-color: var(--Surface);
+.assistant-message-container {
+    border-radius: 0;
+    transition: background-color 0.15s ease;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
 }
 
+    .assistant-message-container:hover {
+        background-color: transparent;
+    }
+
 .user-message-container {
-    max-width: 75%;
+    max-width: 70%;
     align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .message-content {
-    padding-inline: 1rem;
-    word-break: break-word; /* Ensures long words break and wrap */
-    overflow-wrap: break-word; /* Allows wrapping long words */
-    max-width: 100%; /* Prevents the div from exceeding the width of its container */
-    padding-block: 1rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+    min-width: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.assistant-message-content {
+    padding-inline: 0.25rem;
+    padding-block: 0.625rem;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .user-message-content {
-    display: block;
-    background-color: var(--Surface2);
-    border-radius: 2rem;
+    display: inline-block;
+    background-color: #3B3B3B;
+    border-radius: 1.5rem;
+    border: none;
+    padding: 0.625rem 1rem;
+    font-size: 0.9375rem;
 }
 
 .chat-action-button {
@@ -40,46 +64,261 @@
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    color: var(--Outline);
-    font-size: 0.7rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 0.25rem;
+    color: #6B6B6B;
+    font-size: 0.8125rem;
+    width: 1.625rem;
+    height: 1.625rem;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.12s ease, color 0.12s ease;
 }
 
     .chat-action-button:hover {
-        background-color: var(--Surface2);
+        background-color: rgba(255, 255, 255, 0.08);
+        color: #ECECEC;
     }
 
 .message-footer {
-    margin: 0.5rem;
+    margin: 0.375rem 0.125rem;
     display: flex;
     align-items: center;
+    gap: 0.125rem;
 }
-
-
-/*.message-footer-text {
-    color: var(--Outline) !important;
-    display: inline-block;
-    align-self: center;
-    margin-inline: 4px;
-    background-color: red;
-}
-*/
 
 .user-message-footer-content {
     margin-left: auto;
+    opacity: 0.7;
+    transition: opacity 0.15s ease;
 }
 
-/*.eject-button {
-    font-size: 0.6rem;
+#message-container:hover .user-message-footer-content {
+    opacity: 1;
+}
+
+.message-footer-content {
+}
+
+/* Thinking Block Styles */
+.thinking-block {
+    margin: 0.75rem 0;
+    border-radius: 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--Primary) 20%, transparent);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--Primary) 5%, transparent) 0%, color-mix(in srgb, var(--Primary) 3%, transparent) 100%);
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.thinking-block:hover {
+    border-color: color-mix(in srgb, var(--Primary) 30%, transparent);
+}
+
+.thinking-block.thinking-active {
+    border-color: color-mix(in srgb, var(--Primary) 40%, transparent);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--Primary) 10%, transparent);
+}
+
+.thinking-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem 1rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.15s ease;
+}
+
+.thinking-header:hover {
+    background-color: color-mix(in srgb, var(--Primary) 5%, transparent);
+}
+
+.thinking-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.thinking-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 1.5rem;
     height: 1.5rem;
     color: var(--Primary);
-    background-color: var(--Surface2);
-    border-radius: 50%;
-}*/
-
-.message-footer-content{
-    /*padding-block: 0.5rem;*/
+    font-size: 0.875rem;
 }
+
+.thinking-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid color-mix(in srgb, var(--Primary) 20%, transparent);
+    border-top-color: var(--Primary);
+    border-radius: 50%;
+    animation: thinking-spin 1s linear infinite;
+}
+
+@keyframes thinking-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.thinking-title {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--Primary);
+}
+
+.thinking-toggle {
+    color: var(--Primary);
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+}
+
+.thinking-content {
+    padding: 0 1rem 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--Primary) 10%, transparent);
+    animation: thinking-expand 0.2s ease;
+}
+
+@keyframes thinking-expand {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.thinking-text {
+    font-size: 0.875rem !important;
+    color: #9CA3AF !important;
+    line-height: 1.6 !important;
+    white-space: pre-wrap;
+    font-family: inherit;
+}
+
+/* Message Attachments */
+.message-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.message-attachment-item {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.message-attachment-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+    .message-attachment-image:hover {
+        opacity: 0.85;
+    }
+
+.message-attachment-pdf {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(239, 68, 68, 0.15);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+}
+
+    .message-attachment-pdf i {
+        font-size: 1.25rem;
+        color: #EF4444;
+    }
+
+.message-attachment-name {
+    font-size: 0.75rem;
+    color: #ECECEC;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Lightbox Overlay */
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: lightbox-fade-in 0.2s ease;
+}
+
+@keyframes lightbox-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.lightbox-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.lightbox-image {
+    max-width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-filename {
+    margin-top: 1rem;
+    color: #ECECEC;
+    font-size: 0.875rem;
+    text-align: center;
+    max-width: 90vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ECECEC;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    transition: background-color 0.15s ease;
+}
+
+    .lightbox-close:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }

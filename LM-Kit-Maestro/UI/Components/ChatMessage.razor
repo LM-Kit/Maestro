@@ -1,4 +1,7 @@
-﻿@inherits ComponentBase
+@inherits ComponentBase
+@using LMKit.Maestro.Models
+@using LMKit.TextGeneration.Chat
+@using LMKit.TextProcessing
 
 @inject IClipboardHandler ClipboardHandler
 
@@ -6,19 +9,113 @@
      class="@(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-container" : "user-message-container")">
     <div class="message-content @(MessageViewModel.Sender == MessageSender.Assistant ? "assistant-message-content" : "user-message-content")">
         
-       <MudText Typo="Typo.body1">
-            @if (MessageViewModel.Sender == MessageSender.Assistant)
-            {
-                if (MessageHtml != null)
-                {
-                    @((MarkupString)MessageHtml)
-                }
-            }
-            else
-            {
-                @MessageViewModel.GetContent(responseIndex)
-            }
+       @if (MessageViewModel.Sender == MessageSender.Assistant)
+       {
+           @if (SegmentedContent != null && SegmentedContent.Count > 0)
+           {
+               @foreach (var segment in SegmentedContent)
+               {
+                   @if (segment.SegmentType == TextSegmentType.InternalReasoning)
+                   {
+                       <div class="thinking-block @(segment.IsActive ? "thinking-active" : "")">
+                           <div class="thinking-header" @onclick="() => ToggleThinkingBlock(segment)">
+                               <div class="thinking-header-left">
+                                   <span class="thinking-icon">
+                                       @if (segment.IsActive)
+                                       {
+                                           <span class="thinking-spinner"></span>
+                                       }
+                                       else
+                                       {
+                                           <i class="fas fa-brain"></i>
+                                       }
+                                   </span>
+                                   <span class="thinking-title">
+                                       @if (segment.IsActive)
+                                       {
+                                           <span>Thinking...</span>
+                                       }
+                                       else
+                                       {
+                                           <span>Thought for @FormatThinkingDuration(segment.Content)</span>
+                                       }
+                                   </span>
+                               </div>
+                               <span class="thinking-toggle">
+                                   <i class="fas @(segment.IsExpanded ? "fa-chevron-up" : "fa-chevron-down")"></i>
+                               </span>
+                           </div>
+                           @if (segment.IsExpanded || segment.IsActive)
+                           {
+                               <div class="thinking-content">
+                                   <MudText Typo="Typo.body2" Class="thinking-text">
+                                       @segment.Content
+                                       @if (segment.IsActive)
+                                       {
+                                           <span class="dot ml-1 d-inline-block"></span>
+                                       }
+                                   </MudText>
+                               </div>
+                           }
+                       </div>
+                   }
+                   else
+                   {
+                       @if (!string.IsNullOrEmpty(segment.Content))
+                       {
+                           <div class="markdown-wrapper">
+                               <span class="md-source" style="display:none;">@segment.Content</span>
+                               <div class="markdown-content"></div>
+                           </div>
+                       }
+                   }
+               }
+           }
+           else
+           {
+               @* Fallback: render content directly *@
+               var content = MessageViewModel.GetContent(responseIndex);
+               @if (!string.IsNullOrEmpty(content))
+               {
+                   <div class="markdown-wrapper">
+                       <span class="md-source" style="display:none;">@content</span>
+                       <div class="markdown-content"></div>
+                   </div>
+               }
+           }
+       }
+       else
+       {
+           @* Display attachments for user messages *@
+           @if (MessageViewModel.HasAttachments)
+           {
+               <div class="message-attachments">
+                   @foreach (var attachment in MessageViewModel.Attachments)
+                   {
+                       <div class="message-attachment-item">
+                           @if (attachment.IsImage && !string.IsNullOrEmpty(attachment.ThumbnailBase64))
+                           {
+                               <img src="data:@attachment.MimeType;base64,@attachment.ThumbnailBase64" 
+                                    alt="@attachment.FileName" 
+                                    class="message-attachment-image"
+                                    @ondblclick="() => OpenLightbox(attachment)"
+                                    title="Double-click to zoom" />
+                           }
+                           else if (attachment.IsPdf)
+                           {
+                               <div class="message-attachment-pdf">
+                                   <i class="fas fa-file-pdf"></i>
+                                   <span class="message-attachment-name">@attachment.FileName</span>
+                               </div>
+                           }
+                       </div>
+                   }
+               </div>
+           }
+           <MudText Typo="Typo.body1">
+               @MessageViewModel.GetContent(responseIndex)
            </MudText>
+       }
     </div>
 
     @if (MessageViewModel.Sender == MessageSender.User || (MessageViewModel.Sender == MessageSender.Assistant && !MessageViewModel.MessageInProgress))
@@ -69,9 +166,38 @@
     }
 </div>
 
+@* Image Lightbox Overlay *@
+@if (_lightboxAttachment != null)
+{
+    <div class="lightbox-overlay" @onclick="CloseLightbox">
+        <div class="lightbox-content" @onclick:stopPropagation="true">
+            <img src="data:@_lightboxAttachment.MimeType;base64,@_lightboxAttachment.ThumbnailBase64" 
+                 alt="@_lightboxAttachment.FileName" 
+                 class="lightbox-image" />
+            <div class="lightbox-filename">@_lightboxAttachment.FileName</div>
+        </div>
+        <button class="lightbox-close" @onclick="CloseLightbox" title="Close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+}
+
 @code {
 
-    const string ProgressIndicatorHtml = "<span class=\"dot ml-1 d-inline-block\"></span>";
+    // Lightbox state
+    private ChatAttachment? _lightboxAttachment = null;
+
+    private void OpenLightbox(ChatAttachment attachment)
+    {
+        _lightboxAttachment = attachment;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void CloseLightbox()
+    {
+        _lightboxAttachment = null;
+        InvokeAsync(StateHasChanged);
+    }
 
     private int responseIndex;
 
@@ -81,8 +207,38 @@
         set
         {
             responseIndex = value;
-            MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(responseIndex), false);
+            UpdateSegmentedContent();
         }
+    }
+
+    // Segmented content for rendering
+    private List<SegmentRenderInfo> SegmentedContent { get; set; } = new();
+
+    public class SegmentRenderInfo
+    {
+        public TextSegmentType SegmentType { get; set; }
+        public string Content { get; set; } = "";
+        public bool IsExpanded { get; set; } = false;
+        public bool IsActive { get; set; } = false;
+    }
+
+    private void ToggleThinkingBlock(SegmentRenderInfo segment)
+    {
+        if (!segment.IsActive)
+        {
+            segment.IsExpanded = !segment.IsExpanded;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private string FormatThinkingDuration(string content)
+    {
+        // Estimate thinking duration based on content length (rough approximation)
+        int wordCount = content?.Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length ?? 0;
+        if (wordCount < 50) return "a moment";
+        if (wordCount < 150) return "a few seconds";
+        if (wordCount < 500) return "several seconds";
+        return "a while";
     }
 
     bool messageJustCopied;
@@ -95,14 +251,6 @@
             messageJustCopied = value;
             InvokeAsync(() => StateHasChanged());
         }
-    }
-
-    string? messageHtml;
-
-    string? MessageHtml
-    {
-        get => messageHtml;
-        set { messageHtml = value; }
     }
 
     bool messageJustTerminated;
@@ -148,15 +296,52 @@
 
                 if (messageViewModel.Sender == MessageSender.Assistant)
                 {
-                    messageHtml = GenerateAssistantResponseHtml(MessageViewModel.GetContent(responseIndex), messageViewModel.MessageInProgress);
+                    UpdateSegmentedContent();
                 }
-
 
                 InvokeAsync(() => StateHasChanged());
             }
         }
     }
 #pragma warning restore BL0007
+
+    private void UpdateSegmentedContent()
+    {
+        var segments = MessageViewModel.GetSegments(responseIndex);
+        var newContent = new List<SegmentRenderInfo>();
+
+        if (segments != null && segments.Count > 0)
+        {
+            for (int i = 0; i < segments.Count; i++)
+            {
+                var segment = segments[i];
+                bool isLastSegment = i == segments.Count - 1;
+                bool isActive = isLastSegment && MessageViewModel.MessageInProgress;
+
+                var renderInfo = new SegmentRenderInfo
+                {
+                    SegmentType = segment.SegmentType,
+                    Content = segment.Content,
+                    IsActive = isActive,
+                    IsExpanded = isActive // Auto-expand active thinking blocks
+                };
+
+                newContent.Add(renderInfo);
+            }
+        }
+
+        // Preserve expansion state for existing segments
+        for (int i = 0; i < newContent.Count && i < SegmentedContent.Count; i++)
+        {
+            if (newContent[i].SegmentType == SegmentedContent[i].SegmentType &&
+                newContent[i].SegmentType == TextSegmentType.InternalReasoning)
+            {
+                newContent[i].IsExpanded = SegmentedContent[i].IsExpanded || newContent[i].IsActive;
+            }
+        }
+
+        SegmentedContent = newContent;
+    }
 
     private void OnRegeneratedResponse(object? sender, EventArgs e)
     {
@@ -168,20 +353,17 @@
     {
         if (MessageViewModel.Sender == MessageSender.Assistant)
         {
-            if (e.PropertyName == nameof(MessageViewModel.Content))
+            if (e.PropertyName == nameof(MessageViewModel.Content) || 
+                e.PropertyName == nameof(MessageViewModel.Segments))
             {
-                MessageHtml = GenerateAssistantResponseHtml(MessageViewModel.Content, MessageViewModel.MessageInProgress);
+                UpdateSegmentedContent();
             }
             else if (e.PropertyName == nameof(MessageViewModel.MessageInProgress))
             {
                 if (!MessageViewModel.MessageInProgress)
                 {
                     OnAssistantMessageJustTerminated();
-
-                    if (MessageHtml != null && MessageHtml.Contains(ProgressIndicatorHtml))
-                    {
-                        MessageHtml = MessageHtml.Replace(ProgressIndicatorHtml, string.Empty);
-                    }
+                    UpdateSegmentedContent(); // Update to mark segments as no longer active
                 }
             }
         }
@@ -208,7 +390,9 @@
 
     private async Task OnCopyMessageButtonClicked()
     {
-        bool success = await ClipboardHandler.CopyTextToClipboardAsync(MessageViewModel.GetContent(responseIndex));
+        // Copy only visible content (excluding thinking/reasoning segments)
+        string contentToCopy = GetVisibleContent(responseIndex);
+        bool success = await ClipboardHandler.CopyTextToClipboardAsync(contentToCopy);
 
         if (success)
         {
@@ -222,6 +406,32 @@
                 });
             }
         }
+    }
+
+    /// <summary>
+    /// Gets the visible content (excluding InternalReasoning segments) for clipboard copy.
+    /// </summary>
+    private string GetVisibleContent(int messageIndex)
+    {
+        var segments = MessageViewModel.GetSegments(messageIndex);
+        
+        if (segments == null || segments.Count == 0)
+        {
+            return MessageViewModel.GetContent(messageIndex);
+        }
+
+        // Only include UserVisible, ToolResponse, and Undefined segments (not InternalReasoning)
+        var visibleParts = segments
+            .Where(s => s.SegmentType != TextSegmentType.InternalReasoning)
+            .Select(s => s.Content)
+            .ToList();
+
+        if (visibleParts.Count == 0)
+        {
+            return MessageViewModel.GetContent(messageIndex);
+        }
+
+        return string.Join("", visibleParts).Trim();
     }
 
     private void OnRegenerateResponseButtonClicked()
@@ -243,43 +453,6 @@
         {
             ResponseIndex++;
         }
-    }
-
-    private static string GenerateAssistantResponseHtml(string content, bool messageInProgress)
-    {
-        string html = !string.IsNullOrEmpty(content) ? Markdig.Markdown.ToHtml(content) : string.Empty;
-
-        bool responseIsEmpty = html.Length == 0;
-
-        if (messageInProgress)
-        {
-            var closingTagIndex = Math.Max(0, html.LastIndexOf(@"</"));
-
-            if (closingTagIndex != -1)
-            {
-                html = html.Insert(closingTagIndex, ProgressIndicatorHtml);
-
-                if (responseIsEmpty)
-                {
-                    html = $"<p>{html}</p>";
-                }
-            }
-        }
-
-        if (!responseIsEmpty)
-        {
-            // Ensuring we don't insert an unwanted new-line at the end of the message.
-            if (html.EndsWith(">\n"))
-            {
-                html = html.Remove(html.Length - ">\n".Length);
-            }
-            else if (html == "\n")
-            {
-                html = string.Empty;
-            }
-        }
-
-        return html;
     }
 
     private static string GetStatusText(LMKitRequestStatus status)

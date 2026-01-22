@@ -1,31 +1,46 @@
-﻿.model-card-root {
+.model-card-root {
     flex-direction: row;
-    border: 1px solid var(--OutlineVariant);
-    border-radius: 0.25rem;
+    border: none;
+    border-radius: 0.5rem;
     background-color: transparent;
     flex-grow: 1;
     flex-shrink: 1;
     display: flex;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
+    transition: all 0.15s ease;
 }
 
 .model-card-focused {
-    background-color: var(--Surface2);
+    background-color: #2A2A2A;
 }
 
 .model-card-dense.model-card-focused {
-    background-color: var(--Surface15);
+    background-color: #2A2A2A;
 }
 
 .model-card-dense {
-    padding-block: 1.25rem;
-    padding-inline: 1rem;
+    padding: 0.75rem 1.25rem;
     border: none;
     border-radius: 0;
+    background-color: transparent;
+    margin: 0 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.model-card-selectable {
+    cursor: pointer;
 }
 
 .model-card-selectable:hover {
-    cursor: pointer;
+    background-color: #2A2A2A;
+}
+
+.model-card-dense.model-card-selectable:hover {
+    background-color: var(--Primary-10);
+}
+
+.model-card-dense.model-card-selectable:active {
+    background-color: var(--Primary-15);
 }
 
 .primary {
@@ -37,20 +52,30 @@
 }
 
 .tertiary {
-    color: #FA8168;
+    color: #FF8A65;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .score-1 {
-    background-color: #EF594D;
-    color: #EF594D;
+    background-color: #EF5350;
+    color: #EF5350;
+    box-shadow: 0 0 6px rgba(239, 83, 80, 0.4);
 }
 
 .score-2 {
-    background-color: #FFD21E;
-    color: #FFD21E;
+    background-color: #FFC107;
+    color: #FFC107;
+    box-shadow: 0 0 6px rgba(255, 193, 7, 0.4);
 }
 
 .score-3 {
-    background-color: #1C8736;
-    color: #1C8736;
+    background-color: var(--Primary);
+    color: var(--Primary);
+    box-shadow: 0 0 6px var(--Primary-40);
 }

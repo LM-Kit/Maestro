@@ -1,6 +1,9 @@
-﻿<MudDialog Class="action-dialog-root radius-1">
+@inject IJSRuntime JS
+
+<MudDialog Class="action-dialog-root radius-1">
     <DialogContent>
         <div class="d-flex flex-column gap-2">
+            <input @ref="_focusInput" type="text" class="focus-trap" @onkeydown="OnKeyDown" />
 
             <div class="mt-4">
                 <MudText Typo="Typo.subtitle2">
@@ -13,12 +16,12 @@
             </MudText>
 
             <div class="dialog-actions">
-                    <button class="text-button" @onclick="() => DialogInstance.Cancel()">
-                        <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">Delete</MudText>
-                    </button>
-                <button class="text-button" @onclick="() => DialogInstance.Close(true)">
-                        <MudText Typo="Typo.subtitle2">Cancel</MudText>
-                    </button>
+                <button class="text-button" @onclick="OnCancel">
+                    <MudText Typo="Typo.subtitle2">Cancel</MudText>
+                </button>
+                <button class="text-button" @onclick="OnConfirm">
+                    <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">@ActionText</MudText>
+                </button>
             </div>
         </div>
 
@@ -26,7 +29,7 @@
 </MudDialog>
 
 <style>
-    .dialog-actions{
+    .dialog-actions {
         display: flex;
         justify-content: flex-end;
     }
@@ -36,7 +39,18 @@
         border: 1px solid var(--OutlineVariant);
         background-color: var(--Surface);
     }
+
+    .focus-trap {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
 </style>
+
 @code {
     [Parameter] public MarkupString Message { get; set; } = default(MarkupString);
 
@@ -46,19 +60,44 @@
 
     [Parameter] public bool IsImportant { get; set; }
 
-    [CascadingParameter] private IMudDialogInstance DialogInstance { get; set; }
+    [CascadingParameter] private IMudDialogInstance DialogInstance { get; set; } = null!;
+
+    private ElementReference _focusInput;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(100);
+            await _focusInput.FocusAsync();
+        }
+    }
+
+    private void OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            DialogInstance.Close(true);
+        }
+        else if (e.Key == "Escape")
+        {
+            DialogInstance.Cancel();
+        }
+    }
+
+    private void OnConfirm()
+    {
+        DialogInstance.Close(true);
+    }
+
+    private void OnCancel()
+    {
+        DialogInstance.Cancel();
+    }
 
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-
         await InvokeAsync(() => StateHasChanged());
     }
-
-
-}
-
-@code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
 }

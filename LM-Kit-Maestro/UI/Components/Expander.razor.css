@@ -1,23 +1,24 @@
 #expander-container {
+    background-color: transparent;
 }
 
 #expander-header {
-    padding-inline: 1rem;
-    padding-block: 0.5rem;
+    padding: 0.75rem 1rem;
     cursor: pointer;
-    background-color: var(--Surface15);
+    background-color: #1A1A1A;
+    transition: background-color 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
     #expander-header:hover {
+        background-color: #2F2F2F;
     }
 
 #expander-content {
-    padding: 1rem;
-    background-color: var(--Surface);
-    /*transition: all ease-out 0.4s;*/
-}
-
-#expander-content:hover {
+    padding: 0.75rem 1rem;
+    background-color: #171717;
 }
 
 ::deep .mud-icon-size-small {
@@ -26,7 +27,9 @@
 
 
 .expander-icon {
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
+    color: #8E8E8E;
+    font-size: 0.5rem !important;
 }
 
 .rotate-0 {

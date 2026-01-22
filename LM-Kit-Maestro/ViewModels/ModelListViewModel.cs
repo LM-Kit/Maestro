@@ -86,6 +86,14 @@ namespace LMKit.Maestro.ViewModels
         }
 
         [RelayCommand]
+        public void CancelModelLoading()
+        {
+            LMKitService.CancelModelLoading();
+            LoadingState = ModelLoadingState.NotLoaded;
+            LoadingProgress = null;
+        }
+
+        [RelayCommand]
         public void LoadModel(Uri fileUri)
         {
             ModelCard? modelCard = null;
@@ -188,19 +196,7 @@ namespace LMKit.Maestro.ViewModels
 
         private void AddNewModel(ModelCard modelCard)
         {
-#if BETA_DOWNLOAD_MODELS
-            ModelCardViewModel? modelCardViewModel =
- MaestroHelpers.TryGetExistingModelCardViewModel(AvailableModels, modelCard);
-
-            if (modelCardViewModel == null)
-            {
-                modelCardViewModel = new ModelCardViewModel(modelCard);
-            }
-
-            modelCardViewModel.DownloadInfo.Status = DownloadStatus.Downloaded;
-#else
             ModelCardViewModel modelCardViewModel = new ModelCardViewModel(modelCard);
-#endif
 
             AddModel(modelCardViewModel);
         }
@@ -260,18 +256,6 @@ namespace LMKit.Maestro.ViewModels
         private void ClearUserModelList()
         {
             Models.Clear();
-
-#if BETA_DOWNLOAD_MODELS
-            foreach (var model in AvailableModels)
-            {
-                model.DownloadInfo.Status = DownloadStatus.NotDownloaded;
-            }
-
-            if (_lmKitService.ModelLoadingState == LMKitModelLoadingState.Loaded)
-            {
-                _lmKitService.UnloadModel();
-            }
-#endif
         }
 
         private async void OnModelLoadingCompleted(object? sender, EventArgs e)

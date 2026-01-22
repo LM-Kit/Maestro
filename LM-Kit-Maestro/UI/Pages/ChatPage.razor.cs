@@ -1,4 +1,4 @@
-﻿using LMKit.Maestro.Services;
+using LMKit.Maestro.Services;
 using LMKit.Maestro.UI.Dialogs;
 using LMKit.Maestro.ViewModels;
 using Majorsoft.Blazor.Components.Common.JsInterop.GlobalMouseEvents;
@@ -24,6 +24,76 @@ public partial class ChatPage : IDisposable
     private double? _previousScrollTop;
     private double _scrollTop;
     private bool _refreshScheduled;
+
+    private string _searchQuery = string.Empty;
+    private string SearchQuery
+    {
+        get => _searchQuery;
+        set
+        {
+            if (_searchQuery != value)
+            {
+                _searchQuery = value;
+                RefreshUIAsync(forceRerender: true);
+            }
+        }
+    }
+
+    private void ClearSearch()
+    {
+        SearchQuery = string.Empty;
+    }
+
+    private IEnumerable<ConversationViewModel> FilteredConversations
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                return ViewModel.ConversationListViewModel.Conversations;
+            }
+
+            return ViewModel.ConversationListViewModel.Conversations
+                .Where(c => c.Title.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
+        }
+    }
+
+    private IEnumerable<IGrouping<string, ConversationViewModel>> GroupedConversations
+    {
+        get
+        {
+            var today = DateTime.Today;
+            var yesterday = today.AddDays(-1);
+            var lastWeek = today.AddDays(-7);
+
+            return ViewModel.ConversationListViewModel.RecentConversations
+                .GroupBy(c => GetDateGroup(c.ConversationLog.Date, today, yesterday, lastWeek))
+                .OrderBy(g => GetGroupOrder(g.Key));
+        }
+    }
+
+    private string GetDateGroup(DateTime date, DateTime today, DateTime yesterday, DateTime lastWeek)
+    {
+        if (date.Date == today)
+            return "Today";
+        if (date.Date == yesterday)
+            return "Yesterday";
+        if (date.Date > lastWeek)
+            return "Last 7 days";
+        return "Older";
+    }
+
+    private int GetGroupOrder(string groupName)
+    {
+        return groupName switch
+        {
+            "Today" => 0,
+            "Yesterday" => 1,
+            "Last 7 days" => 2,
+            "Older" => 3,
+            _ => 4
+        };
+    }
 
     private bool _showSidebarToggles = true;
     private bool ShowSidebarToggles
@@ -178,6 +248,20 @@ public partial class ChatPage : IDisposable
         SettingsSidebarIsToggled = !SettingsSidebarIsToggled;
     }
 
+    private async void OnNewChatClicked()
+    {
+        // Don't create new chat if current chat is empty
+        if (ViewModel.ConversationListViewModel.CurrentConversation == null ||
+            !ViewModel.ConversationListViewModel.CurrentConversation.IsEmpty)
+        {
+            ViewModel.ConversationListViewModel.AddNewConversation();
+        }
+
+        // Focus the input text area
+        await Task.Delay(50); // Small delay to ensure UI is updated
+        await JS.InvokeVoidAsync("setUserInputFocus");
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -218,6 +302,12 @@ public partial class ChatPage : IDisposable
         if (e.PropertyName == nameof(ConversationListViewModel.CurrentConversation))
         {
             OnConversationSet();
+        }
+        else if (e.PropertyName == nameof(ConversationListViewModel.HasStarredConversations) ||
+                 e.PropertyName == nameof(ConversationListViewModel.StarredConversations) ||
+                 e.PropertyName == nameof(ConversationListViewModel.RecentConversations))
+        {
+            RefreshUIAsync(forceRerender: true);
         }
     }
 
@@ -465,6 +555,33 @@ public partial class ChatPage : IDisposable
         if (result != null && !result.Canceled && result.Data is bool confirmed && confirmed)
         {
             await Task.Run(() => ViewModel.ConversationListViewModel.DeleteConversation(conversationViewModel));
+        }
+    }
+
+    private void OnConversationItemStarToggled(ConversationViewModel conversationViewModel)
+    {
+        ViewModel.ConversationListViewModel.ToggleStar(conversationViewModel);
+    }
+
+    private async Task OnResetSettingsClicked()
+    {
+        var options = new DialogOptions
+        {
+            CloseOnEscapeKey = true,
+            Position = DialogPosition.Center,
+            MaxWidth = MaxWidth.Small
+        };
+
+        var confirmed = await DialogService.ShowMessageBox(
+            "Reset Settings",
+            "Are you sure you want to reset all settings to their default values?",
+            yesText: "Reset",
+            cancelText: "Cancel",
+            options: options);
+
+        if (confirmed == true)
+        {
+            ViewModel.ChatSettingsViewModel.ResetDefaultValues();
         }
     }
 }

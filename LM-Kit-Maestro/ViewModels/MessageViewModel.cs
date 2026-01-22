@@ -1,5 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
 using LMKit.TextGeneration.Chat;
 using static LMKit.TextGeneration.TextGenerationResult;
@@ -10,7 +11,7 @@ public partial class MessageViewModel : ViewModelBase
 {
     public ConversationViewModel ParentConversation { get; }
 
-    private ChatHistory.Message _lmKitMessage;
+    private ChatHistory.Message _lmKitMessage = null!;
 
     public ChatHistory.Message LMKitMessage
     {
@@ -30,7 +31,7 @@ public partial class MessageViewModel : ViewModelBase
     private MessageSender _sender;
 
     [ObservableProperty]
-    private string _content;
+    private string _content = string.Empty;
 
     [ObservableProperty]
     private bool _messageInProgress;
@@ -43,6 +44,16 @@ public partial class MessageViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool _isLastAssistantMessage;
+
+    /// <summary>
+    /// Attachments associated with this message (images, PDFs, etc.)
+    /// </summary>
+    public IReadOnlyList<ChatAttachment> Attachments { get; private set; } = Array.Empty<ChatAttachment>();
+
+    /// <summary>
+    /// Whether this message has any attachments.
+    /// </summary>
+    public bool HasAttachments => Attachments != null && Attachments.Count > 0;
 
     public event EventHandler? OnRegeneratedResponse;
 
@@ -59,6 +70,51 @@ public partial class MessageViewModel : ViewModelBase
     public string GetContent(int messageIndex)
     {
         return GetMessageByIndex(messageIndex).Text;
+    }
+
+    /// <summary>
+    /// Gets the segments for the message at the specified index.
+    /// </summary>
+    public IReadOnlyList<ChatHistory.Message.MessageSegment> GetSegments(int messageIndex)
+    {
+        return GetMessageByIndex(messageIndex).Segments;
+    }
+
+    /// <summary>
+    /// Gets the segments for the current message.
+    /// </summary>
+    public IReadOnlyList<ChatHistory.Message.MessageSegment> Segments => LMKitMessage?.Segments ?? Array.Empty<ChatHistory.Message.MessageSegment>();
+
+    /// <summary>
+    /// Checks if the message has any internal reasoning (thinking) content.
+    /// </summary>
+    public bool HasThinkingContent
+    {
+        get
+        {
+            if (LMKitMessage?.Segments == null)
+            {
+                return false;
+            }
+
+            return LMKitMessage.Segments.Any(s => s.SegmentType == TextSegmentType.InternalReasoning);
+        }
+    }
+
+    /// <summary>
+    /// Checks if the message is currently in thinking mode (last segment is InternalReasoning and message is in progress).
+    /// </summary>
+    public bool IsCurrentlyThinking
+    {
+        get
+        {
+            if (!MessageInProgress || LMKitMessage?.Segments == null || LMKitMessage.Segments.Count == 0)
+            {
+                return false;
+            }
+
+            return LMKitMessage.Segments.Last().SegmentType == TextSegmentType.InternalReasoning;
+        }
     }
 
     public int GetResponseCount()
@@ -107,14 +163,36 @@ public partial class MessageViewModel : ViewModelBase
         MessageInProgress = !LMKitMessage.IsProcessed;
         Sender = AuthorRoleToMessageSender(LMKitMessage.AuthorRole);
         Content = LMKitMessage.Text;
+
+        // Extract attachments from LMKit message
+        if (message.Attachments != null && message.Attachments.Count > 0)
+        {
+            List<ChatAttachment> chatAttachments = new List<ChatAttachment>();
+            foreach (var attachment in message.Attachments)
+            {
+                ChatAttachment chatAttachment = ChatAttachment.FromBytes(
+                    attachment.Target.Name, 
+                    attachment.Target.Mime, 
+                    attachment.Target.GetData());
+                chatAttachments.Add(chatAttachment);
+            }
+
+            Attachments = chatAttachments;
+        }
     }
 
-    public MessageViewModel(ConversationViewModel parentConversation, MessageSender sender, string content = "")
+    public MessageViewModel(ConversationViewModel parentConversation, MessageSender sender, string content = "", IList<ChatAttachment>? attachments = null)
     {
         ParentConversation = parentConversation;
         Sender = sender;
         Content = content;
         LMKitMessage = new ChatHistory.Message(sender == MessageSender.User ? AuthorRole.User : AuthorRole.Assistant, content);
+
+        // Store attachments for display
+        if (attachments != null && attachments.Count > 0)
+        {
+            Attachments = attachments.ToList();
+        }
     }
 
     [RelayCommand]
@@ -128,6 +206,7 @@ public partial class MessageViewModel : ViewModelBase
         if (e.PropertyName == nameof(ChatHistory.Message.IsProcessed))
         {
             MessageInProgress = !LMKitMessage!.IsProcessed;
+            OnPropertyChanged(nameof(IsCurrentlyThinking));
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.AuthorRole))
         {
@@ -136,6 +215,15 @@ public partial class MessageViewModel : ViewModelBase
         else if (e.PropertyName == nameof(ChatHistory.Message.Text))
         {
             Content = LMKitMessage!.Text;
+            OnPropertyChanged(nameof(Segments));
+            OnPropertyChanged(nameof(HasThinkingContent));
+            OnPropertyChanged(nameof(IsCurrentlyThinking));
+        }
+        else if (e.PropertyName == nameof(ChatHistory.Message.Segments))
+        {
+            OnPropertyChanged(nameof(Segments));
+            OnPropertyChanged(nameof(HasThinkingContent));
+            OnPropertyChanged(nameof(IsCurrentlyThinking));
         }
         else if (e.PropertyName == nameof(ChatHistory.Message.PreviousContent))
         {

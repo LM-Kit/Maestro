@@ -26,7 +26,8 @@ public partial class ModelSelectionButton
 
     private void OnModelListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ModelListViewModel.LoadingState))
+        if (e.PropertyName == nameof(ModelListViewModel.LoadingState) ||
+            e.PropertyName == nameof(ModelListViewModel.SelectedModel))
         {
             Text = GetModelStateText(ModelListViewModel);
             InvokeAsync(() => StateHasChanged());
@@ -39,6 +40,14 @@ public partial class ModelSelectionButton
 
     private async Task OnButtonClicked()
     {
+        // Don't allow selecting another model while loading/downloading
+        if (ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Loading ||
+            ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.Downloading ||
+            ModelListViewModel.LoadingState == ModelListViewModel.ModelLoadingState.FinishinUp)
+        {
+            return;
+        }
+
         var options = new DialogOptions { CloseOnEscapeKey = true, FullScreen = true };
 
         var dialog = await DialogService.ShowAsync<ModelSelectionDialog>(null, options);
@@ -56,6 +65,11 @@ public partial class ModelSelectionButton
         ModelListViewModel.EjectModel();
     }
 
+    private void OnCancelButtonClicked()
+    {
+        ModelListViewModel.CancelModelLoading();
+    }
+
     private static string GetModelStateText(ModelListViewModel modelListViewModel)
     {
         switch (modelListViewModel.LoadingState)
@@ -65,7 +79,8 @@ public partial class ModelSelectionButton
                 return Locales.SelectModel;
 
             case ModelListViewModel.ModelLoadingState.Loaded:
-                return modelListViewModel.SelectedModel!.Name;
+                // Handle case where SelectedModel might be null after model list refresh
+                return modelListViewModel.SelectedModel?.Name ?? Locales.SelectModel;
 
             case ModelListViewModel.ModelLoadingState.Loading:
                 return Locales.LoadingModel;

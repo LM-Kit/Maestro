@@ -1,6 +1,3 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LMKit.TextGeneration.Chat;
-using System.ComponentModel;
 using System.Text.Json;
 
 namespace LMKit.Maestro.Services;
@@ -51,6 +48,18 @@ public partial class AppSettingsService : IAppSettingsService
         set
         {
             Settings.Set(nameof(ModelStorageDirectory), value);
+        }
+    }
+
+    public string ChatHistoryDirectory
+    {
+        get
+        {
+            return Settings.Get(nameof(ChatHistoryDirectory), LMKitDefaultSettings.DefaultChatHistoryDirectory);
+        }
+        set
+        {
+            Settings.Set(nameof(ChatHistoryDirectory), value);
         }
     }
 

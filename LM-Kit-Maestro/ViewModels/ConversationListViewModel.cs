@@ -1,4 +1,4 @@
-﻿using LMKit.Maestro.Data;
+using LMKit.Maestro.Data;
 using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
 using Microsoft.Extensions.Logging;
@@ -41,6 +41,14 @@ namespace LMKit.Maestro.ViewModels
 
         public ObservableCollection<ConversationViewModel> Conversations { get; } =
             [];
+
+        public IEnumerable<ConversationViewModel> StarredConversations => 
+            Conversations.Where(c => c.IsStarred);
+
+        public IEnumerable<ConversationViewModel> RecentConversations => 
+            Conversations.Where(c => !c.IsStarred);
+
+        public bool HasStarredConversations => Conversations.Any(c => c.IsStarred);
 
         public ConversationListViewModel(ILogger<ConversationListViewModel> logger, IMaestroDatabase database, LMKitService lmKitService)
         {
@@ -140,7 +148,7 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnConversationCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
             {
                 foreach (var item in e.NewItems)
                 {
@@ -150,14 +158,13 @@ namespace LMKit.Maestro.ViewModels
                 if (Conversations.Count == 1)
                 {
                     CurrentConversation = Conversations[0];
-
                 }
-                else if (e.Action == NotifyCollectionChangedAction.Remove)
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
+            {
+                foreach (var item in e.OldItems)
                 {
-                    foreach (var item in e.OldItems)
-                    {
-                        ((ConversationViewModel)item).PropertyChanged -= OnConversationPropertyChanged;
-                    }
+                    ((ConversationViewModel)item).PropertyChanged -= OnConversationPropertyChanged;
                 }
             }
         }
@@ -165,6 +172,19 @@ namespace LMKit.Maestro.ViewModels
         private void OnConversationPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             ConversationPropertyChanged?.Invoke(sender, e);
+
+            if (e.PropertyName == nameof(ConversationViewModel.IsStarred))
+            {
+                // Notify that the grouped collections have changed
+                OnPropertyChanged(nameof(StarredConversations));
+                OnPropertyChanged(nameof(RecentConversations));
+                OnPropertyChanged(nameof(HasStarredConversations));
+            }
+        }
+
+        public void ToggleStar(ConversationViewModel conversation)
+        {
+            conversation.IsStarred = !conversation.IsStarred;
         }
     }
 }

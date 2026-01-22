@@ -1,4 +1,4 @@
-﻿using LMKit.Maestro.Helpers;
+using LMKit.Maestro.Helpers;
 using System.Diagnostics;
 
 namespace LMKit.Maestro.Services;
@@ -8,7 +8,7 @@ public partial class LLMFileManager
     private sealed partial class FileSystemEntryRecorder
     {
         private DirectoryRecord? _rootDirectoryRecord;
-        private Uri _rootDirectoryUri;
+        private Uri _rootDirectoryUri = null!;
 
         public Uri RootDirectory
         {
@@ -44,8 +44,14 @@ public partial class LLMFileManager
         public FileRecord? RecordFile(Uri fileUri)
         {
             string fileBaseName = FileHelpers.GetFileBaseName(fileUri);
-            DirectoryRecord? directParentDirectory = TryGetDirectParentDirectory(fileUri, true)!;
-            FileRecord? file = directParentDirectory != null ? directParentDirectory.TryGetChildFile(fileBaseName) : null;
+            DirectoryRecord? directParentDirectory = TryGetDirectParentDirectory(fileUri, true);
+            
+            if (directParentDirectory == null)
+            {
+                return null;
+            }
+            
+            FileRecord? file = directParentDirectory.TryGetChildFile(fileBaseName);
 
             if (file != null)
             {
@@ -76,9 +82,6 @@ public partial class LLMFileManager
 
         public FileSystemEntryRecord? TryGetExistingEntry(Uri fileUri)
         {
-            int depth = fileUri.Segments.Length - _rootDirectoryUri!.Segments.Length;
-            DirectoryRecord current = _rootDirectoryRecord!;
-
             DirectoryRecord? parentDirectory = TryGetDirectParentDirectory(fileUri);
 
             if (parentDirectory != null)

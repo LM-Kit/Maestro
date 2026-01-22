@@ -1,4 +1,4 @@
-﻿@inherits ComponentBase
+@inherits ComponentBase
 @inject IJSRuntime JS
 @inject IResizeHandler ResizeHandler
 
@@ -22,7 +22,7 @@ class="@GetClasses()">
         }
     }
 
-    <div class="sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
+    <div class="sidebar-content @GetScrollClasses()">
         @ChildContent
     </div>
 
@@ -49,7 +49,7 @@ class="@GetClasses()">
     private int _resizeStartX;
     private int _resizeStartWidth;
     private ElementReference _sidebarContainer;
-    private string _resizeEventId;
+    private string? _resizeEventId;
 
 
     [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
@@ -111,8 +111,6 @@ class="@GetClasses()">
     }
 
     private int _width;
-
-    bool _zero;
 
     [Parameter]
     public int Width
@@ -193,7 +191,6 @@ class="@GetClasses()">
     {
         string classes = "sidebar-container";
 
-        // classes += IsToggled ? " sidebar-toggled" : " sidebar-hidden";
         classes += Resizable ? " resizable-sidebar" : " fixed-sidebar";
 
         if (!IsResizing)
@@ -202,6 +199,15 @@ class="@GetClasses()">
         }
 
         return classes;
+    }
+
+    private string GetScrollClasses()
+    {
+        if (ShowScrollbar)
+        {
+            return "scrollable hover-scrollable";
+        }
+        return "";
     }
 
     private async Task OnPageResize(ResizeEventArgs args)

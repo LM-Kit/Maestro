@@ -1,4 +1,6 @@
-﻿using LMKit.TextGeneration;
+using LMKit.Data;
+using LMKit.Maestro.Models;
+using LMKit.TextGeneration;
 using LMKit.TextGeneration.Chat;
 using System.ComponentModel;
 
@@ -14,6 +16,11 @@ public partial class LMKitService
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        protected virtual void OnPropertyChanged(string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private readonly LMKitServiceState _state;
 
         private MultiTurnConversation? _multiTurnConversation;
@@ -24,10 +31,22 @@ public partial class LMKitService
             _state = state;
         }
 
+        /// <summary>
+        /// Submits a text-only prompt.
+        /// </summary>
         public async Task<LMKitResult> SubmitPrompt(Conversation conversation, string prompt)
         {
+            return await SubmitPrompt(conversation, prompt, null);
+        }
+
+        /// <summary>
+        /// Submits a prompt with optional attachments (images, PDFs).
+        /// </summary>
+        public async Task<LMKitResult> SubmitPrompt(Conversation conversation, string prompt, IEnumerable<ChatAttachment>? attachments)
+        {
+            var submission = new PromptSubmission(prompt, attachments);
             var promptRequest = new ChatRequest(conversation, ChatRequest.ChatRequestType.Prompt,
-                prompt, _state.Config.RequestTimeout);
+                submission, _state.Config.RequestTimeout);
 
             ScheduleRequest(promptRequest);
 
@@ -167,7 +186,29 @@ public partial class LMKitService
                 {
                     if (request.RequestType == ChatRequest.ChatRequestType.Prompt)
                     {
-                        result.Result = await _multiTurnConversation!.SubmitAsync((string)request.Parameters!, request.CancellationTokenSource.Token);
+                        var submission = (PromptSubmission)request.Parameters!;
+
+                        if (submission.HasAttachments)
+                        {
+                            // Create a message with attachments
+                            List<Attachment> attachments = new List<Attachment>();
+                            foreach (var chatAttachment in submission.Attachments)
+                            {
+                                // Convert our ChatAttachment to LMKit.Data.Attachment
+                                var lmkitAttachment = new Attachment(
+                                    chatAttachment.Content,
+                                    chatAttachment.FileName
+                                );
+                                attachments.Add(lmkitAttachment);
+                            }
+                            var message = new ChatHistory.Message(AuthorRole.User, submission.Text, attachments);
+                            result.Result = await _multiTurnConversation!.SubmitAsync(message, request.CancellationTokenSource.Token);
+                        }
+                        else
+                        {
+                            // Text-only prompt
+                            result.Result = await _multiTurnConversation!.SubmitAsync(submission.Text, request.CancellationTokenSource.Token);
+                        }
                     }
                     else if (request.RequestType == ChatRequest.ChatRequestType.RegenerateResponse)
                     {
@@ -216,8 +257,18 @@ public partial class LMKitService
 
         private void GenerateConversationSummaryTitle(Conversation conversation)
         {
-            string firstMessage = conversation.ChatHistory!.Messages.First(message => message.AuthorRole == AuthorRole.User).Text;
-            ChatRequest titleGenerationRequest = new ChatRequest(conversation, ChatRequest.ChatRequestType.GenerateTitle, firstMessage, 60);
+            var firstUserMessage = conversation.ChatHistory!.Messages.First(message => message.AuthorRole == AuthorRole.User);
+            
+            // Skip title generation if there's no content at all
+            bool hasText = !string.IsNullOrWhiteSpace(firstUserMessage.Text);
+            bool hasAttachments = firstUserMessage.Attachments != null && firstUserMessage.Attachments.Count > 0;
+            
+            if (!hasText && !hasAttachments)
+            {
+                return;
+            }
+            
+            ChatRequest titleGenerationRequest = new ChatRequest(conversation, ChatRequest.ChatRequestType.GenerateTitle, firstUserMessage, 60);
 
             _titleGenerationSchedule.Schedule(titleGenerationRequest);
 
@@ -232,7 +283,7 @@ public partial class LMKitService
             {
                 Summarizer summarizer = new Summarizer(_state.LoadedModel)
                 {
-                    MaximumContextLength = 512,
+                    MaximumContextLength = hasText ? 512: 2048,
                     GenerateContent = false,
                     GenerateTitle = true,
                     MaxTitleWords = 10,
@@ -244,7 +295,16 @@ public partial class LMKitService
 
                 try
                 {
-                    promptResult.Result = await summarizer.SummarizeAsync(firstMessage, titleGenerationRequest.CancellationTokenSource.Token);
+                    if (hasText)
+                    {
+                        // Use text for summarization
+                        promptResult.Result = await summarizer.SummarizeAsync(firstUserMessage.Text, titleGenerationRequest.CancellationTokenSource.Token);
+                    }
+                    else if (hasAttachments)
+                    {
+                        // Use first attachment for summarization (image-only message)
+                        promptResult.Result = await summarizer.SummarizeAsync(firstUserMessage.Attachments!.First().Target, titleGenerationRequest.CancellationTokenSource.Token);
+                    }
                 }
                 catch (Exception exception)
                 {

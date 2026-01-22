@@ -15,6 +15,8 @@ public sealed class ConversationLog
 
     public Uri? LastUsedModel { get; set; }
 
+    public bool IsStarred { get; set; }
+
     public ConversationLog()
     {
     }

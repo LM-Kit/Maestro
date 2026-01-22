@@ -1,24 +1,171 @@
-﻿#input-border {
-    max-width: 800px;
-}
-
 #input-border {
-    display: grid;
-    grid-template-columns: 1fr auto;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
     position: relative;
     width: 100%;
-    transition: all ease-out 0.3s;
-    background-color: var(--Surface2);
-    border-radius: 1rem;
-    border: 1px solid transparent;
+    background-color: #2F2F2F;
+    border-radius: 1.625rem;
+    border: none;
 }
 
     #input-border:focus-within {
-        background-color: var(--Surface);
-        border-color: var(--OutlineVariant);
+        background-color: #3A3A3A;
     }
 
+    #input-border.has-attachments {
+        border-radius: 1rem;
+    }
 
+/* Input row - default layout without attach button */
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    width: 100%;
+}
+
+/* Input row with attach button */
+.input-row.with-attach {
+    grid-template-columns: auto 1fr auto;
+}
+
+/* Attachment Button */
+.attach-button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0.5rem;
+    padding-right: 0;
+}
+
+.attach-button {
+    height: 2rem;
+    width: 2rem;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8E8E8E;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+    .attach-button:hover:not(:disabled) {
+        color: #ECECEC;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .attach-button:disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+
+    .attach-button i {
+        font-size: 1rem;
+    }
+
+/* Attachment Preview Area */
+.attachment-preview-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.attachment-preview-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    max-width: 200px;
+    position: relative;
+}
+
+    .attachment-preview-item:hover {
+        background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .attachment-preview-item:hover .attachment-remove-btn {
+        opacity: 1;
+    }
+
+.attachment-thumbnail {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+    flex-shrink: 0;
+}
+
+.attachment-pdf-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(239, 68, 68, 0.2);
+    border-radius: 0.25rem;
+    flex-shrink: 0;
+}
+
+    .attachment-pdf-icon i {
+        font-size: 1.25rem;
+        color: #EF4444;
+    }
+
+.attachment-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.attachment-name {
+    font-size: 0.75rem;
+    color: #ECECEC;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.attachment-size {
+    font-size: 0.625rem;
+    color: #8E8E8E;
+}
+
+.attachment-remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: none;
+    background-color: #EF4444;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+    .attachment-remove-btn:hover {
+        background-color: #DC2626;
+    }
+
+    .attachment-remove-btn i {
+        font-size: 0.625rem;
+    }
+
+/* Textarea */
 #input-text {
     width: 100%;
     box-sizing: border-box;
@@ -29,68 +176,97 @@
     resize: none;
     height: auto;
     font-size: 1rem;
-    font-family: 'Roboto','Helvetica','Arial','sans-serif';
-    color: var(--OnSurface);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #ECECEC;
     background-color: transparent;
     scrollbar-gutter: stable;
     max-height: 12rem;
-    scrollbar-gutter: both-edges stable;
+    padding: 0;
 }
 
+    #input-text::placeholder {
+        color: #8E8E8E;
+    }
+
+    #input-text::-webkit-scrollbar {
+        width: 6px;
+    }
+
     #input-text::-webkit-scrollbar-thumb {
-        background-color: var(--Outline) !important;
+        background-color: #4A4A4A;
+        border-radius: 3px;
     }
 
 .send-button-container {
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: flex-end;
     padding: 0.5rem;
-    grid-column: 2;
+    padding-left: 0.75rem;
 }
 
 .send-button {
-    height: 1.75rem;
-    width: 1.75rem;
-    transition: all ease-out 0.3s;
+    height: 2rem;
+    width: 2rem;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
     cursor: pointer;
-    font-size: 0.75rem;
     border-radius: 50%;
-    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .disabled-button {
-    background-color: transparent;
-    color: var(--OutlineVariant);
-    cursor: not-allowed;
+    background-color: #676767;
+    color: #2F2F2F;
+    cursor: default;
+    opacity: 0.4;
 }
 
 .enabled-button {
-    color: var(--OnSurface);
-    /*background-color: var(--Outline);*/
-    /*background-color: var(--Outline);*/
-    /*background-color: var(--Primary);*/
+    color: #000000;
+    background-color: #FFFFFF;
+    opacity: 1;
 }
 
-/*     .send-button:hover:not(:disabled) {
-        background-color: var(--OutlineVariant);
-        } */
+    .enabled-button:hover {
+        background-color: #E0E0E0;
+    }
+
+    .enabled-button:active {
+        background-color: #CCCCCC;
+    }
 
 #input-textarea-wrapper {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding-left: 0.5rem;
+    padding: 0.875rem 0 0.875rem 1.25rem;
 }
 
-
 .input-textarea-initial {
-    padding-block: 0.5rem;
-    /*background-color: blue;*/
 }
 
 .input-textarea-multiline {
-    padding-top: 0.5rem;
-    padding-bottom: 2.25rem;
-    /*background-color: green;*/
+}
+
+.send-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.send-icon i {
+    font-size: 0.875rem;
+}
+
+.stop-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stop-icon i {
+    font-size: 0.5rem;
 }

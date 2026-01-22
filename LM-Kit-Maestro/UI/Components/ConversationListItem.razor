@@ -1,6 +1,11 @@
-﻿@inherits ComponentBase
+@inherits ComponentBase
 
-<div @onclick="OnSelected" id="item-container" class="@(IsSelected ? "item-selected" : "")">
+<div @onclick="OnSelected" @oncontextmenu="OnRightClick" @oncontextmenu:preventDefault="true" id="item-container" class="@GetContainerClasses()">
+
+    @* Star indicator - always visible when starred *@
+    <div class="@GetStarIndicatorClasses()" @onclick="OnStarIndicatorClicked" @onclick:stopPropagation="true" title="@(ViewModel.IsStarred ? "Remove from starred" : "Add to starred")">
+        <i class="@GetStarIconClass()"></i>
+    </div>
 
     <MudTextField Underline=false
                   @ref="ItemTitleRef"
@@ -12,29 +17,50 @@
                   TextUpdateSuppression="false"
                   ReadOnly="@(!ViewModel.IsRenaming)" />
 
-    <div>
+    <div class="item-actions">
         <div id="show-more-button" class="@(IsSelected ? "show" : "collapse")">
             <MudIconButton @onclick="OnShowMoreClicked"
                            Icon="@Icons.Material.Filled.MoreHoriz"
                            Size="Size.Small" />
         </div>
 
-        <MudPopover Open="@ViewModel.IsShowingActionPopup" Fixed="true">
-            <div class="action-sheet">
-                <button class="text-button" @onclick="OnSelected">
-                    <MudText Typo="Typo.subtitle2">Select</MudText>
-                </button>
-                <button class="text-button" @onclick="OnRenameClicked">
-                    <MudText Typo="Typo.subtitle2">Rename</MudText>
-                </button>
-                <button class="text-button" @onclick="OnDeleteClicked">
-                      <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete</MudText>
-                 </button>
-            </div>
-        </MudPopover>
+        @if (!_isContextMenu)
+        {
+            <MudPopover Style="z-index: 99999" Open="@ViewModel.IsShowingActionPopup" Fixed="true">
+                <div class="action-sheet">
+                    <button class="text-button" @onclick="OnStarClicked">
+                        <i class="@(ViewModel.IsStarred ? "fas fa-star" : "far fa-star")" style="margin-right: 0.5rem; font-size: 0.75rem; color: @(ViewModel.IsStarred ? "#FBBF24" : "#8E8E8E");"></i>
+                        <MudText Typo="Typo.subtitle2">@(ViewModel.IsStarred ? "Unstar" : "Star")</MudText>
+                    </button>
+                    <button class="text-button" @onclick="OnRenameClicked">
+                        <MudText Typo="Typo.subtitle2">Rename</MudText>
+                    </button>
+                    <button class="text-button" @onclick="OnDeleteClicked">
+                        <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete</MudText>
+                    </button>
+                </div>
+            </MudPopover>
 
-        <MudOverlay @bind-Visible="ViewModel.IsShowingActionPopup"
-                    @onclick="OnClickOutsideShowMore"
-                    AutoClose="true" />
+            <MudOverlay @bind-Visible="ViewModel.IsShowingActionPopup"
+                        @onclick="OnClickOutsideShowMore"
+                        AutoClose="true" />
+        }
     </div>
 </div>
+
+@if (_isContextMenu && ViewModel.IsShowingActionPopup)
+{
+    <div @onclick="OnClickOutsideShowMore" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99998;"></div>
+    <div class="action-sheet" style="position: fixed; left: @(_contextMenuX)px; top: @(_contextMenuY)px; z-index: 99999;">
+        <button class="text-button" @onclick="OnStarClicked">
+            <i class="@(ViewModel.IsStarred ? "fas fa-star" : "far fa-star")" style="margin-right: 0.5rem; font-size: 0.75rem; color: @(ViewModel.IsStarred ? "#FBBF24" : "#8E8E8E");"></i>
+            <MudText Typo="Typo.subtitle2">@(ViewModel.IsStarred ? "Unstar" : "Star")</MudText>
+        </button>
+        <button class="text-button" @onclick="OnRenameClicked">
+            <MudText Typo="Typo.subtitle2">Rename</MudText>
+        </button>
+        <button class="text-button" @onclick="OnDeleteClicked">
+            <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete</MudText>
+        </button>
+    </div>
+}

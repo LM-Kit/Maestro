@@ -1,6 +1,86 @@
-﻿@inherits ComponentBase
+@inject ThemeService ThemeService
+@inject IJSRuntime JS
+@inject IFolderPickerService FolderPickerService
+@inherits ComponentBase
 
 <div id="settings-container">
+    <Expander Title="Appearance">
+        <MudStack Class="pa-2" Spacing="4">
+            <MudText Typo="Typo.overline">Theme color</MudText>
+            <div class="theme-color-picker">
+                @foreach (var theme in ThemePresets.All)
+                {
+                    <button class="theme-color-btn @(ThemeService.CurrentTheme.Name == theme.Name ? "selected" : "")"
+                            style="background: linear-gradient(135deg, @theme.Primary 0%, @theme.Accent 100%);"
+                            title="@theme.Name"
+                            @onclick="() => SelectTheme(theme)">
+                        @if (ThemeService.CurrentTheme.Name == theme.Name)
+                        {
+                            <i class="fas fa-check"></i>
+                        }
+                    </button>
+                }
+            </div>
+        </MudStack>
+    </Expander>
+    <MudDivider />
+
+    <Expander Title="Storage">
+        <div class="storage-settings">
+            <div class="storage-item">
+                <div class="storage-header">
+                    <div class="storage-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <div class="storage-info">
+                        <span class="storage-label">Model Storage</span>
+                        <span class="storage-description">Where AI models are downloaded and stored</span>
+                    </div>
+                </div>
+                <div class="storage-path-row">
+                    <input type="text" 
+                           class="storage-path-input" 
+                           value="@ViewModel.ModelStorageDirectory"
+                           @onchange="OnModelStoragePathChanged"
+                           title="@ViewModel.ModelStorageDirectory" />
+                    <button class="storage-browse-btn" @onclick="BrowseModelStorage" title="Browse for folder">
+                        <i class="fas fa-folder-open"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="storage-divider"></div>
+
+            <div class="storage-item">
+                <div class="storage-header">
+                    <div class="storage-icon">
+                        <i class="fas fa-clock-rotate-left"></i>
+                    </div>
+                    <div class="storage-info">
+                        <span class="storage-label">Chat History</span>
+                        <span class="storage-description">Where conversation history is saved</span>
+                    </div>
+                </div>
+                <div class="storage-path-row">
+                    <input type="text" 
+                           class="storage-path-input" 
+                           value="@ViewModel.ChatHistoryDirectory"
+                           @onchange="OnChatHistoryPathChanged"
+                           title="@ViewModel.ChatHistoryDirectory" />
+                    <button class="storage-browse-btn" @onclick="BrowseChatHistory" title="Browse for folder">
+                        <i class="fas fa-folder-open"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="storage-note">
+                <i class="fas fa-circle-info"></i>
+                <span>Changes to chat history location require restart</span>
+            </div>
+        </div>
+    </Expander>
+    <MudDivider />
+
     <Expander Title="General settings">
         <MudStack Class="pa-2" Spacing="6">
             <div class="d-flex flex-column gap-2">
@@ -166,7 +246,7 @@
 
 @code
 {
-    [Parameter] public ChatSettingsViewModel ViewModel { get; set; }
+    [Parameter] public ChatSettingsViewModel ViewModel { get; set; } = null!;
 
     private int? _previousTokenLimit;
 
@@ -235,5 +315,58 @@
     {
         ViewModel.ResetSystemPrompt();
         ChatbotPurposeInput = ViewModel.SystemPrompt;
+    }
+
+    private async Task SelectTheme(ThemePreset theme)
+    {
+        ThemeService.SetTheme(theme);
+        await JS.InvokeVoidAsync("localStorage.setItem", "maestro-theme", theme.Name);
+        StateHasChanged();
+    }
+
+    private async Task BrowseModelStorage()
+    {
+        var path = await FolderPickerService.PickFolderAsync(
+            ViewModel.ModelStorageDirectory, 
+            "Select Model Storage Folder");
+        
+        if (!string.IsNullOrEmpty(path))
+        {
+            ViewModel.SetModelStorageDirectory(path);
+            StateHasChanged();
+        }
+    }
+
+    private async Task BrowseChatHistory()
+    {
+        var path = await FolderPickerService.PickFolderAsync(
+            ViewModel.ChatHistoryDirectory, 
+            "Select Chat History Folder");
+        
+        if (!string.IsNullOrEmpty(path))
+        {
+            ViewModel.SetChatHistoryDirectory(path);
+            StateHasChanged();
+        }
+    }
+
+    private void OnModelStoragePathChanged(ChangeEventArgs e)
+    {
+        var path = e.Value?.ToString();
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            ViewModel.SetModelStorageDirectory(path);
+            StateHasChanged();
+        }
+    }
+
+    private void OnChatHistoryPathChanged(ChangeEventArgs e)
+    {
+        var path = e.Value?.ToString();
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            ViewModel.SetChatHistoryDirectory(path);
+            StateHasChanged();
+        }
     }
 }

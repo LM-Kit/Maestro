@@ -1,7 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
-using MudBlazor;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace LMKit.Maestro.ViewModels
@@ -19,6 +20,16 @@ namespace LMKit.Maestro.ViewModels
 
         [ObservableProperty]
         bool _awaitingResponse;
+
+        /// <summary>
+        /// Collection of pending attachments to be sent with the next message.
+        /// </summary>
+        public ObservableCollection<ChatAttachment> PendingAttachments { get; } = new();
+
+        /// <summary>
+        /// Whether the current model supports vision (image/PDF attachments).
+        /// </summary>
+        public bool SupportsVision => LmKitService?.SupportsVision == true;
 
         public LMKitService LmKitService { get; protected set; }
 
@@ -39,6 +50,33 @@ namespace LMKit.Maestro.ViewModels
             }
         }
 
+        /// <summary>
+        /// Adds an attachment to the pending attachments list.
+        /// </summary>
+        public void AddAttachment(ChatAttachment attachment)
+        {
+            PendingAttachments.Add(attachment);
+            OnPropertyChanged(nameof(PendingAttachments));
+        }
+
+        /// <summary>
+        /// Removes an attachment from the pending attachments list.
+        /// </summary>
+        public void RemoveAttachment(ChatAttachment attachment)
+        {
+            PendingAttachments.Remove(attachment);
+            OnPropertyChanged(nameof(PendingAttachments));
+        }
+
+        /// <summary>
+        /// Clears all pending attachments.
+        /// </summary>
+        public void ClearAttachments()
+        {
+            PendingAttachments.Clear();
+            OnPropertyChanged(nameof(PendingAttachments));
+        }
+
         protected abstract void HandleSubmit();
 
         protected abstract Task HandleCancel(bool shouldAwait);
@@ -46,6 +84,19 @@ namespace LMKit.Maestro.ViewModels
         protected AssistantViewModelBase(LMKitService lmKitService)
         {
             LmKitService = lmKitService;
+            LmKitService.ModelLoaded += OnModelLoadedForVision;
+            LmKitService.ModelUnloaded += OnModelUnloadedForVision;
+        }
+
+        private void OnModelLoadedForVision(object? sender, LMKitService.NotifyModelStateChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(SupportsVision));
+        }
+
+        private void OnModelUnloadedForVision(object? sender, LMKitService.NotifyModelStateChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(SupportsVision));
+            ClearAttachments();
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)

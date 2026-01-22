@@ -1,24 +1,386 @@
-﻿<MudDialog Class="model-selection-dialog-root">
+<MudDialog Class="model-selection-dialog-root">
     <DialogContent>
-        <div class="model-selection-dialog-content-wrapper width-50 height-auto-100">
+        <div class="model-selection-dialog-content-wrapper">
             <div @onclick="() => MudDialog.Cancel()" class="dialog-backdrop"></div>
             <div class="model-selection-dialog-content-root">
-                <div class="d-flex flex-row space-between align-center px-1 py-1 bg-surface-2">
-                    <MudText Align="Align.Center" Class="flex-grow-1" Typo="Typo.caption">
-                        Available models
-                    </MudText>
+                <div class="dialog-header">
+                    <div class="header-content">
+                        <div class="header-title-row">
+                            <MudText Typo="Typo.h5" Class="header-text">
+                                Models
+                            </MudText>
+                            <span class="model-count-badge">@SortedFilteredModels.Count()</span>
+                        </div>
+                        <MudText Typo="Typo.body2" Class="header-subtitle">
+                            Select a model to power your conversation
+                        </MudText>
+                    </div>
 
+                    <button class="close-button" @onclick="() => MudDialog.Cancel()">
+                        <span class="fas fa-xmark"></span>
+                    </button>
+                </div>
 
-                    <div class="d-flex justify-end close-button align-center">
-                        <IconButton Style="IconButton.ButtonStyle.Icon"
-                                    Icon="fas fa-close"
-                                    Size="IconButton.ButtonSize.Small"
-                                    OnClick="() => MudDialog.Cancel()" />
+                <div class="search-filter-container">
+                    <div class="search-container">
+                        <span class="fas fa-search search-icon"></span>
+                        <input type="text" 
+                               class="search-input" 
+                               placeholder="Search models..." 
+                               @bind="SearchQuery" 
+                               @bind:event="oninput" />
+                        @if (!string.IsNullOrEmpty(SearchQuery))
+                        {
+                            <button class="search-clear" @onclick="() => SearchQuery = string.Empty">
+                                <span class="fas fa-xmark"></span>
+                            </button>
+                        }
+                    </div>
+
+                    <!-- Filter Chips -->
+                    <div class="filter-chips">
+                        <button class="filter-chip @(FilterReasoning ? "active" : "")" @onclick="() => FilterReasoning = !FilterReasoning">
+                            <MudIcon Icon="@Icons.Material.Outlined.Psychology" Size="Size.Small" />
+                            <span>Reasoning</span>
+                        </button>
+                        <button class="filter-chip @(FilterVision ? "active" : "")" @onclick="() => FilterVision = !FilterVision">
+                            <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
+                            <span>Vision</span>
+                        </button>
+                        <button class="filter-chip @(FilterCode ? "active" : "")" @onclick="() => FilterCode = !FilterCode">
+                            <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
+                            <span>Code</span>
+                        </button>
+                        <button class="filter-chip @(FilterMath ? "active" : "")" @onclick="() => FilterMath = !FilterMath">
+                            <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
+                            <span>Math</span>
+                        </button>
+                        <button class="filter-chip @(FilterTools ? "active" : "")" @onclick="() => FilterTools = !FilterTools">
+                            <MudIcon Icon="@Icons.Material.Outlined.Build" Size="Size.Small" />
+                            <span>Tools</span>
+                        </button>
+                        
+                        <span class="filter-divider"></span>
+                        
+                        <button class="filter-chip filter-chip-toggle @(HideLegacy ? "active" : "")" @onclick="() => HideLegacy = !HideLegacy" title="Hide older models that have newer replacements available">
+                            <MudIcon Icon="@Icons.Material.Outlined.History" Size="Size.Small" />
+                            <span>Hide Outdated</span>
+                        </button>
+                        
+                        @if (HasActiveFilters)
+                        {
+                            <button class="filter-clear" @onclick="ClearFilters">
+                                <span class="fas fa-xmark"></span>
+                                <span>Clear</span>
+                            </button>
+                        }
+                    </div>
+                </div>
+
+                <!-- Column Headers with Sorting -->
+                <div class="column-headers">
+                    <div class="col-header col-perf @(SortColumn == "perf" ? "active" : "")" @onclick='() => SetSort("perf")'>
+                        <span>Perf</span>
+                        @if (SortColumn == "perf")
+                        {
+                            <span class="sort-icon fas @(SortAscending ? "fa-arrow-up" : "fa-arrow-down")"></span>
+                        }
+                    </div>
+                    <div class="col-header col-name @(SortColumn == "name" ? "active" : "")" @onclick='() => SetSort("name")'>
+                        <span>Model</span>
+                        @if (SortColumn == "name")
+                        {
+                            <span class="sort-icon fas @(SortAscending ? "fa-arrow-up" : "fa-arrow-down")"></span>
+                        }
+                    </div>
+                    <div class="col-header col-caps">
+                        <span>Capabilities</span>
+                    </div>
+                    <div class="col-header col-params @(SortColumn == "params" ? "active" : "")" @onclick='() => SetSort("params")'>
+                        <span>Params</span>
+                        @if (SortColumn == "params")
+                        {
+                            <span class="sort-icon fas @(SortAscending ? "fa-arrow-up" : "fa-arrow-down")"></span>
+                        }
+                    </div>
+                    <div class="col-header col-context @(SortColumn == "context" ? "active" : "")" @onclick='() => SetSort("context")'>
+                        <span>Context</span>
+                        @if (SortColumn == "context")
+                        {
+                            <span class="sort-icon fas @(SortAscending ? "fa-arrow-up" : "fa-arrow-down")"></span>
+                        }
+                    </div>
+                    <div class="col-header col-quant">
+                        <span>Quant</span>
+                    </div>
+                    <div class="col-header col-size @(SortColumn == "size" ? "active" : "")" @onclick='() => SetSort("size")'>
+                        <span>Size</span>
+                        @if (SortColumn == "size")
+                        {
+                            <span class="sort-icon fas @(SortAscending ? "fa-arrow-up" : "fa-arrow-down")"></span>
+                        }
+                    </div>
+                    <div class="col-header col-status @(SortColumn == "status" ? "active" : "")" @onclick='() => SetSort("status")'>
+                        <span>Status</span>
+                        @if (SortColumn == "status")
+                        {
+                            <span class="sort-icon fas @(SortAscending ? "fa-arrow-up" : "fa-arrow-down")"></span>
+                        }
                     </div>
                 </div>
 
                 <div class="model-selection-dialog-body">
-                    <ModelList OnClick="(model) => MudDialog.Close(model)" LimitWidth="false" Selectable="true" Dense="true" />
+                    @if (SortedFilteredModels.Any())
+                    {
+                        @foreach (var model in SortedFilteredModels)
+                        {
+                            <div class="model-item" @onclick="() => SelectModel(model)">
+                                
+                                <!-- Performance Gauge -->
+                                <div class="model-perf-gauge">
+                                    <MudTooltip Placement="Placement.Right" Arrow="true" Class="perf-tooltip">
+                                        <ChildContent>
+                                            <div class="gauge-container">
+                                                <svg viewBox="0 0 36 36" class="gauge-svg">
+                                                    <path class="gauge-bg"
+                                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                        fill="none" stroke-width="3" />
+                                                    <path class="gauge-fill @GetPerformanceClass(model.CompatibilityLevel)"
+                                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                        fill="none" stroke-width="3"
+                                                        stroke-dasharray="@((model.CompatibilityLevel * 100).ToString("F0")), 100" />
+                                                </svg>
+                                                <span class="gauge-value">@((model.CompatibilityLevel * 100).ToString("F0"))</span>
+                                            </div>
+                                        </ChildContent>
+                                        <TooltipContent>
+                                            <div class="perf-card">
+                                                <div class="perf-card-header">Performance Score</div>
+                                                <div class="perf-card-score @GetPerformanceClass(model.CompatibilityLevel)">
+                                                    @((model.CompatibilityLevel * 100).ToString("F0"))%
+                                                </div>
+                                                <div class="perf-card-meters">
+                                                    <div class="perf-meter">
+                                                        <span class="meter-label">Speed</span>
+                                                        <div class="meter-bar">
+                                                            <div class="meter-fill @GetPerformanceClass(model.CompatibilityLevel)" style="width: @((model.CompatibilityLevel * 100).ToString("F0"))%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="perf-meter">
+                                                        <span class="meter-label">Memory</span>
+                                                        <div class="meter-bar">
+                                                            <div class="meter-fill @GetMemoryClass(model.ModelInfo.FileSize)" style="width: @GetMemoryScore(model.ModelInfo.FileSize)%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="perf-meter">
+                                                        <span class="meter-label">Efficiency</span>
+                                                        <div class="meter-bar">
+                                                            <div class="meter-fill @GetPerformanceClass(model.CompatibilityLevel)" style="width: @((model.CompatibilityLevel * 90 + 10).ToString("F0"))%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="perf-card-hint">Based on your hardware</div>
+                                            </div>
+                                        </TooltipContent>
+                                    </MudTooltip>
+                                </div>
+
+                                <!-- Model Name & Publisher with Info Icon -->
+                                <div class="model-info">
+                                    <div class="model-name-container">
+                                        <div class="model-name-row">
+                                            <span class="model-name">@model.ModelInfo.ModelName</span>
+                                            <MudTooltip Placement="Placement.Right" Arrow="false" Class="model-card-tooltip" Delay="200" Duration="0">
+                                                <ChildContent>
+                                                    <span class="info-icon" @onclick:stopPropagation="true">
+                                                        <MudIcon Icon="@Icons.Material.Outlined.Info" Size="Size.Small" />
+                                                    </span>
+                                                </ChildContent>
+                                                <TooltipContent>
+                                                    <div class="model-card-popup">
+                                                        <!-- Header Row -->
+                                                        <div class="mcp-header">
+                                                            <div class="mcp-header-left">
+                                                                <div class="mcp-title">@model.ModelInfo.ModelName</div>
+                                                                <div class="mcp-subtitle">@model.ModelInfo.Publisher • @model.ModelInfo.Architecture</div>
+                                                            </div>
+                                                            <div class="mcp-perf @GetPerformanceClass(model.CompatibilityLevel)">
+                                                                <MudIcon Icon="@Icons.Material.Outlined.Speed" Size="Size.Small" />
+                                                                <span>@((model.CompatibilityLevel * 100).ToString("F0"))%</span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Description -->
+                                                        @if (!string.IsNullOrEmpty(model.ModelInfo.Description))
+                                                        {
+                                                            <div class="mcp-description">@model.ModelInfo.Description</div>
+                                                        }
+
+                                                        <!-- Specs Row - All in one line -->
+                                                        <div class="mcp-specs-row">
+                                                            <div class="mcp-spec">
+                                                                <span class="mcp-spec-value">@model.ModelSize</span>
+                                                                <span class="mcp-spec-label">Params</span>
+                                                            </div>
+                                                            <div class="mcp-spec-divider"></div>
+                                                            <div class="mcp-spec">
+                                                                <span class="mcp-spec-value">@($"{model.MaxContextLengthKB}K")</span>
+                                                                <span class="mcp-spec-label">Context</span>
+                                                            </div>
+                                                            <div class="mcp-spec-divider"></div>
+                                                            <div class="mcp-spec">
+                                                                <span class="mcp-spec-value">@model.Precision</span>
+                                                                <span class="mcp-spec-label">Quant</span>
+                                                            </div>
+                                                            <div class="mcp-spec-divider"></div>
+                                                            <div class="mcp-spec">
+                                                                <span class="mcp-spec-value">@FormatSize(model.ModelInfo.FileSize)</span>
+                                                                <span class="mcp-spec-label">Size</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Capabilities Row -->
+                                                        @if (model.HasReasoningCapability || model.HasVisionCapability || model.IsCodeModel || model.IsMathModel || model.HasToolsCallCapability)
+                                                        {
+                                                            <div class="mcp-caps-row">
+                                                                @if (model.HasReasoningCapability)
+                                                                {
+                                                                    <span class="mcp-cap-pill mcp-cap-reasoning">
+                                                                        <MudIcon Icon="@Icons.Material.Outlined.Psychology" Size="Size.Small" />
+                                                                        <span>Reasoning</span>
+                                                                    </span>
+                                                                }
+                                                                @if (model.HasVisionCapability)
+                                                                {
+                                                                    <span class="mcp-cap-pill mcp-cap-vision">
+                                                                        <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
+                                                                        <span>Vision</span>
+                                                                    </span>
+                                                                }
+                                                                @if (model.IsCodeModel)
+                                                                {
+                                                                    <span class="mcp-cap-pill mcp-cap-code">
+                                                                        <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
+                                                                        <span>Code</span>
+                                                                    </span>
+                                                                }
+                                                                @if (model.IsMathModel)
+                                                                {
+                                                                    <span class="mcp-cap-pill mcp-cap-math">
+                                                                        <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
+                                                                        <span>Math</span>
+                                                                    </span>
+                                                                }
+                                                                @if (model.HasToolsCallCapability)
+                                                                {
+                                                                    <span class="mcp-cap-pill mcp-cap-tools">
+                                                                        <MudIcon Icon="@Icons.Material.Outlined.Build" Size="Size.Small" />
+                                                                        <span>Tools</span>
+                                                                    </span>
+                                                                }
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </TooltipContent>
+                                            </MudTooltip>
+                                        </div>
+                                        <span class="model-publisher">@model.ModelInfo.Publisher</span>
+                                    </div>
+                                </div>
+
+                                <!-- Capabilities Pills -->
+                                <div class="model-caps">
+                                    <div class="caps-container">
+                                        @if (model.HasReasoningCapability)
+                                        {
+                                            <div class="cap-pill cap-reasoning" title="Advanced Reasoning">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Psychology" Size="Size.Small" />
+                                                <span>Reasoning</span>
+                                            </div>
+                                        }
+                                        @if (model.HasVisionCapability)
+                                        {
+                                            <div class="cap-pill cap-vision" title="Vision / Image Understanding">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Visibility" Size="Size.Small" />
+                                                <span>Vision</span>
+                                            </div>
+                                        }
+                                        @if (model.IsCodeModel)
+                                        {
+                                            <div class="cap-pill cap-code" title="Code Generation">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Code" Size="Size.Small" />
+                                                <span>Code</span>
+                                            </div>
+                                        }
+                                        @if (model.IsMathModel)
+                                        {
+                                            <div class="cap-pill cap-math" title="Math & Calculations">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Calculate" Size="Size.Small" />
+                                                <span>Math</span>
+                                            </div>
+                                        }
+                                        @if (model.HasToolsCallCapability)
+                                        {
+                                            <div class="cap-pill cap-tools" title="Function / Tool Calling">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Build" Size="Size.Small" />
+                                                <span>Tools</span>
+                                            </div>
+                                        }
+                                        @if (model.IsChatModel && !model.HasReasoningCapability && !model.HasVisionCapability && !model.IsCodeModel && !model.IsMathModel && !model.HasToolsCallCapability)
+                                        {
+                                            <div class="cap-pill cap-chat" title="Chat Optimized">
+                                                <MudIcon Icon="@Icons.Material.Outlined.Chat" Size="Size.Small" />
+                                                <span>Chat</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Specs -->
+                                <div class="model-param" title="@($"{model.ModelInfo.ParameterCount:N0} parameters")">
+                                    @model.ModelSize
+                                </div>
+                                <div class="model-context" title="@($"{model.ModelInfo.ContextLength:N0} tokens")">
+                                    @($"{model.MaxContextLengthKB}k")
+                                </div>
+                                <div class="model-quant" title="@($"{model.Precision} quantization")">
+                                    @model.Precision
+                                </div>
+                                <div class="model-size" title="@($"{model.ModelInfo.FileSize:N0} bytes")">
+                                    @FormatSize(model.ModelInfo.FileSize)
+                                </div>
+
+                                <!-- Availability Status -->
+                                <div class="model-status">
+                                    @if (model.IsLocallyAvailable)
+                                    {
+                                        <div class="status-badge status-local" title="Ready to use - Model is downloaded and available locally">
+                                            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small" />
+                                            <span>Ready</span>
+                                        </div>
+                                        <button class="model-folder-btn" @onclick="() => OpenModelFolder(model)" @onclick:stopPropagation="true" title="Open file location">
+                                            <i class="fas fa-folder-open"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <div class="status-badge status-cloud" title="Requires download - Click to download from Hugging Face">
+                                            <MudIcon Icon="@Icons.Material.Outlined.CloudDownload" Size="Size.Small" />
+                                            <span>Download</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="no-results">
+                            <MudIcon Icon="@Icons.Material.Outlined.SearchOff" Size="Size.Large" Class="no-results-icon" />
+                            <MudText Typo="Typo.body1" Class="no-results-text">No models found</MudText>
+                            <MudText Typo="Typo.body2" Class="no-results-hint">Try adjusting your search or filters</MudText>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -29,73 +391,712 @@
     .model-selection-dialog-content-wrapper {
         display: flex;
         justify-content: center;
-        margin-inline: auto;
-        margin-block: auto;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
     }
 
     .model-selection-dialog-content-root {
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        flex-grow: 1;
-        flex-shrink: 1;
-        background-color: var(--Surface);
+        background-color: #1A1A1A;
         border-radius: 1rem;
-        border: 1px solid var(--OutlineVariant);
-        border-radius: 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+        width: 960px;
+        max-width: 95vw;
+        height: 85vh;
+        max-height: 90vh;
+        min-height: 600px;
+        position: relative;
     }
 
     .model-selection-dialog-root {
         left: 0 !important;
         top: 0 !important;
         background-color: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
     }
 
     .dialog-backdrop {
         width: 100%;
         height: 100%;
-        position: absolute;
-        background-color: transparent;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
     }
 
-    .height-auto-100 {
-        height: auto;
-        max-height: 100%;
-        flex-grow: 1;
-        flex-shrink: 1;
+    .dialog-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 1.25rem 1.5rem 1rem;
     }
+
+    .header-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+    }
+
+    .header-title-row {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+    }
+
+    .header-text {
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+        font-size: 1.25rem !important;
+    }
+
+    .model-count-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.5rem;
+        height: 1.5rem;
+        padding: 0 0.5rem;
+        background-color: rgba(16, 163, 127, 0.15);
+        color: #10A37F;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+        border-radius: 2rem;
+    }
+
+    .header-subtitle {
+        color: #6B6B6B !important;
+        font-size: 0.8125rem !important;
+    }
+
+    .close-button {
+        width: 2rem;
+        height: 2rem;
+        border: none;
+        background-color: rgba(255, 255, 255, 0.05);
+        color: #6B6B6B;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8125rem;
+        transition: all 0.15s ease;
+    }
+
+    .close-button:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #FFFFFF;
+    }
+
+    /* Search and Filters */
+    .search-filter-container {
+        padding: 0 1.5rem 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+    }
+
+    .search-container {
+        position: relative;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 0.875rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #4A4A4A;
+        font-size: 0.8125rem;
+    }
+
+    .search-input {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 0.5rem;
+        padding: 0.625rem 2rem 0.625rem 2.25rem;
+        color: #FFFFFF;
+        font-size: 0.875rem;
+        outline: none;
+        transition: all 0.15s ease;
+    }
+
+    .search-input::placeholder {
+        color: #4A4A4A;
+    }
+
+    .search-input:focus {
+        border-color: rgba(16, 163, 127, 0.4);
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .search-clear {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #4A4A4A;
+        cursor: pointer;
+        padding: 0.25rem;
+        font-size: 0.75rem;
+    }
+
+    .search-clear:hover {
+        color: #FFFFFF;
+    }
+
+    /* Filter Chips */
+    .filter-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        align-items: center;
+    }
+
+    .filter-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.3125rem 0.625rem;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background-color: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #8E8E8E;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .filter-chip .mud-icon-root {
+        font-size: 0.875rem !important;
+    }
+
+    .filter-chip:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.12);
+        color: #FFFFFF;
+    }
+
+    .filter-chip.active {
+        background-color: rgba(16, 163, 127, 0.15);
+        border-color: rgba(16, 163, 127, 0.3);
+        color: #10A37F;
+    }
+
+    .filter-divider {
+        width: 1px;
+        height: 1.25rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        margin: 0 0.25rem;
+    }
+
+    .filter-chip-toggle.active {
+        background-color: rgba(245, 158, 11, 0.15);
+        border-color: rgba(245, 158, 11, 0.3);
+        color: #F59E0B;
+    }
+
+    .filter-chip-toggle.active .mud-icon-root {
+        color: #F59E0B !important;
+    }
+
+    .filter-clear {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.6875rem;
+        background: none;
+        border: none;
+        color: #6B6B6B;
+        cursor: pointer;
+        margin-left: 0.25rem;
+    }
+
+    .filter-clear:hover {
+        color: #EF4444;
+    }
+
+    /* Column Headers */
+    .column-headers {
+        display: flex;
+        align-items: center;
+        padding: 0.375rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        gap: 0.5rem;
+    }
+
+    .col-header {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.625rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #5A5A5A;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.15s ease;
+    }
+
+    .col-header:hover {
+        color: #8E8E8E;
+    }
+
+    .col-header.active {
+        color: #10A37F;
+    }
+
+    .sort-icon {
+        font-size: 0.5rem;
+    }
+
+    .col-perf { width: 48px; justify-content: center; }
+    .col-name { flex: 1; min-width: 180px; }
+    .col-caps { width: 180px; cursor: default; }
+    .col-params { width: 55px; justify-content: flex-end; }
+    .col-context { width: 55px; justify-content: flex-end; }
+    .col-quant { width: 50px; justify-content: flex-end; cursor: default; }
+    .col-size { width: 65px; justify-content: flex-end; }
+    .col-status { width: 85px; justify-content: center; }
 
     .model-selection-dialog-body {
         display: flex;
         flex-direction: column;
-        overflow-y: scroll;
+        overflow-y: auto;
+        padding: 0.25rem 0.5rem 1rem;
+        flex: 1 1 0;
+        min-height: 0;
     }
 
-        .model-selection-dialog-body::-webkit-scrollbar {
-            display: none;
-        }
-
-    .close-button {
-        color: var(--Outline) !important;
+    .model-selection-dialog-body::-webkit-scrollbar {
+        width: 6px;
     }
 
-        .close-button:hover {
-            color: var(--OnSurface) !important;
-        }
+    .model-selection-dialog-body::-webkit-scrollbar-track {
+        background: transparent;
+    }
 
+    .model-selection-dialog-body::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+    }
+
+    /* Model Item Row */
+    .model-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.12s ease;
+        gap: 0.5rem;
+    }
+
+    .model-item:hover {
+        background-color: rgba(255, 255, 255, 0.04);
+    }
+
+    .model-item:active {
+        background-color: rgba(16, 163, 127, 0.08);
+    }
+
+    /* Performance Gauge */
+    .model-perf-gauge {
+        width: 48px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .gauge-container {
+        position: relative;
+        width: 32px;
+        height: 32px;
+    }
+
+    .gauge-svg {
+        transform: rotate(-90deg);
+        width: 100%;
+        height: 100%;
+    }
+
+    .gauge-bg {
+        stroke: rgba(255, 255, 255, 0.08);
+    }
+
+    .gauge-fill {
+        stroke-linecap: round;
+        transition: stroke-dasharray 0.3s ease;
+    }
+
+    .gauge-fill.perf-high { stroke: #10A37F; }
+    .gauge-fill.perf-medium { stroke: #F59E0B; }
+    .gauge-fill.perf-low { stroke: #EF4444; }
+
+    .gauge-value {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.5625rem;
+        font-weight: 600;
+        color: #9E9E9E;
+    }
+
+    /* Model Info */
+    .model-info {
+        flex: 1;
+        min-width: 180px;
+        overflow: hidden;
+    }
+
+    .model-name-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.0625rem;
+    }
+
+    .model-name-row {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+    .model-name {
+        color: #FFFFFF;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .model-publisher {
+        color: #5A5A5A;
+        font-size: 0.6875rem;
+    }
+
+    /* Info Icon */
+    .info-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.125rem;
+        height: 1.125rem;
+        border-radius: 50%;
+        cursor: pointer;
+        opacity: 0.4;
+        transition: all 0.15s ease;
+        flex-shrink: 0;
+    }
+
+    .info-icon .mud-icon-root {
+        font-size: 0.875rem !important;
+        color: #8E8E8E !important;
+    }
+
+    .model-item:hover .info-icon {
+        opacity: 0.7;
+    }
+
+    .info-icon:hover {
+        opacity: 1 !important;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .info-icon:hover .mud-icon-root {
+        color: #FFFFFF !important;
+    }
+
+    /* Capabilities */
+    .model-caps {
+        width: 180px;
+    }
+
+    .caps-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.1875rem;
+    }
+
+    .cap-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.1875rem;
+        padding: 0.125rem 0.375rem;
+        border-radius: 0.75rem;
+        font-size: 0.625rem;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .cap-pill .mud-icon-root {
+        font-size: 0.6875rem !important;
+    }
+
+    .cap-reasoning { background-color: rgba(168, 85, 247, 0.12); color: #C084FC; }
+    .cap-vision { background-color: rgba(59, 130, 246, 0.12); color: #60A5FA; }
+    .cap-code { background-color: rgba(16, 163, 127, 0.12); color: #34D399; }
+    .cap-math { background-color: rgba(245, 158, 11, 0.12); color: #FBBF24; }
+    .cap-tools { background-color: rgba(236, 72, 153, 0.12); color: #F472B6; }
+    .cap-chat { background-color: rgba(107, 114, 128, 0.12); color: #9CA3AF; }
+
+    /* Specs */
+    .model-param, .model-context, .model-quant, .model-size {
+        font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+        font-size: 0.6875rem;
+        color: #9E9E9E;
+        text-align: right;
+    }
+
+    .model-param { width: 55px; }
+    .model-context { width: 55px; }
+    .model-quant { width: 50px; color: #6B6B6B; }
+    .model-size { width: 65px; color: #6B6B6B; }
+
+    /* Status Badge */
+    .model-status {
+        width: 110px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.375rem;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 1rem;
+        font-size: 0.6875rem;
+        font-weight: 500;
+        white-space: nowrap;
+        transition: all 0.15s ease;
+    }
+
+    .status-badge .mud-icon-root {
+        font-size: 0.875rem !important;
+    }
+
+    .status-local {
+        background-color: rgba(16, 163, 127, 0.12);
+        color: #10A37F;
+        border: 1px solid rgba(16, 163, 127, 0.2);
+    }
+
+    .status-local .mud-icon-root {
+        color: #10A37F !important;
+    }
+
+    .model-item:hover .status-local {
+        background-color: rgba(16, 163, 127, 0.18);
+        border-color: rgba(16, 163, 127, 0.3);
+    }
+
+    .status-cloud {
+        background-color: rgba(96, 165, 250, 0.1);
+        color: #60A5FA;
+        border: 1px solid rgba(96, 165, 250, 0.2);
+    }
+
+    .status-cloud .mud-icon-root {
+        color: #60A5FA !important;
+    }
+
+    .model-item:hover .status-cloud {
+        background-color: rgba(96, 165, 250, 0.15);
+        border-color: rgba(96, 165, 250, 0.3);
+    }
+
+    .model-folder-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        padding: 0;
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+        color: #5E5E5E;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        opacity: 0;
+    }
+
+    .model-folder-btn i {
+        font-size: 0.75rem;
+    }
+
+    .model-item:hover .model-folder-btn {
+        opacity: 1;
+    }
+
+    .model-folder-btn:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+        color: #AEAEAE;
+    }
+
+    .model-folder-btn:active {
+        transform: scale(0.92);
+    }
+
+    /* No Results */
+    .no-results {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem 1rem;
+        gap: 0.375rem;
+    }
+
+    .no-results-icon {
+        color: #3A3A3A !important;
+        font-size: 2rem !important;
+    }
+
+    .no-results-text {
+        color: #8E8E8E !important;
+        font-size: 0.875rem !important;
+    }
+
+    .no-results-hint {
+        color: #5A5A5A !important;
+        font-size: 0.75rem !important;
+    }
 </style>
 
 @code {
     [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+    private IMudDialogInstance MudDialog { get; set; } = null!;
 
-    [Parameter] public string Message { get; set; }
+    [Inject] private ModelListViewModel ModelListViewModel { get; set; } = null!;
+    [Inject] private ILauncher Launcher { get; set; } = null!;
 
-    [Parameter] public string Title { get; set; }
+    private string _searchQuery = string.Empty;
+    private string SearchQuery
+    {
+        get => _searchQuery;
+        set { _searchQuery = value; InvokeAsync(StateHasChanged); }
+    }
 
-    [Parameter] public string ActionText { get; set; }
+    // Filters
+    private bool FilterReasoning { get; set; }
+    private bool FilterVision { get; set; }
+    private bool FilterCode { get; set; }
+    private bool FilterMath { get; set; }
+    private bool FilterTools { get; set; }
+    private bool HideLegacy { get; set; } = true; // Hide legacy models by default
 
+    private bool HasActiveFilters => FilterReasoning || FilterVision || FilterCode || FilterMath || FilterTools;
+
+    private void ClearFilters()
+    {
+        FilterReasoning = FilterVision = FilterCode = FilterMath = FilterTools = false;
+        HideLegacy = true; // Reset to default (hidden)
+        InvokeAsync(StateHasChanged);
+    }
+
+    // Sorting
+    private string SortColumn { get; set; } = "perf";
+    private bool SortAscending { get; set; } = false; // Default: highest perf first
+
+    private void SetSort(string column)
+    {
+        if (SortColumn == column) SortAscending = !SortAscending;
+        else { SortColumn = column; SortAscending = column == "name"; } // Descending by default for numbers
+        InvokeAsync(StateHasChanged);
+    }
+
+    private IEnumerable<ModelCardViewModel> FilteredModels
+    {
+        get
+        {
+            var models = ModelListViewModel.Models.AsEnumerable();
+
+            // Hide legacy models filter (on by default)
+            if (HideLegacy) models = models.Where(m => !m.IsLegacyModel);
+
+            // Text search
+            if (!string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                models = models.Where(m =>
+                    m.ModelInfo.ModelName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                    m.ModelInfo.Publisher.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Capability filters (AND logic - must have ALL selected capabilities)
+            if (FilterReasoning) models = models.Where(m => m.HasReasoningCapability);
+            if (FilterVision) models = models.Where(m => m.HasVisionCapability);
+            if (FilterCode) models = models.Where(m => m.IsCodeModel);
+            if (FilterMath) models = models.Where(m => m.IsMathModel);
+            if (FilterTools) models = models.Where(m => m.HasToolsCallCapability);
+
+            return models;
+        }
+    }
+
+    private IEnumerable<ModelCardViewModel> SortedFilteredModels => SortColumn switch
+    {
+        "perf" => SortAscending ? FilteredModels.OrderBy(m => m.CompatibilityLevel) : FilteredModels.OrderByDescending(m => m.CompatibilityLevel),
+        "name" => SortAscending ? FilteredModels.OrderBy(m => m.ModelInfo.ModelName) : FilteredModels.OrderByDescending(m => m.ModelInfo.ModelName),
+        "params" => SortAscending ? FilteredModels.OrderBy(m => m.ModelInfo.ParameterCount) : FilteredModels.OrderByDescending(m => m.ModelInfo.ParameterCount),
+        "context" => SortAscending ? FilteredModels.OrderBy(m => m.ModelInfo.ContextLength) : FilteredModels.OrderByDescending(m => m.ModelInfo.ContextLength),
+        "size" => SortAscending ? FilteredModels.OrderBy(m => m.ModelInfo.FileSize) : FilteredModels.OrderByDescending(m => m.ModelInfo.FileSize),
+        "status" => SortAscending ? FilteredModels.OrderBy(m => m.IsLocallyAvailable) : FilteredModels.OrderByDescending(m => m.IsLocallyAvailable),
+        _ => FilteredModels
+    };
+
+    private void SelectModel(ModelCardViewModel model) => MudDialog.Close(model);
+
+    private string GetPerformanceClass(float level) => level >= 0.7f ? "perf-high" : level >= 0.4f ? "perf-medium" : "perf-low";
+
+    private string GetMemoryClass(long size) => size < 3_000_000_000 ? "perf-high" : size < 8_000_000_000 ? "perf-medium" : "perf-low";
+    
+    private int GetMemoryScore(long size) => size < 2_000_000_000 ? 95 : size < 5_000_000_000 ? 70 : size < 10_000_000_000 ? 45 : 25;
+
+    private string FormatSize(long bytes) => bytes >= 1_000_000_000 ? $"{bytes / 1_000_000_000.0:F2} GB" : bytes >= 1_000_000 ? $"{bytes / 1_000_000.0:F0} MB" : $"{bytes / 1_000.0:F0} KB";
+
+    [Parameter] public string Message { get; set; } = string.Empty;
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string ActionText { get; set; } = string.Empty;
     [Parameter] public Color ActionColor { get; set; }
-
     [Parameter] public bool IsImportant { get; set; }
+
+    private async Task OpenModelFolder(ModelCardViewModel model)
+    {
+        if (model.IsLocallyAvailable && !string.IsNullOrEmpty(model.ModelInfo.LocalPath))
+        {
+            try
+            {
+                var folderPath = Path.GetDirectoryName(model.ModelInfo.LocalPath);
+                if (!string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
+                {
+                    await Launcher.OpenAsync(new Uri($"file://{folderPath}"));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to open folder: {ex.Message}");
+            }
+        }
+    }
 }
