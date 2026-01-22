@@ -26,7 +26,8 @@ public partial class ModelSelectionButton
 
     private void OnModelListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ModelListViewModel.LoadingState))
+        if (e.PropertyName == nameof(ModelListViewModel.LoadingState) ||
+            e.PropertyName == nameof(ModelListViewModel.SelectedModel))
         {
             Text = GetModelStateText(ModelListViewModel);
             InvokeAsync(() => StateHasChanged());
@@ -78,9 +79,8 @@ public partial class ModelSelectionButton
                 return Locales.SelectModel;
 
             case ModelListViewModel.ModelLoadingState.Loaded:
-                return modelListViewModel.SelectedModel != null
-                            ? modelListViewModel.SelectedModel.Name
-                            : Locales.SelectModel;
+                // Handle case where SelectedModel might be null after model list refresh
+                return modelListViewModel.SelectedModel?.Name ?? Locales.SelectModel;
 
             case ModelListViewModel.ModelLoadingState.Loading:
                 return Locales.LoadingModel;

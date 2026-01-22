@@ -37,9 +37,11 @@
                     </div>
                 </div>
                 <div class="storage-path-row">
-                    <div class="storage-path" title="@ViewModel.ModelStorageDirectory">
-                        <span class="path-text">@ViewModel.ModelStorageDirectory</span>
-                    </div>
+                    <input type="text" 
+                           class="storage-path-input" 
+                           value="@ViewModel.ModelStorageDirectory"
+                           @onchange="OnModelStoragePathChanged"
+                           title="@ViewModel.ModelStorageDirectory" />
                     <button class="storage-browse-btn" @onclick="BrowseModelStorage" title="Browse for folder">
                         <i class="fas fa-folder-open"></i>
                     </button>
@@ -59,9 +61,11 @@
                     </div>
                 </div>
                 <div class="storage-path-row">
-                    <div class="storage-path" title="@ViewModel.ChatHistoryDirectory">
-                        <span class="path-text">@ViewModel.ChatHistoryDirectory</span>
-                    </div>
+                    <input type="text" 
+                           class="storage-path-input" 
+                           value="@ViewModel.ChatHistoryDirectory"
+                           @onchange="OnChatHistoryPathChanged"
+                           title="@ViewModel.ChatHistoryDirectory" />
                     <button class="storage-browse-btn" @onclick="BrowseChatHistory" title="Browse for folder">
                         <i class="fas fa-folder-open"></i>
                     </button>
@@ -323,18 +327,7 @@
     {
         try
         {
-            var initialPath = ViewModel.ModelStorageDirectory;
-            FolderPickerResult result;
-            
-            if (!string.IsNullOrEmpty(initialPath) && Directory.Exists(initialPath))
-            {
-                result = await FolderPicker.Default.PickAsync(initialPath, default);
-            }
-            else
-            {
-                result = await FolderPicker.Default.PickAsync(default);
-            }
-            
+            var result = await FolderPicker.Default.PickAsync(CancellationToken.None);
             if (result.IsSuccessful && !string.IsNullOrEmpty(result.Folder?.Path))
             {
                 ViewModel.SetModelStorageDirectory(result.Folder.Path);
@@ -351,18 +344,7 @@
     {
         try
         {
-            var initialPath = ViewModel.ChatHistoryDirectory;
-            FolderPickerResult result;
-            
-            if (!string.IsNullOrEmpty(initialPath) && Directory.Exists(initialPath))
-            {
-                result = await FolderPicker.Default.PickAsync(initialPath, default);
-            }
-            else
-            {
-                result = await FolderPicker.Default.PickAsync(default);
-            }
-            
+            var result = await FolderPicker.Default.PickAsync(CancellationToken.None);
             if (result.IsSuccessful && !string.IsNullOrEmpty(result.Folder?.Path))
             {
                 ViewModel.SetChatHistoryDirectory(result.Folder.Path);
@@ -372,6 +354,26 @@
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Folder picker error: {ex.Message}");
+        }
+    }
+
+    private void OnModelStoragePathChanged(ChangeEventArgs e)
+    {
+        var path = e.Value?.ToString();
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            ViewModel.SetModelStorageDirectory(path);
+            StateHasChanged();
+        }
+    }
+
+    private void OnChatHistoryPathChanged(ChangeEventArgs e)
+    {
+        var path = e.Value?.ToString();
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            ViewModel.SetChatHistoryDirectory(path);
+            StateHasChanged();
         }
     }
 }

@@ -61,27 +61,28 @@
     gap: 0.375rem;
 }
 
-.storage-path {
-    display: flex;
-    align-items: center;
+.storage-path-input {
     flex: 1;
     min-width: 0;
     padding: 0.4375rem 0.625rem;
     background-color: #1A1A1A;
     border: 1px solid #2A2A2A;
     border-radius: 0.375rem;
-    overflow: hidden;
-}
-
-.storage-path .path-text {
     font-size: 0.6875rem;
     font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
     color: #9E9E9E;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    direction: rtl;
-    text-align: left;
+    outline: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.storage-path-input:hover {
+    border-color: #3A3A3A;
+}
+
+.storage-path-input:focus {
+    border-color: var(--Primary-40);
+    background-color: #1E1E1E;
+    color: #CECECE;
 }
 
 .storage-browse-btn {

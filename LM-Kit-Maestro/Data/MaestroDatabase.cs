@@ -6,46 +6,39 @@ namespace LMKit.Maestro.Data
 {
     public sealed class MaestroDatabase : IMaestroDatabase
     {
-        private readonly IAppSettingsService _appSettingsService;
+        // Static fallback for legacy access
+        public static string DefaultDatabasePath => Path.Combine(FileSystem.AppDataDirectory, "MaestroSQLite.db3");
         
-        public string DatabasePath => Path.Combine(_appSettingsService.ChatHistoryDirectory, "MaestroSQLite.db3");
+        private readonly string _databasePath;
+        
+        public string DatabasePath => _databasePath;
 
         private SQLiteAsyncConnection? _sqlDatabase;
-        private string? _currentDatabasePath;
 
         public MaestroDatabase(IAppSettingsService appSettingsService)
         {
-            _appSettingsService = appSettingsService;
+            // Read path once at construction - changes require restart
+            var historyDir = appSettingsService.ChatHistoryDirectory;
+            _databasePath = Path.Combine(historyDir, "MaestroSQLite.db3");
         }
 
         private async Task Init()
         {
-            var targetPath = DatabasePath;
-            
-            // Reinitialize if path changed
-            if (_sqlDatabase is not null && _currentDatabasePath == targetPath)
+            if (_sqlDatabase is not null)
             {
                 return;
-            }
-
-            // Close existing connection if path changed
-            if (_sqlDatabase is not null && _currentDatabasePath != targetPath)
-            {
-                await _sqlDatabase.CloseAsync();
-                _sqlDatabase = null;
             }
 
             try
             {
                 // Ensure directory exists
-                var directory = Path.GetDirectoryName(targetPath);
+                var directory = Path.GetDirectoryName(_databasePath);
                 if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
                 }
 
-                _sqlDatabase = new SQLiteAsyncConnection(targetPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.SharedCache);
-                _currentDatabasePath = targetPath;
+                _sqlDatabase = new SQLiteAsyncConnection(_databasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.SharedCache);
 
                 await _sqlDatabase.CreateTableAsync<ConversationLog>();
             }
