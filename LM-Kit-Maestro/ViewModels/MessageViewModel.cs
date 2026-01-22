@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
@@ -11,7 +11,7 @@ public partial class MessageViewModel : ViewModelBase
 {
     public ConversationViewModel ParentConversation { get; }
 
-    private ChatHistory.Message _lmKitMessage;
+    private ChatHistory.Message _lmKitMessage = null!;
 
     public ChatHistory.Message LMKitMessage
     {
@@ -31,7 +31,7 @@ public partial class MessageViewModel : ViewModelBase
     private MessageSender _sender;
 
     [ObservableProperty]
-    private string _content;
+    private string _content = string.Empty;
 
     [ObservableProperty]
     private bool _messageInProgress;

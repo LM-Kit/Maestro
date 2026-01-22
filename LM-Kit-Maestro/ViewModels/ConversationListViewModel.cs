@@ -1,4 +1,4 @@
-﻿using LMKit.Maestro.Data;
+using LMKit.Maestro.Data;
 using LMKit.Maestro.Models;
 using LMKit.Maestro.Services;
 using Microsoft.Extensions.Logging;
@@ -140,7 +140,7 @@ namespace LMKit.Maestro.ViewModels
 
         private void OnConversationCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
             {
                 foreach (var item in e.NewItems)
                 {
@@ -150,14 +150,13 @@ namespace LMKit.Maestro.ViewModels
                 if (Conversations.Count == 1)
                 {
                     CurrentConversation = Conversations[0];
-
                 }
-                else if (e.Action == NotifyCollectionChangedAction.Remove)
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
+            {
+                foreach (var item in e.OldItems)
                 {
-                    foreach (var item in e.OldItems)
-                    {
-                        ((ConversationViewModel)item).PropertyChanged -= OnConversationPropertyChanged;
-                    }
+                    ((ConversationViewModel)item).PropertyChanged -= OnConversationPropertyChanged;
                 }
             }
         }

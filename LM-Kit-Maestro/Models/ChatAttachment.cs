@@ -8,10 +8,10 @@ namespace LMKit.Maestro.Models;
 /// </summary>
 public class ChatAttachment : INotifyPropertyChanged
 {
-    private string _fileName;
-    private string _mimeType;
-    private byte[] _content;
-    private string _thumbnailBase64;
+    private string _fileName = string.Empty;
+    private string _mimeType = string.Empty;
+    private byte[] _content = Array.Empty<byte>();
+    private string? _thumbnailBase64;
     private bool _isImage;
     private bool _isPdf;
 
@@ -55,7 +55,7 @@ public class ChatAttachment : INotifyPropertyChanged
     /// For images, this is the image itself (possibly resized).
     /// For PDFs, this could be a PDF icon or first page preview.
     /// </summary>
-    public string ThumbnailBase64
+    public string? ThumbnailBase64
     {
         get => _thumbnailBase64;
         set { _thumbnailBase64 = value; OnPropertyChanged(); }
@@ -129,11 +129,7 @@ public class ChatAttachment : INotifyPropertyChanged
             // For images, use the image itself as thumbnail (base64)
             attachment.ThumbnailBase64 = Convert.ToBase64String(content);
         }
-        else if (attachment.IsPdf)
-        {
-            // For PDFs, we'll show a PDF icon (handled in UI)
-            attachment.ThumbnailBase64 = null;
-        }
+        // For PDFs, ThumbnailBase64 remains null (PDF icon handled in UI)
 
         return attachment;
     }

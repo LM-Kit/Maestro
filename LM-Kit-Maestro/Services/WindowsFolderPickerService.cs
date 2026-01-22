@@ -1,6 +1,5 @@
 #if WINDOWS
 using System.Runtime.InteropServices;
-using Microsoft.Maui.ApplicationModel;
 
 namespace LMKit.Maestro.Services;
 
@@ -41,17 +40,33 @@ public class WindowsFolderPickerService : IFolderPickerService
     [ThreadStatic]
     private static string? _initialPath;
 
-    public async Task<string?> PickFolderAsync(string? initialPath = null, string? title = null)
+    public Task<string?> PickFolderAsync(string? initialPath = null, string? title = null)
     {
+        var tcs = new TaskCompletionSource<string?>();
+        
         // Must run on UI thread for shell dialogs
-        if (MainThread.IsMainThread)
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher == null)
         {
-            return ShowDialog(initialPath, title);
+            tcs.SetResult(null);
+            return tcs.Task;
         }
-        else
+
+        dispatcher.Dispatch(() =>
         {
-            return await MainThread.InvokeOnMainThreadAsync(() => ShowDialog(initialPath, title));
-        }
+            try
+            {
+                var result = ShowDialog(initialPath, title);
+                tcs.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Folder picker error: {ex.Message}");
+                tcs.SetResult(null);
+            }
+        });
+
+        return tcs.Task;
     }
 
     private static string? ShowDialog(string? initialPath, string? title)

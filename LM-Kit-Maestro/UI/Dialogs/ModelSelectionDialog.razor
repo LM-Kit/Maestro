@@ -985,11 +985,13 @@
 </style>
 
 @code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
 
-    [Inject] private ModelListViewModel ModelListViewModel { get; set; }
-    [Inject] private ILauncher Launcher { get; set; }
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = null!;
+
+    [Inject] private ModelListViewModel ModelListViewModel { get; set; } = null!;
+
+    [Inject] private ILauncher Launcher { get; set; } = null!;
 
     private string _searchQuery = string.Empty;
     private string SearchQuery
@@ -1075,9 +1077,9 @@
 
     private string FormatSize(long bytes) => bytes >= 1_000_000_000 ? $"{bytes / 1_000_000_000.0:F2} GB" : bytes >= 1_000_000 ? $"{bytes / 1_000_000.0:F0} MB" : $"{bytes / 1_000.0:F0} KB";
 
-    [Parameter] public string Message { get; set; }
-    [Parameter] public string Title { get; set; }
-    [Parameter] public string ActionText { get; set; }
+    [Parameter] public string Message { get; set; } = string.Empty;
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string ActionText { get; set; } = string.Empty;
     [Parameter] public Color ActionColor { get; set; }
     [Parameter] public bool IsImportant { get; set; }
 

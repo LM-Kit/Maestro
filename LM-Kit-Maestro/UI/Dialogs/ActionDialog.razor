@@ -1,4 +1,4 @@
-﻿<MudDialog Class="action-dialog-root radius-1">
+<MudDialog Class="action-dialog-root radius-1">
     <DialogContent>
         <div class="d-flex flex-column gap-2">
 
@@ -46,7 +46,7 @@
 
     [Parameter] public bool IsImportant { get; set; }
 
-    [CascadingParameter] private IMudDialogInstance DialogInstance { get; set; }
+    [CascadingParameter] private IMudDialogInstance DialogInstance { get; set; } = null!;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -60,5 +60,5 @@
 
 @code {
     [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+    private IMudDialogInstance MudDialog { get; set; } = null!;
 }
