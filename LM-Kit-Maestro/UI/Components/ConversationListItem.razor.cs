@@ -1,11 +1,12 @@
-﻿using LMKit.Maestro.ViewModels;
+using LMKit.Maestro.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace LMKit.Maestro.UI.Components;
 
-public partial class ConversationListItem : ComponentBase
+public partial class ConversationListItem : ComponentBase, IDisposable
 {
     [Parameter] public EventCallback<ConversationViewModel> OnSelect { get; set; }
     [Parameter] public EventCallback<ConversationViewModel> OnDelete { get; set; }
@@ -13,6 +14,7 @@ public partial class ConversationListItem : ComponentBase
     [Parameter] public bool IsSelected { get; set; }
 
     private MudBlazor.MudTextField<string>? ItemTitleRef;
+    private ConversationViewModel? _previousViewModel;
 
     public string Title { get; private set; } = "";
 
@@ -21,10 +23,42 @@ public partial class ConversationListItem : ComponentBase
     {
         base.OnParametersSet();
 
+        // Handle ViewModel change - unsubscribe from old, subscribe to new
+        if (_previousViewModel != ViewModel)
+        {
+            if (_previousViewModel != null)
+            {
+                _previousViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+            }
+
+            if (ViewModel != null)
+            {
+                ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+            }
+
+            _previousViewModel = ViewModel;
+        }
+
         if (!ViewModel.IsRenaming)
         {
             Title = ViewModel.Title;
             IsSelected = ViewModel.IsSelected;
+        }
+    }
+
+    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ConversationViewModel.Title))
+        {
+            // Update local title and refresh UI on the UI thread
+            InvokeAsync(() =>
+            {
+                if (!ViewModel.IsRenaming)
+                {
+                    Title = ViewModel.Title;
+                    StateHasChanged();
+                }
+            });
         }
     }
 
@@ -85,5 +119,13 @@ public partial class ConversationListItem : ComponentBase
         }
 
         ViewModel!.IsRenaming = false;
+    }
+
+    public void Dispose()
+    {
+        if (_previousViewModel != null)
+        {
+            _previousViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+        }
     }
 }
