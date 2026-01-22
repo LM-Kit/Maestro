@@ -95,6 +95,13 @@ namespace LMKit.Maestro
             // Database (depends on IAppSettingsService)
             builder.Services.AddSingleton<IMaestroDatabase, MaestroDatabase>();
             
+            // Folder picker service (platform-specific)
+#if WINDOWS
+            builder.Services.AddSingleton<IFolderPickerService, WindowsFolderPickerService>();
+#else
+            builder.Services.AddSingleton<IFolderPickerService, DefaultFolderPickerService>();
+#endif
+            
             // Other services
             builder.Services.AddSingleton<ILLMFileManager, LLMFileManager>();
             builder.Services.AddSingleton<IMainThread, Services.MainThread>();

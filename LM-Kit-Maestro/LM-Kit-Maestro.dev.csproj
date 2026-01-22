@@ -107,7 +107,6 @@
 		<PackageReference Include="MudBlazor" Version="8.15.0" />
 		<PackageReference Include="SimpleToolkit.SimpleShell" Version="5.0.1" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-		<PackageReference Include="System.Text.Json" Version="10.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>

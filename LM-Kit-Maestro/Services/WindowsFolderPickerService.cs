@@ -1,15 +1,15 @@
 #if WINDOWS
 using System.Runtime.InteropServices;
+using Microsoft.Maui.ApplicationModel;
 
 namespace LMKit.Maestro.Services;
 
 public class WindowsFolderPickerService : IFolderPickerService
 {
-    // Shell32 constants
     private const int BIF_RETURNONLYFSDIRS = 0x0001;
     private const int BIF_NEWDIALOGSTYLE = 0x0040;
     private const int BFFM_INITIALIZED = 1;
-    private const int BFFM_SETSELECTION = 0x0467; // WM_USER + 103
+    private const int BFFM_SETSELECTION = 0x0467;
 
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
     private static extern IntPtr SHBrowseForFolder(ref BROWSEINFO lpbi);
@@ -38,67 +38,77 @@ public class WindowsFolderPickerService : IFolderPickerService
 
     private delegate int BrowseCallbackProc(IntPtr hwnd, int uMsg, IntPtr lParam, IntPtr lpData);
 
+    [ThreadStatic]
     private static string? _initialPath;
 
-    public Task<string?> PickFolderAsync(string? initialPath = null, string? title = null)
+    public async Task<string?> PickFolderAsync(string? initialPath = null, string? title = null)
     {
-        return Task.Run(() =>
+        // Must run on UI thread for shell dialogs
+        if (MainThread.IsMainThread)
         {
-            _initialPath = initialPath;
-            
-            var bi = new BROWSEINFO
-            {
-                hwndOwner = GetActiveWindowHandle(),
-                pidlRoot = IntPtr.Zero,
-                pszDisplayName = Marshal.AllocHGlobal(260 * 2),
-                lpszTitle = title ?? "Select Folder",
-                ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE,
-                lpfn = BrowseCallback,
-                lParam = IntPtr.Zero,
-                iImage = 0
-            };
+            return ShowDialog(initialPath, title);
+        }
+        else
+        {
+            return await MainThread.InvokeOnMainThreadAsync(() => ShowDialog(initialPath, title));
+        }
+    }
 
-            try
+    private static string? ShowDialog(string? initialPath, string? title)
+    {
+        _initialPath = initialPath;
+
+        var bi = new BROWSEINFO
+        {
+            hwndOwner = GetActiveWindowHandle(),
+            pidlRoot = IntPtr.Zero,
+            pszDisplayName = Marshal.AllocHGlobal(260 * 2),
+            lpszTitle = title ?? "Select Folder",
+            ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE,
+            lpfn = BrowseCallback,
+            lParam = IntPtr.Zero,
+            iImage = 0
+        };
+
+        try
+        {
+            IntPtr pidl = SHBrowseForFolder(ref bi);
+            if (pidl != IntPtr.Zero)
             {
-                IntPtr pidl = SHBrowseForFolder(ref bi);
-                if (pidl != IntPtr.Zero)
+                try
                 {
+                    IntPtr pathPtr = Marshal.AllocHGlobal(260 * 2);
                     try
                     {
-                        IntPtr pathPtr = Marshal.AllocHGlobal(260 * 2);
-                        try
+                        if (SHGetPathFromIDList(pidl, pathPtr))
                         {
-                            if (SHGetPathFromIDList(pidl, pathPtr))
-                            {
-                                return Marshal.PtrToStringUni(pathPtr);
-                            }
-                        }
-                        finally
-                        {
-                            Marshal.FreeHGlobal(pathPtr);
+                            return Marshal.PtrToStringUni(pathPtr);
                         }
                     }
                     finally
                     {
-                        CoTaskMemFree(pidl);
+                        Marshal.FreeHGlobal(pathPtr);
                     }
                 }
+                finally
+                {
+                    CoTaskMemFree(pidl);
+                }
             }
-            finally
-            {
-                Marshal.FreeHGlobal(bi.pszDisplayName);
-                _initialPath = null;
-            }
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(bi.pszDisplayName);
+            _initialPath = null;
+        }
 
-            return null;
-        });
+        return null;
     }
 
     private static int BrowseCallback(IntPtr hwnd, int uMsg, IntPtr lParam, IntPtr lpData)
     {
         if (uMsg == BFFM_INITIALIZED && !string.IsNullOrEmpty(_initialPath))
         {
-            // Set the initial selection
             IntPtr pathPtr = Marshal.StringToHGlobalUni(_initialPath);
             try
             {

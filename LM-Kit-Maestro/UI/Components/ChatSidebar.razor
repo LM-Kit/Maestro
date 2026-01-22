@@ -1,4 +1,4 @@
-﻿@inherits ComponentBase
+@inherits ComponentBase
 @inject IJSRuntime JS
 @inject IResizeHandler ResizeHandler
 
@@ -49,7 +49,7 @@ class="@GetClasses()">
     private int _resizeStartX;
     private int _resizeStartWidth;
     private ElementReference _sidebarContainer;
-    private string _resizeEventId;
+    private string? _resizeEventId;
 
 
     [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
@@ -111,8 +111,6 @@ class="@GetClasses()">
     }
 
     private int _width;
-
-    bool _zero;
 
     [Parameter]
     public int Width

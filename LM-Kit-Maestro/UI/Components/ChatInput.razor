@@ -191,7 +191,7 @@
         }
     }
 
-    private async Task ProcessPickedFileAsync(FileResult file)
+    private async Task ProcessPickedFileAsync(FileResult? file)
     {
         try
         {
@@ -237,6 +237,7 @@
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Error processing file: {ex.Message}");
             SnackbarService.Show("Error reading file", $"Could not read {file?.FileName ?? "file"}", Severity.Error);
         }
     }

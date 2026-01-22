@@ -16,6 +16,11 @@ public partial class LMKitService
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        protected virtual void OnPropertyChanged(string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private readonly LMKitServiceState _state;
 
         private MultiTurnConversation? _multiTurnConversation;

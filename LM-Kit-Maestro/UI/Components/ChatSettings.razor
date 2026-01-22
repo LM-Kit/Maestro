@@ -1,5 +1,6 @@
 @inject ThemeService ThemeService
 @inject IJSRuntime JS
+@inject IFolderPickerService FolderPickerService
 @inherits ComponentBase
 
 <div id="settings-container">
@@ -245,7 +246,7 @@
 
 @code
 {
-    [Parameter] public ChatSettingsViewModel ViewModel { get; set; }
+    [Parameter] public ChatSettingsViewModel ViewModel { get; set; } = null!;
 
     private int? _previousTokenLimit;
 
@@ -325,35 +326,27 @@
 
     private async Task BrowseModelStorage()
     {
-        try
+        var path = await FolderPickerService.PickFolderAsync(
+            ViewModel.ModelStorageDirectory, 
+            "Select Model Storage Folder");
+        
+        if (!string.IsNullOrEmpty(path))
         {
-            var result = await FolderPicker.Default.PickAsync(CancellationToken.None);
-            if (result.IsSuccessful && !string.IsNullOrEmpty(result.Folder?.Path))
-            {
-                ViewModel.SetModelStorageDirectory(result.Folder.Path);
-                StateHasChanged();
-            }
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Folder picker error: {ex.Message}");
+            ViewModel.SetModelStorageDirectory(path);
+            StateHasChanged();
         }
     }
 
     private async Task BrowseChatHistory()
     {
-        try
+        var path = await FolderPickerService.PickFolderAsync(
+            ViewModel.ChatHistoryDirectory, 
+            "Select Chat History Folder");
+        
+        if (!string.IsNullOrEmpty(path))
         {
-            var result = await FolderPicker.Default.PickAsync(CancellationToken.None);
-            if (result.IsSuccessful && !string.IsNullOrEmpty(result.Folder?.Path))
-            {
-                ViewModel.SetChatHistoryDirectory(result.Folder.Path);
-                StateHasChanged();
-            }
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Folder picker error: {ex.Message}");
+            ViewModel.SetChatHistoryDirectory(path);
+            StateHasChanged();
         }
     }
 

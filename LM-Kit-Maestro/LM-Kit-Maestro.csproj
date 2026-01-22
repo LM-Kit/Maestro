@@ -85,7 +85,6 @@
 		<PackageReference Include="MetroLog.Maui" Version="2.1.0" />
 		<PackageReference Include="MudBlazor" Version="8.15.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-		<PackageReference Include="System.Text.Json" Version="10.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
