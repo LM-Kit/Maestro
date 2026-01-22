@@ -1,4 +1,4 @@
-﻿using LMKit.Maestro.Services;
+using LMKit.Maestro.Services;
 using LMKit.Maestro.UI.Dialogs;
 using LMKit.Maestro.ViewModels;
 using Majorsoft.Blazor.Components.Common.JsInterop.GlobalMouseEvents;
@@ -24,6 +24,76 @@ public partial class ChatPage : IDisposable
     private double? _previousScrollTop;
     private double _scrollTop;
     private bool _refreshScheduled;
+
+    private string _searchQuery = string.Empty;
+    private string SearchQuery
+    {
+        get => _searchQuery;
+        set
+        {
+            if (_searchQuery != value)
+            {
+                _searchQuery = value;
+                RefreshUIAsync(forceRerender: true);
+            }
+        }
+    }
+
+    private void ClearSearch()
+    {
+        SearchQuery = string.Empty;
+    }
+
+    private IEnumerable<ConversationViewModel> FilteredConversations
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                return ViewModel.ConversationListViewModel.Conversations;
+            }
+
+            return ViewModel.ConversationListViewModel.Conversations
+                .Where(c => c.Title.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
+        }
+    }
+
+    private IEnumerable<IGrouping<string, ConversationViewModel>> GroupedConversations
+    {
+        get
+        {
+            var today = DateTime.Today;
+            var yesterday = today.AddDays(-1);
+            var lastWeek = today.AddDays(-7);
+
+            return ViewModel.ConversationListViewModel.RecentConversations
+                .GroupBy(c => GetDateGroup(c.ConversationLog.Date, today, yesterday, lastWeek))
+                .OrderBy(g => GetGroupOrder(g.Key));
+        }
+    }
+
+    private string GetDateGroup(DateTime date, DateTime today, DateTime yesterday, DateTime lastWeek)
+    {
+        if (date.Date == today)
+            return "Today";
+        if (date.Date == yesterday)
+            return "Yesterday";
+        if (date.Date > lastWeek)
+            return "Last 7 days";
+        return "Older";
+    }
+
+    private int GetGroupOrder(string groupName)
+    {
+        return groupName switch
+        {
+            "Today" => 0,
+            "Yesterday" => 1,
+            "Last 7 days" => 2,
+            "Older" => 3,
+            _ => 4
+        };
+    }
 
     private bool _showSidebarToggles = true;
     private bool ShowSidebarToggles

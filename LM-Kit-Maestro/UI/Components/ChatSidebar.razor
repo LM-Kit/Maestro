@@ -22,7 +22,7 @@ class="@GetClasses()">
         }
     }
 
-    <div class="sidebar-content scrollable @(ShowScrollbar ? "hover-scrollable" : "no-scrollbar")">
+    <div class="sidebar-content @GetScrollClasses()">
         @ChildContent
     </div>
 
@@ -199,6 +199,15 @@ class="@GetClasses()">
         }
 
         return classes;
+    }
+
+    private string GetScrollClasses()
+    {
+        if (ShowScrollbar)
+        {
+            return "scrollable hover-scrollable";
+        }
+        return "";
     }
 
     private async Task OnPageResize(ResizeEventArgs args)

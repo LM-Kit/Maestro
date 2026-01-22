@@ -40,68 +40,110 @@
 </SectionContent>
 
 <div id="chat-container">
-    <ChatSidebar ShowScrollbar="true"
+    <ChatSidebar ShowScrollbar="false"
         Resizable="true"
         Position="ChatSidebar.SidebarPosition.Left"
         @bind-Width="ChatsSidebarWidth"
         @bind-IsResizing="ChatsSidebarIsResizing"
         @bind-IsToggled="ChatsSidebarIsToggled">
 
-        <div class="sidebar-header">
-            <span class="sidebar-title">Maestro <span class="maestro-heart">❤</span></span>
-            <button class="sidebar-close-button" @onclick="ToggleChatsSidebar" title="Close sidebar">
-                <i class="fas fa-xmark"></i>
-            </button>
-        </div>
-
-        <div class="sidebar-actions">
-            <button class="sidebar-action-button" @onclick="OnNewChatClicked">
-                <i class="fas fa-plus"></i>
-                <span>New chat</span>
-            </button>
-        </div>
-
-        @if (ViewModel.ConversationListViewModel.HasStarredConversations)
-        {
-            <div class="sidebar-section-title">
-                <i class="fas fa-star" style="font-size: 0.625rem; color: #FBBF24; margin-right: 0.375rem;"></i>
-                Starred
+        <div class="sidebar-fixed-content">
+            <div class="sidebar-header">
+                <span class="sidebar-title">Maestro <span class="maestro-heart">❤</span></span>
+                <button class="sidebar-close-button" @onclick="ToggleChatsSidebar" title="Close sidebar">
+                    <i class="fas fa-xmark"></i>
+                </button>
             </div>
 
-            <div class="sidebar-conversations">
-                @foreach (var conversation in ViewModel.ConversationListViewModel.StarredConversations)
-                {
-                    <ConversationListItem OnSelect="OnConversationItemSelected"
-                                          OnDelete="OnConversationItemDeleteClicked"
-                                          OnToggleStar="OnConversationItemStarToggled"
-                                          IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
-                                          ViewModel="conversation"/>
-                }
+            <div class="sidebar-actions">
+                <button class="sidebar-action-button" @onclick="OnNewChatClicked">
+                    <i class="fas fa-plus"></i>
+                    <span>New chat</span>
+                </button>
             </div>
 
-            <div class="sidebar-section-title">Recent</div>
-        }
-        else
-        {
-            <div class="sidebar-section-title">Chats</div>
-        }
+            <div class="sidebar-search">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-magnifying-glass search-icon"></i>
+                    <input type="text" 
+                           class="search-input" 
+                           placeholder="Search chats..." 
+                           @bind="SearchQuery" 
+                           @bind:event="oninput" />
+                    @if (!string.IsNullOrEmpty(SearchQuery))
+                    {
+                        <button class="search-clear-button" @onclick="ClearSearch">
+                            <i class="fas fa-xmark"></i>
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
 
-        <div class="sidebar-conversations">
-            @foreach (var conversation in ViewModel.ConversationListViewModel.RecentConversations)
+        <div class="sidebar-scrollable-content">
+            @if (ViewModel.ConversationListViewModel.HasStarredConversations && string.IsNullOrEmpty(SearchQuery))
             {
-                <ConversationListItem OnSelect="OnConversationItemSelected"
-                                      OnDelete="OnConversationItemDeleteClicked"
-                                      OnToggleStar="OnConversationItemStarToggled"
-                                      IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
-                                      ViewModel="conversation"/>
+                <div class="sidebar-section-title">
+                    <i class="fas fa-star" style="font-size: 0.625rem; color: #FBBF24; margin-right: 0.375rem;"></i>
+                    Starred
+                </div>
+
+                <div class="sidebar-conversations">
+                    @foreach (var conversation in ViewModel.ConversationListViewModel.StarredConversations)
+                    {
+                        <ConversationListItem OnSelect="OnConversationItemSelected"
+                                              OnDelete="OnConversationItemDeleteClicked"
+                                              OnToggleStar="OnConversationItemStarToggled"
+                                              IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
+                                              ViewModel="conversation"/>
+                    }
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(SearchQuery))
+            {
+                <div class="sidebar-section-title">Search Results</div>
+                <div class="sidebar-conversations">
+                    @foreach (var conversation in FilteredConversations)
+                    {
+                        <ConversationListItem OnSelect="OnConversationItemSelected"
+                                              OnDelete="OnConversationItemDeleteClicked"
+                                              OnToggleStar="OnConversationItemStarToggled"
+                                              IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
+                                              ViewModel="conversation"/>
+                    }
+                    @if (!FilteredConversations.Any())
+                    {
+                        <div class="no-results">No chats found</div>
+                    }
+                </div>
+            }
+            else
+            {
+                @foreach (var group in GroupedConversations)
+                {
+                    <div class="sidebar-section-title">@group.Key</div>
+                    <div class="sidebar-conversations">
+                        @foreach (var conversation in group)
+                        {
+                            <ConversationListItem OnSelect="OnConversationItemSelected"
+                                                  OnDelete="OnConversationItemDeleteClicked"
+                                                  OnToggleStar="OnConversationItemStarToggled"
+                                                  IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
+                                                  ViewModel="conversation"/>
+                        }
+                    </div>
+                }
             }
         </div>
 
-        <div class="sidebar-footer">
-            <button class="sidebar-footer-button @(SettingsSidebarIsToggled ? "active" : "")" @onclick="ToggleSettingsSidebar">
-                <i class="fas fa-bars-staggered"></i>
-                <span>Configuration</span>
-            </button>
+        <div class="sidebar-fixed-footer">
+            <div class="sidebar-footer">
+                <button class="sidebar-footer-button @(SettingsSidebarIsToggled ? "active" : "")" @onclick="ToggleSettingsSidebar">
+                    <i class="fas fa-bars-staggered"></i>
+                    <span>Configuration</span>
+                </button>
+            </div>
         </div>
     </ChatSidebar>
 
