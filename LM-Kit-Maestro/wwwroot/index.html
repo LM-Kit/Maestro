@@ -233,7 +233,8 @@
             });
             
             // Inline LaTeX: \( ... \) or $ ... $ (single $)
-            html = html.replace(/\\\(([^)]+)\\\)/g, (match, latex) => {
+            // Use lazy match .+? to correctly find closing \) even when content contains )
+            html = html.replace(/\\\((.+?)\\\)/g, (match, latex) => {
                 return renderLatex(latex.trim(), false);
             });
             // Single $ for inline math (be careful not to match $$)
