@@ -10,6 +10,7 @@
     transition: all 0.15s ease;
     position: relative;
     margin: 0.0625rem 0;
+    gap: 0.25rem;
 }
 
     #item-container:hover {
@@ -25,6 +26,10 @@
         opacity: 1;
     }
 
+    #item-container:hover .star-indicator {
+        opacity: 1;
+    }
+
     #item-container.item-selected {
         background-color: rgba(255, 255, 255, 0.08);
     }
@@ -32,6 +37,47 @@
     #item-container:active {
         transform: scale(0.99);
     }
+
+/* Star indicator styles */
+.star-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    min-width: 1.25rem;
+    border-radius: 0.25rem;
+    opacity: 0;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    color: #6E6E6E;
+    font-size: 0.75rem;
+}
+
+    .star-indicator:hover {
+        color: #FBBF24;
+        background-color: rgba(251, 191, 36, 0.15);
+        transform: scale(1.1);
+    }
+
+    .star-indicator:active {
+        transform: scale(0.95);
+    }
+
+    .star-indicator.starred {
+        opacity: 1;
+        color: #FBBF24;
+    }
+
+        .star-indicator.starred:hover {
+            color: #F59E0B;
+            background-color: rgba(251, 191, 36, 0.2);
+        }
+
+.item-actions {
+    display: flex;
+    align-items: center;
+}
 
 #show-more-button {
     opacity: 0;

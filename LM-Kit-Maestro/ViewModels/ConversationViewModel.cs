@@ -38,6 +38,14 @@ public partial class ConversationViewModel : AssistantViewModelBase
 
     [ObservableProperty] bool _isShowingActionPopup;
 
+    [ObservableProperty] bool _isStarred;
+
+    partial void OnIsStarredChanged(bool value)
+    {
+        ConversationLog.IsStarred = value;
+        SaveConversation();
+    }
+
     public ObservableCollection<MessageViewModel> Messages { get; } = [];
     public ConversationLog ConversationLog { get; }
 
@@ -95,6 +103,7 @@ public partial class ConversationViewModel : AssistantViewModelBase
         LmKitService.ModelUnloaded += OnModelUnloaded;
         _database = database;
         _title = conversationLog.Title!;
+        _isStarred = conversationLog.IsStarred;
         LMKitConversation = new LMKitService.Conversation(lmKitService, conversationLog.ChatHistoryData);
         LMKitConversation.ChatHistoryChanged += OnLMKitChatHistoryChanged;
         LMKitConversation.SummaryTitleGenerated += OnConversationSummaryTitleGenerated;

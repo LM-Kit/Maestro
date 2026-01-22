@@ -224,6 +224,89 @@ xs-icon {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
+/* Beautiful Action Menu - Global styles for MudPopover content */
+.action-menu {
+    background: linear-gradient(135deg, #2A2A2A 0%, #252525 100%);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.375rem;
+    min-width: 140px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                0 2px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    padding: 0.5rem 0.625rem;
+    background: transparent;
+    border: none;
+    border-radius: 0.5rem;
+    color: #D1D1D1;
+    font-size: 0.8125rem;
+    font-weight: 450;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+}
+
+.menu-item:active {
+    background: rgba(255, 255, 255, 0.12);
+    transform: scale(0.98);
+}
+
+.menu-icon {
+    font-size: 0.75rem;
+    width: 1rem;
+    text-align: center;
+    color: #8E8E8E;
+    transition: all 0.15s ease;
+}
+
+.menu-item:hover .menu-icon {
+    color: #ECECEC;
+}
+
+.menu-icon.star-active {
+    color: #FBBF24;
+}
+
+.menu-item:hover .menu-icon.star-active {
+    color: #F59E0B;
+}
+
+.menu-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 0.25rem 0.375rem;
+}
+
+.menu-item-danger {
+    color: #F87171;
+}
+
+.menu-item-danger:hover {
+    background: rgba(239, 68, 68, 0.12);
+    color: #FCA5A5;
+}
+
+.menu-item-danger .menu-icon {
+    color: #F87171;
+}
+
+.menu-item-danger:hover .menu-icon {
+    color: #FCA5A5;
+}
+
 .width-transition {
     transition: width 0.3s ease-in;
 }

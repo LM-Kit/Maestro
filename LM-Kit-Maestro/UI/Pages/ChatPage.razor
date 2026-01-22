@@ -61,13 +61,37 @@
             </button>
         </div>
 
-        <div class="sidebar-section-title">Chats</div>
+        @if (ViewModel.ConversationListViewModel.HasStarredConversations)
+        {
+            <div class="sidebar-section-title">
+                <i class="fas fa-star" style="font-size: 0.625rem; color: #FBBF24; margin-right: 0.375rem;"></i>
+                Starred
+            </div>
+
+            <div class="sidebar-conversations">
+                @foreach (var conversation in ViewModel.ConversationListViewModel.StarredConversations)
+                {
+                    <ConversationListItem OnSelect="OnConversationItemSelected"
+                                          OnDelete="OnConversationItemDeleteClicked"
+                                          OnToggleStar="OnConversationItemStarToggled"
+                                          IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
+                                          ViewModel="conversation"/>
+                }
+            </div>
+
+            <div class="sidebar-section-title">Recent</div>
+        }
+        else
+        {
+            <div class="sidebar-section-title">Chats</div>
+        }
 
         <div class="sidebar-conversations">
-            @foreach (var conversation in ViewModel.ConversationListViewModel.Conversations)
+            @foreach (var conversation in ViewModel.ConversationListViewModel.RecentConversations)
             {
                 <ConversationListItem OnSelect="OnConversationItemSelected"
                                       OnDelete="OnConversationItemDeleteClicked"
+                                      OnToggleStar="OnConversationItemStarToggled"
                                       IsSelected="@(conversation == ViewModel.ConversationListViewModel.CurrentConversation)"
                                       ViewModel="conversation"/>
             }

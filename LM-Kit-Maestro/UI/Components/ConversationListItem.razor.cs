@@ -10,6 +10,7 @@ public partial class ConversationListItem : ComponentBase, IDisposable
 {
     [Parameter] public EventCallback<ConversationViewModel> OnSelect { get; set; }
     [Parameter] public EventCallback<ConversationViewModel> OnDelete { get; set; }
+    [Parameter] public EventCallback<ConversationViewModel> OnToggleStar { get; set; }
     [Parameter] public required ConversationViewModel ViewModel { get; set; }
     [Parameter] public bool IsSelected { get; set; }
 
@@ -17,6 +18,26 @@ public partial class ConversationListItem : ComponentBase, IDisposable
     private ConversationViewModel? _previousViewModel;
 
     public string Title { get; private set; } = "";
+
+    private string GetContainerClasses()
+    {
+        var classes = new List<string>();
+        if (IsSelected) classes.Add("item-selected");
+        if (ViewModel.IsStarred) classes.Add("item-starred");
+        return string.Join(" ", classes);
+    }
+
+    private string GetStarIndicatorClasses()
+    {
+        var classes = new List<string> { "star-indicator" };
+        if (ViewModel.IsStarred) classes.Add("starred");
+        return string.Join(" ", classes);
+    }
+
+    private string GetStarIconClass()
+    {
+        return ViewModel.IsStarred ? "fas fa-star" : "far fa-star";
+    }
 
 
     protected override void OnParametersSet()
@@ -60,6 +81,10 @@ public partial class ConversationListItem : ComponentBase, IDisposable
                 }
             });
         }
+        else if (e.PropertyName == nameof(ConversationViewModel.IsStarred))
+        {
+            InvokeAsync(() => StateHasChanged());
+        }
     }
 
     private void OnShowMoreClicked()
@@ -90,6 +115,12 @@ public partial class ConversationListItem : ComponentBase, IDisposable
     {
         ViewModel.IsShowingActionPopup = false;
         OnDelete.InvokeAsync(ViewModel);
+    }
+
+    private void OnStarClicked()
+    {
+        ViewModel.IsShowingActionPopup = false;
+        OnToggleStar.InvokeAsync(ViewModel);
     }
 
     private void OnTitleFocusOut(Microsoft.AspNetCore.Components.Web.FocusEventArgs e)

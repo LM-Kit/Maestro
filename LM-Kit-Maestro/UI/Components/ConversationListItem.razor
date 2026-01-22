@@ -1,6 +1,11 @@
 ﻿@inherits ComponentBase
 
-<div @onclick="OnSelected" id="item-container" class="@(IsSelected ? "item-selected" : "")">
+<div @onclick="OnSelected" id="item-container" class="@GetContainerClasses()">
+
+    @* Star indicator - always visible when starred *@
+    <div class="@GetStarIndicatorClasses()" @onclick="OnStarClicked" @onclick:stopPropagation="true" title="@(ViewModel.IsStarred ? "Remove from starred" : "Add to starred")">
+        <i class="@GetStarIconClass()"></i>
+    </div>
 
     <MudTextField Underline=false
                   @ref="ItemTitleRef"
@@ -12,7 +17,7 @@
                   TextUpdateSuppression="false"
                   ReadOnly="@(!ViewModel.IsRenaming)" />
 
-    <div>
+    <div class="item-actions">
         <div id="show-more-button" class="@(IsSelected ? "show" : "collapse")">
             <MudIconButton @onclick="OnShowMoreClicked"
                            Icon="@Icons.Material.Filled.MoreHoriz"
@@ -20,16 +25,20 @@
         </div>
 
         <MudPopover Open="@ViewModel.IsShowingActionPopup" Fixed="true">
-            <div class="action-sheet">
-                <button class="text-button" @onclick="OnSelected">
-                    <MudText Typo="Typo.subtitle2">Select</MudText>
+            <div class="action-menu">
+                <button class="menu-item" @onclick="OnStarClicked">
+                    <i class="@(ViewModel.IsStarred ? "fas fa-star" : "far fa-star") menu-icon @(ViewModel.IsStarred ? "star-active" : "")"></i>
+                    <span>@(ViewModel.IsStarred ? "Unstar" : "Star")</span>
                 </button>
-                <button class="text-button" @onclick="OnRenameClicked">
-                    <MudText Typo="Typo.subtitle2">Rename</MudText>
+                <button class="menu-item" @onclick="OnRenameClicked">
+                    <i class="fas fa-pen menu-icon"></i>
+                    <span>Rename</span>
                 </button>
-                <button class="text-button" @onclick="OnDeleteClicked">
-                      <MudText Color="Color.Error" Typo="Typo.subtitle2">Delete</MudText>
-                 </button>
+                <div class="menu-divider"></div>
+                <button class="menu-item menu-item-danger" @onclick="OnDeleteClicked">
+                    <i class="fas fa-trash-can menu-icon"></i>
+                    <span>Delete</span>
+                </button>
             </div>
         </MudPopover>
 

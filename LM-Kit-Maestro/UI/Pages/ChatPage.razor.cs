@@ -233,6 +233,12 @@ public partial class ChatPage : IDisposable
         {
             OnConversationSet();
         }
+        else if (e.PropertyName == nameof(ConversationListViewModel.HasStarredConversations) ||
+                 e.PropertyName == nameof(ConversationListViewModel.StarredConversations) ||
+                 e.PropertyName == nameof(ConversationListViewModel.RecentConversations))
+        {
+            RefreshUIAsync(forceRerender: true);
+        }
     }
 
     private void OnConversationPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -480,6 +486,11 @@ public partial class ChatPage : IDisposable
         {
             await Task.Run(() => ViewModel.ConversationListViewModel.DeleteConversation(conversationViewModel));
         }
+    }
+
+    private void OnConversationItemStarToggled(ConversationViewModel conversationViewModel)
+    {
+        ViewModel.ConversationListViewModel.ToggleStar(conversationViewModel);
     }
 
     private async Task OnResetSettingsClicked()
