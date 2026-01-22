@@ -24,6 +24,58 @@
     </Expander>
     <MudDivider />
 
+    <Expander Title="Storage">
+        <div class="storage-settings">
+            <div class="storage-item">
+                <div class="storage-header">
+                    <div class="storage-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <div class="storage-info">
+                        <span class="storage-label">Model Storage</span>
+                        <span class="storage-description">Where AI models are downloaded and stored</span>
+                    </div>
+                </div>
+                <div class="storage-path-row">
+                    <div class="storage-path" title="@ViewModel.ModelStorageDirectory">
+                        <span class="path-text">@ViewModel.ModelStorageDirectory</span>
+                    </div>
+                    <button class="storage-browse-btn" @onclick="BrowseModelStorage" title="Browse for folder">
+                        <i class="fas fa-folder-open"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="storage-divider"></div>
+
+            <div class="storage-item">
+                <div class="storage-header">
+                    <div class="storage-icon">
+                        <i class="fas fa-clock-rotate-left"></i>
+                    </div>
+                    <div class="storage-info">
+                        <span class="storage-label">Chat History</span>
+                        <span class="storage-description">Where conversation history is saved</span>
+                    </div>
+                </div>
+                <div class="storage-path-row">
+                    <div class="storage-path" title="@ViewModel.ChatHistoryDirectory">
+                        <span class="path-text">@ViewModel.ChatHistoryDirectory</span>
+                    </div>
+                    <button class="storage-browse-btn" @onclick="BrowseChatHistory" title="Browse for folder">
+                        <i class="fas fa-folder-open"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="storage-note">
+                <i class="fas fa-circle-info"></i>
+                <span>Changes to chat history location require restart</span>
+            </div>
+        </div>
+    </Expander>
+    <MudDivider />
+
     <Expander Title="General settings">
         <MudStack Class="pa-2" Spacing="6">
             <div class="d-flex flex-column gap-2">
@@ -265,5 +317,61 @@
         ThemeService.SetTheme(theme);
         await JS.InvokeVoidAsync("localStorage.setItem", "maestro-theme", theme.Name);
         StateHasChanged();
+    }
+
+    private async Task BrowseModelStorage()
+    {
+        try
+        {
+            var initialPath = ViewModel.ModelStorageDirectory;
+            FolderPickerResult result;
+            
+            if (!string.IsNullOrEmpty(initialPath) && Directory.Exists(initialPath))
+            {
+                result = await FolderPicker.Default.PickAsync(initialPath, default);
+            }
+            else
+            {
+                result = await FolderPicker.Default.PickAsync(default);
+            }
+            
+            if (result.IsSuccessful && !string.IsNullOrEmpty(result.Folder?.Path))
+            {
+                ViewModel.SetModelStorageDirectory(result.Folder.Path);
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Folder picker error: {ex.Message}");
+        }
+    }
+
+    private async Task BrowseChatHistory()
+    {
+        try
+        {
+            var initialPath = ViewModel.ChatHistoryDirectory;
+            FolderPickerResult result;
+            
+            if (!string.IsNullOrEmpty(initialPath) && Directory.Exists(initialPath))
+            {
+                result = await FolderPicker.Default.PickAsync(initialPath, default);
+            }
+            else
+            {
+                result = await FolderPicker.Default.PickAsync(default);
+            }
+            
+            if (result.IsSuccessful && !string.IsNullOrEmpty(result.Folder?.Path))
+            {
+                ViewModel.SetChatHistoryDirectory(result.Folder.Path);
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Folder picker error: {ex.Message}");
+        }
     }
 }

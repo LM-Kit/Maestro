@@ -1,24 +1,51 @@
-﻿using LMKit.Maestro.Models;
+using LMKit.Maestro.Models;
+using LMKit.Maestro.Services;
 using SQLite;
 
 namespace LMKit.Maestro.Data
 {
     public sealed class MaestroDatabase : IMaestroDatabase
     {
-        public static string DatabasePath => Path.Combine(FileSystem.AppDataDirectory, "MaestroSQLite.db3");
+        private readonly IAppSettingsService _appSettingsService;
+        
+        public string DatabasePath => Path.Combine(_appSettingsService.ChatHistoryDirectory, "MaestroSQLite.db3");
 
         private SQLiteAsyncConnection? _sqlDatabase;
+        private string? _currentDatabasePath;
+
+        public MaestroDatabase(IAppSettingsService appSettingsService)
+        {
+            _appSettingsService = appSettingsService;
+        }
 
         private async Task Init()
         {
-            if (_sqlDatabase is not null)
+            var targetPath = DatabasePath;
+            
+            // Reinitialize if path changed
+            if (_sqlDatabase is not null && _currentDatabasePath == targetPath)
             {
                 return;
             }
 
+            // Close existing connection if path changed
+            if (_sqlDatabase is not null && _currentDatabasePath != targetPath)
+            {
+                await _sqlDatabase.CloseAsync();
+                _sqlDatabase = null;
+            }
+
             try
             {
-                _sqlDatabase = new SQLiteAsyncConnection(DatabasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.SharedCache);
+                // Ensure directory exists
+                var directory = Path.GetDirectoryName(targetPath);
+                if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                _sqlDatabase = new SQLiteAsyncConnection(targetPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.SharedCache);
+                _currentDatabasePath = targetPath;
 
                 await _sqlDatabase.CreateTableAsync<ConversationLog>();
             }

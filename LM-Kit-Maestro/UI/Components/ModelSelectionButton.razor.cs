@@ -78,7 +78,9 @@ public partial class ModelSelectionButton
                 return Locales.SelectModel;
 
             case ModelListViewModel.ModelLoadingState.Loaded:
-                return modelListViewModel.SelectedModel!.Name;
+                return modelListViewModel.SelectedModel != null
+                            ? modelListViewModel.SelectedModel.Name
+                            : Locales.SelectModel;
 
             case ModelListViewModel.ModelLoadingState.Loading:
                 return Locales.LoadingModel;

@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LMKit.Maestro.Services;
 
@@ -7,6 +7,7 @@ namespace LMKit.Maestro.ViewModels
     public partial class ChatSettingsViewModel : ViewModelBase
     {
         private readonly IAppSettingsService _appSettingsService;
+        private readonly ILLMFileManager _fileManager;
         private readonly LMKitConfig _config;
 
         public string SystemPrompt
@@ -76,6 +77,12 @@ namespace LMKit.Maestro.ViewModels
         }
 
         [ObservableProperty]
+        private string _modelStorageDirectory = string.Empty;
+
+        [ObservableProperty]
+        private string _chatHistoryDirectory = string.Empty;
+
+        [ObservableProperty]
         private RandomSamplingSettingsViewModel _randomSamplingSettings;
 
         [ObservableProperty]
@@ -84,9 +91,10 @@ namespace LMKit.Maestro.ViewModels
         [ObservableProperty]
         private Mirostat2SamplingSettingsViewModel _mirostat2SamplingSettings;
 
-        public ChatSettingsViewModel(IAppSettingsService appSettingsService, LMKitService lmkitService)
+        public ChatSettingsViewModel(IAppSettingsService appSettingsService, ILLMFileManager fileManager, LMKitService lmkitService)
         {
             _appSettingsService = appSettingsService;
+            _fileManager = fileManager;
             _config = lmkitService.LMKitConfig;
             RandomSamplingSettings = new RandomSamplingSettingsViewModel(_config.RandomSamplingConfig);
             Mirostat2SamplingSettings = new Mirostat2SamplingSettingsViewModel(_config.Mirostat2SamplingConfig);
@@ -107,6 +115,27 @@ namespace LMKit.Maestro.ViewModels
             TopNSigmaSamplingSettings.Reset();
         }
 
+        public void SetModelStorageDirectory(string path)
+        {
+            if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
+            {
+                ModelStorageDirectory = path;
+                _appSettingsService.ModelStorageDirectory = path;
+                
+                // Trigger model list refresh by updating LLMFileManager config
+                _fileManager.Config.ModelsDirectory = path;
+            }
+        }
+
+        public void SetChatHistoryDirectory(string path)
+        {
+            if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
+            {
+                ChatHistoryDirectory = path;
+                _appSettingsService.ChatHistoryDirectory = path;
+            }
+        }
+
         public void Init()
         {
             SystemPrompt = _appSettingsService.SystemPrompt;
@@ -114,6 +143,8 @@ namespace LMKit.Maestro.ViewModels
             MaximumCompletionTokens = _appSettingsService.MaximumCompletionTokens;
             RequestTimeout = _appSettingsService.RequestTimeout;
             ContextSize = _appSettingsService.ContextSize;
+            ModelStorageDirectory = _appSettingsService.ModelStorageDirectory;
+            ChatHistoryDirectory = _appSettingsService.ChatHistoryDirectory;
 
             var randomSamplingConfig = _appSettingsService.RandomSamplingConfig;
             RandomSamplingSettings.Temperature = randomSamplingConfig.Temperature;

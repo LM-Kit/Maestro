@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 
 namespace LMKit.Maestro.Services;
 
@@ -48,6 +48,18 @@ public partial class AppSettingsService : IAppSettingsService
         set
         {
             Settings.Set(nameof(ModelStorageDirectory), value);
+        }
+    }
+
+    public string ChatHistoryDirectory
+    {
+        get
+        {
+            return Settings.Get(nameof(ChatHistoryDirectory), LMKitDefaultSettings.DefaultChatHistoryDirectory);
+        }
+        set
+        {
+            Settings.Set(nameof(ChatHistoryDirectory), value);
         }
     }
 
