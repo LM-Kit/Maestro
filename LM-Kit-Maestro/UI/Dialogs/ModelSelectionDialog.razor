@@ -985,12 +985,10 @@
 </style>
 
 @code {
-
     [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; } = null!;
 
     [Inject] private ModelListViewModel ModelListViewModel { get; set; } = null!;
-
     [Inject] private ILauncher Launcher { get; set; } = null!;
 
     private string _searchQuery = string.Empty;

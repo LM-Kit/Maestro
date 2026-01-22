@@ -257,8 +257,18 @@ public partial class LMKitService
 
         private void GenerateConversationSummaryTitle(Conversation conversation)
         {
-            string firstMessage = conversation.ChatHistory!.Messages.First(message => message.AuthorRole == AuthorRole.User).Text;
-            ChatRequest titleGenerationRequest = new ChatRequest(conversation, ChatRequest.ChatRequestType.GenerateTitle, firstMessage, 60);
+            var firstUserMessage = conversation.ChatHistory!.Messages.First(message => message.AuthorRole == AuthorRole.User);
+            
+            // Skip title generation if there's no content at all
+            bool hasText = !string.IsNullOrWhiteSpace(firstUserMessage.Text);
+            bool hasAttachments = firstUserMessage.Attachments != null && firstUserMessage.Attachments.Count > 0;
+            
+            if (!hasText && !hasAttachments)
+            {
+                return;
+            }
+            
+            ChatRequest titleGenerationRequest = new ChatRequest(conversation, ChatRequest.ChatRequestType.GenerateTitle, firstUserMessage, 60);
 
             _titleGenerationSchedule.Schedule(titleGenerationRequest);
 
@@ -273,7 +283,7 @@ public partial class LMKitService
             {
                 Summarizer summarizer = new Summarizer(_state.LoadedModel)
                 {
-                    MaximumContextLength = 512,
+                    MaximumContextLength = hasText ? 512: 2048,
                     GenerateContent = false,
                     GenerateTitle = true,
                     MaxTitleWords = 10,
@@ -285,7 +295,16 @@ public partial class LMKitService
 
                 try
                 {
-                    promptResult.Result = await summarizer.SummarizeAsync(firstMessage, titleGenerationRequest.CancellationTokenSource.Token);
+                    if (hasText)
+                    {
+                        // Use text for summarization
+                        promptResult.Result = await summarizer.SummarizeAsync(firstUserMessage.Text, titleGenerationRequest.CancellationTokenSource.Token);
+                    }
+                    else if (hasAttachments)
+                    {
+                        // Use first attachment for summarization (image-only message)
+                        promptResult.Result = await summarizer.SummarizeAsync(firstUserMessage.Attachments!.First().Target, titleGenerationRequest.CancellationTokenSource.Token);
+                    }
                 }
                 catch (Exception exception)
                 {
