@@ -1,6 +1,6 @@
 <MudDialog Class="action-dialog-root radius-1">
     <DialogContent>
-        <div class="d-flex flex-column gap-2">
+        <div class="d-flex flex-column gap-2" @onkeydown="OnKeyDown">
 
             <div class="mt-4">
                 <MudText Typo="Typo.subtitle2">
@@ -13,12 +13,12 @@
             </MudText>
 
             <div class="dialog-actions">
-                    <button class="text-button" @onclick="() => DialogInstance.Cancel()">
-                        <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">Delete</MudText>
-                    </button>
-                <button class="text-button" @onclick="() => DialogInstance.Close(true)">
-                        <MudText Typo="Typo.subtitle2">Cancel</MudText>
-                    </button>
+                <button class="text-button" @onclick="() => DialogInstance.Cancel()">
+                    <MudText Typo="Typo.subtitle2">Cancel</MudText>
+                </button>
+                <button @ref="_confirmButton" class="text-button" @onclick="() => DialogInstance.Close(true)">
+                    <MudText Color="@(IsImportant ? Color.Error : Color.Default)" Typo="Typo.subtitle2">@ActionText</MudText>
+                </button>
             </div>
         </div>
 
@@ -48,17 +48,28 @@
 
     [CascadingParameter] private IMudDialogInstance DialogInstance { get; set; } = null!;
 
+    private ElementReference _confirmButton;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await _confirmButton.FocusAsync();
+        }
+    }
+
+    private void OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            DialogInstance.Close(true);
+        }
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
 
         await InvokeAsync(() => StateHasChanged());
     }
-
-
-}
-
-@code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; } = null!;
 }

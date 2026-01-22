@@ -17,6 +17,10 @@ public partial class ConversationListItem : ComponentBase, IDisposable
     private MudBlazor.MudTextField<string>? ItemTitleRef;
     private ConversationViewModel? _previousViewModel;
 
+    private bool _isContextMenu;
+    private double _contextMenuX;
+    private double _contextMenuY;
+
     public string Title { get; private set; } = "";
 
     private string GetContainerClasses()
@@ -39,12 +43,10 @@ public partial class ConversationListItem : ComponentBase, IDisposable
         return ViewModel.IsStarred ? "fas fa-star" : "far fa-star";
     }
 
-
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-        // Handle ViewModel change - unsubscribe from old, subscribe to new
         if (_previousViewModel != ViewModel)
         {
             if (_previousViewModel != null)
@@ -71,7 +73,6 @@ public partial class ConversationListItem : ComponentBase, IDisposable
     {
         if (e.PropertyName == nameof(ConversationViewModel.Title))
         {
-            // Update local title and refresh UI on the UI thread
             InvokeAsync(() =>
             {
                 if (!ViewModel.IsRenaming)
@@ -89,17 +90,28 @@ public partial class ConversationListItem : ComponentBase, IDisposable
 
     private void OnShowMoreClicked()
     {
+        _isContextMenu = false;
+        ViewModel.IsShowingActionPopup = true;
+    }
+
+    private void OnRightClick(MouseEventArgs e)
+    {
+        _isContextMenu = true;
+        _contextMenuX = e.ClientX;
+        _contextMenuY = e.ClientY;
         ViewModel.IsShowingActionPopup = true;
     }
 
     private void OnClickOutsideShowMore()
     {
         ViewModel.IsShowingActionPopup = false;
+        _isContextMenu = false;
     }
 
     private async void OnRenameClicked()
     {
         ViewModel.IsShowingActionPopup = false;
+        _isContextMenu = false;
         ViewModel.IsRenaming = true;
 
         await ItemTitleRef!.FocusAsync();
@@ -108,18 +120,26 @@ public partial class ConversationListItem : ComponentBase, IDisposable
     private void OnSelected()
     {
         ViewModel.IsShowingActionPopup = false;
+        _isContextMenu = false;
         OnSelect.InvokeAsync(ViewModel);
     }
 
     private void OnDeleteClicked()
     {
         ViewModel.IsShowingActionPopup = false;
+        _isContextMenu = false;
         OnDelete.InvokeAsync(ViewModel);
     }
 
     private void OnStarClicked()
     {
         ViewModel.IsShowingActionPopup = false;
+        _isContextMenu = false;
+        OnToggleStar.InvokeAsync(ViewModel);
+    }
+
+    private void OnStarIndicatorClicked()
+    {
         OnToggleStar.InvokeAsync(ViewModel);
     }
 
